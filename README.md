@@ -1,3 +1,9 @@
+##quest.wrapper
+Any quest object can take the following properties:
+{
+	stem: "My question stem"
+}
+
 ## quest.text
 ```js
 {

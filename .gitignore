@@ -12,6 +12,7 @@
 *.sass-cache
 
 # OS or Editor folders
+.tmp
 .DS_Store
 ._*
 Thumbs.db

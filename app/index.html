@@ -20,6 +20,10 @@
 		<!-- endbuild -->
 		<script src="libs/requirejs/require.js" data-main="js/bootstrap.js"></script>
 
+		<script type="text/javascript">
+		window.page = [{stem:'huh?', minlength:3,maxlength:7,required:false, errorMsg: {minlength:'rejoice!'}}, {stem:'Dope!',pattern:'/[0-9]/',required:true}];
+		</script>
+
 	</head>
 
 	<body>
@@ -27,17 +31,10 @@
 			<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 		<![endif]-->
 
-		<div ng-init="quests = [{minlength:3,maxlength:7,required:false, errorMsg: {minlength:'rejoice!'}}, {pattern:'/[0-9]/',required:true}]">
+		<div ng-init="quests = [{stem:'huh?', minlength:3,maxlength:7,required:false, errorMsg: {minlength:'rejoice!'}}, {stem:'Dope!',pattern:'/[0-9]/',required:true}]">
 			<form name="myForm" ng-repeat="quest in quests">
-				Text: <input quest-text-number quest-data="quest"> </br>
+				<input quest-wrapper quest-text-number quest-data="quest"> </br>
 			</form>
 		</div>
-
-
-		<!-- Add your site or application content here -->
-		<!-- <div class="container" ng-controller="MainCtrl">
-			    Name: <input ng-model="name"></br>
-			    <span ng-bind="name"></span>
-		</div> -->
 	</body>
 </html>
