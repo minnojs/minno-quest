@@ -1,0 +1,43 @@
+<!doctype html>
+<!--[if IE 7]>				 <html class="no-js lt-ie9 lt-ie8" id="ng-app" ng-app=""> <![endif]-->
+<!--[if IE 8]>				 <html class="no-js lt-ie9" id="ng-app" ng-app=""> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" ng-app> <!--<![endif]-->
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>PI questionnaire</title>
+		<meta name="description" content="Project Implicit Questionnaire">
+		<meta name="viewport" content="width=device-width">
+
+		<!-- build:css styles/vendor.css -->
+		<!-- bower:css -->
+		<link rel="stylesheet" href="libs/bootstrap/dist/css/bootstrap.css" />
+		<!-- endbower -->
+		<!-- endbuild -->
+
+		<!-- build:css({.tmp,app}) styles/main.css -->
+		<link rel="stylesheet" href="styles/main.css">
+		<!-- endbuild -->
+		<script src="libs/requirejs/require.js" data-main="js/bootstrap.js"></script>
+
+	</head>
+
+	<body>
+		<!--[if lt IE 7]>
+			<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+		<![endif]-->
+
+		<div ng-init="quests = [{minlength:3,maxlength:7,required:false, errorMsg: {minlength:'rejoice!'}}, {pattern:'/[0-9]/',required:true}]">
+			<form name="myForm" ng-repeat="quest in quests">
+				Text: <input quest-text-number quest-data="quest"> </br>
+			</form>
+		</div>
+
+
+		<!-- Add your site or application content here -->
+		<!-- <div class="container" ng-controller="MainCtrl">
+			    Name: <input ng-model="name"></br>
+			    <span ng-bind="name"></span>
+		</div> -->
+	</body>
+</html>
