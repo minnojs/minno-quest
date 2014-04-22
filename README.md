@@ -1,4 +1,7 @@
+[![Build Status](https://travis-ci.org/ProjectImplicit/PIquest.svg?branch=master)](https://travis-ci.org/ProjectImplicit/PIquest)
+
 # PIquest
+
 A framework for administering on-line questionnaires.
 
 This repository is nowhere near ready for use - keep in touch, things are moving fast around here!
