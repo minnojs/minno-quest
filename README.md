@@ -1,3 +1,8 @@
+# PIquest
+A framework for administering on-line questionnaires.
+
+This repository is nowhere near ready for use - keep in touch, things are moving fast around here!
+
 ##quest.wrapper
 Any quest object can take the following properties:
 {
