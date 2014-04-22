@@ -1,0 +1,15 @@
+<div ng-form>
+	<h2>{{page.header}}</h2>
+	<ol>
+		<li ng-repeat="quest in page.questions">
+			<div ng-switch="quest.type || 'text'">
+				<div ng-switch-when="text">
+					<input quest-wrapper quest-text quest-data="quest">
+				</div>
+				<div ng-switch-when="textNumber">
+					<input quest-wrapper quest-text-number quest-data="quest">
+				</div>
+			</div>
+		</li>
+	</ol>
+</div>

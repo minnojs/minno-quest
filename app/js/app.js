@@ -1,6 +1,15 @@
-/*jshint unused: vars */
-define(['angular']/*deps*/, function (angular, MainCtrl)/*invoke*/ {
-	'use strict';
+/*
+ *	The main module that ties the whole application together.
+ *	Essentially, we are creating a module with dependencies on anything interesting...
+ */
+define(function (require) {
 
-	return angular.module('piquestApp', []);
+	var angular = require('angular');
+
+	var submodules = [
+		require('sequence/sequence-module').name,
+		require('quest/quest').name
+	];
+
+	return angular.module('piApp', submodules);
 });

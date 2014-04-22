@@ -5,9 +5,10 @@ define(function(require){
 	require('./wrapper/wrapper-module');
 	require('./text/text-module');
 	require('./textNumber/text-number-module');
+	require('./piQuest/piQuest-module');
 
-	// set modules are requirements for the quest module
-	var subModules = ['quest.text', 'quest.textNumber','quest.wrapper'];
+	// set modules that are requirements for the quest module
+	var subModules = ['quest.text', 'quest.textNumber','quest.wrapper','quest.piQuest'];
 
 	var module = angular.module('quest',subModules);
 

@@ -19,16 +19,6 @@
 		<link rel="stylesheet" href="styles/main.css">
 		<!-- endbuild -->
 		<script src="libs/requirejs/require.js" data-main="js/bootstrap.js"></script>
-
-		<script type="text/javascript">
-			function Ctrl($scope){
-				$scope.page = [
-					{stem:'argh?', minlength:3,maxlength:7,required:false, errorMsg: {minlength:'rejoice!'}},
-					{stem:'Dope!',pattern:'/[0-9]/',required:true}
-				]
-			};
-		</script>
-
 	</head>
 
 	<body>
@@ -36,10 +26,6 @@
 			<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 		<![endif]-->
 
-		<div ng-controller="Ctrl">
-			<form name="myForm" ng-repeat="quest in page">
-				<input quest-wrapper quest-text-number quest-data="quest"> </br>
-			</form>
-		</div>
+		<div pi-quest></div>
 	</body>
 </html>
