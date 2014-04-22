@@ -41,3 +41,15 @@ Any quest object can take the following properties:
 	}
 }
 ```
+
+## piQuest (page)
+```js
+{
+	header: 'My header',
+	questions: [
+		{type:'text'},
+		{type:'textNumber'},
+		{type:'multi'}
+	]
+}
+```
