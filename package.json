@@ -1,6 +1,10 @@
 {
   "name": "PIQuest",
-  "version": "0.0.0",
+  "version": "0.0.1",
+  "repository" : {
+    "type" : "git",
+    "url" : "https://github.com/ProjectImplicit/PIquest"
+  },
   "description": "Project implicit Questionnaires",
   "dependencies": {},
   "devDependencies": {
@@ -17,7 +21,7 @@
     "load-grunt-tasks": "~0.2.0",
     "time-grunt": "~0.2.1",
     "grunt-newer": "~0.5.4",
-    "karma-ng-scenario": "^0.1.0",
+    "karma-ng-scenario": "~0.1",
     "grunt-karma": "^0.8.2",
     "karma": "^0.12.1",
     "karma-ng-html2js-preprocessor": "^0.1.0",
