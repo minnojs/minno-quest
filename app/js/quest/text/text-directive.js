@@ -15,8 +15,6 @@ define(function (require) {
 			},
 			link: function(scope, element, attr, ctrls) {
 				var form = ctrls;
-				//var input = element.find('input');
-				// var ngModel = input.eq(0).controller('ngModel');
 
 				scope.form = form;
 

@@ -1,8 +1,8 @@
-define(['./piQuest-module'],function(){
+define(['./piQuest-module','../text/text-module'],function(){
 
 	describe('quest.piQuest',function(){
 
-		var element, scope, currentTask, $compile, $document;
+		var element, scope, currentTask, nextSpy, $compile, $document;
 		var jqLite = angular.element;
 
 		var compile = function compile(data){
@@ -13,10 +13,19 @@ define(['./piQuest-module'],function(){
 			scope.$digest();
 		};
 
+		// we need the text module in order to realy test this...
+		beforeEach(module('quest.text'));
 		beforeEach(module('quest.piQuest', function($provide) {
-			$provide.factory('currentTask', function(){
-				return currentTask;
+			// create spy for next
+			nextSpy = jasmine.createSpy('$sequence.next');
+
+			$provide.factory('$sequence', function(){
+				return {
+					current: currentTask,
+					next: nextSpy
+				};
 			});
+
 		}));
 
 		beforeEach(inject(function($injector) {
@@ -30,7 +39,6 @@ define(['./piQuest-module'],function(){
 			compile({
 				questions: [{},{},{}]
 			});
-
 			expect(element.find('li').length).toBe(3);
 		});
 
@@ -42,9 +50,32 @@ define(['./piQuest-module'],function(){
 			expect(element.find('h2').text()).toBe('My header');
 		});
 
-		it('should submit when submit is clicked', function(){});
+		it('should be valid only if the question are valid', function(){
+			compile({
+				questions: [{required:true}]
+			});
+			expect(element).toBeInvalid();
+		});
 
-		it('should not submit when the form is not valid', function(){});
+		it('should not show a header if it doesnt exist', function(){
+			compile({});
+			expect(element.find('h2').length).toBe(0);
+		});
+
+		it('should submit when submit is clicked', function(){
+			compile({});
+			element.find('[data-role="submit"]').click();
+			expect(nextSpy).toHaveBeenCalled();
+		});
+
+		it('should not submit when the form is not valid', function(){
+			var submitBtn = element.find('[data-role="submit"]');
+			compile({});
+			scope.form.$setValidity('test');
+			scope.$digest();
+			submitBtn.click();
+			expect(nextSpy).not.toHaveBeenCalled();
+		});
 
 	});
 });

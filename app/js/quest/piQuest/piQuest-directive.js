@@ -4,15 +4,26 @@
 define(function (require) {
 	var template = require('text!./piQuest.html');
 
+
 	directive.$inject = ['$sequence','currentTask'];
 	function directive($sequence, currentTask){
 		return {
 			replace: true,
-			transclude: 'element', // replace element instead of replacing contents
+			//transclude: 'element', // replace element instead of replacing contents
 			template:template,
-			priority: 5, // Allows the wrapper to use the same scope as the questions
-			link: function(scope){
+			require: 'form',
+			link: function(scope, element, attr, ctrls) {
+				var form = ctrls;
+
+				scope.form = form;
 				scope.$sequence = $sequence;
+
+				scope.submit = function(){
+					if (form.$valid){
+						$sequence.next();
+					}
+				};
+
 				scope.page = currentTask;
 			}
 		};

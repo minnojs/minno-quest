@@ -1,5 +1,5 @@
-<div ng-form>
-	<h2>{{page.header}}</h2>
+<div ng-form name="piQuest" id="a">
+	<h2 ng-if="page.header">{{page.header}}</h2>
 	<ol>
 		<li ng-repeat="quest in page.questions">
 			<div ng-switch="quest.type || 'text'">
@@ -12,4 +12,11 @@
 			</div>
 		</li>
 	</ol>
+	<button
+		ng-click="submit()"
+		data-role="submit"
+		class="btn btn-default"
+		ng-class="form"
+		ng-disabled="form.$invalid"
+	>Submit</button>
 </div>
