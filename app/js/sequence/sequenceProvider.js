@@ -4,14 +4,15 @@
 define(function(require){
 	//var angular = require('angular');
 	require;
+	var tmpo;
 
 	var sequenceProvider = function sequenceProvider(){
-		var sequence = [];
+		var stack = [];
 		var pointer = 0;
 
 		// add a task
 		this.when = function(task){
-			sequence.push(task);
+			stack.push(task);
 			return this;
 		};
 
@@ -28,21 +29,31 @@ define(function(require){
 			]
 		};
 
+		stack.push({
+			header:'SecondPage',
+			questions: [
+				{type:'textNumber', stem:'blargh?', min:3,maxlength:7,required:false, errorMsg: {min:'rejoice!'}},
+				{type:'text', stem:'Dope!',pattern:'/[0-9]/',required:false}
+			]
+		});
+
 		this.$get = function($rootScope){
 			var $sequence = {
-				sequence: sequence,		// expose sequence
-				current: tmp,			// the curernt task
+				getStack: function(){return stack;},		// expose sequence
+				current: tmp,								// the curernt task
 				next: function(){
-					var task = sequence[pointer++];
+					var task = stack[pointer++];
 					if (typeof task !== 'object'){
-						throw new Error ('Hey, we ran out of options');
+						throw new Error ('Hey, we ran into some trouble in the sequencer');
 					} else {
 						this.current = task;
+						tmpo = task;
+						$rootScope.$evalAsync(updateTask);
 					}
 				}
 			};
 
-			$rootScope.$on('$sequenceNext', function(){});
+			$rootScope.$on('$sequence:update', updateTask);
 
 			return $sequence;
 		};
@@ -50,5 +61,9 @@ define(function(require){
 	};
 
 	return sequenceProvider;
+
+	function updateTask(){
+		console.log(tmpo);
+	}
 
 });

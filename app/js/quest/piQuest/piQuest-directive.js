@@ -24,6 +24,8 @@ define(function (require) {
 					}
 				};
 
+
+
 				scope.page = currentTask;
 			}
 		};

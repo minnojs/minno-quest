@@ -2,6 +2,7 @@
 define([], function(){
 	var req = require.config({
 		paths: {
+			underscore: "../libs/lodash/lodash/dist/lodash.min",
 			angular: '../libs/angular/angular',
 			angularMocks: '../libs/angular-mocks/angular-mocks',
 			text: '../libs/requirejs-text/text'

@@ -13,6 +13,7 @@ module.exports = function(config) {
 		files: [
 			{pattern: 'test/matchers.js', included: false },
 			{pattern: 'app/libs/jquery.js', included: false },
+			{pattern: 'app/libs/lodash/dist/lodash.min.js', included: false },
 			{pattern: 'app/libs/angular/angular.js', included: false },
 			{pattern: 'app/libs/angular-mocks/angular-mocks.js', included: false },
 			{pattern: 'app/libs/requirejs-text/text.js', included: false },
