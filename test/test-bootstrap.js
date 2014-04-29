@@ -20,10 +20,10 @@ requirejs.config({
 	baseUrl: '/base/app/js',
 
 	paths: {
-		underscore: "../libs/lodash/dist/lodash.min",
+		underscore: "../libs/lodash/dist/lodash",
 		angular: '../libs/angular/angular',
 		angularMocks: '../libs/angular-mocks/angular-mocks',
-		jquery: '../libs/jquery',
+		jquery: '../libs/jquery/dist/jquery',
 		text: '../libs/requirejs-text/text'
 	},
 

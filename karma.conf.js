@@ -12,8 +12,8 @@ module.exports = function(config) {
 		// list of files / patterns to load in the browser
 		files: [
 			{pattern: 'test/matchers.js', included: false },
-			{pattern: 'app/libs/jquery.js', included: false },
-			{pattern: 'app/libs/lodash/dist/lodash.min.js', included: false },
+			{pattern: 'app/libs/jquery/dist/jquery.js', included: false },
+			{pattern: 'app/libs/lodash/dist/lodash.js', included: false },
 			{pattern: 'app/libs/angular/angular.js', included: false },
 			{pattern: 'app/libs/angular-mocks/angular-mocks.js', included: false },
 			{pattern: 'app/libs/requirejs-text/text.js', included: false },
