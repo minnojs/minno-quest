@@ -35,12 +35,12 @@ requirejs.config({
 		}
 	},
 	// ask Require.js to load these files (all our tests)
-	deps: allTestFiles,
+	deps: ['../../test/matchers','angular', 'angularMocks', 'jquery'], //allTestFiles,
 
 	//urlArgs: 'bust=' + (new Date()).getTime(),
 
 	// start test run, once Require.js is done
-	callback: window.__karma__.start
+	callback: function(){
+		require(allTestFiles,window.__karma__.start);
+	}
 });
-
-require(allTestFiles,function(){});

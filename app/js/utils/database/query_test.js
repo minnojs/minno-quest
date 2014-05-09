@@ -1,11 +1,8 @@
-define(['./query-provider'],function(provider){
+define(['./database-module'],function(){
 
-	var randomSpy = jasmine.createSpy("random").andReturn(1);
-
-	angular
-		.module('database.query',[])
-		.value('database.randomizer', randomSpy)
-		.service('query',provider);
+	var
+		randomSpy = jasmine.createSpy("random").andReturn(1),
+		exRandomSpy  = jasmine.createSpy('exRandom').andReturn([3,2,1]);
 
 	describe('database.query',function(){
 
@@ -18,11 +15,17 @@ define(['./query-provider'],function(provider){
 			]
 			, q;
 
-		beforeEach(module('database.query'));
-		beforeEach(inject(function(query){
-			q = function(){result = query.apply(null, [coll, arguments[0]]);};
+		beforeEach(module('database'));
+		beforeEach(module(function($provide){
+			$provide.value("database.randomizer.randomInt", randomSpy);
+			$provide.value("database.randomizer.randomArr", exRandomSpy);
 		}));
 
+		beforeEach(inject(function(query, Randomizer){
+			randomSpy.reset();
+			exRandomSpy.reset();
+			q = function(){result = query.apply(null, [coll, new Randomizer(), arguments[0]]);};
+		}));
 
 		it('should support returning a random document', function(){
 			q({});
@@ -39,22 +42,22 @@ define(['./query-provider'],function(provider){
 			expect(result).toBe(coll[3]);
 		});
 
-		it('should support querying by select:data', function(){
+		it('should support querying by data:Obj', function(){
 			// the query only returns one row, we should reset the randomizer accordingly
 			randomSpy.andReturn(0);
 
-			q({select:{val:1}});
+			q({data:{val:1}});
 			expect(result).toBe(coll[0]);
 
-			q({select:{val:3}});
+			q({data:{val:3}});
 			expect(result).toBe(coll[2]);
 		});
 
-		it('should support querying by a select:function', function(){
+		it('should support querying by a data:Function', function(){
 			// the query only returns one row, we should reset the randomizer accordingly
 			randomSpy.andReturn(0);
 
-			q({select:function(value){return value.data.val == 3;}});
+			q({data:function(value){return value.data.val === 3;}});
 			expect(result).toBe(coll[2]);
 		});
 
@@ -65,5 +68,7 @@ define(['./query-provider'],function(provider){
 			expect(result).toEqual(compare);
 			expect(fn).toHaveBeenCalledWith(coll);
 		});
+
+
 	});
 });

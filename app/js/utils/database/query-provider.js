@@ -1,10 +1,10 @@
 define(['underscore'],function(_){
 
-	queryProvider.$inject = ['database.randomizer'];
-	function queryProvider(randomize){
+	queryProvider.$inject = ['Collection'];
+	function queryProvider(Collection){
 
-		function queryFn(collection, query){
-			var coll = _(collection);
+		function queryFn(collection, randomizer, query){
+			var coll = new Collection(collection);
 
 			// shortcuts:
 			// ****************************
@@ -16,7 +16,7 @@ define(['underscore'],function(_){
 
 			// pure string query
 			if (_.isString(query) || _.isNumber(query)){
-				query = {set:query, method:'random'};
+				query = {set:query, type:'random'};
 			}
 
 			// narrow down by set
@@ -25,29 +25,43 @@ define(['underscore'],function(_){
 				coll = coll.where({set:query.set});
 			}
 
-
-
-			// narrow down by select
+			// narrow down by data
 			// ****************************
-			if (_.isPlainObject(query.select)){
-				coll = coll.where({data:query.select});
+			if (_.isPlainObject(query.data)){
+				coll = coll.where({data:query.data});
 			}
 
-			if (_.isFunction(query.select)){
-				coll = coll.filter(query.select);
+			if (_.isFunction(query.data)){
+				coll = coll.filter(query.data);
 			}
 
-			// pick by method
+			// pick by type
 			// ****************************
-			switch (query.method){
+			
+			var seed = query.seed || query.set;
+			var length = coll.length;			
+			var repeat = query.repeat;
+			var at;
+
+			switch (query.type){
 				case undefined:
 				case 'random':
-					return coll.at(randomize(coll.length)).valueOf()[0];
+					at = randomizer.random(length,seed,repeat);
+					break;
+				case 'exRandom':
+					at = randomizer.exRandom(length,seed,repeat);
+					break;
+				case 'sequential':
+					at = randomizer.sequential(length,seed,repeat);
+					break;
 				case 'first':
-					return coll.at(0).valueOf()[0];
+					at = 0;
+					break;
 				default:
-					throw new Error('Unknow method: ' + query.method);
+					throw new Error('Unknow query type: ' + query.type);
 			}
+
+			return coll.at(at);
 		}
 
 		return queryFn;
@@ -55,10 +69,3 @@ define(['underscore'],function(_){
 
 	return queryProvider;
 });
-
-
-seeds = {
-	static : function(){
-		return number
-	}
-}

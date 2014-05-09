@@ -1,14 +1,21 @@
-define(['./collection-module'],function(){
+define(['underscore','./database-module'],function(_){
 
 	describe('Collection',function(){
 
 		var collection;
 
-		beforeEach(module('collection'));
+		beforeEach(module('database'));
 		beforeEach(inject(function(Collection){
 			collection = new Collection();
 		}));
 
+		it('should init a collection from a collection', inject(function(Collection){
+			var coll;
+			collection.add([1,2,3]);
+			coll = new Collection(collection);
+			expect(coll instanceof Collection).toBeTruthy();
+			expect(coll.collection).toEqual([1,2,3]);
+		}));
 
 		it('should init with an array or without one', inject(function(Collection){
 			var col, arr = [1,2,3,4];
@@ -20,7 +27,7 @@ define(['./collection-module'],function(){
 			expect(col.collection.length).toBe(0);
 		}));
 
-		it('should throw an error if initiated with a non Array', inject(function(Collection){
+		it('should throw an error if initiated with a non Array/collection', inject(function(Collection){
 			expect(function(){
 				new Collection({});
 			}).toThrow();
@@ -64,8 +71,16 @@ define(['./collection-module'],function(){
 			expect(collection.pointer).toBe(4);
 		});
 
+		it('should inherit cool underscore functions', function(){
+			_(['where','filter']).each(function(fnName){
+				expect(collection[fnName]).toEqual(jasmine.any(Function));
+		    });
+		});
 
-
-
+		it('should support _.filter', function(){
+			collection.add([1,2,3,4,5]);
+			var coll = collection.filter(function(x){return x > 2;});
+			expect(coll.collection).toEqual([3,4,5]);
+		});
 	});
 });

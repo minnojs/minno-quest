@@ -1,18 +1,17 @@
-define(['./store-provider'],function(provider){
+define(['./database-module'],function(){
 
 	var querySpy = jasmine.createSpy("query").andReturn("query result");
-
-	angular
-		.module('database.store',[])
-		.value('database.query', querySpy)
-		.service('Store',provider);
-
 
 	describe('database.store',function(){
 
 		var store;
 
-		beforeEach(module('database.store'));
+		beforeEach(module('database'));
+		
+		beforeEach(module(function($provide){
+			$provide
+				.value('database.query', querySpy);
+		}));
 
 		beforeEach(inject(function(Store){
 			store = new Store();
