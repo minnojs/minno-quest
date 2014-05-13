@@ -1,9 +1,8 @@
 define(['underscore'],function(_){
 
-	//RandomizerProvider.$inject = ['database.randomize.randomInt', 'database.randomize.randomArr', 'database.collection'];
-	RandomizerProvider.$inject = ['database.randomizer.randomInt', 'database.randomizer.randomArr', 'Collection'];
+	RandomizerProvider.$inject = ['databaseRandomizerRandomInt', 'databaseRandomizerRandomArr', 'Collection'];
 	function RandomizerProvider(randomInt, randomArr, Collection){
-		
+
 		function Randomizer(){
 			this._cache = {
 				random : {},
@@ -43,13 +42,17 @@ define(['underscore'],function(_){
 				coll = cache[seed] = new Collection(_.range(length));
 				return coll.first();
 			}
-			
+
+			if (coll.length !== length){
+				throw new Error("This seed  ("+ seed +") points to a collection with the wrong length, you can only use a seed for sets of the same length");
+			}
+
 			// if this is a repeated element:
 			if (repeat) {
 				return coll.current();
-			} 
+			}
 
-			// if we've reached the end 
+			// if we've reached the end
 			result = coll.next();
 
 			// if we've reached the end of the collection (next)
@@ -70,13 +73,17 @@ define(['underscore'],function(_){
 				coll = cache[seed] = new Collection(randomArr(length));
 				return coll.first();
 			}
-			
+
+			if (coll.length !== length){
+				throw new Error("This seed  ("+ seed +") points to a collection with the wrong length, you can only use a seed for sets of the same length");
+			}
+
 			// if this is a repeated element:
 			if (repeat) {
 				return coll.current();
-			} 
+			}
 
-			// if we've reached the end 
+			// if we've reached the end
 			result = coll.next();
 
 			// if we've reached the end of the collection (next)

@@ -18,7 +18,7 @@ define(['underscore','./task-module'],function(){
 			});
 			$provide.value('taskParse',parseSpy);
 			$provide.value('Sequence',function(){
-				this.next = nextSpy;
+				this.proceed = nextSpy;
 			});
 		}));
 
@@ -89,6 +89,42 @@ define(['underscore','./task-module'],function(){
 		it('should add mixed sequence to sequenceObj', function(){
 			expect(sequence.add).toHaveBeenCalledWith(mixedSequence);
 		});
+	});
 
+	describe('sequence', function(){
+		var inflateSpy = jasmine.createSpy('inflate');
+		var sequence;
+		var db = {};
+
+		beforeEach(module('database','task', function($provide){
+			$provide.value('inflate', inflateSpy);
+		}));
+
+		beforeEach(inject(function(TaskSequenceProvider){
+			sequence = new TaskSequenceProvider([1,2,3,4], db);
+		}));
+
+		it('should be an instance of Collection', inject(function(TaskSequenceProvider, Collection){
+			expect(sequence).toEqual(jasmine.any(TaskSequenceProvider));
+			expect(sequence).toEqual(jasmine.any(Collection));
+		}));
+
+		it('should have a db, and throw an exception if its missing', inject(function(TaskSequenceProvider){
+			expect(sequence.db).toBeDefined();
+			expect(function(){
+				new TaskSequenceProvider([]);
+			}).toThrow();
+		}));
+
+		describe('buildPage', function(){
+			console.log('build page tests - depend on the inflate function');
+			it('should know how to inflate a page', function(){
+
+			});
+
+			it('should know how to inflate questions', function(){
+
+			});
+		});
 	});
 });

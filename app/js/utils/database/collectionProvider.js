@@ -4,7 +4,7 @@ define(['underscore'],function(_){
 	 */
 
 	function collectionService(){
-		
+
 		function Collection (arr) {
 			if (arr instanceof Collection) {
 				return arr;
@@ -16,7 +16,7 @@ define(['underscore'],function(_){
 			}
 
 			this.collection = arr || [];
-			this.lenght = this.collection.length;
+			this.length = this.collection.length;
 
 			// pointer to the current location within the array
 			// we start with -1 so that the initial next points to the begining of the array
@@ -74,7 +74,7 @@ define(['underscore'],function(_){
 			}
 		});
 
-	
+
 		// Stuff we took out of bootstrap that can augment the collection
 		// **************************************************************
 		var methods = ['where','filter'];

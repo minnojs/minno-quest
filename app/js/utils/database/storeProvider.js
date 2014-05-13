@@ -1,7 +1,11 @@
+/*
+ *	The store is a collection of collection devided into namespaces.
+ *	You can think of every namespace/collection as a table.
+ */
 define(['underscore'],function(_){
 
-	storeProvider.$inject = ['database.query'];
-	function storeProvider(query){
+	storeProvider.$inject = ['Collection'];
+	function storeProvider(Collection){
 
 		function Store(){
 			this.store = {};
@@ -12,7 +16,7 @@ define(['underscore'],function(_){
 				if (this.store[nameSpace]){
 					throw new Error('The name space ' + nameSpace + ' already exists');
 				}
-				this.store[nameSpace] = [];
+				this.store[nameSpace] = new Collection();
 			},
 
 			read: function read(nameSpace){
@@ -24,21 +28,11 @@ define(['underscore'],function(_){
 
 			update: function update(nameSpace, data){
 				var coll = this.read(nameSpace);
-				if (_.isArray(data)){
-					_.forEach(data, function(value){
-						coll.push(value);
-					});
-				} else {
-					coll.push(data);
-				}
+				coll.add(data);
 			},
 
 			del: function del(nameSpace){
 				this.store[nameSpace] = undefined;
-			},
-
-			query: function (nameSpace, queryObj){
-				return query(nameSpace, queryObj);
 			}
 		});
 

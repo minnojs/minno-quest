@@ -41,6 +41,16 @@ define(['underscore','./database-module'],function(_){
 			expect(collection.collection.length).toBe(3);
 		});
 
+		it('should keep length updated', function(){
+			expect(collection.length).toBe(0);
+
+			collection.add(1);
+			expect(collection.length).toBe(1);
+
+			collection.add([2,3]);
+			expect(collection.length).toBe(3);
+		});
+
 		it('should support "at"', function(){
 			collection.add([1,2,3]);
 			expect(collection.at(0)).toBe(1);
@@ -74,7 +84,7 @@ define(['underscore','./database-module'],function(_){
 		it('should inherit cool underscore functions', function(){
 			_(['where','filter']).each(function(fnName){
 				expect(collection[fnName]).toEqual(jasmine.any(Function));
-		    });
+			});
 		});
 
 		it('should support _.filter', function(){

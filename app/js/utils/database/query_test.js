@@ -1,10 +1,8 @@
 define(['./database-module'],function(){
 
-	var
-		randomSpy = jasmine.createSpy("random").andReturn(1),
-		exRandomSpy  = jasmine.createSpy('exRandom').andReturn([3,2,1]);
+	var randomizer;
 
-	describe('database.query',function(){
+	describe('database query',function(){
 
 		var result
 			, coll = [
@@ -16,15 +14,15 @@ define(['./database-module'],function(){
 			, q;
 
 		beforeEach(module('database'));
-		beforeEach(module(function($provide){
-			$provide.value("database.randomizer.randomInt", randomSpy);
-			$provide.value("database.randomizer.randomArr", exRandomSpy);
+		beforeEach(module(function(){
+			randomizer = jasmine.createSpyObj('randomizer', ['random','exRandom','sequential']);
+			randomizer.random.andReturn(1);
+			randomizer.exRandom.andReturn(1);
+			randomizer.sequential.andReturn(1);
 		}));
 
-		beforeEach(inject(function(query, Randomizer){
-			randomSpy.reset();
-			exRandomSpy.reset();
-			q = function(){result = query.apply(null, [coll, new Randomizer(), arguments[0]]);};
+		beforeEach(inject(function(databaseQuery){
+			q = function(){result = databaseQuery.apply(null, [arguments[0], coll, randomizer]);};
 		}));
 
 		it('should support returning a random document', function(){
@@ -44,7 +42,7 @@ define(['./database-module'],function(){
 
 		it('should support querying by data:Obj', function(){
 			// the query only returns one row, we should reset the randomizer accordingly
-			randomSpy.andReturn(0);
+			randomizer.random.andReturn(0);
 
 			q({data:{val:1}});
 			expect(result).toBe(coll[0]);
@@ -55,20 +53,44 @@ define(['./database-module'],function(){
 
 		it('should support querying by a data:Function', function(){
 			// the query only returns one row, we should reset the randomizer accordingly
-			randomSpy.andReturn(0);
+			randomizer.random.andReturn(0);
 
 			q({data:function(value){return value.data.val === 3;}});
 			expect(result).toBe(coll[2]);
 		});
 
-		it('should allow using a custom function a a query', function(){
-			var compare = {some:1};
-			var fn = jasmine.createSpy('dummy').andReturn(compare);
-			q(fn);
-			expect(result).toEqual(compare);
-			expect(fn).toHaveBeenCalledWith(coll);
+		it('should throw an error if an object was not found', function(){
+			expect(function(){
+				q({set:18});
+			}).toThrow();
 		});
 
+		describe(': type randomization', function(){
 
+			it('should allow using a custom function as a query', function(){
+				var compare = {};
+				var fn = jasmine.createSpy('dummy').andReturn(compare);
+				q(fn);
+				expect(result).toEqual(compare);
+				expect(fn).toHaveBeenCalledWith(coll);
+			});
+
+			it('should support exRandom', function(){
+				q({type:'exRandom'});
+				expect(randomizer.exRandom).toHaveBeenCalled();
+			});
+
+			it('should support sequential access', function(){
+				q({type:'sequential'});
+				expect(randomizer.sequential).toHaveBeenCalled();
+			});
+
+			it('should support first and last', function(){
+				q({type:'first'});
+				expect(result).toBe(coll[0]);
+				q({type:'last'});
+				expect(result).toBe(coll[3]);
+			});
+		});
 	});
 });

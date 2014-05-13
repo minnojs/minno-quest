@@ -1,20 +1,25 @@
 define(function(require){
-	var 
+	var
 		angular = require('angular'),
-		Collection = require('./collection-provider'),
-		Randomizer = require('./randomizer-provider'),
-		Store = require('./store-provider'),
-		query = require('./query-provider'),
+		Database = require('./databaseProvider'),
+		Collection = require('./collectionProvider'),
+		Randomizer = require('./randomizerProvider'),
+		Store = require('./storeProvider'),
+		query = require('./queryProvider'),
+		inflate = require('./inflateProvider'),
 		randomInt = require('./randomInt'),
 		randomArr = require('./randomArr');
-	
+
 	var module = angular.module('database',[])
 		.service('Collection', Collection)
-		.value('database.randomizer.randomInt', randomInt)
-		.value('database.randomizer.randomArr', randomArr)
-		.service('Randomizer', Randomizer)
-		.service('query', query)
-		.service('Store', Store);
+		.value('databaseRandomizerRandomInt', randomInt)
+		.value('databaseRandomizerRandomArr', randomArr)
+		.service('DatabaseRandomizer', Randomizer)
+		.service('databaseQuery', query)
+		.service('databaseInflate', inflate)
+		.service('DatabaseStore', Store)
+		.service('Database', Database);
+
 
 	return module;
 });

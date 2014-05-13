@@ -1,32 +1,25 @@
 define(['./database-module'],function(){
 
-	var querySpy = jasmine.createSpy("query").andReturn("query result");
-
-	describe('database.store',function(){
+	describe('database Store',function(){
 
 		var store;
 
 		beforeEach(module('database'));
-		
-		beforeEach(module(function($provide){
-			$provide
-				.value('database.query', querySpy);
-		}));
 
-		beforeEach(inject(function(Store){
-			store = new Store();
+		beforeEach(inject(function(DatabaseStore){
+			store = new DatabaseStore();
 		}));
 
 		it('should instantiate a store object', function(){
 			expect(store.store).toEqual({});
 		});
 
-		it('should support creating a collection', function(){
+		it('should support creating a collection', inject(function(Collection){
 			// create instiates an empty array
 			store.create('nameSpace');
-			expect(store.store.nameSpace).toEqual([]);
+			expect(store.store.nameSpace).toEqual(jasmine.any(Collection));
 			expect(store.store.nameSpace.length).toBe(0);
-		});
+		}));
 
 		it('should throw an error if trying to recreate an existing nameSpace', function(){
 			store.create('nameSpace');
@@ -49,17 +42,20 @@ define(['./database-module'],function(){
 		});
 
 
-		it('should support update (with both object and array notations)', function(){
+		it('should support update (with both object and array notations)', inject(function(Collection){
+			var coll = new Collection();
 			store.store = {
-				nameSpace: []
+				nameSpace: coll
 			};
 
 			store.update('nameSpace', 1);
-			expect(store.store.nameSpace).toEqual([1]);
+			expect(coll.length).toBe(1);
+			expect(coll.at(0)).toBe(1);
 
 			store.update('nameSpace', [2,3]);
-			expect(store.store.nameSpace).toEqual([1,2,3]);
-		});
+			expect(coll.length).toBe(3);
+			expect(coll.at(2)).toBe(3);
+		}));
 
 		it('should support del', function(){
 			store.store = {
@@ -68,12 +64,6 @@ define(['./database-module'],function(){
 
 			store.del('nameSpace');
 			expect(store.store.nameSpace).toBeFalsy();
-		});
-
-		it('should support querying', function(){
-			var result = store.query('nameSpace','query');
-			expect(querySpy).toHaveBeenCalledWith('nameSpace','query');
-			expect(result).toBe("query result");
 		});
 	});
 });

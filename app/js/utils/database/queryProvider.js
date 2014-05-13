@@ -3,7 +3,7 @@ define(['underscore'],function(_){
 	queryProvider.$inject = ['Collection'];
 	function queryProvider(Collection){
 
-		function queryFn(collection, randomizer, query){
+		function queryFn(query, collection, randomizer){
 			var coll = new Collection(collection);
 
 			// shortcuts:
@@ -37,14 +37,15 @@ define(['underscore'],function(_){
 
 			// pick by type
 			// ****************************
-			
+
 			var seed = query.seed || query.set;
-			var length = coll.length;			
+			var length = coll.length;
 			var repeat = query.repeat;
 			var at;
 
 			switch (query.type){
 				case undefined:
+				case 'byData':
 				case 'random':
 					at = randomizer.random(length,seed,repeat);
 					break;
@@ -57,8 +58,15 @@ define(['underscore'],function(_){
 				case 'first':
 					at = 0;
 					break;
+				case 'last':
+					at = length-1;
+					break;
 				default:
 					throw new Error('Unknow query type: ' + query.type);
+			}
+
+			if (_.isUndefined(coll.at(at))) {
+				throw new Error('Query failed, object (' + JSON.stringify(query) +	') not found.');
 			}
 
 			return coll.at(at);
