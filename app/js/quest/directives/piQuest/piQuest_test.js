@@ -14,7 +14,7 @@ define(['./piQuest-module','../text/text-module'],function(){
 		};
 
 		// we need the text module in order to realy test this...
-		beforeEach(module('quest.text'));
+		beforeEach(module('questText'));
 		beforeEach(module('quest.piQuest', function($provide) {
 			// create spy for next
 			nextSpy = jasmine.createSpy('$sequence.next');

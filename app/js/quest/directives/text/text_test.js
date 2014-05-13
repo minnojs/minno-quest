@@ -1,6 +1,6 @@
 define(['./text-module'],function(){
 
-	describe('quest.text',function(){
+	describe('questText',function(){
 
 		var formElm, inputElm, scope, $compile, $document, $sniffer, $browser, changeInputValueTo;
 		var jqLite = angular.element;
@@ -13,7 +13,7 @@ define(['./text-module'],function(){
 			inputElm = formElm.find('input');
 		};
 
-		beforeEach(module('quest.text'));
+		beforeEach(module('questText'));
 		beforeEach(inject(function($injector, _$sniffer_, _$browser_) {
 			$sniffer = _$sniffer_;
 			$browser = _$browser_;

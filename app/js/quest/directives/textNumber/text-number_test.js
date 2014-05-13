@@ -1,6 +1,6 @@
 define(['./text-number-module'],function(){
 
-	describe('quest.textNumber',function(){
+	describe('questTextNumber',function(){
 
 		var formElm, inputElm, scope, $compile, $document, $sniffer, $browser, changeInputValueTo;
 		var jqLite = angular.element;
@@ -13,7 +13,7 @@ define(['./text-number-module'],function(){
 			inputElm = formElm.find('input');
 		};
 
-		beforeEach(module('quest.textNumber'));
+		beforeEach(module('questTextNumber'));
 		beforeEach(inject(function($injector, _$sniffer_, _$browser_) {
 			$sniffer = _$sniffer_;
 			$browser = _$browser_;

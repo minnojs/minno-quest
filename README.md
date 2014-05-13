@@ -12,7 +12,7 @@ Any quest object can take the following properties:
 	stem: "My question stem"
 }
 
-## quest.text
+## questText
 ```js
 {
 	dflt: "default value",

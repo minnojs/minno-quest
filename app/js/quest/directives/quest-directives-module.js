@@ -8,9 +8,9 @@ define(function(require){
 	require('./piQuest/piQuest-module');
 
 	// set modules that are requirements for the quest module
-	var subModules = ['quest.text', 'quest.textNumber','quest.wrapper','quest.piQuest'];
+	var subModules = ['questText', 'questTextNumber','questWrapper','questPiQuest'];
 
-	var module = angular.module('quest',subModules);
+	var module = angular.module('questDirectives',subModules);
 
 	return module;
 });
