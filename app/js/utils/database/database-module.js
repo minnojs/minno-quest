@@ -11,9 +11,9 @@ define(function(require){
 		randomArr = require('./randomArr');
 
 	var module = angular.module('database',[])
-		.service('Collection', Collection)
 		.value('databaseRandomizerRandomInt', randomInt)
 		.value('databaseRandomizerRandomArr', randomArr)
+		.service('Collection', Collection)
 		.service('DatabaseRandomizer', Randomizer)
 		.service('databaseQuery', query)
 		.service('databaseInflate', inflate)

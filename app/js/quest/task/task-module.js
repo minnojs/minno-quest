@@ -8,8 +8,10 @@ define(function(require){
 	var parseProvider = require('./parseProvider');
 	var sequenceProvider = require('./taskSequenceProvider');
 	var module = angular.module('task', ['logger', 'database']);
-	module.service('Task', taskProvider);
+
 	module.service('TaskSequenceProvider', sequenceProvider);
+	module.service('Task', taskProvider);
+
 	module.service('taskParse', parseProvider);
 	module.value('mixer', function(){});
 

@@ -10,15 +10,16 @@ define(function(require){
 		}
 
 		_.extend(Database.prototype, {
-			get: function(namespace, query){
+			inflate: function(namespace, query){
 				var coll = this.store.read(namespace);
 				return inflate(query, coll, this.randomizer);
 			},
-			create: function(namespace){
+			createColl: function(namespace){
 				this.store.create(namespace);
 			},
 			add: function(namespace, obj){
-				this.store.add(obj);
+				var coll = this.store.read(namespace);
+				coll.add(obj);
 			}
 		});
 

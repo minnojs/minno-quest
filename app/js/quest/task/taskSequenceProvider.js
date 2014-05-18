@@ -16,9 +16,8 @@ define(function(require){
 		})();
 	}
 
-
-	SequenceProvider.$inject = ['Collection','inflate'];
-	function SequenceProvider(Collection, inflate){
+	SequenceProvider.$inject = ['Collection'];
+	function SequenceProvider(Collection){
 		// classical inheritance from Collection
 		// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create#Classical_inheritance_with_Object.create
 		function Sequence(coll, db){
@@ -34,11 +33,13 @@ define(function(require){
 		Sequence.prototype.constructor = Sequence;
 
 		_.extend(Sequence.prototype, {
+			// @TODO: we should add a system to use inline templates (Grunt style) when inflating.
+			// maybe add a context argument here?
 			buildPage: function(pageObj){
-				// this.db.inflate('pages', pageObj)
-				var page = inflate('page', pageObj, this.db, this.randomizer);
+				var page = this.db.inflate('pages', pageObj);
+				// we can afford to overwrite the original since inflate always creates new objects for us.
 				page.questions = _.map(page.questions || [], function(question){
-					return inflate('quest', question, this.db, this.randomizer);
+					return this.db.inflate('questions', question);
 				}, this);
 
 				return page;

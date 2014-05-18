@@ -92,39 +92,56 @@ define(['underscore','./task-module'],function(){
 	});
 
 	describe('sequence', function(){
-		var inflateSpy = jasmine.createSpy('inflate');
+		var db = jasmine.createSpyObj('db', ['inflate']);
 		var sequence;
-		var db = {};
 
-		beforeEach(module('database','task', function($provide){
-			$provide.value('inflate', inflateSpy);
-		}));
-
+		beforeEach(module('task'));
 		beforeEach(inject(function(TaskSequenceProvider){
 			sequence = new TaskSequenceProvider([1,2,3,4], db);
 		}));
 
-		it('should be an instance of Collection', inject(function(TaskSequenceProvider, Collection){
+		it('should be an instance of Collection and of Sequence', inject(function(TaskSequenceProvider, Collection){
 			expect(sequence).toEqual(jasmine.any(TaskSequenceProvider));
 			expect(sequence).toEqual(jasmine.any(Collection));
 		}));
 
 		it('should have a db, and throw an exception if its missing', inject(function(TaskSequenceProvider){
-			expect(sequence.db).toBeDefined();
+			expect(sequence.db).toBe(db);
 			expect(function(){
 				new TaskSequenceProvider([]);
 			}).toThrow();
 		}));
 
-		describe('buildPage', function(){
-			console.log('build page tests - depend on the inflate function');
+		describe(': buildPage', function(){
 			it('should know how to inflate a page', function(){
-
+				var page = {};
+				db.inflate.andReturn(page); // make sure the inflate function gets a page too
+				sequence.buildPage(page);
+				expect(db.inflate).toHaveBeenCalledWith('pages',page);
 			});
 
 			it('should know how to inflate questions', function(){
+				var questions = [1,2,3];
+				var page = {questions:questions};
+				db.inflate.andReturn(page); // make sure the inflate function gets a page too
+				sequence.buildPage(page);
 
+				expect(db.inflate).toHaveBeenCalledWith('questions',1);
+				expect(db.inflate).toHaveBeenCalledWith('questions',2);
+				expect(db.inflate).toHaveBeenCalledWith('questions',3);
 			});
 		});
+
+		describe(': proceed', function(){
+			it('should return an infalted version of the next obj', function(){
+				spyOn(sequence,'buildPage').andCallFake(function(value){return value;});
+
+				expect(sequence.proceed()).toBe(1);
+				expect(sequence.buildPage).toHaveBeenCalledWith(1);
+				expect(sequence.proceed()).toBe(2);
+				expect(sequence.buildPage).toHaveBeenCalledWith(2);
+			});
+		});
+
 	});
 });

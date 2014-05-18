@@ -27,14 +27,14 @@ define(['underscore', './database-module'],function(_){
 		it('should "get" and inflate an object', function(){
 			store.read.andReturn('coll');
 			inflateSpy.andReturn(123);
-			var result = db.get("namespace", "obj");
+			var result = db.inflate("namespace", "obj");
 
 			expect(result).toBe(123);
 			expect(inflateSpy).toHaveBeenCalledWith('obj','coll',db.randomizer);
 		});
 
-		it('should "create" a column', function(){
-			store.create(123);
+		it('should "createColl" a column', function(){
+			db.createColl(123);
 			expect(store.create).toHaveBeenCalledWith(123);
 		});
 
