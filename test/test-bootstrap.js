@@ -1,4 +1,4 @@
-var allTestFiles = ['../../test/matchers','angular', 'angularMocks', 'jquery'];
+var allTestFiles = [];
 var TEST_REGEXP = /_test\.js$/;
 
 var pathToModule = function(path) {
