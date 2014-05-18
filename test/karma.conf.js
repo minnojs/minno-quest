@@ -16,7 +16,7 @@ module.exports = function(config) {
 			{pattern: 'app/js/**/*.js', included: false },
 			{pattern: 'app/js/**/*.html', watched: true, included: false, served: true},
 
-			// http://karma-runner.github.io/0.10/plus/requirejs.html
+			// http://karma-runner.github.io/0.12/plus/requirejs.html
 			'test/test-bootstrap.js'
 		],
 

@@ -5,28 +5,25 @@ define(function (require) {
 	var template = require('text!./piQuest.html');
 
 
-	directive.$inject = ['$sequence','currentTask'];
-	function directive($sequence, currentTask){
+	directive.$inject = ['$rootScope','Task'];
+	function directive($rootScope, Task){
 		return {
 			replace: true,
-			//transclude: 'element', // replace element instead of replacing contents
 			template:template,
 			require: 'form',
 			link: function(scope, element, attr, ctrls) {
-				var form = ctrls;
+				var task = scope.task = new Task($rootScope.script);
+				var form = scope.form = ctrls;
 
-				scope.form = form;
-				scope.$sequence = $sequence;
 
-				scope.submit = function(){
+
+				scope.page = task.proceed();
+
+				scope.next = function(){
 					if (form.$valid){
-						$sequence.next();
+						scope.page = task.proceed();
 					}
 				};
-
-
-
-				scope.page = currentTask;
 			}
 		};
 	}

@@ -4,7 +4,7 @@ Capability to turn off RT, TRT recording
 **randomization**
 Present items in fixed or random order -- supported
 Present set of items in fixed or random order -- supported
-Present subset of items (e.g. choose 5 of 10 questionnaire items to present)
+Present subset of items (e.g. choose 5 of 10 questionnaire items to present) - use mixer!!!
 
 
 **branching**
@@ -34,9 +34,6 @@ Additional response option possibility: reverse coding (last option is a 1)
 Additional response option possibility: novel coding (user defines coding for each response option)
 Present response options in fixed order
 Present response options in random order
-
-
-
 
 Decline to answer button || required
 

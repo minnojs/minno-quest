@@ -1,11 +1,9 @@
 define(function(require){
 	var angular = require('angular');
-	var module = angular.module('logger', []);
+	var Logger = require('./LoggerProvider');
 
-	module.value('Logger', function(settings){
-		this.log = function(){console.log('logger called');};
-		this.settings = settings;
-	});
+	var module = angular.module('logger', []);
+	module.provider('Logger', Logger);
 
 	return module;
 });
