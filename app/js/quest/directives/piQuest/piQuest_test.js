@@ -1,6 +1,92 @@
 define(['./piQuest-module','../text/text-module'],function(){
 
-	describe('quest.piQuest',function(){
+	describe('piQuest Controller', function(){
+
+		var script = {};
+		var controller, element, scope, $compile;
+		var jqLite = angular.element;
+		var logSpy = jasmine.createSpy('log');
+		var TaskSpy = jasmine.createSpy('Task').andCallFake(function(){
+			this.log = logSpy;
+			this.proceed = jasmine.createSpy('proceed').andReturn('nextObj');
+		});
+
+		function compile(){
+			element = jqLite('<div pi-quest get-ctrl></div>');
+			scope.script = script;
+			$compile(element)(scope);
+			scope.$digest();
+		}
+
+		beforeEach(module('piQuest','task', function($provide, $compileProvider){
+			$provide.value('Task', TaskSpy);
+
+			// get the piQuest controller
+			$compileProvider.directive('getCtrl', function(){
+				return {
+					require:'piQuest',
+					link: function(scope, element, attr, ctrl) {
+						controller = ctrl;
+					}
+				};
+			});
+		}));
+
+		beforeEach(inject(function($injector) {
+			$compile = $injector.get('$compile');
+			scope = $injector.get('$rootScope');
+		}));
+
+		it('should create a task from the script', inject(function(Task){
+			compile();
+			expect(controller.task).toEqual(jasmine.any(Task));
+			expect(TaskSpy).toHaveBeenCalledWith(script);
+		}));
+
+		it('should expose methods to register questions', function(){
+			expect(controller.addQuest).toEqual(jasmine.any(Function));
+			expect(controller.removeQuest).toEqual(jasmine.any(Function));
+		});
+
+		describe(': harvest', function(){
+			var valueSpy;
+
+
+			beforeEach(inject(function(Collection){
+				var coll = new Collection([1,2,3,4,5,6]);
+				// create mock questions
+				valueSpy = jasmine.createSpy('quest').andCallFake(function(){
+					return coll.next();
+				});
+
+				controller.addQuest({value:valueSpy});
+				controller.addQuest({value:valueSpy});
+				controller.addQuest({value:valueSpy});
+				controller.harvest();
+			}));
+
+			it('should log all questions', function(){
+				expect(valueSpy.calls.length).toBe(3);
+				expect(logSpy).toHaveBeenCalledWith(1);
+				expect(logSpy).toHaveBeenCalledWith(2);
+				expect(logSpy).toHaveBeenCalledWith(3);
+			});
+
+			it('should only harvest each question once', function(){
+				controller.harvest();
+				expect(valueSpy.calls.length).toBe(3);
+
+				controller.addQuest({value:valueSpy});
+				controller.harvest();
+				expect(valueSpy.calls.length).toBe(4);
+			});
+		});
+
+
+	});
+
+
+	xdescribe('quest.piQuest',function(){
 
 		var element, scope, currentTask, nextSpy, $compile, $document;
 		var jqLite = angular.element;

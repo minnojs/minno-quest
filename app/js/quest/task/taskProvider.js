@@ -18,7 +18,7 @@ define(['underscore'], function(_){
 				this.logger.log(obj);
 			},
 			next: function(options){
-				this.sequence.proceed(options, this.db);
+				return this.sequence.proceed(options, this.db);
 			}
 
 		});

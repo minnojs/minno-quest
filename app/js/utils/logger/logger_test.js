@@ -2,7 +2,7 @@ define(['./logger-module'],function(){
 
 	var $httpBackend, logger, $log, settings = {pulse:3};
 
-	ddescribe('Logger', function(){
+	describe('Logger', function(){
 
 		beforeEach(module('logger', function(LoggerProvider){
 			LoggerProvider.settings = {

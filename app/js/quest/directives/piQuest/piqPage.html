@@ -1,0 +1,22 @@
+<div ng-form name="piQuest" id="a">
+	<h2 ng-if="page.header">{{page.header}}</h2>
+	<ol>
+		<li ng-repeat="quest in page.questions">
+			<div ng-switch="quest.type || 'text'">
+				<div ng-switch-when="text">
+					<input quest-wrapper quest-text quest-data="quest">
+				</div>
+				<div ng-switch-when="textNumber">
+					<input quest-wrapper quest-text-number quest-data="quest">
+				</div>
+			</div>
+		</li>
+	</ol>
+	<button
+		ng-click="submit()"
+		data-role="submit"
+		class="btn btn-default"
+		ng-class="form"
+		ng-disabled="form.$invalid"
+	>Submit</button>
+</div>

@@ -5,7 +5,7 @@ define(['underscore','./task-module'],function(){
 		var logSpy = jasmine.createSpy("log");
 		var createSpy = jasmine.createSpy('create');
 		var parseSpy = jasmine.createSpy('parse');
-		var nextSpy = jasmine.createSpy('next');
+		var nextSpy = jasmine.createSpy('next').andReturn('nextObj');
 		var script = {};
 
 		// stubout constructors
@@ -42,7 +42,8 @@ define(['underscore','./task-module'],function(){
 
 		it('should ask for the next object to display', function(){
 			var nextObj = "nextContent";
-			task.next(nextObj);
+			var result = task.next(nextObj);
+			expect(result).toBe('nextObj');
 			expect(nextSpy).toHaveBeenCalledWith(nextObj, task.db);
 		});
 
