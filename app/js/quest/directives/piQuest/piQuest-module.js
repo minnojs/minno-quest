@@ -1,9 +1,9 @@
 define(function(require){
-	require('sequence/sequence-module');
+
 	var angular = require('angular');
 	var piQuest = require('./piQuest-directive');
 	var piqPage = require('./piqPage-directive');
-	var module = angular.module('piQuest',['task'])
+	var module = angular.module('questPiQuest',['task'])
 		// work around for dynamic module and form names
 		// https://github.com/angular/angular.js/issues/1404#issuecomment-30859987
 			.config(function($provide) {

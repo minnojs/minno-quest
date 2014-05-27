@@ -15,8 +15,13 @@ define(function (require) {
 
 	piQuestCtrl.$inject = ['$scope','Task','$rootScope'];
 	function piQuestCtrl($scope, Task, $rootScope){
-		var script = $rootScope.script,
-			task = this.task = new Task(script);
+		var script = $rootScope.script;
+
+		if (!script){
+			throw new Error('piQuest: script missing!');
+		}
+
+		var task = this.task = new Task(script);
 
 		this.init = function(){
 			$scope.page = task.proceed();

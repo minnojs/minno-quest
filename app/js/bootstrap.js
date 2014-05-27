@@ -2,7 +2,7 @@
 define([], function(){
 	var req = require.config({
 		paths: {
-			underscore: "../libs/lodash/lodash/dist/lodash.min",
+			underscore: "../libs/lodash/dist/lodash.min",
 			angular: '../libs/angular/angular',
 			angularMocks: '../libs/angular-mocks/angular-mocks',
 			text: '../libs/requirejs-text/text'
@@ -19,10 +19,6 @@ define([], function(){
 	window.name = 'NG_DEFER_BOOTSTRAP!';
 
 	require(['angular','app'], function(angular, app) {
-
-		/* jshint ignore:start */
-		var $html = angular.element(document.getElementsByTagName('html')[0]);
-		/* jshint ignore:end */
 		angular.element().ready(function() {
 			angular.resumeBootstrap([app.name]);
 		});

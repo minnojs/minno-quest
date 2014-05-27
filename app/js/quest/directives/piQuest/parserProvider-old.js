@@ -12,8 +12,8 @@ define(function(require){
 			this.script = script;
 			this.db = new Database();
 
-			this.db.create('pages', script.pagesSet);
-			this.db.create('questions', script.questionsSet);
+			this.db.createColl('pages', script.pagesSet);
+			this.db.createColl('questions', script.questionsSet);
 
 			this.sequence = mixer(script.sequence);
 
@@ -21,8 +21,7 @@ define(function(require){
 		}
 
 		_.extend(Parser.prototype, {
-			next: function(last){
-				// we can use last to determine what type of next this is...
+			next: function(){
 				var next = this.sequence.next();
 				var that = this;
 				if (!next) {

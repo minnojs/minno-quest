@@ -1,6 +1,6 @@
 define(['underscore'], function(_){
 
-	TaskProvider.$inject = ['Database','Logger','Sequence','taskParse'];
+	TaskProvider.$inject = ['Database','Logger','TaskSequence','taskParse'];
 	function TaskProvider(Database, Logger, Sequence, parse){
 		function Task(script){
 			// save script for later use...
@@ -8,7 +8,7 @@ define(['underscore'], function(_){
 
 			this.db = new Database();
 			this.logger = new Logger();
-			this.sequence = new Sequence();
+			this.sequence = new Sequence([], this.db);
 
 			parse(script, this.db, this.sequence);
 		}

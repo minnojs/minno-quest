@@ -1,6 +1,6 @@
 define(['./wrapper-module'],function(){
 
-	describe('quest.wrapper',function(){
+	describe('questWrapper',function(){
 
 		var elm, scope, $compile, $document, $sniffer, $browser;
 		var jqLite = angular.element;
@@ -12,7 +12,7 @@ define(['./wrapper-module'],function(){
 			scope.$digest();
 		};
 
-		beforeEach(module('quest.wrapper'));
+		beforeEach(module('questWrapper'));
 		beforeEach(inject(function($injector, _$sniffer_, _$browser_) {
 			$sniffer = _$sniffer_;
 			$browser = _$browser_;

@@ -2,8 +2,8 @@ define(function(){
 	parseProvider.$inject = ['mixer'];
 	function parseProvider(mixer){
 		function parse(script, db, sequence){
-			db.create('pages');
-			db.create('questions');
+			db.createColl('pages');
+			db.createColl('questions');
 
 			db.add('pages', script.pages);
 			db.add('questions', script.questions);

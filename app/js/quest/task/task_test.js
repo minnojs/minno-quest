@@ -14,10 +14,10 @@ define(['underscore','./task-module'],function(){
 				this.log = logSpy;
 			});
 			$provide.value('Database', function(){
-				this.create = createSpy;
+				this.createColl = createSpy;
 			});
 			$provide.value('taskParse',parseSpy);
-			$provide.value('Sequence',function(){
+			$provide.value('TaskSequence',function(){
 				this.proceed = nextSpy;
 			});
 		}));
@@ -31,9 +31,9 @@ define(['underscore','./task-module'],function(){
 			expect(task.db).toEqual(jasmine.any(Database));
 		}));
 
-		it('should setup the sequence', inject(function(Sequence){
+		it('should setup the sequence', inject(function(TaskSequence){
 			expect(task.sequence).toBeDefined();
-			expect(task.sequence).toEqual(jasmine.any(Sequence));
+			expect(task.sequence).toEqual(jasmine.any(TaskSequence));
 		}));
 
 		it('should call the parser', inject(function(Database){
@@ -61,7 +61,7 @@ define(['underscore','./task-module'],function(){
 				sequence: {}
 			},
 			mixedSequence = {}, // place holder for mixed sequence
-			db = jasmine.createSpyObj('db', ['create', 'add']),
+			db = jasmine.createSpyObj('db', ['createColl', 'add']),
 			sequence = jasmine.createSpyObj('sequence', ['add']),
 			mixerSpy = jasmine.createSpy('mixer').andReturn(mixedSequence);
 
@@ -74,8 +74,8 @@ define(['underscore','./task-module'],function(){
 		}));
 
 		it('should create the appropriate tables for the db', function(){
-			expect(db.create.argsForCall[0]).toEqual(['pages']);
-			expect(db.create.argsForCall[1]).toEqual(['questions']);
+			expect(db.createColl.argsForCall[0]).toEqual(['pages']);
+			expect(db.createColl.argsForCall[1]).toEqual(['questions']);
 		});
 
 		it('should add appropriate elements to the tables', function(){
@@ -97,19 +97,19 @@ define(['underscore','./task-module'],function(){
 		var sequence;
 
 		beforeEach(module('task'));
-		beforeEach(inject(function(TaskSequenceProvider){
-			sequence = new TaskSequenceProvider([1,2,3,4], db);
+		beforeEach(inject(function(TaskSequence){
+			sequence = new TaskSequence([1,2,3,4], db);
 		}));
 
-		it('should be an instance of Collection and of Sequence', inject(function(TaskSequenceProvider, Collection){
-			expect(sequence).toEqual(jasmine.any(TaskSequenceProvider));
+		it('should be an instance of Collection and of Sequence', inject(function(TaskSequence, Collection){
+			expect(sequence).toEqual(jasmine.any(TaskSequence));
 			expect(sequence).toEqual(jasmine.any(Collection));
 		}));
 
-		it('should have a db, and throw an exception if its missing', inject(function(TaskSequenceProvider){
+		it('should have a db, and throw an exception if its missing', inject(function(TaskSequence){
 			expect(sequence.db).toBe(db);
 			expect(function(){
-				new TaskSequenceProvider([]);
+				new TaskSequence([]);
 			}).toThrow();
 		}));
 

@@ -19,7 +19,7 @@ define(['./piQuest-module','../text/text-module'],function(){
 			controller = element.controller('piQuest');
 		}
 
-		beforeEach(module('piQuest','task', function($provide, $compileProvider){
+		beforeEach(module('questPiQuest','task', function($provide, $compileProvider){
 			$provide.value('Task', TaskSpy);
 
 			// make sure piqPage is not activated
@@ -69,7 +69,7 @@ define(['./piQuest-module','../text/text-module'],function(){
 			controller = element.controller('piqPage');
 		}
 
-		beforeEach(module('piQuest','task', 'questText', function($provide){
+		beforeEach(module('questPiQuest','task', 'questText', function($provide){
 			// don't load Task currently
 			$provide.value('Task', function(){});
 		}));

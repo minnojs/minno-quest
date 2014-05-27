@@ -9,7 +9,7 @@ define(function(require){
 	var sequenceProvider = require('./taskSequenceProvider');
 	var module = angular.module('task', ['logger', 'database']);
 
-	module.service('TaskSequenceProvider', sequenceProvider);
+	module.service('TaskSequence', sequenceProvider);
 	module.service('Task', taskProvider);
 
 	module.service('taskParse', parseProvider);
