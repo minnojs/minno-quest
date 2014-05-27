@@ -25,6 +25,14 @@ define(['./logger-module'],function(){
 			expect(logger.pending[1]).toBe(2);
 		});
 
+		it('should parse the input using logFn if it exists', function(){
+			logger.settings.logFn = function(a, b){
+				return a + b;
+			};
+			logger.log(1,2);
+			expect(logger.pending[0]).toBe(3);
+		});
+
 		describe(': pulse', function(){
 			it('should support send after logging settings.pulse objects', function(){
 				spyOn(logger,'send');

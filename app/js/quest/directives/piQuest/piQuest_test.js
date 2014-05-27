@@ -1,14 +1,14 @@
 define(['./piQuest-module','../text/text-module'],function(){
+	var jqLite = angular.element;
+	var controller, element, scope, $compile;
 
 	describe('piQuest Controller', function(){
-
 		var script = {};
-		var controller, element, scope, $compile;
-		var jqLite = angular.element;
 		var logSpy = jasmine.createSpy('log');
+		var proceedSpy = jasmine.createSpy('proceed').andReturn('nextObj');
 		var TaskSpy = jasmine.createSpy('Task').andCallFake(function(){
 			this.log = logSpy;
-			this.proceed = jasmine.createSpy('proceed').andReturn('nextObj');
+			this.proceed = proceedSpy;
 		});
 
 		function compile(){
@@ -16,20 +16,25 @@ define(['./piQuest-module','../text/text-module'],function(){
 			scope.script = script;
 			$compile(element)(scope);
 			scope.$digest();
+			controller = element.controller('piQuest');
 		}
 
 		beforeEach(module('piQuest','task', function($provide, $compileProvider){
 			$provide.value('Task', TaskSpy);
 
-			// get the piQuest controller
-			$compileProvider.directive('getCtrl', function(){
+			// make sure piqPage is not activated
+			$compileProvider.directive('piqPage', function(){
 				return {
-					require:'piQuest',
-					link: function(scope, element, attr, ctrl) {
-						controller = ctrl;
-					}
+					priority: 999,
+					terminal: true
 				};
 			});
+		}));
+
+		beforeEach(inject(function($rootScope, _$compile_){
+			$compile = _$compile_;
+			scope = $rootScope;
+			compile();
 		}));
 
 		beforeEach(inject(function($injector) {
@@ -38,130 +43,153 @@ define(['./piQuest-module','../text/text-module'],function(){
 		}));
 
 		it('should create a task from the script', inject(function(Task){
-			compile();
 			expect(controller.task).toEqual(jasmine.any(Task));
 			expect(TaskSpy).toHaveBeenCalledWith(script);
 		}));
 
-		it('should expose methods to register questions', function(){
-			expect(controller.addQuest).toEqual(jasmine.any(Function));
-			expect(controller.removeQuest).toEqual(jasmine.any(Function));
+		it('should listen for "quest:next" and proceed accordingly', function(){
+			scope.$new().$emit('quest:next','proceedObj');
+			expect(proceedSpy).toHaveBeenCalledWith('proceedObj');
+			expect(element.scope().page).toBe('nextObj');
 		});
 
-		describe(': harvest', function(){
-			var valueSpy;
-
-
-			beforeEach(inject(function(Collection){
-				var coll = new Collection([1,2,3,4,5,6]);
-				// create mock questions
-				valueSpy = jasmine.createSpy('quest').andCallFake(function(){
-					return coll.next();
-				});
-
-				controller.addQuest({value:valueSpy});
-				controller.addQuest({value:valueSpy});
-				controller.addQuest({value:valueSpy});
-				controller.harvest();
-			}));
-
-			it('should log all questions', function(){
-				expect(valueSpy.calls.length).toBe(3);
-				expect(logSpy).toHaveBeenCalledWith(1);
-				expect(logSpy).toHaveBeenCalledWith(2);
-				expect(logSpy).toHaveBeenCalledWith(3);
-			});
-
-			it('should only harvest each question once', function(){
-				controller.harvest();
-				expect(valueSpy.calls.length).toBe(3);
-
-				controller.addQuest({value:valueSpy});
-				controller.harvest();
-				expect(valueSpy.calls.length).toBe(4);
-			});
+		it('should listen for "quest:log" and log accordingly', function(){
+			scope.global = 'global';
+			scope.$new().$emit('quest:log', [1], 'currentPageData');
+			expect(logSpy).toHaveBeenCalledWith(1, 'currentPageData', 'global');
 		});
-
-
 	});
 
-
-	xdescribe('quest.piQuest',function(){
-
-		var element, scope, currentTask, nextSpy, $compile, $document;
-		var jqLite = angular.element;
-
-		var compile = function compile(data){
-			var html = '<div pi-quest></div>';
-			element = jqLite(html);
-			currentTask = data;
+	describe('piqPage', function(){
+		function compile(data){
+			element = jqLite('<div piq-page></div>');
+			scope.page = data;
 			$compile(element)(scope);
 			scope.$digest();
-		};
+			controller = element.controller('piqPage');
+		}
 
-		// we need the text module in order to realy test this...
-		beforeEach(module('questText'));
-		beforeEach(module('quest.piQuest', function($provide) {
-			// create spy for next
-			nextSpy = jasmine.createSpy('$sequence.next');
-
-			$provide.factory('$sequence', function(){
-				return {
-					current: currentTask,
-					next: nextSpy
-				};
-			});
-
+		beforeEach(module('piQuest','task', 'questText', function($provide){
+			// don't load Task currently
+			$provide.value('Task', function(){});
 		}));
 
-		beforeEach(inject(function($injector) {
+		beforeEach(inject(function($injector){
 			$compile = $injector.get('$compile');
-			$document = $injector.get('$document');
-			scope = $injector.get('$rootScope');
+			scope = $injector.get('$rootScope').$new();
 		}));
 
-
-		it('should compile the correct number of questions', function(){
-			compile({
-				questions: [{},{},{}]
-			});
-			expect(element.find('li').length).toBe(3);
-		});
-
-		it('should compile the header', function(){
-			compile({
-				header: 'My header'
+		describe('Controller', function(){
+			// just create the directive so we can grab the controller
+			beforeEach(function(){
+				compile({});
 			});
 
-			expect(element.find('h2').text()).toBe('My header');
-		});
-
-		it('should be valid only if the question are valid', function(){
-			compile({
-				questions: [{required:true}]
+			it('should expose methods to register questions', function(){
+				expect(controller.addQuest).toEqual(jasmine.any(Function));
+				expect(controller.removeQuest).toEqual(jasmine.any(Function));
 			});
-			expect(element).toBeInvalid();
-		});
 
-		it('should not show a header if it doesnt exist', function(){
-			compile({});
-			expect(element.find('h2').length).toBe(0);
-		});
+			describe(': harvest', function(){
+				var valueSpy;
 
-		it('should submit when submit is clicked', function(){
-			compile({});
-			element.find('[data-role="submit"]').click();
-			expect(nextSpy).toHaveBeenCalled();
-		});
+				beforeEach(inject(function(Collection){
+					var coll = new Collection([1,2,3,4,5,6]);
+					// create mock questions
+					valueSpy = jasmine.createSpy('quest').andCallFake(function(){
+						return coll.next();
+					});
 
-		it('should not submit when the form is not valid', function(){
-			var submitBtn = element.find('[data-role="submit"]');
-			compile({});
-			scope.form.$setValidity('test');
-			scope.$digest();
-			submitBtn.click();
-			expect(nextSpy).not.toHaveBeenCalled();
-		});
+					controller.addQuest({value:valueSpy});
+					controller.addQuest({value:valueSpy});
+					controller.addQuest({value:valueSpy});
+				}));
 
+				it('should emit the values of all questions on "quest:log"', function(){
+					scope.$on('quest:log', function(e,logs){
+						expect(logs).toEqual([1,2,3]);
+					});
+					controller.harvest();
+				});
+
+				it('should only harvest each question once', function(){
+					controller.harvest();
+					expect(valueSpy.calls.length).toBe(3);
+
+					controller.addQuest({value:valueSpy});
+					controller.harvest();
+					expect(valueSpy.calls.length).toBe(4);
+				});
+			});
+
+			describe(': submit', function(){
+				var $scope;
+
+				beforeEach(function(){
+					spyOn(controller,'harvest');
+					$scope = element.scope();
+				});
+
+				it('should not submit if the page is not $valid', function(){
+					controller.addQuest({valid:function(){return true;}});
+					controller.addQuest({valid:function(){return false;}});
+					controller.addQuest({valid:function(){return true;}});
+					$scope.submit();
+					expect(controller.harvest).not.toHaveBeenCalled();
+				});
+
+				it('should not validate if submit(false)', function(){
+					controller.addQuest({valid:function(){return true;}});
+					controller.addQuest({valid:function(){return false;}});
+					controller.addQuest({valid:function(){return true;}});
+					$scope.submit(false);
+					expect(controller.harvest).toHaveBeenCalled();
+				});
+
+				it('should harvest even when there are no questions registered', function(){
+					$scope.submit();
+					expect(controller.harvest).toHaveBeenCalled();
+				});
+
+				it('should harvest and then emit "quest:next" when submit is called', function(){
+					var nextSpy = jasmine.createSpy('quest:next');
+					controller.addQuest({valid:function(){return true;}});
+					$scope.$on('quest:next', nextSpy);
+					$scope.submit();
+					expect(nextSpy).toHaveBeenCalled();
+					expect(controller.harvest).toHaveBeenCalled();
+				});
+			}); // end describe page controller
+
+			describe('directive',function(){
+				it('should compile the correct number of questions', function(){
+					compile({
+						questions: [{},{},{}]
+					});
+					expect(element.find('li').length).toBe(3);
+				});
+
+				it('should compile the header', function(){
+					compile({
+						header: 'My header'
+					});
+
+					expect(element.find('h2').text()).toBe('My header');
+				});
+
+				it('should be valid only if the question are valid', function(){
+					compile({
+						questions: [{required:true}]
+					});
+					expect(element).toBeInvalid();
+				});
+
+				it('should not show a header if it doesnt exist', function(){
+					compile({});
+					expect(element.find('h2').length).toBe(0);
+				});
+			}); // end describe page directive
+		});
 	});
+
 });

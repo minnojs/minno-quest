@@ -33,17 +33,21 @@ define(function(require){
 
 		_.extend(Logger.prototype, {
 			log: function(obj){
+				var settings = this.settings;
+
 				if (_.isUndefined(obj)){
 					throw new Error('You can\'t log an undefined object');
 				}
 
-				if (this.settings.DEBUG){
-					$log.log(obj);
+				var logObj = settings.logFn ? settings.logFn.apply(settings, arguments) : obj;
+
+				if (settings.DEBUG){
+					$log.log(logObj);
 				}
 
-				this.pending.push(obj);
+				this.pending.push(logObj);
 				self.logCounter++;
-				if (this.settings.pulse && this.pending.length >= this.settings.pulse){
+				if (settings.pulse && this.pending.length >= settings.pulse){
 					this.send();
 				}
 			},

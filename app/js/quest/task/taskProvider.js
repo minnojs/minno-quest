@@ -14,11 +14,11 @@ define(['underscore'], function(_){
 		}
 
 		_.extend(Task.prototype, {
-			log: function(obj){
-				this.logger.log(obj);
+			log: function(){
+				this.logger.log.apply(this.logger, arguments);
 			},
-			next: function(options){
-				return this.sequence.proceed(options, this.db);
+			next: function(target){
+				return this.sequence.proceed(target, this.db);
 			}
 
 		});
