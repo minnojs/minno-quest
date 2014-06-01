@@ -2,6 +2,7 @@ define(['underscore','./task-module'],function(){
 
 	describe('Task',function(){
 		var task;
+		var sendSpy = jasmine.createSpy("send");
 		var logSpy = jasmine.createSpy("log");
 		var createSpy = jasmine.createSpy('create');
 		var parseSpy = jasmine.createSpy('parse');
@@ -11,6 +12,7 @@ define(['underscore','./task-module'],function(){
 		// stubout constructors
 		beforeEach(module('task', 'logger','database', function($provide) {
 			$provide.value('Logger', jasmine.createSpy('Logger').andCallFake(function(){
+				this.send = sendSpy;
 				this.log = logSpy;
 			}));
 			$provide.value('Database', function(){
@@ -46,7 +48,7 @@ define(['underscore','./task-module'],function(){
 			expect(task.logger.constructor).toHaveBeenCalledWith(script.settings.logger);
 		}));
 
-		it('should call settings.onEnd at the end of the task (it there is no endObject)', inject(function(Task, $rootScope){
+		it('should call settings.onEnd at the end of the task (if there is no endObject)', inject(function(Task, $rootScope){
 			var script = {
 				settings: {
 					onEnd:jasmine.createSpy('onEnd')
@@ -59,6 +61,15 @@ define(['underscore','./task-module'],function(){
 			expect(script.settings.onEnd).toHaveBeenCalled();
 			nextSpy.andReturn('nextObj');
 		}));
+
+		it('should log anything left at the end of the task', inject(function($rootScope){
+			nextSpy.andReturn(null);
+			task.next();
+			$rootScope.$apply();
+			expect(sendSpy).toHaveBeenCalled();
+			nextSpy.andReturn('nextObj');
+		}));
+
 
 		it('should call the parser', inject(function(Database){
 			expect(parseSpy).toHaveBeenCalledWith(script, jasmine.any(Database), jasmine.any(Object));

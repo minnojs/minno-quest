@@ -13,7 +13,7 @@ define(function(require){
 	module.service('Task', taskProvider);
 
 	module.service('taskParse', parseProvider);
-	module.value('mixer', function(){});
+	module.value('mixer', function(a){return a});
 
 	return module;
 });
