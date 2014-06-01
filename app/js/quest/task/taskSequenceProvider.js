@@ -36,6 +36,10 @@ define(function(require){
 			// @TODO: we should add a system to use inline templates (Grunt style) when inflating.
 			// maybe add a context argument here?
 			buildPage: function(pageObj){
+				if (_.isUndefined(pageObj)){
+					return undefined;
+				}
+
 				var page = this.db.inflate('pages', pageObj);
 				// we can afford to overwrite the original since inflate always creates new objects for us.
 				page.questions = _.map(page.questions || [], function(question){

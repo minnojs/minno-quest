@@ -5,14 +5,14 @@ define(['./piQuest-module','../text/text-module'],function(){
 	describe('piQuest Controller', function(){
 		var script = {};
 		var logSpy = jasmine.createSpy('log');
-		var proceedSpy = jasmine.createSpy('proceed').andReturn('nextObj');
+		var nextSpy = jasmine.createSpy('next').andReturn('nextObj');
 		var TaskSpy = jasmine.createSpy('Task').andCallFake(function(){
 			this.log = logSpy;
-			this.proceed = proceedSpy;
+			this.next = nextSpy;
 		});
 
 		function compile(){
-			element = jqLite('<div pi-quest get-ctrl></div>');
+			element = jqLite('<div pi-quest></div>');
 			scope.script = script;
 			$compile(element)(scope);
 			scope.$digest();
@@ -31,15 +31,10 @@ define(['./piQuest-module','../text/text-module'],function(){
 			});
 		}));
 
-		beforeEach(inject(function($rootScope, _$compile_){
-			$compile = _$compile_;
-			scope = $rootScope;
-			compile();
-		}));
-
-		beforeEach(inject(function($injector) {
+		beforeEach(inject(function($injector){
 			$compile = $injector.get('$compile');
-			scope = $injector.get('$rootScope');
+			scope = $injector.get('$rootScope').$new();
+			compile();
 		}));
 
 		it('should create a task from the script', inject(function(Task){
@@ -47,9 +42,9 @@ define(['./piQuest-module','../text/text-module'],function(){
 			expect(TaskSpy).toHaveBeenCalledWith(script);
 		}));
 
-		it('should listen for "quest:next" and proceed accordingly', function(){
-			scope.$new().$emit('quest:next','proceedObj');
-			expect(proceedSpy).toHaveBeenCalledWith('proceedObj');
+		it('should listen for "quest:next" and next accordingly', function(){
+			scope.$new().$emit('quest:next','nextObj');
+			expect(nextSpy).toHaveBeenCalledWith('nextObj');
 			expect(element.scope().page).toBe('nextObj');
 		});
 

@@ -24,6 +24,11 @@ define(['./database-module'],function(){
 			expect(result).toEqual({});
 		});
 
+		it('should throw an error ', function(){
+			inflate({});
+			expect(result).toEqual({});
+		});
+
 		it('should run obj.customize function when there is no inheritance', function(){
 			var spy = jasmine.createSpy();
 			inflate({customize:spy});

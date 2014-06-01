@@ -5,8 +5,12 @@ define(function(){
 			db.createColl('pages');
 			db.createColl('questions');
 
-			db.add('pages', script.pages);
-			db.add('questions', script.questions);
+			db.add('pages', script.pages || []);
+			db.add('questions', script.questions || []);
+
+			if (!script.sequence) {
+				throw new Error('No sequence found');
+			}
 
 			sequence.add(mixer(script.sequence));
 		}

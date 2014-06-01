@@ -46,7 +46,7 @@ module.exports = function (grunt) {
 			},
 			jsTest: {
 				files: ['<%= settings.app %>/js/**/*_test.js'],
-				tasks: ['newer:jshint:test', 'karma']
+				tasks: ['karma', 'newer:jshint:test']
 			},
 			styles: {
 				files: ['<%= settings.app %>/styles/{,*/}*.css'],
@@ -113,10 +113,7 @@ module.exports = function (grunt) {
 				'!<%= settings.app %>/js/{,*/}*_test.js'
 			],
 			test: {
-				options: {
-					jshintrc: 'test/.jshintrc'
-				},
-				src: ['test/spec/{,*/}*.js']
+				src: '<%= settings.app %>/js/{,*/}*_test.js'
 			}
 		},
 
@@ -190,8 +187,9 @@ module.exports = function (grunt) {
 		// Test settings
 		karma: {
 			unit: {
-				configFile: 'test/karma.conf.js',
-				singleRun: true
+				configFile: 'test/karma.conf.js'
+				// singleRun: false,
+				// browsers: ['Chrome']
 			}
 		},
 
@@ -229,7 +227,7 @@ module.exports = function (grunt) {
 			'clean:server',
 			'concurrent:server',
 			'connect:livereload',
-			'watch'
+			'watch:jsTest'
 		]);
 	});
 

@@ -53,7 +53,6 @@ define(function(require){
 			},
 
 			send: function(){
-				//console.log(this.pending.length)
 				var i;
 				var settings = this.settings;
 				var sendData = this.pending;

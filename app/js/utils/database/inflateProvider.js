@@ -37,6 +37,10 @@ define(function(require){
 				throw new Error('Inheritance loop too deep, you can only inherit up to 10 levels down');
 			}
 
+			if (!_.isPlainObject(source)){
+				throw new Error('You are trying to inflate a non object');
+			}
+
 			var parent
 				// create child
 				, child = angular.copy(source);

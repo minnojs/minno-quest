@@ -6,6 +6,23 @@ A framework for administering on-line questionnaires.
 
 This repository is nowhere near ready for use - keep in touch, things are moving fast around here!
 
+## settings
+```js
+settings: {
+	onEnd: function(){
+		// do something when the questionnaire ends
+		// this usualy be taken care of automaticaly by the task manager...
+		// for instance: redirect to 'my/url.js'
+		location.href = 'my/url.js';
+	},
+	logger: {
+		pulse: 34, // after how many objects should we post
+		url: '/my/url', // where should we post to
+		DEBUG: false // activate logging each object to the console
+	}
+}
+```
+
 ##quest.wrapper
 Any quest object can take the following properties:
 {

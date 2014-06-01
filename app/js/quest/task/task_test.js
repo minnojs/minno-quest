@@ -10,9 +10,9 @@ define(['underscore','./task-module'],function(){
 
 		// stubout constructors
 		beforeEach(module('task', 'logger','database', function($provide) {
-			$provide.value('Logger', function(){
+			$provide.value('Logger', jasmine.createSpy('Logger').andCallFake(function(){
 				this.log = logSpy;
-			});
+			}));
 			$provide.value('Database', function(){
 				this.createColl = createSpy;
 			});
@@ -34,6 +34,30 @@ define(['underscore','./task-module'],function(){
 		it('should setup the sequence', inject(function(TaskSequence){
 			expect(task.sequence).toBeDefined();
 			expect(task.sequence).toEqual(jasmine.any(TaskSequence));
+		}));
+
+		it('should setup the logger', inject(function(Task){
+			var script = {
+				settings: {
+					logger:{a:1}
+				}
+			};
+			task = new Task(script);
+			expect(task.logger.constructor).toHaveBeenCalledWith(script.settings.logger);
+		}));
+
+		it('should call settings.onEnd at the end of the task (it there is no endObject)', inject(function(Task, $rootScope){
+			var script = {
+				settings: {
+					onEnd:jasmine.createSpy('onEnd')
+				}
+			};
+			task = new Task(script);
+			nextSpy.andReturn(null);
+			task.next();
+			$rootScope.$apply();
+			expect(script.settings.onEnd).toHaveBeenCalled();
+			nextSpy.andReturn('nextObj');
 		}));
 
 		it('should call the parser', inject(function(Database){
@@ -90,6 +114,12 @@ define(['underscore','./task-module'],function(){
 		it('should add mixed sequence to sequenceObj', function(){
 			expect(sequence.add).toHaveBeenCalledWith(mixedSequence);
 		});
+
+		it('should throw an error if no sequence is provided',inject(function(taskParse){
+			expect(function(){
+				taskParse({} ,db, sequence);
+			}).toThrow();
+		}));
 	});
 
 	describe('sequence', function(){

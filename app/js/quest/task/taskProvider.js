@@ -1,13 +1,17 @@
-define(['underscore'], function(_){
+define(['underscore', 'angular'], function(_, angular){
 
-	TaskProvider.$inject = ['Database','Logger','TaskSequence','taskParse'];
-	function TaskProvider(Database, Logger, Sequence, parse){
+	TaskProvider.$inject = ['$q','Database','Logger','TaskSequence','taskParse'];
+	function TaskProvider($q, Database, Logger, Sequence, parse){
 		function Task(script){
 			// save script for later use...
 			this.script = script;
+			var settings = script.settings || {};
+
+			this.q = $q.defer();
+			this.q.promise.then(settings.onEnd || angular.noop);
 
 			this.db = new Database();
-			this.logger = new Logger();
+			this.logger = new Logger(settings.logger || {});
 			this.sequence = new Sequence([], this.db);
 
 			parse(script, this.db, this.sequence);
@@ -18,7 +22,13 @@ define(['underscore'], function(_){
 				this.logger.log.apply(this.logger, arguments);
 			},
 			next: function(target){
-				return this.sequence.proceed(target, this.db);
+				var nextObj = this.sequence.proceed(target, this.db);
+
+				if (!nextObj){
+					this.q.resolve();
+				}
+
+				return nextObj;
 			}
 
 		});

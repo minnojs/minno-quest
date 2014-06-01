@@ -5,37 +5,33 @@
  * This directive is responsible for:
  *		1. Creating the task object.
  *		2. Relaying pages from the sequence to piqPage.
- *		3. For now, deal with the end of a task (redirect, callback, broadcast etc. - later this should move into the tas)
+ *		3. For now, deal with the end of a task (redirect, callback, broadcast etc. - later this should move into the task)
  *
  * @name piQuest
   */
-define(function (require) {
-	var _ = require('underscore');
-	var template = require('text!./piQuest.html');
+define(['underscore', 'text!./piQuest.html'], function (_, template) {
 
-	piQuestCtrl.$inject = ['$scope','Task','$rootScope'];
-	function piQuestCtrl($scope, Task, $rootScope){
-		var script = $rootScope.script;
+	piQuestCtrl.$inject = ['$scope','Task'];
+	function piQuestCtrl($scope, Task){
+		var self = this;
+		var task = self.task = new Task($scope.script);
 
-		if (!script){
-			throw new Error('piQuest: script missing!');
-		}
+		this.init = next;
 
-		var task = this.task = new Task(script);
-
-		this.init = function(){
-			$scope.page = task.proceed();
-		};
-
-		$scope.$on('quest:next', function(event, target){
-			$scope.page = task.proceed(target);
-		});
+		$scope.$on('quest:next', next);
 
 		$scope.$on('quest:log', function(event, logs, pageData){
 			_.each(logs, function(log){
-				task.log(log, pageData, $rootScope.global);
+				task.log(log, pageData, $scope.global);
 			});
 		});
+
+		function next(event, target){
+			var page = task.next(target);
+			if (page) {
+				$scope.page = page;
+			}
+		}
 	}
 
 	function directive(){
