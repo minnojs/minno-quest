@@ -5,7 +5,7 @@
  */
 define(function(require){
 
-	require('quest/directives/quest-directives-module');
+	require('quest/directives/questDirectivesModule');
 	require('quest/task/task-module');
 
 	var module = angular.module('piQuest', ['questDirectives','task']);

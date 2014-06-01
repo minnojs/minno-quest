@@ -1,8 +1,7 @@
-define(['./text-module'],function(){
+define(['../questDirectivesModule'], function(){
 
 	describe('questText',function(){
-
-		var formElm, inputElm, scope, $compile, $document, $sniffer, $browser, changeInputValueTo;
+		var formElm, inputElm, scope, $compile, $sniffer, $browser, changeInputValueTo, addSpy = jasmine.createSpy('addQuest');
 		var jqLite = angular.element;
 
 		var compileInput = function compileInput(html, data){
@@ -13,12 +12,23 @@ define(['./text-module'],function(){
 			inputElm = formElm.find('input');
 		};
 
-		beforeEach(module('questText'));
+		beforeEach(module('questDirectives', function($compileProvider){
+			// this is a hack to get the piq-page controller registered by the directive
+			$compileProvider.directive('questText', function(){
+				return {
+					priority: -1000,
+					link: function(scope,element){
+						element.data('$piqPageController', {
+							addQuest : addSpy
+						});
+					}
+				};
+			});
+		}));
 		beforeEach(inject(function($injector, _$sniffer_, _$browser_) {
 			$sniffer = _$sniffer_;
 			$browser = _$browser_;
 			$compile = $injector.get('$compile');
-			$document = $injector.get('$document');
 			scope = $injector.get('$rootScope');
 
 			changeInputValueTo = function(value) {
@@ -110,5 +120,9 @@ define(['./text-module'],function(){
 			expect(formElm).toBeInvalid();
 		});
 
+		it('should register with piqPage', function(){
+			compileInput('<input piq-pages quest-text quest-data="data" />',{});
+			expect(addSpy).toHaveBeenCalledWith(inputElm.controller('questText'));
+		});
 	});
 });

@@ -1,8 +1,8 @@
-define(['./text-number-module'],function(){
+define(['../questDirectivesModule'],function(){
 
 	describe('questTextNumber',function(){
 
-		var formElm, inputElm, scope, $compile, $document, $sniffer, $browser, changeInputValueTo;
+		var formElm, inputElm, scope, $compile, $document, $sniffer, $browser, changeInputValueTo, addSpy = jasmine.createSpy('addQuest');
 		var jqLite = angular.element;
 
 		var compileInput = function compileInput(html, data){
@@ -13,7 +13,20 @@ define(['./text-number-module'],function(){
 			inputElm = formElm.find('input');
 		};
 
-		beforeEach(module('questTextNumber'));
+		beforeEach(module('questDirectives', function($compileProvider){
+			// this is a hack to get the piq-page controller registered by the directive
+			$compileProvider.directive('questTextNumber', function(){
+				return {
+					priority: -1000,
+					link: function(scope,element){
+						element.data('$piqPageController', {
+							addQuest : addSpy
+						});
+					}
+				};
+			});
+		}));
+
 		beforeEach(inject(function($injector, _$sniffer_, _$browser_) {
 			$sniffer = _$sniffer_;
 			$browser = _$browser_;
@@ -29,7 +42,6 @@ define(['./text-number-module'],function(){
 
 		it('should bind to a model', function(){
 			compileInput('<input quest-text-number quest-data="data" />',{});
-
 			expect(scope.data.response).toBe('');
 
 			changeInputValueTo(234234);
@@ -104,5 +116,11 @@ define(['./text-number-module'],function(){
 			changeInputValueTo(3);
 			expect(formElm).toBeInvalid();
 		});
+
+		iit('should register with piqPage', function(){
+			compileInput('<input quest-text-number quest-data="data" />',{});
+			expect(addSpy).toHaveBeenCalledWith(inputElm.controller('questTextNumber'));
+		});
+
 	});
 });

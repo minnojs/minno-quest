@@ -1,4 +1,4 @@
-define(['./piQuest-module','../text/text-module'],function(){
+define(['../questDirectivesModule'],function(){
 	var jqLite = angular.element;
 	var controller, element, scope, $compile;
 
@@ -19,7 +19,7 @@ define(['./piQuest-module','../text/text-module'],function(){
 			controller = element.controller('piQuest');
 		}
 
-		beforeEach(module('questPiQuest','task', function($provide, $compileProvider){
+		beforeEach(module('questDirectives','task', function($provide, $compileProvider){
 			$provide.value('Task', TaskSpy);
 
 			// make sure piqPage is not activated
@@ -64,7 +64,7 @@ define(['./piQuest-module','../text/text-module'],function(){
 			controller = element.controller('piqPage');
 		}
 
-		beforeEach(module('questPiQuest','task', 'questText', function($provide){
+		beforeEach(module('task', 'questDirectives', function($provide){
 			// don't load Task currently
 			$provide.value('Task', function(){});
 		}));

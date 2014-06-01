@@ -1,4 +1,4 @@
-define(['./wrapper-module'],function(){
+define(['../questDirectivesModule'], function(){
 
 	describe('questWrapper',function(){
 
@@ -12,7 +12,7 @@ define(['./wrapper-module'],function(){
 			scope.$digest();
 		};
 
-		beforeEach(module('questWrapper'));
+		beforeEach(module('questDirectives'));
 		beforeEach(inject(function($injector, _$sniffer_, _$browser_) {
 			$sniffer = _$sniffer_;
 			$browser = _$browser_;

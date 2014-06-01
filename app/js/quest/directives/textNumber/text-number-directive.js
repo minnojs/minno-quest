@@ -10,14 +10,21 @@ define(function (require) {
 		return {
 			replace: true,
 			template:template,
-			require: 'form',
+			require: ['form', '^?piqPage'],
+			controller: 'questController',
+			controllerAs: 'ctrl',
 			scope:{
 				data: '=questData'
 			},
 			link: function(scope, element, attr, ctrls) {
-				var form = ctrls;
+				var form = ctrls[0];
+				var page = ctrls[1];
+				var ctrl = scope.ctrl;
+
 				var input = element.find('input');
 				var ngModel = input.eq(0).controller('ngModel');
+
+				page && page.addQuest(ctrl);
 
 				// we have a specific problem with min max that don't take internal
 				// http://stackoverflow.com/questions/15656617/validation-not-triggered-when-data-binding-a-number-inputs-min-max-attributes

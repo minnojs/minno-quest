@@ -9,12 +9,18 @@ define(function (require) {
 		return {
 			replace: true,
 			template:template,
-			require: 'form',
+			require: ['form', '^?piqPage'],
+			controller: 'questController',
+			controllerAs: 'ctrl',
 			scope:{
 				data: '=questData'
 			},
 			link: function(scope, element, attr, ctrls) {
-				var form = ctrls;
+				var form = ctrls[0];
+				var page = ctrls[1];
+				var ctrl = scope.ctrl;
+
+				page && page.addQuest(ctrl);
 
 				scope.form = form;
 
