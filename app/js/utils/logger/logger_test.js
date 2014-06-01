@@ -138,6 +138,25 @@ define(['./logger-module'],function(){
 			logger.log(123);
 			expect($log.log).toHaveBeenCalledWith(123);
 		});
+
+		it('should extend the log object with whatever is set in settings.meta',inject(function(Logger){
+			var l = new Logger({meta:{a:1}});
+			l.log({b:2});
+			l.log({c:3});
+			expect(l.pending[0]).toEqual({a:1,b:2});
+			expect(l.pending[1]).toEqual({a:1,c:3});
+		}));
+
+		it('should throw an error if meta is set and we try to log a non object', inject(function(Logger){
+			var l = new Logger({meta:{a:1}});
+			expect(function(){
+				logger.log(1234);
+			}).not.toThrow();
+
+			expect(function(){
+				l.log(1234);
+			}).toThrow();
+		}));
 	});
 
 });

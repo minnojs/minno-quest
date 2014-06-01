@@ -15,7 +15,7 @@ define(['../questDirectivesModule'],function(){
 
 		beforeEach(module('questDirectives', function($compileProvider){
 			// this is a hack to get the piq-page controller registered by the directive
-			$compileProvider.directive('questTextNumber', function(){
+			$compileProvider.directive('piqPageInject', function(){
 				return {
 					priority: -1000,
 					link: function(scope,element){
@@ -117,8 +117,8 @@ define(['../questDirectivesModule'],function(){
 			expect(formElm).toBeInvalid();
 		});
 
-		iit('should register with piqPage', function(){
-			compileInput('<input quest-text-number quest-data="data" />',{});
+		it('should register with piqPage', function(){
+			compileInput('<input piq-page-inject quest-text-number quest-data="data" />',{});
 			expect(addSpy).toHaveBeenCalledWith(inputElm.controller('questTextNumber'));
 		});
 

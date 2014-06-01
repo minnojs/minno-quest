@@ -3,6 +3,10 @@ define([], function(){
 		pages: [],
 		questions:[],
 		settings: {
+			logger: {
+				pulse: 3,
+				url: 'mine/sps'
+			},
 			onEnd: function(){
 				location.href = location.href;
 			}
@@ -10,9 +14,11 @@ define([], function(){
 		sequence: [
 			{
 				header: 'This Royal Questionnaire of mine.',
+				decline:true,
 				questions: [
 					{
-						stem: "First question"
+						stem: "First question",
+						required: true
 					},
 					{
 						stem: "Second question"

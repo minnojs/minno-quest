@@ -13,10 +13,10 @@ define(['../questDirectivesModule'], function(){
 		};
 
 		beforeEach(module('questDirectives', function($compileProvider){
-			// this is a hack to get the piq-page controller registered by the directive
-			$compileProvider.directive('questText', function(){
+			//this is a hack to get the piq-page controller registered by the directive
+			$compileProvider.directive('piqPageInject', function(){
 				return {
-					priority: -1000,
+					priority: -100,
 					link: function(scope,element){
 						element.data('$piqPageController', {
 							addQuest : addSpy
@@ -121,7 +121,7 @@ define(['../questDirectivesModule'], function(){
 		});
 
 		it('should register with piqPage', function(){
-			compileInput('<input piq-pages quest-text quest-data="data" />',{});
+			compileInput('<input piq-page-inject quest-text quest-data="data" />',{});
 			expect(addSpy).toHaveBeenCalledWith(inputElm.controller('questText'));
 		});
 	});

@@ -1,4 +1,4 @@
-<div ng-form name="piQuest" id="a">
+<div ng-form name="pageForm">
 	<h2 ng-if="page.header">{{page.header}}</h2>
 	<ol>
 		<li ng-repeat="quest in page.questions">
@@ -12,11 +12,24 @@
 			</div>
 		</li>
 	</ol>
-	<button
-		ng-click="submit()"
-		data-role="submit"
-		class="btn btn-default"
-		ng-class="form"
-		ng-disabled="form.$invalid"
-	>Submit</button>
+
+	<div class="btn-group pull-right">
+		<button
+			ng-click="submit()"
+			data-role="submit"
+			class="btn btn-primary"
+			ng-class="form"
+			ng-disabled="pageForm.$invalid"
+		>Submit</button>
+
+		<button
+			ng-click="submit(true)"
+			data-role="submit"
+			class="btn btn-warning"
+			ng-class="form"
+			ng-if="page.decline"
+		>Decline to Answer</button>
+	</div>
+
+
 </div>

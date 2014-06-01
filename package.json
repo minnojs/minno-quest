@@ -23,10 +23,9 @@
     "karma": "^0.12.16",
     "karma-chrome-launcher": "^0.1.2",
     "karma-jasmine": "^0.1.5",
-    "karma-ng-html2js-preprocessor": "^0.1.0",
-    "karma-ng-scenario": "~0.1",
     "karma-phantomjs-launcher": "^0.1.2",
     "karma-requirejs": "^0.2.1",
+    "karma-spec-reporter": "0.0.12",
     "load-grunt-tasks": "~0.2.0",
     "requirejs": "^2.1.11",
     "time-grunt": "~0.2.1"

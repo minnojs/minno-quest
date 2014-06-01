@@ -5,6 +5,7 @@
  *	settings = {
  *		pulse: 34, // after how many objects should we post
  *		url: '/my/url', // where should we post to
+ *		meta: an object that extends each log
  *		DEBUG: false // activate logging each object to the console
  *	}
  *
@@ -24,11 +25,16 @@ define(function(require){
 		var self = this;
 
 		function Logger(settings){
+			settings || (settings = {});
+
 			this.pending = [];
 			this.sent = [];
 
 			// inherit settings both from settings obj, and the global settings
 			this.settings = _.defaults({}, settings, self.settings);
+
+			// inherit meta settings
+			this.meta = _.defaults({}, settings.meta, self.meta);
 		}
 
 		_.extend(Logger.prototype, {
@@ -40,6 +46,18 @@ define(function(require){
 				}
 
 				var logObj = settings.logFn ? settings.logFn.apply(settings, arguments) : obj;
+
+				if (settings.meta){
+					if (!_.isPlainObject(obj)){
+						throw new Error('Logger: in order to use "meta" the log must be an object.');
+					}
+
+					if (!_.isPlainObject(settings.meta)){
+						throw new Error('Logger: "meta" must be an object.');
+					}
+
+					_.extend(obj, settings.meta);
+				}
 
 				if (settings.DEBUG){
 					$log.log(logObj);
@@ -100,6 +118,7 @@ define(function(require){
 	return function(){
 		this.$get = loggerProvider;
 		this.settings = {};
+		this.meta = {};
 		this.logCounter = 0;
 	};
 });
