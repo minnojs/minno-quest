@@ -24,44 +24,28 @@ define(function(require){
 	function loggerProvider($http, $q, $log){
 		var self = this;
 
-		function Logger(settings){
-			settings || (settings = {});
-
+		function Logger(dfltLogFn){
 			this.pending = [];
 			this.sent = [];
-
-			// inherit settings both from settings obj, and the global settings
-			this.settings = _.defaults({}, settings, self.settings);
-
-			// inherit meta settings
-			this.meta = _.defaults({}, settings.meta, self.meta);
+			this.settings = {};
+			this.meta = {};
+			this.dfltLogFn = dfltLogFn || function(){return arguments[0];};
 		}
 
 		_.extend(Logger.prototype, {
-			log: function(obj){
+			log: function(){
 				var settings = this.settings;
+				var logObj = (settings.logFn || this.dfltLogFn).apply(settings, arguments);
 
-				if (_.isUndefined(obj)){
-					throw new Error('You can\'t log an undefined object');
+				if (!_.isEmpty(this.meta) && !_.isPlainObject(logObj)){
+					settings.DEBUG && $log.log(logObj);
+					throw new Error('Logger: in order to use "meta" the log must be an object.');
 				}
 
-				var logObj = settings.logFn ? settings.logFn.apply(settings, arguments) : obj;
+				_.extend(logObj, this.meta);
 
-				if (settings.meta){
-					if (!_.isPlainObject(obj)){
-						throw new Error('Logger: in order to use "meta" the log must be an object.');
-					}
-
-					if (!_.isPlainObject(settings.meta)){
-						throw new Error('Logger: "meta" must be an object.');
-					}
-
-					_.extend(obj, settings.meta);
-				}
-
-				if (settings.DEBUG){
-					$log.log(logObj);
-				}
+				// if debug, then log this object
+				settings.DEBUG && $log.log(logObj);
 
 				this.pending.push(logObj);
 				self.logCounter++;
@@ -109,6 +93,22 @@ define(function(require){
 
 			getCount: function(){
 				return self.logCounter;
+			},
+
+			setSettings: function(settings){
+				if (arguments.length === 0){
+					return this.settings;
+				}
+
+				// inherit settings both from settings obj, and the global settings
+				this.settings = _.defaults({}, settings, self.settings);
+
+				if (!_.isUndefined(settings.meta) && !_.isPlainObject(settings.meta)){
+					throw new Error('Logger: "meta" must be an object.');
+				}
+
+				// inherit meta settings
+				this.meta = _.defaults({}, settings.meta, self.meta);
 			}
 		});
 

@@ -14,7 +14,8 @@ define(['./logger-module'],function(){
 
 		beforeEach(inject(function(_$httpBackend_, Logger, _$log_){
 			$httpBackend = _$httpBackend_;
-			logger = new Logger(settings);
+			logger = new Logger();
+			logger.setSettings(settings);
 			$log = _$log_;
 		}));
 
@@ -25,12 +26,29 @@ define(['./logger-module'],function(){
 			expect(logger.pending[1]).toBe(2);
 		});
 
-		it('should parse the input using logFn if it exists', function(){
-			logger.settings.logFn = function(a, b){
-				return a + b;
-			};
-			logger.log(1,2);
-			expect(logger.pending[0]).toBe(3);
+		describe(': settings', function(){
+			it('should have a method that sets "settings"', function(){
+				var s = {a:1};
+				expect(logger.setSettings).toBeDefined();
+				logger.setSettings(s);
+				expect(logger.setSettings().a).toBe(1);
+			});
+
+			it('should inherit settings (across instances)', function(){
+				expect(logger.settings.fake).toBe('fake');
+				expect(logger.settings.pulse).not.toBe(10); // make sure not to overide the explicit settings
+			});
+
+			it('should throw an error if meta is set and we try to log a non object', inject(function(Logger){
+				var l = new Logger({meta:{a:1}});
+				expect(function(){
+					logger.log(1234);
+				}).not.toThrow();
+
+				expect(function(){
+					l.log(1234);
+				}).toThrow();
+			}));
 		});
 
 		describe(': pulse', function(){
@@ -111,14 +129,12 @@ define(['./logger-module'],function(){
 			});
 		});
 
-		it('should inherit settings (across instances)', function(){
-			expect(logger.settings.fake).toBe('fake');
-			expect(logger.settings.pulse).not.toBe(10); // make sure not to overide the explicit settings
-		});
-
 		it('should supply a log counter across instances', inject(function(Logger){
-			var l1 = new Logger(settings);
-			var l2 = new Logger(settings);
+			var l1 = new Logger();
+			l1.setSettings(settings);
+			var l2 = new Logger();
+			l2.setSettings(settings);
+
 			expect(l1.getCount()).toBe(0);
 			l1.log(123);
 			l2.log(123);
@@ -139,23 +155,29 @@ define(['./logger-module'],function(){
 			expect($log.log).toHaveBeenCalledWith(123);
 		});
 
+		it('should parse the input using logFn if it exists', function(){
+			logger.settings.logFn = function(a, b){
+				return a + b;
+			};
+			logger.log(1,2);
+			expect(logger.pending[0]).toBe(3);
+		});
+
+		it('should use the default log function if it is set (and pass all relevant arguments)', inject(function(Logger){
+			var logFn = jasmine.createSpy('logFn').andCallFake(function(a){return a;});
+			var l = new Logger(logFn);
+			l.log(1,2,3);
+			expect(l.pending[0]).toBe(1);
+			expect(logFn).toHaveBeenCalledWith(1,2,3);
+		}));
+
 		it('should extend the log object with whatever is set in settings.meta',inject(function(Logger){
-			var l = new Logger({meta:{a:1}});
+			var l = new Logger();
+			l.setSettings({meta:{a:1}});
 			l.log({b:2});
 			l.log({c:3});
 			expect(l.pending[0]).toEqual({a:1,b:2});
 			expect(l.pending[1]).toEqual({a:1,c:3});
-		}));
-
-		it('should throw an error if meta is set and we try to log a non object', inject(function(Logger){
-			var l = new Logger({meta:{a:1}});
-			expect(function(){
-				logger.log(1234);
-			}).not.toThrow();
-
-			expect(function(){
-				l.log(1234);
-			}).toThrow();
 		}));
 	});
 

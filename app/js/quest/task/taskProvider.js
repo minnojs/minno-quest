@@ -1,7 +1,7 @@
 define(['underscore', 'angular'], function(_, angular){
 
-	TaskProvider.$inject = ['$q','Database','Logger','TaskSequence','taskParse'];
-	function TaskProvider($q, Database, Logger, Sequence, parse){
+	TaskProvider.$inject = ['$q','Database','Logger','TaskSequence','taskParse', 'dfltQuestLogger'];
+	function TaskProvider($q, Database, Logger, Sequence, parse, dfltQuestLogger){
 		function Task(script){
 			var self = this;
 			var settings = script.settings || {};
@@ -9,7 +9,8 @@ define(['underscore', 'angular'], function(_, angular){
 			// save script for later use...
 			this.script = script;
 			this.db = new Database();
-			this.logger = new Logger(settings.logger || {});
+			this.logger = new Logger(dfltQuestLogger);
+			this.logger.setSettings(settings.logger || {});
 			this.sequence = new Sequence([], this.db);
 			this.q = $q.defer();
 

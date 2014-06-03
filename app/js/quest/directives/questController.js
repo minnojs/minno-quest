@@ -9,7 +9,10 @@ define(function(){
 	function questController($scope){
 		this.scope = $scope;
 		this.value = function(){
-			return $scope.response;
+			return {
+				response: $scope.response,
+				name: $scope.data.name
+			};
 		};
 		this.valid = function(){
 			if ($scope.form){

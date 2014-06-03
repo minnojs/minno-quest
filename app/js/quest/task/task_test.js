@@ -14,6 +14,7 @@ define(['underscore','./task-module'],function(){
 			$provide.value('Logger', jasmine.createSpy('Logger').andCallFake(function(){
 				this.send = sendSpy;
 				this.log = logSpy;
+				this.setSettings = jasmine.createSpy('setSettings');
 			}));
 			$provide.value('Database', function(){
 				this.createColl = createSpy;
@@ -45,7 +46,7 @@ define(['underscore','./task-module'],function(){
 				}
 			};
 			task = new Task(script);
-			expect(task.logger.constructor).toHaveBeenCalledWith(script.settings.logger);
+			expect(task.logger.setSettings).toHaveBeenCalledWith(script.settings.logger);
 		}));
 
 		it('should call settings.onEnd at the end of the task (if there is no endObject)', inject(function(Task, $rootScope){

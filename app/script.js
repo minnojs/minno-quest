@@ -5,7 +5,8 @@ define([], function(){
 		settings: {
 			logger: {
 				pulse: 3,
-				url: 'mine/sps'
+				url: 'mine/sps',
+				DEBUG:true
 			},
 			onEnd: function(){
 				location.href = location.href;
