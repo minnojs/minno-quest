@@ -53,7 +53,7 @@ define(['require','./manager-module'], function(require){
 			});
 		});
 
-		describe('getScript', function(){
+		describe(': getScript', function(){
 			var base_url = require.toUrl('.');
 			var q;
 

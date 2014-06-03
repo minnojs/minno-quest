@@ -25,6 +25,12 @@ module.exports = function(config) {
 			'app/js/bootstrap.js'
 		],
 
+		// use dolts reporter, as travis terminal does not support escaping sequences
+		// possible values: 'dots', 'progress', 'junit', 'teamcity'
+		// CLI --reporters progress
+		// reporters : ['spec'],
+
+
 		// web server port
 		port: 8080,
 

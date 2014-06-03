@@ -186,9 +186,12 @@ module.exports = function (grunt) {
 
 		// Test settings
 		karma: {
-			unit: {
+			options: {
 				configFile: 'test/karma.conf.js'
-				// singleRun: false,
+			},
+			unit:{
+				singleRun: true,
+				reporters : grunt.option('report') ? ['spec'] : ['progress']
 				// browsers: ['Chrome']
 			}
 		},
