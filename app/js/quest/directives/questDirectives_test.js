@@ -13,6 +13,7 @@ define(['./questDirectivesModule'], function(){
 
 		it('should expose a value function as well as the scope', function(){
 			expect(controller.value).toBeDefined();
+			expect(controller.valid).toBeDefined();
 			expect(controller.scope).toBe(scope);
 		});
 	});

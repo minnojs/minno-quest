@@ -41,12 +41,12 @@ define(function (require) {
 			questStack = [];
 		};
 
-		$scope.submit = function(validate){
+		$scope.submit = function(skipValidation){
 			var valid = _.reduce(questStack, function(result, quest){
 				return result &= quest.valid();
 			}, true);
 
-			if (!valid && validate !== false){
+			if (!valid && skipValidation !== true){
 				return true;
 			}
 

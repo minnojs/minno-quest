@@ -133,11 +133,11 @@ define(['../questDirectivesModule'],function(){
 					expect(controller.harvest).not.toHaveBeenCalled();
 				});
 
-				it('should not validate if submit(false)', function(){
+				it('should not validate if submit(true)', function(){
 					controller.addQuest({valid:function(){return true;}});
 					controller.addQuest({valid:function(){return false;}});
 					controller.addQuest({valid:function(){return true;}});
-					$scope.submit(false);
+					$scope.submit(true);
 					expect(controller.harvest).toHaveBeenCalled();
 				});
 

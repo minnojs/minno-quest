@@ -11,6 +11,12 @@ define(function(){
 		this.value = function(){
 			return $scope.response;
 		};
+		this.valid = function(){
+			if ($scope.form){
+				return !$scope.form.$invalid;
+			}
+			return true;
+		};
 	}
 
 	return questController;
