@@ -96,14 +96,12 @@ define(['underscore','./task-module'],function(){
 				questions: {},
 				sequence: {}
 			},
-			mixedSequence = {}, // place holder for mixed sequence
-			db = jasmine.createSpyObj('db', ['createColl', 'add']),
-			sequence = jasmine.createSpyObj('sequence', ['add']),
-			mixerSpy = jasmine.createSpy('mixer').andReturn(mixedSequence);
 
-		beforeEach(module('task', function($provide){
-			$provide.value('mixer', mixerSpy);
-		}));
+			db = jasmine.createSpyObj('db', ['createColl', 'add']),
+			sequence = jasmine.createSpyObj('sequence', ['add']);
+
+
+		beforeEach(module('task'));
 
 		beforeEach(inject(function(taskParse){
 			taskParse(script, db, sequence);
@@ -119,12 +117,8 @@ define(['underscore','./task-module'],function(){
 			expect(db.add.argsForCall[1]).toEqual(['questions', script.questions]);
 		});
 
-		it('should mix sequence', function(){
-			expect(mixerSpy).toHaveBeenCalledWith(script.sequence);
-		});
-
-		it('should add mixed sequence to sequenceObj', function(){
-			expect(sequence.add).toHaveBeenCalledWith(mixedSequence);
+		it('should add sequence to sequenceObj', function(){
+			expect(sequence.add).toHaveBeenCalledWith(script.sequence);
 		});
 
 		it('should throw an error if no sequence is provided',inject(function(taskParse){
