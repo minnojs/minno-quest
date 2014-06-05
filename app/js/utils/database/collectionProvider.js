@@ -80,14 +80,14 @@ define(['underscore'],function(_){
 		var methods = ['where','filter'];
 		var slice = Array.prototype.slice;
 
-		  // Mix in each Underscore method as a proxy to `Collection#models`.
+		// Mix in each Underscore method as a proxy to `Collection#models`.
 		_.each(methods, function(method) {
-		    Collection.prototype[method] = function() {
-		    	var args = slice.call(arguments);
-		    	args.unshift(this.collection);
-		    	var coll = _[method].apply(_,args);
-		    	return new Collection(coll);
-		    };
+			Collection.prototype[method] = function() {
+				var args = slice.call(arguments);
+				args.unshift(this.collection);
+				var coll = _[method].apply(_,args);
+				return new Collection(coll);
+			};
 		});
 
 		return Collection;

@@ -12,7 +12,7 @@ define(function(){
 				throw new Error('No sequence found');
 			}
 
-			sequence.add(mixer(script.sequence));
+			sequence.add(script.sequence);
 		}
 
 		return parse;

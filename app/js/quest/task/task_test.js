@@ -137,8 +137,12 @@ define(['underscore','./task-module'],function(){
 	describe('sequence', function(){
 		var db = jasmine.createSpyObj('db', ['inflate']);
 		var sequence;
+		// mock the mixer without mixing
+		var mixerSpy = jasmine.createSpy('mixer').andCallFake(function(a){return [a];});
 
-		beforeEach(module('task'));
+		beforeEach(module('task', function($provide){
+			$provide.value('mixer', mixerSpy);
+		}));
 		beforeEach(inject(function(TaskSequence){
 			sequence = new TaskSequence([1,2,3,4], db);
 		}));
@@ -185,6 +189,5 @@ define(['underscore','./task-module'],function(){
 				expect(sequence.buildPage).toHaveBeenCalledWith(2);
 			});
 		});
-
 	});
 });

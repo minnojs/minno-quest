@@ -52,6 +52,14 @@ define(function(require){
 				var page = this.next();
 				page = this.buildPage(page);
 				return page;
+			},
+
+			mix: function(){
+				// get the current element
+				// mixArray it
+				// and put it back
+				// : we should make sure to keep a copy of the source...
+				// : and a copy of the ongoing sequence
 			}
 		});
 
