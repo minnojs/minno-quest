@@ -4,6 +4,7 @@ define(function(require){
 	var module = angular.module('mixer',[]);
 
 	module.service('mixer', require('./mixer'));
+	module.service('mixerArray', require('./mixerArray'));
 	module.value('mixerShuffle', _.shuffle);
 	module.value('mixerRandom', function(){return Math.random();});
 

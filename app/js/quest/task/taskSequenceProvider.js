@@ -16,8 +16,8 @@ define(function(require){
 		})();
 	}
 
-	SequenceProvider.$inject = ['Collection'];
-	function SequenceProvider(Collection){
+	SequenceProvider.$inject = ['Collection', 'mixerArray'];
+	function SequenceProvider(Collection, mix){
 		// classical inheritance from Collection
 		// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create#Classical_inheritance_with_Object.create
 		function Sequence(coll, db){
@@ -49,17 +49,22 @@ define(function(require){
 				return page;
 			},
 			proceed: function(){
-				var page = this.next();
+				this.next();
+				this.mix();
+				var page = this.current();
 				page = this.buildPage(page);
 				return page;
 			},
 
 			mix: function(){
-				// get the current element
-				// mixArray it
-				// and put it back
-				// : we should make sure to keep a copy of the source...
-				// : and a copy of the ongoing sequence
+				var obj = this.current();
+				var mixed = mix([obj]);
+				var sequence = this.collection;
+
+				// push the first arguments of splice into the mixer array...
+				mixed.unshift(1); // how many objects to delete
+				mixed.unshift(this.pointer); // where to start at
+				sequence.splice.apply(sequence, mixed);
 			}
 		});
 

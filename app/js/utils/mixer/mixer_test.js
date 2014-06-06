@@ -85,39 +85,48 @@ define(['underscore','./mixer-module'],function(_){
 		});
 	});
 
-	xdescribe(': mix', function(){
-		it('should mix the current element', function(){
-			sequence.mix();
-			expect(mixerSpy).toHaveBeenCalledWith(1);
-			sequence.next();
-			sequence.mix();
-			expect(mixerSpy).toHaveBeenCalledWith(2);
+	describe(': mixerArray', function(){
+		var mix;
+		var mix1 = {mixer:1};
+		var mix2 = {mixer:2};
+		var mix3 = {mixer:3};
+		var mixerSpy = jasmine.createSpy('mixer').andCallFake(function(a){
+			if (a == mix1){
+				return ['a','b'];
+			}
+			if (a == mix2){
+				return [mix1,1];
+			}
+			if (a == mix3){
+				return [mix3];
+			}
 		});
 
-		it('should replace current element with the mixed array', function(){
-			mixerSpy.andCallFake(function(a){return [a,a];});
-			sequence.mix();
-			expect(sequence.collection).toEqual([1,1,2,3,4]);
-			sequence.last();
-			sequence.mix();
-			expect(sequence.collection).toEqual([1,1,2,3,4,4]);
+		beforeEach(module('mixer',function($provide){
+			$provide.value('mixer', mixerSpy);
+		}));
+
+		beforeEach(inject(function(mixerArray){
+			mix = mixerArray;
+		}));
+
+		it('should mix the first element', function(){
+			mix([mix1]);
+			expect(mixerSpy).toHaveBeenCalledWith(mix1);
 		});
 
-		it('should update length', function(){
-			mixerSpy.andCallFake(function(a){return [a,a];});
-			expect(sequence.length).toBe(4);
-			sequence.mix();
-			expect(sequence.length).toBe(5);
-			sequence.mix();
-			expect(sequence.length).toBe(6);
+		it('should replace first element with the mixed array', function(){
+			expect(mix([mix1,2])).toEqual(['a','b',2]);
 		});
 
 		it('should mix recursively', function(){
-
+			expect(mix([mix2, 2])).toEqual(['a','b',1,2]);
 		});
 
 		it('should break recursion when mixerDepth is reached', function(){
-
+			expect(function(){
+				mix([mix3]);
+			}).toThrow();
 		});
 	});
 

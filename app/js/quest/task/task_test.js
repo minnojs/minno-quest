@@ -132,10 +132,10 @@ define(['underscore','./task-module'],function(){
 		var db = jasmine.createSpyObj('db', ['inflate']);
 		var sequence;
 		// mock the mixer without mixing
-		var mixerSpy = jasmine.createSpy('mixer').andCallFake(function(a){return [a];});
+		var mixerSpy = jasmine.createSpy('mixer').andCallFake(function(a){return [a[0],a[0]];});
 
 		beforeEach(module('task', function($provide){
-			$provide.value('mixer', mixerSpy);
+			$provide.value('mixerArray', mixerSpy);
 		}));
 		beforeEach(inject(function(TaskSequence){
 			sequence = new TaskSequence([1,2,3,4], db);
@@ -174,14 +174,40 @@ define(['underscore','./task-module'],function(){
 		});
 
 		describe(': proceed', function(){
+			it('should mix the sequence before proceeding', function(){
+				spyOn(sequence,'buildPage').andCallFake(function(value){return value;});
+				spyOn(sequence,'mix').andCallFake(function(){
+					expect(sequence.buildPage).not.toHaveBeenCalled();
+				});
+				sequence.proceed();
+				expect(sequence.mix).toHaveBeenCalled();
+			});
+
 			it('should return an infalted version of the next obj', function(){
 				spyOn(sequence,'buildPage').andCallFake(function(value){return value;});
+				spyOn(sequence,'mix'); // neutralize mix
 
 				expect(sequence.proceed()).toBe(1);
 				expect(sequence.buildPage).toHaveBeenCalledWith(1);
 				expect(sequence.proceed()).toBe(2);
 				expect(sequence.buildPage).toHaveBeenCalledWith(2);
 			});
+		});
+
+		describe(': mix',function(){
+			it('should mix the current object', function(){
+				sequence.last();
+				sequence.mix();
+				expect(mixerSpy).toHaveBeenCalledWith([4]);
+			});
+
+			it('should replace the object with the mixed array', function(){
+				sequence.next();
+				sequence.next();
+				sequence.mix();
+				expect(sequence.collection).toEqual([1,2,2,3,4]);
+			});
+
 		});
 	});
 });
