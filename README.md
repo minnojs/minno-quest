@@ -78,6 +78,8 @@ Any quest object can take the following properties:
 {
 	name: "identifier",
 	header: 'My header',
+	timeout: 3452, // how long in ms before timeout triggers
+	timeoutMessage: 'you ran out of time...', // an optional message to be displayed upon timeout
 	questions: [
 		{type:'text'},
 		{type:'textNumber'},

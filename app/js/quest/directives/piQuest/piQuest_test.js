@@ -76,13 +76,21 @@ define(['../questDirectivesModule'],function(){
 
 		describe('Controller', function(){
 			// just create the directive so we can grab the controller
-			beforeEach(function(){
-				compile({});
-			});
+			describe(': general', function(){
+				beforeEach(function(){
+					compile({name:'myName'});
+				});
 
-			it('should expose methods to register questions', function(){
-				expect(controller.addQuest).toEqual(jasmine.any(Function));
-				expect(controller.removeQuest).toEqual(jasmine.any(Function));
+				it('should expose methods to register questions', function(){
+					expect(controller.addQuest).toEqual(jasmine.any(Function));
+					expect(controller.removeQuest).toEqual(jasmine.any(Function));
+				});
+
+				it('should create the basic log object', function(){
+					expect(controller.log).toBeDefined();
+					expect(controller.log.name).toBe('myName');
+				});
+
 			});
 
 			describe(': harvest', function(){
@@ -94,6 +102,8 @@ define(['../questDirectivesModule'],function(){
 					valueSpy = jasmine.createSpy('quest').andCallFake(function(){
 						return coll.next();
 					});
+
+					compile({});
 
 					controller.addQuest({value:valueSpy});
 					controller.addQuest({value:valueSpy});
@@ -121,6 +131,7 @@ define(['../questDirectivesModule'],function(){
 				var $scope;
 
 				beforeEach(function(){
+					compile({});
 					spyOn(controller,'harvest');
 					$scope = element.scope();
 				});
@@ -184,6 +195,44 @@ define(['../questDirectivesModule'],function(){
 					expect(element.find('h2').length).toBe(0);
 				});
 			}); // end describe page directive
+
+			describe('timeout', function(){
+				var $timeout;
+
+				beforeEach(inject(function(_$timeout_){
+					$timeout = _$timeout_;
+					compile({timeout: 100});
+				}));
+
+				it('should submit',function(){
+					var submitSpy = jasmine.createSpy('submit');
+					scope.$on('quest:next', submitSpy);
+					$timeout.flush();
+					expect(submitSpy).toHaveBeenCalled();
+					expect(controller.log.timeout).toBeDefined();
+				});
+
+				it('should submit even upon error', function(){
+					var noop = function(){};
+					var submitSpy = jasmine.createSpy('submit');
+
+					controller.addQuest({valid:function(){return true;}, value: noop});
+					controller.addQuest({valid:function(){return false;}, value: noop});
+					scope.$on('quest:next', submitSpy);
+					$timeout.flush();
+					expect(submitSpy).toHaveBeenCalled();
+				});
+
+				it('should not trigger if submit was called before it', function(){
+					scope.submit(true);
+					$timeout.flush();
+					expect(controller.log.timeout).not.toBeDefined();
+				});
+
+				it('should optionally display a timer on the page', function(){});
+
+				it('should show a custom message', function(){});
+			});
 		});
 	});
 

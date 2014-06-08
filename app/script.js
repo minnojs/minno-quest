@@ -6,7 +6,7 @@ define([], function(){
 			logger: {
 				pulse: 3,
 				url: 'mine/sps',
-				DEBUG:true
+				//DEBUG:true
 			},
 			onEnd: function(){
 				location.href = location.href;
@@ -19,6 +19,8 @@ define([], function(){
 				data: [
 					{
 						header: 'This Royal Questionnaire of mine.',
+						timeout:1000,
+						timeoutMessage: 'My message',
 						decline:true,
 						questions: [
 							{

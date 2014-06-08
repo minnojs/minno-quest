@@ -5,13 +5,18 @@ define([], function(){
 			underscore: "../libs/lodash/dist/lodash.min",
 			angular: '../libs/angular/angular',
 			angularMocks: '../libs/angular-mocks/angular-mocks',
+			//angularUi: '../libs/angular-bootstrap/ui-bootstrap-tpls.min',
 			text: '../libs/requirejs-text/text'
 		},
 		shim: {
-			'angular' : {'exports' : 'angular'}
+			angular : {exports : 'angular'},
+			angularUi : {
+				deps: ['angular'],
+				exports: 'angular.ui'
+			}
 		},
-		priority: [
-			'angular'
+		deps: [
+			'angular', 'underscore','text' //, 'angularUi'
 		]
 	});
 
