@@ -183,6 +183,14 @@ define(['underscore','./task-module'],function(){
 				expect(sequence.mix).toHaveBeenCalled();
 			});
 
+			it('should return undefined and not mix when we reach the end', function(){
+				spyOn(sequence,'buildPage').andCallFake(function(value){return value;});
+				spyOn(sequence,'mix');
+				sequence.last();
+				expect(sequence.proceed()).toBe(undefined);
+				expect(sequence.mix).not.toHaveBeenCalled();
+			});
+
 			it('should return an infalted version of the next obj', function(){
 				spyOn(sequence,'buildPage').andCallFake(function(value){return value;});
 				spyOn(sequence,'mix'); // neutralize mix
@@ -208,6 +216,11 @@ define(['underscore','./task-module'],function(){
 				expect(sequence.collection).toEqual([1,2,2,3,4]);
 			});
 
+			it('should update sequence length', function(){
+				sequence.next();
+				sequence.mix();
+				expect(sequence.length).toEqual(5);
+			});
 		});
 	});
 });

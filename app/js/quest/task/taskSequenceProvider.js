@@ -50,6 +50,12 @@ define(function(require){
 			},
 			proceed: function(){
 				this.next();
+
+				// return undefined at the end
+				if (this.length === this.pointer){
+					return undefined;
+				}
+
 				this.mix();
 				var page = this.current();
 				page = this.buildPage(page);
@@ -65,6 +71,9 @@ define(function(require){
 				mixed.unshift(1); // how many objects to delete
 				mixed.unshift(this.pointer); // where to start at
 				sequence.splice.apply(sequence, mixed);
+
+				// update sequence length
+				this.length = sequence.length;
 			}
 		});
 

@@ -14,26 +14,37 @@ define([], function(){
 		},
 		sequence: [
 			{
-				header: 'This Royal Questionnaire of mine.',
-				decline:true,
-				questions: [
+				mixer: 'repeat',
+				times: 2,
+				data: [
 					{
-						stem: "First question",
-						required: true
-					},
-					{
-						stem: "Second question"
+						header: 'This Royal Questionnaire of mine.',
+						decline:true,
+						questions: [
+							{
+								stem: "First question",
+								required: true
+							},
+							{
+								stem: "Second question"
+							}
+						]
 					}
 				]
 			},
 			{
-				header: 'This Royal Questionnaire of mine.',
-				questions: [
+				mixer: 'wrapper',
+				data: [
 					{
-						stem: "Third question"
-					},
-					{
-						stem: "Fourth question"
+						header: 'This Royal Questionnaire of mine.',
+						questions: [
+							{
+								stem: "Third question"
+							},
+							{
+								stem: "Fourth question"
+							}
+						]
 					}
 				]
 			}
