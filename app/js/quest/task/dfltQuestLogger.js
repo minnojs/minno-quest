@@ -1,13 +1,12 @@
-define(function(){
+define(function(require){
+	var _ = require('underscore');
 
 	function dfltQuestLogger(log, pageData, global){
 		global;
-		return {
-			response: log.response,
-			name: log.name,
+		return _.extend({
 			pageData: 'pageData place holder',
 			global: 'globalData place holder'
-		};
+		},log);
 	}
 
 	return dfltQuestLogger;

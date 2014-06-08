@@ -19,19 +19,29 @@ settings: {
 		pulse: 34, // after how many objects should we post
 		url: '/my/url', // where should we post to
 		DEBUG: false // activate logging each object to the console
+		logfn: function(log,pageData, global){
+			log = {name:111,latency:8976, prestineLatency:45634, response:'response', data: {/* data */}};
+			pageData = {startTime:'234645345', pageName: 'name'}
+			return {};
+		}
+
 	}
 }
 ```
 
 ##quest.wrapper
 Any quest object can take the following properties:
+
+```js
 {
 	stem: "My question stem"
 }
+```
 
 ## questText
 ```js
 {
+	name: "identifier",
 	dflt: "default value",
 	minlength: 11,
 	maxlength: 11,
@@ -49,6 +59,7 @@ Any quest object can take the following properties:
 ## quest.number
 ```js
 {
+	name: "identifier",
 	dflt: 42,
 	min: 3,
 	max: 54,
@@ -65,6 +76,7 @@ Any quest object can take the following properties:
 ## piQuest (page)
 ```js
 {
+	name: "identifier",
 	header: 'My header',
 	questions: [
 		{type:'text'},

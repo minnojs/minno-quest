@@ -5,15 +5,41 @@
 
 define(function(){
 
-	questController.$inject = ['$scope'];
-	function questController($scope){
+	questController.$inject = ['$scope', 'timerStopper'];
+	function questController($scope, Stopper){
+		var self = this;
+
 		this.scope = $scope;
-		this.value = function(){
-			return {
-				response: $scope.response,
-				name: $scope.data.name
-			};
+		this.stopper = new Stopper();
+
+		this.log = {
+			name: $scope.data.name
 		};
+
+		// update data object with the response
+		$scope.$watch('response',function(newValue, oldValue /*, scope*/){
+			var log = self.log;
+			var latency = self.stopper.now();
+
+			if (newValue === oldValue){
+				return true;
+			}
+
+			log.response = newValue;
+			log.latency = latency;
+
+			// if this is the first change
+			if (!log.pristineLatency){
+				log.pristineLatency = latency;
+			}
+		});
+
+
+
+		this.value = function(){
+			return self.log;
+		};
+
 		this.valid = function(){
 			if ($scope.form){
 				return !$scope.form.$invalid;

@@ -1,8 +1,9 @@
 define(function(require){
 	var angular = require('angular');
+	require('utils/timer/timer-module');
 
 	// set modules that are requirements for the quest module
-	var module = angular.module('questDirectives',[]);
+	var module = angular.module('questDirectives',['timer']);
 	module.controller('questController', require('./questController'));
 	module.directive('piQuest', require('./piQuest/piQuest-directive'));
 	module.directive('piqPage', require('./piQuest/piqPage-directive'));
