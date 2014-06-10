@@ -14,18 +14,6 @@ define([], function(){
 		},
 		sequence: [
 			{
-
-				questions: [
-					{
-						stem: 'how are you?',
-						name: 'select example',
-						type: 'selectOne',
-						dflt:3,
-						answers: [1,2,3,4]
-					}
-				]
-			},
-			{
 				mixer: 'repeat',
 				times: 2,
 				data: [
@@ -35,13 +23,30 @@ define([], function(){
 						decline:true,
 						questions: [
 							{
-								stem: "First question",
-								required: true
-							},
-							{
-								stem: "Second question"
+								mixer: 'random',
+								data: [
+									{
+										stem: "First question",
+										required: true
+									},
+									{
+										stem: "Second question"
+									}
+								]
 							}
 						]
+					}
+				]
+			},
+			{
+
+				questions: [
+					{
+						stem: 'how are you?',
+						name: 'select example',
+						type: 'selectOne',
+						dflt:1,
+						answers: ['good','bad','ugly']
 					}
 				]
 			},

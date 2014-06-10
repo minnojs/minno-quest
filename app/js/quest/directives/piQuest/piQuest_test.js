@@ -67,6 +67,7 @@ define(['../questDirectivesModule'],function(){
 		beforeEach(module('task', 'questDirectives', function($provide){
 			// don't load Task currently
 			$provide.value('Task', function(){});
+			$provide.value('mixerRecursive', jasmine.createSpy('mixerRecursive').andCallFake(function(a){return a;}));
 		}));
 
 		beforeEach(inject(function($injector){
@@ -90,6 +91,11 @@ define(['../questDirectivesModule'],function(){
 					expect(controller.log).toBeDefined();
 					expect(controller.log.name).toBe('myName');
 				});
+
+				it('should mix the questions', inject(function(mixerRecursive){
+					expect(mixerRecursive).toHaveBeenCalled();
+					expect(scope.questions).toBe(scope.page.questions);
+				}));
 
 			});
 

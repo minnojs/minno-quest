@@ -1,7 +1,7 @@
 <div ng-form name="pageForm">
 	<h2 ng-if="page.header">{{page.header}}</h2>
 	<ol>
-		<li ng-repeat="quest in page.questions">
+		<li ng-repeat="quest in questions">
 			<div ng-switch="quest.type || 'text'">
 				<div ng-switch-when="text">
 					<input quest-wrapper quest-text quest-data="quest">

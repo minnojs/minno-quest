@@ -15,8 +15,8 @@ define(function (require) {
 	var _ = require('underscore');
 	var template = require('text!./piqPage.html');
 
-	piqPageCtrl.$inject = ['$scope','$timeout'];
-	function piqPageCtrl($scope,$timeout){
+	piqPageCtrl.$inject = ['$scope','$timeout', 'mixerRecursive'];
+	function piqPageCtrl($scope,$timeout, mixer){
 
 		var self = this;
 		var questStack = [];
@@ -92,6 +92,12 @@ define(function (require) {
 				name: newPage.name,
 				startTime: +new Date()
 			};
+
+			/**
+			 * Render questions (mixem up!!)
+			 */
+			$scope.questions = mixer($scope.page.questions);
+
 
 			// If there is a timeout set, submit when it runs out.
 			if (newPage.timeout){

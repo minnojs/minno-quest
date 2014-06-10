@@ -80,6 +80,7 @@ Any quest object can take the following properties:
 	header: 'My header',
 	timeout: 3452, // how long in ms before timeout triggers
 	timeoutMessage: 'you ran out of time...', // an optional message to be displayed upon timeout
+	// the questions may be randomized using the regular mixer syntax
 	questions: [
 		{type:'text'},
 		{type:'textNumber'},
