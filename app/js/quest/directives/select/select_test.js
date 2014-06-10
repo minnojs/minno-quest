@@ -49,19 +49,19 @@ define(['../questDirectivesModule', 'utils/randomize/randomizeModuleMock'], func
 			});
 		}); // end mixer
 
-		xdescribe('SelectOne',function(){
+		ddescribe('SelectOne',function(){
 			var formElm, inputElm, scope, $compile, choose, jqLite = angular.element;
 
 			var compileInput = function compileInput(data){
-				formElm = jqLite('<div piq-page-inject quest-select-one quest-data="data"');
+				formElm = jqLite('<div piq-page-inject quest-select-one quest-data="data">');
 				scope.data = data;
 				$compile(formElm)(scope);
+				scope = formElm.isolateScope(); // get the isolated scope
 				scope.$digest();
-				inputElm = formElm.find('input');
 			};
 
 			var addSpy = jasmine.createSpy('addQuest');
-			beforeEach(module(function($compileProvider){
+			beforeEach(module('ui.bootstrap.buttons',function($compileProvider, $provide){
 				//this is a hack to get the piq-page controller registered by the directive
 				$compileProvider.directive('piqPageInject', function(){
 					return {
@@ -73,6 +73,8 @@ define(['../questDirectivesModule', 'utils/randomize/randomizeModuleMock'], func
 						}
 					};
 				});
+
+				$provide.value('mixerRecursive', mixerSpy);
 			}));
 
 			beforeEach(inject(function($injector) {
@@ -80,13 +82,13 @@ define(['../questDirectivesModule', 'utils/randomize/randomizeModuleMock'], func
 				scope = $injector.get('$rootScope').$new();
 
 				choose = function(at){
-					return jqLite('.list-group').children().at(at).click();
+					return formElm.children().eq(at).trigger('click');
 				};
 			}));
 
 			it('should register with piqPage', function(){
 				compileInput({});
-				expect(addSpy).toHaveBeenCalledWith(inputElm.controller('questSelectOne'));
+				expect(addSpy).toHaveBeenCalledWith(formElm.controller('questSelectOne'));
 			});
 
 			it('should bind to a model', function(){
@@ -94,13 +96,19 @@ define(['../questDirectivesModule', 'utils/randomize/randomizeModuleMock'], func
 					answers: [1,2]
 				});
 				expect(scope.response).toBe('');
+
 				choose(1);
 				expect(scope.response).toBe(1);
 			});
 
+			it('should mix the answers', function(){
+				compileInput({answers: [1,2,3]});
+				expect(scope.quest.answers).toBeDefined();
+			});
+
 			it('should print the correct number of answers', function(){
 				compileInput({answers: [1,2,3]});
-				expect(inputElm.find('button').length).toBe(3);
+				expect(formElm.children().length).toBe(3);
 			});
 
 			it('should support dflt',function(){
@@ -109,14 +117,11 @@ define(['../questDirectivesModule', 'utils/randomize/randomizeModuleMock'], func
 					answers: [1,2,{value:'default value'}]
 				});
 				expect(scope.response).toBe('default value');
-				expect(inputElm.find('.active').length).toBe(1);
-				expect(inputElm.find('button').at(2)).toHaveClass('active');
+				expect(scope.responseObj.value).toBe('default value');
+				expect(formElm.find('.active').length).toBe(1);
+				expect(formElm.children().eq(2)).toHaveClass('active');
 			});
 
-			it('should mix the answers', function(){
-				compileInput({answers: [1,2,3]});
-				expect(scope.quest.answers).toBeDefined();
-			});
 		});
 
 	});

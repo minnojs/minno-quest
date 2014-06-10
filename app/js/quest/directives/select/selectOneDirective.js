@@ -12,33 +12,38 @@ define(function (require) {
 		return {
 			replace: true,
 			template:template,
-			require: ['form', '^?piqPage'],
+			require: ['^?piqPage'],
 			controller: 'questController',
 			controllerAs: 'ctrl',
 			scope:{
 				data: '=questData'
 			},
 			link: function(scope, element, attr, ctrls) {
-				var form = ctrls[0];
-				var page = ctrls[1];
+				var page = ctrls[0];
 				var ctrl = scope.ctrl;
 
+				// push controller into page cue
 				page && page.addQuest(ctrl);
-
-				scope.form = form;
 
 				// render quest
 				scope.quest = {
-					answers: mixer(scope.data.answers || [])
+					answers: mixer(scope.data.answers || [], scope.data)
 				};
 
 				// set the default value
-				scope.response = typeof _.isUndefined(scope.data.dflt) ? '' : scope.data.dflt;
+				if (_.isUndefined(scope.data.dflt)){
+					scope.response = '';
+				} else {
+					scope.response = scope.data.dflt;
+					scope.responseObj = _.find(scope.quest.answers, function(answer){ return answer.value === scope.data.dflt;});
+				}
 
-				// update data object with the response
-				scope.$watch('response',function(newValue, oldValue, scope){
-					scope.response = newValue.value;
-					ctrl.log.response = newValue;
+				// update controller with the response
+				scope.$watch('responseObj',function(newValue, oldValue, scope){
+					if (newValue){
+						scope.response = newValue.value;
+						ctrl.log.responseObj = newValue;
+					}
 				});
 			}
 		};

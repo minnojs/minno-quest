@@ -4,9 +4,8 @@ define(function(require){
 	function dfltQuestLogger(log, pageData, global){
 		global;
 		return _.extend({
-			pageData: 'pageData place holder',
 			global: 'globalData place holder'
-		},log);
+		},pageData,log);
 	}
 
 	return dfltQuestLogger;
