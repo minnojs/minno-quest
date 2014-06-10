@@ -1,7 +1,7 @@
 define(['underscore'],function(_){
 
-	RandomizerProvider.$inject = ['databaseRandomizerRandomInt', 'databaseRandomizerRandomArr', 'Collection'];
-	function RandomizerProvider(randomInt, randomArr, Collection){
+	RandomizerProvider.$inject = ['randomizeInt', 'randomizeRange', 'Collection'];
+	function RandomizerProvider(randomizeInt, randomizeRange, Collection){
 
 		function Randomizer(){
 			this._cache = {
@@ -27,7 +27,7 @@ define(['underscore'],function(_){
 			}
 
 			// save result in cache
-			cache[seed] = randomInt(length);
+			cache[seed] = randomizeInt(length);
 
 			return cache[seed];
 		}
@@ -70,7 +70,7 @@ define(['underscore'],function(_){
 
 			// if needed create collection and set it in seed
 			if (_.isUndefined(coll)){
-				coll = cache[seed] = new Collection(randomArr(length));
+				coll = cache[seed] = new Collection(randomizeRange(length));
 				return coll.first();
 			}
 
@@ -89,7 +89,7 @@ define(['underscore'],function(_){
 			// if we've reached the end of the collection (next)
 			// we should re-randomize
 			if (_.isUndefined(result)){
-				coll = cache[seed] = new Collection(randomArr(length));
+				coll = cache[seed] = new Collection(randomizeRange(length));
 				return coll.first();
 			} else {
 				return result;

@@ -16,7 +16,7 @@ define(function(require){
 		})();
 	}
 
-	SequenceProvider.$inject = ['Collection', 'mixerArray'];
+	SequenceProvider.$inject = ['Collection', 'mixerSequential'];
 	function SequenceProvider(Collection, mix){
 		// classical inheritance from Collection
 		// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create#Classical_inheritance_with_Object.create

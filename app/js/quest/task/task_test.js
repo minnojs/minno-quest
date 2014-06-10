@@ -135,7 +135,7 @@ define(['underscore','./task-module'],function(){
 		var mixerSpy = jasmine.createSpy('mixer').andCallFake(function(a){return [a[0],a[0]];});
 
 		beforeEach(module('task', function($provide){
-			$provide.value('mixerArray', mixerSpy);
+			$provide.value('mixerSequential', mixerSpy);
 		}));
 		beforeEach(inject(function(TaskSequence){
 			sequence = new TaskSequence([1,2,3,4], db);

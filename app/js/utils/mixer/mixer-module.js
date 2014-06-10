@@ -1,12 +1,12 @@
 define(function(require){
-	var _ = require('underscore');
+	require('utils/randomize/randomizeModule');
+
 	var angular = require('angular');
-	var module = angular.module('mixer',[]);
+	var module = angular.module('mixer',['randomize']);
 
 	module.service('mixer', require('./mixer'));
-	module.service('mixerArray', require('./mixerArray'));
-	module.value('mixerShuffle', _.shuffle);
-	module.value('mixerRandom', function(){return Math.random();});
+	module.service('mixerSequential', require('./mixerSequential'));
+	module.service('mixerRecursive', require('./mixerRecursive'));
 
 	return module;
 });

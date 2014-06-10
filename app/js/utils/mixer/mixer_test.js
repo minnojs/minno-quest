@@ -1,14 +1,9 @@
-define(['underscore','./mixer-module'],function(_){
+define(['underscore','./mixer-module', 'utils/randomize/randomizeModuleMock'],function(){
 
-	var mixer, randomCutoff = 0.5;
+	var mixer;
 
 	describe('Mixer', function(){
-		beforeEach(module('mixer', function($provide){
-			$provide.value('mixerShuffle', function(arr){
-				return _(arr).reverse().value();
-			});
-			$provide.value('mixerRandom', function(){return randomCutoff;});
-		}));
+		beforeEach(module('mixer','randomizeMock'));
 
 		beforeEach(inject(function(_mixer_){
 			mixer = _mixer_;
@@ -61,31 +56,31 @@ define(['underscore','./mixer-module'],function(_){
 			})).toEqual([4,3]);
 		});
 
-		it('should know how to weightedRandom', function(){
-			randomCutoff = 0.5;
+		it('should know how to weightedRandom', inject(function(randomizeSettings){
+			randomizeSettings.random = 0.5;
 			expect(mixer({
 				mixer:'weightedRandom',
 				weights: [0.2, 0.8],
 				data: [1,2]
 			})).toEqual([2]);
 
-			randomCutoff = 0.1;
+			randomizeSettings.random = 0.1;
 			expect(mixer({
 				mixer:'weightedRandom',
 				weights: [0.2, 0.8],
 				data: [1,2]
 			})).toEqual([1]);
 
-			randomCutoff = 0.9;
+			randomizeSettings.random = 0.9;
 			expect(mixer({
 				mixer:'weightedRandom',
 				weights: [0.2, 0.6, 0.2],
 				data: [1,2, 3]
 			})).toEqual([3]);
-		});
+		}));
 	});
 
-	describe(': mixerArray', function(){
+	describe(': mixerSequential', function(){
 		var mix;
 		var mix1 = {mixer:1};
 		var mix2 = {mixer:2};
@@ -106,8 +101,9 @@ define(['underscore','./mixer-module'],function(_){
 			$provide.value('mixer', mixerSpy);
 		}));
 
-		beforeEach(inject(function(mixerArray){
-			mix = mixerArray;
+		beforeEach(inject(function(mixerSequential){
+			mix = mixerSequential;
+			mixerSpy.reset();
 		}));
 
 		it('should mix the first element', function(){
@@ -130,4 +126,44 @@ define(['underscore','./mixer-module'],function(_){
 		});
 	});
 
+	describe(': mixerRecursive', function(){
+		var mix;
+		var mix1 = {mixer:1};
+		var mix2 = {mixer:2};
+		var mix3 = {mixer:3};
+		var mixerSpy = jasmine.createSpy('mixer').andCallFake(function(a){
+			if (a == mix1){
+				return ['a','b'];
+			}
+			if (a == mix2){
+				return [mix1,1];
+			}
+			if (a == mix3){
+				return [mix3];
+			}
+		});
+
+		beforeEach(module('mixer',function($provide){
+			$provide.value('mixer', mixerSpy);
+		}));
+
+		beforeEach(inject(function(mixerRecursive){
+			mix = mixerRecursive;
+			mixerSpy.reset();
+		}));
+
+		it('should replace all elements with the mixed array', function(){
+			expect(mix([mix1,3,mix1])).toEqual(['a','b',3, 'a','b']);
+		});
+
+		it('should mix recursively', function(){
+			expect(mix([3, mix2])).toEqual([3, 'a','b',1]);
+		});
+
+		it('should break recursion when mixerDepth is reached', function(){
+			expect(function(){
+				mix([mix3]);
+			}).toThrow();
+		});
+	});
 });

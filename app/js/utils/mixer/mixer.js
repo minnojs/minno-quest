@@ -13,7 +13,7 @@ define(['underscore'],function(_){
 	 * @returns {Array} [An array of mixed objects]
 	 */
 
-	mixProvider.$inject = ['mixerShuffle', 'mixerRandom'];
+	mixProvider.$inject = ['randomizeShuffle', 'randomizeRandom'];
 	function mixProvider(shuffle, random){
 
 		function mix(obj){

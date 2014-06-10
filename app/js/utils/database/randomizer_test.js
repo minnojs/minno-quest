@@ -6,12 +6,11 @@ define(['./database-module'], function(){
 		exRandomSpy = jasmine.createSpy("exRandom").andReturn([2,1,0]);
 
 	describe('database Randomizer', function(){
-
 		beforeEach(module('database'));
 
 		beforeEach(module(function($provide){
-			$provide.value("databaseRandomizerRandomInt", randomSpy);
-			$provide.value("databaseRandomizerRandomArr", exRandomSpy);
+			$provide.value("randomizeInt", randomSpy);
+			$provide.value("randomizeRange", exRandomSpy);
 		}));
 
 		beforeEach(inject(function(DatabaseRandomizer){

@@ -1,9 +1,9 @@
 define(function(require){
 	var _ = require('underscore');
 
-	mixerArrayProvider.$inject = ['mixer'];
-	function mixerArrayProvider(mix){
-		function mixerArray(sequence, depth){
+	mixerSequentialProvider.$inject = ['mixer'];
+	function mixerSequentialProvider(mix){
+		function mixerSequential(sequence, depth){
 			var mixed;
 			var obj = sequence[0];
 
@@ -25,11 +25,11 @@ define(function(require){
 			// concat mixed and sequence
 			mixed = mixed.concat(sequence);
 
-			return _.isUndefined(mixed[0].mixer) ? mixed : mixerArray(mixed, depth);
+			return _.isUndefined(mixed[0].mixer) ? mixed : mixerSequential(mixed, depth);
 		}
 
-		return mixerArray;
+		return mixerSequential;
 	}
 
-	return mixerArrayProvider;
+	return mixerSequentialProvider;
 });

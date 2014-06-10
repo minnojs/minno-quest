@@ -87,3 +87,25 @@ Any quest object can take the following properties:
 	]
 }
 ```
+
+## selectOne
+```js
+{
+	name: 'identifier',
+	dflt: 3, // default value
+	randomize: true, // shuffle answers after mixing them (the mixer is activated in any case...)
+	reverse: true, // reverses the order of the answers
+	// by default values are set numericaly by the order of the answers
+	// they are set *after* the mixer is activated
+	answers: [
+		'first',
+		'second',
+		'third'
+	],
+	answers: [
+		{text:'first', value:1},
+		{text:'second', value:2},
+		{text:'third', value:3}
+	]
+}
+```

@@ -1,4 +1,8 @@
 define(function(require){
+
+
+	require('utils/randomize/randomizeModule');
+
 	var
 		angular = require('angular'),
 		Database = require('./databaseProvider'),
@@ -6,20 +10,15 @@ define(function(require){
 		Randomizer = require('./randomizerProvider'),
 		Store = require('./storeProvider'),
 		query = require('./queryProvider'),
-		inflate = require('./inflateProvider'),
-		randomInt = require('./randomInt'),
-		randomArr = require('./randomArr');
+		inflate = require('./inflateProvider');
 
-	var module = angular.module('database',[])
-		.value('databaseRandomizerRandomInt', randomInt)
-		.value('databaseRandomizerRandomArr', randomArr)
+	var module = angular.module('database',['randomize'])
 		.service('Collection', Collection)
 		.service('DatabaseRandomizer', Randomizer)
 		.service('databaseQuery', query)
 		.service('databaseInflate', inflate)
 		.service('DatabaseStore', Store)
 		.service('Database', Database);
-
 
 	return module;
 });

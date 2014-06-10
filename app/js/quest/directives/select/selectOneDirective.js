@@ -1,11 +1,14 @@
 /*
- * The directive for creating text inputs.
+ * The directive for creating selectOne inputs.
  */
 define(function (require) {
-	// This is the only way to get a non js file relatively
-	var template = require('text!./text.html');
+	var _ = require('underscore');
 
-	var directive = function(){
+	// This is the only way to get a non js file relatively
+	var template = require('text!./selectOne.html');
+
+	directive.$inject = ['questSelectMixer'];
+	function directive(mixer){
 		return {
 			replace: true,
 			template:template,
@@ -24,16 +27,22 @@ define(function (require) {
 
 				scope.form = form;
 
+				// render quest
+				scope.quest = {
+					answers: mixer(scope.data.answers || [])
+				};
+
 				// set the default value
-				scope.response = typeof scope.data.dflt == 'undefined' ? '' : scope.data.dflt;
+				scope.response = typeof _.isUndefined(scope.data.dflt) ? '' : scope.data.dflt;
 
 				// update data object with the response
 				scope.$watch('response',function(newValue, oldValue, scope){
-					scope.data.response = newValue;
+					scope.response = newValue.value;
+					ctrl.log.response = newValue;
 				});
 			}
 		};
-	};
+	}
 
 	return directive;
 });

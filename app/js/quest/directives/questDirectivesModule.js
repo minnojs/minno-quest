@@ -9,7 +9,10 @@ define(function(require){
 	module.directive('piqPage', require('./piQuest/piqPage-directive'));
 	module.directive('questWrapper', require('./wrapper/wrapper-directive'));
 	module.directive('questText', require('./text/text-directive'));
-	module.directive('questTextNumber', require('./textNumber/text-number-directive'));
+	module.directive('questTextNumber', require('./text/text-number-directive'));
+
+	module.service('questSelectMixer', require('./select/selectMixerProvider'));
+	module.directive('questSelectOne',require('./select/selectOneDirective'));
 
 	// work around for dynamic module and form names
 	// https://github.com/angular/angular.js/issues/1404#issuecomment-30859987
