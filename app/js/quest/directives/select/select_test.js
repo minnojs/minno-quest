@@ -49,8 +49,8 @@ define(['../questDirectivesModule', 'utils/randomize/randomizeModuleMock'], func
 			});
 		}); // end mixer
 
-		ddescribe('SelectOne',function(){
-			var formElm, inputElm, scope, $compile, choose, jqLite = angular.element;
+		describe('SelectOne',function(){
+			var formElm, scope, $compile, choose, jqLite = angular.element;
 
 			var compileInput = function compileInput(data){
 				formElm = jqLite('<div piq-page-inject quest-select-one quest-data="data">');

@@ -21,6 +21,8 @@ define([], function(){
 						header: 'This Royal Questionnaire of mine.',
 						timeoutMessage: 'My message',
 						decline:true,
+						numbered: true,
+						numberStart: 4,
 						questions: [
 							{
 								mixer: 'random',

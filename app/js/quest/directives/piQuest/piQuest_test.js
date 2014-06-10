@@ -200,6 +200,13 @@ define(['../questDirectivesModule'],function(){
 					compile({});
 					expect(element.find('h2').length).toBe(0);
 				});
+
+				it('should display numbers only if numbered is set', function(){
+					compile({});
+					expect(element.find('ol')).toHaveClass('list-unstyled');
+					compile({numbered:true});
+					expect(element.find('ol')).not.toHaveClass('list-unstyled');
+				});
 			}); // end describe page directive
 
 			describe('timeout', function(){

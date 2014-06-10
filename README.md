@@ -78,6 +78,8 @@ Any quest object can take the following properties:
 {
 	name: "identifier",
 	header: 'My header',
+	numbered: false, // should we display the number of each questions
+	numberStart: 4, // what number should the page start at
 	timeout: 3452, // how long in ms before timeout triggers
 	timeoutMessage: 'you ran out of time...', // an optional message to be displayed upon timeout
 	// the questions may be randomized using the regular mixer syntax
