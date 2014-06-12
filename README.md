@@ -98,17 +98,17 @@ Any quest object can take the following properties:
 	dflt: 3, // default value
 	randomize: true, // shuffle answers after mixing them (the mixer is activated in any case...)
 	reverse: true, // reverses the order of the answers
-	// by default values are set numericaly by the order of the answers
-	// they are set *after* the mixer is activated
+	numericValues: false, // if numericValues is set default values are set numericaly by the order of the answers, they are set *after* the mixer is activated
+	// by default, value is set to equal text
 	answers: [
 		'first',
 		'second',
 		'third'
 	],
 	answers: [
-		{text:'first', value:1},
-		{text:'second', value:2},
-		{text:'third', value:3}
+		{text:'first', value:0},
+		{text:'second', value:1},
+		{text:'third', value:2}
 	]
 }
 ```

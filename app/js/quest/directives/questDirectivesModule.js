@@ -14,6 +14,7 @@ define(function(require){
 
 	module.service('questSelectMixer', require('./select/selectMixerProvider'));
 	module.directive('questSelectOne',require('./select/selectOneDirective'));
+	module.directive('questSelectMulti',require('./select/selectMultiDirective'));
 
 	// work around for dynamic module and form names
 	// https://github.com/angular/angular.js/issues/1404#issuecomment-30859987

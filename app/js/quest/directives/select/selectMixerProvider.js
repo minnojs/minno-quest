@@ -10,12 +10,13 @@ define(function(require){
 
 			// inject values
 			answers = _.map(answers, function(answer, index){
+
 				if (!_.isPlainObject(answer)){
-					answer = {text:answer, value:index};
+					answer = {text:answer};
 				}
 
 				if (_.isUndefined(answer.value)){
-					answer.value = index;
+					answer.value = options.numericValues ? index : answer.text;
 				}
 				return answer;
 			});

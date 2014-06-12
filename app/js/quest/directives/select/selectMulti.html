@@ -4,9 +4,9 @@
 		href="javascript:void(0);"
 		ng-repeat="answer in quest.answers track by answer.order"
 		class="list-group-item"
-		ng-model="$parent.responseObj"
-		btn-radio="answer"
-		ng-class="{active:$parent.data.dflt === answer.value}"
+		ng-model="answer.chosen"
+		btn-checkbox
+		ng-class="{active:answer.chosen}"
 		uncheckable
 	>
 	{{answer.text}}
