@@ -209,7 +209,7 @@ module.exports = function (grunt) {
 				// browserDisconnectTolerance: 5,
 				customLaunchers: sauceBrowsers,
 				browsers: Object.keys(sauceBrowsers),
-				reporters: ['spec', 'saucelabs'],
+				reporters: ['saucelabs'],
 				singleRun: true
 			}
 		},

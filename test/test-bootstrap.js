@@ -1,3 +1,4 @@
+var file;
 var allTestFiles = [];
 var TEST_REGEXP = /_test\.js$/;
 
@@ -6,13 +7,13 @@ var pathToModule = function(path) {
 	return path.replace(/^\/base\/app\/js\/|\.js$/g,'');
 };
 
-
-Object.keys(window.__karma__.files).forEach(function(file) {
+// We can't use Object.keys because IE8
+for(file in window.__karma__.files){
 	if (TEST_REGEXP.test(file)) {
 		// Normalize paths to RequireJS module names.
 		allTestFiles.push(pathToModule(file));
 	}
-});
+}
 
 /* global requirejs */
 requirejs.config({
@@ -36,7 +37,7 @@ requirejs.config({
 		}
 	},
 	// ask Require.js to load these files (all our tests)
-	deps: ['../../test/matchers','angular', 'angularMocks', 'jquery'], //allTestFiles,
+	deps: ['../libs/es5-shim/es5-shim','../../test/matchers','angular', 'angularMocks', 'jquery'], //allTestFiles,
 
 	//urlArgs: 'bust=' + (new Date()).getTime(),
 
