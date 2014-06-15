@@ -201,12 +201,12 @@ module.exports = function (grunt) {
 					testName: 'PIQuest Unit Tests <%= pkg.version %>',
 					recordScreenshots: false
 				},
-				captureTimeout: 0, // rely on SL timeout
+				captureTimeout: 60000, // rely on SL timeout
 
 				// useful with really bad connections
 				// https://groups.google.com/forum/#!topic/karma-users/B-E7nLphNHQ
-				//browserNoActivityTimeout: 240000,
-				// browserDisconnectTolerance: 5,
+				browserNoActivityTimeout: 120000,
+				browserDisconnectTolerance: 3,
 				customLaunchers: sauceBrowsers,
 				browsers: Object.keys(sauceBrowsers),
 				reporters: ['saucelabs'],
