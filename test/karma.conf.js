@@ -57,20 +57,4 @@ module.exports = function(config) {
 		// if true, it capture browsers, run tests and exit
 		singleRun: true
 	});
-
-if (process.env.TRAVIS) {
-    var buildLabel = 'TRAVIS #' + process.env.TRAVIS_BUILD_NUMBER + ' (' + process.env.TRAVIS_BUILD_ID + ')';
-
-    config.logLevel = config.LOG_DEBUG;
-    config.transports = ['websocket', 'xhr-polling'];
-    config.captureTimeout = 0; // rely on SL timeout
-
-    config.sauceLabs.build = buildLabel;
-    config.sauceLabs.startConnect = false;
-    config.sauceLabs.tunnelIdentifier = process.env.TRAVIS_JOB_NUMBER;
-
-    // TODO(vojta): remove once SauceLabs supports websockets.
-    // This speeds up the capturing a bit, as browsers don't even try to use websocket.
-    config.transports = ['xhr-polling'];
-  }
 };
