@@ -30,6 +30,36 @@
 		<![endif]-->
 
 		<script src="libs/requirejs/require.js" data-main="js/bootstrap.js"></script>
+
+		<style type="text/css">
+			/* http://www.sitepoint.com/css3-responsive-centered-image/ */
+			img.pi-logo {
+				position: absolute;
+				max-width: 80%;
+				top: 50%;
+				left: 50%;
+				margin-left: -50px;
+				margin-top: -50px;
+				border-radius: 3px;
+			}
+
+			img.pi-logo:empty {
+				margin: auto;
+				-webkit-transform: translate(-50%, -50%);
+				-moz-transform: translate(-50%, -50%);
+				-ms-transform: translate(-50%, -50%);
+				-o-transform: translate(-50%, -50%);
+				transform: translate(-50%, -50%);
+			}
+
+			@media screen and (orientation: portrait) {
+			  img.pi-logo { max-width: 90%; }
+			}
+
+			@media screen and (orientation: landscape) {
+			  img.pi-logo { max-height: 90%; }
+			}
+		</style>
 	</head>
 
 	<body ng-app>
@@ -38,7 +68,9 @@
 		<![endif]-->
 
 		<div class="container">
-			<div pi-task="script.js"></div>
+			<div pi-task="script.js">
+				<img class="pi-logo" src="img/logo.png" />
+			</div>
 		</div>
 
 
