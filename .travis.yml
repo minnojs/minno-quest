@@ -1,6 +1,12 @@
 language: node_js
 node_js:
   - '0.10'
+
+env:
+  global:
+  - SAUCE_USERNAME: project_implicit
+  - secure: "PFglabKFpODvO442CTkeGBd+WmYepqB/eTe0jHBdHUi/X7BghFxhQDuXMlLuDuUf9msRPl0bZ+lIF9Q9HbzYoAo+qHHjuvx6TgIjgU21MRCTcyYzixm7CzwVJM7tV/0+AQ4fUpvNHc9O1GuEkHEVI3+lIbu0whkWo728oA3R7SA="
+
 before_script:
   - 'npm install -g bower grunt-cli'
   - 'bower install'

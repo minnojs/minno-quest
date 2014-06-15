@@ -7,6 +7,8 @@
 // use this if you want to recursively match all subfolders:
 // 'test/spec/**/*.js'
 
+var sauceBrowsers =	require('./test/sauceBrowsers');
+
 module.exports = function (grunt) {
 
 	// Load grunt tasks automatically
@@ -191,8 +193,24 @@ module.exports = function (grunt) {
 			},
 			unit:{
 				singleRun: true,
-				reporters : grunt.option('report') ? ['spec'] : ['progress']
-				// browsers: ['Chrome']
+				reporters : grunt.option('report') ? ['spec'] : ['progress'],
+				browsers: ['PhantomJS']
+			},
+			sauce:{
+				sauceLabs: {
+					testName: 'PIQuest Unit Tests <%= pkg.version %>',
+					recordScreenshots: false
+				},
+				captureTimeout: 0, // rely on SL timeout
+
+				// useful with really bad connections
+				// https://groups.google.com/forum/#!topic/karma-users/B-E7nLphNHQ
+				//browserNoActivityTimeout: 240000,
+				// browserDisconnectTolerance: 5,
+				customLaunchers: sauceBrowsers,
+				browsers: Object.keys(sauceBrowsers),
+				reporters: ['spec', 'saucelabs'],
+				singleRun: true
 			}
 		},
 
@@ -238,8 +256,29 @@ module.exports = function (grunt) {
 		'clean:server',
 		'concurrent:test',
 		'connect:test',
-		'karma'
+		'karma:unit'
 	]);
+
+	grunt.registerTask('test','Running tests', function(){
+		var tasks = [
+			'clean:server',
+			'concurrent:test',
+			'connect:test',
+			'karma:unit'
+		];
+
+		if (grunt.option('sauce')){
+			// make sure we have the access keys available
+			if (!process.env.SAUCE_USERNAME || !process.env.SAUCE_ACCESS_KEY) {
+				console.log('Make sure the SAUCE_USERNAME and SAUCE_ACCESS_KEY environment variables are set.');
+				process.exit(1);
+			}
+
+			tasks.push('karma:sauce');
+		}
+
+		grunt.task.run(tasks);
+	});
 
 	grunt.registerTask('build', [
 		'clean:dist',

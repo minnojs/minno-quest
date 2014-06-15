@@ -16,6 +16,7 @@ Object.keys(window.__karma__.files).forEach(function(file) {
 
 /* global requirejs */
 requirejs.config({
+	waitSeconds: 0,
 	// Karma serves files from '/base'
 	baseUrl: '/base/app/js',
 

@@ -28,13 +28,14 @@
     "karma-spec-reporter": "0.0.12",
     "load-grunt-tasks": "~0.2.0",
     "requirejs": "^2.1.11",
-    "time-grunt": "~0.2.1"
+    "time-grunt": "~0.2.1",
+    "karma-sauce-launcher": "^0.2.8"
   },
   "engines": {
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "grunt test --report",
+    "test": "grunt test --sauce --report",
     "start": "grunt serve"
   }
 }
