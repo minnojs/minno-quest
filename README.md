@@ -112,3 +112,21 @@ Any quest object can take the following properties:
 	]
 }
 ```
+
+## mixer:conditions
+```js
+var cond = {
+	compare: 'global.var',
+	to: 'local.otherVar',
+	operator: 'equals'
+}
+```
+
+**operators**
+
+* `equals/default`: compare == to (supports comparison of objects and arrays too)
+* `exactly`: compare === to
+* `greaterThan`: compare > to
+* `greaterThanOrEquals`: compare >= to
+* `in`: compare is in Arr(to);
+* `function(){}`: custom function (compareValue, toValue){return {Boolean}}

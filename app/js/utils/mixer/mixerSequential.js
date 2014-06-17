@@ -3,7 +3,7 @@ define(function(require){
 
 	mixerSequentialProvider.$inject = ['mixer'];
 	function mixerSequentialProvider(mix){
-		function mixerSequential(sequence, depth){
+		function mixerSequential(sequence, context, depth){
 			var mixed;
 			var obj = sequence[0];
 
@@ -17,7 +17,7 @@ define(function(require){
 			}
 
 			// mix obj
-			mixed = mix(obj);
+			mixed = mix(obj, context);
 
 			// remove obj from sequence
 			sequence.shift();
@@ -25,7 +25,7 @@ define(function(require){
 			// concat mixed and sequence
 			mixed = mixed.concat(sequence);
 
-			return _.isUndefined(mixed[0].mixer) ? mixed : mixerSequential(mixed, depth);
+			return _.isUndefined(mixed[0].mixer) ? mixed : mixerSequential(mixed, context, depth);
 		}
 
 		return mixerSequential;

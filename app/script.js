@@ -1,7 +1,9 @@
 define([], function(){
 	return {
 		pages: [],
+
 		questions:[],
+
 		settings: {
 			logger: {
 				pulse: 3,
@@ -12,6 +14,7 @@ define([], function(){
 				location.href = location.href;
 			}
 		},
+
 		sequence: [
 			{
 				header: 'Questionnaire page num. 1',

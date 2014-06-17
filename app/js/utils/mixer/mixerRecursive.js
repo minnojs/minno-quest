@@ -3,7 +3,7 @@ define(function(require){
 
 	mixerRecursiveProvider.$inject = ['mixer'];
 	function mixerRecursiveProvider(mix){
-		function mixerRecursive(sequence, depth){
+		function mixerRecursive(sequence, context, depth){
 			var mixed = [];
 
 			depth = depth || 0;
@@ -19,7 +19,7 @@ define(function(require){
 					}
 
 					// mix object, and recursively mix the result
-					return mixerRecursive(mix(obj));
+					return mixerRecursive(mix(obj, context), context, depth);
 				})
 				.flatten()
 				.value();
