@@ -21,6 +21,12 @@ define(['underscore','./mixer-module', 'utils/randomize/randomizeModuleMock'],fu
 				}).toThrow();
 			});
 
+			it('should throw an error if an undefined mixer is used', function(){
+				expect(function(){
+					mixer({mixer:undefined});
+				}).toThrow();
+			});
+
 			it('should repeat any data in a repeat n times', function(){
 				expect(mixer({
 					mixer:'repeat',

@@ -16,8 +16,8 @@ define(function(require){
 		})();
 	}
 
-	SequenceProvider.$inject = ['Collection', 'mixerSequential'];
-	function SequenceProvider(Collection, mix){
+	SequenceProvider.$inject = ['Collection', 'mixerSequential','mixerRecursive'];
+	function SequenceProvider(Collection, mixerSequential, mixerRecursive){
 		// classical inheritance from Collection
 		// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create#Classical_inheritance_with_Object.create
 		function Sequence(coll, db){
@@ -41,6 +41,8 @@ define(function(require){
 				}
 
 				var page = this.db.inflate('pages', pageObj);
+
+				page.questions = mixerRecursive(page.questions);
 				// we can afford to overwrite the original since inflate always creates new objects for us.
 				page.questions = _.map(page.questions || [], function(question){
 					return this.db.inflate('questions', question);
@@ -59,12 +61,13 @@ define(function(require){
 				this.mix();
 				var page = this.current();
 				page = this.buildPage(page);
+
 				return page;
 			},
 
 			mix: function(){
 				var obj = this.current();
-				var mixed = mix([obj]);
+				var mixed = mixerSequential([obj]);
 				var sequence = this.collection;
 
 				// push the first arguments of splice into the mixer array...

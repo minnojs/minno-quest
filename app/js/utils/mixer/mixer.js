@@ -19,7 +19,9 @@ define(['underscore'],function(_){
 		function mix(obj){
 			var mixerName = obj.mixer;
 
-			if (_.isUndefined(mixerName)){
+			// if this isn't a mixer
+			// make sure we catch mixers that are set with undefined by accident...
+			if (!(_.isPlainObject(obj) && 'mixer' in obj)){
 				return [obj];
 			}
 
