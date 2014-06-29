@@ -6,27 +6,13 @@ define(function(require){
 
 	var _ = require('underscore');
 
-	mixerBranchingDecorator.$inject = ['$delegate','mixerCondition'];
-
-	function mixerBranchingDecorator(mix, condition){
+	mixerBranchingDecorator.$inject = ['$delegate','mixerEvaluate'];
+	function mixerBranchingDecorator(mix, evaluate){
 
 		mix.mixers.branch = branch;
 		mix.mixers.multiBranch = multiBranch;
 
 		return mix;
-
-		/**
-		 * Checks if a conditions set is true
-		 * @param  {Array} conditions [an array of conditions]
-		 * @param  {Object} context   [A context for the condition checker]
-		 * @return {Boolean}          [Are these conditions true]
-		 */
-
-		function evaluate(conditions,context){
-			return _.reduce(conditions, function(result,cond){
-				return result && condition(cond, context);
-			}, true);
-		}
 
 		/**
 		 * Branching mixer

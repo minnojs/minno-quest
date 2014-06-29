@@ -307,6 +307,50 @@ define(['underscore','./mixer-module', 'utils/randomize/randomizeModuleMock'],fu
 				});
 			});
 
+			describe(': evaluate', function(){
+				var evaluate;
+
+				beforeEach(module(function($provide){
+					$provide.value('mixerCondition', function(a){return !!a;});
+				}));
+				beforeEach(inject(function(mixerEvaluate){
+					evaluate = mixerEvaluate;
+				}));
+
+				it('should support AND', function(){
+					expect(evaluate({and:[1,2,3,4]})).toBeTruthy();
+					expect(evaluate({and:[1,2,0,4]})).not.toBeTruthy();
+				});
+
+				it('should support NAND', function(){
+					expect(evaluate({nand:[1,2,3,4]})).not.toBeTruthy();
+					expect(evaluate({nand:[1,2,0,4]})).toBeTruthy();
+				});
+
+				it('should treat arrays as &&', function(){
+					expect(evaluate([1,2,3,4])).toBeTruthy();
+					expect(evaluate([1,2,0,4])).not.toBeTruthy();
+				});
+
+				it('should support OR', function(){
+					expect(evaluate({or:[1,0,0,0]})).toBeTruthy();
+					expect(evaluate({or:[0,0,0,0]})).not.toBeTruthy();
+				});
+
+				it('should support NOR', function(){
+					expect(evaluate({nor:[1,0,0,0]})).not.toBeTruthy();
+					expect(evaluate({nor:[0,0,0,0]})).toBeTruthy();
+				});
+
+				it('should support nested operators', function(){
+					expect(evaluate([{and:[1,1,{or:[0,0]}]}])).not.toBeTruthy();
+					expect(evaluate([
+						{and:[1,1,{or:[0,0]}]},
+						{nor:[1,1,1, {and:[1,1]}]}
+					])).not.toBeTruthy();
+				});
+			});
+
 			describe(': branch', function(){
 				var mixer;
 				beforeEach(inject(function(_mixer_){

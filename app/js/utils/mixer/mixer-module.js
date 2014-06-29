@@ -11,6 +11,7 @@ define(function(require){
 	module.value('dotNotation', require('./branching/dotNotation'));
 	module.service('mixerDotNotation', require('./branching/mixerDotNotationProvider'));
 	module.service('mixerCondition', require('./branching/mixerConditionProvider'));
+	module.service('mixerEvaluate', require('./branching/mixerEvaluateProvider'));
 	module.config(['$provide', function($provide){
 		$provide.decorator('mixer', require('./branching/mixerBranchingDecorator'));
 	}]);
