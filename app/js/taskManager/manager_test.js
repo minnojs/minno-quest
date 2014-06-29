@@ -27,6 +27,8 @@ define(['require','./manager-module'], function(require){
 				compile();
 			}));
 
+
+			// This is temporary!! should be replaced as soon as the task manager is actually up...
 			it('should create a quest element', function(){
 				q.resolve({});
 				$rootScope.$apply();
@@ -51,6 +53,10 @@ define(['require','./manager-module'], function(require){
 			it('should get its url from the attribute', function(){
 				expect(getScriptSpy).toHaveBeenCalledWith('my/url.js');
 			});
+
+			it('should create a global object and set it to the scope', inject(function($rootScope){
+				expect($rootScope.global).toEqual({});
+			}));
 		});
 
 		describe(': getScript', function(){

@@ -3,7 +3,7 @@ define(['../questDirectivesModule'],function(){
 	var controller, element, scope, $compile;
 
 	describe('piQuest Controller', function(){
-		var script = {};
+		var script = {name:"myName"};
 		var logSpy = jasmine.createSpy('log');
 		var nextSpy = jasmine.createSpy('next').andReturn('nextObj');
 		var TaskSpy = jasmine.createSpy('Task').andCallFake(function(){
@@ -24,16 +24,15 @@ define(['../questDirectivesModule'],function(){
 
 			// make sure piqPage is not activated
 			$compileProvider.directive('piqPage', function(){
-				return {
-					priority: 999,
-					terminal: true
-				};
+				return {priority: 999,terminal: true};
 			});
 		}));
 
 		beforeEach(inject(function($injector){
 			$compile = $injector.get('$compile');
-			scope = $injector.get('$rootScope').$new();
+			var rootScope = $injector.get('$rootScope');
+			rootScope.global = {};
+			scope = rootScope.$new();
 			compile();
 		}));
 
@@ -49,13 +48,78 @@ define(['../questDirectivesModule'],function(){
 		});
 
 		it('should listen for "quest:log" and log accordingly', function(){
-			scope.global = 'global';
 			scope.$new().$emit('quest:log', [1], 'currentPageData');
-			expect(logSpy).toHaveBeenCalledWith(1, 'currentPageData', 'global');
+			expect(logSpy).toHaveBeenCalledWith(1, 'currentPageData', scope.global);
+		});
+
+		it('should create a local quest object', inject(function($rootScope){
+			expect($rootScope.global.myName).toEqual({questions:{}});
+			expect(scope.current).toBe($rootScope.global.myName);
+		}));
+	});
+
+	describe('questHarvest', function(){
+
+		var questions, harvest, scope;
+		beforeEach(module('questDirectives'));
+		beforeEach(inject(function($rootScope, questHarvest){
+			$rootScope.current = {questions:{
+				1:{value:1},
+				2:{value:2},
+				3:{value:3}
+			}};
+
+			scope = $rootScope.$new();
+
+			harvest = function(a, b, c){
+				questHarvest(scope,a,b,c);
+			};
+			questions = $rootScope.current.questions;
+		}));
+
+		it('should emit the values of all questions on "quest:log"', function(){
+			var emited = false;
+			scope.$on('quest:log', function(e,logs){
+				emited = true;
+				expect(logs).toEqual([{value:1},{value:2},{value:3}]);
+			});
+			harvest();
+			expect(emited).toBeTruthy();
+		});
+
+		it('should emit all arguments with the logs', function(){
+			var emited = false;
+			scope.$on('quest:log', function(e,logs,a,b){
+				emited = true;
+				expect(a).toBe(123);
+				expect(b).toBe(345);
+			});
+			harvest(123,345);
+			expect(emited).toBeTruthy();
+		});
+
+		it('should mark all questions as logged', function(){
+			harvest();
+			var i;
+			for (i=0; i<questions.length; i++){
+				expect(questions[i].logged).toBeTruthy();
+			}
+		});
+
+		it('should only harvest each question once', function(){
+			harvest();
+
+			scope.$on('quest:log', function(e,logs){
+				expect(logs.length).toBe(1);
+				expect(logs[0].value).toBe(4);
+			});
+			questions.test = {value:4};
+			harvest();
 		});
 	});
 
 	describe('piqPage', function(){
+		var $rootScope;
 		function compile(data){
 			element = jqLite('<div piq-page></div>');
 			scope.page = data;
@@ -72,7 +136,10 @@ define(['../questDirectivesModule'],function(){
 
 		beforeEach(inject(function($injector){
 			$compile = $injector.get('$compile');
-			scope = $injector.get('$rootScope').$new();
+			$rootScope = $injector.get('$rootScope');
+			$rootScope.global = {};
+			$rootScope.current = {questions:{}};
+			scope = $rootScope.$new();
 		}));
 
 		describe('Controller', function(){
@@ -80,11 +147,6 @@ define(['../questDirectivesModule'],function(){
 			describe(': general', function(){
 				beforeEach(function(){
 					compile({name:'myName'});
-				});
-
-				it('should expose methods to register questions', function(){
-					expect(controller.addQuest).toEqual(jasmine.any(Function));
-					expect(controller.removeQuest).toEqual(jasmine.any(Function));
 				});
 
 				it('should create the basic log object', function(){
@@ -96,41 +158,6 @@ define(['../questDirectivesModule'],function(){
 					expect(mixerRecursive).toHaveBeenCalled();
 					expect(scope.questions).toBe(scope.page.questions);
 				}));
-
-			});
-
-			describe(': harvest', function(){
-				var valueSpy;
-
-				beforeEach(inject(function(Collection){
-					var coll = new Collection([1,2,3,4,5,6]);
-					// create mock questions
-					valueSpy = jasmine.createSpy('quest').andCallFake(function(){
-						return coll.next();
-					});
-
-					compile({});
-
-					controller.addQuest({value:valueSpy});
-					controller.addQuest({value:valueSpy});
-					controller.addQuest({value:valueSpy});
-				}));
-
-				it('should emit the values of all questions on "quest:log"', function(){
-					scope.$on('quest:log', function(e,logs){
-						expect(logs).toEqual([1,2,3]);
-					});
-					controller.harvest();
-				});
-
-				it('should only harvest each question once', function(){
-					controller.harvest();
-					expect(valueSpy.calls.length).toBe(3);
-
-					controller.addQuest({value:valueSpy});
-					controller.harvest();
-					expect(valueSpy.calls.length).toBe(4);
-				});
 			});
 
 			describe(': submit', function(){
@@ -142,30 +169,31 @@ define(['../questDirectivesModule'],function(){
 					$scope = element.scope();
 				});
 
+				it('should harvest', function(){
+					$scope.submit();
+					expect(controller.harvest).toHaveBeenCalled();
+				});
+
+				it('should harvest even if there are no questions', inject(function($rootScope){
+					$rootScope.current.questions = {};
+					$scope.submit();
+					expect(controller.harvest).toHaveBeenCalled();
+				}));
+
 				it('should not submit if the page is not $valid', function(){
-					controller.addQuest({valid:function(){return true;}});
-					controller.addQuest({valid:function(){return false;}});
-					controller.addQuest({valid:function(){return true;}});
+					$scope.pageForm.$setValidity('test', false);
 					$scope.submit();
 					expect(controller.harvest).not.toHaveBeenCalled();
 				});
 
 				it('should not validate if submit(true)', function(){
-					controller.addQuest({valid:function(){return true;}});
-					controller.addQuest({valid:function(){return false;}});
-					controller.addQuest({valid:function(){return true;}});
+					$scope.pageForm.$setValidity('test', false);
 					$scope.submit(true);
 					expect(controller.harvest).toHaveBeenCalled();
 				});
 
-				it('should harvest even when there are no questions registered', function(){
-					$scope.submit();
-					expect(controller.harvest).toHaveBeenCalled();
-				});
-
-				it('should harvest and then emit "quest:next" when submit is called', function(){
+				it('should harvest and only then emit "quest:next"', function(){
 					var nextSpy = jasmine.createSpy('quest:next');
-					controller.addQuest({valid:function(){return true;}});
 					$scope.$on('quest:next', nextSpy);
 					$scope.submit();
 					expect(nextSpy).toHaveBeenCalled();
@@ -225,15 +253,13 @@ define(['../questDirectivesModule'],function(){
 					expect(controller.log.timeout).toBeDefined();
 				});
 
-				it('should submit even upon error', function(){
-					var noop = function(){};
-					var submitSpy = jasmine.createSpy('submit');
+				it('should harvest even upon error', function(){
+					var harvestSpy = jasmine.createSpy('harvest');
+					scope.pageForm.$setValidity('test', false);
 
-					controller.addQuest({valid:function(){return true;}, value: noop});
-					controller.addQuest({valid:function(){return false;}, value: noop});
-					scope.$on('quest:next', submitSpy);
+					scope.$on('quest:next', harvestSpy);
 					$timeout.flush();
-					expect(submitSpy).toHaveBeenCalled();
+					expect(harvestSpy).toHaveBeenCalled();
 				});
 
 				it('should not trigger if submit was called before it', function(){

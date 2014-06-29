@@ -16,8 +16,8 @@ define(function(require){
 		})();
 	}
 
-	SequenceProvider.$inject = ['Collection', 'mixerSequential','mixerRecursive'];
-	function SequenceProvider(Collection, mixerSequential, mixerRecursive){
+	SequenceProvider.$inject = ['Collection', 'mixerSequential','mixerRecursive','$rootScope'];
+	function SequenceProvider(Collection, mixerSequential, mixerRecursive, $rootScope){
 		// classical inheritance from Collection
 		// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create#Classical_inheritance_with_Object.create
 		function Sequence(coll, db){
@@ -42,32 +42,47 @@ define(function(require){
 
 				var page = this.db.inflate('pages', pageObj);
 
-				page.questions = mixerRecursive(page.questions);
+				page.questions = mixerRecursive(page.questions || []);
+
 				// we can afford to overwrite the original since inflate always creates new objects for us.
-				page.questions = _.map(page.questions || [], function(question){
+				page.questions = _.map(page.questions, function(question){
 					return this.db.inflate('questions', question);
 				}, this);
 
 				return page;
 			},
+
+			/**
+			 * Parses the sequence to get the next page.
+			 * next -> mix -> build (or escape) -> current
+			 * @return {*} the next page to parse or undefined
+			 */
 			proceed: function(){
+				// proceed
 				this.next();
-
-				// return undefined at the end
-				if (this.length === this.pointer){
-					return undefined;
-				}
-
 				this.mix();
-				var page = this.current();
-				page = this.buildPage(page);
+				var page = this.buildPage(this.current());
 
 				return page;
 			},
 
+			/**
+			 * Mix the current object, until we have a non mixer
+			 * @return {[type]} [description]
+			 */
 			mix: function(){
 				var obj = this.current();
-				var mixed = mixerSequential([obj]);
+
+				// manage the end of the line
+				if (_.isUndefined(obj)){
+					return undefined;
+				}
+
+				var mixed = mixerSequential([obj], {
+					global: $rootScope.global,
+					current: $rootScope.current,
+					questions: $rootScope.current.questions
+				});
 				var sequence = this.collection;
 
 				// push the first arguments of splice into the mixer array...
@@ -77,6 +92,12 @@ define(function(require){
 
 				// update sequence length
 				this.length = sequence.length;
+
+				// if mixed returned an empty array, remix with the next object
+				// removing the current mixer effectively moves the pointer ahead (== next)
+				if (mixed.length == 2){
+					this.mix();
+				}
 			}
 		});
 

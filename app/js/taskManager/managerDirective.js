@@ -7,11 +7,15 @@
  */
 define(function(){
 
-	directive.$inject = ['$compile','managerGetScript'];
-	function directive($compile,getScript){
+	directive.$inject = ['$compile','$rootScope','managerGetScript'];
+	function directive($compile,$rootScope,getScript){
 		return {
 			link:  function(scope, $element, attr){
 				var q = getScript(attr.piTask);
+
+				// create the global object
+				$rootScope.global = {};
+
 				q.then(function(script){
 					scope.script = script;
 					$element.html('<div pi-quest></div>');

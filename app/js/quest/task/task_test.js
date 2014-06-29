@@ -132,12 +132,15 @@ define(['underscore','./task-module'],function(){
 		var db = jasmine.createSpyObj('db', ['inflate']);
 		var sequence;
 		// mock the mixer without mixing
-		var mixerSpy = jasmine.createSpy('mixer').andCallFake(function(a){return [a[0],a[0]];});
+		var mixerSpy = jasmine.createSpy('mixerSequential');
+		var recursiveMixerSpy = jasmine.createSpy('mixerRecursive').andCallFake(function(a){return a;});
 
 		beforeEach(module('task', function($provide){
 			$provide.value('mixerSequential', mixerSpy);
+			$provide.value('mixerRecursive', recursiveMixerSpy);
 		}));
 		beforeEach(inject(function(TaskSequence){
+			mixerSpy.andCallFake(function(a){return [a[0],a[0]];});
 			sequence = new TaskSequence([1,2,3,4], db);
 		}));
 
@@ -154,9 +157,6 @@ define(['underscore','./task-module'],function(){
 		}));
 
 		describe(': buildPage', function(){
-
-			console.log('missing test for mixing the questions!!!!');
-
 			it('should know how to inflate a page', function(){
 				var page = {};
 				db.inflate.andReturn(page); // make sure the inflate function gets a page too
@@ -174,6 +174,13 @@ define(['underscore','./task-module'],function(){
 				expect(db.inflate).toHaveBeenCalledWith('questions',2);
 				expect(db.inflate).toHaveBeenCalledWith('questions',3);
 			});
+
+			it('should mix the questions', function(){
+				var page = {questions:[1,23,2]};
+				db.inflate.andReturn(page);
+				sequence.buildPage(page);
+				expect(recursiveMixerSpy).toHaveBeenCalledWith([1,23,2]);
+			});
 		});
 
 		describe(': proceed', function(){
@@ -188,10 +195,9 @@ define(['underscore','./task-module'],function(){
 
 			it('should return undefined and not mix when we reach the end', function(){
 				spyOn(sequence,'buildPage').andCallFake(function(value){return value;});
-				spyOn(sequence,'mix');
 				sequence.last();
 				expect(sequence.proceed()).toBe(undefined);
-				expect(sequence.mix).not.toHaveBeenCalled();
+				expect(mixerSpy).not.toHaveBeenCalled();
 			});
 
 			it('should return an infalted version of the next obj', function(){
@@ -206,10 +212,33 @@ define(['underscore','./task-module'],function(){
 		});
 
 		describe(': mix',function(){
+			beforeEach(inject(function($rootScope){
+				$rootScope.global = {};
+				$rootScope.current = {questions:{}};
+			}));
+
 			it('should mix the current object', function(){
 				sequence.last();
 				sequence.mix();
-				expect(mixerSpy).toHaveBeenCalledWith([4]);
+				expect(mixerSpy).toHaveBeenCalledWith([4], jasmine.any(Object));
+			});
+
+			it('should pass the correct context', inject(function($rootScope){
+				sequence.last();
+				sequence.mix();
+				expect(mixerSpy.calls[0].args[1]).toEqual({
+					global: $rootScope.global,
+					current: $rootScope.current,
+					questions: $rootScope.current.questions
+				});
+			}));
+
+			it('should proceed and remix, if an empty mixer was returned', function(){
+				var mixerStack = [[], [7], [8]];
+				mixerSpy.andCallFake(function(){return mixerStack.shift();});
+				sequence.next();
+				sequence.mix();
+				expect(sequence.collection).toEqual([7,3,4]);
 			});
 
 			it('should replace the object with the mixed array', function(){
@@ -224,6 +253,7 @@ define(['underscore','./task-module'],function(){
 				sequence.mix();
 				expect(sequence.length).toEqual(5);
 			});
+
 		});
 	});
 });

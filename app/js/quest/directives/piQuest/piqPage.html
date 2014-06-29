@@ -4,18 +4,17 @@
 		<li ng-repeat="quest in questions">
 			<div ng-switch="quest.type || 'text'">
 				<div ng-switch-when="text">
-					<input quest-wrapper quest-text quest-data="quest">
+					<input quest-wrapper quest-text quest-data="quest" ng-model="current.questions[quest.name]">
 				</div>
 				<div ng-switch-when="textNumber">
-					<input quest-wrapper quest-text-number quest-data="quest">
+					<input quest-wrapper quest-text-number quest-data="quest" ng-model="current.questions[quest.name]">
 				</div>
 				<div ng-switch-when="selectOne">
-					<input quest-wrapper quest-select-one quest-data="quest">
+					<input quest-wrapper quest-select-one quest-data="quest" ng-model="current.questions[quest.name]">
 				</div>
 				<div ng-switch-when="selectMulti">
-					<input quest-wrapper quest-select-multi quest-data="quest">
+					<input quest-wrapper quest-select-multi quest-data="quest" ng-model="current.questions[quest.name]">
 				</div>
-
 			</div>
 		</li>
 	</ol>

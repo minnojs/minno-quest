@@ -21,6 +21,7 @@ define(function(require){
 		 * @param  {Object} context   [A context for the condition checker]
 		 * @return {Boolean}          [Are these conditions true]
 		 */
+
 		function evaluate(conditions,context){
 			return _.reduce(conditions, function(result,cond){
 				return result && condition(cond, context);

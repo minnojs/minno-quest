@@ -3,9 +3,7 @@ define(function(require){
 
 	function dfltQuestLogger(log, pageData, global){
 		global;
-		return _.extend({
-			global: 'globalData place holder'
-		},pageData,log);
+		return _.extend({},pageData,log);
 	}
 
 	return dfltQuestLogger;

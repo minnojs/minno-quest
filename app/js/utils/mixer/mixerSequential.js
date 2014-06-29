@@ -25,7 +25,7 @@ define(function(require){
 			// concat mixed and sequence
 			mixed = mixed.concat(sequence);
 
-			return _.isUndefined(mixed[0].mixer) ? mixed : mixerSequential(mixed, context, depth);
+			return _.isUndefined(mixed[0]) || _.isUndefined(mixed[0].mixer) ? mixed : mixerSequential(mixed, context, depth);
 		}
 
 		return mixerSequential;

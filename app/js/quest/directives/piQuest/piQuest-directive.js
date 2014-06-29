@@ -18,6 +18,11 @@ define(['underscore', 'text!./piQuest.html'], function (_, template) {
 
 		this.init = next;
 
+		// create the local object
+		$scope.global[$scope.script.name || 'current'] = $scope.current = {
+			questions: {}
+		};
+
 		$scope.$on('quest:next', next);
 
 		$scope.$on('quest:log', function(event, logs, pageData){

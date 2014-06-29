@@ -2,13 +2,17 @@ define(function(require){
 	var _ = require('underscore');
 	var angular = require('angular');
 
-	mixerConditionProvider.$inject = ['mixerDotNotation'];
-	function mixerConditionProvider(dotNotation){
+
+	mixerConditionProvider.$inject = ['mixerDotNotation', '$log'];
+	function mixerConditionProvider(dotNotation, $log){
 
 		function mixerCondition(condition, context){
+			// @TODO angular.$parse may be a better candidate for doing this...
 			var left = dotNotation(condition.compare,context);
 			var right = dotNotation(condition.to,context);
 			var operator = condition.operator;
+
+			condition.DEBUG && $log.log('Condition DEBUG: ', left, operator || 'equals', right);
 
 			if (_.isFunction(operator)){
 				return !! operator.apply(context,[left, right]);

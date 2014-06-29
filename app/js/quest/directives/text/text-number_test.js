@@ -2,37 +2,27 @@ define(['../questDirectivesModule'],function(){
 
 	describe('questTextNumber',function(){
 
-		var formElm, inputElm, scope, $compile, $document, $sniffer, $browser, changeInputValueTo, addSpy = jasmine.createSpy('addQuest');
-		var jqLite = angular.element;
+		var formElm, inputElm, scope, $compile, $document, $sniffer, changeInputValueTo;
+		var jqLite = angular.element, log;
 
-		var compileInput = function compileInput(html, data){
-			formElm = jqLite(html);
+		var compile = function compileInput(data, logObj){
+			formElm = jqLite('<input quest-text-number quest-data="data" ng-model="current.logObj"/>');
+			logObj && (scope.current.logObj = logObj);
 			scope.data = data;
 			$compile(formElm)(scope);
 			scope.$digest();
 			inputElm = formElm.find('input');
+			log = formElm.data('$questTextNumberController').log;
 		};
 
-		beforeEach(module('questDirectives', function($compileProvider){
-			// this is a hack to get the piq-page controller registered by the directive
-			$compileProvider.directive('piqPageInject', function(){
-				return {
-					priority: -1000,
-					link: function(scope,element){
-						element.data('$piqPageController', {
-							addQuest : addSpy
-						});
-					}
-				};
-			});
-		}));
-
-		beforeEach(inject(function($injector, _$sniffer_, _$browser_) {
+		beforeEach(module('questDirectives'));
+		beforeEach(inject(function($injector, _$sniffer_) {
 			$sniffer = _$sniffer_;
-			$browser = _$browser_;
 			$compile = $injector.get('$compile');
 			$document = $injector.get('$document');
 			scope = $injector.get('$rootScope');
+			scope.current = [];
+			scope = scope.$new();
 
 			changeInputValueTo = function(value) {
 				inputElm.val(value);
@@ -40,16 +30,18 @@ define(['../questDirectivesModule'],function(){
 			};
 		}));
 
+
+
 		it('should bind to a model', function(){
-			compileInput('<input quest-text-number quest-data="data" />',{});
-			expect(scope.data.response).toBe('');
+			compile({});
+			expect(log.response).toBe('');
 
 			changeInputValueTo(234234);
-			expect(scope.data.response).toBe(234234);
+			expect(log.response).toBe(234234);
 		});
 
 		it('should be a number', function(){
-			compileInput('<input quest-text-number quest-data="data" />',{});
+			compile({});
 
 			try {
 				// to allow non-number values, we have to change type so that
@@ -67,16 +59,16 @@ define(['../questDirectivesModule'],function(){
 		});
 
 		it('should support dflt',function(){
-			compileInput('<input quest-text-number quest-data="data" />',{dflt:123123});
+			compile({dflt:123123});
 			expect(inputElm.val()).toBe('123123');
 			// even if the default value is 0
-			compileInput('<input quest-text-number quest-data="data" />',{dflt:0});
+			compile({dflt:0});
 			expect(inputElm.val()).toBe('0');
 		});
 
 
 		it('should support required',function(){
-			compileInput('<input quest-text-number quest-data="data" />',{required:true, errorMsg:{required: 'required msg'}});
+			compile({required:true, errorMsg:{required: 'required msg'}});
 			var errorElm = formElm.find('[ng-show="form.$error.required"]');
 			expect(errorElm.text()).toBe('required msg');
 
@@ -87,12 +79,12 @@ define(['../questDirectivesModule'],function(){
 			expect(formElm).toBeValid();
 			expect(errorElm).toBeHidden();
 
-			changeInputValueTo('');
+			changeInputValueTo('a');
 			expect(formElm).toBeInvalid();
 		});
 
 		it('should support max',function(){
-			compileInput('<input quest-text-number quest-data="data" />',{max:5, errorMsg:{max: 'max msg'}});
+			compile({max:5, errorMsg:{max: 'max msg'}});
 			var errorElm = formElm.find('[ng-show="form.$error.max"]');
 			expect(errorElm.text()).toBe('max msg');
 
@@ -105,7 +97,7 @@ define(['../questDirectivesModule'],function(){
 		});
 
 		it('should support min',function(){
-			compileInput('<input quest-text-number quest-data="data" />',{min:5, errorMsg:{min: 'min msg'}});
+			compile({min:5, errorMsg:{min: 'min msg'}});
 			var errorElm = formElm.find('[ng-show="form.$error.min"]');
 			expect(errorElm.text()).toBe('min msg');
 
@@ -116,11 +108,5 @@ define(['../questDirectivesModule'],function(){
 			changeInputValueTo(3);
 			expect(formElm).toBeInvalid();
 		});
-
-		it('should register with piqPage', function(){
-			compileInput('<input piq-page-inject quest-text-number quest-data="data" />',{});
-			expect(addSpy).toHaveBeenCalledWith(inputElm.controller('questTextNumber'));
-		});
-
 	});
 });

@@ -12,47 +12,45 @@ define(function (require) {
 		return {
 			replace: true,
 			template:template,
-			require: ['^?piqPage'],
+			require: ['^?piqPage', 'ngModel'],
 			controller: 'questController',
 			controllerAs: 'ctrl',
 			scope:{
 				data: '=questData'
 			},
 			link: function(scope, element, attr, ctrls) {
-				var page = ctrls[0];
 				var ctrl = scope.ctrl;
-				var dflt = scope.data.dflt;
+				var ngModel = ctrls[1];
 
-				// push controller into page cue
-				page && page.addQuest(ctrl);
+				ctrl.registerModel(ngModel, {
+					dflt: []
+				});
 
-				// render quest
+				// render questions
 				scope.quest = {
 					answers: mixer(scope.data.answers || [], scope.data)
 				};
 
-				// set the default value
-				if (_.isUndefined(dflt)){
-					scope.response = [];
-				} else {
-					_.each(scope.quest.answers, function(answer){
-						if (answer.dflt || _.indexOf(dflt, answer.value) != -1){
-							answer.chosen = true;
-						}
-					});
-				}
-
-				ctrl.log.responseObj = scope.responseObj;
+				// mark the chosen questions
+				_.each(scope.quest.answers, function(answer){
+					// mark it chosen if
+					if (_.indexOf(scope.response, answer.value) != -1){
+						answer.chosen = true;
+					}
+				});
 
 				// update controller with the response
-				scope.$watch('quest.answers',function(newValue, oldValue, scope){
-					if (newValue){
-						scope.response = _(newValue)
-							.filter(function(answer){return answer.chosen;})
-							.pluck('value')
-							.value();
+				scope.$watch('quest.answers',function(newValue, oldValue){
+					if (newValue === oldValue){
+						return;
 					}
-				},true);
+
+					// get chosen answers
+					scope.response = _(newValue)
+						.filter(function(answer){return answer.chosen;})
+						.pluck('value')
+						.value();
+				},true); // deep watch
 			}
 		};
 	}

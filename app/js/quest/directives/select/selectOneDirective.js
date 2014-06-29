@@ -1,5 +1,8 @@
 /*
  * The directive for creating selectOne inputs.
+ *
+ * scope.response is the value of the chosen response
+ * scope.responseObj is the full answer object or undefined
  */
 define(function (require) {
 	var _ = require('underscore');
@@ -12,20 +15,21 @@ define(function (require) {
 		return {
 			replace: true,
 			template:template,
-			require: ['^?piqPage'],
+			require: ['ngModel', '^?piqPage'],
 			controller: 'questController',
 			controllerAs: 'ctrl',
 			scope:{
 				data: '=questData'
 			},
 			link: function(scope, element, attr, ctrls) {
-				var page = ctrls[0];
+				var ngModel = ctrls[0];
 				var ctrl = scope.ctrl;
 
-				// push controller into page cue
-				page && page.addQuest(ctrl);
+				ctrl.registerModel(ngModel, {
+					dflt: undefined
+				});
 
-				// render quest
+				// render quest if needed
 				scope.quest = {
 					answers: mixer(scope.data.answers || [], scope.data)
 				};
@@ -39,11 +43,13 @@ define(function (require) {
 				}
 
 				// update controller with the response
-				scope.$watch('responseObj',function(newValue, oldValue, scope){
-					if (newValue){
-						scope.response = newValue.value;
-						ctrl.log.responseObj = newValue;
+				scope.$watch('responseObj',function(newValue, oldValue){
+					if (newValue === oldValue){
+						return;
 					}
+
+					scope.response = newValue.value;
+					ctrl.log.responseObj = newValue;
 				});
 			}
 		};

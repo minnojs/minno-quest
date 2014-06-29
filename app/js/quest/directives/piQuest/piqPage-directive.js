@@ -11,46 +11,21 @@
  * @name piqPage
   */
 define(function (require) {
-
-	var _ = require('underscore');
 	var template = require('text!./piqPage.html');
 
-	piqPageCtrl.$inject = ['$scope','$timeout', 'mixerRecursive'];
-	function piqPageCtrl($scope,$timeout, mixer){
+	piqPageCtrl.$inject = ['$scope','$timeout', 'mixerRecursive', '$rootScope', 'questHarvest'];
+	function piqPageCtrl($scope,$timeout, mixer, $rootScope, harvest){
 
 		var self = this;
-		var questStack = [];
 
-		/**
-		 * Allows a controller to register with piqPage
-		 * @param {[Controller]} quest [a controller with a "valid" and "value" methods]
-		 */
-		this.addQuest = function(quest){
-			questStack.push(quest);
-		};
-
-		/**
-		 * Removes a controller registered with piqPage
-		 * @param {[Controller]} quest [a controller previously registered]
-		 */
-		this.removeQuest = function(quest){
-			var index = _.indexOf(questStack, quest);
-			if (index > 0){
-				questStack.splice(index,1);
-			}
-		};
+		$scope.global = $rootScope.global;
+		$scope.current = $rootScope.current;
 
 		/**
 		 * Harvest piqPage questions, and log them.
 		 */
 		this.harvest = function(){
-			var logs = _.map(questStack, function(quest){
-				return quest.value();
-			});
-
-			$scope.$emit('quest:log', logs, self.log);
-
-			questStack = [];
+			return harvest($scope,self.log, $scope.global);
 		};
 
 		/**
@@ -62,20 +37,19 @@ define(function (require) {
 		 * @param  {Boolean} skipValidation [Should skip validation of the form before submitting?]
 		 */
 		$scope.submit = function(skipValidation){
-			var valid = _.reduce(questStack, function(result, quest){
-				return result &= quest.valid();
-			}, true);
+			var valid = $scope.pageForm.$valid;
 
 			if (!valid && skipValidation !== true){
 				return true;
 			}
 
-			// reomve timeout if needed
+			// remove timeout if needed
 			if (self.timeoutDeferred){
 				$timeout.cancel(self.timeoutDeferred);
 				delete(self.timeoutDeferred);
 			}
 
+			// by default, harvest after every page..
 			self.harvest();
 			next();
 		};
@@ -98,7 +72,6 @@ define(function (require) {
 			 */
 			$scope.questions = mixer($scope.page.questions);
 
-
 			// If there is a timeout set, submit when it runs out.
 			if (newPage.timeout){
 				self.timeoutDeferred = $timeout(function(){
@@ -115,8 +88,7 @@ define(function (require) {
 		return {
 			replace: true,
 			controller: piqPageCtrl,
-			template:template //,
-			//link: function(scope, element, attr, ctrl) {}
+			template:template
 		};
 	}
 

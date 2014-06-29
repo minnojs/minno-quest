@@ -7,8 +7,8 @@ define([], function(){
 		settings: {
 			logger: {
 				pulse: 3,
-				url: 'mine/sps',
-				DEBUG:true
+				url: 'mine/sps'
+				//DEBUG:true
 			},
 			onEnd: function(){
 				location.href = location.href;
@@ -35,9 +35,22 @@ define([], function(){
 						]
 					},
 					{
-						stem: "Second question"
+						name: 'myName',
+						stem: "What is your name?"
 					}
 				]
+			},
+			{
+				mixer: 'branch',
+				conditions: [{compare: 'questions.myName.response', to:'yba', DEBUG:true}],
+				data: [{
+					header: 'Hi <%= questions.myName.response %>',
+					questions: [
+						{
+							stem: 'This question can only be reached if you type yba for the previous question'
+						}
+					]
+				}]
 			},
 			{
 				mixer: 'repeat',

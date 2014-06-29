@@ -2,14 +2,16 @@ define(['../questDirectivesModule'], function(){
 
 	describe('questText',function(){
 		var formElm, inputElm, scope, $compile, $sniffer, $browser, changeInputValueTo, addSpy = jasmine.createSpy('addQuest');
-		var jqLite = angular.element;
+		var jqLite = angular.element, log;
 
-		var compileInput = function compileInput(html, data){
-			formElm = jqLite(html);
+		var compile = function compileInput(data){
+			formElm = jqLite('<input quest-text quest-data="data" ng-model="current.logObj" />');
+
 			scope.data = data;
 			$compile(formElm)(scope);
 			scope.$digest();
 			inputElm = formElm.find('input');
+			log = formElm.data('$questTextController').log;
 		};
 
 		beforeEach(module('questDirectives', function($compileProvider){
@@ -25,11 +27,14 @@ define(['../questDirectivesModule'], function(){
 				};
 			});
 		}));
+
 		beforeEach(inject(function($injector, _$sniffer_, _$browser_) {
 			$sniffer = _$sniffer_;
 			$browser = _$browser_;
 			$compile = $injector.get('$compile');
 			scope = $injector.get('$rootScope');
+			scope.current = {};
+			scope = scope.$new();
 
 			changeInputValueTo = function(value) {
 				inputElm.val(value);
@@ -38,25 +43,28 @@ define(['../questDirectivesModule'], function(){
 		}));
 
 		it('should bind to a model', function(){
-			compileInput('<input quest-text quest-data="data" />',{});
-
-			expect(scope.data.response).toBe('');
+			compile({});
+			expect(log.response).toBe('');
 
 			changeInputValueTo('hello');
-			expect(scope.data.response).toBe('hello');
+			expect(log.response).toBe('hello');
+
+			changeInputValueTo('band');
+			expect(log.response).toBe('band');
 		});
 
 		it('should support dflt',function(){
-			compileInput('<input quest-text quest-data="data" />',{dflt:"default value"});
+			compile({dflt:"default value"});
 			expect(inputElm.val()).toBe('default value');
+			expect(log.response).toBe('default value');
 			// even if the default value is 0
-			compileInput('<input quest-text quest-data="data" />',{dflt:0});
+			compile({dflt:0});
 			expect(inputElm.val()).toBe('0');
 		});
 
 
 		it('should support required',function(){
-			compileInput('<input quest-text quest-data="data" />',{required:true, errorMsg:{required: 'required msg'}});
+			compile({required:true, errorMsg:{required: 'required msg'}});
 			var errorElm = formElm.find('[ng-show="form.$error.required"]');
 			expect(errorElm.text()).toBe('required msg');
 
@@ -73,7 +81,7 @@ define(['../questDirectivesModule'], function(){
 		});
 
 		it('should support maxlength',function(){
-			compileInput('<input quest-text quest-data="data" />',{maxlength:5, errorMsg:{maxlength: 'maxlength msg'}});
+			compile({maxlength:5, errorMsg:{maxlength: 'maxlength msg'}});
 			var errorElm = formElm.find('[ng-show="form.$error.maxlength"]');
 			expect(errorElm.text()).toBe('maxlength msg');
 
@@ -86,7 +94,7 @@ define(['../questDirectivesModule'], function(){
 		});
 
 		it('should support minlength',function(){
-			compileInput('<input quest-text quest-data="data" />',{minlength:5, errorMsg:{minlength: 'minlength msg'}});
+			compile({minlength:5, errorMsg:{minlength: 'minlength msg'}});
 			var errorElm = formElm.find('[ng-show="form.$error.minlength"]');
 			expect(errorElm.text()).toBe('minlength msg');
 
@@ -99,7 +107,7 @@ define(['../questDirectivesModule'], function(){
 		});
 
 		it('should support pattern',function(){
-			compileInput('<input quest-text quest-data="data" />',{pattern:"/^\\d\\d\\d-\\d\\d-\\d\\d\\d\\d$/", errorMsg:{pattern: 'pattern msg'}});
+			compile({pattern:"/^\\d\\d\\d-\\d\\d-\\d\\d\\d\\d$/", errorMsg:{pattern: 'pattern msg'}});
 			var errorElm = formElm.find('[ng-show="form.$error.pattern"]');
 			expect(errorElm.text()).toBe('pattern msg');
 
@@ -118,11 +126,6 @@ define(['../questDirectivesModule'], function(){
 
 			changeInputValueTo('x');
 			expect(formElm).toBeInvalid();
-		});
-
-		it('should register with piqPage', function(){
-			compileInput('<input piq-page-inject quest-text quest-data="data" />',{});
-			expect(addSpy).toHaveBeenCalledWith(inputElm.controller('questText'));
 		});
 	});
 });

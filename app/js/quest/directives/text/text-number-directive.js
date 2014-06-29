@@ -10,21 +10,23 @@ define(function (require) {
 		return {
 			replace: true,
 			template:template,
-			require: ['form', '^?piqPage'],
+			require: ['form', 'ngModel', '^?piqPage'],
 			controller: 'questController',
 			controllerAs: 'ctrl',
 			scope:{
 				data: '=questData'
 			},
 			link: function(scope, element, attr, ctrls) {
-				var form = ctrls[0];
-				var page = ctrls[1];
-				var ctrl = scope.ctrl;
 
+				var form = ctrls[0];
 				var input = element.find('input');
 				var ngModel = input.eq(0).controller('ngModel');
 
-				page && page.addQuest(ctrl);
+				scope.form = form;
+
+				scope.ctrl.registerModel(ctrls[1], {
+					dflt: ""
+				});
 
 				// we have a specific problem with min max that don't take internal
 				// http://stackoverflow.com/questions/15656617/validation-not-triggered-when-data-binding-a-number-inputs-min-max-attributes
@@ -55,16 +57,6 @@ define(function (require) {
 
 				ngModel.$parsers.push(maxValidator);
 				ngModel.$formatters.push(maxValidator);
-
-				scope.form = form;
-
-				// set the default value
-				scope.response = typeof scope.data.dflt == 'undefined' ? '' : scope.data.dflt;
-
-				// update data object with the response
-				scope.$watch('response',function(newValue, oldValue, scope){
-					scope.data.response = newValue;
-				});
 			}
 		};
 	};

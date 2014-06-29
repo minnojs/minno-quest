@@ -9,7 +9,7 @@ define(function (require) {
 		return {
 			replace: true,
 			template:template,
-			require: ['form', '^?piqPage'],
+			require: ['form', 'ngModel', '^?piqPage'],
 			controller: 'questController',
 			controllerAs: 'ctrl',
 			scope:{
@@ -17,19 +17,12 @@ define(function (require) {
 			},
 			link: function(scope, element, attr, ctrls) {
 				var form = ctrls[0];
-				var page = ctrls[1];
-				var ctrl = scope.ctrl;
-
-				page && page.addQuest(ctrl);
+				var ngModel = ctrls[1];
 
 				scope.form = form;
 
-				// set the default value
-				scope.response = typeof scope.data.dflt == 'undefined' ? '' : scope.data.dflt;
-
-				// update data object with the response
-				scope.$watch('response',function(newValue, oldValue, scope){
-					scope.data.response = newValue;
+				scope.ctrl.registerModel(ngModel, {
+					dflt: ""
 				});
 			}
 		};

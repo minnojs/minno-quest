@@ -19,18 +19,6 @@
 		<!-- <link rel="stylesheet" href="styles/main.css"> -->
 		<!-- endbuild -->
 
-		<!-- Uncomment For debugging -->
-		<!-- <script type="text/javascript" src="libs/jquery/dist/jquery.js"></script> -->
-
-		<!--[if lt IE 7]>
-			<script src="//cdnjs.cloudflare.com/ajax/libs/json3/3.3.1/json3.min.js"></script>
-		<![endif]-->
-		<!--[if lt IE 8]>
-			<script src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/3.4.0/es5-shim.min.js"></script>
-		<![endif]-->
-
-		<script src="libs/requirejs/require.js" data-main="js/bootstrap.js"></script>
-
 		<style type="text/css">
 			/* http://www.sitepoint.com/css3-responsive-centered-image/ */
 			img.pi-logo {
@@ -72,7 +60,18 @@
 				<img class="pi-logo" src="img/logo.png" />
 			</div>
 		</div>
-
-
 	</body>
+
+	<!-- Uncomment For debugging -->
+	<!-- <script type="text/javascript" src="libs/jquery/dist/jquery.js"></script> -->
+
+	<!--[if lt IE 7]>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/json3/3.3.1/json3.min.js"></script>
+	<![endif]-->
+	<!--[if lt IE 8]>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/3.4.0/es5-shim.min.js"></script>
+	<![endif]-->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.min.js" data-main="js/bootstrap.js"></script>
+	<script>window.require || document.write('<script src="libs/requirejs/require.js" data-main="js/bootstrap.js"><\/script>');</script>
+
 </html>

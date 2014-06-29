@@ -24,8 +24,21 @@ settings: {
 			pageData = {startTime:'234645345', pageName: 'name'}
 			return {};
 		}
-
 	}
+}
+```
+
+## sequence
+A sequence of pages that should be displayed to the user.
+The pages are processed sequentialy, they may be inherited from the pages/questions sets.
+Also, you can mix them to your hearts conent.
+The conditional object contains three objects: global, current and questions. documentation of the global and current objects should be elsewhere.
+Questions is an object indexed by question name. You can access any question property with the following syntax:
+
+```js
+var cond = {
+	compare: 'questions.quest1.response', // compare the response of quest1
+	to: 'questions.quest2.latency' // to the latency of question2
 }
 ```
 
@@ -118,7 +131,8 @@ Any quest object can take the following properties:
 var cond = {
 	compare: 'global.var',
 	to: 'local.otherVar',
-	operator: 'equals'
+	operator: 'equals',
+	DEBUG: false // console.log the comparison for debuging
 }
 ```
 
@@ -130,3 +144,32 @@ var cond = {
 * `greaterThanOrEquals`: compare >= to
 * `in`: compare is in Arr(to);
 * `function(){}`: custom function (compareValue, toValue){return {Boolean}}
+
+```js
+var branch = {
+    mixer: 'branch',
+    conditions: [],
+    data: [],
+    elseData: [] // optional
+}
+
+var multiBranch = {
+    mixer: 'branch',
+    branches: [
+        {
+            conditions: [],
+            data: []
+        },
+        {
+            conditions: [],
+            data: []
+        }
+    ],
+    elseData: [] // optional
+}
+
+var condition = {
+    compare: 'global.myVar',
+    to: 'local.myVar'
+}
+```
