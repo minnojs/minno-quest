@@ -90,9 +90,14 @@ define([], function(){
 				questions: [
 					{
 						stem: 'how are you?',
-						name: 'select example',
 						type: 'selectOne',
-						dflt:1,
+						dflt:2,
+						buttons: true,
+						answers: ['good','bad','ugly']
+					},
+					{
+						stem: 'how are you?',
+						type: 'selectOne',
 						answers: ['good','bad','ugly']
 					}
 				]

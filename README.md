@@ -118,6 +118,7 @@ Any quest object can take the following properties:
 	randomize: true, // shuffle answers after mixing them (the mixer is activated in any case...)
 	reverse: true, // reverses the order of the answers
 	numericValues: false, // if numericValues is set default values are set numericaly by the order of the answers, they are set *after* the mixer is activated
+	buttons: false, // by default uses a list format, set to true in order to use vertical buttons (likert style, currently does not support extremely narrow screens)
 	// by default, value is set to equal text
 	answers: [
 		'first',

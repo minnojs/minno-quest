@@ -34,7 +34,7 @@ define(function (require) {
 				// mark the chosen questions
 				_.each(scope.quest.answers, function(answer){
 					// mark it chosen if
-					if (_.indexOf(scope.response, answer.value) != -1){
+					if (~_.indexOf(scope.response, answer.value)){
 						answer.chosen = true;
 					}
 				});

@@ -56,15 +56,17 @@ define(['../questDirectivesModule', 'utils/randomize/randomizeModuleMock'], func
 			});
 		}); // end mixer
 
-		describe('SelectOne',function(){
-			var formElm, scope, $compile, choose, jqLite = angular.element;
+		ddescribe('SelectOne',function(){
+			var formElm, scope, $compile, choose, jqLite = angular.element, log;
 
 			var compileInput = function compileInput(data){
-				formElm = jqLite('<div piq-page-inject quest-select-one quest-data="data" ng-model="data.model">');
+				formElm = jqLite('<div quest-select-one quest-data="data" ng-model="data.model">');
 				scope.data = data;
 				$compile(formElm)(scope);
 				scope = formElm.isolateScope(); // get the isolated scope
 				scope.$digest();
+				log = formElm.data('$questSelectOneController').log;
+				//formElm = formElm.children(); // get the appropriat variation of selectOne
 			};
 
 			beforeEach(module('ui.bootstrap.buttons',function($compileProvider, $provide){
@@ -84,10 +86,10 @@ define(['../questDirectivesModule', 'utils/randomize/randomizeModuleMock'], func
 				compileInput({
 					answers: [1,2]
 				});
-				expect(scope.response).toBe('');
+				expect(log.response).not.toBeTruthy();
 
 				choose(1);
-				expect(scope.response).toBe(2);
+				expect(log.response).toBe(2);
 			});
 
 			it('should mix the answers', function(){
@@ -106,9 +108,20 @@ define(['../questDirectivesModule', 'utils/randomize/randomizeModuleMock'], func
 					answers: [1,2,{value:'default value'}]
 				});
 				expect(scope.response).toBe('default value');
-				expect(scope.responseObj.value).toBe('default value');
+				expect(log.response).toBe('default value');
 				expect(formElm.find('.active').length).toBe(1);
 				expect(formElm.children().eq(2)).toHaveClass('active');
+			});
+
+			it('should support the buttons/likert version', function(){
+				compileInput({answers: [1,2,3]});
+				expect(formElm).toHaveClass('list-group');
+				expect(formElm.children().eq(2)).toHaveClass('list-group-item');
+
+
+				compileInput({answers: [1,2,3], buttons:true});
+				expect(formElm).toHaveClass('btn-group');
+				expect(formElm.children().eq(2)).toHaveClass('btn');
 			});
 
 		});

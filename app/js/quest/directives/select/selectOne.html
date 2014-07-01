@@ -1,12 +1,12 @@
-<div class="list-group">
+<div ng-class="{'list-group':!data.buttons, 'btn-group btn-group-justified btn-group-lg':data.buttons}">
 	<!-- track by in the ng-repeat allows us to keep the repeated object clean so that angular doesn't add a $$hashkey property -->
 	<a
-		href="javascript:void(0);"
+		shref="javascript:void(0);"
+		tabindex="-1"
 		ng-repeat="answer in quest.answers track by answer.order"
-		class="list-group-item"
 		ng-model="$parent.responseObj"
 		btn-radio="answer"
-		ng-class="{active:$parent.data.dflt === answer.value}"
+		ng-class="{active:$parent.data.dflt === answer.value, 'list-group-item': !$parent.data.buttons, 'btn btn-success': $parent.data.buttons}"
 		uncheckable
 	>
 	{{answer.text}}

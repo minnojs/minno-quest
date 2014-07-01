@@ -5,7 +5,6 @@
  * scope.responseObj is the full answer object or undefined
  */
 define(function (require) {
-	var _ = require('underscore');
 
 	// This is the only way to get a non js file relatively
 	var template = require('text!./selectOne.html');
@@ -26,7 +25,7 @@ define(function (require) {
 				var ctrl = scope.ctrl;
 
 				ctrl.registerModel(ngModel, {
-					dflt: undefined
+					dflt: NaN
 				});
 
 				// render quest if needed
@@ -34,21 +33,13 @@ define(function (require) {
 					answers: mixer(scope.data.answers || [], scope.data)
 				};
 
-				// set the default value
-				if (_.isUndefined(scope.data.dflt)){
-					scope.response = '';
-				} else {
-					scope.response = scope.data.dflt;
-					scope.responseObj = _.find(scope.quest.answers, function(answer){ return answer.value === scope.data.dflt;});
-				}
-
 				// update controller with the response
 				scope.$watch('responseObj',function(newValue, oldValue){
 					if (newValue === oldValue){
 						return;
 					}
 
-					scope.response = newValue.value;
+					scope.response = newValue && newValue.value;
 					ctrl.log.responseObj = newValue;
 				});
 			}
