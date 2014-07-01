@@ -1,6 +1,25 @@
 define(function(require){
 	var _ = require('underscore');
 
+	if (typeof Object.create != 'function') {
+		(function () {
+			var F = function () {};
+			Object.create = function (o) {
+				if (arguments.length > 1) {
+					throw new Error('Second argument not supported');
+				}
+				if (o === null) {
+					throw new Error('Cannot set a null [[Prototype]]');
+				}
+				if (typeof o != 'object') {
+					throw new TypeError('Argument must be an object');
+				}
+				F.prototype = o;
+				return new F();
+			};
+		})();
+	}
+
 	SequenceProvider.$inject = ['Collection', 'mixerSequential','mixerRecursive', 'templateObj'];
 	function SequenceProvider(Collection, mixerSequential, mixerRecursive, templateObj){
 		// classical inheritance from Collection
