@@ -11,17 +11,29 @@
   */
 define(['underscore', 'text!./piQuest.html'], function (_, template) {
 
-	piQuestCtrl.$inject = ['$scope','Task'];
-	function piQuestCtrl($scope, Task){
+	piQuestCtrl.$inject = ['$scope','$rootScope','Task','templateDefaultContext', 'mixerDefaultContext'];
+	function piQuestCtrl($scope, $rootScope, Task, templateDefaultContext, mixerDefaultContext){
 		var self = this;
 		var task = self.task = new Task($scope.script);
+		var defaultContext;
 
 		this.init = next;
 
-		// create the local object
-		$scope.global[$scope.script.name || 'current'] = $scope.current = {
+		// create the "current" object and expose "questions"
+		$rootScope.global[$scope.script.name || 'current'] = $rootScope.current = {
 			questions: {}
 		};
+
+		// create default context
+		defaultContext = {
+			global: $scope.global,
+			current: $scope.current,
+			questions: $scope.current.questions
+		};
+
+		// set default contexts
+		_.extend(templateDefaultContext,defaultContext);
+		_.extend(mixerDefaultContext,defaultContext);
 
 		$scope.$on('quest:next', next);
 

@@ -19,6 +19,8 @@ define(['../questDirectivesModule'], function(){
 			$compile = $injector.get('$compile');
 			$document = $injector.get('$document');
 			scope = $injector.get('$rootScope');
+			scope.current = {questions:{}};
+			scope = scope.$new();
 		}));
 
 		it('should bind to a model', function(){

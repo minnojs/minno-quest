@@ -1,23 +1,8 @@
 define(function(require){
 	var _ = require('underscore');
 
-	// polyfill for IE8 that doesn't support object.create
-	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create#Polyfill
-	if (typeof Object.create != 'function') {
-		(function () {
-			var F = function () {};
-			Object.create = function (o) {
-				if (arguments.length > 1) { throw new Error('Second argument not supported');}
-				if (o === null) { throw new Error('Cannot set a null [[Prototype]]');}
-				if (typeof o != 'object') { throw new TypeError('Argument must be an object');}
-				F.prototype = o;
-				return new F();
-			};
-		})();
-	}
-
-	SequenceProvider.$inject = ['Collection', 'mixerSequential','mixerRecursive','$rootScope'];
-	function SequenceProvider(Collection, mixerSequential, mixerRecursive, $rootScope){
+	SequenceProvider.$inject = ['Collection', 'mixerSequential','mixerRecursive', 'templateObj'];
+	function SequenceProvider(Collection, mixerSequential, mixerRecursive, templateObj){
 		// classical inheritance from Collection
 		// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create#Classical_inheritance_with_Object.create
 		function Sequence(coll, db){
@@ -41,12 +26,15 @@ define(function(require){
 				}
 
 				var page = this.db.inflate('pages', pageObj);
+				templateObj(page, {pageData: page.data || {}});
 
 				page.questions = mixerRecursive(page.questions || []);
 
 				// we can afford to overwrite the original since inflate always creates new objects for us.
 				page.questions = _.map(page.questions, function(question){
-					return this.db.inflate('questions', question);
+					question = this.db.inflate('questions', question);
+					templateObj(question, {pageData: page.data || {}, questData: question.data || {}});
+					return question;
 				}, this);
 
 				return page;
@@ -78,11 +66,7 @@ define(function(require){
 					return undefined;
 				}
 
-				var mixed = mixerSequential([obj], {
-					global: $rootScope.global,
-					current: $rootScope.current,
-					questions: $rootScope.current.questions
-				});
+				var mixed = mixerSequential([obj]);
 				var sequence = this.collection;
 
 				// push the first arguments of splice into the mixer array...

@@ -17,8 +17,9 @@ define([], function(){
 
 		sequence: [
 			{
-				header: 'Questionnaire page num. 1',
+				header: '<%= pageData.pageName %>: Questionnaire page num. <%= 1 + 1 %>',
 				decline:true,
+				data: {pageName:'page name from data'},
 				numbered: true,
 				numberStart: 4,
 				questions: [
@@ -36,7 +37,7 @@ define([], function(){
 					},
 					{
 						name: 'myName',
-						stem: "What is your name?"
+						stem: "What is your name? (try yba!)"
 					}
 				]
 			},
@@ -47,7 +48,9 @@ define([], function(){
 					header: 'Hi <%= questions.myName.response %>',
 					questions: [
 						{
-							stem: 'This question can only be reached if you type yba for the previous question'
+							data: {myDflt:'this is a secret page...'},
+							stem: 'This question can only be reached if you type yba for the previous question',
+							dflt: '<%= questData.myDflt %>'
 						}
 					]
 				}]

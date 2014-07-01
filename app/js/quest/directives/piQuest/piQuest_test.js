@@ -36,6 +36,15 @@ define(['../questDirectivesModule'],function(){
 			compile();
 		}));
 
+		afterEach(inject(function(templateDefaultContext, mixerDefaultContext){
+			delete(templateDefaultContext.global);
+			delete(templateDefaultContext.current);
+			delete(templateDefaultContext.questions);
+			delete(mixerDefaultContext.global);
+			delete(mixerDefaultContext.current);
+			delete(mixerDefaultContext.questions);
+		}));
+
 		it('should create a task from the script', inject(function(Task){
 			expect(controller.task).toEqual(jasmine.any(Task));
 			expect(TaskSpy).toHaveBeenCalledWith(script);
@@ -56,6 +65,19 @@ define(['../questDirectivesModule'],function(){
 			expect($rootScope.global.myName).toEqual({questions:{}});
 			expect(scope.current).toBe($rootScope.global.myName);
 		}));
+
+		it('should setup the templateDefaultContext', inject(function(templateDefaultContext){
+			expect(templateDefaultContext.global).toBe(scope.global);
+			expect(templateDefaultContext.current).toBe(scope.current);
+			expect(templateDefaultContext.questions).toBe(scope.current.questions);
+		}));
+
+		it('should setup the mixerDefaultContext', inject(function(mixerDefaultContext){
+			expect(mixerDefaultContext.global).toBe(scope.global);
+			expect(mixerDefaultContext.current).toBe(scope.current);
+			expect(mixerDefaultContext.questions).toBe(scope.current.questions);
+		}));
+
 	});
 
 	describe('questHarvest', function(){

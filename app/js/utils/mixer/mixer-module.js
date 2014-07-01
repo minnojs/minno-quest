@@ -15,6 +15,7 @@ define(function(require){
 	module.config(['$provide', function($provide){
 		$provide.decorator('mixer', require('./branching/mixerBranchingDecorator'));
 	}]);
+	module.constant('mixerDefaultContext', {});
 
 
 

@@ -12,7 +12,7 @@ define(function(require){
 			var right = dotNotation(condition.to,context);
 			var operator = condition.operator;
 
-			condition.DEBUG && $log.log('Condition DEBUG: ', left, operator || 'equals', right);
+			condition.DEBUG && $log.log('Condition DEBUG: ', left, operator || 'equals', right, condition);
 
 			if (_.isFunction(operator)){
 				return !! operator.apply(context,[left, right]);

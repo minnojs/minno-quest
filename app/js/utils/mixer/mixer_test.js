@@ -370,6 +370,17 @@ define(['underscore','./mixer-module', 'utils/randomize/randomizeModuleMock'],fu
 					}, {global:[1,2,3]})).toEqual([4,5,6]);
 				});
 
+				it('should support the defaultContext', inject(function(mixerDefaultContext){
+					mixerDefaultContext.global = [1,2,3];
+					expect(mixer({
+						mixer:'branch',
+						conditions: [{compare:'global.1',to:2}],
+						data: [4,5,6]
+					})).toEqual([4,5,6]);
+
+					delete(mixerDefaultContext.global);
+				}));
+
 				it('should support elseData', function(){
 					expect(mixer({
 						mixer:'branch',
@@ -398,12 +409,29 @@ define(['underscore','./mixer-module', 'utils/randomize/randomizeModuleMock'],fu
 					}, {global:[1,2,3]})).toEqual("true");
 				});
 
-				it('should support elseData', function(){
+				it('should support the defaultContext', inject(function(mixerDefaultContext){
+					mixerDefaultContext.global = [1,2,3];
 					expect(mixer({
 						mixer:'multiBranch',
 						branches:[
 							{conditions:[{}]}, //always false
 							{conditions: [{compare:'global.1',to:2}],data: "true"},
+							{conditions: [{compare:'global.1',to:2}],data: "false"},
+							{}
+						],
+						elseData: "else"
+					})).toEqual("true");
+
+					delete(mixerDefaultContext.global);
+				}));
+
+
+				it('should support elseData', function(){
+					expect(mixer({
+						mixer:'multiBranch',
+						branches:[
+							{conditions:[{}]}, //always false
+							{conditions: [{compare:'global.1',to:2}],data: "false"},
 							{conditions: [{compare:'global.1',to:2}],data: "false"},
 							{conditions:[{}]} //always false
 						],

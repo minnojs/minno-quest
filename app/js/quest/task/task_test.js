@@ -181,6 +181,23 @@ define(['underscore','./task-module'],function(){
 				sequence.buildPage(page);
 				expect(recursiveMixerSpy).toHaveBeenCalledWith([1,23,2]);
 			});
+
+			it('should inflate the page templates', function(){
+				var page = {data:{value:'test'}, foo:'<%= pageData.value%>'};
+				db.inflate.andReturn(page);
+				sequence.buildPage(page);
+				expect(page.foo).toBe('test');
+			});
+
+			it('should inflate the questions templates', function(){
+				var question = {data:{value:'quest data'}, foo:'<%= pageData.value%>', bar: '<%= questData.value %>'};
+				var page = {data:{value:'page data'}, questions:[question]};
+				db.inflate.andCallFake(function(a){return a == 'questions' ? question : page;});
+				sequence.buildPage(page);
+				expect(question.foo).toBe('page data');
+				expect(question.bar).toBe('quest data');
+			});
+
 		});
 
 		describe(': proceed', function(){
@@ -220,18 +237,8 @@ define(['underscore','./task-module'],function(){
 			it('should mix the current object', function(){
 				sequence.last();
 				sequence.mix();
-				expect(mixerSpy).toHaveBeenCalledWith([4], jasmine.any(Object));
+				expect(mixerSpy).toHaveBeenCalledWith([4]);
 			});
-
-			it('should pass the correct context', inject(function($rootScope){
-				sequence.last();
-				sequence.mix();
-				expect(mixerSpy.calls[0].args[1]).toEqual({
-					global: $rootScope.global,
-					current: $rootScope.current,
-					questions: $rootScope.current.questions
-				});
-			}));
 
 			it('should proceed and remix, if an empty mixer was returned', function(){
 				var mixerStack = [[], [7], [8]];

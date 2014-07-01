@@ -28,6 +28,12 @@ settings: {
 }
 ```
 
+## templates
+any of the settings in questions/pages may use js templates `'<%= global.value %>'`
+all templates may use the global, current and questions variables.
+pages may use the pageData as well.
+questions may use both pageData and questData.
+
 ## sequence
 A sequence of pages that should be displayed to the user.
 The pages are processed sequentialy, they may be inherited from the pages/questions sets.
@@ -173,3 +179,21 @@ var condition = {
     to: 'local.myVar'
 }
 ```
+
+**logical operators**
+
+PIquest supports logical operators with the following form:
+
+How about: (defaults to AND, objects may assign OR)
+```js
+// cond1 && cond2
+var conds = [cond1, cond2];
+
+// cond1 && (cond2 || cond3)
+var conds = [cond1, {or:[cond2,cond3]}];
+
+// (cond1 && cond2) || cond2
+var conds = [{or:[{and:[cond1,cond2]},cond3]}]
+```
+
+The supported operators are: `and`, `or`, `nand`, `nor`.

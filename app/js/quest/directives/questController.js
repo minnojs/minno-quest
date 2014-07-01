@@ -48,6 +48,11 @@ define(function(require){
 
 			// view --> model
 			ngModel.$parsers.push(function(viewValue){
+				// don't know exactly why this is needed!
+				// probably has to do with our use of nested ng-module
+				if (_.isUndefined(viewValue)){
+					return log;
+				}
 				var latency = self.stopper.now();
 
 				log.response = viewValue;
