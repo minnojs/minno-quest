@@ -17,6 +17,7 @@ define([], function(){
 
 		sequence: [
 			{
+				progressBar: '<%= pageMeta.number %> out of <%= pageMeta.outOf%>',
 				header: '<%= pageData.pageName %>: Questionnaire page num. <%= 1 + 1 %>',
 				decline:true,
 				data: {pageName:'page name from data'},
@@ -45,6 +46,7 @@ define([], function(){
 				mixer: 'branch',
 				conditions: [{compare: 'questions.myName.response', to:'yba', DEBUG:true}],
 				data: [{
+					progressBar: '<%= pageMeta.number %> out of <%= pageMeta.outOf%>',
 					header: 'Hi <%= questions.myName.response %>',
 					questions: [
 						{
@@ -60,6 +62,7 @@ define([], function(){
 				times: 2,
 				data: [
 					{
+						progressBar: '<%= pageMeta.number %> out of <%= pageMeta.outOf%>',
 						header: 'This Royal Questionnaire of mine.',
 						timeoutMessage: 'My message',
 						decline:true,
@@ -83,7 +86,7 @@ define([], function(){
 				]
 			},
 			{
-
+				progressBar: '<%= pageMeta.number %> out of <%= pageMeta.outOf%>',
 				questions: [
 					{
 						stem: 'how are you?',

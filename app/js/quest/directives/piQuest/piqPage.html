@@ -1,4 +1,5 @@
 <div ng-form name="pageForm">
+	<div>{{page.progressBar}}</div>
 	<h2 ng-if="page.header">{{page.header}}</h2>
 	<ol ng-class="{'list-unstyled':!page.numbered}" start="{{page.numberStart}}">
 		<li ng-repeat="quest in questions">

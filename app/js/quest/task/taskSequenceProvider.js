@@ -45,7 +45,12 @@ define(function(require){
 				}
 
 				var page = this.db.inflate('pages', pageObj);
-				templateObj(page, {pageData: page.data || {}});
+				var pageMeta = {
+					number : this.pointer + 1,
+					outOf : this.length
+				};
+
+				templateObj(page, {pageData: page.data || {}, pageMeta: pageMeta});
 
 				page.questions = mixerRecursive(page.questions || []);
 
