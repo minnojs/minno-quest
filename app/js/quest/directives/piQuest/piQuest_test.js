@@ -170,6 +170,13 @@ define(['../questDirectivesModule'],function(){
 				expect(controller.log.name).toBe('myName');
 			});
 
+			it('should submit when `quest:submit` is $emited', function(){
+				compile({});
+				spyOn(scope, 'submit');
+				scope.$new().$emit('quest:submit');
+				expect(scope.submit).toHaveBeenCalled();
+			});
+
 			describe(': proceed', function(){
 				var $scope;
 

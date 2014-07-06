@@ -28,6 +28,15 @@ define(function (require) {
 					dflt: ""
 				});
 
+				scope.data.autoSubmit && element.bind("keydown keypress", function (event) {
+					if(event.which === 13) {
+						scope.$apply(function(){
+							scope.$emit('quest:submit');
+						});
+						event.preventDefault();
+					}
+				});
+
 				// we have a specific problem with min max that don't take internal
 				// http://stackoverflow.com/questions/15656617/validation-not-triggered-when-data-binding-a-number-inputs-min-max-attributes
 				var minValidator = function(value) {

@@ -40,8 +40,18 @@ define([], function(){
 					},
 					{
 						name: 'myName',
-						stem: "What is your name? (try yba!)"
+						stem: "What is your name? (try yba!)",
+						autoSubmit: true
+					},
+					{
+						stem: 'how are you?',
+						type: 'selectOne',
+						autoSubmit: true,
+						dflt:'good',
+						buttons: true,
+						answers: ['good','bad','ugly']
 					}
+
 				]
 			},
 			{

@@ -33,7 +33,7 @@ any of the settings in questions/pages may use js templates `'<%= global.value %
 all templates may use the global, current and questions variables.
 pages may use the pageData as well.
 questions may use both pageData and questData.
-
+They can both use pageMeta that has `number`, `outOf`, `name` of the page (so you can use `<%= pageMeta.number %> out of <%= pageMeta.outOf%>`)
 ## sequence
 A sequence of pages that should be displayed to the user.
 The pages are processed sequentialy, they may be inherited from the pages/questions sets.
@@ -65,6 +65,7 @@ Any quest object can take the following properties:
 	minlength: 11,
 	maxlength: 11,
 	required: true,
+	autoSubmit: false, // if this is set to true, the page will submit on "Enter"
 	pattern: "/^\\d\\d\\d-\\d\\d-\\d\\d\\d\\d$/",
 	errorMsg: {
 		minlength: "too short",
@@ -120,6 +121,7 @@ Any quest object can take the following properties:
 ```js
 {
 	name: 'identifier',
+	autoSubmit: false, // if this is set to true, the page will submit on second click on button
 	dflt: 3, // default value
 	randomize: true, // shuffle answers after mixing them (the mixer is activated in any case...)
 	reverse: true, // reverses the order of the answers

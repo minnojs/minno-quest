@@ -76,6 +76,9 @@ define(function (require) {
 		};
 
 		$scope.$watch('page', pageSetup);
+		$scope.$on('quest:submit', function(){
+			$scope.submit();
+		});
 
 		function next(proceedObj){
 			$scope.$emit('quest:next', proceedObj);

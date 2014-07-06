@@ -108,5 +108,23 @@ define(['../questDirectivesModule'],function(){
 			changeInputValueTo(3);
 			expect(formElm).toBeInvalid();
 		});
+
+		it('should support autoSubmit', function(){
+			var e = jqLite.Event('keypress', { which: 13 });
+			var submitSpy;
+
+			compile({});
+			submitSpy = jasmine.createSpy('quest:submit');
+			scope.$on('quest:submit', submitSpy);
+			inputElm.trigger(e);
+			expect(submitSpy).not.toHaveBeenCalled();
+
+			compile({autoSubmit:true});
+			submitSpy = jasmine.createSpy('quest:submit');
+			scope.$on('quest:submit', submitSpy);
+			inputElm.trigger(e);
+			expect(submitSpy).toHaveBeenCalled();
+		});
+
 	});
 });

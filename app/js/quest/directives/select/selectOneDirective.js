@@ -8,13 +8,14 @@ define(function (require) {
 
 	// This is the only way to get a non js file relatively
 	var template = require('text!./selectOne.html');
+	var angular = require('angular');
 
-	directive.$inject = ['questSelectMixer'];
-	function directive(mixer){
+	directive.$inject = ['questSelectMixer', 'buttonConfig'];
+	function directive(mixer, buttonConfig){
 		return {
 			replace: true,
 			template:template,
-			require: ['ngModel', '^?piqPage'],
+			require: ['ngModel'],
 			controller: 'questController',
 			controllerAs: 'ctrl',
 			scope:{
@@ -42,6 +43,23 @@ define(function (require) {
 					scope.response = newValue && newValue.value;
 					ctrl.log.responseObj = newValue;
 				});
+
+				/**
+				 * Manage auto submit
+				 * @param  {event} e [description]
+				 */
+				scope.autoSubmit = function(e){
+					if (!scope.data.autoSubmit){
+						return;
+					}
+
+					var isActive = angular.element(e.target).hasClass(buttonConfig.activeClass);
+
+					if (isActive){
+						// this whole function happens within a digest cycle, so we don't need to $apply
+						scope.$emit('quest:submit');
+					}
+				};
 			}
 		};
 	}

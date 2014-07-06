@@ -124,6 +124,25 @@ define(['../questDirectivesModule', 'utils/randomize/randomizeModuleMock'], func
 				expect(formElm.children().eq(2)).toHaveClass('btn');
 			});
 
+			it('should support autoSubmit', function(){
+				var submitSpy;
+
+				compileInput({answers: [1,2,3]});
+				submitSpy = jasmine.createSpy('quest:submit');
+				scope.$on('quest:submit', submitSpy);
+				choose(1);
+				choose(1);
+				expect(submitSpy).not.toHaveBeenCalled();
+
+				compileInput({answers: [1,2,3], autoSubmit: true});
+				submitSpy = jasmine.createSpy('quest:submit');
+				scope.$on('quest:submit', submitSpy);
+				choose(1);
+				expect(submitSpy).not.toHaveBeenCalled();
+				choose(1);
+				expect(submitSpy).toHaveBeenCalled();
+			});
+
 		});
 
 

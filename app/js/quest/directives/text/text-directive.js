@@ -24,6 +24,16 @@ define(function (require) {
 				scope.ctrl.registerModel(ngModel, {
 					dflt: ""
 				});
+
+				scope.data.autoSubmit && element.bind("keydown keypress", function (event) {
+					if(event.which === 13) {
+						scope.$apply(function(){
+							scope.$emit('quest:submit');
+						});
+						event.preventDefault();
+					}
+				});
+
 			}
 		};
 	};
