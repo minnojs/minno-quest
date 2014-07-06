@@ -2,7 +2,7 @@
 	<div>{{page.progressBar}}</div>
 	<h2 ng-if="page.header">{{page.header}}</h2>
 	<ol ng-class="{'list-unstyled':!page.numbered}" start="{{page.numberStart}}">
-		<li ng-repeat="quest in questions">
+		<li ng-repeat="quest in page.questions">
 			<div ng-switch="quest.type || 'text'">
 				<div ng-switch-when="text">
 					<input quest-wrapper quest-text quest-data="quest" ng-model="current.questions[quest.name]">
@@ -27,15 +27,16 @@
 			class="btn btn-primary"
 			ng-class="form"
 			ng-disabled="pageForm.$invalid"
-		>Submit</button>
+			ng-if="!page.noSubmit"
+		>{{page.submitText || "Submit"}}</button>
 
 		<button
-			ng-click="submit(true)"
+			ng-click="decline()"
 			data-role="submit"
 			class="btn btn-warning"
 			ng-class="form"
 			ng-if="page.decline"
-		>Decline to Answer</button>
+		>{{page.declineText || "Decline to Answer"}}</button>
 	</div>
 
 

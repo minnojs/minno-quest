@@ -11,10 +11,11 @@
  * @name piqPage
   */
 define(function (require) {
+	var _ = require('underscore');
 	var template = require('text!./piqPage.html');
 
-	piqPageCtrl.$inject = ['$scope','$timeout', 'mixerRecursive', '$rootScope', 'questHarvest'];
-	function piqPageCtrl($scope,$timeout, mixer, $rootScope, harvest){
+	piqPageCtrl.$inject = ['$scope','$timeout', '$rootScope', 'questHarvest'];
+	function piqPageCtrl($scope,$timeout, $rootScope, harvest){
 
 		var self = this;
 
@@ -30,8 +31,6 @@ define(function (require) {
 
 		/**
 		 * Proceed to next page.
-		 * By default validates the form first.
-		 * `skipValidation` allows proceeding without validation (good for timeout/decline to answer)
 		 *
 		 * @name submit
 		 * @param  {Boolean} skipValidation [Should skip validation of the form before submitting?]
@@ -43,6 +42,28 @@ define(function (require) {
 				return true;
 			}
 
+			self.proceed();
+		};
+
+		/**
+		 * Decline to answer. mark all questions on this page as declined
+		 * (leave filtering the responses themselves to the logger, so that answers can be saved despite declining)
+		 */
+		$scope.decline = function(){
+			var questions = $scope.global.current.questions;
+			// mark all questions on this page as declined
+			_.forEach($scope.page.questions || {}, function(quest){
+				questions[quest.name].declined = true;
+			});
+			self.proceed();
+		};
+
+		/**
+		 * Proceed to the next page.
+		 * After canceling timeout, and harvesting.
+		 * @todo: optional harvesting
+		 */
+		this.proceed = function(){
 			// remove timeout if needed
 			if (self.timeoutDeferred){
 				$timeout.cancel(self.timeoutDeferred);
@@ -66,11 +87,6 @@ define(function (require) {
 				name: newPage.name,
 				startTime: +new Date()
 			};
-
-			/**
-			 * Render questions (mixem up!!)
-			 */
-			$scope.questions = mixer($scope.page.questions);
 
 			// If there is a timeout set, submit when it runs out.
 			if (newPage.timeout){

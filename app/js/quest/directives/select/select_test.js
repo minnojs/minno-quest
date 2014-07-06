@@ -56,7 +56,7 @@ define(['../questDirectivesModule', 'utils/randomize/randomizeModuleMock'], func
 			});
 		}); // end mixer
 
-		ddescribe('SelectOne',function(){
+		describe('SelectOne',function(){
 			var formElm, scope, $compile, choose, jqLite = angular.element, log;
 
 			var compileInput = function compileInput(data){

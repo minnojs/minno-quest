@@ -96,6 +96,12 @@ Any quest object can take the following properties:
 ```js
 {
 	name: "identifier",
+
+	decline:true, // should we allow users to decline (proceed without validation, mark responses as `declined`)
+	declineText: "my decline Text",  // set to a string to change decline text
+	noSubmit: false, // remove submit button
+	submitText: "my submit text",
+
 	header: 'My header',
 	numbered: false, // should we display the number of each questions
 	numberStart: 4, // what number should the page start at

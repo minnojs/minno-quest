@@ -19,7 +19,9 @@ define([], function(){
 			{
 				progressBar: '<%= pageMeta.number %> out of <%= pageMeta.outOf%>',
 				header: '<%= pageData.pageName %>: Questionnaire page num. <%= 1 + 1 %>',
-				decline:true,
+				decline:"Cutsom decline text",
+				noSubmit: 0,
+				submitText: "Custom submit text",
 				data: {pageName:'page name from data'},
 				numbered: true,
 				numberStart: 4,

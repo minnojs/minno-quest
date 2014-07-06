@@ -153,36 +153,24 @@ define(['../questDirectivesModule'],function(){
 		beforeEach(module('task', 'questDirectives', function($provide){
 			// don't load Task currently
 			$provide.value('Task', function(){});
-			$provide.value('mixerRecursive', jasmine.createSpy('mixerRecursive').andCallFake(function(a){return a;}));
 		}));
 
 		beforeEach(inject(function($injector){
 			$compile = $injector.get('$compile');
 			$rootScope = $injector.get('$rootScope');
-			$rootScope.global = {};
 			$rootScope.current = {questions:{}};
+			$rootScope.global = {current: $rootScope.current};
 			scope = $rootScope.$new();
 		}));
 
 		describe('Controller', function(){
-			// just create the directive so we can grab the controller
-			describe(': general', function(){
-				beforeEach(function(){
-					compile({name:'myName'});
-				});
-
-				it('should create the basic log object', function(){
-					expect(controller.log).toBeDefined();
-					expect(controller.log.name).toBe('myName');
-				});
-
-				it('should mix the questions', inject(function(mixerRecursive){
-					expect(mixerRecursive).toHaveBeenCalled();
-					expect(scope.questions).toBe(scope.page.questions);
-				}));
+			it('should create the basic log object', function(){
+				compile({name:'myName'});
+				expect(controller.log).toBeDefined();
+				expect(controller.log.name).toBe('myName');
 			});
 
-			describe(': submit', function(){
+			describe(': proceed', function(){
 				var $scope;
 
 				beforeEach(function(){
@@ -192,36 +180,82 @@ define(['../questDirectivesModule'],function(){
 				});
 
 				it('should harvest', function(){
-					$scope.submit();
+					controller.proceed();
 					expect(controller.harvest).toHaveBeenCalled();
 				});
 
 				it('should harvest even if there are no questions', inject(function($rootScope){
 					$rootScope.current.questions = {};
-					$scope.submit();
+					controller.proceed();
 					expect(controller.harvest).toHaveBeenCalled();
 				}));
 
-				it('should not submit if the page is not $valid', function(){
+				it('should first harvest and only then emit "quest:next"', function(){
+					var nextSpy = jasmine.createSpy('quest:next');
+					$scope.$on('quest:next', nextSpy);
+					controller.proceed();
+					expect(nextSpy).toHaveBeenCalled();
+					expect(controller.harvest).toHaveBeenCalled();
+				});
+			}); // end describe page controller
+
+			describe(': submit', function(){
+				var $scope;
+
+				beforeEach(function(){
+					compile({});
+					$scope = element.scope();
+					spyOn(controller, 'proceed');
+				});
+
+				it('should proceed if the page is $valid', function(){
+					$scope.pageForm.$setValidity('test', true);
+					$scope.submit();
+					expect(controller.proceed).toHaveBeenCalled();
+				});
+
+				it('should not proceed if the page is not $valid', function(){
 					$scope.pageForm.$setValidity('test', false);
 					$scope.submit();
-					expect(controller.harvest).not.toHaveBeenCalled();
+					expect(controller.proceed).not.toHaveBeenCalled();
 				});
 
 				it('should not validate if submit(true)', function(){
 					$scope.pageForm.$setValidity('test', false);
 					$scope.submit(true);
-					expect(controller.harvest).toHaveBeenCalled();
+					expect(controller.proceed).toHaveBeenCalled();
+				});
+			});
+
+			describe(': decline', function(){
+				var $scope;
+
+				beforeEach(function(){
+					compile({
+						questions: [{name:'newQ'}]
+					});
+					$scope = element.scope();
+					$scope.current.questions.old = {};
+					spyOn(controller, 'proceed');
 				});
 
-				it('should harvest and only then emit "quest:next"', function(){
-					var nextSpy = jasmine.createSpy('quest:next');
-					$scope.$on('quest:next', nextSpy);
-					$scope.submit();
-					expect(nextSpy).toHaveBeenCalled();
-					expect(controller.harvest).toHaveBeenCalled();
+				it('should proceed, even if page is not valid', function(){
+					$scope.pageForm.$setValidity('test', false);
+					$scope.decline();
+					expect(controller.proceed).toHaveBeenCalled();
 				});
-			}); // end describe page controller
+
+				it('should mark all questions on page as declined', function(){
+					$scope.decline();
+					expect($scope.current.questions.newQ.declined).toBeTruthy();
+				});
+
+				it('should not mark question not on the page as declined', function(){
+					$scope.decline();
+					expect($scope.current.questions.old.declined).not.toBeTruthy();
+				});
+
+			});
 
 			describe('directive',function(){
 				it('should compile the correct number of questions', function(){

@@ -57,6 +57,7 @@ define(function(require){
 
 				log.response = viewValue;
 				log.latency = latency;
+				log.declined = undefined;
 
 				// if this is the first change
 				if (!log.pristineLatency){
@@ -66,7 +67,7 @@ define(function(require){
 				return log;
 			});
 
-			// maker the model work with a custom event, so that it doesn't get confused with inner modules
+			// make the model work with a custom event, so that it doesn't get confused with inner modules
 			// note: this is a problem caused by nesting ngModule...
 			ngModel.$options = _.defaults(ngModel.$options || {}, {updateOn: "quest"});
 

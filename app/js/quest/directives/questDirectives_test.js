@@ -58,6 +58,14 @@ define(['angular','./questDirectivesModule'], function(angular){
 			expect($rootScope.current.logObj).toBe(log);
 		}));
 
+		it('should un-decline a question that is answered', function(){
+			compile({});
+			log.declined = true;
+			scope.response = 123;
+			scope.$digest();
+			expect(log.declined).not.toBeTruthy();
+		});
+
 		describe(': defaults', function(){
 			it('should use NaN by default', function(){
 				// natural default

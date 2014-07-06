@@ -3,7 +3,11 @@ define(function(require){
 
 	function dfltQuestLogger(log, pageData, global){
 		global;
-		return _.extend({},pageData,log);
+		var logObj = _.extend({},pageData,log);
+		if (logObj.declined) {
+			logObj.response = log.responseObj = undefined;
+		}
+		return logObj;
 	}
 
 	return dfltQuestLogger;
