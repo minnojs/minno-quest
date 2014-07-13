@@ -25,9 +25,16 @@ define(['../questDirectivesModule'], function(){
 			scope = scope.$new();
 		}));
 
-		it('should bind to a model', function(){
+		it('should render stem', function(){
 			compile('<span quest-wrapper quest-data="data"></span>',{stem:'Hello'});
 			expect(elm.find('label').text()).toBe('Hello');
+		});
+
+		it('should render help', function(){
+			compile('<span quest-wrapper quest-data="data"></span>',{help:true, helpText:'Hello'});
+			expect(elm.find('p.help-block').text()).toBe('Hello');
+			compile('<span quest-wrapper quest-data="data"></span>',{help:false, helpText:'Hello'});
+			expect(elm.find('p.help-block').length).toBe(0);
 		});
 
 		it('should transclude',function(){

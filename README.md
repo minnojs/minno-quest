@@ -62,7 +62,9 @@ Any quest object can take the following properties:
 
 ```js
 {
-	stem: "My question stem"
+	stem: "My question stem",
+	help: false, // whether we should display help text (you can use a template here: '<%= pageMeta.number < 2%>',)
+	helpText: "some help text"
 }
 ```
 

@@ -57,7 +57,7 @@ define(function(require){
 				// we can afford to overwrite the original since inflate always creates new objects for us.
 				page.questions = _.map(page.questions, function(question){
 					question = this.db.inflate('questions', question);
-					templateObj(question, {pageData: page.data || {}, questData: question.data || {}});
+					templateObj(question, {pageData: page.data || {}, pageMeta: pageMeta, questData: question.data || {}});
 					return question;
 				}, this);
 
