@@ -37,12 +37,12 @@ define(function(require){
 		Sequence.prototype.constructor = Sequence;
 
 		_.extend(Sequence.prototype, {
-			// @TODO: we should add a system to use inline templates (Grunt style) when inflating.
 			// maybe add a context argument here?
 			buildPage: function(pageObj){
 				if (_.isUndefined(pageObj)){
 					return undefined;
 				}
+
 
 				var page = this.db.inflate('pages', pageObj);
 				var pageMeta = {

@@ -34,6 +34,7 @@ all templates may use the global, current and questions variables.
 pages may use the pageData as well.
 questions may use both pageData and questData.
 They can both use pageMeta that has `number`, `outOf`, `name` of the page (so you can use `<%= pageMeta.number %> out of <%= pageMeta.outOf%>`)
+
 ## sequence
 A sequence of pages that should be displayed to the user.
 The pages are processed sequentialy, they may be inherited from the pages/questions sets.

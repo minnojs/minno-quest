@@ -66,7 +66,7 @@ define(['underscore'],function(_){
 			}
 
 			if (_.isUndefined(coll.at(at))) {
-				throw new Error('Query failed, object (' + JSON.stringify(query) +	') not found.');
+				throw new Error('Query failed, object (' + JSON.stringify(query) +	') not found. If you are trying to apply a template, you should know that they are not supported for inheritance.');
 			}
 
 			return coll.at(at);
