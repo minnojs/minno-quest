@@ -5,16 +5,22 @@
  * @name  managerDirctive
  * @return {directive}
  */
-define(function(){
+define(function(require){
 
-	directive.$inject = ['$compile','$rootScope','managerGetScript'];
-	function directive($compile,$rootScope,getScript){
+	var _ = require('underscore');
+	directive.$inject = ['$compile','$rootScope','managerGetScript','$parse', '$window'];
+	function directive($compile,$rootScope,getScript,$parse, $window){
 		return {
 			link:  function(scope, $element, attr){
 				var q = getScript(attr.piTask);
+				var piGlobal = $parse(attr.piGlobal)($window);
 
 				// create the global object
 				$rootScope.global = {};
+
+				if (piGlobal){
+					_.extend($rootScope.global, piGlobal);
+				}
 
 				q.then(function(script){
 					scope.script = script;

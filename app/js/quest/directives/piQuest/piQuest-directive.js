@@ -17,17 +17,28 @@ define(['underscore', 'text!./piQuest.html'], function (_, template) {
 		var task = self.task = new Task($scope.script);
 		var defaultContext;
 
-		this.init = next;
+
+		var global = $rootScope.global;
+		var script = $scope.script;
 
 		// create the "current" object and expose "questions"
-		$rootScope.global[$scope.script.name || 'current'] = $rootScope.current = {
-			questions: {}
-		};
+		var current = $rootScope.global[script.name || 'current'] = $rootScope.current = {questions: {}};
+
+		// extend global and current with settings...
+		if (script.current) {
+			_.extend(current, script.current);
+		}
+
+		if (script.global) {
+			_.extend(global, script.global);
+		}
+
+		this.init = next;
 
 		// create default context
 		defaultContext = {
-			global: $scope.global,
-			current: $scope.current,
+			global: global,
+			current: current,
 			questions: $scope.current.questions
 		};
 

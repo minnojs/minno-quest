@@ -28,6 +28,14 @@ settings: {
 }
 ```
 
+## global & current
+Are globaly available objects.
+`current` holds a special object called questions that holds all the user responses.
+
+You can set global and current in advance using the global/current objects.
+
+You can also set global in advance by setting it into the pi-task pi-global attribute.
+
 ## templates
 any of the settings in questions/pages may use js templates `'<%= global.value %>'`
 all templates may use the global, current and questions variables.
