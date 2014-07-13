@@ -1,6 +1,6 @@
 <div ng-form name="pageForm">
-	<div>{{page.progressBar}}</div>
-	<h2 ng-if="page.header">{{page.header}}</h2>
+	<div ng-bind-html="page.progressBar"></div>
+	<h2 ng-if="page.header" ng-bind-html="page.header"></h2>
 	<ol ng-class="{'list-unstyled':!page.numbered}" start="{{page.numberStart}}">
 		<li ng-repeat="quest in page.questions">
 			<div ng-switch="quest.type || 'text'">

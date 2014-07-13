@@ -161,9 +161,10 @@ define(['../questDirectivesModule'],function(){
 			controller = element.controller('piqPage');
 		}
 
-		beforeEach(module('task', 'questDirectives', function($provide){
+		beforeEach(module('task', 'questDirectives', function($provide, $sceProvider){
 			// don't load Task currently
 			$provide.value('Task', function(){});
+			$sceProvider.enabled(false);
 		}));
 
 		beforeEach(inject(function($injector){

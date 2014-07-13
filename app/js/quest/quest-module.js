@@ -9,6 +9,9 @@ define(function(require){
 	require('quest/task/task-module');
 
 	var module = angular.module('piQuest', ['questDirectives','task']);
+	module.config(['$sceProvider', function($sceProvider){
+		$sceProvider.enabled(false);
+	}]);
 
 	return module;
 });

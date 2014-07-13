@@ -12,7 +12,9 @@ define(['../questDirectivesModule'], function(){
 			scope.$digest();
 		};
 
-		beforeEach(module('questDirectives'));
+		beforeEach(module('questDirectives', function($sceProvider){
+			$sceProvider.enabled(false);
+		}));
 		beforeEach(inject(function($injector, _$sniffer_, _$browser_) {
 			$sniffer = _$sniffer_;
 			$browser = _$browser_;

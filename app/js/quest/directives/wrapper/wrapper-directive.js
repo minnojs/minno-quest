@@ -4,7 +4,7 @@
 define(function (require) {
 	var template = require('text!./wrapper.html');
 
-	var directive = function(){
+	function directive(){
 		return {
 			replace: true,
 			transclude: 'element', // replace element instead of replacing contents
@@ -14,7 +14,7 @@ define(function (require) {
 				data: '=questData'
 			}
 		};
-	};
+	}
 
 	return directive;
 });

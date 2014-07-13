@@ -8,7 +8,6 @@
 		ng-class="{active:$parent.data.dflt === answer.value, 'list-group-item': !$parent.data.buttons, 'btn btn-success': $parent.data.buttons}"
 		uncheckable
 		ng-click="autoSubmit($event)"
-	>
-	{{answer.text}}
-	</a>
+		ng-bind-html="answer.text"
+	></a>
 </div>

@@ -2,7 +2,9 @@ define(['../questDirectivesModule', 'utils/randomize/randomizeModuleMock'], func
 
 	describe('select', function(){
 		var mixerSpy = jasmine.createSpy('mixer').andCallFake(function(a){return a;});
-		beforeEach(module('questDirectives', 'randomizeMock'));
+		beforeEach(module('questDirectives', 'randomizeMock', function($sceProvider){
+			$sceProvider.enabled(false);
+		}));
 
 		describe('Mixer', function(){
 			var mixer;
