@@ -23,6 +23,16 @@ module.exports = function (grunt) {
 		// get package information
 		pkg: grunt.file.readJSON('package.json'),
 
+		bump: {
+			// https://github.com/vojtajina/grunt-bump
+			options: {
+				files:			['package.json', 'bower.json'],
+				commitFiles:	['package.json', 'bower.json'],
+				updateConfigs:	['pkg'],
+				push: false
+			}
+		},
+
 		// Project settings
 		settings: {
 			// configurable paths
