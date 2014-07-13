@@ -29,7 +29,8 @@
     "load-grunt-tasks": "~0.2.0",
     "requirejs": "^2.1.11",
     "time-grunt": "~0.2.1",
-    "karma-sauce-launcher": "^0.2.8"
+    "karma-sauce-launcher": "^0.2.8",
+    "grunt-bump": "0.0.14"
   },
   "engines": {
     "node": ">=0.10.0"
