@@ -2,6 +2,7 @@
 define([], function(){
 	var req = require.config({
 		paths: {
+			questAPI: 'quest/API',
 			underscore: ["//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min","../libs/lodash/dist/lodash.min"],
 			angular: ["//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.16/angular.min", '../libs/angular/angular'],
 			text: ['//cdnjs.cloudflare.com/ajax/libs/require-text/2.0.10/text.min','../libs/requirejs-text/text']
