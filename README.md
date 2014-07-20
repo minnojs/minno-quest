@@ -1,7 +1,5 @@
 [![Build Status](https://travis-ci.org/ProjectImplicit/PIquest.svg?branch=master)](https://travis-ci.org/ProjectImplicit/PIquest)
 
-This repository is nowhere near ready for use - keep in touch, things are moving fast around here!
-
 # PIquest
 
 PIquest is a framework for administering on-line questionnaires.
@@ -19,8 +17,14 @@ It is written in JavaScript and is built to be extremely versatile and customiza
 	- [selectOne & selectMulti](#selectone-selectmulti)
 * [Settings](#settings)
 * [The mixer ](#mixer)
+	- [Mixer types](#mixer-types)
+	- [Conditions](#conditions)
+	- [Operators](#operators)
+	- [Aggregation](#aggregation)
+* [Variables](#variables)
+* [Templates](#templates)
 * [Inheritance ](#inheritance)
-* [Templates and variables](#templates-and-variables)
+
 
 ### Central concepts
 
@@ -275,125 +279,215 @@ var quest = {
 }
 ```
 
-
 ### settings
+Settings allow you to control the generic way that the player works, the are set using the `addSettings` function. The first argument to the function is always the name of the setting, the second argument is the setting itself. In case the setting is an object, subsequent objects will extend each other so that settings may be progressively added.
 
-Docs not ready yet!!!!!!!!!!!!!
+##### onEnd
+`onEnd` is a function to be called as soon as the task ends. It should be taken care of automatically when PIQuest is run from within the task manager.
 
 ```js
-settings: {
-	onEnd: function(){
-		// do something when the questionnaire ends
-		// this usualy be taken care of automaticaly by the task manager...
-		// for instance: redirect to 'my/url.js'
-		location.href = 'my/url.js';
-	},
-	logger: {
-		pulse: 34, // after how many objects should we post
-		url: '/my/url', // where should we post to
-		DEBUG: false // activate logging each object to the console
-		logfn: function(log,pageData, global){
-			log = {name:111,latency:8976, prestineLatency:45634, response:'response', data: {/* data */}};
-			pageData = {startTime:'234645345', pageName: 'name'}
-			return {};
-		}
+API.addSettings('onEnd', function(){
+	// Do something: for instance, redirect to 'my/url.js'
+	location.href = 'my/url.js';
+});
+```
+
+##### logger
+This setting controls the way that logging works within the player.
+
+```js
+API.addSettings("logger", {
+	pulse: 34,
+	url: '/my/url',
+	DEBUG: false,
+	logfn: function(log,pageData, global){
+		return {name: log.name, set: global.setName};
 	}
+});
+```
+
+Setting 	| Description
+----------- | ---------------
+pulse 		| (Number: 0) After how many objects should we post to the server. Setting this to 0 tells the player to log only at the end of the task.
+url 		| (String:"") The URL to which we should post the data to.
+DEBUG 		| (Boolean: false) When set to true, logs each logged object to the console.
+logfn 		| (Function) The task has a default object that it logs, if you want to change the logged obj itself, you may use a function of the form: `function(log, pageData, global){return logObj;}`
+
+### Mixer
+The mixer is responsible for managing lists (arrays) within PIQuest, it is capable of repeating, randomizing and even changing the list according to [environmental variables](#variables). You may use it within the sequence, for answer lists within pages and even for answers within the `selectOne` or `selectMulti` questions.
+The mixer allows wrapping a sub list in an object that allows you to manipulate the way in which it appears. You may insert such an object at any place within a list and it will be replaced by the appropriate objs.
+
+The basic structure of a mixer object is:
+```js
+{
+	mixer: 'functionType',
+	data: [obj1, obj2]
 }
 ```
 
-### Mixer
-Docs not ready yet!!!!!!!!!!!!!
+The `mixer` property holds the mixer type, essentially it tells the mixer what to do with the sub-list. The `data` property holds the sub-list; an array of elements (either plain objects or mixer objects).
 
-The conditional object contains three objects: global, current and questions. documentation of the global and current objects should be elsewhere.
-Questions is an object indexed by question name. You can access any question property with the following syntax:
+A sequence can look something like this (don't get scared it's simpler than it looks):
+
+```js
+[
+	// The first obj to present.
+	firstobj,
+
+	// Repeat the structure inside 10 time (so we get 40 objs)
+	{
+		mixer: 'repeat',
+		times: 10,
+		data: [
+			// Delay the mixing of these elements until after the `repeat`.
+			{
+				mixer: 'wrapper',
+				data: [
+					obj1,
+					// Randomize the order of the objectss within.
+					{
+						mixer: 'random',
+						data: [
+							obj2,
+							// Keep obj 3 and 4 together.
+							{
+								mixer: 'wrapper',
+								data: [
+									obj3,
+									obj4
+								]
+							}
+						]
+					} // end random
+				]
+			} // end wrapper
+		]
+	}, // end repeat
+
+	// the last obj to present
+	lastobj
+]
+```
+This sequence has an opening and ending obj (`firstobj` and `lastobj`).
+Between them them we repeat a set of four objs ten times.
+The order of the four objs is randomized, so that `obj1` always comes first and the order of the following objs are randomized but `obj3` and `obj4` are wrapped together and therefore always stay consecutive.
+
+##### Mixer types
+We support several mixer types.
+
+**repeat**:
+Repeats the element in `data` `times` times.
+* `{mixer:'repeat', times:10, data: [obj1,obj2]}`
+
+**random**:
+Randomizes the order of elements in `data`.
+* `{mixer:'random', data: [obj1,obj2]}`
+
+**weightedRandom**:
+Picks a single element using a weighted random algorithm. Each element in `data` is given the appropriate weight from `weights`. In the following example obj2 has four times the probability of being picked as obj1.
+* `{mixer:'weightedRandom', weights: [0.2,0.8], data: [obj1,obj2]}`
+
+**choose**:
+Picks `n` random elements from `data` (by default the chooser picks one element).
+* `{mixer:'choose', data: [obj1,obj2]}` pick one of these two objs
+* `{mixer:'choose', n:2, data: [obj1,obj2,obj3]}` pick two of these three objs
+
+**wrapper**:
+The wrapper mixer serves a sort of parenthesis for the mixer. It has two primary functions; first, in case you want to keep a set of elements as a block (when randomizing) simply wrap them and they'll stay together. Second, when repeating a `random` mixer, the mixer first randomizes the content of the inner mixer and only then repeats it. If you want the randomization to be deferred until after the repeat all you have to do is wrap it in a wrapper.
+* `{mixer:'wrapper', data: [obj1,obj2]}`
+
+**branch**:
+Pick the elements in `data` if `conditions` is true, pick the elements in `elseData` if `conditions` is not true. If `elseData` is not defined, or is left empty, then this object is skipped (See [conditions](#conditions) to learn about how conditions work).
+* `{mixer:'branch', conditions:[cond], data:[obj1,obj2]}`
+* `{mixer:'branch', conditions:[cond], data:[obj1,obj2], elseData: [obj3, obj4]}`
+
+**multiBranch**:
+Find the first object within `branches` for which `conditions` is true, and pick the elements in that objects `data`. If no object is picked then pick `elseData` (optional). (See [conditions](#conditions) to learn about how conditions work).
+```js
+{
+    mixer: 'branch',
+    branches: [
+        {conditions: [],data: []},
+        {conditions: [],data: []}
+    ],
+    elseData: [] // optional
+}
+```
+
+##### Conditions
+The conditional mixers allow you to change the content of a list according to [environmental variables](#variables). Each list has specific variables available to it, you can find the relevant details in the documentation for each list, but all lists have access to the `global` and `current` objects, so we'll use them for all examples here.
+
+A condition is a proposition, it is evaluated to either a `true` or `false` value. They are used for decision making within the branching mixers. Conditions are represented by objects. The following condition object `compare`s **global.var** `to` **local.otherVar** and checks if the are equal (if you aren't sure what **global.var** means you should check [this](#variables) out):
 
 ```js
 var cond = {
-	compare: 'questions.quest1.response', // compare the response of quest1
-	to: 'questions.quest2.latency' // to the latency of question2
+	compare: 'global.var',
+	to: 'local.otherVar'
 }
 ```
 
-### Inheritance
-Docs not ready yet!!!!!!!!!!!!!
+Conditions should be treated as a type of equation. 
 
-### Templates and variables
-Docs not ready yet!!!!!!!!!!!!!
+The `compare` and `to` properties have a special syntax that describes the value that they refer to. Most values that you use will be treated as-is. The special case is string that have dots in them: `global.var`, `questions.q1.response`; these values will be treated as pointing to variables within the lists context. So that `questions.q1.response` will retrieve the value of the response for q1 from the questions object. The following check whether the global variable var is equal to 15. 
 
-##### global & current
-Are globaly available objects.
-`current` holds a special object called questions that holds all the user responses.
+```js
+var cond = {
+	compare: 'global.var',
+	to: 15
+}
+```
 
-You can set global and current in advance using the global/current objects.
+The following is a list of condition properties:
 
-You can also set global in advance by setting it into the pi-task pi-global attribute.
+Property 		| Description
+--------------- | -------------------
+compare 		| The left side of the equation.
+to 				| The right side of the equation.
+operator 		| The type of comparison to do (read more about operators [here](#operators)).
+DEBUG 			| Set this to `true` so that the any condition that is evaluated will be logged to the console.
 
-##### templates
-any of the settings in questions/pages may use js templates `'<%= global.value %>'`
-all templates may use the global, current and questions variables.
-pages may use the pageData as well.
-questions may use both pageData and questData.
-They can both use pageMeta that has `number`, `outOf`, `name` of the page (so you can use `<%= pageMeta.number %> out of <%= pageMeta.outOf%>`)
+##### Operators
+The default comparison for a condition is to check equality (supports comparison of objects and arrays too). You can use the `operator` property to change the comparison method. The following checks if var is greater than otherVar:
 
-
-<hr/>
-<hr/>
-
-
-## mixer:conditions
-Docs not ready yet!!!!!!!!!!!!!
 ```js
 var cond = {
 	compare: 'global.var',
 	to: 'local.otherVar',
-	operator: 'equals',
-	DEBUG: false // console.log the comparison for debuging
+	operator: 'greaterThan'
 }
 ```
 
-**operators**
+Operator 			| Description
+-------------------	| -----------------
+equals 				| This is the default operator. It checks if *compare* is equal to *to* (supports comparison of objects and arrays too)
+exactly 			| Checks if *compare* is exactly equal to *to* (uses ===)
+greaterThan 		| *compare* > *to*
+greaterThanOrEquals | *compare* >= *to*
+in 					| *compare* is in the Array *to*;
+function(){} 		| This operator allows you to use a custom function of the form: `function(compareValue, toValue){return {Boolean}}`
 
-* `equals/default`: compare == to (supports comparison of objects and arrays too)
-* `exactly`: compare === to
-* `greaterThan`: compare > to
-* `greaterThanOrEquals`: compare >= to
-* `in`: compare is in Arr(to);
-* `function(){}`: custom function (compareValue, toValue){return {Boolean}}
+##### Aggregation
+Sometimes you will want a branch to be activated only if more than one condition is true, or in some other complex specific condition. For cases like this, the mixer supports aggregation. The mixer supports applying logical operations on conditions in the following way:
+
+An aggregator object has a single property, denoting the type of aggregation, holding an array of conditions to aggregate. The following condition will only be true if `cond1` and `cond2` are both true:
 
 ```js
-var branch = {
-    mixer: 'branch',
-    conditions: [],
-    data: [],
-    elseData: [] // optional
-}
-
-var multiBranch = {
-    mixer: 'branch',
-    branches: [
-        {
-            conditions: [],
-            data: []
-        },
-        {
-            conditions: [],
-            data: []
-        }
-    ],
-    elseData: [] // optional
-}
-
-var condition = {
-    compare: 'global.myVar',
-    to: 'local.myVar'
-}
+var cond = {and:[cond1, cond2]};
 ```
 
-**logical operators**
+The mixer supports several types of aggregators:
 
-PIquest supports logical operators with the following form:
+Aggregator 	| Description
+----------- | --------------
+and 		| If all conditions are true
+or 			| If at least one condition is true
+nor 		| If all conditions are false
+nand 		| If at least one condition is false
 
-How about: (defaults to AND, objects may assign OR)
+By default, if the mixer runs into an array instead of an object, it will treat it as an `and` aggregator and be true only if all conditions within the array are true.
+
+Following are several examples for how to create different aggregations:
+
 ```js
 // cond1 && cond2
 var conds = [cond1, cond2];
@@ -405,4 +499,168 @@ var conds = [cond1, {or:[cond2,cond3]}];
 var conds = [{or:[{and:[cond1,cond2]},cond3]}]
 ```
 
-The supported operators are: `and`, `or`, `nand`, `nor`.
+### Variables
+Sometimes it is not enough to hard code behaviors into your tasks, sometimes you want behavior to depend on a previous response, or change texts according to randomization. In order to support these behaviors you can use variables. 
+
+The `global` variable is the context of everything that happens within the task manager. It is an object that holds a property for each task that is run. 
+The current task object is automatically set into the global, as well as any questions that the user completes. In addition you as a user may extend it manually using the `API.addGlobal` function. You can also set Global by using the `pi-global` attribute of `pi-task`;
+
+
+```js
+API.addGlobal({
+	value: 123,
+	variable: [1,2,3]
+})
+```
+
+Each **PIQuest** task has an object associated with it that logs anything that happens within the task. In the duration of the task, this object can be accessed using the `current` object. After the task ends, the object stays available from within the global object as `global.taskName`, where "taskName" is the name associated with this specific task.
+The task object is there for you to change. You can extend it to your hearts content using `API.addCurrent`:
+
+```js
+API.addCurrent({
+	value: 123,
+	variable: [1,2,3]
+})
+```
+
+**PIQuest** task objects have a reserved property called `questions`. `questions` holds an object that keeps track of all questions answered throughout the questionnaire. Each question is logged on to the property with its name; for instance if you have a question named quest1, then `questions.quest1` will hold an object describing the user response.
+The following is a list of the response object properties:
+
+Property 			| Description
+-------------------	| --------------
+response 			| The user response itself.
+latency 			| The time from the moment the question was displayed to the last time it was changed.
+pristineLatency 	| The time from the moment the question was displayed to the first time it was changed.
+declined 			| whether the user declined to answer this question.
+
+Throughout the player there are several components that refer to environmental variables. In particular you should check out [mixer conditions](#conditions) and [templates](#templates).
+
+### Templates
+One of the ways to create dynamic questionnaires is using templates. Templates are a format that allows you to dynamically generate settings for your questions. You can replace any non-object setting from within you questions/pages with a template, and it will be rendered according to the [environmental variables](#variables) (The exception to this rule is the `inherit` setting that cannot use templates). 
+
+A template is a string that has a section of the form `<%= %>` in it. Within these brackets you can write any Javascript that you like and it will be evaluated and printed out. For instance, in order to print the global variable "name", you could create a template that looks like this: `My name is <%= global.name%>`.
+
+The player uses [lodash templates](lodash.org/docs#template) internally, you can look them up to see all the possible uses.
+
+Questions and Pages have access to the same local variables, with the exception of questData that is available only to questions.
+
+Variable 	| Description
+----------- | -------------
+global 		| The global object.
+current 	| The current task object.
+questions 	| The questions object.
+pageData 	| The 'data' attribute from the page.
+questData 	| The 'data' attribute from the question (available only within questions).
+pageMeta 	| An object describing meta data about the page:</br> `number`: the serial number of this page, `outOf` the overall number of pages, `name`: the name of the current page. These can be used for instance to generate a description of your place within the questionnaire: `<%= pageMeta.number %> out of <%= pageMeta.outOf%>`.
+
+### Inheritance
+
+Each element in PIQuest (page/question) can inherit its attributes from an element set.
+
+#### Sets
+
+The element sets are defined using the `addPagesSet` and `addQuestionsSet` function in the API.
+
+Each set is simply an array of elements that can later be referred to as a base for new elements. Note that the name that you give the set (in the example: base or demographics) is the handle that you later use to refer to it.
+
+```js
+API.addQuestionsSet('likert', [
+	{type: 'selectOne', numericValues: true}
+]);
+
+API.addQuestionsSet('sizeLikert', [
+	{inherit: 'likert', answers: ['Big', 'Medium', 'Small']}
+]);
+```
+
+#### Inheriting
+
+When inheriting an element the new element starts out with all of the parent's attributes and extends them with its own. This means that we use the parent element as a base and then copy in any properties that the child has, overwriting any existing properties.
+The only exception to this rule is the `data` objects which we attempt to merge (giving precedence to the child).
+
+Follow this pseudo code:
+```js
+// The parent page
+{
+	data: {name: 'jhon', family:'doe'}
+	questions: [
+		quest1,
+		quest2
+	]
+}
+
+// The child page which attempts to inherit the parent
+{
+	inherit: 'parent',
+	data: {name: 'jack'}
+	questions: [
+		quest3
+	]
+}
+
+// The result would be:
+{
+	data: {name: 'jack', family:'doe'} 	// the child kept its own name but inherited the family name
+	stimuli: [							// the questions array was completely overwritten
+		quest3
+	]
+}
+```
+
+In order for an element to inherit another element it must use the `inherit` property of the inheriting element.
+
+```js
+{
+	inherit: inheritObject
+}
+```
+
+The inherit object has a `set` property defining which element set it should inherit from.
+It also has a `type` property that defines what type of inheritance we should use.
+
+We have implemented several types of inheritance:
+
+**random**:
+Randomly picks an element from the set. Note that this is the default inheritance type and so it is not obligatory to use the `type` property. You can also use a short cut and set the `set` using a simple string instead of an object (see example below).
+* `'setName'`
+* `{set: 'setName'}`
+* `{set: 'setName', type:'random'}`
+
+**exRandom**:
+Picks a random element without repeating the same element until we've gone through the whole set
+* `{set: 'setName', type:'exRandom'}`
+
+**bySequence**:
+Picks the elements by the order they were inserted into the set
+* `{set: 'setName', type:'bySequence'}`
+
+**byData**:
+Picks a specific element from the set.
+We compare the `data` property to the `element.data` property and if `data` is a subset of `element.data` it picks the element
+(this means that if all properties of data property equal to the properties of the same name in element.data it is a fit).
+This function will pick only the first element to fit the data.
+If the data property is set as a string, we assume it refers to the element handle.
+
+* `{set: 'setName', type: 'byData', data: {block:1, row:2}}` picks the element with both block:1 and row:2
+* `{set: 'setName', type: 'byData', data: "myStimHandle"}` picks the element that has the "myStimHandle" handle
+
+**function**:
+You may also use a custom function to pick your element.
+```js
+{set: 'setName', type: function(definitions){
+	// definitions is the inherit object (including  set, type, and whatever other properties you'd like to use)
+}}
+```
+
+##### Customization
+
+Each question/page can also have a customize method, this method is called once the element is inherited but before it is activated.
+It accepts two arguments: the source object on which it is called (in this case the appropriate trial object), and the global object. The source object is also the context for the function.
+
+```js
+{
+	inherit: 'something',
+	customize : function(source, globalObject){
+	}
+}
+```
