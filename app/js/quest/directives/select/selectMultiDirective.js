@@ -26,6 +26,10 @@ define(function (require) {
 					dflt: []
 				});
 
+				ngModel.$isEmpty = function(){
+					return _.isEmpty(ngModel.$viewValue);
+				};
+
 				// render questions
 				scope.quest = {
 					answers: mixer(scope.data.answers || [], scope.data)

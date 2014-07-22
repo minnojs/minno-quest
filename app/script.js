@@ -34,6 +34,7 @@ define(['questAPI'], function(Quest){
 						'syndrom',
 						'polyAdept'
 					],
+					required: true,
 					correct:true,
 					correctValue: [1,3],
 					errorMsg: {correct:"answer is reverie polyAdept"}

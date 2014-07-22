@@ -250,6 +250,7 @@ reverse 		| (Boolean: false) Reverses the order of answers in this question.
 numericValues 	| (Boolean: false) If `numericValues` is set, default numeric values are set for each answer, they are set *before* randomize, but *after* the mixer is activated.
 buttons 		| (Boolean: false) By default we use a list format for this question, set to true in order to use horizontal buttons (Likert style). This option  does not currently support extremely narrow screens).
 answers			| (Array: []) The list of possible answers for this question. There are two acceptable formats; (1) an array of strings/numbers, (2) an array of objects with `text` and `value` parameters.
+required		| (Boolean: false) Validation: require a response.
 correct 		| (Boolean: false) Validation: require the response to be correct (set the target value using `correctValue`)
 correctValue 	| (*) Set the correct response value for the correct validation (This should be an array for selectMulti).
 errorMsg		| (Object: {}) This object has a property for each validation type. Setting the appropriate type changes the validation message. For instance setting the `correct` property will change the validation message for instances where the correct response was not given.
@@ -433,9 +434,9 @@ var cond = {
 }
 ```
 
-Conditions should be treated as a type of equation. 
+Conditions should be treated as a type of equation.
 
-The `compare` and `to` properties have a special syntax that describes the value that they refer to. Most values that you use will be treated as-is. The special case is string that have dots in them: `global.var`, `questions.q1.response`; these values will be treated as pointing to variables within the lists context. So that `questions.q1.response` will retrieve the value of the response for q1 from the questions object. The following check whether the global variable var is equal to 15. 
+The `compare` and `to` properties have a special syntax that describes the value that they refer to. Most values that you use will be treated as-is. The special case is string that have dots in them: `global.var`, `questions.q1.response`; these values will be treated as pointing to variables within the lists context. So that `questions.q1.response` will retrieve the value of the response for q1 from the questions object. The following check whether the global variable var is equal to 15.
 
 ```js
 var cond = {
@@ -507,9 +508,9 @@ var conds = [{or:[{and:[cond1,cond2]},cond3]}]
 ```
 
 ### Variables
-Sometimes it is not enough to hard code behaviors into your tasks, sometimes you want behavior to depend on a previous response, or change texts according to randomization. In order to support these behaviors you can use variables. 
+Sometimes it is not enough to hard code behaviors into your tasks, sometimes you want behavior to depend on a previous response, or change texts according to randomization. In order to support these behaviors you can use variables.
 
-The `global` variable is the context of everything that happens within the task manager. It is an object that holds a property for each task that is run. 
+The `global` variable is the context of everything that happens within the task manager. It is an object that holds a property for each task that is run.
 The current task object is automatically set into the global, as well as any questions that the user completes. In addition you as a user may extend it manually using the `API.addGlobal` function. You can also set Global by using the `pi-global` attribute of `pi-task`;
 
 
@@ -543,7 +544,7 @@ declined 			| whether the user declined to answer this question.
 Throughout the player there are several components that refer to environmental variables. In particular you should check out [mixer conditions](#conditions) and [templates](#templates).
 
 ### Templates
-One of the ways to create dynamic questionnaires is using templates. Templates are a format that allows you to dynamically generate settings for your questions. You can replace any non-object setting from within you questions/pages with a template, and it will be rendered according to the [environmental variables](#variables) (The exception to this rule is the `inherit` setting that cannot use templates). 
+One of the ways to create dynamic questionnaires is using templates. Templates are a format that allows you to dynamically generate settings for your questions. You can replace any non-object setting from within you questions/pages with a template, and it will be rendered according to the [environmental variables](#variables) (The exception to this rule is the `inherit` setting that cannot use templates).
 
 A template is a string that has a section of the form `<%= %>` in it. Within these brackets you can write any Javascript that you like and it will be evaluated and printed out. For instance, in order to print the global variable "name", you could create a template that looks like this: `My name is <%= global.name%>`.
 

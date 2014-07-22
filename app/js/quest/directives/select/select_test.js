@@ -147,7 +147,7 @@ define(['../questDirectivesModule', 'utils/randomize/randomizeModuleMock'], func
 				expect(submitSpy).toHaveBeenCalled();
 			});
 
-			it('should support correct validation',function(){
+			it('should support "correct" validation',function(){
 				compileInput({answers: [1,2,3], correct:true, correctValue: 1, errorMsg:{correct: 'correct msg'}});
 				var errorElm = element.find('[ng-show="model.$error.correct"]');
 				expect(errorElm.text()).toBe('correct msg');
@@ -160,6 +160,17 @@ define(['../questDirectivesModule', 'utils/randomize/randomizeModuleMock'], func
 				expect(element).toBeInvalid();
 			});
 
+			it('should support "required" validation',function(){
+				compileInput({answers: [1,2,3], required:true, errorMsg:{required: 'required msg'}});
+				var errorElm = element.find('[ng-show="model.$error.required"]');
+				expect(errorElm.text()).toBe('required msg');
+
+				expect(element).toBeInvalid();
+
+				choose(0);
+				expect(element).toBeValid();
+				expect(errorElm).toBeHidden();
+			});
 		});
 
 
@@ -223,7 +234,7 @@ define(['../questDirectivesModule', 'utils/randomize/randomizeModuleMock'], func
 				expect(formElm.children().length).toBe(3);
 			});
 
-			it('should support correct validation',function(){
+			it('should support "correct" validation',function(){
 				compileInput({answers: [1,2,3], correct:true, correctValue: [1,2], errorMsg:{correct: 'correct msg'}});
 				var errorElm = element.find('[ng-show="model.$error.correct"]');
 				expect(errorElm.text()).toBe('correct msg');
@@ -236,6 +247,19 @@ define(['../questDirectivesModule', 'utils/randomize/randomizeModuleMock'], func
 				expect(errorElm).toBeHidden();
 
 			});
+
+			it('should support "required" validation',function(){
+				compileInput({answers: [1,2,3], required:true, errorMsg:{required: 'required msg'}});
+				var errorElm = element.find('[ng-show="model.$error.required"]');
+				expect(errorElm.text()).toBe('required msg');
+
+				expect(element).toBeInvalid();
+
+				choose(0);
+				expect(element).toBeValid();
+				expect(errorElm).toBeHidden();
+			});
+
 
 			it('should support dflt',function(){
 				compileInput({

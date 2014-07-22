@@ -1,5 +1,5 @@
-<div>
-	<div class="list-group">
+<div required="data.required">
+	<div class="list-group" >
 		<!-- track by in the ng-repeat allows us to keep the repeated object clean so that angular doesn't add a $$hashkey property -->
 		<a
 			href="javascript:void(0);"
@@ -13,5 +13,6 @@
 		>
 		</a>
 	</div>
+	<p class="error" ng-show="model.$error.required">{{data.errorMsg.required || "This field is required!"}}</p>
 	<p class="error" ng-show="model.$error.correct">{{data.errorMsg.correct || "You must answer the correct answer!"}}</p>
 </div>
