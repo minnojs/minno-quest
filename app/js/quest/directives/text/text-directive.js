@@ -33,7 +33,6 @@ define(function (require) {
 						event.preventDefault();
 					}
 				});
-
 			}
 		};
 	};

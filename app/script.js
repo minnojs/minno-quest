@@ -53,7 +53,6 @@ define(['questAPI'], function(Quest){
 					correct:true,
 					correctValue: 'good',
 					errorMsg: {correct:"That may not be correct... say good!"}
-
 				}
 
 			]

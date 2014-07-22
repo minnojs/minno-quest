@@ -70,6 +70,14 @@ define(function(require){
 				return log;
 			});
 
+			// make the model work with a custom event, so that it doesn't get confused with inner modules
+			// note: this is a problem caused by nesting ngModule...
+			ngModel.$options = _.defaults(ngModel.$options || {}, {updateOn: "quest"});
+
+			$scope.$watch('response',function(newValue, oldValue /*, scope*/){
+				newValue !== oldValue && ngModel.$setViewValue(newValue, 'quest');
+			});
+
 			var correctValidator = function(value) {
 				var response = value.response;
 				var correctValue = data.correctValue;
@@ -87,16 +95,12 @@ define(function(require){
 				return value;
 			};
 
-			data.correct && ngModel.$parsers.push(correctValidator);
+			if (data.correct) {
+				ngModel.$parsers.push(correctValidator);
+				data.response = correctValidator(this.log);
+			}
 
 
-			// make the model work with a custom event, so that it doesn't get confused with inner modules
-			// note: this is a problem caused by nesting ngModule...
-			ngModel.$options = _.defaults(ngModel.$options || {}, {updateOn: "quest"});
-
-			$scope.$watch('response',function(newValue, oldValue /*, scope*/){
-				newValue !== oldValue && ngModel.$setViewValue(newValue, 'quest');
-			});
 		};
 	}
 
