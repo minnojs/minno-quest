@@ -26,6 +26,9 @@ define(function(require){
 			var ngModelGet = $parse($attr.ngModel);
 			var dfltValue = ("dflt" in data) ? data.dflt : options.dflt; // use "in" to cover cases where dflt is set to "" or explicitly undefined
 
+			// make model accesable from within scope
+			$scope.model = ngModel;
+
 			// set log and module
 			if (_.isUndefined(ngModelGet($scope))){
 				self.log = ngModel.$modelValue = log = {
@@ -66,6 +69,26 @@ define(function(require){
 
 				return log;
 			});
+
+			var correctValidator = function(value) {
+				var response = value.response;
+				var correctValue = data.correctValue;
+
+				// make sure numbers are always treated as strings
+				_.isNumber(correctValue) && (correctValue+="");
+				_.isNumber(response) && (response+="");
+
+				if (_.isEqual(correctValue, response)) {
+					ngModel.$setValidity('correct', true);
+				} else {
+					ngModel.$setValidity('correct', false);
+					value.response =  undefined;
+				}
+				return value;
+			};
+
+			data.correct && ngModel.$parsers.push(correctValidator);
+
 
 			// make the model work with a custom event, so that it doesn't get confused with inner modules
 			// note: this is a problem caused by nesting ngModule...

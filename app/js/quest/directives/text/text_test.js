@@ -106,6 +106,19 @@ define(['../questDirectivesModule'], function(){
 			expect(formElm).toBeInvalid();
 		});
 
+		it('should support correct validation',function(){
+			compile({correct:true, correctValue: 123, errorMsg:{correct: 'correct msg'}});
+			var errorElm = formElm.find('[ng-show="model.$error.correct"]');
+			expect(errorElm.text()).toBe('correct msg');
+
+			changeInputValueTo('123');
+			expect(formElm).toBeValid();
+			expect(errorElm).toBeHidden();
+
+			changeInputValueTo('aaa');
+			expect(formElm).toBeInvalid();
+		});
+
 		it('should support pattern',function(){
 			compile({pattern:"/^\\d\\d\\d-\\d\\d-\\d\\d\\d\\d$/", errorMsg:{pattern: 'pattern msg'}});
 			var errorElm = formElm.find('[ng-show="form.$error.pattern"]');

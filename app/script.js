@@ -33,7 +33,10 @@ define(['questAPI'], function(Quest){
 						'reverie',
 						'syndrom',
 						'polyAdept'
-					]
+					],
+					correct:true,
+					correctValue: [1,3],
+					errorMsg: {correct:"answer is reverie polyAdept"}
 				},
 				{
 					name: 'myName',
@@ -46,7 +49,11 @@ define(['questAPI'], function(Quest){
 					autoSubmit: true,
 					dflt:'good',
 					buttons: true,
-					answers: ['good','bad','ugly']
+					answers: ['good','bad','ugly'],
+					correct:true,
+					correctValue: 'good',
+					errorMsg: {correct:"That may not be correct... say good!"}
+
 				}
 
 			]

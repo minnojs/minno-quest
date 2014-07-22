@@ -186,6 +186,8 @@ minlength 		| (Number: null) Validation: force at least this number of character
 maxlength		| (Number: null) Validation: force at most this number of characters.
 required		| (Boolean: false) Validation: require a non empty string as a response.
 pattern			| (Regex/String: null) Validation: require the response to match the regular expression set in pattern.
+correct 		| (Boolean: false) Validation: require the response to be correct (set the target value using `correctValue`)
+correctValue 	| (*) Set the correct response value for the correct validation.
 errorMsg		| (Object: {}) This object has a property for each validation type. Setting the appropriate type changes the validation message. For instance setting the `required` property will change the validation message for instances where no response was given.
 
 For example, this is a text question that requires a valid email address (although there are better patterns out there for this purpose):
@@ -213,6 +215,8 @@ autoSubmit 		| (Boolean: false) If this property is set to true typing `Enter` w
 min 			| (Number: null) Validation: minimum valid number.
 max				| (Number: null) Validation: maximum valid number.
 required		| (Boolean: false) Validation: require a non empty string as a response.
+correct 		| (Boolean: false) Validation: require the response to be correct (set the target value using `correctValue`)
+correctValue 	| (*) Set the correct response value for the correct validation.
 errorMsg		| (Object: {}) This object has a property for each validation type. Setting the appropriate type changes the validation message. For instance setting the `required` property will change the validation message for instances where no response was given. Note that their is a special property `number` that is triggered whenever the response is not a valid number.
 
 For example, this is a text question that asks for a number under 273:
@@ -242,6 +246,9 @@ reverse 		| (Boolean: false) Reverses the order of answers in this question.
 numericValues 	| (Boolean: false) If `numericValues` is set, default numeric values are set for each answer, they are set *before* randomize, but *after* the mixer is activated.
 buttons 		| (Boolean: false) By default we use a list format for this question, set to true in order to use horizontal buttons (Likert style). This option  does not currently support extremely narrow screens).
 answers			| (Array: []) The list of possible answers for this question. There are two acceptable formats; (1) an array of strings/numbers, (2) an array of objects with `text` and `value` parameters.
+correct 		| (Boolean: false) Validation: require the response to be correct (set the target value using `correctValue`)
+correctValue 	| (*) Set the correct response value for the correct validation (This should be an array for selectMulti).
+errorMsg		| (Object: {}) This object has a property for each validation type. Setting the appropriate type changes the validation message. For instance setting the `correct` property will change the validation message for instances where the correct response was not given.
 
 Each answer on the list has a value associated with it. By default the value is equal to the text of the answer. If `numericValues` is set, the value is set to the appropriate number. Using the object notation, you can set values of your own.
 

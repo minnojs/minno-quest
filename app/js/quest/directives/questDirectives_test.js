@@ -119,6 +119,64 @@ define(['angular','./questDirectivesModule'], function(angular){
 			expect(log.latency).toBe(20);
 			expect(log.pristineLatency).toBe(10);
 		});
+
+		describe(': correct validation', function(){
+			it('should work', function(){
+				compile({correct:true, correctValue:123});
+				expect(element).not.toBeValid();
+
+				scope.response = 123;
+				scope.$digest();
+				expect(element).toBeValid();
+
+				scope.response = 456;
+				scope.$digest();
+				expect(element).not.toBeValid();
+			});
+
+			it('should work with 0', function(){
+				compile({correct:true, correctValue:0});
+				expect(element).not.toBeValid();
+
+				scope.response = "";
+				scope.$digest();
+				expect(element).not.toBeValid();
+
+				scope.response = 0;
+				scope.$digest();
+				expect(element).toBeValid();
+			});
+
+			it('should work with ""', function(){
+				compile({correct:true, correctValue:""});
+				expect(element).not.toBeValid();
+
+				scope.response = 0;
+				scope.$digest();
+				expect(element).not.toBeValid();
+
+				scope.response = "";
+				scope.$digest();
+				expect(element).toBeValid();
+			});
+
+			it('should work with numbers', function(){
+				compile({correct:true, correctValue:123});
+				expect(element).not.toBeValid();
+
+				scope.response = "123";
+				scope.$digest();
+				expect(element).toBeValid();
+			});
+
+			it('should support arrays', function(){
+				compile({correct:true, correctValue:[1,2,3]});
+
+				scope.response = [1,2,3];
+				scope.$digest();
+				expect(element).toBeValid();
+			});
+		});
 	});
 
 });

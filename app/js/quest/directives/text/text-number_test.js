@@ -109,6 +109,19 @@ define(['../questDirectivesModule'],function(){
 			expect(formElm).toBeInvalid();
 		});
 
+		it('should support correct validation',function(){
+			compile({correct:true, correctValue: 123, errorMsg:{correct: 'correct msg'}});
+			var errorElm = formElm.find('[ng-show="model.$error.correct"]');
+			expect(errorElm.text()).toBe('correct msg');
+
+			changeInputValueTo('123');
+			expect(formElm).toBeValid();
+			expect(errorElm).toBeHidden();
+
+			changeInputValueTo(12);
+			expect(formElm).toBeInvalid();
+		});
+
 		it('should support autoSubmit', function(){
 			var e = jqLite.Event('keypress', { which: 13 });
 			var submitSpy;

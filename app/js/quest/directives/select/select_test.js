@@ -59,16 +59,18 @@ define(['../questDirectivesModule', 'utils/randomize/randomizeModuleMock'], func
 		}); // end mixer
 
 		describe('SelectOne',function(){
-			var formElm, scope, $compile, choose, jqLite = angular.element, log;
+			var element, formElm, scope, $compile, choose, jqLite = angular.element, log;
 
 			var compileInput = function compileInput(data){
-				formElm = jqLite('<div quest-select-one quest-data="data" ng-model="data.model">');
+				element = jqLite('<div quest-select-one quest-data="data" ng-model="data.model">');
 				scope.data = data;
-				$compile(formElm)(scope);
-				scope = formElm.isolateScope(); // get the isolated scope
+				$compile(element)(scope);
+
+				scope = element.isolateScope(); // get the isolated scope
 				scope.$digest();
-				log = formElm.data('$questSelectOneController').log;
-				//formElm = formElm.children(); // get the appropriat variation of selectOne
+				log = element.data('$questSelectOneController').log;
+
+				formElm = element.children().first();
 			};
 
 			beforeEach(module('ui.bootstrap.buttons',function($compileProvider, $provide){
@@ -145,19 +147,33 @@ define(['../questDirectivesModule', 'utils/randomize/randomizeModuleMock'], func
 				expect(submitSpy).toHaveBeenCalled();
 			});
 
+			it('should support correct validation',function(){
+				compileInput({answers: [1,2,3], correct:true, correctValue: 1, errorMsg:{correct: 'correct msg'}});
+				var errorElm = element.find('[ng-show="model.$error.correct"]');
+				expect(errorElm.text()).toBe('correct msg');
+
+				choose(0);
+				expect(element).toBeValid();
+				expect(errorElm).toBeHidden();
+
+				choose(2);
+				expect(element).toBeInvalid();
+			});
+
 		});
 
 
 		describe('SelectMulti',function(){
-			var formElm, scope, $compile, choose, jqLite = angular.element, log;
+			var element, formElm, scope, $compile, choose, jqLite = angular.element, log;
 
 			var compileInput = function compileInput(data){
-				formElm = jqLite('<div piq-page-inject quest-select-multi quest-data="data" ng-model="data.model">');
+				element = jqLite('<div piq-page-inject quest-select-multi quest-data="data" ng-model="data.model">');
 				scope.data = data;
-				$compile(formElm)(scope);
-				scope = formElm.isolateScope(); // get the isolated scope
+				$compile(element)(scope);
+				scope = element.isolateScope(); // get the isolated scope
 				scope.$digest();
-				log = formElm.controller('questSelectMulti').log;
+				log = element.controller('questSelectMulti').log;
+				formElm = element.children().first();
 			};
 
 			beforeEach(module('ui.bootstrap.buttons',function($compileProvider, $provide){
@@ -205,6 +221,20 @@ define(['../questDirectivesModule', 'utils/randomize/randomizeModuleMock'], func
 			it('should display the correct number of answers', function(){
 				compileInput({answers: [1,2,3]});
 				expect(formElm.children().length).toBe(3);
+			});
+
+			it('should support correct validation',function(){
+				compileInput({answers: [1,2,3], correct:true, correctValue: [1,2], errorMsg:{correct: 'correct msg'}});
+				var errorElm = element.find('[ng-show="model.$error.correct"]');
+				expect(errorElm.text()).toBe('correct msg');
+
+				choose(0);
+				expect(element).toBeInvalid();
+
+				choose(1);
+				expect(element).toBeValid();
+				expect(errorElm).toBeHidden();
+
 			});
 
 			it('should support dflt',function(){
