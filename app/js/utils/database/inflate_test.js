@@ -29,11 +29,15 @@ define(['./database-module'],function(){
 			expect(result).toEqual({});
 		});
 
-		it('should run obj.customize function when there is no inheritance', function(){
-			var spy = jasmine.createSpy();
-			inflate({customize:spy});
-			expect(spy).toHaveBeenCalledWith({customize:spy});
-		});
+		iit('should run obj.customize function when there is no inheritance', inject(function($rootScope){
+			var global = {global:'obj'};
+			var spy = jasmine.createSpy('customize');
+			var source = {customize:spy};
+			$rootScope.global = global;
+			inflate(source);
+			expect(spy).toHaveBeenCalledWith(source,global);
+		}));
+
 
 		it('should return a copy, never the source', function(){
 			var source;

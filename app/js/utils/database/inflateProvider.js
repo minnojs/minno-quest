@@ -13,13 +13,13 @@ define(function(require){
 	var angular = require('angular');
 	var _ = require('underscore');
 
-	inflateProvider.$inject = ['databaseQuery'];
-	function inflateProvider(query){
+	inflateProvider.$inject = ['databaseQuery','$rootScope'];
+	function inflateProvider(query, $rootScope){
 
 		function customize(source){
 			// check for a custom function and run it if it exists
 			if (_.isFunction(source.customize)){
-				source.customize.apply(source, [source]);
+				source.customize.apply(source, [source, $rootScope.global]);
 			}
 			return source;
 		}

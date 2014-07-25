@@ -665,7 +665,7 @@ You may also use a custom function to pick your element.
 ##### Customization
 
 Each question/page can also have a `customize` method, this method is called once the element is inherited but before it is activated.
-It accepts one argument: the source object on which it is called (the page or question object). The source object is also the context for the function.
+It accepts two argument: the source object on which it is called (the page or question object), and the global object (in which you can find the current object etc.). The source object is also the context for the function.
 
 ```js
 {
