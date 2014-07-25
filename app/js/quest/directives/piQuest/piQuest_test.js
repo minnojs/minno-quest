@@ -289,8 +289,18 @@ define(['../questDirectivesModule'],function(){
 						header: 'My header'
 					});
 
-					expect(element.find('h2').text()).toBe('My header');
+					expect(element.find('h3').text()).toBe('My header');
 				});
+
+				it('should style the header', function(){
+					compile({
+						header: 'My header',
+						headerStyle: {'z-index':'123'}
+					});
+
+					expect(element.find('h3').css('z-index')).toEqual('123');
+				});
+
 
 				it('should be valid only if the question are valid', function(){
 					compile({
