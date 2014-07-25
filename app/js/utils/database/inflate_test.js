@@ -29,7 +29,7 @@ define(['./database-module'],function(){
 			expect(result).toEqual({});
 		});
 
-		iit('should run obj.customize function when there is no inheritance', inject(function($rootScope){
+		it('should run obj.customize function when there is no inheritance', inject(function($rootScope){
 			var global = {global:'obj'};
 			var spy = jasmine.createSpy('customize');
 			var source = {customize:spy};
@@ -38,6 +38,18 @@ define(['./database-module'],function(){
 			expect(spy).toHaveBeenCalledWith(source,global);
 		}));
 
+		it('should run obj.customize function when there is inheritance', inject(function($rootScope){
+			var spy = jasmine.createSpy('customize');
+			var unspy = jasmine.createSpy('later customize');
+			var global = {global:'obj'};
+			$rootScope.global = global;
+			inflate({inherit:true}, [{customize:spy}]);
+			expect(spy).toHaveBeenCalledWith({inherit:true, customize:spy}, global);
+
+			inflate({inherit:true, customize:spy}, [{customize:unspy}]);
+			expect(spy).toHaveBeenCalledWith({inherit:true, customize:spy}, global);
+			expect(unspy).not.toHaveBeenCalled();
+		}));
 
 		it('should return a copy, never the source', function(){
 			var source;
@@ -114,18 +126,6 @@ define(['./database-module'],function(){
 			expect(result.data.a).toBe(1);
 			expect(result.data.b).toBe(2);
 		});
-
-		it('should run obj.customize function when there is inheritance', function(){
-			var spy = jasmine.createSpy();
-			var unspy = jasmine.createSpy('later customize');
-			inflate({inherit:true}, [{customize:spy}]);
-			expect(spy).toHaveBeenCalledWith({inherit:true, customize:spy});
-
-			inflate({inherit:true, customize:spy}, [{customize:unspy}]);
-			expect(spy).toHaveBeenCalledWith({inherit:true, customize:spy});
-			expect(unspy).not.toHaveBeenCalled();
-		});
-
 
 	});
 });
