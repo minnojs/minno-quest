@@ -42,6 +42,8 @@ String getBase = getProtocol+"://"+getDomain;
 		<!-- endbuild -->
 
 		<style type="text/css">
+			.container {padding-top: 15px;}
+
 			/* http://www.sitepoint.com/css3-responsive-centered-image/ */
 			img.pi-logo {
 				position: absolute;
