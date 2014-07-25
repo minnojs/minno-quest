@@ -133,25 +133,27 @@ Thats it! PIquest has loads of additional features, but this is really all you n
 ### Pages
 The basic unit that PIquest deals with is the **page**. The properties within a page manage the way a page of question is displayed and the users interactions with it.
 
-| property		| description
-| ------------- | ---------------------
-| name 			| (string) The identifier for this page, is used mainly for logging purposes
-| decline 		| (boolean) Should we allow users to decline to answer the questions on this page. This option displays a "decline" button that proceeds to the next page without validation and marks this response as "declined".
-| declineText	| (string) The text for the decline button (default to "Decline to answer")
-| noSubmit		| (Boolean) remove submit button (useful when using the 'autoSubmit' function of some questions).
-| submitText	| (String) The text for the submit button (default to "Submit").
-| header 		| (String) Text for the page header.
-| numbered 		| (Boolean) Should we display the number of each questions.
-| numberStart	| (Number) The number we should start the page at.
-| timeout 		| (Number) If this is set to a positive integer *x*, it auto submits after *x* milliseconds (no validation allowed).
-| timeoutMessage| (String) An optional message to be displayed upon timeout.
-| questions 	| (Array) an array of [questions](#questions) to be displayed in the page. Note that the questions may be randomized and chosen conditionally using the [mixer](#mixer).
+ property		| description
+ -------------- | ---------------------
+name 			| (string) The identifier for this page, is used mainly for logging purposes
+decline 		| (boolean) Should we allow users to decline to answer the questions on this page. This option displays a "decline" button that proceeds to the next page without validation and marks this response as "declined".
+declineText		| (string) The text for the decline button (default to "Decline to answer")
+noSubmit		| (Boolean) remove submit button (useful when using the 'autoSubmit' function of some questions).
+submitText		| (String) The text for the submit button (default to "Submit").
+header  		| (String) Text for the page header.
+headerStyle		| (Object) An object whose keys are CSS style names and values are corresponding values for those CSS keys. Since some CSS style names are not valid keys for an object, they must be quoted. See the 'background-color' style in the example below.
+numbered 		| (Boolean) Should we display the number of each questions.
+numberStart		| (Number) The number we should start the page at.
+timeout 		| (Number) If this is set to a positive integer *x*, it auto submits after *x* milliseconds (no validation allowed).
+timeoutMessage	| (String) An optional message to be displayed upon timeout.
+questions 		| (Array) an array of [questions](#questions) to be displayed in the page. Note that the questions may be randomized and chosen conditionally using the [mixer](#mixer).
 
 For example, a page can look something like this:
 
 ```js
 var page = {
 	header: 'Personal information:',
+	headerStyle: {'background-color':'red',color:'blue'},
 	decline: true,
 	declineText: 'I prefer to keep this information to myself',
 	questions: [
@@ -662,13 +664,14 @@ You may also use a custom function to pick your element.
 
 ##### Customization
 
-Each question/page can also have a customize method, this method is called once the element is inherited but before it is activated.
-It accepts two arguments: the source object on which it is called (in this case the appropriate trial object), and the global object. The source object is also the context for the function.
+Each question/page can also have a `customize` method, this method is called once the element is inherited but before it is activated.
+It accepts one argument: the source object on which it is called (the page or question object). The source object is also the context for the function.
 
 ```js
 {
 	inherit: 'something',
-	customize : function(source, globalObject){
+	customize : function(source){
+		source.questions.push(quest);
 	}
 }
 ```
