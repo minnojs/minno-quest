@@ -39,7 +39,6 @@
     "commit": "6751d3f058227ae2450f2f5dd5097d5005c5f93d"
   },
   "_source": "git://github.com/es-shims/es5-shim.git",
-  "_target": "~3.4.0",
-  "_originalSource": "es5-shim",
-  "_direct": true
+  "_target": "3.4.0",
+  "_originalSource": "es5-shim"
 }
