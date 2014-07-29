@@ -1,0 +1,30 @@
+<div ng-form name="pageForm">
+	<div ng-if="page.progressBar" class="text-center" ng-bind-html="page.progressBar"></div>
+	<h3 ng-if="page.header" ng-bind-html="page.header" ng-style="page.headerStyle"></h3>
+	<ol ng-class="{'list-unstyled':!page.numbered}" start="{{page.numberStart}}">
+		<li ng-repeat="quest in page.questions">
+			<div quest-wrapper quest-data="quest" quest-current="current"></div>
+		</li>
+	</ol>
+
+	<div class="btn-group pull-right">
+		<button
+			ng-click="submit()"
+			data-role="submit"
+			class="btn btn-primary"
+			ng-class="form"
+			ng-disabled="pageForm.$invalid"
+			ng-if="!page.noSubmit"
+		>{{page.submitText || "Submit"}}</button>
+
+		<button
+			ng-click="decline()"
+			data-role="submit"
+			class="btn btn-warning"
+			ng-class="form"
+			ng-if="page.decline"
+		>{{page.declineText || "Decline to Answer"}}</button>
+	</div>
+
+
+</div>

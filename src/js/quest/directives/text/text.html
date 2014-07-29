@@ -1,0 +1,15 @@
+<div ng-form>
+	<input
+	 	type="text"
+		ng-model="response"
+		ng-minlength="{{data.minlength}}"
+		ng-maxlength="{{data.maxlength}}"
+		ng-pattern="{{data.pattern}}"
+		ng-required="{{data.required}}"
+	>
+	<p class="error" ng-show="form.$error.minlength">{{data.errorMsg.minlength || "Too short!"}}</p>
+	<p class="error" ng-show="form.$error.maxlength">{{data.errorMsg.maxlength || "Too long!"}}</p>
+	<p class="error" ng-show="form.$error.pattern">{{data.errorMsg.pattern || "wrong pattern!"}}</p>
+	<p class="error" ng-show="form.$error.required">{{data.errorMsg.required || "This field is required!"}}</p>
+	<p class="error" ng-show="model.$error.correct">{{data.errorMsg.correct || "You must answer the correct answer!"}}</p>
+</div>

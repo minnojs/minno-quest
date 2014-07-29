@@ -36,7 +36,7 @@ module.exports = function (grunt) {
 		// Project settings
 		settings: {
 			// configurable paths
-			app: require('./bower.json').appPath || 'app',
+			app: require('./bower.json').appPath || 'src',
 			dist: 'dist',
 			banner: {
 				compact: '/*! <%= pkg.name %> <%= pkg.version %> (Custom Build) | <%= pkg.license %> */',
@@ -235,6 +235,11 @@ module.exports = function (grunt) {
 
 					// Tells Require.js to look at main.js for all shim and path configurations
 					mainConfigFile: '<%= settings.app %>/js/bootstrap.js',
+					paths: {
+						underscore: 'empty:',
+						angular: 'empty:',
+						text: '../libs/requirejs-text/text'
+					},
 
 					// Add banner
 					wrap: {

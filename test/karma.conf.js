@@ -12,9 +12,9 @@ module.exports = function(config) {
 		// list of files / patterns to load in the browser
 		files: [
 			{pattern: 'test/matchers.js', included: false },
-			{pattern: 'app/libs/**/*.js', included: false },
-			{pattern: 'app/js/**/*.js', included: false },
-			{pattern: 'app/js/**/*.html', watched: true, included: false, served: true},
+			{pattern: 'src/libs/**/*.js', included: false },
+			{pattern: 'src/js/**/*.js', included: false },
+			{pattern: 'src/js/**/*.html', watched: true, included: false, served: true},
 
 			// http://karma-runner.github.io/0.12/plus/requirejs.html
 			'test/test-bootstrap.js'
@@ -22,7 +22,7 @@ module.exports = function(config) {
 
 		// list of files / patterns to exclude
 		exclude: [
-			'app/js/bootstrap.js'
+			'src/js/bootstrap.js'
 		],
 
 		// use dolts reporter, as travis terminal does not support escaping sequences

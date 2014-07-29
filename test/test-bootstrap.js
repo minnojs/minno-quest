@@ -4,7 +4,7 @@ var TEST_REGEXP = /_test\.js$/;
 
 var pathToModule = function(path) {
 	//return path.replace(/^\/base\//, '').replace(/\.js$/, '');
-	return path.replace(/^\/base\/app\/js\/|\.js$/g,'');
+	return path.replace(/^\/base\/src\/js\/|\.js$/g,'');
 };
 
 // We can't use Object.keys because IE8
@@ -19,7 +19,7 @@ for(file in window.__karma__.files){
 requirejs.config({
 	waitSeconds: 0,
 	// Karma serves files from '/base'
-	baseUrl: '/base/app/js',
+	baseUrl: '/base/src/js',
 
 	paths: {
 		underscore: "../libs/lodash/dist/lodash",
