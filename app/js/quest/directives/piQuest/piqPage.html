@@ -3,20 +3,7 @@
 	<h3 ng-if="page.header" ng-bind-html="page.header" ng-style="page.headerStyle"></h3>
 	<ol ng-class="{'list-unstyled':!page.numbered}" start="{{page.numberStart}}">
 		<li ng-repeat="quest in page.questions">
-			<div ng-switch="quest.type || 'text'">
-				<div ng-switch-when="text">
-					<input quest-wrapper quest-text quest-data="quest" ng-model="current.questions[quest.name]">
-				</div>
-				<div ng-switch-when="textNumber">
-					<input quest-wrapper quest-text-number quest-data="quest" ng-model="current.questions[quest.name]">
-				</div>
-				<div ng-switch-when="selectOne">
-					<input quest-wrapper quest-select-one quest-data="quest" ng-model="current.questions[quest.name]">
-				</div>
-				<div ng-switch-when="selectMulti">
-					<input quest-wrapper quest-select-multi quest-data="quest" ng-model="current.questions[quest.name]">
-				</div>
-			</div>
+			<div quest-wrapper quest-data="quest" quest-current="current"></div>
 		</li>
 	</ol>
 

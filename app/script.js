@@ -24,6 +24,7 @@ define(['questAPI'], function(Quest){
 			numberStart: 4,
 			questions: [
 				{
+					name:'baat',
 					type: 'selectMulti',
 					stem: "Multi question",
 					dflt: [1,2],

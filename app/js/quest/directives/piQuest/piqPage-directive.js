@@ -16,7 +16,6 @@ define(function (require) {
 
 	piqPageCtrl.$inject = ['$scope','$timeout', '$rootScope', 'questHarvest'];
 	function piqPageCtrl($scope,$timeout, $rootScope, harvest){
-
 		var self = this;
 
 		$scope.global = $rootScope.global;

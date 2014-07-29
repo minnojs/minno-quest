@@ -90,8 +90,9 @@ define(function(require){
 					ngModel.$setValidity('correct', true);
 				} else {
 					ngModel.$setValidity('correct', false);
-					value.response =  undefined;
+					//value.response = dfltValue;
 				}
+
 				return value;
 			};
 
@@ -99,6 +100,8 @@ define(function(require){
 				ngModel.$parsers.push(correctValidator);
 				data.response = correctValidator(this.log);
 			}
+
+
 
 
 		};
