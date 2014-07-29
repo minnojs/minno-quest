@@ -238,7 +238,7 @@ module.exports = function (grunt) {
 					paths: {
 						underscore: 'empty:',
 						angular: 'empty:',
-						text: '../libs/requirejs-text/text'
+						text: '../../bower_components/requirejs-text/text'
 					},
 
 					// Add banner

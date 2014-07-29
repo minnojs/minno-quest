@@ -33,7 +33,7 @@ String getBase = getProtocol+"://"+getDomain;
 
 		<!-- build:css styles/vendor.css -->
 		<!-- bower:css -->
-		<link rel="stylesheet" href="libs/bootstrap/dist/css/bootstrap.css" />
+		<link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css" />
 		<!-- endbower -->
 		<!-- endbuild -->
 
@@ -87,7 +87,7 @@ String getBase = getProtocol+"://"+getDomain;
 	</body>
 
 	<!-- Uncomment For debugging -->
-	<!-- <script type="text/javascript" src="libs/jquery/dist/jquery.js"></script> -->
+	<!-- <script type="text/javascript" src="../bower_components/jquery/dist/jquery.js"></script> -->
 
 	<!--[if lt IE 7]>
 		<script src="//cdnjs.cloudflare.com/ajax/libs/json3/3.3.1/json3.min.js"></script>
@@ -96,5 +96,5 @@ String getBase = getProtocol+"://"+getDomain;
 		<script src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/3.4.0/es5-shim.min.js"></script>
 	<![endif]-->
 	<script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.min.js" data-main="js/bootstrap.js"></script>
-	<script>window.require || document.write('<script src="libs/requirejs/require.js" data-main="js/bootstrap.js"><\/script>');</script>
+	<script>window.require || document.write('<script src="../bower_components/requirejs/require.js" data-main="js/bootstrap.js"><\/script>');</script>
 </html>

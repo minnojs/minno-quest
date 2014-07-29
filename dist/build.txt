@@ -1,24 +1,4 @@
 
-libs/angular/angular-csp.css
-----------------
-libs/angular/angular-csp.css
-
-libs/bootstrap/dist/css/bootstrap-theme.css
-----------------
-libs/bootstrap/dist/css/bootstrap-theme.css
-
-libs/bootstrap/dist/css/bootstrap-theme.min.css
-----------------
-libs/bootstrap/dist/css/bootstrap-theme.min.css
-
-libs/bootstrap/dist/css/bootstrap.css
-----------------
-libs/bootstrap/dist/css/bootstrap.css
-
-libs/bootstrap/dist/css/bootstrap.min.css
-----------------
-libs/bootstrap/dist/css/bootstrap.min.css
-
 styles/main.css
 ----------------
 styles/main.css
