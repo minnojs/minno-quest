@@ -33,7 +33,7 @@ String getBase = getProtocol+"://"+getDomain;
 
 		<!-- build:css styles/vendor.css -->
 		<!-- bower:css -->
-		<link rel="stylesheet" href="libs/bootstrap/dist/css/bootstrap.css" />
+		<link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css" />
 		<!-- endbower -->
 		<!-- endbuild -->
 
@@ -45,32 +45,10 @@ String getBase = getProtocol+"://"+getDomain;
 			.container {padding-top: 15px;}
 
 			/* http://www.sitepoint.com/css3-responsive-centered-image/ */
-			img.pi-logo {
-				position: absolute;
-				max-width: 80%;
-				top: 50%;
-				left: 50%;
-				margin-left: -100px;
-				margin-top: -62px;
-				border-radius: 3px;
-			}
-
-			img.pi-logo:empty {
-				margin: auto;
-				-webkit-transform: translate(-50%, -50%);
-				-moz-transform: translate(-50%, -50%);
-				-ms-transform: translate(-50%, -50%);
-				-o-transform: translate(-50%, -50%);
-				transform: translate(-50%, -50%);
-			}
-
-			@media screen and (orientation: portrait) {
-			  img.pi-logo { max-width: 90%; }
-			}
-
-			@media screen and (orientation: landscape) {
-			  img.pi-logo { max-height: 90%; }
-			}
+			img.pi-logo {position: absolute;max-width: 80%;top: 50%;left: 50%;margin-left: -100px;margin-top: -62px;border-radius: 3px;}
+			img.pi-logo:empty {margin: auto;-webkit-transform: translate(-50%, -50%);-moz-transform: translate(-50%, -50%);-ms-transform: translate(-50%, -50%);-o-transform: translate(-50%, -50%);transform: translate(-50%, -50%);}
+			@media screen and (orientation: portrait) {img.pi-logo { max-width: 90%; }}
+			@media screen and (orientation: landscape) {img.pi-logo { max-height: 90%; }}
 		</style>
 	</head>
 
@@ -87,7 +65,7 @@ String getBase = getProtocol+"://"+getDomain;
 	</body>
 
 	<!-- Uncomment For debugging -->
-	<!-- <script type="text/javascript" src="libs/jquery/dist/jquery.js"></script> -->
+	<!-- <script type="text/javascript" src="../bower_components/jquery/dist/jquery.js"></script> -->
 
 	<!--[if lt IE 7]>
 		<script src="//cdnjs.cloudflare.com/ajax/libs/json3/3.3.1/json3.min.js"></script>
@@ -96,5 +74,5 @@ String getBase = getProtocol+"://"+getDomain;
 		<script src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/3.4.0/es5-shim.min.js"></script>
 	<![endif]-->
 	<script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.min.js" data-main="js/bootstrap.js"></script>
-	<script>window.require || document.write('<script src="libs/requirejs/require.js" data-main="js/bootstrap.js"><\/script>');</script>
+	<script>window.require || document.write('<script src="../bower_components/requirejs/require.js" data-main="js/bootstrap.js"><\/script>');</script>
 </html>
