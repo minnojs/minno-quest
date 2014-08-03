@@ -6,8 +6,12 @@ define(['underscore'],function(_){
 	 * The basic structure of such an obect is:
 	 * {
 	 *		mixer: 'functionType',
+	 *		remix : false,
 	 *		data: [task1, task2]
 	 *	}
+	 *
+	 * The results of the mix are set into `$parsed` within the original mixer object.
+	 * if remix is true $parsed is returned instead of recomputing
 	 *
 	 * @param {Object} [obj] [a mixer object]
 	 * @returns {Array} [An array of mixed objects]
@@ -29,7 +33,13 @@ define(['underscore'],function(_){
 				throw new Error('Mixer: unknow mixer type = ' + mixerName);
 			}
 
-			return mix.mixers[mixerName].apply(null, arguments);
+			if (obj.remix && obj.$parsed) {
+				return obj.$parsed;
+			}
+
+			obj.$parsed = mix.mixers[mixerName].apply(null, arguments);
+
+			return obj.$parsed;
 		}
 
 		mix.mixers = {

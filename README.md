@@ -337,6 +337,8 @@ The basic structure of a mixer object is:
 
 The `mixer` property holds the mixer type, essentially it tells the mixer what to do with the sub-list. The `data` property holds the sub-list; an array of elements (either plain objects or mixer objects).
 
+Some sequence may be parsed more than once, for instance, the `questions` sequences get mixed each time a response is changed. By default, mixers are **not** remixed so that randomizations and other mixer decisions can stay fixed. If you want a mixer to remix when a page is reparsed, you shoud set the `remix` property of the mixer object to true.
+
 A sequence can look something like this (don't get scared it's simpler than it looks):
 
 ```js

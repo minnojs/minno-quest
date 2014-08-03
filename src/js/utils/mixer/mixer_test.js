@@ -27,6 +27,22 @@ define(['underscore','./mixer-module', 'utils/randomize/randomizeModuleMock'],fu
 				}).toThrow();
 			});
 
+			it('should keep the results in the mixer object `$parsed`', function(){
+				var testArr = [];
+				mixer.mixers.testFn = function(){return testArr;};
+				var mixerObj = {mixer:'testFn'};
+
+				expect(mixer(mixerObj)).toBe(testArr);
+				expect(mixerObj.$parsed).toBe(testArr);
+			});
+
+			it('should return `$parsed` if remix = true', function(){
+				mixer.mixers.testFn = function(){return 456;};
+
+				expect(mixer({mixer:'testFn', remix:true})).toBe(456);
+				expect(mixer({mixer:'testFn', remix:true, $parsed:123})).toBe(123);
+			});
+
 			it('should repeat any data in a repeat n times', function(){
 				expect(mixer({
 					mixer:'repeat',
