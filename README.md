@@ -38,7 +38,7 @@ Questionnaires are created by writing a Java-script object that has several prop
 
 ### A short introduction
 
-The basic unit that PIquest deals with is the page. Each page has several properties that deal with submitting and page layout, and most importantly a list of one or more questions. Your basic page is a simple object with the `questions` property. This following will create a simple page with no header/progress-bar/decline button etc.
+The basic unit in PIquest's scripts is the page. A page represents one screen in the questionnaire. A page can have a few properties to define its settings, and, most importantly, a list of one or more questions that will be displayed in the page. Here is the most basic page. It only has the `questions` property. It creates a simple page with no header/progress-bar/decline button, and other features.
 
 ```js
 var page = {
@@ -48,7 +48,7 @@ var page = {
 
 There are plenty of additional features that [pages have](#pages), but this is the very minimum that you'll need.
 
-Next, we'll want to create the question objects themselves. There are several [types of questions](#questions), but all of the share some basic properties.
+Well, you also need to define the questions. There are several [types of questions](#questions). All share a few basic properties.
 
 ```js
 var question = {
@@ -58,9 +58,11 @@ var question = {
 }
 ```
 
-The `type` of question is the first decision that you have to make, it controls the question type and interface. This is where you decide if you want the user to input some text, choose from a list or maybe even set a slider. The `name` is literally the name that this question is marked with when it is logged, and also allows you to refer to the question from within PIquest. Finally, `stem` is the text for the question itself.
+The `type` of question is the first decision that you have to make, it defines the question type and interface. This is where you decide if you want the user to enter some text, choose from a list or use a slider. The `name` is the question's name to save when logged to the server. The name also allows you to refer to the question from other objects. Finally, `stem` is the text that will be displayed.
 
-The question in the following example will show a text input with the question 'What would you like to know?'. Here is an example of a `selectOne` question that prompts the user to choose one response out of a list of answers: red, blue or green.
+The question in the example above shows a text input with the question 'What would you like to know?'. 
+
+Here is an example of a `selectOne` question that prompts the user to choose one response out of a list of answers: red, blue or green.
 
 ```js
 var question = {
@@ -75,7 +77,7 @@ var question = {
 }
 ```
 
-Now that we know how to create questions we can move on to create the sequence. The main component of your questionnaire will always be the sequence. The sequence describes the course of your questionnaire; most of the time it is possible to create everything that you want just within the sequence. The sequence is simply an array of page objects that are activated one after the other. The following sequence holds two pages, the first has two questions, the second only one:
+Now that we know how to create questions, let's create the sequence. The main component of your questionnaire will always be the sequence. The sequence describes the course of your questionnaire; most of the time it is possible to create everything that you want just within the sequence (i.e., define all the pages and all the questions when you define the sequence). The sequence is a javascript array of page objects that are activated one after the other. The following sequence includes two pages, the first has two questions, the second only one:
 
 ```js
 var sequence = [
@@ -110,25 +112,50 @@ var sequence = [
 ]
 ```
 
-The sequence can also do quite a lot of randomization and branching, you can read about it [here](#mixer).
+The sequence also supports randomization and branching. Read about it [here](#mixer).
 
-Now that we've created the sequence we can finally proceed to setting it into the player. The first and last two lines are the same for all scripts (they have to do with the way Javascript works), you can simply ignore them. The `API` object assists you in putting your script together, you will [eventually](#API) learn more of its functionality, but for now you should know that the `addSequence` function is responsible for adding pages into your sequence. You may call it as many times as  you like.
+Now that we've created the sequence, let's put it into the player. The first and last two lines are the same for all scripts (they have to do with the way Javascript works), you can simply ignore them. The `API` object assists you in putting your script together, you will [eventually](#API) learn more about its functionality, but for now we only need to know that the `addSequence` function is responsible for adding pages into the sequence. You may call it as many times as you like.
 
 ```js
 define(['questAPI'], function(quest){
 	var API = new quest();
 
 	API.addSequence([
-		page1,
-		page2,
-		page3
+		// 1. This is a page object
+		{
+			// It has a questions property
+			questions:[
+				// 1a. This is the first question (a text input):
+				{
+					type: 'text',
+					stem: 'What is your name?'
+				},
+				// 1b. This is a second question (a select one input)
+				{
+					type: 'selectOne',
+					stem: 'How are you?',
+					answers: ['good', 'fair' ,'bad']
+				}
+			]
+		},
+		// 2. This is the second page object
+		{
+			// It has the same structure as the previous one
+			questions:[
+				// 2a. But only one question
+				{
+					type: 'text',
+					stem: 'What is your name again?'
+				}
+			]
+		}
 	]);
 
 	return API.script;
 });
 ```
 
-Thats it! PIquest has loads of additional features, but this is really all you need to know in order to get started (by the way, if you want to log the responses to your questions you should learn about the [ logger setting ](#settings)).
+That's it! PIquest has loads of additional features (as you can read below), but this was the very basic information that you must know first. (by the way, if you want to log the responses to your questions you should learn about the [ logger setting ](#settings)).
 
 ### Pages
 The basic unit that PIquest deals with is the **page**. The properties within a page manage the way a page of question is displayed and the users interactions with it.
