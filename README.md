@@ -309,7 +309,7 @@ var quest = {
 ```
 
 ### settings
-Settings allow you to control the generic way that the player works, the are set using the `addSettings` function. The first argument to the function is always the name of the setting, the second argument is the setting itself. In case the setting is an object, subsequent objects will extend each other so that settings may be progressively added.
+Settings allow you to control the generic way that the player works. Change the settings using the `addSettings` function. The first argument to the function is always the name of the setting, the second argument is the setting values. In case the setting is an object, subsequent objects will extend each other so that settings may be progressively added.
 
 ##### onEnd
 `onEnd` is a function to be called as soon as the task ends. It should be taken care of automatically when PIQuest is run from within the task manager.
@@ -337,10 +337,10 @@ API.addSettings("logger", {
 
 Setting 	| Description
 ----------- | ---------------
-pulse 		| (Number: 0) After how many objects should we post to the server. Setting this to 0 tells the player to log only at the end of the task.
-url 		| (String:"") The URL to which we should post the data to.
-DEBUG 		| (Boolean: false) When set to true, logs each logged object to the console.
-logfn 		| (Function) The task has a default object that it logs, if you want to change the logged obj itself, you may use a function of the form: `function(log, pageData, global){return logObj;}`
+pulse 		| (Number; Default: 0) How many rows to collect before posting to the server. 0 means that the player sends to the server only at the end of the task.
+url 		| (Text; default:"") The URL to which we should post the data to.
+DEBUG 		| (true or false; default: false) When set to true, prints each logged object in the console.
+logfn 		| (Function) The task has a default object that it logs, if you want to change the logged object itself, you may use a function of the form: `function(log, pageData, global){return logObj;}`
 
 ### Mixer
 The mixer is responsible for managing lists (arrays) within PIQuest, it is capable of repeating, randomizing and even changing the list according to [environmental variables](#variables). You may use it within the sequence, for answer lists within pages and even for answers within the `selectOne` or `selectMulti` questions.
