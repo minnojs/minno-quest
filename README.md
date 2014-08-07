@@ -121,16 +121,12 @@ define(['questAPI'], function(quest){
 	var API = new quest();
 
 	API.addSequence([
-		// 1. This is a page object
 		{
-			// It has a questions property
 			questions:[
-				// 1a. This is the first question (a text input):
 				{
 					type: 'text',
 					stem: 'What is your name?'
 				},
-				// 1b. This is a second question (a select one input)
 				{
 					type: 'selectOne',
 					stem: 'How are you?',
@@ -138,11 +134,8 @@ define(['questAPI'], function(quest){
 				}
 			]
 		},
-		// 2. This is the second page object
 		{
-			// It has the same structure as the previous one
 			questions:[
-				// 2a. But only one question
 				{
 					type: 'text',
 					stem: 'What is your name again?'
@@ -158,22 +151,22 @@ define(['questAPI'], function(quest){
 That's it! PIquest has loads of additional features (as you can read below), but this was the very basic information that you must know first. (by the way, if you want to log the responses to your questions you should learn about the [ logger setting ](#settings)).
 
 ### Pages
-The basic unit that PIquest deals with is the **page**. The properties within a page manage the way a page of question is displayed and the users interactions with it.
+The basic unit in PIquest is the **page**. A page is usually one screen in your questionnaire. If your questionnaire presents all its questions in one screen, it will probably have only one page. The properties within a page manage how the question(s) is(are) displayed and how the participants interact with it (e.g., select an answer and then click a submit button).
 
  property		| description
  -------------- | ---------------------
-name 			| (string) The identifier for this page, is used mainly for logging purposes
-decline 		| (boolean) Should we allow users to decline to answer the questions on this page. This option displays a "decline" button that proceeds to the next page without validation and marks this response as "declined".
-declineText		| (string) The text for the decline button (default to "Decline to answer")
-noSubmit		| (Boolean) remove submit button (useful when using the 'autoSubmit' function of some questions).
-submitText		| (String) The text for the submit button (default to "Submit").
-header  		| (String) Text for the page header.
-headerStyle		| (Object) An object whose keys are CSS style names and values are corresponding values for those CSS keys. Since some CSS style names are not valid keys for an object, they must be quoted. See the 'background-color' style in the example below.
-numbered 		| (Boolean) Should we display the number of each questions.
-numberStart		| (Number) The number we should start the page at.
-timeout 		| (Number) If this is set to a positive integer *x*, it auto submits after *x* milliseconds (no validation allowed).
-timeoutMessage	| (String) An optional message to be displayed upon timeout.
-questions 		| (Array) an array of [questions](#questions) to be displayed in the page. Note that the questions may be randomized and chosen conditionally using the [mixer](#mixer).
+name 			| (text) The identifier for this page, is used mainly for logging
+decline 		| (true or false) Whether to allow participants decline to answer the questions on this page. This option displays a "decline" button that proceeds to the next page without validation and marks this response as "declined" (default value: false).
+declineText		| (text) The text for the decline button (default value: "Decline to answer")
+noSubmit		| (true of false) remove submit button (useful when using the 'autoSubmit' function of some questions; default value: false).
+submitText		| (text) The text of the submit button (default to "Submit").
+header  		| (text) Text for the page header.
+headerStyle		| (Object) An object to set the style of the header (has most css properties; see examples below).
+numbered 		| (true of false) Whether to  display the number of each question (default value: true).
+numberStart		| (Number) The number for the first question in the page (default: 1).
+timeout 		| (Number) If this is set to a positive integer *x*, the page auto-submits after *x* milliseconds (no validation allowed).
+timeoutMessage	| (text) An optional message to be displayed upon timeout. (default: "")
+questions 		| (Array) an array of [questions](#questions) to be displayed in the page. Note that the questions may be randomized and chosen conditionally using a [mixer](#mixer).
 
 For example, a page can look something like this:
 
@@ -192,34 +185,33 @@ var page = {
 
 ### Questions
 
-Questions are the thing we've all gathered here for.
-
+Here are the types of questions PIQuest currently supports:
 - [text](#text)
 - [textNumber](#textNumber)
 - [selectOne & selectMulti](#selectone-selectmulti)
 
-There are several types of questions, but all of them share some basic properties.
+All question types share some basic properties:
 
 property		| description
 --------------- | ---------------------
-type 			| (String: 'text') Controls the question type and interface. This is where you decide if you want the user to input some text, choose from a list or maybe even set a slider.
-name 			| (String: undefined) The name that this question is marked with when it is logged, and also allows you to refer to the question from within PIquest.
-stem 			| (String: '') The text for the question itself.
-help			| (Bool: false) Whether to display the question help text.
-helpText		| (String: special) The question help text. Some questions have default help texts, some don't.
+type 			| (text; default: 'text') Controls the question type. See the possible types below. 
+name 			| (text) The name that this question is marked with when it is logged. Also allows you to refer to the question from within PIquest.
+stem 			| (text; default: '') The text for the question itself..
+help			| (true or false;  (default: false)) Whether to display the question help text.
+helpText		| (text) The question help text. (Some questions have default help texts, some don't).
 
 ##### Text
-The `text` questions consist of a simple text input in which the users can type in a string of text. They have the following parameters:
+The `text` questions consist of a simple text input in which the users can type in text. These kind of questions have the following properties:
 
 property		| description
 --------------- | ---------------------
-dflt 			| (String: "") The default value for this question.
-autoSubmit 		| (Boolean: false) If this property is set to true typing `Enter` while this input is focused will submit the form.
-minlength 		| (Number: null) Validation: force at least this number of characters.
-maxlength		| (Number: null) Validation: force at most this number of characters.
-required		| (Boolean: false) Validation: require a non empty string as a response.
-pattern			| (Regex/String: null) Validation: require the response to match the regular expression set in pattern.
-correct 		| (Boolean: false) Validation: require the response to be correct (set the target value using `correctValue`)
+dflt 			| (test; default value: "") The default value for this question.
+autoSubmit 		| (true or false; default: false) If this property is set to true typing `Enter` while this input is focused will submit the page.
+minlength 		| (Number) Validation: force at least this number of characters.
+maxlength		| (Number) Validation: force at most this number of characters.
+required		| (true of false; default: false) Validation: require a non-empty string as a response.
+pattern			| (text [supports regex]) Validation: require the response to match the regular expression set in pattern.
+correct 		| (true or false; default: false) Validation: require the response to be correct (set the target value using `correctValue`)
 correctValue 	| (*) Set the correct response value for the correct validation.
 errorMsg		| (Object: {}) This object has a property for each validation type. Setting the appropriate type changes the validation message. For instance setting the `required` property will change the validation message for instances where no response was given.
 
@@ -239,16 +231,16 @@ var quest = {
 ```
 
 ##### textNumber
-The `textNumber` questions consist of a simple text input that limit the user to numeric responses only. They have the following parameters:
+The `textNumber` questions consist of a simple text input that limits the participant to numeric responses only. This type of questions have the following parameters:
 
 property		| description
 --------------- | ---------------------
-dflt 			| (Number: null) The default value for this question.
-autoSubmit 		| (Boolean: false) If this property is set to true typing `Enter` while this input is focused will submit the form.
-min 			| (Number: null) Validation: minimum valid number.
-max				| (Number: null) Validation: maximum valid number.
-required		| (Boolean: false) Validation: require a non empty string as a response.
-correct 		| (Boolean: false) Validation: require the response to be correct (set the target value using `correctValue`)
+dflt 			| (Number; default: null) The default value for this question.
+autoSubmit 		| (true or false; default: false) If this property is set to true typing `Enter` while this input is focused will submit the form.
+min 			| (Number) Validation: minimum valid number.
+max				| (Number) Validation: maximum valid number.
+required		| (true or false; default: false) Validation: require a non empty string as a response.
+correct 		| (true or false; default: false) Validation: require the response to be correct (set the target value using `correctValue`)
 correctValue 	| (*) Set the correct response value for the correct validation.
 errorMsg		| (Object: {}) This object has a property for each validation type. Setting the appropriate type changes the validation message. For instance setting the `required` property will change the validation message for instances where no response was given. Note that their is a special property `number` that is triggered whenever the response is not a valid number.
 
@@ -268,19 +260,19 @@ var quest = {
 ```
 
 ##### selectOne & selectMulti
-The `selectOne` and `selectMulti` questions present a list of possible answers for the user to pick from. The only difference between them is that select Multi allows the user to pick more than one answer. They have the following parameters:
+The `selectOne` and `selectMulti` questions present a list of possible response options for the user to pick from. The only difference between them is that select Multi allows the user to select more than one response option. They have the following parameters:
 
 property		| description
 --------------- | ---------------------
-dflt 			| The default *value* for this question, this is the literal value for `selectOne`, and an array of values for `selectMulti`.
-autoSubmit 		| (Boolean: false) If this property is set to true, Clicking twice on the same answer will submit the form. This options is not supported for `selectMulti`.
-randomize 		| (Boolean: false) Shuffle answers after mixing them (the mixer is activated regardless of this parameter, this serves as as shortcut of sorts)
-reverse 		| (Boolean: false) Reverses the order of answers in this question.
-numericValues 	| (Boolean: false) If `numericValues` is set, default numeric values are set for each answer, they are set *before* randomize, but *after* the mixer is activated.
-buttons 		| (Boolean: false) By default we use a list format for this question, set to true in order to use horizontal buttons (Likert style). This option  does not currently support extremely narrow screens).
+dflt 			| The default *value* for this question; Use one value for `selectOne`, and an array of values for `selectMulti`.
+autoSubmit 		| (true or false; default: false) If this property is set to true, Clicking twice on the same answer will submit the form. This options is not supported for `selectMulti`.
+randomize 		| (true or false; default: false) Shuffle response options after mixing them (the mixer is activated regardless of this parameter, this serves as a shortcut)
+reverse 		| (true or false; default: false) Reverses the order of response options in this question. It is useful when you inherit a question and only wants to change the order of the response options. Or, if you want to have a between-participant condition that reverses the response scale for half of the participants.
+numericValues 	| (true or false; default: false) If `numericValues` is true, default numeric values are set for each answer, they are set *before* randomization, but *after* the mixer is activated.
+buttons 		| (true or false; default: false) By default we use a vertical list format for this question. Set this property to true in order to use a horizontal scale (Likert style). This option  does not currently support extremely narrow screens.
 answers			| (Array: []) The list of possible answers for this question. There are two acceptable formats; (1) an array of strings/numbers, (2) an array of objects with `text` and `value` parameters.
-required		| (Boolean: false) Validation: require a response.
-correct 		| (Boolean: false) Validation: require the response to be correct (set the target value using `correctValue`)
+required		| (true or false; default: false) Validation: require a response.
+correct 		| (true or false; default: false) Validation: require the response to be correct (set the target value using `correctValue`)
 correctValue 	| (*) Set the correct response value for the correct validation (This should be an array for selectMulti).
 errorMsg		| (Object: {}) This object has a property for each validation type. Setting the appropriate type changes the validation message. For instance setting the `correct` property will change the validation message for instances where the correct response was not given.
 
