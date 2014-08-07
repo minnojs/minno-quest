@@ -4,7 +4,7 @@
 
 PIquest is a framework for administering on-line questionnaires.
 
-It is written in JavaScript and is built to be extremely versatile and customizable. The scripts for the player are written as JavaScript objects. This format allows, writing simple and straightforward scripts using a constrained scripting language. The format also allows advanced users to easily create complex and dynamic scripts using in-line JavaScript.
+It is written in JavaScript and is built to be extremely versatile and customizable. The scripts for are written as JavaScript objects. This format allows writing simple and straightforward scripts using a constrained scripting language. The format also allows advanced users to easily create complex and dynamic scripts using in-line JavaScript.
 
 ### Table of contents
 
@@ -30,11 +30,11 @@ It is written in JavaScript and is built to be extremely versatile and customiza
 
 The player treats each questionnaire a **sequence** of **pages**. Each page may have one or more **questions**.
 
-Each page or question is implemented as a page/question object. The pages are set into a sequence and presented sequentially. This is essentially all you need to know in order to start writing questionnaires.
+The pages are set into a sequence and presented sequentially. This is essentially all you need to know in order to start writing questionnaires.
 
-The sequence supports a mixer that will allow you to randomize the order of the pages (or questions) that you create. The questionnaire also supports an *inheritance* system, that will allow you to abstract you questionnaires and make them shorter, simpler and more dynamic.
+The sequence supports ***mixers*** that allow randomiinge the order of the pages (or questions) that you create, and other features often needed when creating the sequence of a questionnaire. The questionnaire also supports an *inheritance* system, that allow abstracting questionnaires and make them shorter, simpler, more dynamic, and most important, reusable.
 
-Questionnaires are created by writing a Java-script object that has several properties: `settings`, `sequence`, `pages`, `questions`, `global` and `current`. Some of these properties have to do with advanced uses of the player, but really the only two that you **have** to know are `sequence` and `settings`. We'll first show a simple questionnaire, then go through each of the more advanced options.
+Questionnaires are created by writing a Java-script object that has several property objects: `settings`, `sequence`, `pages`, `questions`, `global` and `current`. Some of these properties have to do with advanced uses of the player. The only objects that you **have** to know are `sequence` and `settings`. We'll first show a simple questionnaire, then go through each of the more advanced options.
 
 ### A short introduction
 
