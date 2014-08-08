@@ -354,9 +354,9 @@ The basic structure of a mixer object is:
 }
 ```
 
-The `mixer` property holds the mixer type, essentially it tells the mixer what to do with the sub-list. The `data` property holds the sub-list; an array of elements (either plain objects or mixer objects).
+The `mixer` property defines the mixer type. It tells the mixer what to do with the list. The `data` property defines the list; an array of elements (either plain objects or mixer objects).
 
-A sequence can look something like this (don't get scared it's simpler than it looks):
+A sequence can look something like this:
 
 ```js
 [
@@ -402,7 +402,6 @@ Between them them we repeat a set of four objs ten times.
 The order of the four objs is randomized, so that `obj1` always comes first and the order of the following objs are randomized but `obj3` and `obj4` are wrapped together and therefore always stay consecutive.
 
 ##### Mixer types
-We support several mixer types.
 
 **repeat**:
 Repeats the element in `data` `times` times.
@@ -413,11 +412,11 @@ Randomizes the order of elements in `data`.
 * `{mixer:'random', data: [obj1,obj2]}`
 
 **weightedRandom**:
-Picks a single element using a weighted random algorithm. Each element in `data` is given the appropriate weight from `weights`. In the following example obj2 has four times the probability of being picked as obj1.
+Selects a single element using a weighted random algorithm. Each element in `data` is given the appropriate weight from `weights`. In the following example obj2 has four times the probability of being selected as obj1.
 * `{mixer:'weightedRandom', weights: [0.2,0.8], data: [obj1,obj2]}`
 
 **choose**:
-Picks `n` random elements from `data` (by default the chooser picks one element).
+Selects `n` random elements from `data` (by default the chooser picks one element).
 * `{mixer:'choose', data: [obj1,obj2]}` pick one of these two objs
 * `{mixer:'choose', n:2, data: [obj1,obj2,obj3]}` pick two of these three objs
 
@@ -426,12 +425,11 @@ The wrapper mixer serves a sort of parenthesis for the mixer. It has two primary
 * `{mixer:'wrapper', data: [obj1,obj2]}`
 
 **branch**:
-Pick the elements in `data` if `conditions` is true, pick the elements in `elseData` if `conditions` is not true. If `elseData` is not defined, or is left empty, then this object is skipped (See [conditions](#conditions) to learn about how conditions work).
 * `{mixer:'branch', conditions:[cond], data:[obj1,obj2]}`
 * `{mixer:'branch', conditions:[cond], data:[obj1,obj2], elseData: [obj3, obj4]}`
+Select the elements in `data` if all the conditions in the `conditions` array are true, select the elements in `elseData` if at least one of the conditions in `conditions` are not true. If `elseData` is not defined, or is left empty, then nothing happen in case the conditions are not true (See [conditions](#conditions) to learn about how conditions work).
 
 **multiBranch**:
-Find the first object within `branches` for which `conditions` is true, and pick the elements in that objects `data`. If no object is picked then pick `elseData` (optional). (See [conditions](#conditions) to learn about how conditions work).
 ```js
 {
     mixer: 'branch',
@@ -442,38 +440,46 @@ Find the first object within `branches` for which `conditions` is true, and pick
     elseData: [] // optional
 }
 ```
+Find the first object within `branches` for which `conditions` is true, and select the elements in that objects `data`. If no object is selected then select `elseData` (optional). (See [conditions](#conditions) to learn about how conditions work).
 
 ##### Conditions
 The conditional mixers allow you to change the content of a list according to [environmental variables](#variables). Each list has specific variables available to it, you can find the relevant details in the documentation for each list, but all lists have access to the `global` and `current` objects, so we'll use them for all examples here.
 
-A condition is a proposition, it is evaluated to either a `true` or `false` value. They are used for decision making within the branching mixers. Conditions are represented by objects. The following condition object `compare`s **global.var** `to` **local.otherVar** and checks if the are equal (if you aren't sure what **global.var** means you should check [this](#variables) out):
+A condition is a proposition, it is evaluated to either a `true` or `false` value. Conditions are used for decision making within the branching mixers. Conditions are represented by objects. The following condition object `compare`s **global.var** `to` **local.otherVar** and examines if they are equal (if you aren't sure what **global.var** means, see [here](#variables)):
 
 ```js
 var cond = {
-	compare: 'global.var',
-	to: 'local.otherVar'
+	compare: 'global.myVar',
+	to: 'local.myOtherVar'
 }
 ```
 
 Conditions should be treated as a type of equation.
 
-The `compare` and `to` properties have a special syntax that describes the value that they refer to. Most values that you use will be treated as-is. The special case is string that have dots in them: `global.var`, `questions.q1.response`; these values will be treated as pointing to variables within the lists context. So that `questions.q1.response` will retrieve the value of the response for q1 from the questions object. The following check whether the global variable var is equal to 15.
-
+In `compare` and `to` you can use simple values or values that are actually the name of a variable: 
 ```js
-var cond = {
-	compare: 'global.var',
-	to: 15
+//Compares the variable time to the value 12
+var cond1 = {
+	compare: 'global.time',
+	to: '12'
+}
+//Compare the variable gender to the value 'Female'
+var cond2 = {
+	compare: 'Female',
+	to: 'local.gender'
 }
 ```
 
-The following is a list of condition properties:
+When you want to refer to a variable, you use text with dots: `global.var`, `questions.q1.response`; these values will be treated as pointing to variables within the lists context. `questions.q1.response` will retrieve the value of the response for q1 from the questions object. The following checks whether the global variable var is equal to 15.
+
+Here are the condition's possible properties:
 
 Property 		| Description
 --------------- | -------------------
 compare 		| The left side of the equation.
 to 				| The right side of the equation.
 operator 		| The type of comparison to do (read more about operators [here](#operators)).
-DEBUG 			| Set this to `true` so that the any condition that is evaluated will be logged to the console.
+DEBUG 			| If `true`, then any condition that is evaluated will be logged to the console.
 
 ##### Operators
 The default comparison for a condition is to check equality (supports comparison of objects and arrays too). You can use the `operator` property to change the comparison method. The following checks if var is greater than otherVar:
@@ -571,7 +577,7 @@ A template is a string that has a section of the form `<%= %>` in it. Within the
 
 The player uses [lodash templates](lodash.org/docs#template) internally, you can look them up to see all the possible uses.
 
-Questions and Pages have access to the same local variables, with the exception of questData that is available only to questions.
+Here are the objects that you can access with templates:
 
 Variable 	| Description
 ----------- | -------------
@@ -581,6 +587,8 @@ questions 	| The questions object.
 pageData 	| The 'data' attribute from the page.
 questData 	| The 'data' attribute from the question (available only within questions).
 pageMeta 	| An object describing meta data about the page:</br> `number`: the serial number of this page, `outOf` the overall number of pages, `name`: the name of the current page. These can be used for instance to generate a description of your place within the questionnaire: `<%= pageMeta.number %> out of <%= pageMeta.outOf%>`.
+
+Questions and Pages have access to the same local variables, with the exception of questData that is available only to questions.
 
 ### Inheritance
 
@@ -650,31 +658,40 @@ It also has a `type` property that defines what type of inheritance we should us
 We have implemented several types of inheritance:
 
 **random**:
-Randomly picks an element from the set. Note that this is the default inheritance type and so it is not obligatory to use the `type` property. You can also use a short cut and set the `set` using a simple string instead of an object (see example below).
+Randomly selects an element from the set (in case the set has only one element, the same element will always be selected, of course). 
 * `'setName'`
 * `{set: 'setName'}`
 * `{set: 'setName', type:'random'}`
+`random` this is the default inheritance type, so it is not obligatory to use the `type` property. You can also use a short cut and set the `set` using only its name, like we did in the example above:
+```js
+{
+	inherit: 'parent',
+	data: {name: 'jack'}
+	questions: [
+		quest3
+	]
+}
+```
 
 **exRandom**:
-Picks a random element without repeating the same element until we've gone through the whole set
+Selects a random element without repeating the same element until we've gone through the whole set
 * `{set: 'setName', type:'exRandom'}`
 
 **bySequence**:
-Picks the elements by the order they were inserted into the set
+Selects the elements by the order they were inserted into the set
 * `{set: 'setName', type:'bySequence'}`
 
 **byData**:
-Picks a specific element from the set.
-We compare the `data` property to the `element.data` property and if `data` is a subset of `element.data` it picks the element
-(this means that if all properties of data property equal to the properties of the same name in element.data it is a fit).
-This function will pick only the first element to fit the data.
+Selects a specific element from the set.
+We compare the `data` property to the `element.data` property and if `data` is a subset of `element.data` it selects the element (this means that if all properties of data property equal to the properties of the same name in element.data it is a fit).
+This function will select only the first element to fit the data.
 If the data property is set as a string, we assume it refers to the element handle.
 
 * `{set: 'setName', type: 'byData', data: {block:1, row:2}}` picks the element with both block:1 and row:2
 * `{set: 'setName', type: 'byData', data: "myStimHandle"}` picks the element that has the "myStimHandle" handle
 
 **function**:
-You may also use a custom function to pick your element.
+You may also use a custom function to select your element.
 ```js
 {set: 'setName', type: function(definitions){
 	// definitions is the inherit object (including  set, type, and whatever other properties you'd like to use)
@@ -683,7 +700,7 @@ You may also use a custom function to pick your element.
 
 ##### Customization
 
-Each question/page can also have a `customize` method, this method is called once the element is inherited but before it is activated.
+Each question/page can also define a `customize` method, this method is called once the element is inherited but before it is activated.
 It accepts two argument: the source object on which it is called (the page or question object), and the global object (in which you can find the current object etc.). The source object is also the context for the function.
 
 ```js
