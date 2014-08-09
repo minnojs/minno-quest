@@ -159,7 +159,7 @@ name 			| (text) The identifier for this page, is used mainly for logging
 decline 		| (true or false) Whether to allow participants decline to answer the questions on this page. This option displays a "decline" button that proceeds to the next page without validation and marks this response as "declined" (default value: false).
 declineText		| (text) The text for the decline button (default value: "Decline to answer")
 noSubmit		| (true of false) remove submit button (useful when using the 'autoSubmit' function of some questions; default value: false).
-submitText		| (text) The text of the submit button (default to "Submit").
+submitText		| (text) The text of the submit button (default: "Submit").
 header  		| (text) Text for the page header.
 headerStyle		| (Object) An object to set the style of the header (has most css properties; see examples below).
 numbered 		| (true of false) Whether to  display the number of each question (default value: true).
