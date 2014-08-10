@@ -4,7 +4,7 @@
 
 PIquest is a framework for administering on-line questionnaires.
 
-It is written in JavaScript and is built to be extremely versatile and customizable. The scripts for the player are written as JavaScript objects. This format allows, writing simple and straightforward scripts using a constrained scripting language. The format also allows advanced users to easily create complex and dynamic scripts using in-line JavaScript.
+It is written in JavaScript and is built to be extremely versatile and customizable. The scripts for are written as JavaScript objects. This format allows writing simple and straightforward scripts using a constrained scripting language. The format also allows advanced users to easily create complex and dynamic scripts using in-line JavaScript.
 
 ### Table of contents
 
@@ -30,15 +30,15 @@ It is written in JavaScript and is built to be extremely versatile and customiza
 
 The player treats each questionnaire a **sequence** of **pages**. Each page may have one or more **questions**.
 
-Each page or question is implemented as a page/question object. The pages are set into a sequence and presented sequentially. This is essentially all you need to know in order to start writing questionnaires.
+The pages are set into a sequence and presented sequentially. This is essentially all you need to know in order to start writing questionnaires.
 
-The sequence supports a mixer that will allow you to randomize the order of the pages (or questions) that you create. The questionnaire also supports an *inheritance* system, that will allow you to abstract you questionnaires and make them shorter, simpler and more dynamic.
+The sequence supports ***mixers*** that allow randomiinge the order of the pages (or questions) that you create, and other features often needed when creating the sequence of a questionnaire. The questionnaire also supports an *inheritance* system, that allow abstracting questionnaires and make them shorter, simpler, more dynamic, and most important, reusable.
 
-Questionnaires are created by writing a Java-script object that has several properties: `settings`, `sequence`, `pages`, `questions`, `global` and `current`. Some of these properties have to do with advanced uses of the player, but really the only two that you **have** to know are `sequence` and `settings`. We'll first show a simple questionnaire, then go through each of the more advanced options.
+Questionnaires are created by writing a Java-script object that has several property objects: `settings`, `sequence`, `pages`, `questions`, `global` and `current`. Some of these properties have to do with advanced uses of the player. The only objects that you **have** to know are `sequence` and `settings`. We'll first show a simple questionnaire, then go through each of the more advanced options.
 
 ### A short introduction
 
-The basic unit that PIquest deals with is the page. Each page has several properties that deal with submitting and page layout, and most importantly a list of one or more questions. Your basic page is a simple object with the `questions` property. This following will create a simple page with no header/progress-bar/decline button etc.
+The basic unit in PIquest's scripts is the page. A page represents one screen in the questionnaire. A page can have a few properties to define its settings, and, most importantly, a list of one or more questions that will be displayed in the page. Here is the most basic page. It only has the `questions` property. It creates a simple page with no header/progress-bar/decline button, and other features.
 
 ```js
 var page = {
@@ -48,7 +48,7 @@ var page = {
 
 There are plenty of additional features that [pages have](#pages), but this is the very minimum that you'll need.
 
-Next, we'll want to create the question objects themselves. There are several [types of questions](#questions), but all of the share some basic properties.
+Well, you also need to define the questions. There are several [types of questions](#questions). All share a few basic properties.
 
 ```js
 var question = {
@@ -58,9 +58,11 @@ var question = {
 }
 ```
 
-The `type` of question is the first decision that you have to make, it controls the question type and interface. This is where you decide if you want the user to input some text, choose from a list or maybe even set a slider. The `name` is literally the name that this question is marked with when it is logged, and also allows you to refer to the question from within PIquest. Finally, `stem` is the text for the question itself.
+The `type` of question is the first decision that you have to make, it defines the question type and interface. This is where you decide if you want the user to enter some text, choose from a list or use a slider. The `name` is the question's name to save when logged to the server. The name also allows you to refer to the question from other objects. Finally, `stem` is the text that will be displayed.
 
-The question in the following example will show a text input with the question 'What would you like to know?'. Here is an example of a `selectOne` question that prompts the user to choose one response out of a list of answers: red, blue or green.
+The question in the example above shows a text input with the question 'What would you like to know?'. 
+
+Here is an example of a `selectOne` question that prompts the user to choose one response out of a list of answers: red, blue or green.
 
 ```js
 var question = {
@@ -75,7 +77,7 @@ var question = {
 }
 ```
 
-Now that we know how to create questions we can move on to create the sequence. The main component of your questionnaire will always be the sequence. The sequence describes the course of your questionnaire; most of the time it is possible to create everything that you want just within the sequence. The sequence is simply an array of page objects that are activated one after the other. The following sequence holds two pages, the first has two questions, the second only one:
+Now that we know how to create questions, let's create the sequence. The main component of your questionnaire will always be the sequence. The sequence describes the course of your questionnaire; most of the time it is possible to create everything that you want just within the sequence (i.e., define all the pages and all the questions when you define the sequence). The sequence is a javascript array of page objects that are activated one after the other. The following sequence includes two pages, the first has two questions, the second only one:
 
 ```js
 var sequence = [
@@ -110,43 +112,61 @@ var sequence = [
 ]
 ```
 
-The sequence can also do quite a lot of randomization and branching, you can read about it [here](#mixer).
+The sequence also supports randomization and branching. Read about it [here](#mixer).
 
-Now that we've created the sequence we can finally proceed to setting it into the player. The first and last two lines are the same for all scripts (they have to do with the way Javascript works), you can simply ignore them. The `API` object assists you in putting your script together, you will [eventually](#API) learn more of its functionality, but for now you should know that the `addSequence` function is responsible for adding pages into your sequence. You may call it as many times as  you like.
+Now that we've created the sequence, let's put it into the player. The first and last two lines are the same for all scripts (they have to do with the way Javascript works), you can simply ignore them. The `API` object assists you in putting your script together, you will [eventually](#API) learn more about its functionality, but for now we only need to know that the `addSequence` function is responsible for adding pages into the sequence. You may call it as many times as you like.
 
 ```js
 define(['questAPI'], function(quest){
 	var API = new quest();
 
 	API.addSequence([
-		page1,
-		page2,
-		page3
+		{
+			questions:[
+				{
+					type: 'text',
+					stem: 'What is your name?'
+				},
+				{
+					type: 'selectOne',
+					stem: 'How are you?',
+					answers: ['good', 'fair' ,'bad']
+				}
+			]
+		},
+		{
+			questions:[
+				{
+					type: 'text',
+					stem: 'What is your name again?'
+				}
+			]
+		}
 	]);
 
 	return API.script;
 });
 ```
 
-Thats it! PIquest has loads of additional features, but this is really all you need to know in order to get started (by the way, if you want to log the responses to your questions you should learn about the [ logger setting ](#settings)).
+That's it! PIquest has loads of additional features (as you can read below), but this was the very basic information that you must know first. (by the way, if you want to log the responses to your questions you should learn about the [ logger setting ](#settings)).
 
 ### Pages
-The basic unit that PIquest deals with is the **page**. The properties within a page manage the way a page of question is displayed and the users interactions with it.
+The basic unit in PIquest is the **page**. A page is usually one screen in your questionnaire. If your questionnaire presents all its questions in one screen, it will probably have only one page. The properties within a page manage how the question(s) is(are) displayed and how the participants interact with it (e.g., select an answer and then click a submit button).
 
  property		| description
  -------------- | ---------------------
-name 			| (string) The identifier for this page, is used mainly for logging purposes
-decline 		| (boolean) Should we allow users to decline to answer the questions on this page. This option displays a "decline" button that proceeds to the next page without validation and marks this response as "declined".
-declineText		| (string) The text for the decline button (default to "Decline to answer")
-noSubmit		| (Boolean) remove submit button (useful when using the 'autoSubmit' function of some questions).
-submitText		| (String) The text for the submit button (default to "Submit").
-header  		| (String) Text for the page header.
-headerStyle		| (Object) An object whose keys are CSS style names and values are corresponding values for those CSS keys. Since some CSS style names are not valid keys for an object, they must be quoted. See the 'background-color' style in the example below.
-numbered 		| (Boolean) Should we display the number of each questions.
-numberStart		| (Number) The number we should start the page at.
-timeout 		| (Number) If this is set to a positive integer *x*, it auto submits after *x* milliseconds (no validation allowed).
-timeoutMessage	| (String) An optional message to be displayed upon timeout.
-questions 		| (Array) an array of [questions](#questions) to be displayed in the page. Note that the questions may be randomized and chosen conditionally using the [mixer](#mixer).
+name 			| (text) The identifier for this page, is used mainly for logging
+decline 		| (true or false) Whether to allow participants decline to answer the questions on this page. This option displays a "decline" button that proceeds to the next page without validation and marks this response as "declined" (default value: false).
+declineText		| (text) The text for the decline button (default value: "Decline to answer")
+noSubmit		| (true of false) remove submit button (useful when using the 'autoSubmit' function of some questions; default value: false).
+submitText		| (text) The text of the submit button (default: "Submit").
+header  		| (text) Text for the page header.
+headerStyle		| (Object) An object to set the style of the header (has most css properties; see examples below).
+numbered 		| (true of false) Whether to  display the number of each question (default value: false).
+numberStart		| (Number) The number for the first question in the page (default: 1).
+timeout 		| (Number) If this is set to a positive integer *x*, the page auto-submits after *x* milliseconds (no validation allowed).
+timeoutMessage	| (text) An optional message to be displayed upon timeout. (default: "")
+questions 		| (Array) an array of [questions](#questions) to be displayed in the page. Note that the questions may be randomized and chosen conditionally using a [mixer](#mixer).
 
 For example, a page can look something like this:
 
@@ -165,34 +185,33 @@ var page = {
 
 ### Questions
 
-Questions are the thing we've all gathered here for.
-
+Here are the types of questions PIQuest currently supports:
 - [text](#text)
 - [textNumber](#textNumber)
 - [selectOne & selectMulti](#selectone-selectmulti)
 
-There are several types of questions, but all of them share some basic properties.
+All question types share some basic properties:
 
 property		| description
 --------------- | ---------------------
-type 			| (String: 'text') Controls the question type and interface. This is where you decide if you want the user to input some text, choose from a list or maybe even set a slider.
-name 			| (String: undefined) The name that this question is marked with when it is logged, and also allows you to refer to the question from within PIquest.
-stem 			| (String: '') The text for the question itself.
-help			| (Bool: false) Whether to display the question help text.
-helpText		| (String: special) The question help text. Some questions have default help texts, some don't.
+type 			| (text; default: 'text') Controls the question type. See the possible types below. 
+name 			| (text) The name that this question is marked with when it is logged. Also allows you to refer to the question from within PIquest.
+stem 			| (text; default: '') The text for the question itself..
+help			| (true or false;  (default: false)) Whether to display the question help text.
+helpText		| (text) The question help text. (Some questions have default help texts, some don't).
 
 ##### Text
-The `text` questions consist of a simple text input in which the users can type in a string of text. They have the following parameters:
+The `text` questions consist of a simple text input in which the users can type in text. These kind of questions have the following properties:
 
 property		| description
 --------------- | ---------------------
-dflt 			| (String: "") The default value for this question.
-autoSubmit 		| (Boolean: false) If this property is set to true typing `Enter` while this input is focused will submit the form.
-minlength 		| (Number: null) Validation: force at least this number of characters.
-maxlength		| (Number: null) Validation: force at most this number of characters.
-required		| (Boolean: false) Validation: require a non empty string as a response.
-pattern			| (Regex/String: null) Validation: require the response to match the regular expression set in pattern.
-correct 		| (Boolean: false) Validation: require the response to be correct (set the target value using `correctValue`)
+dflt 			| (test; default value: "") The default value for this question.
+autoSubmit 		| (true or false; default: false) If this property is set to true typing `Enter` while this input is focused will submit the page.
+minlength 		| (Number) Validation: force at least this number of characters.
+maxlength		| (Number) Validation: force at most this number of characters.
+required		| (true of false; default: false) Validation: require a non-empty string as a response.
+pattern			| (text [supports regex]) Validation: require the response to match the regular expression set in pattern.
+correct 		| (true or false; default: false) Validation: require the response to be correct (set the target value using `correctValue`)
 correctValue 	| (*) Set the correct response value for the correct validation.
 errorMsg		| (Object: {}) This object has a property for each validation type. Setting the appropriate type changes the validation message. For instance setting the `required` property will change the validation message for instances where no response was given.
 
@@ -212,16 +231,16 @@ var quest = {
 ```
 
 ##### textNumber
-The `textNumber` questions consist of a simple text input that limit the user to numeric responses only. They have the following parameters:
+The `textNumber` questions consist of a simple text input that limits the participant to numeric responses only. This type of questions have the following parameters:
 
 property		| description
 --------------- | ---------------------
-dflt 			| (Number: null) The default value for this question.
-autoSubmit 		| (Boolean: false) If this property is set to true typing `Enter` while this input is focused will submit the form.
-min 			| (Number: null) Validation: minimum valid number.
-max				| (Number: null) Validation: maximum valid number.
-required		| (Boolean: false) Validation: require a non empty string as a response.
-correct 		| (Boolean: false) Validation: require the response to be correct (set the target value using `correctValue`)
+dflt 			| (Number; default: null) The default value for this question.
+autoSubmit 		| (true or false; default: false) If this property is set to true typing `Enter` while this input is focused will submit the form.
+min 			| (Number) Validation: minimum valid number.
+max				| (Number) Validation: maximum valid number.
+required		| (true or false; default: false) Validation: require a non empty string as a response.
+correct 		| (true or false; default: false) Validation: require the response to be correct (set the target value using `correctValue`)
 correctValue 	| (*) Set the correct response value for the correct validation.
 errorMsg		| (Object: {}) This object has a property for each validation type. Setting the appropriate type changes the validation message. For instance setting the `required` property will change the validation message for instances where no response was given. Note that their is a special property `number` that is triggered whenever the response is not a valid number.
 
@@ -241,19 +260,19 @@ var quest = {
 ```
 
 ##### selectOne & selectMulti
-The `selectOne` and `selectMulti` questions present a list of possible answers for the user to pick from. The only difference between them is that select Multi allows the user to pick more than one answer. They have the following parameters:
+The `selectOne` and `selectMulti` questions present a list of possible response options for the user to pick from. The only difference between them is that select Multi allows the user to select more than one response option. They have the following parameters:
 
 property		| description
 --------------- | ---------------------
-dflt 			| The default *value* for this question, this is the literal value for `selectOne`, and an array of values for `selectMulti`.
-autoSubmit 		| (Boolean: false) If this property is set to true, Clicking twice on the same answer will submit the form. This options is not supported for `selectMulti`.
-randomize 		| (Boolean: false) Shuffle answers after mixing them (the mixer is activated regardless of this parameter, this serves as as shortcut of sorts)
-reverse 		| (Boolean: false) Reverses the order of answers in this question.
-numericValues 	| (Boolean: false) If `numericValues` is set, default numeric values are set for each answer, they are set *before* randomize, but *after* the mixer is activated.
-buttons 		| (Boolean: false) By default we use a list format for this question, set to true in order to use horizontal buttons (Likert style). This option  does not currently support extremely narrow screens).
+dflt 			| The default *value* for this question; Use one value for `selectOne`, and an array of values for `selectMulti`.
+autoSubmit 		| (true or false; default: false) If this property is set to true, Clicking twice on the same answer will submit the form. This options is not supported for `selectMulti`.
+randomize 		| (true or false; default: false) Shuffle response options after mixing them (the mixer is activated regardless of this parameter, this serves as a shortcut)
+reverse 		| (true or false; default: false) Reverses the order of response options in this question. It is useful when you inherit a question and only wants to change the order of the response options. Or, if you want to have a between-participant condition that reverses the response scale for half of the participants.
+numericValues 	| (true or false; default: false) If `numericValues` is true, default numeric values are set for each answer, they are set *before* randomization, but *after* the mixer is activated.
+buttons 		| (true or false; default: false) By default we use a vertical list format for this question. Set this property to true in order to use a horizontal scale (Likert style). This option  does not currently support extremely narrow screens.
 answers			| (Array: []) The list of possible answers for this question. There are two acceptable formats; (1) an array of strings/numbers, (2) an array of objects with `text` and `value` parameters.
-required		| (Boolean: false) Validation: require a response.
-correct 		| (Boolean: false) Validation: require the response to be correct (set the target value using `correctValue`)
+required		| (true or false; default: false) Validation: require a response.
+correct 		| (true or false; default: false) Validation: require the response to be correct (set the target value using `correctValue`)
 correctValue 	| (*) Set the correct response value for the correct validation (This should be an array for selectMulti).
 errorMsg		| (Object: {}) This object has a property for each validation type. Setting the appropriate type changes the validation message. For instance setting the `correct` property will change the validation message for instances where the correct response was not given.
 
@@ -290,7 +309,7 @@ var quest = {
 ```
 
 ### settings
-Settings allow you to control the generic way that the player works, the are set using the `addSettings` function. The first argument to the function is always the name of the setting, the second argument is the setting itself. In case the setting is an object, subsequent objects will extend each other so that settings may be progressively added.
+Settings allow you to control the generic way that the player works. Change the settings using the `addSettings` function. The first argument to the function is always the name of the setting, the second argument is the setting values. In case the setting is an object, subsequent objects will extend each other so that settings may be progressively added.
 
 ##### onEnd
 `onEnd` is a function to be called as soon as the task ends. It should be taken care of automatically when PIQuest is run from within the task manager.
@@ -318,10 +337,10 @@ API.addSettings("logger", {
 
 Setting 	| Description
 ----------- | ---------------
-pulse 		| (Number: 0) After how many objects should we post to the server. Setting this to 0 tells the player to log only at the end of the task.
-url 		| (String:"") The URL to which we should post the data to.
-DEBUG 		| (Boolean: false) When set to true, logs each logged object to the console.
-logfn 		| (Function) The task has a default object that it logs, if you want to change the logged obj itself, you may use a function of the form: `function(log, pageData, global){return logObj;}`
+pulse 		| (Number; Default: 0) How many rows to collect before posting to the server. 0 means that the player sends to the server only at the end of the task.
+url 		| (Text; default:"") The URL to which we should post the data to.
+DEBUG 		| (true or false; default: false) When set to true, prints each logged object in the console.
+logfn 		| (Function) The task has a default object that it logs, if you want to change the logged object itself, you may use a function of the form: `function(log, pageData, global){return logObj;}`
 
 ### Mixer
 The mixer is responsible for managing lists (arrays) within PIQuest, it is capable of repeating, randomizing and even changing the list according to [environmental variables](#variables). You may use it within the sequence, for answer lists within pages and even for answers within the `selectOne` or `selectMulti` questions.
@@ -335,11 +354,9 @@ The basic structure of a mixer object is:
 }
 ```
 
-The `mixer` property holds the mixer type, essentially it tells the mixer what to do with the sub-list. The `data` property holds the sub-list; an array of elements (either plain objects or mixer objects).
+The `mixer` property defines the mixer type. It tells the mixer what to do with the list. The `data` property defines the list; an array of elements (either plain objects or mixer objects).
 
-Some sequence may be parsed more than once, for instance, the `questions` sequences get mixed each time a response is changed. By default, mixers are **not** remixed so that randomizations and other mixer decisions can stay fixed. If you want a mixer to remix when a page is reparsed, you shoud set the `remix` property of the mixer object to true.
-
-A sequence can look something like this (don't get scared it's simpler than it looks):
+A sequence can look something like this:
 
 ```js
 [
@@ -385,7 +402,6 @@ Between them them we repeat a set of four objs ten times.
 The order of the four objs is randomized, so that `obj1` always comes first and the order of the following objs are randomized but `obj3` and `obj4` are wrapped together and therefore always stay consecutive.
 
 ##### Mixer types
-We support several mixer types.
 
 **repeat**:
 Repeats the element in `data` `times` times.
@@ -396,25 +412,24 @@ Randomizes the order of elements in `data`.
 * `{mixer:'random', data: [obj1,obj2]}`
 
 **weightedRandom**:
-Picks a single element using a weighted random algorithm. Each element in `data` is given the appropriate weight from `weights`. In the following example obj2 has four times the probability of being picked as obj1.
+Selects a single element using a weighted random algorithm. Each element in `data` is given the appropriate weight from `weights`. In the following example obj2 has four times the probability of being selected as obj1.
 * `{mixer:'weightedRandom', weights: [0.2,0.8], data: [obj1,obj2]}`
 
 **choose**:
-Picks `n` random elements from `data` (by default the chooser picks one element).
+Selects `n` random elements from `data` (by default the chooser picks one element).
 * `{mixer:'choose', data: [obj1,obj2]}` pick one of these two objs
 * `{mixer:'choose', n:2, data: [obj1,obj2,obj3]}` pick two of these three objs
 
 **wrapper**:
-The wrapper mixer serves a sort of parenthesis for the mixer. It has two primary functions; first, in case you want to keep a set of elements as a block (when randomizing) simply wrap them and they'll stay together. Second, when repeating a `random` mixer, the mixer first randomizes the content of the inner mixer and only then repeats it. If you want the randomization to be deferred until after the repeat all you have to do is wrap it in a wrapper.
+The wrapper mixer serves a sort of parenthesis for the mixer. In case you want to keep a set of elements as a block (when randomizing) simply wrap them and they'll stay together.
 * `{mixer:'wrapper', data: [obj1,obj2]}`
 
 **branch**:
-Pick the elements in `data` if `conditions` is true, pick the elements in `elseData` if `conditions` is not true. If `elseData` is not defined, or is left empty, then this object is skipped (See [conditions](#conditions) to learn about how conditions work).
 * `{mixer:'branch', conditions:[cond], data:[obj1,obj2]}`
 * `{mixer:'branch', conditions:[cond], data:[obj1,obj2], elseData: [obj3, obj4]}`
+Select the elements in `data` if all the conditions in the `conditions` array are true, select the elements in `elseData` if at least one of the conditions in `conditions` are not true. If `elseData` is not defined, or is left empty, then nothing happen in case the conditions are not true (See [conditions](#conditions) to learn about how conditions work).
 
 **multiBranch**:
-Find the first object within `branches` for which `conditions` is true, and pick the elements in that objects `data`. If no object is picked then pick `elseData` (optional). (See [conditions](#conditions) to learn about how conditions work).
 ```js
 {
     mixer: 'branch',
@@ -425,38 +440,46 @@ Find the first object within `branches` for which `conditions` is true, and pick
     elseData: [] // optional
 }
 ```
+Find the first object within `branches` for which `conditions` is true, and select the elements in that objects `data`. If no object is selected then select `elseData` (optional). (See [conditions](#conditions) to learn about how conditions work).
 
 ##### Conditions
 The conditional mixers allow you to change the content of a list according to [environmental variables](#variables). Each list has specific variables available to it, you can find the relevant details in the documentation for each list, but all lists have access to the `global` and `current` objects, so we'll use them for all examples here.
 
-A condition is a proposition, it is evaluated to either a `true` or `false` value. They are used for decision making within the branching mixers. Conditions are represented by objects. The following condition object `compare`s **global.var** `to` **local.otherVar** and checks if the are equal (if you aren't sure what **global.var** means you should check [this](#variables) out):
+A condition is a proposition, it is evaluated to either a `true` or `false` value. Conditions are used for decision making within the branching mixers. Conditions are represented by objects. The following condition object `compare`s **global.var** `to` **local.otherVar** and examines if they are equal (if you aren't sure what **global.var** means, see [here](#variables)):
 
 ```js
 var cond = {
-	compare: 'global.var',
-	to: 'local.otherVar'
+	compare: 'global.myVar',
+	to: 'local.myOtherVar'
 }
 ```
 
 Conditions should be treated as a type of equation.
 
-The `compare` and `to` properties have a special syntax that describes the value that they refer to. Most values that you use will be treated as-is. The special case is string that have dots in them: `global.var`, `questions.q1.response`; these values will be treated as pointing to variables within the lists context. So that `questions.q1.response` will retrieve the value of the response for q1 from the questions object. The following check whether the global variable var is equal to 15.
-
+In `compare` and `to` you can use simple values or values that are actually the name of a variable: 
 ```js
-var cond = {
-	compare: 'global.var',
-	to: 15
+//Compares the variable time to the value 12
+var cond1 = {
+	compare: 'global.time',
+	to: '12'
+}
+//Compare the variable gender to the value 'Female'
+var cond2 = {
+	compare: 'Female',
+	to: 'local.gender'
 }
 ```
 
-The following is a list of condition properties:
+When you want to refer to a variable, you use text with dots: `global.var`, `questions.q1.response`; these values will be treated as pointing to variables within the lists context. `questions.q1.response` will retrieve the value of the response for q1 from the questions object. The following checks whether the global variable var is equal to 15.
+
+Here are the condition's possible properties:
 
 Property 		| Description
 --------------- | -------------------
 compare 		| The left side of the equation.
 to 				| The right side of the equation.
 operator 		| The type of comparison to do (read more about operators [here](#operators)).
-DEBUG 			| Set this to `true` so that the any condition that is evaluated will be logged to the console.
+DEBUG 			| If `true`, then any condition that is evaluated will be logged to the console.
 
 ##### Operators
 The default comparison for a condition is to check equality (supports comparison of objects and arrays too). You can use the `operator` property to change the comparison method. The following checks if var is greater than otherVar:
@@ -548,13 +571,13 @@ declined 			| whether the user declined to answer this question.
 Throughout the player there are several components that refer to environmental variables. In particular you should check out [mixer conditions](#conditions) and [templates](#templates).
 
 ### Templates
-One of the ways to create dynamic questionnaires is using templates. Templates are a format that allows you to dynamically generate settings for your questions. You can replace any non-object setting from within you questions/pages with a template, and it will be rendered according to the [environmental variables](#variables) (The exception to this rule is the `inherit` setting that cannot use templates).
+One of the ways to create dynamic questionnaires is using templates. Templates are a format that allows you to dynamically generate settings for your questions. You can replace any non-object setting from within your questions/pages with a template, and it will be rendered according to the [environmental variables](#variables) (The exception to this rule is the `inherit` setting that cannot use templates).
 
-A template is a string that has a section of the form `<%= %>` in it. Within these brackets you can write any Javascript that you like and it will be evaluated and printed out. For instance, in order to print the global variable "name", you could create a template that looks like this: `My name is <%= global.name%>`.
+A template is a string that has a section of the form `<%= %>` in it. Within these brackets you can write any Javascript that you like and it will be evaluated and printed out. The main use of templates is probably accessing local and global variables. For instance, in order to print the global variable "name", you could create a template that looks like this: `My name is <%= global.name%>`.
 
-The player uses [lodash templates](lodash.org/docs#template) internally, you can look them up to see all the possible uses.
+The player uses [lodash templates](http://lodash.com/docs#template) internally, you can look them up to see all the possible uses.
 
-Questions and Pages have access to the same local variables, with the exception of questData that is available only to questions.
+Templates allow access only to a confined number of variables; following is a list of the variables that you can access from within templates:
 
 Variable 	| Description
 ----------- | -------------
@@ -564,6 +587,8 @@ questions 	| The questions object.
 pageData 	| The 'data' attribute from the page.
 questData 	| The 'data' attribute from the question (available only within questions).
 pageMeta 	| An object describing meta data about the page:</br> `number`: the serial number of this page, `outOf` the overall number of pages, `name`: the name of the current page. These can be used for instance to generate a description of your place within the questionnaire: `<%= pageMeta.number %> out of <%= pageMeta.outOf%>`.
+
+Questions and Pages have access to the same local variables, with the exception of questData that is available only to questions.
 
 ### Inheritance
 
@@ -633,31 +658,40 @@ It also has a `type` property that defines what type of inheritance we should us
 We have implemented several types of inheritance:
 
 **random**:
-Randomly picks an element from the set. Note that this is the default inheritance type and so it is not obligatory to use the `type` property. You can also use a short cut and set the `set` using a simple string instead of an object (see example below).
+Randomly selects an element from the set (in case the set has only one element, the same element will always be selected, of course). 
 * `'setName'`
 * `{set: 'setName'}`
 * `{set: 'setName', type:'random'}`
+`random` this is the default inheritance type, so it is not obligatory to use the `type` property. You can also use a short cut and set the `set` using only its name, like we did in the example above:
+```js
+{
+	inherit: 'parent',
+	data: {name: 'jack'}
+	questions: [
+		quest3
+	]
+}
+```
 
 **exRandom**:
-Picks a random element without repeating the same element until we've gone through the whole set
+Selects a random element without repeating the same element until we've gone through the whole set
 * `{set: 'setName', type:'exRandom'}`
 
 **bySequence**:
-Picks the elements by the order they were inserted into the set
+Selects the elements by the order they were inserted into the set
 * `{set: 'setName', type:'bySequence'}`
 
 **byData**:
-Picks a specific element from the set.
-We compare the `data` property to the `element.data` property and if `data` is a subset of `element.data` it picks the element
-(this means that if all properties of data property equal to the properties of the same name in element.data it is a fit).
-This function will pick only the first element to fit the data.
+Selects a specific element from the set.
+We compare the `data` property to the `element.data` property and if `data` is a subset of `element.data` it selects the element (this means that if all properties of data property equal to the properties of the same name in element.data it is a fit).
+This function will select only the first element to fit the data.
 If the data property is set as a string, we assume it refers to the element handle.
 
 * `{set: 'setName', type: 'byData', data: {block:1, row:2}}` picks the element with both block:1 and row:2
 * `{set: 'setName', type: 'byData', data: "myStimHandle"}` picks the element that has the "myStimHandle" handle
 
 **function**:
-You may also use a custom function to pick your element.
+You may also use a custom function to select your element.
 ```js
 {set: 'setName', type: function(definitions){
 	// definitions is the inherit object (including  set, type, and whatever other properties you'd like to use)
@@ -666,7 +700,7 @@ You may also use a custom function to pick your element.
 
 ##### Customization
 
-Each question/page can also have a `customize` method, this method is called once the element is inherited but before it is activated.
+Each question/page can also define a `customize` method, this method is called once the element is inherited but before it is activated.
 It accepts two argument: the source object on which it is called (the page or question object), and the global object (in which you can find the current object etc.). The source object is also the context for the function.
 
 ```js
