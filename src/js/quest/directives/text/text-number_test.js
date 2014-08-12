@@ -59,10 +59,12 @@ define(['../questDirectivesModule'],function(){
 		});
 
 		it('should support dflt',function(){
-			compile({dflt:123123});
+			compile({name:1, dflt:123123});
 			expect(inputElm.val()).toBe('123123');
-			// even if the default value is 0
-			compile({dflt:0});
+		});
+
+		it('should support dflt even if the default value is 0',function(){
+			compile({name:2,dflt:0});
 			expect(inputElm.val()).toBe('0');
 		});
 

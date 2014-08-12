@@ -18,8 +18,6 @@ define(function (require) {
 	function piqPageCtrl($scope,$timeout, $rootScope, harvest){
 		var self = this;
 
-
-
 		$scope.global = $rootScope.global;
 		$scope.current = $rootScope.current;
 

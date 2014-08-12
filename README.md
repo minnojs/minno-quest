@@ -200,6 +200,7 @@ name 			| (text) The name that this question is marked with when it is logged. A
 stem 			| (text; default: '') The text for the question itself..
 help			| (true or false;  (default: false)) Whether to display the question help text.
 helpText		| (text) The question help text. (Some questions have default help texts, some don't).
+DEBUG 			| (true or false) Warn in the console if a question name is reused (note: sometimes a question is supposed to be reused, if this warning pops up just make sure the use case is correct).
 
 ##### Text
 The `text` questions consist of a simple text input in which the users can type in text. These kind of questions have the following properties:

@@ -22,7 +22,9 @@ define(function(require){
 			$scope.$emit.apply($scope, args);
 
 			// mark stuff as logged
-			_.each($scope.current.questions, function(quest){quest.logged = true;});
+			_.each($scope.current.questions, function(quest){
+				quest.logged = true;
+			});
 		}
 
 		return harvest;

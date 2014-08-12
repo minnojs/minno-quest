@@ -6,7 +6,7 @@
 			ng-repeat="answer in quest.answers track by answer.order"
 			ng-model="$parent.responseObj"
 			btn-radio="answer"
-			ng-class="{active:$parent.data.dflt === answer.value, 'list-group-item': !$parent.data.buttons, 'btn btn-success': $parent.data.buttons}"
+			ng-class="{active:$parent.response === answer.value, 'list-group-item': !$parent.data.buttons, 'btn btn-success': $parent.data.buttons}"
 			uncheckable
 			ng-click="autoSubmit($event)"
 			ng-bind-html="answer.text"

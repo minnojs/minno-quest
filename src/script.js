@@ -27,19 +27,15 @@ define(['questAPI'], function(Quest){
 				},
 				{
 					mixer:'branch',
-					name: 'secondary',
 					remix:true,
-					conditions:[{compare: 'questions.myName.response',to:'yba', DEBUG:true}],
+					conditions:[{compare: 'questions.myName.response',to:'yba', DEBUG:false}],
 					data:[
 						{
 							stem: 'how are you?',
+							name: 'secondary',
 							type: 'selectOne',
-							autoSubmit: true,
 							dflt:'good',
-							buttons: true,
 							answers: ['good','bad','ugly'],
-							correct:true,
-							correctValue: 'good',
 							errorMsg: {correct:"That may not be correct... say good!"}
 						}
 					]
@@ -95,7 +91,7 @@ define(['questAPI'], function(Quest){
 		},
 		{
 			mixer: 'branch',
-			conditions: [{compare: 'questions.myName.response', to:'yba', DEBUG:true}],
+			conditions: [{compare: 'questions.myName.response', to:'yba', DEBUG:false}],
 			data: [{
 				progressBar: '<%= pagesMeta.number %> out of <%= pagesMeta.outOf%>',
 				header: 'Hi <%= questions.myName.response %>',

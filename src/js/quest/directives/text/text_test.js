@@ -53,14 +53,19 @@ define(['../questDirectivesModule'], function(){
 			expect(log.response).toBe('band');
 		});
 
+
+
 		it('should support dflt',function(){
 			compile({dflt:"default value"});
 			expect(inputElm.val()).toBe('default value');
 			expect(log.response).toBe('default value');
-			// even if the default value is 0
-			compile({dflt:0});
+		});
+
+		it('should support dflt even if the default value is 0',function(){
+			compile({name:2,dflt:0});
 			expect(inputElm.val()).toBe('0');
 		});
+
 
 
 		it('should support required',function(){

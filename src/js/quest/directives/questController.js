@@ -6,8 +6,8 @@
 define(function(require){
 	var _ = require('underscore');
 
-	questController.$inject = ['$scope', 'timerStopper', '$parse', '$attrs'];
-	function questController($scope, Stopper, $parse, $attr){
+	questController.$inject = ['$scope', 'timerStopper', '$parse', '$attrs','$log'];
+	function questController($scope, Stopper, $parse, $attr, $log){
 		var self = this;
 		var log;
 		var data = $scope.data;
@@ -30,7 +30,7 @@ define(function(require){
 			$scope.model = ngModel;
 
 			// set log and module
-			if (_.isUndefined(ngModelGet($scope))){
+			if (_.isUndefined(ngModelGet($scope.$parent))){
 				self.log = ngModel.$modelValue = log = {
 					name: data.name,
 					response: dfltValue
@@ -39,9 +39,11 @@ define(function(require){
 
 				ngModelGet.assign($scope.$parent, log);
 			} else {
-				log = self.log = ngModelGet($scope);
-				ngModel.$viewValue = log.response;
+				log = self.log = ngModelGet($scope.$parent);
+				$scope.response = ngModel.$viewValue = log.response;
+				data.DEBUG && $log.warn('DEBUG: this question has already been in use: "' + log.name + '"');
 			}
+
 
 			// model --> view
 			// should probably never be called (since our model is an object and not a primitive)
@@ -100,11 +102,11 @@ define(function(require){
 				ngModel.$parsers.push(correctValidator);
 				data.response = correctValidator(this.log);
 			}
-
-
-
-
 		};
+
+		// $scope.$on('$destroy', function(a,b){
+		// 	console.log(a,b)
+		// })
 	}
 
 	return questController;
