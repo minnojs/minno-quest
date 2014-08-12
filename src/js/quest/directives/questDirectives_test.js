@@ -32,7 +32,7 @@ define(['angular','./questDirectivesModule'], function(angular){
 		}));
 
 		beforeEach(inject(function($rootScope, _$compile_){
-			$rootScope.current = {};
+			$rootScope.current = {questions:{}};
 			scope = $rootScope.$new();
 			$compile = _$compile_;
 
@@ -46,6 +46,12 @@ define(['angular','./questDirectivesModule'], function(angular){
 			expect(scope.ctrl.scope).toBe(scope);
 			expect(log.name).toEqual(123);
 		});
+
+		it('should log a unique serial number for each question', inject(function($rootScope){
+			$rootScope.current.questions = {a:{}, b:{}};
+			compile({name:123});
+			expect(scope.ctrl.log.serial).toBe(2);
+		}));
 
 		// view -> model
 		it('should bind to a model', inject(function($rootScope){
@@ -93,13 +99,13 @@ define(['angular','./questDirectivesModule'], function(angular){
 				compile({dflt:""}, undefined, {dflt:456});
 				expect(log.response).toBe("");
 			});
-
 		});
 
 
 		it('should load data from ngModel to overide default', function(){
 			compile({dflt:123}, {response:234});
 			expect(scope.ctrl.log.response).toBe(234);
+			expect(scope.response).toBe(234);
 		});
 
 		it('should update log latency each time there is a change in scope.response', function(){

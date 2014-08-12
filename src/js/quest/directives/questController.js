@@ -33,7 +33,10 @@ define(function(require){
 			if (_.isUndefined(ngModelGet($scope.$parent))){
 				self.log = ngModel.$modelValue = log = {
 					name: data.name,
-					response: dfltValue
+					response: dfltValue,
+					// @TODO: this is a bit fragile and primitive.
+					// we should probably create a unique ID service of some sort...
+					serial: _.size($parse('current.questions')($scope.$parent))
 				};
 				$scope.response = ngModel.$viewValue = dfltValue;
 
