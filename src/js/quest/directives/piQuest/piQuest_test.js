@@ -4,11 +4,9 @@ define(['../questDirectivesModule'],function(){
 
 	describe('piQuest Controller', function(){
 		var script = {name:"myName", global: {extendGlobal:true}, current: {extendCurrent:true}};
-		var logSpy = jasmine.createSpy('log');
-		var nextSpy = jasmine.createSpy('next').andReturn('nextObj');
+		var taskSpyObj;
 		var TaskSpy = jasmine.createSpy('Task').andCallFake(function(){
-			this.log = logSpy;
-			this.next = nextSpy;
+			return (taskSpyObj = jasmine.createSpyObj('Task', ['log','next','prev','current']));
 		});
 
 		function compile(){
@@ -45,20 +43,31 @@ define(['../questDirectivesModule'],function(){
 			delete(mixerDefaultContext.questions);
 		}));
 
-		it('should create a task from the script', inject(function(Task){
-			expect(controller.task).toEqual(jasmine.any(Task));
+		it('should create a task from the script', function(){
+			expect(controller.task).toBeDefined();
 			expect(TaskSpy).toHaveBeenCalledWith(script);
-		}));
+		});
 
-		it('should listen for "quest:next" and next accordingly', function(){
+		it('should listen for "quest:next" and act accordingly', function(){
 			scope.$new().$emit('quest:next','nextObj');
-			expect(nextSpy).toHaveBeenCalledWith('nextObj');
-			expect(element.scope().page).toBe('nextObj');
+			expect(taskSpyObj.next).toHaveBeenCalled();
+			expect(taskSpyObj.current).toHaveBeenCalled();
+		});
+
+		it('should listen for "quest:prev" and act accordingly', function(){
+			scope.$new().$emit('quest:prev');
+			expect(taskSpyObj.prev).toHaveBeenCalled();
+			expect(taskSpyObj.current).toHaveBeenCalled();
+		});
+
+		it('should listen for "quest:refresh" and act accordingly', function(){
+			scope.$new().$emit('quest:refresh');
+			expect(taskSpyObj.current).toHaveBeenCalled();
 		});
 
 		it('should listen for "quest:log" and log accordingly', function(){
 			scope.$new().$emit('quest:log', [1], 'currentPageData');
-			expect(logSpy).toHaveBeenCalledWith(1, 'currentPageData', scope.global);
+			expect(taskSpyObj.log).toHaveBeenCalledWith(1, 'currentPageData', scope.global);
 		});
 
 		it('should create a "current" quest object', inject(function($rootScope){
@@ -74,8 +83,6 @@ define(['../questDirectivesModule'],function(){
 		it('should extend the "globa" object with script.global', function(){
 			expect(scope.global.extendGlobal).toBeTruthy();
 		});
-
-
 
 		it('should setup the templateDefaultContext', inject(function(templateDefaultContext){
 			expect(templateDefaultContext.global).toBe(scope.global);
@@ -152,7 +159,7 @@ define(['../questDirectivesModule'],function(){
 	});
 
 	describe('piqPage', function(){
-		var $rootScope;
+		var $rootScope,scope;
 		function compile(data){
 			element = jqLite('<div piq-page></div>');
 			scope.page = data;
@@ -187,6 +194,20 @@ define(['../questDirectivesModule'],function(){
 				spyOn(scope, 'submit');
 				scope.$new().$emit('quest:submit');
 				expect(scope.submit).toHaveBeenCalled();
+			});
+
+			// it('should setup page, when page changes', function(){
+			// });
+
+			it('should refresh page when questions is changed', function(){
+				var refresh = jasmine.createSpy('refresh');
+				compile({});
+				scope.$on('quest:refresh', refresh);
+				scope.$digest();
+				expect(refresh).not.toHaveBeenCalled();
+				$rootScope.current.questions.test = true;
+				scope.$digest();
+				expect(refresh).toHaveBeenCalled();
 			});
 
 			describe(': proceed', function(){

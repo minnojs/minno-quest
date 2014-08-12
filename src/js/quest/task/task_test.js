@@ -60,8 +60,8 @@ define(['underscore','./task-module'],function(){
 				}
 			};
 			task = new Task(script);
-			nextSpy.andReturn(null);
-			task.next();
+			nextSpy.andReturn(undefined);
+			task.current();
 			$rootScope.$apply();
 			expect(script.settings.onEnd).toHaveBeenCalled();
 			nextSpy.andReturn('nextObj');

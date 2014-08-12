@@ -47,6 +47,8 @@ define(['underscore', 'text!./piQuest.html'], function (_, template) {
 		_.extend(mixerDefaultContext,defaultContext);
 
 		$scope.$on('quest:next', next);
+		$scope.$on('quest:prev', prev);
+		$scope.$on('quest:refresh', refresh);
 
 		$scope.$on('quest:log', function(event, logs, pageData){
 			_.each(logs, function(log){
@@ -55,7 +57,17 @@ define(['underscore', 'text!./piQuest.html'], function (_, template) {
 		});
 
 		function next(event, target){
-			var page = task.next(target);
+			task.next(target);
+			refresh();
+		}
+
+		function prev(event, target){
+			task.prev(target);
+			refresh();
+		}
+
+		function refresh(){
+			var page = task.current();
 			if (page) {
 				$scope.page = page;
 			}

@@ -32,14 +32,20 @@ define(['underscore', 'angular'], function(_, angular){
 			log: function(){
 				this.logger.log.apply(this.logger, arguments);
 			},
-			next: function(){
-				var nextObj = this.sequence.next().current();
+			current: function(){
+				var nextObj = this.sequence.current();
 
 				if (!nextObj){
 					this.q.resolve();
 				}
 
 				return nextObj;
+			},
+			next: function(){
+				return this.sequence.next();
+			},
+			prev: function(){
+				return this.sequence.prev();
 			}
 		});
 

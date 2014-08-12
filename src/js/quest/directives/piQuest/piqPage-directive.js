@@ -76,7 +76,13 @@ define(function (require) {
 			next();
 		};
 
+		// setup page on page refresh
 		$scope.$watch('page', pageSetup);
+
+		// refresh page on question change
+		$scope.$watch('current.questions', pageRefresh, true);
+
+		// listen for auto submit calls
 		$scope.$on('quest:submit', function(){
 			$scope.submit();
 		});
@@ -85,8 +91,13 @@ define(function (require) {
 			$scope.$emit('quest:next', proceedObj);
 		}
 
+		function pageRefresh(){
+			$scope.$emit('quest:refresh');
+		}
+
 		function pageSetup(newPage, oldValue, scope){
 			// set the page log object
+			// @TODO: make sure log stays constant per page (or something... maybe move the startime into question. makes more sense.)
 			self.log = {
 				name: newPage.name,
 				startTime: +new Date()

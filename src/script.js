@@ -12,7 +12,41 @@ define(['questAPI'], function(Quest){
 		location.href = location.href;
 	});
 
+	//API.addGloba({test:''});
+
 	API.addSequence([
+
+		{
+			progressBar: '<%= pagesMeta.number %> out of <%= pagesMeta.outOf%>',
+			header: 'Questionnaire: example for realtime branching',
+			questions: [
+				{
+					name: 'myName',
+					stem: "What is your name? (try yba!)",
+					autoSubmit: true
+				},
+				{
+					mixer:'branch',
+					name: 'secondary',
+					remix:true,
+					conditions:[{compare: 'questions.myName.response',to:'yba', DEBUG:true}],
+					data:[
+						{
+							stem: 'how are you?',
+							type: 'selectOne',
+							autoSubmit: true,
+							dflt:'good',
+							buttons: true,
+							answers: ['good','bad','ugly'],
+							correct:true,
+							correctValue: 'good',
+							errorMsg: {correct:"That may not be correct... say good!"}
+						}
+					]
+				}
+			]
+		},
+
 		{
 			progressBar: '<%= pagesMeta.number %> out of <%= pagesMeta.outOf%>',
 			header: '<%= pagesData.pageName %>: Questionnaire page num. <%= 1 + 1 %>',

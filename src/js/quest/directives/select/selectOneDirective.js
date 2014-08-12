@@ -41,7 +41,6 @@ define(function (require) {
 					}
 
 					scope.response = newValue && newValue.value;
-					ctrl.log.responseObj = newValue;
 				});
 
 				/**
