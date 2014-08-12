@@ -16,14 +16,15 @@ It is written in JavaScript and is built to be extremely versatile and customiza
 	- [textNumber](#textnumber)
 	- [selectOne & selectMulti](#selectone-selectmulti)
 * [Settings](#settings)
-* [The mixer ](#mixer)
-	- [Mixer types](#mixer-types)
-	- [Conditions](#conditions)
-	- [Operators](#operators)
-	- [Aggregation](#aggregation)
-* [Variables](#variables)
-* [Templates](#templates)
-* [Inheritance ](#inheritance)
+* [Making your questionnaire Dynamic](#making-your-questionnaire-dynamic)
+	- [The mixer ](#mixer)
+		+ [Mixer types](#mixer-types)
+		+ [Conditions](#conditions)
+		+ [Operators](#operators)
+		+ [Aggregation](#aggregation)
+	- [Variables](#variables)
+	- [Templates](#templates)
+	- [Inheritance ](#inheritance)
 
 
 ### Central concepts
@@ -32,7 +33,7 @@ The player treats each questionnaire a **sequence** of **pages**. Each page may 
 
 The pages are set into a sequence and presented sequentially. This is essentially all you need to know in order to start writing questionnaires.
 
-The sequence supports ***mixers*** that allow randomiinge the order of the pages (or questions) that you create, and other features often needed when creating the sequence of a questionnaire. The questionnaire also supports an *inheritance* system, that allow abstracting questionnaires and make them shorter, simpler, more dynamic, and most important, reusable.
+The sequence supports ***mixers*** that allow randomizing the order of the pages (or questions) that you create, and other features often needed when creating the sequence of a questionnaire. The questionnaire also supports an *inheritance* system, that allows abstracting questionnaires and makes them shorter, simpler, more dynamic, and most important, reusable.
 
 Questionnaires are created by writing a Java-script object that has several property objects: `settings`, `sequence`, `pages`, `questions`, `global` and `current`. Some of these properties have to do with advanced uses of the player. The only objects that you **have** to know are `sequence` and `settings`. We'll first show a simple questionnaire, then go through each of the more advanced options.
 
@@ -329,7 +330,7 @@ API.addSettings("logger", {
 	pulse: 34,
 	url: '/my/url',
 	DEBUG: false,
-	logfn: function(log,pageData, global){
+	logfn: function(log,pagesData, global){
 		return {name: log.name, set: global.setName};
 	}
 });
@@ -340,7 +341,22 @@ Setting 	| Description
 pulse 		| (Number; Default: 0) How many rows to collect before posting to the server. 0 means that the player sends to the server only at the end of the task.
 url 		| (Text; default:"") The URL to which we should post the data to.
 DEBUG 		| (true or false; default: false) When set to true, prints each logged object in the console.
-logfn 		| (Function) The task has a default object that it logs, if you want to change the logged object itself, you may use a function of the form: `function(log, pageData, global){return logObj;}`
+logfn 		| (Function) The task has a default object that it logs, if you want to change the logged object itself, you may use a function of the form: `function(log, pagesData, global){return logObj;}`
+
+### Making your questionnaire dynamic
+There are several ways that you can make your questionnaire more dynamic. We will give a short overview and then get into the specifics.
+
+The basic elements of the player (pages or questions) are set into ordered lists (arrays). The player parses these lists into the questionnaire that the user eventually sees.
+
+The first level of parsing has to do with the order that the elements appear.The [mixer](#mixer) allows you to control the order of the lists; it allows you to randomize the order, duplicate elements and even display them conditionally.
+
+The second level of parsing has to do with inheritance. Many times you want to present several elements that share some of the same features (for instance, you may want all your pages to have the same header or the same submit text). The [inherit ](#inheritance) feature allows you to create prototypes of elements that you may reuse thought your script.
+
+The third and last level of parsing has to do with templates. [Templates](#templates) allow you to change the settings of your elements depending on existing data from within the player. For instance, you may want to refer to the answer of a previous question. 
+
+Some sequence may be parsed more than once, for instance, the questions sequences get re-parsed each time a response is changed. By default, none of the parsing is repeated so that the questionnaires can stay fixed. For each type of parsing there is a property that lets the player know that you want it re-parsed.
+
+In order to re-parse mixers, set `remix` to true. In order to re-parse inheritance set `reinflate` to true. In order to re-parse templates set `reinterpolate` to true.
 
 ### Mixer
 The mixer is responsible for managing lists (arrays) within PIQuest, it is capable of repeating, randomizing and even changing the list according to [environmental variables](#variables). You may use it within the sequence, for answer lists within pages and even for answers within the `selectOne` or `selectMulti` questions.
@@ -584,11 +600,11 @@ Variable 	| Description
 global 		| The global object.
 current 	| The current task object.
 questions 	| The questions object.
-pageData 	| The 'data' attribute from the page.
-questData 	| The 'data' attribute from the question (available only within questions).
+pagesData 	| The 'data' attribute from the page.
+questionsData 	| The 'data' attribute from the question (available only within questions).
 pageMeta 	| An object describing meta data about the page:</br> `number`: the serial number of this page, `outOf` the overall number of pages, `name`: the name of the current page. These can be used for instance to generate a description of your place within the questionnaire: `<%= pageMeta.number %> out of <%= pageMeta.outOf%>`.
 
-Questions and Pages have access to the same local variables, with the exception of questData that is available only to questions.
+Questions and Pages have access to the same local variables, with the exception of questionsData that is available only to questions.
 
 ### Inheritance
 

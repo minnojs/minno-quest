@@ -33,7 +33,7 @@ define(['underscore'],function(_){
 				throw new Error('Mixer: unknow mixer type = ' + mixerName);
 			}
 
-			if (obj.remix && obj.$parsed) {
+			if (!obj.remix && obj.$parsed) {
 				return obj.$parsed;
 			}
 
@@ -51,7 +51,7 @@ define(['underscore'],function(_){
 					var sequence = obj.data || [];
 					var result = [], i;
 					for (i=0; i < obj.times; i++){
-						result = result.concat(sequence);
+						result = result.concat(_.clone(sequence,true));
 					}
 					return result;
 			},

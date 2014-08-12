@@ -14,8 +14,8 @@ define(['questAPI'], function(Quest){
 
 	API.addSequence([
 		{
-			progressBar: '<%= pageMeta.number %> out of <%= pageMeta.outOf%>',
-			header: '<%= pageData.pageName %>: Questionnaire page num. <%= 1 + 1 %>',
+			progressBar: '<%= pagesMeta.number %> out of <%= pagesMeta.outOf%>',
+			header: '<%= pagesData.pageName %>: Questionnaire page num. <%= 1 + 1 %>',
 			decline:"Cutsom decline text",
 			noSubmit: 0,
 			submitText: "Custom submit text",
@@ -63,7 +63,7 @@ define(['questAPI'], function(Quest){
 			mixer: 'branch',
 			conditions: [{compare: 'questions.myName.response', to:'yba', DEBUG:true}],
 			data: [{
-				progressBar: '<%= pageMeta.number %> out of <%= pageMeta.outOf%>',
+				progressBar: '<%= pagesMeta.number %> out of <%= pagesMeta.outOf%>',
 				header: 'Hi <%= questions.myName.response %>',
 				questions: [
 					{
@@ -79,7 +79,8 @@ define(['questAPI'], function(Quest){
 			times: 2,
 			data: [
 				{
-					progressBar: '<%= pageMeta.number %> out of <%= pageMeta.outOf%>',
+					progressBar: '<%= pagesMeta.number %> out of <%= pagesMeta.outOf%>',
+					reinterpolate:true,
 					header: 'This Royal Questionnaire of mine.',
 					timeoutMessage: 'My message',
 					decline:true,
@@ -103,7 +104,7 @@ define(['questAPI'], function(Quest){
 			]
 		},
 		{
-			progressBar: '<%= pageMeta.number %> out of <%= pageMeta.outOf%>',
+			progressBar: '<%= pagesMeta.number %> out of <%= pagesMeta.outOf%>',
 			questions: [
 				{
 					stem: 'how are you?',

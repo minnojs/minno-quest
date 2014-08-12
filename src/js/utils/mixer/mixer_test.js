@@ -36,11 +36,11 @@ define(['underscore','./mixer-module', 'utils/randomize/randomizeModuleMock'],fu
 				expect(mixerObj.$parsed).toBe(testArr);
 			});
 
-			it('should return `$parsed` if remix = true', function(){
+			it('should return `$parsed` unless remix = true', function(){
 				mixer.mixers.testFn = function(){return 456;};
 
-				expect(mixer({mixer:'testFn', remix:true})).toBe(456);
-				expect(mixer({mixer:'testFn', remix:true, $parsed:123})).toBe(123);
+				expect(mixer({mixer:'testFn', $parsed:123})).toBe(123);
+				expect(mixer({mixer:'testFn', $parsed:123, remix:true})).toBe(456);
 			});
 
 			it('should repeat any data in a repeat n times', function(){
@@ -100,6 +100,117 @@ define(['underscore','./mixer-module', 'utils/randomize/randomizeModuleMock'],fu
 					data: [1,2, 3]
 				})).toEqual([3]);
 			}));
+		});
+
+
+		describe(': mixerSequenceProvider', function(){
+			var sequence, Sequence;
+
+			function create(arr){return (sequence = new Sequence(arr));}
+			function expect_current(){return expect(sequence.current().test);}
+
+			beforeEach(module('mixer','randomizeMock'));
+			beforeEach(inject(function(MixerSequence){
+				Sequence = MixerSequence;
+			}));
+
+			it('should return plain elements', function(){
+				create([{test:1}]).next();
+				expect_current().toBe(1);
+			});
+
+			it('should evaluate mixers', function(){
+				create([{mixer:'wrapper', data:[{test:1}]}]).next();
+				expect_current().toBe(1);
+			});
+
+			it('should evaluate nested mixers', function(){
+				create([
+					{mixer:'wrapper', data:[
+						{mixer:'wrapper', data:[
+							{test:1}
+						]}
+					]}
+				]).next();
+				expect_current().toBe(1);
+			});
+
+			it('should support (nested) going back', function(){
+				create([
+					{test:0},
+					{mixer:'wrapper', data:[
+						{mixer:'wrapper', data:[
+							{test:1},{test:2}
+						]},
+						{test:3}
+					]},
+					{test:4}
+				]).next().next().next().next().next();
+				expect_current().toBe(4);
+				sequence.prev();
+				expect_current().toBe(3);
+				sequence.prev();
+				expect_current().toBe(2);
+				sequence.prev();
+				expect_current().toBe(1);
+				sequence.prev();
+				expect_current().toBe(0);
+			});
+
+			it('should remix when needed', function(){
+				var context = {global:{flag:true}};
+
+				create([
+					{
+						mixer:'branch',
+						conditions:[{compare: 'global.flag',to:true}],
+						data:[{test:1}],
+						elseData: [{test:2}]
+					},
+					{
+						mixer:'branch',
+						remix:true,
+						conditions:[{compare: 'global.flag',to:true}],
+						data:[{test:3}],
+						elseData: [{test:4}]
+					}
+				]);
+
+				sequence.next(context);
+				expect_current().toBe(1);
+				sequence.next(context);
+				expect_current().toBe(3);
+
+				context.global.flag = false;
+				sequence.prev(context);
+				expect_current().toBe(1);
+				sequence.next(context);
+				expect_current().toBe(4);
+			});
+
+			it('should return undefined when the sequence is done', function(){
+				create([{}]).next().next();
+				expect(sequence.current()).not.toBeDefined();
+			});
+
+			it('should allow going back after a sequence is finished', function(){
+				create([{}]).next().next().prev();
+				expect(sequence.current()).toBeDefined();
+			});
+
+			it('should mark the elements with $meta', function(){
+				var meta;
+				create([{},{mixer:'wrapper',data:[{},{}]}]).next();
+
+				meta = sequence.current().$meta;
+				expect(meta.number).toBe(1);
+				expect(meta.outOf).toBe(2);
+
+				meta = sequence.next().current().$meta;
+				expect(meta.number).toBe(2);
+				expect(meta.outOf).toBe(3);
+			});
+
 		});
 
 		describe(': mixerSequential', function(){
