@@ -285,14 +285,11 @@ define(['../questDirectivesModule'],function(){
 					expect(controller.proceed).toHaveBeenCalled();
 				});
 
-				it('should mark all questions on page as declined', function(){
+				it('should broadcast quest:declined', function(){
+					var spy = jasmine.createSpy('decline');
+					$scope.$on('quest:decline', spy);
 					$scope.decline();
-					expect($scope.current.questions.newQ.declined).toBeTruthy();
-				});
-
-				it('should not mark question not on the page as declined', function(){
-					$scope.decline();
-					expect($scope.current.questions.old.declined).not.toBeTruthy();
+					expect(spy).toHaveBeenCalled();
 				});
 
 			});

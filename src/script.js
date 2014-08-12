@@ -99,7 +99,7 @@ define(['questAPI'], function(Quest){
 					{
 						data: {myDflt:'this is a secret page...'},
 						stem: 'This question can only be reached if you type yba for the previous question',
-						dflt: '<%= questData.myDflt %>'
+						dflt: '<%= questionsData.myDflt %>'
 					}
 				]
 			}]

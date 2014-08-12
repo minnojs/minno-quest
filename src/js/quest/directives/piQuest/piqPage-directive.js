@@ -46,14 +46,10 @@ define(function (require) {
 
 		/**
 		 * Decline to answer. mark all questions on this page as declined
-		 * (leave filtering the responses themselves to the logger, so that answers can be saved despite declining)
 		 */
 		$scope.decline = function(){
-			var questions = $scope.global.current.questions;
-			// mark all questions on this page as declined
-			_.forEach($scope.page.questions || {}, function(quest){
-				questions[quest.name].declined = true;
-			});
+			// broadcast to the quest controller
+			$scope.$broadcast('quest:decline');
 			self.proceed();
 		};
 

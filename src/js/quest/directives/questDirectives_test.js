@@ -64,13 +64,23 @@ define(['angular','./questDirectivesModule'], function(angular){
 			expect($rootScope.current.logObj).toBe(log);
 		}));
 
-		it('should un-decline a question that is answered', function(){
-			compile({});
-			log.declined = true;
-			scope.response = 123;
-			scope.$digest();
-			expect(log.declined).not.toBeTruthy();
+		describe(': decline', function(){
+			it('should decline this question if quest:decline is broadcast', function(){
+				compile({});
+				expect(log.declined).not.toBeTruthy();
+				scope.$emit('quest:decline');
+				expect(log.declined).toBeTruthy();
+			});
+
+			it('should un-decline a question that is answered', function(){
+				compile({});
+				log.declined = true;
+				scope.response = 123;
+				scope.$digest();
+				expect(log.declined).not.toBeTruthy();
+			});
 		});
+
 
 		describe(': defaults', function(){
 			it('should use NaN by default', function(){

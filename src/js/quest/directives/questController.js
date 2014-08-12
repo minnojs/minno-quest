@@ -107,6 +107,11 @@ define(function(require){
 			}
 		};
 
+		$scope.$on('quest:decline', function(event){
+			event.preventDefault();
+			log.declined = true;
+		});
+
 		// $scope.$on('$destroy', function(a,b){
 		// 	console.log(a,b)
 		// })
