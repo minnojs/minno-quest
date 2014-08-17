@@ -1,7 +1,7 @@
 {
   "name": "piquest",
   "description" : "A js framework for administering questionnaires",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "main" : ["dist/js/API.js", "dist/js/bootstrap.js"],
   "repository": {
     "type": "git",
