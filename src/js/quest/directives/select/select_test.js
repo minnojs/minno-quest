@@ -132,15 +132,15 @@ define(['../questDirectivesModule', 'utils/randomize/randomizeModuleMock'], func
 				var submitSpy;
 
 				compileInput({answers: [1,2,3]});
-				submitSpy = jasmine.createSpy('quest:submit');
-				scope.$on('quest:submit', submitSpy);
+				submitSpy = jasmine.createSpy('quest:submit:now');
+				scope.$on('quest:submit:now', submitSpy);
 				choose(1);
 				choose(1);
 				expect(submitSpy).not.toHaveBeenCalled();
 
 				compileInput({answers: [1,2,3], autoSubmit: true});
-				submitSpy = jasmine.createSpy('quest:submit');
-				scope.$on('quest:submit', submitSpy);
+				submitSpy = jasmine.createSpy('quest:submit:now');
+				scope.$on('quest:submit:now', submitSpy);
 				choose(1);
 				expect(submitSpy).not.toHaveBeenCalled();
 				choose(1);

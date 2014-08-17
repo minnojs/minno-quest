@@ -151,14 +151,14 @@ define(['../questDirectivesModule'], function(){
 			var submitSpy;
 
 			compile({});
-			submitSpy = jasmine.createSpy('quest:submit');
-			scope.$on('quest:submit', submitSpy);
+			submitSpy = jasmine.createSpy('quest:submit:now');
+			scope.$on('quest:submit:now', submitSpy);
 			inputElm.trigger(e);
 			expect(submitSpy).not.toHaveBeenCalled();
 
 			compile({autoSubmit:true});
-			submitSpy = jasmine.createSpy('quest:submit');
-			scope.$on('quest:submit', submitSpy);
+			submitSpy = jasmine.createSpy('quest:submit:now');
+			scope.$on('quest:submit:now', submitSpy);
 			inputElm.trigger(e);
 			expect(submitSpy).toHaveBeenCalled();
 		});

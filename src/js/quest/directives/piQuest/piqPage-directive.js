@@ -41,6 +41,7 @@ define(function (require) {
 				return true;
 			}
 
+			$scope.$broadcast('quest:submit');
 			self.proceed();
 		};
 
@@ -77,7 +78,7 @@ define(function (require) {
 		$scope.$watch('current.questions', pageRefresh, true);
 
 		// listen for auto submit calls
-		$scope.$on('quest:submit', function(){
+		$scope.$on('quest:submit:now', function(){
 			$scope.submit();
 		});
 

@@ -189,10 +189,10 @@ define(['../questDirectivesModule'],function(){
 				expect(controller.log.name).toBe('myName');
 			});
 
-			it('should submit when `quest:submit` is $emited', function(){
+			it('should submit when `quest:submit:now` is $emited', function(){
 				compile({});
 				spyOn(scope, 'submit');
-				scope.$new().$emit('quest:submit');
+				scope.$new().$emit('quest:submit:now');
 				expect(scope.submit).toHaveBeenCalled();
 			});
 
@@ -265,6 +265,14 @@ define(['../questDirectivesModule'],function(){
 					$scope.submit(true);
 					expect(controller.proceed).toHaveBeenCalled();
 				});
+
+				it('should broadcast quest:submit', function(){
+					var spy = jasmine.createSpy('submit');
+					$scope.$on('quest:submit', spy);
+					$scope.submit(true); // don't mess around with validation
+					expect(spy).toHaveBeenCalled();
+				});
+
 			});
 
 			describe(': decline', function(){

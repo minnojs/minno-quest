@@ -65,7 +65,6 @@ define(function(require){
 
 				log.response = viewValue;
 				log.latency = latency;
-				log.declined = undefined;
 
 				// if this is the first change
 				if (!log.pristineLatency){
@@ -110,6 +109,13 @@ define(function(require){
 		$scope.$on('quest:decline', function(event){
 			event.preventDefault();
 			log.declined = true;
+			log.submitLatency = self.stopper.now();
+		});
+
+		$scope.$on('quest:submit', function(event){
+			event.preventDefault();
+			log.declined = undefined;
+			log.submitLatency = self.stopper.now();
 		});
 
 		// $scope.$on('$destroy', function(a,b){

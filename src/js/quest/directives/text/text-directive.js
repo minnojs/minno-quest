@@ -28,7 +28,7 @@ define(function (require) {
 				scope.data.autoSubmit && element.bind("keydown keypress", function (event) {
 					if(event.which === 13) {
 						scope.$apply(function(){
-							scope.$emit('quest:submit');
+							scope.$emit('quest:submit:now');
 						});
 						event.preventDefault();
 					}
