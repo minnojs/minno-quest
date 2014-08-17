@@ -15,8 +15,9 @@ define(['questAPI'], function(Quest){
 	//API.addGloba({test:''});
 
 	API.addSequence([
-
 		{
+			prevText: '123',
+			prev:true,
 			progressBar: '<%= pagesMeta.number %> out of <%= pagesMeta.outOf%>',
 			header: 'Questionnaire: example for realtime branching',
 			questions: [
@@ -44,6 +45,8 @@ define(['questAPI'], function(Quest){
 		},
 
 		{
+			prevText: '123',
+			prev:true,
 			progressBar: '<%= pagesMeta.number %> out of <%= pagesMeta.outOf%>',
 			header: '<%= pagesData.pageName %>: Questionnaire page num. <%= 1 + 1 %>',
 			decline:"Cutsom decline text",
@@ -91,6 +94,7 @@ define(['questAPI'], function(Quest){
 		},
 		{
 			mixer: 'branch',
+			remix:true,
 			conditions: [{compare: 'questions.myName.response', to:'yba', DEBUG:false}],
 			data: [{
 				progressBar: '<%= pagesMeta.number %> out of <%= pagesMeta.outOf%>',
@@ -109,6 +113,9 @@ define(['questAPI'], function(Quest){
 			times: 2,
 			data: [
 				{
+								prevText: '123',
+			prev:true,
+
 					progressBar: '<%= pagesMeta.number %> out of <%= pagesMeta.outOf%>',
 					regenerateTemplate:true,
 					header: 'This Royal Questionnaire of mine.',

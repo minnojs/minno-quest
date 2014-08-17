@@ -11,7 +11,6 @@
  * @name piqPage
   */
 define(function (require) {
-	var _ = require('underscore');
 	var template = require('text!./piqPage.html');
 
 	piqPageCtrl.$inject = ['$scope','$timeout', '$rootScope', 'questHarvest'];
@@ -41,8 +40,11 @@ define(function (require) {
 				return true;
 			}
 
+			// broadcast to the quest controller
 			$scope.$broadcast('quest:submit');
+
 			self.proceed();
+			$scope.$emit('quest:next');
 		};
 
 		/**
@@ -51,8 +53,20 @@ define(function (require) {
 		$scope.decline = function(){
 			// broadcast to the quest controller
 			$scope.$broadcast('quest:decline');
+
 			self.proceed();
+			$scope.$emit('quest:next');
 		};
+
+		/**
+		 * Go back to previous page.
+		 */
+		$scope.prev = function(){
+			// broadcast to the quest controller
+			self.proceed();
+			$scope.$broadcast('quest:prev');
+		};
+
 
 		/**
 		 * Proceed to the next page.
@@ -68,7 +82,6 @@ define(function (require) {
 
 			// by default, harvest after every page..
 			self.harvest();
-			next();
 		};
 
 		// setup page on page refresh
@@ -82,10 +95,8 @@ define(function (require) {
 			$scope.submit();
 		});
 
-		function next(proceedObj){
-			$scope.$emit('quest:next', proceedObj);
-		}
-
+		// change $scope.page
+		// indirectly triggers pageSetup
 		function pageRefresh(){
 			$scope.$emit('quest:refresh');
 		}

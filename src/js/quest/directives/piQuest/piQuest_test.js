@@ -229,14 +229,6 @@ define(['../questDirectivesModule'],function(){
 					controller.proceed();
 					expect(controller.harvest).toHaveBeenCalled();
 				}));
-
-				it('should first harvest and only then emit "quest:next"', function(){
-					var nextSpy = jasmine.createSpy('quest:next');
-					$scope.$on('quest:next', nextSpy);
-					controller.proceed();
-					expect(nextSpy).toHaveBeenCalled();
-					expect(controller.harvest).toHaveBeenCalled();
-				});
 			}); // end describe page controller
 
 			describe(': submit', function(){
@@ -273,6 +265,34 @@ define(['../questDirectivesModule'],function(){
 					expect(spy).toHaveBeenCalled();
 				});
 
+				it('should broadcast quest:next', function(){
+					var spy = jasmine.createSpy('next');
+					$scope.$on('quest:next', spy);
+					$scope.submit(true); // don't mess around with validation
+					expect(spy).toHaveBeenCalled();
+				});
+			});
+
+			describe(': prev', function(){
+				var $scope;
+
+				beforeEach(function(){
+					compile({});
+					$scope = element.scope();
+					spyOn(controller, 'proceed');
+				});
+
+				it('should proceed', function(){
+					$scope.prev();
+					expect(controller.proceed).toHaveBeenCalled();
+				});
+
+				it('should broadcast quest:prev', function(){
+					var spy = jasmine.createSpy('quest:prev');
+					$scope.$on('quest:prev', spy);
+					$scope.prev();
+					expect(spy).toHaveBeenCalled();
+				});
 			});
 
 			describe(': decline', function(){
@@ -300,6 +320,12 @@ define(['../questDirectivesModule'],function(){
 					expect(spy).toHaveBeenCalled();
 				});
 
+				it('should broadcast quest:next', function(){
+					var spy = jasmine.createSpy('next');
+					$scope.$on('quest:next', spy);
+					$scope.submit(true); // don't mess around with validation
+					expect(spy).toHaveBeenCalled();
+				});
 			});
 
 			describe('directive',function(){
@@ -345,6 +371,29 @@ define(['../questDirectivesModule'],function(){
 					expect(element.find('ol')).toHaveClass('list-unstyled');
 					compile({numbered:true});
 					expect(element.find('ol')).not.toHaveClass('list-unstyled');
+				});
+
+				describe(': prev', function () {
+					it('should not display the prev button by default', function() {
+						var el;
+						compile({$meta: {number:3}});
+						el = element.find('[ng-click="prev()"]');
+						expect(el.length).toBe(0);
+					});
+
+					it('should not display the prev button on the first page', function() {
+						var el;
+						compile({$meta: {number:1}});
+						el = element.find('[ng-click="prev()"]');
+						expect(el.length).toBe(0);
+					});
+
+					it('should display the prev button', function() {
+						var el;
+						compile({prev:true, $meta: {number:3}});
+						el = element.find('[ng-click="prev()"]');
+						expect(el.length).toBe(1);
+					});
 				});
 			}); // end describe page directive
 

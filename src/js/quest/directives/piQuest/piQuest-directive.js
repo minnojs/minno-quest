@@ -68,6 +68,7 @@ define(['underscore', 'text!./piQuest.html'], function (_, template) {
 
 		function refresh(){
 			var page = task.current();
+
 			if (page) {
 				$scope.page = page;
 			}
