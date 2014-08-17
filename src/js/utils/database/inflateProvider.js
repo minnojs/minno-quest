@@ -80,7 +80,7 @@ define(function(require){
 			// start inflating child (we have to extend selectively...)
 			_.each(parent, function(value, key){
 				// if this key is not set yet, copy it out of the parent
-				if (!child[key]){
+				if (!(key in child)){
 					child[key] = angular.copy(value);
 				}
 			});

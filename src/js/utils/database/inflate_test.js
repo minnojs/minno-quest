@@ -121,6 +121,11 @@ define(['./database-module'],function(){
 			expect(result.a).toBe(1);
 		});
 
+		it('should not inherit keys that the child has even when they evaluate to false', function(){
+			inflate({inherit:true,a:undefined},[{a:2}]);
+			expect(result.a).toBe(undefined);
+		});
+
 		it('should extend data any way (child gets precedence)', function(){
 			inflate({inherit:true, data:{a:1}}, [{data:{a:2, b:2}}]);
 			expect(result.data.a).toBe(1);
