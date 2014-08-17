@@ -449,7 +449,7 @@ Select the elements in `data` if all the conditions in the `conditions` array ar
 **multiBranch**:
 ```js
 {
-    mixer: 'branch',
+    mixer: 'multiBranch',
     branches: [
         {conditions: [],data: []},
         {conditions: [],data: []}
