@@ -183,7 +183,7 @@ define(['underscore','./task-module'],function(){
 			it('should set the interpolated element into $inflated', function(){
 				create([{test:1}]).next();
 				var el = sequence.current();
-				expect(el.$interpolated).toBe(el);
+				expect(el.$templated).toBe(el);
 				expect(templateObj).toHaveBeenCalledWith(el,jasmine.any(Object));
 			});
 
@@ -194,15 +194,15 @@ define(['underscore','./task-module'],function(){
 				expect(templateObj.calls.length).toBe(1);
 			});
 
-			it('should interpolate multiple times if reinterpolate = true', function(){
-				create([{test:1, reinterpolate:true}]).next();
+			it('should interpolate multiple times if regenerateTemplate = true', function(){
+				create([{test:1, regenerateTemplate:true}]).next();
 				sequence.current();
 				sequence.current();
 				expect(templateObj.calls.length).toBe(2);
 			});
 
 			it('should extend the context with metaData and elmData', function(){
-				create([{test:1, reinterpolate:true}]).next();
+				create([{test:1, regenerateTemplate:true}]).next();
 				sequence.current();
 				var context = templateObj.calls[0].args[1];
 				expect(context.testMeta).toBeDefined();

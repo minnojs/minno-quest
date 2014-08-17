@@ -357,7 +357,7 @@ The third and last level of parsing has to do with templates. [Templates](#templ
 
 Some sequence may be parsed more than once, for instance, the questions sequences get re-parsed each time a response is changed. By default, none of the parsing is repeated so that the questionnaires can stay fixed. For each type of parsing there is a property that lets the player know that you want it re-parsed.
 
-In order to re-parse mixers, set `remix` to true. In order to re-parse inheritance set `reinflate` to true. In order to re-parse templates set `reinterpolate` to true.
+In order to re-parse mixers, set `remix` to true. In order to re-parse inheritance set `reinflate` to true. In order to re-parse templates set `regenerateTemplate` to true.
 
 ### Mixer
 The mixer is responsible for managing lists (arrays) within PIQuest, it is capable of repeating, randomizing and even changing the list according to [environmental variables](#variables). You may use it within the sequence, for answer lists within pages and even for answers within the `selectOne` or `selectMulti` questions.

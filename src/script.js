@@ -110,7 +110,7 @@ define(['questAPI'], function(Quest){
 			data: [
 				{
 					progressBar: '<%= pagesMeta.number %> out of <%= pagesMeta.outOf%>',
-					reinterpolate:true,
+					regenerateTemplate:true,
 					header: 'This Royal Questionnaire of mine.',
 					timeoutMessage: 'My message',
 					decline:true,

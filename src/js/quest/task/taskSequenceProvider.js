@@ -53,13 +53,13 @@ define(function(require){
 				}
 
 				// interpolate
-				if (!obj.$interpolated || obj.reinterpolate){
+				if (!obj.$templated || obj.regenerateTemplate){
 					context[this.namespace + 'Data'] = obj.data || {};
 					context[this.namespace + 'Meta'] = obj.$meta;
-					obj.$interpolated = templateObj(obj.$inflated, context);
+					obj.$templated = templateObj(obj.$inflated, context);
 				}
 
-				return obj.$interpolated;
+				return obj.$templated;
 			},
 
 			/**
