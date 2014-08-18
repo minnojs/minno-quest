@@ -1,5 +1,5 @@
 /*!
- * PIQuest v0.0.4
+ * PIQuest v0.0.5
  *  License
  */
 /**
@@ -211,8 +211,8 @@ define('utils/template/templateModule',['require','angular','./templateFilter','
 define('quest/directives/questController',['require','underscore'],function(require){
 	var _ = require('underscore');
 
-	questController.$inject = ['$scope', 'timerStopper', '$parse', '$attrs'];
-	function questController($scope, Stopper, $parse, $attr){
+	questController.$inject = ['$scope', 'timerStopper', '$parse', '$attrs','$log'];
+	function questController($scope, Stopper, $parse, $attr, $log){
 		var self = this;
 		var log;
 		var data = $scope.data;
@@ -235,18 +235,23 @@ define('quest/directives/questController',['require','underscore'],function(requ
 			$scope.model = ngModel;
 
 			// set log and module
-			if (_.isUndefined(ngModelGet($scope))){
+			if (_.isUndefined(ngModelGet($scope.$parent))){
 				self.log = ngModel.$modelValue = log = {
 					name: data.name,
-					response: dfltValue
+					response: dfltValue,
+					// @TODO: this is a bit fragile and primitive.
+					// we should probably create a unique ID service of some sort...
+					serial: _.size($parse('current.questions')($scope.$parent))
 				};
 				$scope.response = ngModel.$viewValue = dfltValue;
 
 				ngModelGet.assign($scope.$parent, log);
 			} else {
-				log = self.log = ngModelGet($scope);
-				ngModel.$viewValue = log.response;
+				log = self.log = ngModelGet($scope.$parent);
+				$scope.response = ngModel.$viewValue = log.response;
+				data.DEBUG && $log.warn('DEBUG: this question has already been in use: "' + log.name + '"');
 			}
+
 
 			// model --> view
 			// should probably never be called (since our model is an object and not a primitive)
@@ -265,7 +270,6 @@ define('quest/directives/questController',['require','underscore'],function(requ
 
 				log.response = viewValue;
 				log.latency = latency;
-				log.declined = undefined;
 
 				// if this is the first change
 				if (!log.pristineLatency){
@@ -305,11 +309,23 @@ define('quest/directives/questController',['require','underscore'],function(requ
 				ngModel.$parsers.push(correctValidator);
 				data.response = correctValidator(this.log);
 			}
-
-
-
-
 		};
+
+		$scope.$on('quest:decline', function(event){
+			event.preventDefault();
+			log.declined = true;
+			log.submitLatency = self.stopper.now();
+		});
+
+		$scope.$on('quest:submit', function(event){
+			event.preventDefault();
+			log.declined = undefined;
+			log.submitLatency = self.stopper.now();
+		});
+
+		// $scope.$on('$destroy', function(a,b){
+		// 	console.log(a,b)
+		// })
 	}
 
 	return questController;
@@ -366,15 +382,26 @@ define('quest/directives/piQuest/piQuest-directive',['underscore', 'text!./piQue
 		_.extend(mixerDefaultContext,defaultContext);
 
 		$scope.$on('quest:next', next);
+		$scope.$on('quest:prev', prev);
+		$scope.$on('quest:refresh', refresh);
 
-		$scope.$on('quest:log', function(event, logs, pageData){
-			_.each(logs, function(log){
-				task.log(log, pageData, $scope.global);
-			});
+		$scope.$on('quest:log', function(event, log, pageData){
+			task.log(log, pageData, $scope.global);
 		});
 
 		function next(event, target){
-			var page = task.next(target);
+			task.next(target);
+			refresh();
+		}
+
+		function prev(event, target){
+			task.prev(target);
+			refresh();
+		}
+
+		function refresh(){
+			var page = task.current();
+
 			if (page) {
 				$scope.page = page;
 			}
@@ -396,7 +423,7 @@ define('quest/directives/piQuest/piQuest-directive',['underscore', 'text!./piQue
 	return directive;
 });
 
-define('text!quest/directives/piQuest/piqPage.html',[],function () { return '<div ng-form name="pageForm">\n\t<div ng-if="page.progressBar" class="text-center" ng-bind-html="page.progressBar"></div>\n\t<h3 ng-if="page.header" ng-bind-html="page.header" ng-style="page.headerStyle"></h3>\n\t<ol ng-class="{\'list-unstyled\':!page.numbered}" start="{{page.numberStart}}">\n\t\t<li ng-repeat="quest in page.questions">\n\t\t\t<div quest-wrapper quest-data="quest" quest-current="current"></div>\n\t\t</li>\n\t</ol>\n\n\t<div class="btn-group pull-right">\n\t\t<button\n\t\t\tng-click="submit()"\n\t\t\tdata-role="submit"\n\t\t\tclass="btn btn-primary"\n\t\t\tng-class="form"\n\t\t\tng-disabled="pageForm.$invalid"\n\t\t\tng-if="!page.noSubmit"\n\t\t>{{page.submitText || "Submit"}}</button>\n\n\t\t<button\n\t\t\tng-click="decline()"\n\t\t\tdata-role="submit"\n\t\t\tclass="btn btn-warning"\n\t\t\tng-class="form"\n\t\t\tng-if="page.decline"\n\t\t>{{page.declineText || "Decline to Answer"}}</button>\n\t</div>\n\n\n</div>';});
+define('text!quest/directives/piQuest/piqPage.html',[],function () { return '<div ng-form name="pageForm">\n\t<div ng-if="page.progressBar" class="text-center" ng-bind-html="page.progressBar"></div>\n\t<h3 ng-if="page.header" ng-bind-html="page.header" ng-style="page.headerStyle"></h3>\n\t<ol ng-class="{\'list-unstyled\':!page.numbered}" start="{{page.numberStart}}">\n\t\t<li ng-repeat="quest in page.questions">\n\t\t\t<div quest-wrapper quest-data="quest" quest-current="current"></div>\n\t\t</li>\n\t</ol>\n\n\t<div class="btn-group pull-right">\n\t\t<button\n\t\t\tng-click="prev()"\n\t\t\tdata-role="submit"\n\t\t\tclass="btn"\n\t\t\tng-class="form"\n\t\t\tng-if="page.prev && page.$meta.number > 1"\n\t\t>{{page.prevText || "Go Back"}}</button>\n\n\t\t<button\n\t\t\tng-click="submit()"\n\t\t\tdata-role="submit"\n\t\t\tclass="btn btn-primary"\n\t\t\tng-class="form"\n\t\t\tng-disabled="pageForm.$invalid"\n\t\t\tng-if="!page.noSubmit"\n\t\t>{{page.submitText || "Submit"}}</button>\n\n\t\t<button\n\t\t\tng-click="decline()"\n\t\t\tdata-role="submit"\n\t\t\tclass="btn btn-warning"\n\t\t\tng-class="form"\n\t\t\tng-if="page.decline"\n\t\t>{{page.declineText || "Decline to Answer"}}</button>\n\t</div>\n\n\n</div>';});
 
 /**
  * Main tag for piqPage component.
@@ -410,12 +437,12 @@ define('text!quest/directives/piQuest/piqPage.html',[],function () { return '<di
  *
  * @name piqPage
   */
-define('quest/directives/piQuest/piqPage-directive',['require','underscore','text!./piqPage.html'],function (require) {
-	var _ = require('underscore');
+define('quest/directives/piQuest/piqPage-directive',['require','text!./piqPage.html','underscore'],function (require) {
 	var template = require('text!./piqPage.html');
+	var _ = require('underscore');
 
-	piqPageCtrl.$inject = ['$scope','$timeout', '$rootScope', 'questHarvest'];
-	function piqPageCtrl($scope,$timeout, $rootScope, harvest){
+	piqPageCtrl.$inject = ['$scope','$timeout', '$rootScope'];
+	function piqPageCtrl($scope,$timeout, $rootScope){
 		var self = this;
 
 		$scope.global = $rootScope.global;
@@ -425,7 +452,22 @@ define('quest/directives/piQuest/piqPage-directive',['require','underscore','tex
 		 * Harvest piqPage questions, and log them.
 		 */
 		this.harvest = function(){
-			return harvest($scope,self.log, $scope.global);
+			var questions = $scope.current.questions;
+
+			_.each($scope.page.questions, function(q){
+				// don't log if we don't have a name or if nolog is set
+				if (!q.name || q.nolog){return;}
+
+				// get the appropriate log
+				var log = questions[q.name];
+
+				// don't log if this has already been logged
+				if (log.$logged){return;}
+
+				// emit to quest directive
+				$scope.$emit('quest:log', log, self.log);
+				log.$logged = true;
+			});
 		};
 
 		/**
@@ -441,21 +483,33 @@ define('quest/directives/piQuest/piqPage-directive',['require','underscore','tex
 				return true;
 			}
 
+			// broadcast to the quest controller
+			$scope.$broadcast('quest:submit');
+
 			self.proceed();
+			$scope.$emit('quest:next');
 		};
 
 		/**
 		 * Decline to answer. mark all questions on this page as declined
-		 * (leave filtering the responses themselves to the logger, so that answers can be saved despite declining)
 		 */
 		$scope.decline = function(){
-			var questions = $scope.global.current.questions;
-			// mark all questions on this page as declined
-			_.forEach($scope.page.questions || {}, function(quest){
-				questions[quest.name].declined = true;
-			});
+			// broadcast to the quest controller
+			$scope.$broadcast('quest:decline');
+
 			self.proceed();
+			$scope.$emit('quest:next');
 		};
+
+		/**
+		 * Go back to previous page.
+		 */
+		$scope.prev = function(){
+			// broadcast to the quest controller
+			self.proceed();
+			$scope.$broadcast('quest:prev');
+		};
+
 
 		/**
 		 * Proceed to the next page.
@@ -463,6 +517,7 @@ define('quest/directives/piQuest/piqPage-directive',['require','underscore','tex
 		 * @todo: optional harvesting
 		 */
 		this.proceed = function(){
+
 			// remove timeout if needed
 			if (self.timeoutDeferred){
 				$timeout.cancel(self.timeoutDeferred);
@@ -470,21 +525,29 @@ define('quest/directives/piQuest/piqPage-directive',['require','underscore','tex
 			}
 
 			// by default, harvest after every page..
-			self.harvest();
-			next();
+			!$scope.page.nolog && self.harvest();
 		};
 
+		// setup page on page refresh
 		$scope.$watch('page', pageSetup);
-		$scope.$on('quest:submit', function(){
+
+		// refresh page on question change
+		$scope.$watch('current.questions', pageRefresh, true);
+
+		// listen for auto submit calls
+		$scope.$on('quest:submit:now', function(){
 			$scope.submit();
 		});
 
-		function next(proceedObj){
-			$scope.$emit('quest:next', proceedObj);
+		// change $scope.page
+		// indirectly triggers pageSetup
+		function pageRefresh(){
+			$scope.$emit('quest:refresh');
 		}
 
 		function pageSetup(newPage, oldValue, scope){
 			// set the page log object
+			// @TODO: make sure log stays constant per page (or something... maybe move the startime into question. makes more sense.)
 			self.log = {
 				name: newPage.name,
 				startTime: +new Date()
@@ -511,39 +574,6 @@ define('quest/directives/piQuest/piqPage-directive',['require','underscore','tex
 	}
 
 	return directive;
-});
-define('quest/directives/piQuest/harvestProvider',['require','underscore'],function(require){
-	var _ = require('underscore');
-
-
-	harvestProvider.$inject = ['$rootScope'];
-	function harvestProvider($rootScope){
-
-		/**
-		 * Gathers the questions needed to emit and emits them
-		 * @param  {$scope} $scope [The scope to emit the log pub]
-		 * @param  {*}             [any parameters to be published]
-		 */
-		function harvest($scope){
-			var questions = $rootScope.current.questions;
-
-			// filter all logged questions
-			var logs = _.filter(questions, function(quest){return !quest.logged;});
-
-			// log everything
-			var args = _.rest(arguments);
-			args.unshift('quest:log',logs);
-			$scope.$emit.apply($scope, args);
-
-			// mark stuff as logged
-			_.each($scope.current.questions, function(quest){quest.logged = true;});
-		}
-
-		return harvest;
-	}
-
-	return harvestProvider;
-
 });
 
 define('text!quest/directives/wrapper/wrapper.html',[],function () { return '<div class="form-group">\n\t<label for="{{data.name}}" ng-bind-html="data.stem"></label>\n\t<div quest-data="data" ng-model="current.questions[data.name]"></div>\n\t<p class="help-block" ng-if="data.help" ng-bind-html="data.helpText"></p>\n</div>';});
@@ -629,7 +659,7 @@ define('quest/directives/text/text-directive',['require','text!./text.html'],fun
 				scope.data.autoSubmit && element.bind("keydown keypress", function (event) {
 					if(event.which === 13) {
 						scope.$apply(function(){
-							scope.$emit('quest:submit');
+							scope.$emit('quest:submit:now');
 						});
 						event.preventDefault();
 					}
@@ -676,7 +706,7 @@ define('quest/directives/text/text-number-directive',['require','text!./text-num
 				scope.data.autoSubmit && element.bind("keydown keypress", function (event) {
 					if(event.which === 13) {
 						scope.$apply(function(){
-							scope.$emit('quest:submit');
+							scope.$emit('quest:submit:now');
 						});
 						event.preventDefault();
 					}
@@ -761,7 +791,7 @@ define('quest/directives/select/selectMixerProvider',['require','underscore'],fu
 	return selectMixerProvider;
 });
 
-define('text!quest/directives/select/selectOne.html',[],function () { return '<div required="data.required">\n\t<div ng-class="{\'list-group\':!data.buttons, \'btn-group btn-group-justified btn-group-lg\':data.buttons}">\n\t\t<!-- track by in the ng-repeat allows us to keep the repeated object clean so that angular doesn\'t add a $$hashkey property -->\n\t\t<a\n\t\t\ttabindex="-1"\n\t\t\tng-repeat="answer in quest.answers track by answer.order"\n\t\t\tng-model="$parent.responseObj"\n\t\t\tbtn-radio="answer"\n\t\t\tng-class="{active:$parent.data.dflt === answer.value, \'list-group-item\': !$parent.data.buttons, \'btn btn-success\': $parent.data.buttons}"\n\t\t\tuncheckable\n\t\t\tng-click="autoSubmit($event)"\n\t\t\tng-bind-html="answer.text"\n\t\t></a>\n\t</div>\n\t<p class="error" ng-show="model.$error.required">{{data.errorMsg.required || "This field is required!"}}</p>\n\t<p class="error" ng-show="model.$error.correct">{{data.errorMsg.correct || "You must answer the correct answer!"}}</p>\n</div>';});
+define('text!quest/directives/select/selectOne.html',[],function () { return '<div required="{{data.required}}">\n\t<div ng-class="{\'list-group\':!data.buttons, \'btn-group btn-group-justified btn-group-lg\':data.buttons}">\n\t\t<!-- track by in the ng-repeat allows us to keep the repeated object clean so that angular doesn\'t add a $$hashkey property -->\n\t\t<a\n\t\t\ttabindex="-1"\n\t\t\tng-repeat="answer in quest.answers track by answer.order"\n\t\t\tng-model="$parent.responseObj"\n\t\t\tbtn-radio="answer"\n\t\t\tng-class="{active:$parent.response === answer.value, \'list-group-item\': !$parent.data.buttons, \'btn btn-success\': $parent.data.buttons}"\n\t\t\tuncheckable\n\t\t\tng-click="data.autoSubmit && autoSubmit($event)"\n\t\t\tng-bind-html="answer.text"\n\t\t></a>\n\t</div>\n\t<p class="error" ng-show="model.$error.required">{{data.errorMsg.required || "This field is required!"}}</p>\n\t<p class="error" ng-show="model.$error.correct">{{data.errorMsg.correct || "You must answer the correct answer!"}}</p>\n</div>';});
 
 /*
  * The directive for creating selectOne inputs.
@@ -806,7 +836,6 @@ define('quest/directives/select/selectOneDirective',['require','text!./selectOne
 					}
 
 					scope.response = newValue && newValue.value;
-					ctrl.log.responseObj = newValue;
 				});
 
 				/**
@@ -822,7 +851,7 @@ define('quest/directives/select/selectOneDirective',['require','text!./selectOne
 
 					if (isActive){
 						// this whole function happens within a digest cycle, so we don't need to $apply
-						scope.$emit('quest:submit');
+						scope.$emit('quest:submit:now');
 					}
 				};
 			}
@@ -832,7 +861,7 @@ define('quest/directives/select/selectOneDirective',['require','text!./selectOne
 	return directive;
 });
 
-define('text!quest/directives/select/selectMulti.html',[],function () { return '<div required="data.required">\n\t<div class="list-group" >\n\t\t<!-- track by in the ng-repeat allows us to keep the repeated object clean so that angular doesn\'t add a $$hashkey property -->\n\t\t<a\n\t\t\thref="javascript:void(0);"\n\t\t\tng-repeat="answer in quest.answers track by answer.order"\n\t\t\tclass="list-group-item"\n\t\t\tng-model="answer.chosen"\n\t\t\tbtn-checkbox\n\t\t\tng-class="{active:answer.chosen}"\n\t\t\tuncheckable\n\t\t\tng-bind-html="answer.text"\n\t\t>\n\t\t</a>\n\t</div>\n\t<p class="error" ng-show="model.$error.required">{{data.errorMsg.required || "This field is required!"}}</p>\n\t<p class="error" ng-show="model.$error.correct">{{data.errorMsg.correct || "You must answer the correct answer!"}}</p>\n</div>';});
+define('text!quest/directives/select/selectMulti.html',[],function () { return '<div required="{{data.required}}">\n\t<div class="list-group" >\n\t\t<!-- track by in the ng-repeat allows us to keep the repeated object clean so that angular doesn\'t add a $$hashkey property -->\n\t\t<a\n\t\t\thref="javascript:void(0);"\n\t\t\tng-repeat="answer in quest.answers track by answer.order"\n\t\t\tclass="list-group-item"\n\t\t\tng-model="answer.chosen"\n\t\t\tbtn-checkbox\n\t\t\tng-class="{active:answer.chosen}"\n\t\t\tuncheckable\n\t\t\tng-bind-html="answer.text"\n\t\t>\n\t\t</a>\n\t</div>\n\t<p class="error" ng-show="model.$error.required">{{data.errorMsg.required || "This field is required!"}}</p>\n\t<p class="error" ng-show="model.$error.correct">{{data.errorMsg.correct || "You must answer the correct answer!"}}</p>\n</div>';});
 
 /*
  * The directive for creating selectMulti inputs.
@@ -897,7 +926,7 @@ define('quest/directives/select/selectMultiDirective',['require','underscore','t
 
 	return directive;
 });
-define('quest/directives/questDirectivesModule',['require','angular','utils/timer/timer-module','./buttons/buttons','utils/template/templateModule','./questController','./piQuest/piQuest-directive','./piQuest/piqPage-directive','./piQuest/harvestProvider','./wrapper/wrapper-directive','./text/text-directive','./text/text-number-directive','./select/selectMixerProvider','./select/selectOneDirective','./select/selectMultiDirective'],function(require){
+define('quest/directives/questDirectivesModule',['require','angular','utils/timer/timer-module','./buttons/buttons','utils/template/templateModule','./questController','./piQuest/piQuest-directive','./piQuest/piqPage-directive','./wrapper/wrapper-directive','./text/text-directive','./text/text-number-directive','./select/selectMixerProvider','./select/selectOneDirective','./select/selectMultiDirective'],function(require){
 	var angular = require('angular');
 	require('utils/timer/timer-module');
 	require('./buttons/buttons');
@@ -909,7 +938,6 @@ define('quest/directives/questDirectivesModule',['require','angular','utils/time
 	module.controller('questController', require('./questController'));
 	module.directive('piQuest', require('./piQuest/piQuest-directive'));
 	module.directive('piqPage', require('./piQuest/piqPage-directive'));
-	module.service('questHarvest', require('./piQuest/harvestProvider'));
 	module.directive('questWrapper', require('./wrapper/wrapper-directive'));
 	module.directive('questText', require('./text/text-directive'));
 	module.directive('questTextNumber', require('./text/text-number-directive'));
@@ -1043,7 +1071,7 @@ define('utils/logger/LoggerProvider',['require','underscore'],function(require){
 				function error(){
 					// try again
 					$http.post(settings.url, sendData).then(success, function(){
-						throw new Error('Failed to send data, it seems the backend is not responding');
+						throw new Error('Failed to send data, it seems the backend is not responding.');
 					});
 				}
 			},
@@ -1562,7 +1590,7 @@ define('utils/database/inflateProvider',['require','angular','underscore'],funct
 			// start inflating child (we have to extend selectively...)
 			_.each(parent, function(value, key){
 				// if this key is not set yet, copy it out of the parent
-				if (!child[key]){
+				if (!(key in child)){
 					child[key] = angular.copy(value);
 				}
 			});
@@ -1618,8 +1646,12 @@ define('utils/mixer/mixer',['underscore'],function(_){
 	 * The basic structure of such an obect is:
 	 * {
 	 *		mixer: 'functionType',
+	 *		remix : false,
 	 *		data: [task1, task2]
 	 *	}
+	 *
+	 * The results of the mix are set into `$parsed` within the original mixer object.
+	 * if remix is true $parsed is returned instead of recomputing
 	 *
 	 * @param {Object} [obj] [a mixer object]
 	 * @returns {Array} [An array of mixed objects]
@@ -1641,7 +1673,13 @@ define('utils/mixer/mixer',['underscore'],function(_){
 				throw new Error('Mixer: unknow mixer type = ' + mixerName);
 			}
 
-			return mix.mixers[mixerName].apply(null, arguments);
+			if (!obj.remix && obj.$parsed) {
+				return obj.$parsed;
+			}
+
+			obj.$parsed = mix.mixers[mixerName].apply(null, arguments);
+
+			return obj.$parsed;
 		}
 
 		mix.mixers = {
@@ -1653,7 +1691,7 @@ define('utils/mixer/mixer',['underscore'],function(_){
 					var sequence = obj.data || [];
 					var result = [], i;
 					for (i=0; i < obj.times; i++){
-						result = result.concat(sequence);
+						result = result.concat(_.clone(sequence,true));
 					}
 					return result;
 			},
@@ -1764,6 +1802,119 @@ define('utils/mixer/mixerRecursive',['require','underscore'],function(require){
 
 	return mixerRecursiveProvider;
 });
+define('utils/mixer/mixerSequenceProvider',['require','underscore'],function(require){
+	var _ = require('underscore');
+
+	mixerSequenceProvider.$inject = ['mixer'];
+	function mixerSequenceProvider(mix){
+
+		/**
+		 * MixerSequence takes an mixer array and allows browsing back and forth within it
+		 * @param {Array} arr [a mixer array]
+		 */
+		function MixerSequence(arr){
+			this.sequence = arr;
+			this.stack = [];
+			this.add(arr);
+		}
+
+		_.extend(MixerSequence.prototype, {
+			/**
+			 * Add sequence to mixer
+			 * @param {[type]} arr     Sequence
+			 * @param {[type]} reverse Whether to start from begining or end
+			 */
+			add: function(arr, reverse){
+				this.stack.push({pointer:reverse ? arr.length : -1,sequence:arr});
+			},
+
+			proceed: function(direction, context){
+				// get last subSequence
+				var subSequence = this.stack[this.stack.length-1];
+				var isNext = (direction === 'next');
+
+				// if we ran out of sequence
+				// add the original sequence back in
+				if (!subSequence) {
+					throw new Error ('mixerSequence: subSequence not found');
+				}
+
+				subSequence.pointer += isNext ? 1 : -1;
+
+				var el = subSequence.sequence[subSequence.pointer];
+
+				// if we ran out of elements, go to previous level (unless we are on the root sequence)
+				if (_.isUndefined(el) && this.stack.length > 1){
+					this.stack.pop();
+					return this.proceed.call(this,direction,context);
+				}
+
+				// if element is a mixer, mix it
+				if (el && el.mixer){
+					this.add(mix(el,context), !isNext);
+					return this.proceed.call(this,direction,context);
+				}
+
+				// regular element or undefined (end of sequence)
+				return this;
+			},
+
+			next: function(context){
+				return this.proceed.call(this, 'next',context);
+			},
+
+			prev: function(context){
+				return this.proceed.call(this, 'prev',context);
+			},
+
+			/**
+			 * Return current element
+			 * should **never** return a mixer - supposed to abstract them away
+			 * @return {[type]} undefined or element
+			 */
+			current:function(){
+				// get last subSequence
+				var subSequence = this.stack[this.stack.length-1];
+
+				if (!subSequence) {
+					throw new Error ('mixerSequence: subSequence not found');
+				}
+
+				var el = subSequence.sequence[subSequence.pointer];
+
+				if (!el){
+					return undefined;
+				}
+
+				// extend element with meta data
+				el.$meta = this.meta();
+
+				return el;
+			},
+
+			meta: function(){
+				return {
+					// sum of pointers + 1
+					number: _.reduce(this.stack, function(memo,sub){return memo + sub.pointer;},0) + 1,
+
+					// sum of sequence length, minus one (the mixer) for each level of stack except the last
+					outOf:  _.reduce(this.stack, function(memo,sub){return memo + sub.sequence.length-1;},0)+1
+				};
+			}
+
+		});
+
+		return MixerSequence;
+	}
+
+	return mixerSequenceProvider;
+});
+
+
+
+
+
+
 define('utils/mixer/branching/dotNotation',['require','underscore'],function(require){
 	var _ = require('underscore');
 
@@ -1963,7 +2114,7 @@ define('utils/mixer/branching/mixerBranchingDecorator',['require','underscore'],
 
 	return mixerBranchingDecorator;
 });
-define('utils/mixer/mixer-module',['require','utils/randomize/randomizeModule','angular','./mixer','./mixerSequential','./mixerRecursive','./branching/dotNotation','./branching/mixerDotNotationProvider','./branching/mixerConditionProvider','./branching/mixerEvaluateProvider','./branching/mixerBranchingDecorator'],function(require){
+define('utils/mixer/mixer-module',['require','utils/randomize/randomizeModule','angular','./mixer','./mixerSequential','./mixerRecursive','./mixerSequenceProvider','./branching/dotNotation','./branching/mixerDotNotationProvider','./branching/mixerConditionProvider','./branching/mixerEvaluateProvider','./branching/mixerBranchingDecorator'],function(require){
 	require('utils/randomize/randomizeModule');
 
 	var angular = require('angular');
@@ -1972,6 +2123,8 @@ define('utils/mixer/mixer-module',['require','utils/randomize/randomizeModule','
 	module.service('mixer', require('./mixer'));
 	module.service('mixerSequential', require('./mixerSequential'));
 	module.service('mixerRecursive', require('./mixerRecursive'));
+	module.service('MixerSequence', require('./mixerSequenceProvider'));
+
 
 	module.value('dotNotation', require('./branching/dotNotation'));
 	module.service('mixerDotNotation', require('./branching/mixerDotNotationProvider'));
@@ -1986,114 +2139,136 @@ define('utils/mixer/mixer-module',['require','utils/randomize/randomizeModule','
 
 	return module;
 });
-define('quest/task/taskSequenceProvider',['require','underscore'],function(require){
+define('quest/task/questSequenceProvider',['require','underscore'],function(require){
 	var _ = require('underscore');
 
-	if (typeof Object.create != 'function') {
-		(function () {
-			var F = function () {};
-			Object.create = function (o) {
-				if (arguments.length > 1) {
-					throw new Error('Second argument not supported');
-				}
-				if (o === null) {
-					throw new Error('Cannot set a null [[Prototype]]');
-				}
-				if (typeof o != 'object') {
-					throw new TypeError('Argument must be an object');
-				}
-				F.prototype = o;
-				return new F();
-			};
-		})();
-	}
+	SequenceProvider.$inject = ['TaskSequence'];
+	function SequenceProvider(TaskSequence){
 
-	SequenceProvider.$inject = ['Collection', 'mixerSequential','mixerRecursive', 'templateObj'];
-	function SequenceProvider(Collection, mixerSequential, mixerRecursive, templateObj){
-		// classical inheritance from Collection
-		// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create#Classical_inheritance_with_Object.create
-		function Sequence(coll, db){
-			Collection.call(this, coll);
-
+		function Sequence(arr, db){
 			if (!db){
 				throw new Error('Sequences need to take a db as the second argument');
 			}
+
+			this.sequence = new TaskSequence('pages', arr, db);
 			this.db = db;
 		}
 
-		Sequence.prototype = Object.create(Collection.prototype);
-		Sequence.prototype.constructor = Sequence;
+		_.extend(Sequence.prototype, {
+			next: function(context){
+				this.sequence.next(context);
+				return this;
+			},
+
+			prev: function(context){
+				this.sequence.prev(context);
+				return this;
+			},
+
+			current: function(context){
+				var page = this.sequence.current(context);
+
+				if (!page){
+					return page;
+				}
+
+				var questions = new TaskSequence('questions', page.questions, this.db).all({
+					pagesData: page.data,
+					pagesMeta: page.$meta
+				});
+
+				// make sure we don't lose any thing in the orginal page
+				// @TODO: this seems extremely expensive. Is this really neccesary?
+				page = _.clone(page, true);
+				page.questions = questions;
+
+				return page;
+			}
+		});
+
+		return Sequence;
+	}
+
+	return SequenceProvider;
+});
+define('quest/task/taskSequenceProvider',['require','underscore'],function(require){
+	var _ = require('underscore');
+
+	SequenceProvider.$inject = ['MixerSequence', 'templateObj'];
+	function SequenceProvider(MixerSequence, templateObj){
+
+		/**
+		 * Sequence Constructor:
+		 * Manage the progression of a sequence, including parsing (mixing, inheritance and templating).
+		 * @param  {String  } namespace [pages or questions (the type of db.Store)]
+		 * @param  {Array   } arr       [a sequence to manage]
+		 * @param  {Database} db        [the db itself]
+		 */
+
+		function Sequence(namespace, arr,db){
+			this.namespace = namespace;
+			this.mixerSequence = new MixerSequence(arr);
+			this.db = db;
+		}
 
 		_.extend(Sequence.prototype, {
-			// maybe add a context argument here?
-			buildPage: function(pageObj){
-				if (_.isUndefined(pageObj)){
-					return undefined;
+			// only mix
+			next: function(context){
+				this.mixerSequence.next(context);
+				return this;
+			},
+
+			// anti mix
+			prev: function(context){
+				this.mixerSequence.prev(context);
+				return this;
+			},
+
+			/**
+			 * Return the element currently in focus.
+			 * It always returns either an element or undefined (mixers are abstrcted away)
+			 * @param  {[type]} context [description]
+			 * @return {[type]}         [description]
+			 */
+			current: function(context){
+				context || (context = {});
+				// must returned an element or undefined
+				var obj = this.mixerSequence.current(context);
+
+				// in case this is the end of the sequence
+				if (!obj){
+					return obj;
 				}
 
+				// inflate
+				if (!obj.$inflated || obj.reinflate) {
+					obj.$inflated = this.db.inflate(this.namespace, obj);
+				}
 
-				var page = this.db.inflate('pages', pageObj);
-				var pageMeta = {
-					number : this.pointer + 1,
-					outOf : this.length
-				};
+				// interpolate
+				if (!obj.$templated || obj.regenerateTemplate){
+					context[this.namespace + 'Data'] = obj.data || {};
+					context[this.namespace + 'Meta'] = obj.$meta;
+					obj.$templated = templateObj(obj.$inflated, context);
+				}
 
-				templateObj(page, {pageData: page.data || {}, pageMeta: pageMeta});
-
-				page.questions = mixerRecursive(page.questions || []);
-
-				// we can afford to overwrite the original since inflate always creates new objects for us.
-				page.questions = _.map(page.questions, function(question){
-					question = this.db.inflate('questions', question);
-					templateObj(question, {pageData: page.data || {}, pageMeta: pageMeta, questData: question.data || {}});
-					return question;
-				}, this);
-
-				return page;
+				return obj.$templated;
 			},
 
 			/**
-			 * Parses the sequence to get the next page.
-			 * next -> mix -> build (or escape) -> current
-			 * @return {*} the next page to parse or undefined
-			 */
-			proceed: function(){
-				// proceed
-				this.next();
-				this.mix();
-				var page = this.buildPage(this.current());
-
-				return page;
-			},
-
-			/**
-			 * Mix the current object, until we have a non mixer
+			 * Returns an array of elements, created by proceeding through the whole sequence.
 			 * @return {[type]} [description]
 			 */
-			mix: function(){
-				var obj = this.current();
+			all: function(context){
+				var sequence = [];
 
-				// manage the end of the line
-				if (_.isUndefined(obj)){
-					return undefined;
+				var el = this.next().current();
+				while (el){
+					sequence.push(el);
+					el = this.next().current(context);
 				}
 
-				var mixed = mixerSequential([obj]);
-				var sequence = this.collection;
-
-				// push the first arguments of splice into the mixer array...
-				mixed.unshift(1); // how many objects to delete
-				mixed.unshift(this.pointer); // where to start at
-				sequence.splice.apply(sequence, mixed);
-
-				// update sequence length
-				this.length = sequence.length;
-
-				// if mixed returned an empty array, remix with the next object
-				// removing the current mixer effectively moves the pointer ahead (== next)
-				if (mixed.length == 2){
-					this.mix();
-				}
+				return sequence;
 			}
 		});
 
@@ -2104,8 +2279,8 @@ define('quest/task/taskSequenceProvider',['require','underscore'],function(requi
 });
 define('quest/task/taskProvider',['underscore', 'angular'], function(_, angular){
 
-	TaskProvider.$inject = ['$q','Database','Logger','TaskSequence','taskParse', 'dfltQuestLogger'];
-	function TaskProvider($q, Database, Logger, Sequence, parse, dfltQuestLogger){
+	TaskProvider.$inject = ['$q','Database','Logger','QuestSequence','taskParse', 'dfltQuestLogger', '$rootScope'];
+	function TaskProvider($q, Database, Logger, Sequence, parse, dfltQuestLogger,$rootScope){
 		function Task(script){
 			var self = this;
 			var settings = script.settings || {};
@@ -2115,32 +2290,50 @@ define('quest/task/taskProvider',['underscore', 'angular'], function(_, angular)
 			this.db = new Database();
 			this.logger = new Logger(dfltQuestLogger);
 			this.logger.setSettings(settings.logger || {});
-			this.sequence = new Sequence([], this.db);
 			this.q = $q.defer();
+
+			if (!_.isArray(script.sequence)){
+				throw new Error('Task: no sequence was defined');
+			}
+
+			this.sequence = new Sequence(script.sequence, this.db);
 
 			this.q.promise
 				.then(function(){
+					// check if there are unlogged questions and log them
+					_.each($rootScope.current.questions, function(quest){
+						if(quest.$logged){
+							return true;
+						}
+						self.log(quest, {}, $rootScope.global);
+						quest.$logged = true;
+					});
 					return self.logger.send();
 				})
 				.then(settings.onEnd || angular.noop);
 
-			parse(script, this.db, this.sequence);
+			parse(script, this.db);
 		}
 
 		_.extend(Task.prototype, {
 			log: function(){
 				this.logger.log.apply(this.logger, arguments);
 			},
-			next: function(target){
-				var nextObj = this.sequence.proceed(target, this.db);
+			current: function(){
+				var nextObj = this.sequence.current();
 
 				if (!nextObj){
 					this.q.resolve();
 				}
 
 				return nextObj;
+			},
+			next: function(){
+				return this.sequence.next();
+			},
+			prev: function(){
+				return this.sequence.prev();
 			}
-
 		});
 
 		return Task;
@@ -2149,20 +2342,14 @@ define('quest/task/taskProvider',['underscore', 'angular'], function(_, angular)
 	return TaskProvider;
 });
 define('quest/task/parseProvider',[],function(){
-	parseProvider.$inject = ['mixer'];
-	function parseProvider(mixer){
+
+	function parseProvider(){
 		function parse(script, db, sequence){
 			db.createColl('pages');
 			db.createColl('questions');
 
 			db.add('pages', script.pages || []);
 			db.add('questions', script.questions || []);
-
-			if (!script.sequence) {
-				throw new Error('No sequence found');
-			}
-
-			sequence.add(script.sequence);
 		}
 
 		return parse;
@@ -2185,7 +2372,7 @@ define('quest/task/dfltQuestLogger',['require','underscore'],function(require){
 	return dfltQuestLogger;
 
 });
-define('quest/task/task-module',['require','utils/logger/logger-module','utils/database/database-module','utils/mixer/mixer-module','utils/template/templateModule','angular','./taskSequenceProvider','./taskProvider','./parseProvider','./dfltQuestLogger'],function(require){
+define('quest/task/task-module',['require','utils/logger/logger-module','utils/database/database-module','utils/mixer/mixer-module','utils/template/templateModule','angular','./questSequenceProvider','./taskSequenceProvider','./taskProvider','./parseProvider','./dfltQuestLogger'],function(require){
 	require('utils/logger/logger-module');
 	require('utils/database/database-module');
 	require('utils/mixer/mixer-module');
@@ -2194,6 +2381,7 @@ define('quest/task/task-module',['require','utils/logger/logger-module','utils/d
 	var angular = require('angular');
 	var module = angular.module('task', ['logger', 'database','mixer', 'template']);
 
+	module.service('QuestSequence', require('./questSequenceProvider'));
 	module.service('TaskSequence', require('./taskSequenceProvider'));
 	module.service('Task', require('./taskProvider'));
 	module.service('taskParse', require('./parseProvider'));

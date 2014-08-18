@@ -13,8 +13,12 @@ define(function(require){
 		function harvest($scope){
 			var questions = $rootScope.current.questions;
 
-			// filter all logged questions
-			var logs = _.filter(questions, function(quest){return !quest.logged;});
+			var logs = _($scope.page.questions)
+				// get current question logs
+				.map(function(page){return questions[page.name];})
+				// filter all logged questions
+				.filter(function(quest){return !quest.$logged;})
+				.value();
 
 			// log everything
 			var args = _.rest(arguments);
@@ -22,7 +26,9 @@ define(function(require){
 			$scope.$emit.apply($scope, args);
 
 			// mark stuff as logged
-			_.each($scope.current.questions, function(quest){quest.logged = true;});
+			_.each(logs, function(quest){
+				quest.$logged = true;
+			});
 		}
 
 		return harvest;

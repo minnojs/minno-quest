@@ -59,10 +59,12 @@ define(['../questDirectivesModule'],function(){
 		});
 
 		it('should support dflt',function(){
-			compile({dflt:123123});
+			compile({name:1, dflt:123123});
 			expect(inputElm.val()).toBe('123123');
-			// even if the default value is 0
-			compile({dflt:0});
+		});
+
+		it('should support dflt even if the default value is 0',function(){
+			compile({name:2,dflt:0});
 			expect(inputElm.val()).toBe('0');
 		});
 
@@ -127,14 +129,14 @@ define(['../questDirectivesModule'],function(){
 			var submitSpy;
 
 			compile({});
-			submitSpy = jasmine.createSpy('quest:submit');
-			scope.$on('quest:submit', submitSpy);
+			submitSpy = jasmine.createSpy('quest:submit:now');
+			scope.$on('quest:submit:now', submitSpy);
 			inputElm.trigger(e);
 			expect(submitSpy).not.toHaveBeenCalled();
 
 			compile({autoSubmit:true});
-			submitSpy = jasmine.createSpy('quest:submit');
-			scope.$on('quest:submit', submitSpy);
+			submitSpy = jasmine.createSpy('quest:submit:now');
+			scope.$on('quest:submit:now', submitSpy);
 			inputElm.trigger(e);
 			expect(submitSpy).toHaveBeenCalled();
 		});

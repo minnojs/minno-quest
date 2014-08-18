@@ -50,10 +50,8 @@ define(['underscore', 'text!./piQuest.html'], function (_, template) {
 		$scope.$on('quest:prev', prev);
 		$scope.$on('quest:refresh', refresh);
 
-		$scope.$on('quest:log', function(event, logs, pageData){
-			_.each(logs, function(log){
-				task.log(log, pageData, $scope.global);
-			});
+		$scope.$on('quest:log', function(event, log, pageData){
+			task.log(log, pageData, $scope.global);
 		});
 
 		function next(event, target){

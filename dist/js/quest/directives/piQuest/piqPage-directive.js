@@ -11,11 +11,11 @@
  * @name piqPage
   */
 define(function (require) {
-	var _ = require('underscore');
 	var template = require('text!./piqPage.html');
+	var _ = require('underscore');
 
-	piqPageCtrl.$inject = ['$scope','$timeout', '$rootScope', 'questHarvest'];
-	function piqPageCtrl($scope,$timeout, $rootScope, harvest){
+	piqPageCtrl.$inject = ['$scope','$timeout', '$rootScope'];
+	function piqPageCtrl($scope,$timeout, $rootScope){
 		var self = this;
 
 		$scope.global = $rootScope.global;
@@ -25,7 +25,22 @@ define(function (require) {
 		 * Harvest piqPage questions, and log them.
 		 */
 		this.harvest = function(){
-			return harvest($scope,self.log, $scope.global);
+			var questions = $scope.current.questions;
+
+			_.each($scope.page.questions, function(q){
+				// don't log if we don't have a name or if nolog is set
+				if (!q.name || q.nolog){return;}
+
+				// get the appropriate log
+				var log = questions[q.name];
+
+				// don't log if this has already been logged
+				if (log.$logged){return;}
+
+				// emit to quest directive
+				$scope.$emit('quest:log', log, self.log);
+				log.$logged = true;
+			});
 		};
 
 		/**
@@ -41,21 +56,33 @@ define(function (require) {
 				return true;
 			}
 
+			// broadcast to the quest controller
+			$scope.$broadcast('quest:submit');
+
 			self.proceed();
+			$scope.$emit('quest:next');
 		};
 
 		/**
 		 * Decline to answer. mark all questions on this page as declined
-		 * (leave filtering the responses themselves to the logger, so that answers can be saved despite declining)
 		 */
 		$scope.decline = function(){
-			var questions = $scope.global.current.questions;
-			// mark all questions on this page as declined
-			_.forEach($scope.page.questions || {}, function(quest){
-				questions[quest.name].declined = true;
-			});
+			// broadcast to the quest controller
+			$scope.$broadcast('quest:decline');
+
 			self.proceed();
+			$scope.$emit('quest:next');
 		};
+
+		/**
+		 * Go back to previous page.
+		 */
+		$scope.prev = function(){
+			// broadcast to the quest controller
+			self.proceed();
+			$scope.$broadcast('quest:prev');
+		};
+
 
 		/**
 		 * Proceed to the next page.
@@ -63,6 +90,7 @@ define(function (require) {
 		 * @todo: optional harvesting
 		 */
 		this.proceed = function(){
+
 			// remove timeout if needed
 			if (self.timeoutDeferred){
 				$timeout.cancel(self.timeoutDeferred);
@@ -70,21 +98,29 @@ define(function (require) {
 			}
 
 			// by default, harvest after every page..
-			self.harvest();
-			next();
+			!$scope.page.nolog && self.harvest();
 		};
 
+		// setup page on page refresh
 		$scope.$watch('page', pageSetup);
-		$scope.$on('quest:submit', function(){
+
+		// refresh page on question change
+		$scope.$watch('current.questions', pageRefresh, true);
+
+		// listen for auto submit calls
+		$scope.$on('quest:submit:now', function(){
 			$scope.submit();
 		});
 
-		function next(proceedObj){
-			$scope.$emit('quest:next', proceedObj);
+		// change $scope.page
+		// indirectly triggers pageSetup
+		function pageRefresh(){
+			$scope.$emit('quest:refresh');
 		}
 
 		function pageSetup(newPage, oldValue, scope){
 			// set the page log object
+			// @TODO: make sure log stays constant per page (or something... maybe move the startime into question. makes more sense.)
 			self.log = {
 				name: newPage.name,
 				startTime: +new Date()

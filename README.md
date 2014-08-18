@@ -170,6 +170,7 @@ numberStart		| (Number) The number for the first question in the page (default: 
 timeout 		| (Number) If this is set to a positive integer *x*, the page auto-submits after *x* milliseconds (no validation allowed).
 timeoutMessage	| (text) An optional message to be displayed upon timeout. (default: "")
 questions 		| (Array) an array of [questions](#questions) to be displayed in the page. Note that the questions may be randomized and chosen conditionally using a [mixer](#mixer).
+nolog 			| (true or false) Whether to log the questions on this page. This option is useful in cases that a specific page may be accessed multiple times. Questions may only be logged once, and therefore in order to change the responses you may want to prevent logging (see [logger](#logger) for more information on this). (default: false)
 
 For example, a page can look something like this:
 
@@ -202,6 +203,7 @@ name 			| (text) The name that this question is marked with when it is logged. A
 stem 			| (text; default: '') The text for the question itself..
 help			| (true or false;  (default: false)) Whether to display the question help text.
 helpText		| (text) The question help text. (Some questions have default help texts, some don't).
+nolog 			| (true or false) Whether to log this question. This option is useful in cases that a specific page may be accessed multiple times. Questions may only be logged once, and therefore in order to change the responses you may want to prevent logging (see [logger](#logger) for more information on this). (default: false).
 DEBUG 			| (true or false) Warn in the console if a question name is reused (note: sometimes a question is supposed to be reused, if this warning pops up just make sure the use case is correct).
 
 ##### Text
@@ -346,6 +348,10 @@ url 		| (Text; default:"") The URL to which we should post the data to.
 DEBUG 		| (true or false; default: false) When set to true, prints each logged object in the console.
 logfn 		| (Function) The task has a default object that it logs, if you want to change the logged object itself, you may use a function of the form: `function(log, pagesData, global){return logObj;}`
 
+Within the player, each question (as defined by unique question name) may be logged only once. By default questions are logged at the end of a page (on submit or decline), if you want to delay logging until the end of the task, you may do so by setting `nolog` in the appropriate page or question.
+
+If you want a question not to be logged at all, simply do not give it a name.
+
 ### Making your questionnaire dynamic
 There are several ways that you can make your questionnaire more dynamic. We will give a short overview and then get into the specifics.
 
@@ -357,9 +363,11 @@ The second level of parsing has to do with inheritance. Many times you want to p
 
 The third and last level of parsing has to do with templates. [Templates](#templates) allow you to change the settings of your elements depending on existing data from within the player. For instance, you may want to refer to the answer of a previous question. 
 
-Some sequence may be parsed more than once, for instance, the questions sequences get re-parsed each time a response is changed. By default, none of the parsing is repeated so that the questionnaires can stay fixed. For each type of parsing there is a property that lets the player know that you want it re-parsed.
+Some sequence may be parsed more than once, for instance, the questions sequences get re-parsed each time a response is changed, and each time a user returns to a page it is re-parsed. By default, none of the parsing is repeated so that the questionnaires can stay fixed. For each type of parsing there is a property that lets the player know that you want it re-parsed.
 
 In order to re-parse mixers, set `remix` to true. In order to re-parse inheritance set `reinflate` to true. In order to re-parse templates set `regenerateTemplate` to true.
+
+Another consideration when creating complex sequnces is logging. By default the player logs user responses automaticaly as soon as the user submits. If you are creating a sequence that allows users to go back to previous questions etc. you should make sure you don't prematurely log the user response (use `nolog`. learn more [here](#logger)).
 
 ### Mixer
 The mixer is responsible for managing lists (arrays) within PIQuest, it is capable of repeating, randomizing and even changing the list according to [environmental variables](#variables). You may use it within the sequence, for answer lists within pages and even for answers within the `selectOne` or `selectMulti` questions.

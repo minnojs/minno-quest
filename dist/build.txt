@@ -17,7 +17,6 @@ text!quest/directives/piQuest/piQuest.html
 js/quest/directives/piQuest/piQuest-directive.js
 text!quest/directives/piQuest/piqPage.html
 js/quest/directives/piQuest/piqPage-directive.js
-js/quest/directives/piQuest/harvestProvider.js
 text!quest/directives/wrapper/wrapper.html
 js/quest/directives/wrapper/wrapper-directive.js
 text!quest/directives/text/text.html
@@ -43,12 +42,14 @@ js/utils/database/database-module.js
 js/utils/mixer/mixer.js
 js/utils/mixer/mixerSequential.js
 js/utils/mixer/mixerRecursive.js
+js/utils/mixer/mixerSequenceProvider.js
 js/utils/mixer/branching/dotNotation.js
 js/utils/mixer/branching/mixerDotNotationProvider.js
 js/utils/mixer/branching/mixerConditionProvider.js
 js/utils/mixer/branching/mixerEvaluateProvider.js
 js/utils/mixer/branching/mixerBranchingDecorator.js
 js/utils/mixer/mixer-module.js
+js/quest/task/questSequenceProvider.js
 js/quest/task/taskSequenceProvider.js
 js/quest/task/taskProvider.js
 js/quest/task/parseProvider.js

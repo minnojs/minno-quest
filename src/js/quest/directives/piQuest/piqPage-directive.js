@@ -12,9 +12,10 @@
   */
 define(function (require) {
 	var template = require('text!./piqPage.html');
+	var _ = require('underscore');
 
-	piqPageCtrl.$inject = ['$scope','$timeout', '$rootScope', 'questHarvest'];
-	function piqPageCtrl($scope,$timeout, $rootScope, harvest){
+	piqPageCtrl.$inject = ['$scope','$timeout', '$rootScope'];
+	function piqPageCtrl($scope,$timeout, $rootScope){
 		var self = this;
 
 		$scope.global = $rootScope.global;
@@ -24,7 +25,22 @@ define(function (require) {
 		 * Harvest piqPage questions, and log them.
 		 */
 		this.harvest = function(){
-			return harvest($scope,self.log, $scope.global);
+			var questions = $scope.current.questions;
+
+			_.each($scope.page.questions, function(q){
+				// don't log if we don't have a name or if nolog is set
+				if (!q.name || q.nolog){return;}
+
+				// get the appropriate log
+				var log = questions[q.name];
+
+				// don't log if this has already been logged
+				if (log.$logged){return;}
+
+				// emit to quest directive
+				$scope.$emit('quest:log', log, self.log);
+				log.$logged = true;
+			});
 		};
 
 		/**
@@ -74,6 +90,7 @@ define(function (require) {
 		 * @todo: optional harvesting
 		 */
 		this.proceed = function(){
+
 			// remove timeout if needed
 			if (self.timeoutDeferred){
 				$timeout.cancel(self.timeoutDeferred);
@@ -81,7 +98,7 @@ define(function (require) {
 			}
 
 			// by default, harvest after every page..
-			self.harvest();
+			!$scope.page.nolog && self.harvest();
 		};
 
 		// setup page on page refresh

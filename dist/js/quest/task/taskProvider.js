@@ -1,7 +1,7 @@
 define(['underscore', 'angular'], function(_, angular){
 
-	TaskProvider.$inject = ['$q','Database','Logger','TaskSequence','taskParse', 'dfltQuestLogger'];
-	function TaskProvider($q, Database, Logger, Sequence, parse, dfltQuestLogger){
+	TaskProvider.$inject = ['$q','Database','Logger','QuestSequence','taskParse', 'dfltQuestLogger', '$rootScope'];
+	function TaskProvider($q, Database, Logger, Sequence, parse, dfltQuestLogger,$rootScope){
 		function Task(script){
 			var self = this;
 			var settings = script.settings || {};
@@ -11,32 +11,50 @@ define(['underscore', 'angular'], function(_, angular){
 			this.db = new Database();
 			this.logger = new Logger(dfltQuestLogger);
 			this.logger.setSettings(settings.logger || {});
-			this.sequence = new Sequence([], this.db);
 			this.q = $q.defer();
+
+			if (!_.isArray(script.sequence)){
+				throw new Error('Task: no sequence was defined');
+			}
+
+			this.sequence = new Sequence(script.sequence, this.db);
 
 			this.q.promise
 				.then(function(){
+					// check if there are unlogged questions and log them
+					_.each($rootScope.current.questions, function(quest){
+						if(quest.$logged){
+							return true;
+						}
+						self.log(quest, {}, $rootScope.global);
+						quest.$logged = true;
+					});
 					return self.logger.send();
 				})
 				.then(settings.onEnd || angular.noop);
 
-			parse(script, this.db, this.sequence);
+			parse(script, this.db);
 		}
 
 		_.extend(Task.prototype, {
 			log: function(){
 				this.logger.log.apply(this.logger, arguments);
 			},
-			next: function(target){
-				var nextObj = this.sequence.proceed(target, this.db);
+			current: function(){
+				var nextObj = this.sequence.current();
 
 				if (!nextObj){
 					this.q.resolve();
 				}
 
 				return nextObj;
+			},
+			next: function(){
+				return this.sequence.next();
+			},
+			prev: function(){
+				return this.sequence.prev();
 			}
-
 		});
 
 		return Task;

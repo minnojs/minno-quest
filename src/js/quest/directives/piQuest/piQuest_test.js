@@ -66,7 +66,7 @@ define(['../questDirectivesModule'],function(){
 		});
 
 		it('should listen for "quest:log" and log accordingly', function(){
-			scope.$new().$emit('quest:log', [1], 'currentPageData');
+			scope.$new().$emit('quest:log', 1, 'currentPageData');
 			expect(taskSpyObj.log).toHaveBeenCalledWith(1, 'currentPageData', scope.global);
 		});
 
@@ -96,66 +96,6 @@ define(['../questDirectivesModule'],function(){
 			expect(mixerDefaultContext.questions).toBe(scope.current.questions);
 		}));
 
-	});
-
-	describe('questHarvest', function(){
-
-		var questions, harvest, scope;
-		beforeEach(module('questDirectives'));
-		beforeEach(inject(function($rootScope, questHarvest){
-			$rootScope.current = {questions:{
-				1:{value:1},
-				2:{value:2},
-				3:{value:3}
-			}};
-
-			scope = $rootScope.$new();
-
-			harvest = function(a, b, c){
-				questHarvest(scope,a,b,c);
-			};
-			questions = $rootScope.current.questions;
-		}));
-
-		it('should emit the values of all questions on "quest:log"', function(){
-			var emited = false;
-			scope.$on('quest:log', function(e,logs){
-				emited = true;
-				expect(logs).toEqual([{value:1},{value:2},{value:3}]);
-			});
-			harvest();
-			expect(emited).toBeTruthy();
-		});
-
-		it('should emit all arguments with the logs', function(){
-			var emited = false;
-			scope.$on('quest:log', function(e,logs,a,b){
-				emited = true;
-				expect(a).toBe(123);
-				expect(b).toBe(345);
-			});
-			harvest(123,345);
-			expect(emited).toBeTruthy();
-		});
-
-		it('should mark all questions as logged', function(){
-			harvest();
-			var i;
-			for (i=0; i<questions.length; i++){
-				expect(questions[i].logged).toBeTruthy();
-			}
-		});
-
-		it('should only harvest each question once', function(){
-			harvest();
-
-			scope.$on('quest:log', function(e,logs){
-				expect(logs.length).toBe(1);
-				expect(logs[0].value).toBe(4);
-			});
-			questions.test = {value:4};
-			harvest();
-		});
 	});
 
 	describe('piqPage', function(){
@@ -327,6 +267,81 @@ define(['../questDirectivesModule'],function(){
 					expect(spy).toHaveBeenCalled();
 				});
 			});
+
+
+			describe(': harvest', function(){
+
+				var harvest, spy;
+				beforeEach(inject(function($rootScope){
+					$rootScope.current = {questions:{}};
+					spy = jasmine.createSpy('quest:log');
+					scope.$on('quest:log',spy);
+
+					harvest = function(pQuestions, questions){
+						compile({questions:pQuestions||[]});
+						angular.extend($rootScope.current.questions, questions || {});
+						controller.harvest();
+					};
+				}));
+
+				it('should not harvest nameless questions', function(){
+					/* jshint ignore:start */
+					var q = {"":{},undefined:{}};
+					var p = [{},{name:""},{name:undefined}];
+					harvest(p,q);
+					expect(spy).not.toHaveBeenCalled();
+					/* jshint ignore:end */
+				});
+
+				it('should not harvest questions marked with nolog', function(){
+					var q = {1:{}};
+					var p = [{name:1, nolog:true}];
+					harvest(p,q);
+					expect(spy).not.toHaveBeenCalled();
+				});
+
+				it('should emit the values of all questions on page uppon "quest:log"', function(){
+					var q = {1:{},2:{}};
+					var p = [{name:1},{name:2}];
+					harvest(p,q);
+					expect(spy.calls[0].args[1]).toBe(q[1]);
+					expect(spy.calls[1].args[1]).toBe(q[2]);
+				});
+
+				it('should emit all arguments with the page log', function(){
+					var q = {1:{},2:{}};
+					var p = [{name:1},{name:2}];
+					harvest(p,q);
+					expect(spy.calls[0].args[2]).toBe(controller.log);
+				});
+
+				it('should log only active questions', function(){
+					var q = {1:{},2:{}};
+					var p = [{name:1}];
+
+					harvest(p,q);
+					expect(spy.calls.length).toBe(1);
+					expect(spy.calls[0].args[1]).toBe(q[1]);
+				});
+
+				it('should mark (only) logged questions', function(){
+					var q = {1:{},2:{}};
+					var p = [{name:1}];
+
+					harvest(p,q);
+					expect(q[1].$logged).toBeTruthy();
+					expect(q[2].$logged).not.toBeTruthy();
+				});
+
+				it('should only harvest each question once', function(){
+					var q = {1:{$logged:true},2:{$logged:true}};
+					var p = [{name:1},{name:2}];
+					harvest(p,q);
+					expect(spy).not.toHaveBeenCalled();
+				});
+
+			});
+
 
 			describe('directive',function(){
 				it('should compile the correct number of questions', function(){

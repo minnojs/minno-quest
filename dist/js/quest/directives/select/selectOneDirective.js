@@ -41,7 +41,6 @@ define(function (require) {
 					}
 
 					scope.response = newValue && newValue.value;
-					ctrl.log.responseObj = newValue;
 				});
 
 				/**
@@ -57,7 +56,7 @@ define(function (require) {
 
 					if (isActive){
 						// this whole function happens within a digest cycle, so we don't need to $apply
-						scope.$emit('quest:submit');
+						scope.$emit('quest:submit:now');
 					}
 				};
 			}

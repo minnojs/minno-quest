@@ -27,7 +27,8 @@ define(['underscore','./task-module'],function(){
 			});
 		}));
 
-		beforeEach(inject(function(Task){
+		beforeEach(inject(function(Task, $rootScope){
+			$rootScope.current = {questions:{}};
 			task = new Task(script);
 		}));
 
@@ -68,8 +69,19 @@ define(['underscore','./task-module'],function(){
 		}));
 
 		it('should log anything left at the end of the task', inject(function($rootScope){
+			$rootScope.current.questions = {1:{test:1}, 2:{test:2, $logged:true}};
+			nextSpy.andReturn(undefined);
+			task.current();
+			$rootScope.$apply();
+			var q1 = $rootScope.current.questions[1];
+			expect(task.logger.log.calls.length).toBe(1);
+			expect(task.logger.log).toHaveBeenCalledWith(q1,{}, undefined);
+			expect(q1.$logged).toBeTruthy();
+		}));
+
+		it('should `send` anything left at the end of the task', inject(function($rootScope){
 			nextSpy.andReturn(null);
-			task.next();
+			task.current();
 			$rootScope.$apply();
 			expect(sendSpy).toHaveBeenCalled();
 			nextSpy.andReturn('nextObj');

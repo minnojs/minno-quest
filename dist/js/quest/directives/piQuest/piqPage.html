@@ -9,6 +9,14 @@
 
 	<div class="btn-group pull-right">
 		<button
+			ng-click="prev()"
+			data-role="submit"
+			class="btn"
+			ng-class="form"
+			ng-if="page.prev && page.$meta.number > 1"
+		>{{page.prevText || "Go Back"}}</button>
+
+		<button
 			ng-click="submit()"
 			data-role="submit"
 			class="btn btn-primary"

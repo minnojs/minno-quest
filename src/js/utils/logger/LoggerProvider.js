@@ -86,7 +86,7 @@ define(function(require){
 				function error(){
 					// try again
 					$http.post(settings.url, sendData).then(success, function(){
-						throw new Error('Failed to send data, it seems the backend is not responding');
+						throw new Error('Failed to send data, it seems the backend is not responding.');
 					});
 				}
 			},

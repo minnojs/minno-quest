@@ -1,7 +1,7 @@
 define(['underscore', 'angular'], function(_, angular){
 
-	TaskProvider.$inject = ['$q','Database','Logger','QuestSequence','taskParse', 'dfltQuestLogger'];
-	function TaskProvider($q, Database, Logger, Sequence, parse, dfltQuestLogger){
+	TaskProvider.$inject = ['$q','Database','Logger','QuestSequence','taskParse', 'dfltQuestLogger', '$rootScope'];
+	function TaskProvider($q, Database, Logger, Sequence, parse, dfltQuestLogger,$rootScope){
 		function Task(script){
 			var self = this;
 			var settings = script.settings || {};
@@ -21,6 +21,14 @@ define(['underscore', 'angular'], function(_, angular){
 
 			this.q.promise
 				.then(function(){
+					// check if there are unlogged questions and log them
+					_.each($rootScope.current.questions, function(quest){
+						if(quest.$logged){
+							return true;
+						}
+						self.log(quest, {}, $rootScope.global);
+						quest.$logged = true;
+					});
 					return self.logger.send();
 				})
 				.then(settings.onEnd || angular.noop);

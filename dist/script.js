@@ -12,10 +12,43 @@ define(['questAPI'], function(Quest){
 		location.href = location.href;
 	});
 
+	//API.addGloba({test:''});
+
 	API.addSequence([
 		{
-			progressBar: '<%= pageMeta.number %> out of <%= pageMeta.outOf%>',
-			header: '<%= pageData.pageName %>: Questionnaire page num. <%= 1 + 1 %>',
+			prevText: '123',
+			prev:true,
+			progressBar: '<%= pagesMeta.number %> out of <%= pagesMeta.outOf%>',
+			header: 'Questionnaire: example for realtime branching',
+			questions: [
+				{
+					name: 'myName',
+					stem: "What is your name? (try yba!)",
+					autoSubmit: true
+				},
+				{
+					mixer:'branch',
+					remix:true,
+					conditions:[{compare: 'questions.myName.response',to:'yba', DEBUG:false}],
+					data:[
+						{
+							stem: 'how are you?',
+							name: 'secondary',
+							type: 'selectOne',
+							dflt:'good',
+							answers: ['good','bad','ugly'],
+							errorMsg: {correct:"That may not be correct... say good!"}
+						}
+					]
+				}
+			]
+		},
+
+		{
+			prevText: '123',
+			prev:true,
+			progressBar: '<%= pagesMeta.number %> out of <%= pagesMeta.outOf%>',
+			header: '<%= pagesData.pageName %>: Questionnaire page num. <%= 1 + 1 %>',
 			decline:"Cutsom decline text",
 			noSubmit: 0,
 			submitText: "Custom submit text",
@@ -61,15 +94,16 @@ define(['questAPI'], function(Quest){
 		},
 		{
 			mixer: 'branch',
-			conditions: [{compare: 'questions.myName.response', to:'yba', DEBUG:true}],
+			remix:true,
+			conditions: [{compare: 'questions.myName.response', to:'yba', DEBUG:false}],
 			data: [{
-				progressBar: '<%= pageMeta.number %> out of <%= pageMeta.outOf%>',
+				progressBar: '<%= pagesMeta.number %> out of <%= pagesMeta.outOf%>',
 				header: 'Hi <%= questions.myName.response %>',
 				questions: [
 					{
 						data: {myDflt:'this is a secret page...'},
 						stem: 'This question can only be reached if you type yba for the previous question',
-						dflt: '<%= questData.myDflt %>'
+						dflt: '<%= questionsData.myDflt %>'
 					}
 				]
 			}]
@@ -79,7 +113,11 @@ define(['questAPI'], function(Quest){
 			times: 2,
 			data: [
 				{
-					progressBar: '<%= pageMeta.number %> out of <%= pageMeta.outOf%>',
+								prevText: '123',
+			prev:true,
+
+					progressBar: '<%= pagesMeta.number %> out of <%= pagesMeta.outOf%>',
+					regenerateTemplate:true,
 					header: 'This Royal Questionnaire of mine.',
 					timeoutMessage: 'My message',
 					decline:true,
@@ -103,7 +141,7 @@ define(['questAPI'], function(Quest){
 			]
 		},
 		{
-			progressBar: '<%= pageMeta.number %> out of <%= pageMeta.outOf%>',
+			progressBar: '<%= pagesMeta.number %> out of <%= pagesMeta.outOf%>',
 			questions: [
 				{
 					stem: 'how are you?',

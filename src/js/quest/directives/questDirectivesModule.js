@@ -10,7 +10,6 @@ define(function(require){
 	module.controller('questController', require('./questController'));
 	module.directive('piQuest', require('./piQuest/piQuest-directive'));
 	module.directive('piqPage', require('./piQuest/piqPage-directive'));
-	module.service('questHarvest', require('./piQuest/harvestProvider'));
 	module.directive('questWrapper', require('./wrapper/wrapper-directive'));
 	module.directive('questText', require('./text/text-directive'));
 	module.directive('questTextNumber', require('./text/text-number-directive'));

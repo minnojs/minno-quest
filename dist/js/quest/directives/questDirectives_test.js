@@ -32,7 +32,7 @@ define(['angular','./questDirectivesModule'], function(angular){
 		}));
 
 		beforeEach(inject(function($rootScope, _$compile_){
-			$rootScope.current = {};
+			$rootScope.current = {questions:{}};
 			scope = $rootScope.$new();
 			$compile = _$compile_;
 
@@ -47,6 +47,12 @@ define(['angular','./questDirectivesModule'], function(angular){
 			expect(log.name).toEqual(123);
 		});
 
+		it('should log a unique serial number for each question', inject(function($rootScope){
+			$rootScope.current.questions = {a:{}, b:{}};
+			compile({name:123});
+			expect(scope.ctrl.log.serial).toBe(2);
+		}));
+
 		// view -> model
 		it('should bind to a model', inject(function($rootScope){
 			compile({});
@@ -58,12 +64,37 @@ define(['angular','./questDirectivesModule'], function(angular){
 			expect($rootScope.current.logObj).toBe(log);
 		}));
 
-		it('should un-decline a question that is answered', function(){
-			compile({});
-			log.declined = true;
-			scope.response = 123;
-			scope.$digest();
-			expect(log.declined).not.toBeTruthy();
+		describe(': decline', function(){
+			it('should decline this question if quest:decline is broadcast', function(){
+				compile({});
+				expect(log.declined).not.toBeTruthy();
+				scope.$emit('quest:decline');
+				expect(log.declined).toBeTruthy();
+			});
+
+			it('should set submitLatency', function(){
+				timerStack = [10,20,40];
+				compile({});
+				scope.$emit('quest:decline');
+				expect(log.submitLatency).toBe(30);
+			});
+		});
+
+		describe(': submit', function(){
+			it('should set submitLatency', function(){
+				timerStack = [10,20,40];
+				compile({});
+				scope.$emit('quest:submit');
+				expect(log.submitLatency).toBe(30);
+			});
+
+			it('should un-decline a question that is answered', function(){
+				compile({});
+				log.declined = true;
+				scope.$emit('quest:submit');
+				expect(log.declined).not.toBeTruthy();
+			});
+
 		});
 
 		describe(': defaults', function(){
@@ -93,13 +124,13 @@ define(['angular','./questDirectivesModule'], function(angular){
 				compile({dflt:""}, undefined, {dflt:456});
 				expect(log.response).toBe("");
 			});
-
 		});
 
 
 		it('should load data from ngModel to overide default', function(){
 			compile({dflt:123}, {response:234});
 			expect(scope.ctrl.log.response).toBe(234);
+			expect(scope.response).toBe(234);
 		});
 
 		it('should update log latency each time there is a change in scope.response', function(){
