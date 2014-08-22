@@ -269,7 +269,6 @@ define(['../questDirectivesModule', 'utils/randomize/randomizeModuleMock'], func
 
 				expect(log.response).toEqual([1,2]);
 				expect(formElm.find('.active').length).toBe(2);
-				console.log(formElm.children());
 				expect(formElm.children().eq(1)).toHaveClass('active');
 				expect(formElm.children().eq(2)).toHaveClass('active');
 			});

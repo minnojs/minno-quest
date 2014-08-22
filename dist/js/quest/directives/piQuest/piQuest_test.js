@@ -280,7 +280,7 @@ define(['../questDirectivesModule'],function(){
 					harvest = function(pQuestions, questions){
 						compile({questions:pQuestions||[]});
 						angular.extend($rootScope.current.questions, questions || {});
-						controller.harvest();
+						controller.harvest(true); // set lognow to true
 					};
 				}));
 
@@ -293,12 +293,16 @@ define(['../questDirectivesModule'],function(){
 					/* jshint ignore:end */
 				});
 
-				it('should not harvest questions marked with nolog', function(){
+				it('should harvest only questions marked with lognow', inject(function($rootScope){
 					var q = {1:{}};
-					var p = [{name:1, nolog:true}];
-					harvest(p,q);
-					expect(spy).not.toHaveBeenCalled();
-				});
+					var p = [{name:1, lognow:true}, {name:2, lognow:false}];
+
+					compile({questions:p});
+					angular.extend($rootScope.current.questions, q || {});
+					controller.harvest(false); // set lognow to false
+
+					expect(spy.calls.length).toBe(1);
+				}));
 
 				it('should emit the values of all questions on page uppon "quest:log"', function(){
 					var q = {1:{},2:{}};

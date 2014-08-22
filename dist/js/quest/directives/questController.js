@@ -119,7 +119,6 @@ define(function(require){
 		});
 
 		// $scope.$on('$destroy', function(a,b){
-		// 	console.log(a,b)
 		// })
 	}
 

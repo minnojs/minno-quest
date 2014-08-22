@@ -1,5 +1,5 @@
 /*!
- * PIQuest v0.0.5
+ * PIQuest v0.0.6
  *  License
  */
 /**
@@ -324,7 +324,6 @@ define('quest/directives/questController',['require','underscore'],function(requ
 		});
 
 		// $scope.$on('$destroy', function(a,b){
-		// 	console.log(a,b)
 		// })
 	}
 
@@ -451,12 +450,12 @@ define('quest/directives/piQuest/piqPage-directive',['require','text!./piqPage.h
 		/**
 		 * Harvest piqPage questions, and log them.
 		 */
-		this.harvest = function(){
+		this.harvest = function(lognow){
 			var questions = $scope.current.questions;
 
 			_.each($scope.page.questions, function(q){
-				// don't log if we don't have a name or if nolog is set
-				if (!q.name || q.nolog){return;}
+				// don't log if we don't have a name or if lognow is'nt true
+				if (!q.name || !(lognow || q.lognow)){return;}
 
 				// get the appropriate log
 				var log = questions[q.name];
@@ -525,7 +524,7 @@ define('quest/directives/piQuest/piqPage-directive',['require','text!./piqPage.h
 			}
 
 			// by default, harvest after every page..
-			!$scope.page.nolog && self.harvest();
+			self.harvest($scope.page.lognow);
 		};
 
 		// setup page on page refresh
@@ -765,7 +764,7 @@ define('quest/directives/select/selectMixerProvider',['require','underscore'],fu
 				}
 
 				if (_.isUndefined(answer.value)){
-					answer.value = options.numericValues ? index : answer.text;
+					answer.value = options.numericValues ? index + 1 : answer.text;
 				}
 				return answer;
 			});

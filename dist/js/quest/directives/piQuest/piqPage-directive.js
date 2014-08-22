@@ -24,12 +24,12 @@ define(function (require) {
 		/**
 		 * Harvest piqPage questions, and log them.
 		 */
-		this.harvest = function(){
+		this.harvest = function(lognow){
 			var questions = $scope.current.questions;
 
 			_.each($scope.page.questions, function(q){
-				// don't log if we don't have a name or if nolog is set
-				if (!q.name || q.nolog){return;}
+				// don't log if we don't have a name or if lognow is'nt true
+				if (!q.name || !(lognow || q.lognow)){return;}
 
 				// get the appropriate log
 				var log = questions[q.name];
@@ -98,7 +98,7 @@ define(function (require) {
 			}
 
 			// by default, harvest after every page..
-			!$scope.page.nolog && self.harvest();
+			self.harvest($scope.page.lognow);
 		};
 
 		// setup page on page refresh

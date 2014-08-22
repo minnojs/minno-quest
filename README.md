@@ -171,7 +171,7 @@ numberStart		| (Number) The number for the first question in the page (default: 
 timeout 		| (Number) If this is set to a positive integer *x*, the page auto-submits after *x* milliseconds (no validation allowed).
 timeoutMessage	| (text) An optional message to be displayed upon timeout. (default: "")
 questions 		| (Array) an array of [questions](#questions) to be displayed in the page. Note that the questions may be randomized and chosen conditionally using a [mixer](#mixer).
-nolog 			| (true or false) Whether to log the questions on this page. This option is useful in cases that a specific page may be accessed multiple times. Questions may only be logged once, and therefore in order to change the responses you may want to prevent logging (see [logger](#logger) for more information on this). (default: false)
+lognow 			| (true or false) Whether to log the questions on this page. This option is useful when you know that the page will not be accessed any more. It allows you to use the `pulse` option from the [logger](#logger) to send questions as they are being answered instead of sending only at the end of the task. (default: false)
 
 For example, a page can look something like this:
 
@@ -204,7 +204,7 @@ name 			| (text) The name that this question is marked with when it is logged. A
 stem 			| (text; default: '') The text for the question itself..
 help			| (true or false;  (default: false)) Whether to display the question help text.
 helpText		| (text) The question help text. (Some questions have default help texts, some don't).
-nolog 			| (true or false) Whether to log this question. This option is useful in cases that a specific page may be accessed multiple times. Questions may only be logged once, and therefore in order to change the responses you may want to prevent logging (see [logger](#logger) for more information on this). (default: false).
+lognow 			| (true or false) Whether to log this questions when the page is submited. This option is useful when you know that the question will not be accessed any more. It allows you to use the `pulse` option from the [logger](#logger) to send questions as they are being answered instead of sending only at the end of the task. (default: false)
 DEBUG 			| (true or false) Warn in the console if a question name is reused (note: sometimes a question is supposed to be reused, if this warning pops up just make sure the use case is correct).
 
 ##### Text
