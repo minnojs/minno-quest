@@ -165,6 +165,7 @@ noSubmit		| (true of false) remove submit button (useful when using the 'autoSub
 submitText		| (text) The text of the submit button (default: "Submit").
 header  		| (text) Text for the page header.
 headerStyle		| (Object) An object to set the style of the header (has most css properties; see examples below).
+progressBar 	| (text) Text for the progress bar (You might want to use a template for this, maybe something like: `<%= pageMeta.number %> out of <%= pageMeta.outOf%>`.).
 numbered 		| (true of false) Whether to  display the number of each question (default value: false).
 numberStart		| (Number) The number for the first question in the page (default: 1).
 timeout 		| (Number) If this is set to a positive integer *x*, the page auto-submits after *x* milliseconds (no validation allowed).
