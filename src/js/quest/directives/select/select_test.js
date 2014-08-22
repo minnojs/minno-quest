@@ -30,9 +30,9 @@ define(['../questDirectivesModule', 'utils/randomize/randomizeModuleMock'], func
 			});
 
 			it('should inject default values (numericValues)', function(){
-				var result = mixer([1, {text:123}, {value:'custom'}], {numericValues:true});
-				expect(result[0].value).toBe(0);
-				expect(result[1].value).toBe(1);
+				var result = mixer([0, {text:123}, {value:'custom'}], {numericValues:true});
+				expect(result[0].value).toBe(1);
+				expect(result[1].value).toBe(2);
 				expect(result[2].value).toBe('custom');
 			});
 
@@ -264,12 +264,12 @@ define(['../questDirectivesModule', 'utils/randomize/randomizeModuleMock'], func
 			it('should support dflt',function(){
 				compileInput({
 					dflt:[1,2],
-					answers: [0,1,2,3],
-					numericValues: true
+					answers: [0,1,2,3]
 				});
 
 				expect(log.response).toEqual([1,2]);
 				expect(formElm.find('.active').length).toBe(2);
+				console.log(formElm.children());
 				expect(formElm.children().eq(1)).toHaveClass('active');
 				expect(formElm.children().eq(2)).toHaveClass('active');
 			});

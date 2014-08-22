@@ -16,7 +16,7 @@ define(function(require){
 				}
 
 				if (_.isUndefined(answer.value)){
-					answer.value = options.numericValues ? index : answer.text;
+					answer.value = options.numericValues ? index + 1 : answer.text;
 				}
 				return answer;
 			});
