@@ -24,6 +24,8 @@ js/quest/directives/text/text-directive.js
 text!quest/directives/text/text-number.html
 js/quest/directives/text/text-number-directive.js
 js/quest/directives/select/selectMixerProvider.js
+text!quest/directives/select/dropdown.html
+js/quest/directives/select/dropdownDirective.js
 text!quest/directives/select/selectOne.html
 js/quest/directives/select/selectOneDirective.js
 text!quest/directives/select/selectMulti.html

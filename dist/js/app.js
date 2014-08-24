@@ -1,5 +1,5 @@
 /*!
- * PIQuest v0.0.6
+ * PIQuest v0.0.7
  *  License
  */
 /**
@@ -790,6 +790,57 @@ define('quest/directives/select/selectMixerProvider',['require','underscore'],fu
 	return selectMixerProvider;
 });
 
+define('text!quest/directives/select/dropdown.html',[],function () { return '<div ng-form>\n\t<select\n\t\tng-model="response"\n\t\tng-options="answer.value as answer.text group by answer.group for answer in quest.answers"\n\t\tng-required="data.required"\n\t\tng-change="data.autoSubmit && autoSubmit($event)"\n\t\t>\n\t\t<option value="">{{chooseText || "-- Choose an option --"}}</option>\n\t</select>\n\t<p class="error" ng-show="form.$error.required">{{data.errorMsg.required || "This field is required!"}}</p>\n\t<p class="error" ng-show="model.$error.correct">{{data.errorMsg.correct || "You must answer the correct answer!"}}</p>\n</div>';});
+
+/*
+ * The directive for creating dropdown inputs.
+ * scope.response is the value of the chosen response
+ */
+define('quest/directives/select/dropdownDirective',['require','text!./dropdown.html'],function (require) {
+
+	// This is the only way to get a non js file relatively
+	var template = require('text!./dropdown.html');
+
+	directive.$inject = ['questSelectMixer'];
+	function directive(mixer){
+		return {
+			replace: true,
+			template:template,
+			require: ['ngModel'],
+			controller: 'questController',
+			controllerAs: 'ctrl',
+			scope:{
+				data: '=questData'
+			},
+			link: function(scope, element, attr, ctrls) {
+				var ngModel = ctrls[0];
+				var ctrl = scope.ctrl;
+
+				ctrl.registerModel(ngModel, {
+					dflt: NaN
+				});
+
+				// render quest if needed
+				scope.quest = {
+					answers: mixer(scope.data.answers || [], scope.data)
+				};
+
+				// createChooseText
+				scope.chooseText = "chooseText" in scope.data && scope.data.chooseText;
+
+				/**
+				 * Manage auto submit
+				 */
+				scope.autoSubmit = function(){
+					scope.$emit('quest:submit:now');
+				};
+			}
+		};
+	}
+
+	return directive;
+});
+
 define('text!quest/directives/select/selectOne.html',[],function () { return '<div required="{{data.required}}">\n\t<div ng-class="{\'list-group\':!data.buttons, \'btn-group btn-group-justified btn-group-lg\':data.buttons}">\n\t\t<!-- track by in the ng-repeat allows us to keep the repeated object clean so that angular doesn\'t add a $$hashkey property -->\n\t\t<a\n\t\t\ttabindex="-1"\n\t\t\tng-repeat="answer in quest.answers track by answer.order"\n\t\t\tng-model="$parent.responseObj"\n\t\t\tbtn-radio="answer"\n\t\t\tng-class="{active:$parent.response === answer.value, \'list-group-item\': !$parent.data.buttons, \'btn btn-success\': $parent.data.buttons}"\n\t\t\tuncheckable\n\t\t\tng-click="data.autoSubmit && autoSubmit($event)"\n\t\t\tng-bind-html="answer.text"\n\t\t></a>\n\t</div>\n\t<p class="error" ng-show="model.$error.required">{{data.errorMsg.required || "This field is required!"}}</p>\n\t<p class="error" ng-show="model.$error.correct">{{data.errorMsg.correct || "You must answer the correct answer!"}}</p>\n</div>';});
 
 /*
@@ -925,7 +976,7 @@ define('quest/directives/select/selectMultiDirective',['require','underscore','t
 
 	return directive;
 });
-define('quest/directives/questDirectivesModule',['require','angular','utils/timer/timer-module','./buttons/buttons','utils/template/templateModule','./questController','./piQuest/piQuest-directive','./piQuest/piqPage-directive','./wrapper/wrapper-directive','./text/text-directive','./text/text-number-directive','./select/selectMixerProvider','./select/selectOneDirective','./select/selectMultiDirective'],function(require){
+define('quest/directives/questDirectivesModule',['require','angular','utils/timer/timer-module','./buttons/buttons','utils/template/templateModule','./questController','./piQuest/piQuest-directive','./piQuest/piqPage-directive','./wrapper/wrapper-directive','./text/text-directive','./text/text-number-directive','./select/selectMixerProvider','./select/dropdownDirective','./select/selectOneDirective','./select/selectMultiDirective'],function(require){
 	var angular = require('angular');
 	require('utils/timer/timer-module');
 	require('./buttons/buttons');
@@ -942,42 +993,9 @@ define('quest/directives/questDirectivesModule',['require','angular','utils/time
 	module.directive('questTextNumber', require('./text/text-number-directive'));
 
 	module.service('questSelectMixer', require('./select/selectMixerProvider'));
+	module.directive('questDropdown',require('./select/dropdownDirective'));
 	module.directive('questSelectOne',require('./select/selectOneDirective'));
 	module.directive('questSelectMulti',require('./select/selectMultiDirective'));
-
-	// work around for dynamic module and form names
-	// https://github.com/angular/angular.js/issues/1404#issuecomment-30859987
-	module.config(function($provide) {
-			$provide.decorator('ngModelDirective', function($delegate) {
-				var ngModel = $delegate[0], controller = ngModel.controller;
-				ngModel.controller = ['$scope', '$element', '$attrs', '$injector', function(scope, element, attrs, $injector) {
-					var $interpolate = $injector.get('$interpolate');
-					attrs.$set('name', $interpolate(attrs.name || '')(scope));
-					$injector.invoke(controller, this, {
-						'$scope': scope,
-						'$element': element,
-						'$attrs': attrs
-					});
-				}];
-				return $delegate;
-			});
-			$provide.decorator('ngFormDirective', function($delegate) {
-				var form = $delegate[0], controller = form.controller;
-				form.controller = ['$scope', '$element', '$attrs', '$injector', function(scope, element, attrs, $injector) {
-
-					var $interpolate = $injector.get('$interpolate');
-					attrs.$set('name', $interpolate(attrs.name || attrs.ngForm || '')(scope));
-					$injector.invoke(controller, this, {
-						'$scope': scope,
-						'$element': element,
-						'$attrs': attrs
-					});
-				}];
-				return $delegate;
-			});
-		});
-
-
 
 	return module;
 });

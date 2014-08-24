@@ -58,6 +58,120 @@ define(['../questDirectivesModule', 'utils/randomize/randomizeModuleMock'], func
 			});
 		}); // end mixer
 
+		describe('dropdown', function(){
+			var log, select, element, scope, jqLite = angular.element, $compile;
+
+			function compileInput(data){
+				element = jqLite('<div quest-dropdown quest-data="data" ng-model="data.model">');
+				scope.data = data;
+				$compile(element)(scope);
+
+				scope = element.isolateScope(); // get the isolated scope
+				scope.$digest();
+				log = element.data('$questDropdownController').log;
+
+				select = element.children().first();
+			}
+
+			function choose(val){
+				select.val(val);
+				select.trigger('change');
+			}
+
+
+			beforeEach(module(function($provide){
+				$provide.value('mixerRecursive', mixerSpy);
+			}));
+
+			beforeEach(inject(function($rootScope, _$compile_){
+				scope = $rootScope.$new();
+				$compile = _$compile_;
+			}));
+
+			it('should bind to a model', function(){
+				compileInput({
+					answers: [1,2,'a']
+				});
+				expect(log.response).not.toBeTruthy();
+
+				choose(2);
+				expect(log.response).toBe('a');
+			});
+
+			it('should mix the answers', function(){
+				compileInput({answers: [1,2,3]});
+				expect(scope.quest.answers).toBeDefined();
+			});
+
+			it('should print the correct number of answers', function(){
+				compileInput({answers: [1,2,3]});
+				expect(select.children().length).toBe(4);
+			});
+
+			it('should support grouping', function(){
+				compileInput({answers: [
+					{value:1, group:'a'},
+					{value:2, group:'a'},
+					{value:3, group:'b'},
+					{value:4, group:'b'},
+					{value:5, group:'b'}
+				]});
+
+				expect(select.children().length).toBe(2+1); // the number of groups + dflt
+				expect(select.children().children().length).toBe(5); // the number of answers
+			});
+
+			it('should support dflt',function(){
+				compileInput({
+					dflt:"default value",
+					answers: [1,2,{value:'default value'}]
+				});
+				expect(log.response).toBe('default value');
+			});
+
+			it('should support autoSubmit', function(){
+				var submitSpy;
+
+				compileInput({answers: [1,2,3]});
+				submitSpy = jasmine.createSpy('quest:submit:now');
+				scope.$on('quest:submit:now', submitSpy);
+				choose(1);
+				expect(submitSpy).not.toHaveBeenCalled();
+
+				compileInput({answers: [1,2,3], autoSubmit: true});
+				submitSpy = jasmine.createSpy('quest:submit:now');
+				scope.$on('quest:submit:now', submitSpy);
+				choose(1);
+				expect(submitSpy).toHaveBeenCalled();
+			});
+
+			it('should support "correct" validation',function(){
+				compileInput({answers: [1,2,3], correct:true, correctValue: 1, errorMsg:{correct: 'correct msg'}});
+				var errorElm = element.find('[ng-show="model.$error.correct"]');
+				expect(errorElm.text()).toBe('correct msg');
+
+				choose(0);
+				expect(element).toBeValid();
+				expect(errorElm).toBeHidden();
+
+				choose(2);
+				expect(element).toBeInvalid();
+			});
+
+			it('should support "required" validation',function(){
+				compileInput({answers: [1,2,3], required:true, errorMsg:{required: 'required msg'}});
+				var errorElm = element.find('[ng-show="form.$error.required"]');
+				expect(errorElm.text()).toBe('required msg');
+
+				expect(element).toBeInvalid();
+
+				choose(0);
+				expect(element).toBeValid();
+				expect(errorElm).toBeHidden();
+			});
+
+		});
+
 		describe('SelectOne',function(){
 			var element, formElm, scope, $compile, choose, jqLite = angular.element, log;
 

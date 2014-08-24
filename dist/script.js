@@ -34,7 +34,8 @@ define(['questAPI'], function(Quest){
 						{
 							stem: 'how are you?',
 							name: 'secondary',
-							type: 'selectOne',
+							type: 'select',
+							autoSubmit: true,
 							dflt:'good',
 							answers: ['good','bad','ugly'],
 							errorMsg: {correct:"That may not be correct... say good!"}
