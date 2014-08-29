@@ -166,7 +166,7 @@ noSubmit		| (true of false) remove submit button (useful when using the 'autoSub
 submitText		| (text) The text of the submit button (default: "Submit").
 header  		| (text) Text for the page header.
 headerStyle		| (Object) An object to set the style of the header (has most css properties; see examples below).
-progressBar 	| (text) Text for the progress bar (You might want to use a template for this, maybe something like: `<%= pageMeta.number %> out of <%= pageMeta.outOf%>`.).
+progressBar 	| (text) Text for the progress bar (You might want to use a template for this, maybe something like: `<%= pagesMeta.number %> out of <%= pagesMeta.outOf%>`.).
 numbered 		| (true of false) Whether to  display the number of each question (default value: false).
 numberStart		| (Number) The number for the first question in the page (default: 1).
 timeout 		| (Number) If this is set to a positive integer *x*, the page auto-submits after *x* milliseconds (no validation allowed).
@@ -631,7 +631,7 @@ current 	| The current task object.
 questions 	| The questions object.
 pagesData 	| The 'data' attribute from the page.
 questionsData 	| The 'data' attribute from the question (available only within questions).
-pageMeta 	| An object describing meta data about the page:</br> `number`: the serial number of this page, `outOf` the overall number of pages, `name`: the name of the current page. These can be used for instance to generate a description of your place within the questionnaire: `<%= pageMeta.number %> out of <%= pageMeta.outOf%>`.
+pagesMeta 	| An object describing meta data about the page:</br> `number`: the serial number of this page, `outOf` the overall number of pages, `name`: the name of the current page. These can be used for instance to generate a description of your place within the questionnaire: `<%= pagesMeta.number %> out of <%= pagesMeta.outOf%>`.
 
 Questions and Pages have access to the same local variables, with the exception of questionsData that is available only to questions.
 
