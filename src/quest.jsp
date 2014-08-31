@@ -45,7 +45,7 @@ String getBase = getProtocol+"://"+getDomain;
 			.container {padding-top: 15px;}
 
 			/* http://www.sitepoint.com/css3-responsive-centered-image/ */
-			img.pi-logo {position: absolute;max-width: 80%;top: 50%;left: 50%;margin-left: -100px;margin-top: -62px;border-radius: 3px;}
+			img.pi-logo {position: absolute;max-width: 80%;top: 50%;left: 50%;margin-left: -32px;margin-top: -32px;border-radius: 3px;}
 			img.pi-logo:empty {margin: auto;-webkit-transform: translate(-50%, -50%);-moz-transform: translate(-50%, -50%);-ms-transform: translate(-50%, -50%);-o-transform: translate(-50%, -50%);transform: translate(-50%, -50%);}
 			@media screen and (orientation: portrait) {img.pi-logo { max-width: 90%; }}
 			@media screen and (orientation: landscape) {img.pi-logo { max-height: 90%; }}
@@ -59,7 +59,7 @@ String getBase = getProtocol+"://"+getDomain;
 
 		<div class="container">
 			<div pi-task="<%= script %>">
-				<img class="pi-logo" src="img/logo.png" />
+				<img class="pi-logo" src="img/loader.gif" />
 			</div>
 		</div>
 	</body>

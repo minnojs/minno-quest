@@ -1,5 +1,5 @@
 /*!
- * PIQuest v0.0.7
+ * PIQuest v0.0.8
  *  License
  */
 /**
@@ -2279,7 +2279,7 @@ define('quest/task/taskSequenceProvider',['require','underscore'],function(requi
 			all: function(context){
 				var sequence = [];
 
-				var el = this.next().current();
+				var el = this.next().current(context);
 				while (el){
 					sequence.push(el);
 					el = this.next().current(context);

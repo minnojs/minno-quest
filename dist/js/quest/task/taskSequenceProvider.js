@@ -69,7 +69,7 @@ define(function(require){
 			all: function(context){
 				var sequence = [];
 
-				var el = this.next().current();
+				var el = this.next().current(context);
 				while (el){
 					sequence.push(el);
 					el = this.next().current(context);
