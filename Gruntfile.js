@@ -211,7 +211,7 @@ module.exports = function (grunt) {
 					testName: 'PIQuest Unit Tests <%= pkg.version %>',
 					recordScreenshots: false
 				},
-				captureTimeout: 60000, // rely on SL timeout
+				captureTimeout: 120000, // rely on SL timeout
 
 				// useful with really bad connections
 				// https://groups.google.com/forum/#!topic/karma-users/B-E7nLphNHQ
