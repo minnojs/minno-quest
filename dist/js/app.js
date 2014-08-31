@@ -2264,7 +2264,7 @@ define('quest/task/taskSequenceProvider',['require','underscore'],function(requi
 
 				// interpolate
 				if (!obj.$templated || obj.regenerateTemplate){
-					context[this.namespace + 'Data'] = obj.data || {};
+					context[this.namespace + 'Data'] = obj.$inflated.data || {};
 					context[this.namespace + 'Meta'] = obj.$meta;
 					obj.$templated = templateObj(obj.$inflated, context);
 				}
