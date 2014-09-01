@@ -12,6 +12,7 @@ define(function(require){
 			this.sequence = arr;
 			this.stack = [];
 			this.add(arr);
+			this.pointer = 0;
 		}
 
 		_.extend(MixerSequence.prototype, {
@@ -56,10 +57,12 @@ define(function(require){
 			},
 
 			next: function(context){
+				this.pointer++;
 				return this.proceed.call(this, 'next',context);
 			},
 
 			prev: function(context){
+				this.pointer--;
 				return this.proceed.call(this, 'prev',context);
 			},
 
@@ -90,8 +93,7 @@ define(function(require){
 
 			meta: function(){
 				return {
-					// sum of pointers + 1
-					number: _.reduce(this.stack, function(memo,sub){return memo + sub.pointer;},0) + 1,
+					number: this.pointer,
 
 					// sum of sequence length, minus one (the mixer) for each level of stack except the last
 					outOf:  _.reduce(this.stack, function(memo,sub){return memo + sub.sequence.length-1;},0)+1
