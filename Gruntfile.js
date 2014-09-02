@@ -224,6 +224,12 @@ module.exports = function (grunt) {
 			}
 		},
 
+		githooks: {
+			all: {
+				'pre-commit': 'default requirejs'
+			}
+		},
+
 		requirejs: {
 			compile: {
 				options : {
@@ -231,7 +237,7 @@ module.exports = function (grunt) {
 					dir: "dist",
 					appDir: '<%= settings.app %>',
 					baseUrl: 'js',
-					optimize:'none', // toggle this for fast optimized debuging
+					//optimize:'none', // toggle this for fast optimized debuging
 
 					// Tells Require.js to look at main.js for all shim and path configurations
 					mainConfigFile: '<%= settings.app %>/js/bootstrap.js',
