@@ -1,10 +1,1 @@
-define(function(require){
-	
-	var angular = require('angular');
-	var module = angular.module('taskManager',[]);
-
-	module.service('managerGetScript', require('./getScriptProvider'));
-	module.directive('piTask', require('./managerDirective'));
-
-	return module;
-});
+define(["require","angular","./getScriptProvider","./managerDirective"],function(e){var t=e("angular"),n=t.module("taskManager",[]);return n.service("managerGetScript",e("./getScriptProvider")),n.directive("piTask",e("./managerDirective")),n});

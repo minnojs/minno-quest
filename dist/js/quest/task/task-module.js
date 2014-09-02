@@ -1,18 +1,1 @@
-define(function(require){
-	require('utils/logger/logger-module');
-	require('utils/database/database-module');
-	require('utils/mixer/mixer-module');
-	require('utils/template/templateModule');
-
-	var angular = require('angular');
-	var module = angular.module('task', ['logger', 'database','mixer', 'template']);
-
-	module.service('QuestSequence', require('./questSequenceProvider'));
-	module.service('TaskSequence', require('./taskSequenceProvider'));
-	module.service('Task', require('./taskProvider'));
-	module.service('taskParse', require('./parseProvider'));
-
-	module.value('dfltQuestLogger', require('./dfltQuestLogger'));
-
-	return module;
-});
+define(["require","utils/logger/logger-module","utils/database/database-module","utils/mixer/mixer-module","utils/template/templateModule","angular","./questSequenceProvider","./taskSequenceProvider","./taskProvider","./parseProvider","./dfltQuestLogger"],function(e){e("utils/logger/logger-module"),e("utils/database/database-module"),e("utils/mixer/mixer-module"),e("utils/template/templateModule");var t=e("angular"),n=t.module("task",["logger","database","mixer","template"]);return n.service("QuestSequence",e("./questSequenceProvider")),n.service("TaskSequence",e("./taskSequenceProvider")),n.service("Task",e("./taskProvider")),n.service("taskParse",e("./parseProvider")),n.value("dfltQuestLogger",e("./dfltQuestLogger")),n});

@@ -1,9 +1,1 @@
-define(function(require){
-	var angular = require('angular');
-	var Logger = require('./LoggerProvider');
-
-	var module = angular.module('logger', []);
-	module.provider('Logger', Logger);
-
-	return module;
-});
+define(["require","angular","./LoggerProvider"],function(e){var t=e("angular"),n=e("./LoggerProvider"),r=t.module("logger",[]);return r.provider("Logger",n),r});

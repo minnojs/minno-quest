@@ -1,16 +1,1 @@
-define(function(){
-
-	function parseProvider(){
-		function parse(script, db, sequence){
-			db.createColl('pages');
-			db.createColl('questions');
-
-			db.add('pages', script.pages || []);
-			db.add('questions', script.questions || []);
-		}
-
-		return parse;
-	}
-
-	return parseProvider;
-});
+define([],function(){function e(){function e(e,t,n){t.createColl("pages"),t.createColl("questions"),t.add("pages",e.pages||[]),t.add("questions",e.questions||[])}return e}return e});

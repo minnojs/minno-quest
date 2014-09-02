@@ -1,11 +1,1 @@
-define(function(require){
-	var angular = require('angular');
-
-	var module = angular.module('template', []);
-
-	module.filter('template', require('./templateFilter'));
-	module.service('templateObj', require('./templateObjProvider'));
-	module.constant('templateDefaultContext',{});
-
-	return module;
-});
+define(["require","angular","./templateFilter","./templateObjProvider"],function(e){var t=e("angular"),n=t.module("template",[]);return n.filter("template",e("./templateFilter")),n.service("templateObj",e("./templateObjProvider")),n.constant("templateDefaultContext",{}),n});
