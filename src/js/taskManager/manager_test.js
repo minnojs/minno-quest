@@ -1,5 +1,5 @@
-define(['require','./manager-module'], function(require){
-	describe('manager', function(){
+define(['./managerModule'], function(){
+	xdescribe('manager', function(){
 
 		beforeEach(module('taskManager'));
 
@@ -65,31 +65,6 @@ define(['require','./manager-module'], function(require){
 				expect($rootScope.global.extendGlobal).toBeTruthy();
 			}));
 
-		});
-
-		describe(': getScript', function(){
-			var base_url = require.toUrl('.');
-			var q;
-
-			beforeEach(inject(function(managerGetScript){
-				q = managerGetScript(base_url + '/test/script1.js');
-			}));
-
-			it('should return a $q', function(){
-				expect(q.then).toBeDefined();
-				expect(q['catch']).toBeDefined();
-				expect(q['finally']).toBeDefined();
-			});
-
-
-			// couldn't manage to test this...
-			//it('should resolve when a file was found');
-			//it('should reject when a file was not found');
-			//it('should return the file contents that we requested', function(){	});
-
-			it('should support base_url', function(){
-				// not just yet it isn't needed...
-			});
 		});
 	});
 });

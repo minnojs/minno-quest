@@ -34,7 +34,7 @@ define(['questAPI'], function(Quest){
 						{
 							stem: 'how are you?',
 							name: 'secondary',
-							type: 'select',
+							type: 'dropdown',
 							autoSubmit: true,
 							dflt:'good',
 							answers: ['good','bad','ugly'],

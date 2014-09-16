@@ -39,7 +39,7 @@ define(['underscore', 'text!./piQuest.html'], function (_, template) {
 		defaultContext = {
 			global: global,
 			current: current,
-			questions: $scope.current.questions
+			questions: current.questions
 		};
 
 		// set default contexts

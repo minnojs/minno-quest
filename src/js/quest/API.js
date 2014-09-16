@@ -14,7 +14,15 @@ define(function(require){
 			questions: [],
 			sequence: [],
 			global: {},
-			current: {}
+			current: {},
+			play: function(end, $element){
+				$element.append('<div pi-quest></div>');
+				var oldOnEnd = this.settings.onEnd;
+				this.settings.onEnd = function(){
+					oldOnEnd && oldOnEnd.call();
+					end();
+				};
+			}
 		};
 	}
 

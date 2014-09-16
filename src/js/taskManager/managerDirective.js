@@ -11,8 +11,7 @@ define(function(require){
 	directive.$inject = ['$compile','$rootScope','managerGetScript','$parse', '$window'];
 	function directive($compile,$rootScope,getScript,$parse, $window){
 		return {
-			link:  function(scope, $element, attr){
-				var q = getScript(attr.piTask);
+			link:  function($scope, $element, attr){
 				var piGlobal = $parse(attr.piGlobal)($window);
 
 				// create the global object
@@ -22,11 +21,14 @@ define(function(require){
 					_.extend($rootScope.global, piGlobal);
 				}
 
-				q.then(function(script){
-					scope.script = script;
-					$element.html('<div pi-quest></div>');
-					$compile($element.contents())(scope);
-				});
+				$scope.task = {
+					type: 'quest',
+					scriptUrl: attr.piManager
+				};
+
+				$element.html('<div pi-task="task"></div>');
+				$compile($element.contents())($scope);
+
 			}
 		};
 	}
