@@ -39,6 +39,6 @@
   "scripts": {
     "test": "grunt test --sauce --report",
     "start": "grunt serve",
-    "postinstall": "hash git 2>/dev/null && grunt githooks"
+    "postinstall": "hash grunt 2>/dev/null && grunt githooks"
   }
 }
