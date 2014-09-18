@@ -20,6 +20,7 @@ define(['questAPI'], function(Quest){
 			prev:true,
 			progressBar: '<%= pagesMeta.number %> out of <%= pagesMeta.outOf%>',
 			header: 'Questionnaire: example for realtime branching',
+
 			questions: [
 				{
 					name: 'myName',
@@ -34,7 +35,7 @@ define(['questAPI'], function(Quest){
 						{
 							stem: 'how are you?',
 							name: 'secondary',
-							type: 'select',
+							type: 'selectOne',
 							autoSubmit: true,
 							dflt:'good',
 							answers: ['good','bad','ugly'],
