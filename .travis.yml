@@ -5,7 +5,7 @@ node_js:
 env:
   global:
   - SAUCE_USERNAME: project_implicit
-  - secure: "PFglabKFpODvO442CTkeGBd+WmYepqB/eTe0jHBdHUi/X7BghFxhQDuXMlLuDuUf9msRPl0bZ+lIF9Q9HbzYoAo+qHHjuvx6TgIjgU21MRCTcyYzixm7CzwVJM7tV/0+AQ4fUpvNHc9O1GuEkHEVI3+lIbu0whkWo728oA3R7SA="
+  - secure: "IUXvzHpfLuz2yBIXSyJqdG7poFe5aL7LBl2lStwoRGPXFUdhXPujpvqZnJWQ+zufCNFOaalx/vorNzDzgM4gZ2e88X0p3zhYoT/3iq0VuXL+dSWKE7OM4Krxd6Z+oHXzS456UG3Xi35cWLQxP6pP287ND+vRcG1MVaZ+IVyseuA="
 
 before_install:
   - 'npm install -g bower grunt-cli'
