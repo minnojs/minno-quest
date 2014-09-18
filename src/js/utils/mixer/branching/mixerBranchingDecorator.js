@@ -20,7 +20,7 @@ define(function(require){
 		 */
 		function branch(obj, context){
 			context = _.extend(context || {}, mixerDefaultContext);
-			return evaluate(obj.conditions, context) ? obj.data : obj.elseData || [];
+			return evaluate(obj.conditions, context) ? obj.data || [] : obj.elseData || [];
 		}
 
 		/**

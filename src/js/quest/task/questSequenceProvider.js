@@ -31,7 +31,7 @@ define(function(require){
 					return page;
 				}
 
-				var questions = new TaskSequence('questions', page.questions, this.db).all({
+				var questions = new TaskSequence('questions', page.questions || [], this.db).all({
 					pagesData: page.data,
 					pagesMeta: page.$meta
 				});
