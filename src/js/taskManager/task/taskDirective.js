@@ -43,16 +43,14 @@ define(function (require) {
 							newTask.pre && newTask.pre(global);
 
 							// activate task
-							activateTask(newTask, script, $canvas)
+							activateTask(newTask, script, $canvas, $scope)
 								.then(function(){
 									// activate post
 									// @TODO: support returning a deferred
 									newTask.post && newTask.post(global);
+									$canvas.empty();
 									$scope.$emit('task:end', arguments);
 								});
-
-							// compile the canvas
-							$compile($canvas.contents())($scope);
 						});
 				});
 			}

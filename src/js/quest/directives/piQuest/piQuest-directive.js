@@ -16,8 +16,6 @@ define(['underscore', 'text!./piQuest.html'], function (_, template) {
 		var self = this;
 		var task = self.task = new Task($scope.script);
 		var defaultContext;
-
-
 		var global = $rootScope.global;
 		var script = $scope.script;
 

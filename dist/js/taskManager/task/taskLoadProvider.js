@@ -1,0 +1,1 @@
+define([],function(){function e(e,t){function n(n){var r;if(n.script)return r=e.defer(),r.resolve(n.script),r.promise;if(!n.scriptUrl)throw new Error('Tasks must have eithe a "script" property or a "scriptUrl" property.');return t(n.scriptUrl)}return n}return e.$inject=["$q","taskGetScript"],e});

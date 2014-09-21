@@ -9,7 +9,8 @@ define(['questAPI'], function(Quest){
 	});
 
 	API.addSettings('onEnd', function(){
-		location.href = location.href;
+		console.log('onEnd')
+		// location.href = location.href;
 	});
 
 	//API.addGloba({test:''});
@@ -44,7 +45,7 @@ define(['questAPI'], function(Quest){
 				}
 			]
 		},
-
+/*
 		{
 			prevText: '123',
 			prev:true,
@@ -175,7 +176,7 @@ define(['questAPI'], function(Quest){
 			]
 		}
 
-
+*/
 	]);
 
 	return API.script;

@@ -1,1 +1,0 @@
-define(["require","angular","./getScriptProvider","./managerDirective"],function(e){var t=e("angular"),n=t.module("taskManager",[]);return n.service("managerGetScript",e("./getScriptProvider")),n.directive("piTask",e("./managerDirective")),n});

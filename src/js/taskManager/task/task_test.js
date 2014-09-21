@@ -86,7 +86,12 @@ define(['require','angular','./taskModule'],function(require, angular){
 		});
 
 		describe('taskActivate', function(){
-			var activate;
+			var activate, testSpy;
+
+			beforeEach(module(function(taskActivateProvider){
+				testSpy = jasmine.createSpy('test');
+				taskActivateProvider.set('test', testSpy);
+			}));
 
 			beforeEach(inject(function(taskActivate){
 				activate = taskActivate;
@@ -105,6 +110,11 @@ define(['require','angular','./taskModule'],function(require, angular){
 				var script = {play:spy};
 				activate({}, script, 'el');
 				expect(spy).toHaveBeenCalled();
+			});
+
+			it('should run as script by task.type', function(){
+				activate({type:'test'}, {}, 'el');
+				expect(testSpy).toHaveBeenCalled();
 			});
 
 			it('should resolve when the callback is called', inject(function($rootScope){
@@ -188,19 +198,6 @@ define(['require','angular','./taskModule'],function(require, angular){
 				$rootScope.$digest();
 				expect(spy).toHaveBeenCalled();
 			}));
-
-			it('should compile element after activating', function(){
-				compile({});
-				$scope.test = jasmine.createSpy('test');
-				$elm
-					.children().eq(1)
-					.append(angular.element('<div ng-init="test()"></div>'));
-
-				loadDef.resolve();
-				$scope.$digest();
-
-				expect($scope.test).toHaveBeenCalled();
-			});
 		});
 
 	});

@@ -58,7 +58,7 @@ String getBase = getProtocol+"://"+getDomain;
 		<![endif]-->
 
 		<div class="container">
-			<div pi-task="<%= script %>">
+			<div pi-manager="<%= script %>">
 				<img class="pi-logo" src="img/loader.gif" />
 			</div>
 		</div>

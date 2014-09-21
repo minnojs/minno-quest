@@ -30,7 +30,9 @@ define(['underscore', 'angular'], function(_, angular){
 						quest.$logged = true;
 					});
 					return self.logger.send();
-				})
+				});
+
+			this.q.promise
 				.then(settings.onEnd || angular.noop);
 
 			parse(script, this.db);

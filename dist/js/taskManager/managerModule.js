@@ -1,0 +1,1 @@
+define(["require","angular","./task/taskModule","./managerDirective"],function(e){var t=e("angular"),n=t.module("taskManager",[e("./task/taskModule").name]);return n.value("managerGetScript",{}),n.directive("piManager",e("./managerDirective")),n});
