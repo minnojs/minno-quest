@@ -25,13 +25,20 @@ define(function(require){
 			},
 
 			current: function(context){
-				var page = this.sequence.current(context);
+				var questionsArr,
+					page = this.sequence.current(context);
 
 				if (!page){
 					return page;
 				}
 
-				var questions = new TaskSequence('questions', page.questions || [], this.db).all({
+				if (page.questions){
+					questionsArr = _.isArray(page.questions) ? page.questions : [page.questions];
+				} else {
+					questionsArr = [];
+				}
+
+				var questions = new TaskSequence('questions', questionsArr, this.db).all({
 					pagesData: page.data,
 					pagesMeta: page.$meta
 				});

@@ -171,7 +171,7 @@ numbered 		| (true of false) Whether to  display the number of each question (de
 numberStart		| (Number) The number for the first question in the page (default: 1).
 timeout 		| (Number) If this is set to a positive integer *x*, the page auto-submits after *x* milliseconds (no validation allowed).
 timeoutMessage	| (text) An optional message to be displayed upon timeout. (default: "")
-questions 		| (Array) an array of [questions](#questions) to be displayed in the page. Note that the questions may be randomized and chosen conditionally using a [mixer](#mixer).
+questions 		| (Array or Object) an array of [questions](#questions) to be displayed in the page. Note that the questions may be randomized and chosen conditionally using a [mixer](#mixer). This property also accepts a single question object if you want to present only a single question per page.
 lognow 			| (true or false) Whether to log the questions on this page. This option is useful when you know that the page will not be accessed any more. It allows you to use the `pulse` option from the [logger](#logger) to send questions as they are being answered instead of sending only at the end of the task. (default: false)
 
 For example, a page can look something like this:
