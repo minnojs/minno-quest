@@ -9,7 +9,7 @@ define(['questAPI'], function(Quest){
 	});
 
 	API.addSettings('onEnd', function(){
-		console.log('onEnd')
+		console.log('onEnd');
 		// location.href = location.href;
 	});
 
@@ -21,6 +21,7 @@ define(['questAPI'], function(Quest){
 			prev:true,
 			progressBar: '<%= pagesMeta.number %> out of <%= pagesMeta.outOf%>',
 			header: 'Questionnaire: example for realtime branching',
+
 			questions: [
 				{
 					name: 'myName',
@@ -45,7 +46,7 @@ define(['questAPI'], function(Quest){
 				}
 			]
 		},
-/*
+
 		{
 			prevText: '123',
 			prev:true,
@@ -175,8 +176,6 @@ define(['questAPI'], function(Quest){
 				}
 			]
 		}
-
-*/
 	]);
 
 	return API.script;

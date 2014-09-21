@@ -59,7 +59,7 @@ define(['../questDirectivesModule', 'utils/randomize/randomizeModuleMock'], func
 		}); // end mixer
 
 		describe('dropdown', function(){
-			var log, select, element, scope, jqLite = angular.element, $compile;
+			var log, select, element, scope, jqLite = angular.element, $compile, $timeout;
 
 			function compileInput(data){
 				element = jqLite('<div quest-dropdown quest-data="data" ng-model="data.model">');
@@ -76,6 +76,8 @@ define(['../questDirectivesModule', 'utils/randomize/randomizeModuleMock'], func
 			function choose(val){
 				select.val(val);
 				select.trigger('change');
+				$timeout(function(){});// just so we can call flush without problems (if there are no defered tasks it throws an error.)
+				$timeout.flush();
 			}
 
 
@@ -83,9 +85,10 @@ define(['../questDirectivesModule', 'utils/randomize/randomizeModuleMock'], func
 				$provide.value('mixerRecursive', mixerSpy);
 			}));
 
-			beforeEach(inject(function($rootScope, _$compile_){
+			beforeEach(inject(function($rootScope, _$compile_, _$timeout_){
 				scope = $rootScope.$new();
 				$compile = _$compile_;
+				$timeout = _$timeout_;
 			}));
 
 			it('should bind to a model', function(){
@@ -140,6 +143,16 @@ define(['../questDirectivesModule', 'utils/randomize/randomizeModuleMock'], func
 
 				compileInput({answers: [1,2,3], autoSubmit: true});
 				submitSpy = jasmine.createSpy('quest:submit:now');
+				scope.$on('quest:submit:now', submitSpy);
+				choose(1);
+				expect(submitSpy).toHaveBeenCalled();
+			});
+
+			it('should log before autoSubmit', function () {
+				compileInput({answers: [1,2,3], autoSubmit: true});
+				submitSpy = jasmine.createSpy('quest:submit:now').andCallFake(function(){
+					expect(log.response).toBe(2);
+				});
 				scope.$on('quest:submit:now', submitSpy);
 				choose(1);
 				expect(submitSpy).toHaveBeenCalled();

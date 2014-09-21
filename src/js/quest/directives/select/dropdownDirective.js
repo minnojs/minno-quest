@@ -7,8 +7,8 @@ define(function (require) {
 	// This is the only way to get a non js file relatively
 	var template = require('text!./dropdown.html');
 
-	directive.$inject = ['questSelectMixer'];
-	function directive(mixer){
+	directive.$inject = ['questSelectMixer','$timeout'];
+	function directive(mixer,$timeout){
 		return {
 			replace: true,
 			template:template,
@@ -38,7 +38,9 @@ define(function (require) {
 				 * Manage auto submit
 				 */
 				scope.autoSubmit = function(){
-					scope.$emit('quest:submit:now');
+					$timeout(function(){
+						scope.$emit('quest:submit:now');
+					});
 				};
 			}
 		};
