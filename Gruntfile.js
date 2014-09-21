@@ -226,7 +226,7 @@ module.exports = function (grunt) {
 
 		githooks: {
 			all: {
-				'pre-commit': 'default requirejs'
+				'pre-commit': 'default'
 			}
 		},
 
