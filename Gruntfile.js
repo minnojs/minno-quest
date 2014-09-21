@@ -27,8 +27,8 @@ module.exports = function (grunt) {
 			// https://github.com/vojtajina/grunt-bump
 			options: {
 				files:			['package.json', 'bower.json'],
-				commitFiles:	['package.json', 'bower.json'],
 				updateConfigs:	['pkg'],
+				commitFiles: ['package.json','bower.json', 'dist/**/*'],
 				push: false
 			}
 		},
@@ -272,6 +272,8 @@ module.exports = function (grunt) {
 			'watch:jsTest'
 		]);
 	});
+
+	grunt.registerTask('version', 'Advancing version', ['bump-only','requirejs','bump-commit']);
 
 	grunt.registerTask('test', [
 		'clean:server',
