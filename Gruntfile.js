@@ -257,6 +257,15 @@ module.exports = function (grunt) {
 					exclude: ['angular']
 				}
 			}
+		},
+
+		sass: {
+			options: {
+				loadPath: 'bower_components/bootstrap-sass-official/assets/stylesheets/'
+			},
+			dist: {
+				files: {'src/styles/main.css':'resources/sass/main.scss'}
+			}
 		}
 	});
 
@@ -277,8 +286,8 @@ module.exports = function (grunt) {
 	grunt.registerTask('version', 'Advancing version', function(type){
 		grunt.task.run([
 			"bump:" + (type || 'patch') + ":bump-only",
+			'build',
 			'changelog',
-			'requirejs',
 			'bump-commit'
 		]);
 	});
@@ -312,9 +321,7 @@ module.exports = function (grunt) {
 	});
 
 	grunt.registerTask('build', [
-		'clean:dist',
-		'concurrent:dist',
-		'copy:dist',
+		'sass',
 		'requirejs'
 	]);
 

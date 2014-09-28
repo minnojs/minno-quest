@@ -33,7 +33,7 @@ String getBase = getProtocol+"://"+getDomain;
 
 		<!-- build:css styles/vendor.css -->
 		<!-- bower:css -->
-		<link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css" />
+		<link rel="stylesheet" href="styles/main.js" />
 		<!-- endbower -->
 		<!-- endbuild -->
 
