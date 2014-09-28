@@ -26,9 +26,10 @@ module.exports = function (grunt) {
 		bump: {
 			// https://github.com/vojtajina/grunt-bump
 			options: {
-				files:			['package.json', 'bower.json'],
+				files:			['package.json'],
+				commitMessage: 	'chore: release v%VERSION%',
 				updateConfigs:	['pkg'],
-				commitFiles: ['package.json','bower.json', 'dist/**/*'],
+				commitFiles: 	['package.json','CHANGELOG.md', 'dist/**/*'],
 				push: false
 			}
 		},
@@ -273,7 +274,14 @@ module.exports = function (grunt) {
 		]);
 	});
 
-	grunt.registerTask('version', 'Advancing version', ['bump-only','requirejs','bump-commit']);
+	grunt.registerTask('version', 'Advancing version', function(type){
+		grunt.task.run([
+			"bump:" + (type || 'patch') + ":bump-only",
+			'changelog',
+			'requirejs',
+			'bump-commit'
+		]);
+	});
 
 	grunt.registerTask('test', [
 		'clean:server',
