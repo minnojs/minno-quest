@@ -882,7 +882,7 @@ body {
   font-size: 14px;
   line-height: 1.42857;
   color: #333333;
-  background-color: #F5EFFB; }
+  background-color: #FFF; }
 
 input,
 button,
@@ -921,7 +921,7 @@ img {
 .img-thumbnail {
   padding: 4px;
   line-height: 1.42857;
-  background-color: #F5EFFB;
+  background-color: #FFF;
   border: 1px solid #ddd;
   border-radius: 4px;
   -webkit-transition: all 0.2s ease-in-out;
@@ -3237,5 +3237,11 @@ a.list-group-item-danger {
     display: none !important; } }
 label {
   font-size: 18px; }
+
+.btn:active, .btn.active {
+  outline: 0;
+  background-image: none;
+  -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.3); }
 
 /*# sourceMappingURL=main.css.map */
