@@ -74,12 +74,8 @@ define(function(require){
 				return log;
 			});
 
-			// make the model work with a custom event, so that it doesn't get confused with inner modules
-			// note: this is a problem caused by nesting ngModule...
-			ngModel.$options = _.defaults(ngModel.$options || {}, {updateOn: "quest"});
-
 			$scope.$watch('response',function(newValue, oldValue /*, scope*/){
-				newValue !== oldValue && ngModel.$setViewValue(newValue, 'quest');
+				newValue !== oldValue && ngModel.$setViewValue(newValue);
 			});
 
 			var correctValidator = function(value) {

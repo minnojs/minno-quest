@@ -6,7 +6,7 @@ define(['../questDirectivesModule'],function(){
 		var jqLite = angular.element, log;
 
 		var compile = function compileInput(data, logObj){
-			formElm = jqLite('<input quest-text-number quest-data="data" ng-model="current.logObj"/>');
+			formElm = jqLite('<div quest-text-number quest-data="data" ng-model="current.logObj"><div/>');
 			logObj && (scope.current.logObj = logObj);
 			scope.data = data;
 			$compile(formElm)(scope);

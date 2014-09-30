@@ -5,13 +5,14 @@ define(['../questDirectivesModule'], function(){
 		var jqLite = angular.element, log;
 
 		var compile = function compileInput(data){
-			formElm = jqLite('<input quest-text quest-data="data" ng-model="current.logObj" />');
+			formElm = jqLite('<div id="input" quest-text quest-data="data" ng-model="current.logObj"></div>');
 
+			data.name = 'test';
 			scope.data = data;
 			$compile(formElm)(scope);
 			scope.$digest();
 			inputElm = formElm.find('input');
-			log = formElm.data('$questTextController').log;
+			log = scope.current.logObj;
 		};
 
 		beforeEach(module('questDirectives', function($compileProvider){
@@ -52,8 +53,6 @@ define(['../questDirectivesModule'], function(){
 			changeInputValueTo('band');
 			expect(log.response).toBe('band');
 		});
-
-
 
 		it('should support dflt',function(){
 			compile({dflt:"default value"});
