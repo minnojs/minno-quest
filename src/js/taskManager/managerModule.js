@@ -11,6 +11,7 @@ define(function(require){
 	module.service('managerProvider', require('./managerProvider'));
 	module.service('managerSequence', require('./managerSequence'));
 	module.directive('piManager', require('./managerDirective'));
+	module.directive('piSpinner', require('./spinner/spinnerDirective'));
 
 	return module;
 });
