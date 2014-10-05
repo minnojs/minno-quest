@@ -28,7 +28,6 @@ define(function(require){
 
 				$element.html('<div pi-task="task"></div>');
 				$compile($element.contents())($scope);
-
 			}
 		};
 	}

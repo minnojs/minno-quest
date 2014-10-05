@@ -4,18 +4,16 @@ define([], function(){
 		paths: {
 			questAPI: 'quest/API',
 			underscore: ["//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min","../../bower_components/lodash/dist/lodash.min"],
-			angular: ['../../bower_components/angular/angular.min'],
+			angular: ['../../bower_components/angular/angular'],
+			animate: ['../../bower_components/angular-animate/angular-animate.min'],
 			text: ['//cdnjs.cloudflare.com/ajax/libs/require-text/2.0.10/text.min','../../bower_components/requirejs-text/text']
 		},
 		shim: {
 			angular : {exports : 'angular'},
-			angularUi : {
-				deps: ['angular'],
-				exports: 'angular.ui'
-			}
+			animate : {deps: ['angular'], exports: 'angular'}
 		},
 		deps: [
-			'angular', 'underscore','text'
+			'angular', 'animate', 'underscore','text'
 		]
 	});
 

@@ -27,9 +27,9 @@ module.exports = function (grunt) {
 			// https://github.com/vojtajina/grunt-bump
 			options: {
 				files:			['package.json'],
-				commitMessage: 	'chore: release v%VERSION%',
+				commitMessage:	'chore: release v%VERSION%',
 				updateConfigs:	['pkg'],
-				commitFiles: 	['package.json','CHANGELOG.md', 'dist/**/*'],
+				commitFiles:	['package.json','CHANGELOG.md', 'dist/**/*'],
 				push: false
 			}
 		},
@@ -245,7 +245,8 @@ module.exports = function (grunt) {
 					paths: {
 						underscore: 'empty:',
 						angular: 'empty:',
-						text: '../../bower_components/requirejs-text/text'
+						text: '../../bower_components/requirejs-text/text',
+						animate: '../../bower_components/angular-animate/angular-animate.min'
 					},
 
 					// Add banner

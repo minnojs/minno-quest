@@ -1,9 +1,10 @@
 define(['./managerModule'], function(){
-	xdescribe('manager', function(){
+	describe('manager', function(){
 
 		beforeEach(module('taskManager'));
 
-		describe(': directive', function(){
+		// This has been deactivated because we're actually still developing here..
+		xdescribe(': directive', function(){
 
 			var q, element, $compile, $rootScope, getScriptSpy, $window;
 

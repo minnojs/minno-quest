@@ -11,15 +11,15 @@
     "url": "git://github.com/ProjectImplicit/PIquest.git"
   },
   "dependencies": {
-    "angular": "1.2.25",
+    "angular": "1.2.26",
     "requirejs": "2.1.10",
     "requirejs-text": "2.0.10",
     "lodash": "2.4.1",
     "bootstrap-sass-official": "~3.2.0+2",
-    "angular-animate": "~1.2.25"
+    "angular-animate": "1.2.26"
   },
   "devDependencies": {
-    "angular-mocks": "1.2.25",
+    "angular-mocks": "1.2.26",
     "es5-shim": "3.4.0",
     "jquery": "1.11"
   }

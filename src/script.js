@@ -3,7 +3,7 @@ define(['questAPI'], function(Quest){
 	var API = new Quest();
 
 	API.addSettings('logger', {
-		pulse: 3,
+		pulse: 2,
 		url: 'mine/sps'
 		//DEBUG:true
 	});
@@ -17,6 +17,7 @@ define(['questAPI'], function(Quest){
 
 	API.addSequence([
 		{
+			animate:false,
 			prevText: '123',
 			prev:true,
 			progressBar: '<%= pagesMeta.number %> out of <%= pagesMeta.outOf%>',
@@ -73,7 +74,7 @@ define(['questAPI'], function(Quest){
 					],
 					required: true,
 					correct:true,
-					correctValue: [1,3],
+					correctValue: [2,4],
 					errorMsg: {correct:"answer is reverie polyAdept"}
 				},
 				{

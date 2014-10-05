@@ -24,20 +24,19 @@ requirejs.config({
 	paths: {
 		underscore: "../../bower_components/lodash/dist/lodash",
 		angular: '../../bower_components/angular/angular',
+		animate: ['../../bower_components/angular-animate/angular-animate.min'],
 		angularMocks: '../../bower_components/angular-mocks/angular-mocks',
 		jquery: '../../bower_components/jquery/dist/jquery',
 		text: '../../bower_components/requirejs-text/text'
 	},
 
 	shim: {
-		'angular' : {'exports' : 'angular'},
-		'angularMocks': {
-			deps:['angular'],
-			'exports':'angular.mock'
-		}
+		angular : {'exports' : 'angular'},
+		animate : {deps: ['angular'], exports: 'angular'},
+		angularMocks : {deps: ['angular'], exports: 'angular'}
 	},
 	// ask Require.js to load these files (all our tests)
-	deps: ['../../bower_components/es5-shim/es5-shim','../../test/matchers','angular', 'angularMocks', 'jquery'], //allTestFiles,
+	deps: ['../../bower_components/es5-shim/es5-shim','../../test/matchers','angular', 'animate', 'angularMocks', 'jquery'], //allTestFiles,
 
 	//urlArgs: 'bust=' + (new Date()).getTime(),
 

@@ -8,14 +8,14 @@
  *		3. For now, deal with the end of a task (redirect, callback, broadcast etc. - later this should move into the task)
  *
  * @name piQuest
-  */
+	*/
 define(['underscore', 'text!./piQuest.html'], function (_, template) {
 
 	piQuestCtrl.$inject = ['$scope','$rootScope','Task','templateDefaultContext', 'mixerDefaultContext'];
 	function piQuestCtrl($scope, $rootScope, Task, templateDefaultContext, mixerDefaultContext){
 		var self = this;
 		var task = self.task = new Task($scope.script);
-		var defaultContext;
+		var defaultContext; // for templates and the mixer
 		var global = $rootScope.global;
 		var script = $scope.script;
 
@@ -23,6 +23,7 @@ define(['underscore', 'text!./piQuest.html'], function (_, template) {
 		var current = $rootScope.global[script.name || 'current'] = $rootScope.current = {questions: {}};
 
 		// extend global and current with settings...
+		// @TODO: should move to task
 		if (script.current) {
 			_.extend(current, script.current);
 		}
@@ -30,8 +31,6 @@ define(['underscore', 'text!./piQuest.html'], function (_, template) {
 		if (script.global) {
 			_.extend(global, script.global);
 		}
-
-		this.init = next;
 
 		// create default context
 		defaultContext = {
@@ -44,9 +43,11 @@ define(['underscore', 'text!./piQuest.html'], function (_, template) {
 		_.extend(templateDefaultContext,defaultContext);
 		_.extend(mixerDefaultContext,defaultContext);
 
+		// setup the first page
+		task.next();
+
 		$scope.$on('quest:next', next);
 		$scope.$on('quest:prev', prev);
-		$scope.$on('quest:refresh', refresh);
 
 		$scope.$on('quest:log', function(event, log, pageData){
 			task.log(log, pageData, $scope.global);
@@ -54,31 +55,76 @@ define(['underscore', 'text!./piQuest.html'], function (_, template) {
 
 		function next(event, target){
 			task.next(target);
-			refresh();
+			$scope.$emit('quest:newPage');
 		}
 
 		function prev(event, target){
 			task.prev(target);
-			refresh();
-		}
-
-		function refresh(){
-			var page = task.current();
-
-			if (page) {
-				$scope.page = page;
-			}
+			$scope.$emit('quest:newPage');
 		}
 	}
 
-	function directive(){
+	directive.$inject = ['$compile', '$animate'];
+	function directive($compile, $animate){
 		return {
 			replace: true,
 			controller: piQuestCtrl,
-			template:template,
-			link: function(scope, element, attr, ctrl) {
-				// initiate controller
-				ctrl.init();
+			link: function(scope, parentElement, attr, ctrl) {
+				var task = ctrl.task,
+					currentScope,
+					currentElement,
+					previousElement;
+
+				scope.$on('quest:refresh', refresh); // just refresh the object
+				scope.$on('quest:newPage', newPage); // new element, new object and animation
+				newPage();
+
+				function cleanupLastPage() {
+					if(previousElement) {
+						previousElement.remove();
+						previousElement = null;
+					}
+					if(currentScope) {
+						currentScope.$destroy();
+						currentScope = null;
+					}
+					if(currentElement) {
+						$animate.leave(currentElement, function() {
+							previousElement = null;
+						});
+						previousElement = currentElement;
+						currentElement = null;
+					}
+				}
+
+				function newPage(){
+					var page = task.current();
+
+					if (page){
+						var newScope = scope.$new();
+						newScope.page = page;
+
+						// first send away the previous element (if it exists)
+						cleanupLastPage();
+
+						// enter: new element
+						currentElement = $compile(template)(newScope);
+						// disable animation if `animate` is false. This is not a very good solution.
+						// It globaly cancels animations, and doesn't allow complex animation options.
+						// Its probably a good enough temporary solution...
+						$animate.enabled(page.animate !== false);
+						$animate.enter(currentElement, parentElement);
+
+						currentScope = newScope;
+						currentScope.$emit('quest:updated');
+					} else {
+						cleanupLastPage();
+					}
+				}
+
+				function refresh(){
+					currentScope.page = task.current();
+				}
 			}
 		};
 	}

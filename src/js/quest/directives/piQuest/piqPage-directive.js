@@ -102,9 +102,10 @@ define(function (require) {
 		};
 
 		// setup page on page refresh
-		$scope.$watch('page', pageSetup);
+		pageSetup($scope.page);
 
-		// refresh page on question change
+		// refresh page on question change (deep watch)
+		// should refresh this directive without animating the whole page in...
 		$scope.$watch('current.questions', pageRefresh, true);
 
 		// listen for auto submit calls
@@ -112,15 +113,14 @@ define(function (require) {
 			$scope.submit();
 		});
 
-		// change $scope.page
+		// refresh $scope.page
 		// indirectly triggers pageSetup
 		function pageRefresh(){
 			$scope.$emit('quest:refresh');
 		}
 
-		function pageSetup(newPage, oldValue, scope){
+		function pageSetup(newPage){
 			// set the page log object
-			// @TODO: make sure log stays constant per page (or something... maybe move the startime into question. makes more sense.)
 			self.log = {
 				name: newPage.name,
 				startTime: +new Date()
@@ -130,10 +130,10 @@ define(function (require) {
 			if (newPage.timeout){
 				self.timeoutDeferred = $timeout(function(){
 					self.log.timeout = true;
-					scope.submit(true);
+					$scope.submit(true);
 					/* global alert */
 					newPage.timeoutMessage && alert(newPage.timeoutMessage);
-				}, newPage.timeout);
+				}, newPage.timeout, false);
 			}
 		}
 	}

@@ -60,9 +60,8 @@ define(['../questDirectivesModule'],function(){
 			expect(taskSpyObj.current).toHaveBeenCalled();
 		});
 
-		it('should listen for "quest:refresh" and act accordingly', function(){
-			scope.$new().$emit('quest:refresh');
-			expect(taskSpyObj.current).toHaveBeenCalled();
+		it('should setup task by caling "next"', function(){
+			expect(taskSpyObj.next).toHaveBeenCalled();
 		});
 
 		it('should listen for "quest:log" and log accordingly', function(){
@@ -425,20 +424,17 @@ define(['../questDirectivesModule'],function(){
 				}));
 
 				it('should submit',function(){
-					var submitSpy = jasmine.createSpy('submit');
-					scope.$on('quest:next', submitSpy);
+					spyOn(scope, 'submit');
 					$timeout.flush();
-					expect(submitSpy).toHaveBeenCalled();
+					expect(scope.submit).toHaveBeenCalled();
 					expect(controller.log.timeout).toBeDefined();
 				});
 
-				it('should harvest even upon error', function(){
-					var harvestSpy = jasmine.createSpy('harvest');
+				it('should proceed even upon error', function(){
+					spyOn(controller,'proceed');
 					scope.pageForm.$setValidity('test', false);
-
-					scope.$on('quest:next', harvestSpy);
 					$timeout.flush();
-					expect(harvestSpy).toHaveBeenCalled();
+					expect(controller.proceed).toHaveBeenCalled();
 				});
 
 				it('should not trigger if submit was called before it', function(){
