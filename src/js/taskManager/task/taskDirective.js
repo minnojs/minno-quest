@@ -17,9 +17,11 @@ define(function (require) {
 				data: '=piTask'
 			},
 			link: function($scope, $element){
+
 				var global = $rootScope.global;
 
 				$scope.$watch('data', function (newTask) {
+
 					// don't do anything at the very begining or end
 					if (!newTask){
 						return;

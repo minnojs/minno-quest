@@ -72,6 +72,7 @@ String getBase = getProtocol+"://"+getDomain;
 	<![endif]-->
 	<!--[if lte IE 8]>
 		<script src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/3.4.0/es5-shim.min.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
 	<![endif]-->
 	<script language="JavaScript" type="text/javascript" src="/implicit/common/en-us/js/task.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.min.js" data-main="js/bootstrap.js"></script>

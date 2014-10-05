@@ -4,7 +4,7 @@ define([], function(){
 		paths: {
 			questAPI: 'quest/API',
 			underscore: ["//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min","../../bower_components/lodash/dist/lodash.min"],
-			angular: ['../../bower_components/angular/angular'],
+			angular: ['../../bower_components/angular/angular.min'],
 			animate: ['../../bower_components/angular-animate/angular-animate.min'],
 			text: ['//cdnjs.cloudflare.com/ajax/libs/require-text/2.0.10/text.min','../../bower_components/requirejs-text/text']
 		},

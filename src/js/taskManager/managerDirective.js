@@ -12,6 +12,7 @@ define(function(require){
 	function directive($compile,$rootScope,getScript,$parse, $window){
 		return {
 			link:  function($scope, $element, attr){
+
 				var piGlobal = $parse(attr.piGlobal)($window);
 
 				// create the global object

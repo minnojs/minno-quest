@@ -62,6 +62,7 @@ define(['underscore', 'text!./piQuest.html'], function (_, template) {
 			task.prev(target);
 			$scope.$emit('quest:newPage');
 		}
+
 	}
 
 	directive.$inject = ['$compile', '$animate'];
