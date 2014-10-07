@@ -74,6 +74,29 @@ define(['./logger-module'],function(){
 				logger.log(4);
 				expect(logger.send).not.toHaveBeenCalled();
 			});
+
+			it('should not pulse if suppressPulse was called', function(){
+				spyOn(logger,'send');
+				logger.suppressPulse();
+				logger.log(1);
+				logger.log(2);
+				logger.log(3);
+				expect(logger.send).not.toHaveBeenCalled();
+			});
+
+			describe(': suppressPulse', function(){
+				it('should set suppress to true by default', function(){
+					logger.suppressPulse();
+					expect(logger.suppress).toBeTruthy();
+				});
+
+				it('should set suppress to the argument', function(){
+					logger.suppressPulse(true);
+					expect(logger.suppress).toBeTruthy();
+					logger.suppressPulse(false);
+					expect(logger.suppress).not.toBeTruthy();
+				});
+			});
 		});
 
 		describe(': send', function(){
@@ -96,6 +119,7 @@ define(['./logger-module'],function(){
 
 			it('should not post data if there are no pending objects', inject(function($http){
 				spyOn($http,'post');
+				logger.send();
 				expect($http.post).not.toHaveBeenCalled();
 			}));
 

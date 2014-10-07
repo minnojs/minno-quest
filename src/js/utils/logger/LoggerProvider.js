@@ -29,6 +29,7 @@ define(function(require){
 			this.sent = [];
 			this.settings = {};
 			this.meta = {};
+			this.suppress = false; // don't suppress send
 			this.dfltLogFn = dfltLogFn || function(){return arguments[0];};
 		}
 
@@ -49,7 +50,7 @@ define(function(require){
 
 				this.pending.push(logObj);
 				self.logCounter++;
-				if (settings.pulse && this.pending.length >= settings.pulse){
+				if (settings.pulse && !this.suppress && this.pending.length >= settings.pulse){
 					this.send();
 				}
 			},
@@ -89,6 +90,14 @@ define(function(require){
 						throw new Error('Failed to send data, it seems the backend is not responding.');
 					});
 				}
+			},
+
+			/**
+			 * suppress pulse
+			 * sets suppress to `suppress`, or to true by default.
+			 */
+			suppressPulse: function (suppress) {
+				this.suppress = _.isUndefined(suppress) ? true : suppress;
 			},
 
 			getCount: function(){

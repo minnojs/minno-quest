@@ -3,17 +3,6 @@ label {
 	font-size: $font-size-large
 }
 
-
-// added this so there is a difference between active buttons and hover
-.btn {
-	&:active,
-  	&.active {
-	    outline: 0;
-	    background-image: none;
-	    @include box-shadow(inset 0 3px 5px rgba(0,0,0,.3));
-  	}
-}
-
 [pi-quest] {
 	position: relative;
 }

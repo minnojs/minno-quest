@@ -22,13 +22,22 @@ define(['underscore', 'angular'], function(_, angular){
 			this.q.promise
 				.then(function(){
 					// check if there are unlogged questions and log them
+					self.logger.suppressPulse(); // this is the end of the task, we want to post all the logs at once.
 					_.each($rootScope.current.questions, function(quest){
 						if(quest.$logged){
 							return true;
 						}
+
+						/**
+						 * logs to server
+						 * @param {Object} log : the actual data regarding this log
+						 * @param {Object} pageData : General inforamtion about this page
+						 * @param {Object} global : The global object
+						 */
 						self.log(quest, {}, $rootScope.global);
 						quest.$logged = true;
 					});
+					self.logger.suppressPulse(false); // turn suppress off
 					return self.logger.send();
 				});
 

@@ -14,6 +14,7 @@ define(['underscore','./task-module'],function(){
 			$provide.value('Logger', jasmine.createSpy('Logger').andCallFake(function(){
 				this.send = sendSpy;
 				this.log = logSpy;
+				this.suppressPulse = jasmine.createSpy('suppressPulse');
 				this.setSettings = jasmine.createSpy('setSettings');
 			}));
 			$provide.value('Database', function(){
@@ -84,6 +85,7 @@ define(['underscore','./task-module'],function(){
 			task.current();
 			$rootScope.$apply();
 			expect(sendSpy).toHaveBeenCalled();
+			expect(task.logger.suppressPulse).toHaveBeenCalled(); // prevent breaking the final send into pulses
 			nextSpy.andReturn('nextObj');
 		}));
 
