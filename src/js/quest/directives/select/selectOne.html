@@ -10,6 +10,7 @@
 			uncheckable
 			ng-click="data.autoSubmit && autoSubmit($event)"
 			ng-bind-html="answer.text"
+			unselectable="on"
 		></a>
 	</div>
 	<p class="error" ng-show="model.$error.required">{{data.errorMsg.required || "This field is required!"}}</p>
