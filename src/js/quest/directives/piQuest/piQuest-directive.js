@@ -9,7 +9,10 @@
  *
  * @name piQuest
 	*/
-define(['underscore', 'text!./piQuest.html'], function (_, template) {
+define(function (require) {
+	var _ = require('underscore');
+	var template = require('text!./piQuest.html');
+	var jqLite = require('angular').element;
 
 	piQuestCtrl.$inject = ['$scope','$rootScope','Task','templateDefaultContext', 'mixerDefaultContext'];
 	function piQuestCtrl($scope, $rootScope, Task, templateDefaultContext, mixerDefaultContext){
@@ -65,8 +68,8 @@ define(['underscore', 'text!./piQuest.html'], function (_, template) {
 
 	}
 
-	directive.$inject = ['$compile', '$animate'];
-	function directive($compile, $animate){
+	directive.$inject = ['$compile', '$animate','$injector'];
+	function directive($compile, $animate, $injector){
 		return {
 			replace: true,
 			controller: piQuestCtrl,
@@ -103,17 +106,17 @@ define(['underscore', 'text!./piQuest.html'], function (_, template) {
 
 					if (page){
 						var newScope = scope.$new();
+						var tempElm = jqLite(template); // create a new element here so we can add the animation classes before linking
+
 						newScope.page = page;
+						addAnimations(tempElm, page.animate);
 
 						// first send away the previous element (if it exists)
 						cleanupLastPage();
 
 						// enter: new element
-						currentElement = $compile(template)(newScope);
-						// disable animation if `animate` is false. This is not a very good solution.
-						// It globaly cancels animations, and doesn't allow complex animation options.
-						// Its probably a good enough temporary solution...
-						$animate.enabled(page.animate !== false);
+						currentElement = $compile(tempElm)(newScope);
+
 						$animate.enter(currentElement, parentElement);
 
 						currentScope = newScope;
@@ -125,6 +128,24 @@ define(['underscore', 'text!./piQuest.html'], function (_, template) {
 
 				function refresh(){
 					currentScope.page = task.current();
+				}
+
+				function addAnimations(element, animationsStr){
+					if (!animationsStr){
+						return;
+					}
+
+					var animations = animationsStr.split(" ");
+
+					_.each(animations, function(animation){
+						// Make sure that this animation exists
+						if (!$injector.has("." + animation + '-animation')){
+							throw new Error ('Unknown animation type: "' + animation + '"');
+						}
+
+					});
+
+					element.addClass(animationsStr);
 				}
 			}
 		};

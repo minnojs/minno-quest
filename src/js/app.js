@@ -5,12 +5,11 @@
 define(function (require) {
 
 	var angular = require('angular');
-	require('animate'); // load animate as a dependency
 
 	var submodules = [
 		require('quest/questModule').name,
 		require('taskManager/managerModule').name,
-		'ngAnimate'
+		require('utils/animations/animationModule').name
 	];
 
 	return angular.module('piApp', submodules);

@@ -2,7 +2,10 @@ define(['../questDirectivesModule'],function(){
 	var jqLite = angular.element;
 	var controller, element, scope, $compile;
 
-	describe('piQuest Controller', function(){
+	// fake animation for test
+	angular.module('questDirectives').animation('.test', function(){});
+
+	describe('piQuest', function(){
 		var script = {name:"myName", global: {extendGlobal:true}, current: {extendCurrent:true}};
 		var taskSpyObj;
 		var TaskSpy = jasmine.createSpy('Task').andCallFake(function(){
@@ -31,7 +34,6 @@ define(['../questDirectivesModule'],function(){
 			var rootScope = $injector.get('$rootScope');
 			rootScope.global = {};
 			scope = rootScope.$new();
-			compile();
 		}));
 
 		afterEach(inject(function(templateDefaultContext, mixerDefaultContext){
@@ -43,57 +45,82 @@ define(['../questDirectivesModule'],function(){
 			delete(mixerDefaultContext.questions);
 		}));
 
-		it('should create a task from the script', function(){
-			expect(controller.task).toBeDefined();
-			expect(TaskSpy).toHaveBeenCalledWith(script);
+		describe('Controller', function(){
+			beforeEach(compile);
+
+			it('should create a task from the script', function(){
+				expect(controller.task).toBeDefined();
+				expect(TaskSpy).toHaveBeenCalledWith(script);
+			});
+
+			it('should listen for "quest:next" and act accordingly', function(){
+				scope.$new().$emit('quest:next','nextObj');
+				expect(taskSpyObj.next).toHaveBeenCalled();
+				expect(taskSpyObj.current).toHaveBeenCalled();
+			});
+
+			it('should listen for "quest:prev" and act accordingly', function(){
+				scope.$new().$emit('quest:prev');
+				expect(taskSpyObj.prev).toHaveBeenCalled();
+				expect(taskSpyObj.current).toHaveBeenCalled();
+			});
+
+			it('should setup task by caling "next"', function(){
+				expect(taskSpyObj.next).toHaveBeenCalled();
+			});
+
+			it('should listen for "quest:log" and log accordingly', function(){
+				scope.$new().$emit('quest:log', 1, 'currentPageData');
+				expect(taskSpyObj.log).toHaveBeenCalledWith(1, 'currentPageData', scope.global);
+			});
+
+			it('should create a "current" quest object', inject(function($rootScope){
+				expect($rootScope.global.myName).toEqual(jasmine.any(Object));
+				expect($rootScope.global.myName.questions).toEqual(jasmine.any(Object));
+				expect(scope.current).toBe($rootScope.global.myName);
+			}));
+
+			it('should extend the "current" quest object with script.current', function(){
+				expect(scope.current.extendCurrent).toBeTruthy();
+			});
+
+			it('should extend the "globa" object with script.global', function(){
+				expect(scope.global.extendGlobal).toBeTruthy();
+			});
+
+			it('should setup the templateDefaultContext', inject(function(templateDefaultContext){
+				expect(templateDefaultContext.global).toBe(scope.global);
+				expect(templateDefaultContext.current).toBe(scope.current);
+				expect(templateDefaultContext.questions).toBe(scope.current.questions);
+			}));
+
+			it('should setup the mixerDefaultContext', inject(function(mixerDefaultContext){
+				expect(mixerDefaultContext.global).toBe(scope.global);
+				expect(mixerDefaultContext.current).toBe(scope.current);
+				expect(mixerDefaultContext.questions).toBe(scope.current.questions);
+			}));
 		});
 
-		it('should listen for "quest:next" and act accordingly', function(){
-			scope.$new().$emit('quest:next','nextObj');
-			expect(taskSpyObj.next).toHaveBeenCalled();
-			expect(taskSpyObj.current).toHaveBeenCalled();
+		describe('directive', function(){
+			describe(': animation', function(){
+				it('should add appropriate animation', function(){
+					compile();
+					taskSpyObj.current.andReturn({animate:'test'});
+					scope.$emit('quest:newPage');
+					expect(element.children()).toHaveClass('test');
+				});
+
+				it('should throw for unknown animation', function(){
+					compile();
+					taskSpyObj.current.andReturn({animate:'fake'});
+					expect(function(){
+						scope.$emit('quest:newPage');
+					}).toThrow();
+				});
+			});
+
+
 		});
-
-		it('should listen for "quest:prev" and act accordingly', function(){
-			scope.$new().$emit('quest:prev');
-			expect(taskSpyObj.prev).toHaveBeenCalled();
-			expect(taskSpyObj.current).toHaveBeenCalled();
-		});
-
-		it('should setup task by caling "next"', function(){
-			expect(taskSpyObj.next).toHaveBeenCalled();
-		});
-
-		it('should listen for "quest:log" and log accordingly', function(){
-			scope.$new().$emit('quest:log', 1, 'currentPageData');
-			expect(taskSpyObj.log).toHaveBeenCalledWith(1, 'currentPageData', scope.global);
-		});
-
-		it('should create a "current" quest object', inject(function($rootScope){
-			expect($rootScope.global.myName).toEqual(jasmine.any(Object));
-			expect($rootScope.global.myName.questions).toEqual(jasmine.any(Object));
-			expect(scope.current).toBe($rootScope.global.myName);
-		}));
-
-		it('should extend the "current" quest object with script.current', function(){
-			expect(scope.current.extendCurrent).toBeTruthy();
-		});
-
-		it('should extend the "globa" object with script.global', function(){
-			expect(scope.global.extendGlobal).toBeTruthy();
-		});
-
-		it('should setup the templateDefaultContext', inject(function(templateDefaultContext){
-			expect(templateDefaultContext.global).toBe(scope.global);
-			expect(templateDefaultContext.current).toBe(scope.current);
-			expect(templateDefaultContext.questions).toBe(scope.current.questions);
-		}));
-
-		it('should setup the mixerDefaultContext', inject(function(mixerDefaultContext){
-			expect(mixerDefaultContext.global).toBe(scope.global);
-			expect(mixerDefaultContext.current).toBe(scope.current);
-			expect(mixerDefaultContext.questions).toBe(scope.current.questions);
-		}));
 
 	});
 
