@@ -362,7 +362,7 @@ API.addSettings("logger", {
 
 Setting 	| Description
 ----------- | ---------------
-pulse 		| (Number; Default: 0) How many rows to collect before posting to the server. 0 means that the player sends to the server only at the end of the task.
+pulse 		| (Number; Default: 0) How many rows to collect before posting to the server. 0 means that the player sends to the server only at the end of the task. Note that only questions and pages marked with the `lognow` property will be pulsed. All other questions will be sent at the end of the task.
 url 		| (Text; default:"") The URL to which we should post the data to.
 DEBUG 		| (true or false; default: false) When set to true, prints each logged object in the console.
 logfn 		| (Function) The task has a default object that it logs, if you want to change the logged object itself, you may use a function of the form: `function(log, pagesData, global){return logObj;}`
