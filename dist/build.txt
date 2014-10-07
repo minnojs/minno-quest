@@ -66,4 +66,9 @@ js/taskManager/task/taskDirective.js
 js/taskManager/task/taskModule.js
 js/taskManager/managerDirective.js
 js/taskManager/managerModule.js
+js/utils/animations/rafPolyfill.js
+js/utils/animations/dropInAnimation.js
+js/utils/animations/fadeAnimation.js
+js/utils/animations/slideAnimation.js
+js/utils/animations/animationModule.js
 js/app.js

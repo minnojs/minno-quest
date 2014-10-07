@@ -1,0 +1,1 @@
+define(["require","angular","animate","./rafPolyfill","./dropInAnimation","./fadeAnimation","./slideAnimation"],function(e){var t=e("angular");e("animate"),e("./rafPolyfill");var n=t.module("pi.animate",["ngAnimate"]);return n.animation(".drop-in",e("./dropInAnimation")),n.animation(".fade",e("./fadeAnimation")),n.animation(".slide",e("./slideAnimation")),n});

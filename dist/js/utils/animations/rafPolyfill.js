@@ -1,0 +1,3 @@
+// MIT license
+
+define([],function(){var e=["webkit","moz"];for(var t=0;t<e.length&&!window.requestAnimationFrame;++t){var n=e[t];window.requestAnimationFrame=window[n+"RequestAnimationFrame"],window.cancelAnimationFrame=window[n+"CancelAnimationFrame"]||window[n+"CancelRequestAnimationFrame"]}if(/iP(ad|hone|od).*OS 6/.test(window.navigator.userAgent)||!window.requestAnimationFrame||!window.cancelAnimationFrame){var r=0;window.requestAnimationFrame=function(e){var t=+(new Date),n=Math.max(r+16,t);return setTimeout(function(){e(r=n)},n-t)},window.cancelAnimationFrame=clearTimeout}});

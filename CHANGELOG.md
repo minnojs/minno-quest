@@ -1,3 +1,24 @@
+<a name="0.0.14"></a>
+### 0.0.14 (2014-10-08)
+
+
+#### Bug Fixes
+
+* **task:** does not log in pulses at the end of the task. ([a48f9323](https://github.com/ProjectImplicit/PIquest/commit/a48f93231e1c6bc64d5a9a7d5cf79b64b7b45c3c), closes [#49](https://github.com/ProjectImplicit/PIquest/issues/49))
+
+
+#### Features
+
+* **animation:** support for slide, fade and drop-in. ([aa142a24](https://github.com/ProjectImplicit/PIquest/commit/aa142a2464b1c5934bd4c9b1821e980fc9956255))
+* **select:** selectOne and selectMulti cannot be highlighted any more. ([9aa87e7e](https://github.com/ProjectImplicit/PIquest/commit/9aa87e7e1c3fd7e98db1f8cb5c50ec86746745b3), closes [#50](https://github.com/ProjectImplicit/PIquest/issues/50))
+
+
+#### Breaking Changes
+
+* by default animation is not activated, you must manually activate it by setting the class name in /`animation/`.
+ ([aa142a24](https://github.com/ProjectImplicit/PIquest/commit/aa142a2464b1c5934bd4c9b1821e980fc9956255))
+
+
 <a name="0.0.13"></a>
 ### 0.0.13 (2014-10-06)
 
