@@ -151,6 +151,16 @@ define(['./logger-module'],function(){
 				}).toThrow();
 				$httpBackend.flush();
 			});
+
+			it('should return a promise', function(){
+				// when not logging
+				expect(logger.send().then).toEqual(jasmine.any(Function));
+
+				// when logging
+				logger.log(1);
+				expect(logger.send().then).toEqual(jasmine.any(Function));
+				$httpBackend.flush();
+			});
 		});
 
 		it('should supply a log counter across instances', inject(function(Logger){

@@ -39,10 +39,8 @@ define(['underscore', 'angular'], function(_, angular){
 					});
 					self.logger.suppressPulse(false); // turn suppress off
 					return self.logger.send();
-				});
-
-			this.q.promise
-				.then(settings.onEnd || angular.noop);
+				})
+				.then(settings.onEnd || angular.noop); // end only after logging has finished
 
 			parse(script, this.db);
 		}

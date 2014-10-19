@@ -89,6 +89,30 @@ define(['underscore','./task-module'],function(){
 			nextSpy.andReturn('nextObj');
 		}));
 
+		it('should call `onEnd` only after `send` is called', inject(function(Task, $rootScope, $q){
+			var def = $q.defer();
+			var script = {
+				sequence:[],
+				settings: {
+					onEnd:jasmine.createSpy('onEnd').andCallFake(function(){
+						expect(sendSpy).toHaveBeenCalled();
+					})
+				}
+			};
+			task = new Task(script);
+			nextSpy.andReturn(undefined);
+			sendSpy.andReturn(def.promise);
+			task.current();
+			$rootScope.$apply();
+			expect(sendSpy).toHaveBeenCalled();
+			expect(script.settings.onEnd).not.toHaveBeenCalled();
+			def.resolve();
+			$rootScope.$apply();
+			expect(script.settings.onEnd).toHaveBeenCalled();
+			nextSpy.andReturn('nextObj');
+			sendSpy.andReturn(undefined);
+		}));
+
 		it('should call the parser', inject(function(Database){
 			expect(parseSpy).toHaveBeenCalledWith(script, jasmine.any(Database));
 		}));

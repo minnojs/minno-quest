@@ -63,7 +63,8 @@ define(function(require){
 
 				// if there are no records to send...
 				if (sendData.length === 0){
-					return def.resolve();
+					def.resolve();
+					return def.promise;
 				}
 
 				if (_.isUndefined(settings.url)){
@@ -80,13 +81,15 @@ define(function(require){
 					this.sent.push(sendData[i]);
 				}
 
+				return def.promise;
+
 				function success(){
 					def.resolve();
 				}
 
 				function error(){
 					// try again
-					$http.post(settings.url, sendData).then(success, function(){
+					return $http.post(settings.url, sendData).then(success, function(){
 						throw new Error('Failed to send data, it seems the backend is not responding.');
 					});
 				}
