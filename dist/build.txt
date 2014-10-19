@@ -12,6 +12,8 @@ js/quest/directives/buttons/buttons.js
 js/utils/template/templateFilter.js
 js/utils/template/templateObjProvider.js
 js/utils/template/templateModule.js
+js/utils/console/consoleProvider.js
+js/utils/console/consoleModule.js
 js/quest/directives/questController.js
 text!quest/directives/piQuest/piQuest.html
 js/quest/directives/piQuest/piQuest-directive.js

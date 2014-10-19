@@ -3,8 +3,8 @@ define(function(require){
 	var angular = require('angular');
 
 
-	mixerConditionProvider.$inject = ['mixerDotNotation', '$log'];
-	function mixerConditionProvider(dotNotation, $log){
+	mixerConditionProvider.$inject = ['mixerDotNotation', 'piConsole'];
+	function mixerConditionProvider(dotNotation, piConsole){
 
 		function mixerCondition(condition, context){
 			// @TODO angular.$parse may be a better candidate for doing this...
@@ -12,7 +12,7 @@ define(function(require){
 			var right = dotNotation(condition.to,context);
 			var operator = condition.operator;
 
-			condition.DEBUG && $log.log('Condition DEBUG: ', left, operator || 'equals', right, condition);
+			piConsole(['conditions']).info('Condition: ', left, operator || 'equals', right, condition);
 
 			if (_.isFunction(operator)){
 				return !! operator.apply(context,[left, right]);

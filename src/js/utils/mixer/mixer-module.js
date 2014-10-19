@@ -1,8 +1,11 @@
 define(function(require){
-	require('utils/randomize/randomizeModule');
 
 	var angular = require('angular');
-	var module = angular.module('mixer',['randomize']);
+
+	var module = angular.module('mixer',[
+		require('utils/randomize/randomizeModule').name,
+		require('utils/console/consoleModule').name
+	]);
 
 	module.service('mixer', require('./mixer'));
 	module.service('mixerSequential', require('./mixerSequential'));
@@ -18,8 +21,6 @@ define(function(require){
 		$provide.decorator('mixer', require('./branching/mixerBranchingDecorator'));
 	}]);
 	module.constant('mixerDefaultContext', {});
-
-
 
 	return module;
 });

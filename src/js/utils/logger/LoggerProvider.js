@@ -6,8 +6,7 @@
  *		pulse: 34, // after how many objects should we post
  *		url: '/my/url', // where should we post to
  *		meta: an object that extends each log
- *		DEBUG: false // activate logging each object to the console
- *	}
+  *	}
  *
  *	methods:
  *
@@ -20,8 +19,8 @@
 define(function(require){
 	var _ = require('underscore');
 
-	loggerProvider.$inject = ['$http','$q', '$log'];
-	function loggerProvider($http, $q, $log){
+	loggerProvider.$inject = ['$http','$q', 'piConsole'];
+	function loggerProvider($http, $q, piConsole){
 		var self = this;
 
 		function Logger(dfltLogFn){
@@ -39,14 +38,14 @@ define(function(require){
 				var logObj = (settings.logFn || this.dfltLogFn).apply(settings, arguments);
 
 				if (!_.isEmpty(this.meta) && !_.isPlainObject(logObj)){
-					settings.DEBUG && $log.log(logObj);
+					piConsole(['logger']).debug(logObj);
 					throw new Error('Logger: in order to use "meta" the log must be an object.');
 				}
 
 				_.extend(logObj, this.meta);
 
 				// if debug, then log this object
-				settings.DEBUG && $log.log(logObj);
+				piConsole(['logger']).debug('Logged: ', logObj);
 
 				this.pending.push(logObj);
 				self.logCounter++;

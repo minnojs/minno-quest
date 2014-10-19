@@ -110,13 +110,13 @@ define(['../questDirectivesModule'],function(){
 					expect(element.children()).toHaveClass('test');
 				});
 
-				it('should throw for unknown animation', function(){
+				it('should $log.error for unknown animation', inject(function($log, piConsoleSettings){
+					piConsoleSettings.tags = true;
 					compile();
 					taskSpyObj.current.andReturn({animate:'fake'});
-					expect(function(){
-						scope.$emit('quest:newPage');
-					}).toThrow();
-				});
+					scope.$emit('quest:newPage');
+					expect($log.error.logs.length).toBe(1);
+				}));
 			});
 
 

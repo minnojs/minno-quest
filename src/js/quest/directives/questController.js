@@ -6,8 +6,8 @@
 define(function(require){
 	var _ = require('underscore');
 
-	questController.$inject = ['$scope', 'timerStopper', '$parse', '$attrs','$log'];
-	function questController($scope, Stopper, $parse, $attr, $log){
+	questController.$inject = ['$scope', 'timerStopper', '$parse', '$attrs','piConsole'];
+	function questController($scope, Stopper, $parse, $attr, piConsole){
 		var self = this;
 		var log;
 		var data = $scope.data;
@@ -44,7 +44,7 @@ define(function(require){
 			} else {
 				log = self.log = ngModelGet($scope.$parent);
 				$scope.response = ngModel.$viewValue = log.response;
-				data.DEBUG && $log.warn('DEBUG: this question has already been in use: "' + log.name + '"');
+				piConsole(['question']).debug('This question has already been in use: "' + log.name + '"');
 			}
 
 

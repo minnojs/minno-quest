@@ -1,6 +1,6 @@
 define(['./logger-module'],function(){
 
-	var $httpBackend, logger, $log, settings = {pulse:3};
+	var $httpBackend, logger, settings = {pulse:3};
 
 	describe('Logger', function(){
 
@@ -12,11 +12,10 @@ define(['./logger-module'],function(){
 			};
 		}));
 
-		beforeEach(inject(function(_$httpBackend_, Logger, _$log_){
+		beforeEach(inject(function(_$httpBackend_, Logger){
 			$httpBackend = _$httpBackend_;
 			logger = new Logger();
 			logger.setSettings(settings);
-			$log = _$log_;
 		}));
 
 		it('should add logged objects to the stack', function(){
@@ -178,16 +177,11 @@ define(['./logger-module'],function(){
 			expect(l2.getCount()).toBe(3);
 		}));
 
-		it('should log an object to the console if DEBUG is set to true', function(){
-			spyOn($log,'log');
-
+		it('should log an object to the console if DEBUG is set to true', inject(function($log, piConsoleSettings){
+			piConsoleSettings.tags = true;
 			logger.log(123);
-			expect($log.log).not.toHaveBeenCalledWith(123);
-
-			logger.settings.DEBUG = true;
-			logger.log(123);
-			expect($log.log).toHaveBeenCalledWith(123);
-		});
+			expect($log.debug.logs[0]).toEqual(['Logged: ', 123]);
+		}));
 
 		it('should parse the input using logFn if it exists', function(){
 			logger.settings.logFn = function(a, b){

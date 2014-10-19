@@ -35,4 +35,6 @@ define(function(require){
 	module.value('randomizeRange', function randomArr(length){
 		return _.shuffle(_.range(length));
 	});
+
+	return module;
 });

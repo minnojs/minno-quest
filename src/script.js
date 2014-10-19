@@ -2,6 +2,8 @@ define(['questAPI'], function(Quest){
 
 	var API = new Quest();
 
+	API.addSettings('DEBUG', true);
+
 	API.addSettings('logger', {
 		pulse: 2,
 		url: 'mine/sps'
@@ -17,7 +19,7 @@ define(['questAPI'], function(Quest){
 
 	API.addSequence([
 		{
-			animate:"fade slide",
+			animate:"fade slide bong",
 			prevText: '123',
 			prev:true,
 			progressBar: '<%= pagesMeta.number %> out of <%= pagesMeta.outOf%>',

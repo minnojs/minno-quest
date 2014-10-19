@@ -5,7 +5,7 @@ define(function(require){
 	require('utils/template/templateModule');
 
 	// set modules that are requirements for the quest module
-	var module = angular.module('questDirectives',['timer', 'ui.bootstrap.buttons', 'template']);
+	var module = angular.module('questDirectives',['timer', 'ui.bootstrap.buttons', 'template', require('utils/console/consoleModule').name]);
 
 	module.controller('questController', require('./questController'));
 	module.directive('piQuest', require('./piQuest/piQuest-directive'));

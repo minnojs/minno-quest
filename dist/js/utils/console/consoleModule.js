@@ -1,0 +1,1 @@
+define(["require","angular","./consoleProvider"],function(e){var t=e("angular"),n=t.module("piConsole",[]);return n.service("piConsole",e("./consoleProvider")),n.service("piConsoleSettings",function(){this.tags=[]}),n});

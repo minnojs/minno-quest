@@ -9,7 +9,8 @@ define(function (require) {
 	var submodules = [
 		require('quest/questModule').name,
 		require('taskManager/managerModule').name,
-		require('utils/animations/animationModule').name
+		require('utils/animations/animationModule').name,
+		require('utils/console/consoleModule').name
 	];
 
 	return angular.module('piApp', submodules);

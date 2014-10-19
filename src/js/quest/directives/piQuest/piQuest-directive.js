@@ -68,8 +68,8 @@ define(function (require) {
 
 	}
 
-	directive.$inject = ['$compile', '$animate','$injector'];
-	function directive($compile, $animate, $injector){
+	directive.$inject = ['$compile', '$animate','$injector','piConsole'];
+	function directive($compile, $animate, $injector, piConsole){
 		return {
 			replace: true,
 			controller: piQuestCtrl,
@@ -140,7 +140,7 @@ define(function (require) {
 					_.each(animations, function(animation){
 						// Make sure that this animation exists
 						if (!$injector.has("." + animation + '-animation')){
-							throw new Error ('Unknown animation type: "' + animation + '"');
+							piConsole(['page','animation']).error('Unknown animation type: "' + animation + '"');
 						}
 
 					});

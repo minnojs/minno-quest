@@ -5,7 +5,7 @@ define(function(require){
 	require('utils/template/templateModule');
 
 	var angular = require('angular');
-	var module = angular.module('task', ['logger', 'database','mixer', 'template']);
+	var module = angular.module('task', ['logger', 'database','mixer', 'template', require('utils/console/consoleModule').name]);
 
 	module.service('QuestSequence', require('./questSequenceProvider'));
 	module.service('TaskSequence', require('./taskSequenceProvider'));

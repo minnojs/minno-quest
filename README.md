@@ -26,6 +26,8 @@ It is written in JavaScript and is built to be extremely versatile and customiza
 	- [Variables](#variables)
 	- [Templates](#templates)
 	- [Inheritance ](#inheritance)
+* [Development](#development)
+	- [Debugging](#debugging)
 
 
 ### Central concepts
@@ -207,7 +209,8 @@ stem 			| (text; default: '') The text for the question itself..
 help			| (true or false;  (default: false)) Whether to display the question help text.
 helpText		| (text) The question help text. (Some questions have default help texts, some don't).
 lognow 			| (true or false) Whether to log this questions when the page is submited. This option is useful when you know that the question will not be accessed any more. It allows you to use the `pulse` option from the [logger](#logger) to send questions as they are being answered instead of sending only at the end of the task. (default: false)
-DEBUG 			| (true or false) Warn in the console if a question name is reused (note: sometimes a question is supposed to be reused, if this warning pops up just make sure the use case is correct).
+
+You may want to debug questions by [activating the `question` DEBUG setting](#debugging). You will then be warned in the console if a question name is reused (note: sometimes a question is supposed to be reused, if this warning pops up just make sure the use case is correct).
 
 ##### Text
 The `text` questions consist of a simple text input in which the users can type in text. These kind of questions have the following properties:
@@ -352,8 +355,7 @@ This setting controls the way that logging works within the player.
 ```js
 API.addSettings("logger", {
 	pulse: 34,
-	url: '/my/url',
-	DEBUG: false,
+	url: '/my/url',	
 	logfn: function(log,pagesData, global){
 		return {name: log.name, set: global.setName};
 	}
@@ -364,12 +366,13 @@ Setting 	| Description
 ----------- | ---------------
 pulse 		| (Number; Default: 0) How many rows to collect before posting to the server. 0 means that the player sends to the server only at the end of the task. Note that only questions and pages marked with the `lognow` property will be pulsed. All other questions will be sent at the end of the task.
 url 		| (Text; default:"") The URL to which we should post the data to.
-DEBUG 		| (true or false; default: false) When set to true, prints each logged object in the console.
 logfn 		| (Function) The task has a default object that it logs, if you want to change the logged object itself, you may use a function of the form: `function(log, pagesData, global){return logObj;}`
 
 Within the player, each question (as defined by unique question name) may be logged only once. By default questions are logged at the end of a page (on submit or decline), if you want to delay logging until the end of the task, you may do so by setting `nolog` in the appropriate page or question.
 
 If you want a question not to be logged at all, simply do not give it a name.
+
+You may want to debug the logger by [activating the DEBUG `logger` setting](#debugging). When activated, it prints each logged object into the console.
 
 ### Making your questionnaire dynamic
 There are several ways that you can make your questionnaire more dynamic. We will give a short overview and then get into the specifics.
@@ -525,7 +528,9 @@ Property 		| Description
 compare 		| The left side of the equation.
 to 				| The right side of the equation.
 operator 		| The type of comparison to do (read more about operators [here](#operators)).
-DEBUG 			| If `true`, then any condition that is evaluated will be logged to the console.
+
+You may want to debug conditions by [activating the DEBUG `conditions` setting](#debugging). When activated, then any condition that is evaluated will be logged to the console.
+
 
 ##### Operators
 The default comparison for a condition is to check equality (supports comparison of objects and arrays too). You can use the `operator` property to change the comparison method. The following checks if var is greater than otherVar:
@@ -757,3 +762,22 @@ It accepts two argument: the source object on which it is called (the page or qu
 	}
 }
 ```
+
+### Development
+This section of the manual deals with the mechanics of developing a questionnaire.
+
+##### Debugging
+PIQuest can supply some extra information regarding its inner workings, all you have to do is set the DEBUG setting property like so:
+
+```js
+// Log everything
+API.addSettings('DEBUG', true);
+API.addSettings('DEBUG', 'all');
+
+// Log page and animation related messages
+API.addSettings('DEBUG', ['page','animation']);
+```
+
+The messages in the player are organized by tags. There are some messages that can be activated in more than one way.
+
+The tags currently available are as follows: `page`, `question`, `conditions` and `animate`.
