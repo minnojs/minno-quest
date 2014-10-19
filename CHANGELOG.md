@@ -1,3 +1,12 @@
+<a name="0.0.15"></a>
+### 0.0.15 (2014-10-19)
+
+
+#### Bug Fixes
+
+* **task:** run onEnd after sending ([e6a6799c](https://github.com/ProjectImplicit/PIquest/commit/e6a6799ce795aca42ac4552b24df57bba6c481b6))
+
+
 <a name="0.0.14"></a>
 ### 0.0.14 (2014-10-08)
 
