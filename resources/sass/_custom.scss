@@ -21,6 +21,22 @@ label {
 }
 
 [piq-page]{
-	position: absolute;
-	width: 100%
+	position: relative;
+	width: 100%;
+	overflow: hidden;
+}
+
+[pi-console] {
+	margin: 20px 0px;
+
+	.pre a{
+		white-space: pre;
+		text-decoration:none
+	}
+
+	.alert span {
+		margin-right:5px;
+	}
+
+
 }

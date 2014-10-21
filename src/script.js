@@ -2,7 +2,12 @@ define(['questAPI'], function(Quest){
 
 	var API = new Quest();
 
-	API.addSettings('DEBUG', true);
+	API.addSettings('DEBUG', {
+		tags: 'all',
+		//hideConsole: true, // default false : whether to display console
+		level: 'info' // ERROR > WARN > INFO > DEBUG || [E, W...] || warningsOnly: Error && WARNING
+
+	});
 
 	API.addSettings('logger', {
 		pulse: 2,
@@ -15,11 +20,9 @@ define(['questAPI'], function(Quest){
 		location.href = location.href;
 	});
 
-	//API.addGloba({test:''});
-
 	API.addSequence([
 		{
-			animate:"fade slide bong",
+			animate:"fade slide d",
 			prevText: '123',
 			prev:true,
 			progressBar: '<%= pagesMeta.number %> out of <%= pagesMeta.outOf%>',

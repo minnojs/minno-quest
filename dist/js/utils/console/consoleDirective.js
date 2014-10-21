@@ -1,0 +1,1 @@
+define(["require","text!./console.html","underscore"],function(e){function r(e){return{replace:!0,template:t,link:function(t){function i(e){var t=n.indexOf(r,e);t>-1&&r.splice(t,1)}var r=t.logs=[];t.remove=i,t.reverse=!0,e.$on("console:log",function(e,t){r.push(t)})}}}var t=e("text!./console.html"),n=e("underscore");return r.$inject=["$rootScope"],r});

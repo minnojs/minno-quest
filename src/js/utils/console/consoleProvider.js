@@ -1,44 +1,36 @@
+/**
+ * A factory for $console
+ *
+ * each $console is prototyped on `consolePrototype`
+ */
 define(function(require){
 	var _ = require('underscore');
 
-	consoleProvider.$inject = ['$log', '$rootScope', 'piConsoleSettings'];
-	function consoleProvider($log, $rootScope, consoleSettings){
-		var logFunctions = ['log', 'info', 'warn', 'error', 'debug'];
-		var noopConsole = {active:false};
-		var realConsole = {active:true};
+	consoleProvider.$inject = ['piConsolePrototype'];
 
-		// create console prototypes
-		_.each(logFunctions, function(logType){
-			noopConsole[logType] = _.noop;
-			realConsole[logType] = createLog(logType);
-		});
+	function consoleProvider(consolePrototype){
 
-		return $console;
+		// decorate Console with a simple settings manager
+		Console.setSettings = consoleSetSettings;
 
-		function $console(localTags){
-			var shouldLog = consoleSettings.tags === true ||	// if settings is true
-			 	consoleSettings.tags === 'all' || // if settings is all
-			 	_.intersection(localTags || [], consoleSettings.tags).length; // is settings includes tag
+		return Console;
 
-			// create console object
-			var $consoleObj = _.create(shouldLog ? realConsole : noopConsole);
+		function Console(tags, force){
+			var $console = _.create(consolePrototype);
 
-			// keep track of relevant tags
-			$consoleObj.tags = localTags;
+			_.extend($console, {
+				tags: _.isArray(tags) ? tags : [tags], // make sure tags is an array
+				force: !!force
+			});
 
-			return $consoleObj;
+			return $console;
 		}
 
-		function createLog (logType) {
-			return function logProvider(){
-				var i, args = [];
-
-				for (i=0; i < arguments.length; i++){args[i] = arguments[i];}
-				$log[logType].apply(null, args);
-
-				$rootScope.$emit('console:log',args, this.tags);
-			};
+		// a mehtod of console
+		function consoleSetSettings (settings) {
+			consolePrototype.settings = settings;
 		}
+
 	}
 
 	return consoleProvider;

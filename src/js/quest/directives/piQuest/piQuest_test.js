@@ -110,8 +110,7 @@ define(['../questDirectivesModule'],function(){
 					expect(element.children()).toHaveClass('test');
 				});
 
-				it('should $log.error for unknown animation', inject(function($log, piConsoleSettings){
-					piConsoleSettings.tags = true;
+				it('should $log.error for unknown animation', inject(function($log){
 					compile();
 					taskSpyObj.current.andReturn({animate:'fake'});
 					scope.$emit('quest:newPage');

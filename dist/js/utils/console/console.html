@@ -1,0 +1,25 @@
+<div>
+	<div
+		ng-repeat="log in logs | orderBy:'time':true"
+		class="alert"
+		ng-class="{
+			'alert-warning':log.type == 'warn',
+			'alert-danger':log.type == 'error',
+			'alert-info':log.type == 'info',
+			'alert-success':log.type == 'log',
+			'alert-success':log.type == 'debug'
+
+		}"
+		role="alert"
+	>
+		<button ng-click="remove(log)" type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		<strong>{{ log.type | uppercase}}:</strong> <i class="text-danger">{{log.time | date : 'HH:mm:ss:sss'}}</i> - <strong>{{log.tags.join(' ')}}</strong>:</br>
+		<span
+			ng-repeat="arg in log.args track by $index"
+			ng-click="pre = !pre"
+			ng-class="{pre:pre}"
+			ng-bind-html="arg | stringify:pre"
+		></span>
+
+	</div>
+</div>
