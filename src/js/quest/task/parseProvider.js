@@ -1,7 +1,7 @@
 define(function(){
 
-	parseProvider.$inject = ['piConsoleSettings'];
-	function parseProvider(consoleSettings){
+	parseProvider.$inject = ['piConsole'];
+	function parseProvider(piConsole){
 		function parse(script, db){
 			db.createColl('pages');
 			db.createColl('questions');
@@ -11,7 +11,7 @@ define(function(){
 
 			script.settings || (script.settings = {});
 
-			consoleSettings.tags = script.settings.DEBUG;
+			piConsole.setSettings(script.settings.DEBUG || {});
 		}
 
 		return parse;

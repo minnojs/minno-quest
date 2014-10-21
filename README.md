@@ -17,6 +17,9 @@ It is written in JavaScript and is built to be extremely versatile and customiza
 	- [select](#select)
 	- [selectOne & selectMulti](#selectone-selectmulti)
 * [Settings](#settings)
+	- [onEnd](#onend)
+	- [logger](#logger)
+	- [Debugging](#debugging)
 * [Making your questionnaire Dynamic](#making-your-questionnaire-dynamic)
 	- [The mixer ](#mixer)
 		+ [Mixer types](#mixer-types)
@@ -27,7 +30,7 @@ It is written in JavaScript and is built to be extremely versatile and customiza
 	- [Templates](#templates)
 	- [Inheritance ](#inheritance)
 * [Development](#development)
-	- [Debugging](#debugging)
+	
 
 
 ### Central concepts
@@ -373,6 +376,37 @@ Within the player, each question (as defined by unique question name) may be log
 If you want a question not to be logged at all, simply do not give it a name.
 
 You may want to debug the logger by [activating the DEBUG `logger` setting](#debugging). When activated, it prints each logged object into the console.
+
+##### Debugging
+PIQuest can supply some extra information regarding its inner workings, all you have to do is set the DEBUG setting property like so:
+
+```js
+// Log everything
+API.addSettings('DEBUG', {
+	level: 'warn', // log errors and warnings
+	tags: ['page','animation'], // Log page and animation related messages
+	hideConsole: true 
+});
+```
+
+**tags**:
+Logs are broken down into subjects by tags. The tags property allows you to insert an array of tags that you want to be logged. If you want all tags to printed you may use the string `'all'` instead of an array (this is also the default).
+
+The tags currently available are as follows: `page`, `question`, `conditions` and `animate`.
+
+**level**:
+The player has several levels of logging, by default it logs only `error` level logs. When you want to debug you should probably use `info` or `warn`. The precedence of logging levels is as follows: error>warn>info>debug. Each logging level includes any levels higher than itself.
+
+level 	| Description
+----- 	| -----------
+none 	| Do not log any messages
+error 	| Log messages that warn that something in the script is broken (this is the default level, and you should probably leave at least this level active).
+warn 	| Log warning messages that something smells fishy, these are not neccesarily errors, but you might want to check them out.
+info 	| Log General usefull information.
+debug 	| Just spill everything out.
+
+**hideConsole**:
+This property allows you to control the display of logs inside the browser, if it is set to `true` then the logs will only be printed into your console.
 
 ### Making your questionnaire dynamic
 There are several ways that you can make your questionnaire more dynamic. We will give a short overview and then get into the specifics.
@@ -762,22 +796,3 @@ It accepts two argument: the source object on which it is called (the page or qu
 	}
 }
 ```
-
-### Development
-This section of the manual deals with the mechanics of developing a questionnaire.
-
-##### Debugging
-PIQuest can supply some extra information regarding its inner workings, all you have to do is set the DEBUG setting property like so:
-
-```js
-// Log everything
-API.addSettings('DEBUG', true);
-API.addSettings('DEBUG', 'all');
-
-// Log page and animation related messages
-API.addSettings('DEBUG', ['page','animation']);
-```
-
-The messages in the player are organized by tags. There are some messages that can be activated in more than one way.
-
-The tags currently available are as follows: `page`, `question`, `conditions` and `animate`.

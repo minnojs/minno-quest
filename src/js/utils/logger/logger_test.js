@@ -177,8 +177,8 @@ define(['./logger-module'],function(){
 			expect(l2.getCount()).toBe(3);
 		}));
 
-		it('should log an object to the console if DEBUG is set to true', inject(function($log, piConsoleSettings){
-			piConsoleSettings.tags = true;
+		it('should log an object to the console if DEBUG is set to true', inject(function($log, piConsole){
+			piConsole.setSettings({level:'debug'});
 			logger.log(123);
 			expect($log.debug.logs[0]).toEqual(['Logged: ', 123]);
 		}));

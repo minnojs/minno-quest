@@ -13,6 +13,9 @@ js/utils/template/templateFilter.js
 js/utils/template/templateObjProvider.js
 js/utils/template/templateModule.js
 js/utils/console/consoleProvider.js
+js/utils/console/consolePrototypeProvider.js
+text!utils/console/console.html
+js/utils/console/consoleDirective.js
 js/utils/console/consoleModule.js
 js/quest/directives/questController.js
 text!quest/directives/piQuest/piQuest.html

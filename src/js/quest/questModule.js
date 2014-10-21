@@ -9,9 +9,17 @@ define(function(require){
 	require('quest/task/task-module');
 
 	var module = angular.module('piQuest', ['questDirectives','task']);
+
+	// @TODO: move to utils or something
 	module.config(['$sceProvider', function($sceProvider){
 		$sceProvider.enabled(false);
 	}]);
+
+	// app.filter('unsafe', function($sce) {
+	//     return function(val) {
+	//         return $sce.trustAsHtml(val);
+	//     };
+	// });
 
 	return module;
 });
