@@ -1,3 +1,24 @@
+<a name="0.0.16"></a>
+### 0.0.16 (2014-10-23)
+
+
+#### Bug Fixes
+
+* **readme:** animation -> animate ([6e17a252](https://github.com/ProjectImplicit/PIquest/commit/6e17a252b37cfc1cbb0acc4fa39336ecbba6595b))
+
+
+#### Features
+
+* **DEBUG:** full support for debug with control over tags and levels. ([e21d41ef](https://github.com/ProjectImplicit/PIquest/commit/e21d41ef421c4d56fbab617cd423073cae0a7e0c), closes [#17](https://github.com/ProjectImplicit/PIquest/issues/17))
+* **console:** Move DEBUG properties to a central location. Solves #17. ([736cf417](https://github.com/ProjectImplicit/PIquest/commit/736cf417d96c343ee3d3da7c3b8dcd54c884688a))
+
+
+#### Breaking Changes
+
+* The DEBUG property of many stuff doesn't work any more. To migrate, activate centraly from the main settings.DEBUG.
+ ([736cf417](https://github.com/ProjectImplicit/PIquest/commit/736cf417d96c343ee3d3da7c3b8dcd54c884688a))
+
+
 <a name="0.0.15"></a>
 ### 0.0.15 (2014-10-19)
 
