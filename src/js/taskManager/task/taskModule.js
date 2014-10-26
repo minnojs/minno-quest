@@ -9,7 +9,7 @@ define(function(require){
 	var angular = require('angular');
 	var module = angular.module('pi.task',[]);
 
-	module.service('taskGetScript', require('./getScriptProvider'));
+	module.service('taskGetScript', require('./taskGetScriptProvider'));
 	module.service('taskLoad', require('./taskLoadProvider'));
 	module.provider('taskActivate', require('./taskActivateProvider'));
 	module.directive('piTask', require('./taskDirective'));
