@@ -6,6 +6,7 @@ define(function(require){
 	]);
 
 	module.value('managerGetScript', {});
+	module.service('managerProvider', require('./managerProvider'));
 	module.directive('piManager', require('./managerDirective'));
 
 	return module;

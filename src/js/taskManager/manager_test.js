@@ -3,69 +3,83 @@ define(['./managerModule'], function(){
 
 		beforeEach(module('taskManager'));
 
-		// This has been deactivated because we're actually still developing here..
-		xdescribe(': directive', function(){
-
-			var q, element, $compile, $rootScope, getScriptSpy, $window;
-
-			function compile(){
-				element = $compile('<div pi-task="my/url.js", pi-global="globalObj"></div>')($rootScope);
-			}
+		describe('managerProvider', function(){
+			var manager, $scope, loadedQ;
 
 			beforeEach(module(function($provide){
-				getScriptSpy = jasmine.createSpy('getScript');
-				$provide.service('managerGetScript', function($q){
-					return getScriptSpy.andCallFake(function(){
-						q = $q.defer();
-						return q.promise;
-					});
+				$provide.service('taskLoad', function($q){
+					loadedQ = $q.defer();
+					return function(){
+						return loadedQ.promise;
+					};
+				});
+
+				$provide.value('managerSequence', function managerSequence(){
+					// jshint newcap:false
+					if (!(this instanceof managerSequence)){return new managerSequence();}
+					this.next = jasmine.createSpy('next');
+					this.prev = jasmine.createSpy('prev');
 				});
 			}));
 
-			beforeEach(inject(function($injector){
-				$compile = $injector.get('$compile');
-				$window = $injector.get('$window');
-				$rootScope = $injector.get('$rootScope').$new();
-				compile();
+			beforeEach(inject(function($rootScope, managerProvider){
+				$scope = $rootScope.$new();
+				manager = managerProvider($scope, {});
 			}));
 
+			describe(': constructor', function(){
+				it('should return an object (no need for new)', function(){
+					expect(manager).toEqual(jasmine.any(Object));
+				});
 
-			// This is temporary!! should be replaced as soon as the task manager is actually up...
-			it('should create a quest element', function(){
-				q.resolve({});
-				$rootScope.$apply();
-				expect(element.find('[pi-quest]').length).toBe(1);
+				it('should create a sequence', inject(function(managerSequence){
+					expect(manager.sequence).toEqual(jasmine.any(managerSequence));
+				}));
+
+				it('should call next on manager:next', function(){
+					spyOn(manager, 'next');
+					$scope.$emit('manager:next');
+					$scope.$digest();
+					expect(manager.next).toHaveBeenCalled();
+				});
+
+				it('should call prev on manager:prev', function(){
+					spyOn(manager, 'prev');
+					$scope.$emit('manager:prev');
+					$scope.$digest();
+					expect(manager.prev).toHaveBeenCalled();
+				});
 			});
 
-			it('should have the script set in the scope', function(){
-				q.resolve(123);
-				$rootScope.$apply();
-				expect(element.scope().script).toBe(123);
+			describe(': prototype', function(){
+				it('should proceed and load for next', function(){
+					spyOn(manager,'load');
+					manager.next();
+					expect(manager.sequence.next).toHaveBeenCalled();
+					expect(manager.load).toHaveBeenCalled();
+				});
+
+				it('should proceed and load for prev', function(){
+					spyOn(manager,'load');
+					manager.prev();
+					expect(manager.sequence.prev).toHaveBeenCalled();
+					expect(manager.load).toHaveBeenCalled();
+				});
+
+				it('should emit manager:loaded only after loading is done', function(){
+					var spy = jasmine.createSpy('loaded');
+					$scope.$on('manager:loaded', spy);
+					manager.load();
+
+					$scope.$digest();
+					expect(spy).not.toHaveBeenCalled();
+
+					loadedQ.resolve();
+					$scope.$digest();
+					expect(spy).toHaveBeenCalled();
+				});
 			});
+		}); // end managerProvider
 
-			it('should create the directive only after the script is loaded', function(){
-				expect(element.find('[pi-quest]').length).toBe(0);
-				expect(element.scope().script).not.toBeDefined();
-				q.resolve(123);
-				$rootScope.$apply();
-				expect(element.find('[pi-quest]').length).toBe(1);
-				expect(element.scope().script).toBe(123);
-			});
-
-			it('should get its url from the attribute', function(){
-				expect(getScriptSpy).toHaveBeenCalledWith('my/url.js');
-			});
-
-			it('should create a global object and set it to the scope', inject(function($rootScope){
-				expect($rootScope.global).toEqual(jasmine.any(Object));
-			}));
-
-			it('should extend the global object with "pi-global"', inject(function($rootScope){
-				$window.globalObj = {extendGlobal:true};
-				compile();
-				expect($rootScope.global.extendGlobal).toBeTruthy();
-			}));
-
-		});
-	});
+	}); // end manager
 });
