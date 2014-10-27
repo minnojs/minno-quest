@@ -69,6 +69,8 @@ js/taskManager/task/taskActivateProvider.js
 text!taskManager/task/taskTemplate.html
 js/taskManager/task/taskDirective.js
 js/taskManager/task/taskModule.js
+js/taskManager/managerProvider.js
+js/taskManager/managerSequence.js
 js/taskManager/managerDirective.js
 js/taskManager/managerModule.js
 js/utils/animations/rafPolyfill.js

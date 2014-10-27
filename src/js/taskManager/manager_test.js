@@ -81,5 +81,54 @@ define(['./managerModule'], function(){
 			});
 		}); // end managerProvider
 
+		describe('managerSequence', function(){
+			var sequence, script;
+
+			beforeEach(module(function($provide){
+				$provide.value('Database', function(){
+					this.add = jasmine.createSpy('add');
+					this.createColl = jasmine.createSpy('createColl');
+				});
+
+				$provide.value('TaskSequence', function(){
+					this.args = [arguments[0], arguments[1], arguments[2]];
+					this.next = jasmine.createSpy('next');
+					this.prev = jasmine.createSpy('prev');
+					this.current = jasmine.createSpy('current');
+				});
+			}));
+
+			beforeEach(inject(function(managerSequence){
+				script = {tasks:{},sequence:[]};
+				sequence = managerSequence(script);
+			}));
+
+			it('should create a db correctly', function(){
+				expect(sequence.db).toEqual(jasmine.any(Object));
+				expect(sequence.db.createColl).toHaveBeenCalledWith('tasks');
+				expect(sequence.db.add).toHaveBeenCalledWith('tasks',script.tasks);
+			});
+
+			it('should create a taskSequence correctly', inject(function(TaskSequence){
+				expect(sequence.sequence).toEqual(jasmine.any(TaskSequence));
+				expect(sequence.sequence.args).toEqual(['tasks', script.sequence, sequence.db]);
+			}));
+
+			it('should call next', function(){
+				sequence.next();
+				expect(sequence.sequence.next).toHaveBeenCalled();
+			});
+
+			it('should call prev', function(){
+				sequence.prev();
+				expect(sequence.sequence.prev).toHaveBeenCalled();
+			});
+
+			it('should call current', function(){
+				sequence.current();
+				expect(sequence.sequence.current).toHaveBeenCalled();
+			});
+		});
+
 	}); // end manager
 });

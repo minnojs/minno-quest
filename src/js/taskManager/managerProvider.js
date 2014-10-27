@@ -47,6 +47,7 @@ define(function(require){
 
 			current: function(){
 				var task = this.sequence.current() || {};
+				// taskLoad sets the loaded script into $script
 				return task.$script;
 			},
 

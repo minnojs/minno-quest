@@ -5,8 +5,11 @@ define(function(require){
 		require('./task/taskModule').name
 	]);
 
+	// @TODO: WTF?
 	module.value('managerGetScript', {});
+
 	module.service('managerProvider', require('./managerProvider'));
+	module.service('managerSequence', require('./managerSequence'));
 	module.directive('piManager', require('./managerDirective'));
 
 	return module;
