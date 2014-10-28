@@ -8,21 +8,23 @@ define(function(){
 	function taskLoadProvider($q, getScript){
 
 		function taskLoad(task){
-			var def;
+			var promise;
 
 			// if we don't need any loading
 			if (task.script){
-				def = $q.defer();
-				def.resolve(task.script)
-				return def.promise;
+				promise = task.script;
+			} else {
+				if (!task.scriptUrl){
+					throw new Error('Tasks must have either a "script" property or a "scriptUrl" property.');
+				}
+				// load script
+				promise = getScript(task.scriptUrl);
 			}
 
-			if (!task.scriptUrl){
-				throw new Error('Tasks must have eithe a "script" property or a "scriptUrl" property.')
-			}
-
-			// load script
-			return getScript(task.scriptUrl);
+			return $q.when(promise).then(function(script){
+				task.$script = script;
+				return script;
+			});
 		}
 
 		return taskLoad;
