@@ -72,6 +72,8 @@ js/taskManager/task/taskModule.js
 js/taskManager/managerProvider.js
 js/taskManager/managerSequence.js
 js/taskManager/managerDirective.js
+text!taskManager/spinner/spinner.html
+js/taskManager/spinner/spinnerDirective.js
 js/taskManager/managerModule.js
 js/utils/animations/rafPolyfill.js
 js/utils/animations/dropInAnimation.js

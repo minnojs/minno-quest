@@ -61,7 +61,7 @@ String getBase = getProtocol+"://"+getDomain;
 			<div pi-manager="<%= script %>">
 				<img class="pi-logo" src="img/loader.gif" />
 			</div>
-			<div pi-console></div>
+			<% if (org.uva.Implicit.IS_PRODUCTION == "false") {%><div pi-console></div><% } %>
 		</div>
 	</body>
 
