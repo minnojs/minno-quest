@@ -1,3 +1,22 @@
+<a name="0.0.17"></a>
+### 0.0.17 (2014-11-02)
+
+
+#### Bug Fixes
+
+* **task:** no longer breaks in dist ([6498e718](https://github.com/ProjectImplicit/PIquest/commit/6498e7189276b4d0b80f681239860428ca8b2bf9))
+
+
+#### Features
+
+* **DEBUG:** full support for debug with control over tags and levels. ([837d6f6d](https://github.com/ProjectImplicit/PIquest/commit/837d6f6dd4b79b487790349a292017524c92ccb7), closes [#17](https://github.com/ProjectImplicit/PIquest/issues/17))
+* **console:** conditional pi-console on production ([95c0457b](https://github.com/ProjectImplicit/PIquest/commit/95c0457b01cb562dadfa25fce2a8515a3f69ea91))
+* **manager:**
+  * taskLoadProvider now stores the script in ([b0da92ec](https://github.com/ProjectImplicit/PIquest/commit/b0da92ec1ab3c095a915a0eca0285472fe776d8f))
+  * managerSequence, creates sequence+db for the manager ([22780504](https://github.com/ProjectImplicit/PIquest/commit/22780504bca042a698f9418d99c1f0af5acdd5c8))
+  * created the managerProvider (comunications between sequence and directive) ([c9740430](https://github.com/ProjectImplicit/PIquest/commit/c9740430965e80095956314c42f2da3e33d10fa5))
+
+
 <a name="0.0.16"></a>
 ### 0.0.16 (2014-10-23)
 
