@@ -262,7 +262,8 @@ module.exports = function (grunt) {
 
 		sass: {
 			options: {
-				loadPath: 'bower_components/bootstrap-sass-official/assets/stylesheets/'
+				loadPath: 'bower_components/bootstrap-sass-official/assets/stylesheets/',
+				style: 'compressed'
 			},
 			dist: {
 				files: {'src/styles/main.css':'resources/sass/main.scss'}
