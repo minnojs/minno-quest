@@ -44,7 +44,10 @@
 
 		<div class="container">
 			<img class="pi-spinner" ng-hide="1"/>
-			<div pi-manager="managerScript.js" ></div>
+			<div pi-manager="{sequence:[{type:'quest',scriptUrl:'/quest/src/questScript1.js'},{
+				type:'quest',
+				scriptUrl: '/quest/src/questScript2.js'
+			}]}" ></div>
 			<div pi-console></div>
 		</div>
 

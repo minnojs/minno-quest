@@ -3,9 +3,9 @@ define(['questAPI'], function(Quest){
 	var API = new Quest();
 
 	API.addSettings('DEBUG', {
-		tags: [],
+		tags: 'all',
 		//hideConsole: true, // default false : whether to display console
-		//level: 'none' // ERROR > WARN > INFO > DEBUG || [E, W...] || warningsOnly: Error && WARNING
+		level: 'warn' // ERROR > WARN > INFO > DEBUG || [E, W...] || warningsOnly: Error && WARNING
 
 	});
 
@@ -17,7 +17,7 @@ define(['questAPI'], function(Quest){
 
 	API.addSettings('onEnd', function(){
 		console.log('onEnd');
-		location.href = location.href;
+		//location.href = location.href;
 	});
 
 	API.addSequence([

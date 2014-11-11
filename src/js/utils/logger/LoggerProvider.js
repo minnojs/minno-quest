@@ -89,7 +89,8 @@ define(function(require){
 				function error(){
 					// try again
 					return $http.post(settings.url, sendData).then(success, function(){
-						throw new Error('Failed to send data, it seems the backend is not responding.');
+						piConsole(['logger']).error('Failed to send data, it seems the backend is not responding. (sending to: "' + settings.url +'")');
+						def.reject();
 					});
 				}
 			},

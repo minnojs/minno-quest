@@ -62,7 +62,7 @@ String getBase = getProtocol+"://"+getDomain;
 
 		<div class="container">
 			<img class="pi-spinner" ng-hide="1"/>
-			<div pi-manager="<%= script %>" ></div>
+			<div pi-manager="{sequence:[{type:'quest',scriptUrl:'<%= script %>'}]}" ></div>
 			<% if (org.uva.Implicit.IS_PRODUCTION == "false") {%><div pi-console></div><% } %>
 		</div>
 

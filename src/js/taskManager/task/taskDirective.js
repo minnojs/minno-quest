@@ -16,7 +16,7 @@ define(function(){
 				}
 
 				activateTask(task, $element, $scope.$new())
-					.then(function(){
+					['finally'](function(){
 						$scope.$emit('task:done', arguments);
 					});
 			}

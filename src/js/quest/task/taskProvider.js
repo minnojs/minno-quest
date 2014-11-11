@@ -19,7 +19,7 @@ define(['underscore', 'angular'], function(_, angular){
 
 			this.sequence = new Sequence(script.sequence, this.db);
 
-			this.q.promise
+			this.promise = this.q.promise
 				.then(function(){
 					// check if there are unlogged questions and log them
 					self.logger.suppressPulse(); // this is the end of the task, we want to post all the logs at once.
@@ -40,7 +40,7 @@ define(['underscore', 'angular'], function(_, angular){
 					self.logger.suppressPulse(false); // turn suppress off
 					return self.logger.send();
 				})
-				.then(settings.onEnd || angular.noop); // end only after logging has finished
+				['finally'](settings.onEnd || angular.noop); // end only after logging has finished (regardless of success)
 
 			parse(script, this.db);
 		}

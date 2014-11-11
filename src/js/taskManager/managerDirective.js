@@ -13,10 +13,11 @@ define(function(require){
 	function managerControler($scope, ManagerService, managerLoad){
 		this.init = init;
 
+
 		function init(source){
 			var ctrl = this;
-
-			managerLoad(source).then(function(script){
+			var taskSource = $scope.$eval(source) || source; // if source is a plain string eval returns undefined so we want to load this as a url
+			managerLoad(taskSource).then(function(script){
 				// keep the script on scope
 				$scope.script = script;
 				// create the manager

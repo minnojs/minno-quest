@@ -50,18 +50,22 @@ define(function(require){
 			},
 
 			current: function(){
-				var task = this.sequence.current() || {};
+				var task = this.sequence.current();
 				// taskLoad sets the loaded script into $script
 				return task;
 			},
 
 			load: function(){
-				var task = this.sequence.current() || {};
+				var task = this.current();
 				var $scope = this.$scope;
 				// @TODO: consider using managerLoadService instead
-				taskLoad(task).then(function(){
-					$scope.$emit('manager:loaded',task.$script);
-				});
+				if (task){
+					taskLoad(task).then(function(){
+						$scope.$emit('manager:loaded',task.$script);
+					});
+				} else {
+					$scope.$emit('manager:loaded');
+				}
 			}
 		});
 

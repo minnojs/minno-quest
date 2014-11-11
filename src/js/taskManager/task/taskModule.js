@@ -27,7 +27,7 @@ define(function(require){
 			$compile($el)($scope);
 
 			// clean up piQuest
-			$el.controller('piQuest').task.q.promise.then(function(){
+			$el.controller('piQuest').task.promise['finally'](function(){
 				$el.scope().$destroy();
 				$el.remove();
 				done();

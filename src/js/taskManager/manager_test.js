@@ -66,10 +66,12 @@ define(['require','./managerModule'], function(require){
 				expect(manager.load).toHaveBeenCalled();
 			});
 
-			it('should emit manager:loaded only after loading is done', function(){
+			it('should emit manager:loaded after loading is done', function(){
 				var spy = jasmine.createSpy('loaded');
 				$scope.$on('manager:loaded', spy);
-				manager.load({});
+				spyOn(manager,'current');
+				manager.current.andReturn({});
+				manager.load();
 
 				$scope.$digest();
 				expect(spy).not.toHaveBeenCalled();
@@ -78,6 +80,16 @@ define(['require','./managerModule'], function(require){
 				$scope.$digest();
 				expect(spy).toHaveBeenCalled();
 			});
+
+			it('should emit manager:loaded if task is empty (end of sequence)', function(){
+				var spy = jasmine.createSpy('loaded');
+				$scope.$on('manager:loaded', spy);
+				manager.load();
+
+				$scope.$digest();
+				expect(spy).toHaveBeenCalled();
+			});
+
 		}); // end managerService
 
 		/**
@@ -174,10 +186,15 @@ define(['require','./managerModule'], function(require){
 				$scope = $injector.get('$rootScope').$new();
 			}));
 
-			describe(': setup', function(){
-				it('should load a script from attr.piManager', inject(function(managerLoad){
-					compile('123');
-					expect(managerLoad).toHaveBeenCalledWith('123');
+			ddescribe(': setup', function(){
+				it('should load a url from attr.piManager', inject(function(managerLoad){
+					compile('abc');
+					expect(managerLoad).toHaveBeenCalledWith('abc');
+				}));
+
+				it('should load an object from attr.piManager', inject(function(managerLoad){
+					compile('{a:1}');
+					expect(managerLoad).toHaveBeenCalledWith({a:1});
 				}));
 
 				it('should create a sequence', inject(function(managerService){

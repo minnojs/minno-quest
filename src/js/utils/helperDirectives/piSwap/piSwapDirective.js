@@ -54,7 +54,9 @@ define(function (require) {
 					previousElement, // an element that is currently leaving
 					parentElement = $element;
 
-				function cleanupLast(options) {
+				function cleanupLast(opts) {
+					var options = opts || {};
+
 					if(previousElement) {
 						previousElement.remove();
 						previousElement = null;
