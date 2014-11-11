@@ -15,11 +15,12 @@ define(function(require){
 	module.directive('piTask', require('./taskDirective'));
 
 	module.config(['taskActivateProvider', function(activateProvider){
-		activateProvider.set('quest', function(done, props){
-			var $compile = props.$injector.get('$compile');
-			var $canvas = props.$element;
-			var $scope = props.$scope;
+
+		activateQuest.$inject = ['done', '$element', '$scope', '$compile', 'script'];
+		function activateQuest(done, $canvas, $scope, $compile, script){
 			var $el;
+
+			$scope.script = script;
 
 			$canvas.append('<div pi-quest></div>');
 			$el = $canvas.contents();
@@ -31,7 +32,10 @@ define(function(require){
 				$el.remove();
 				done();
 			});
-		});
+
+		}
+
+		activateProvider.set('quest', activateQuest);
 	}]);
 
 	return module;

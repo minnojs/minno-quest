@@ -85,6 +85,7 @@ define(['require','angular','./taskModule'],function(require, angular){
 			});
 		});
 
+		// taskActivate(task, el, scope)
 		describe('taskActivate', function(){
 			var activate, testSpy;
 
@@ -99,7 +100,7 @@ define(['require','angular','./taskModule'],function(require, angular){
 
 			it('should run a "function" script', function(){
 				var spy = jasmine.createSpy('task');
-				activate({}, spy, 'el');
+				activate({$script:spy}, 'el', 'scope');
 				expect(spy).toHaveBeenCalled();
 			});
 
@@ -108,19 +109,19 @@ define(['require','angular','./taskModule'],function(require, angular){
 					expect(this).toBe(script);
 				});
 				var script = {play:spy};
-				activate({}, script, 'el');
+				activate({$script:script}, 'el','scope');
 				expect(spy).toHaveBeenCalled();
 			});
 
 			it('should run as script by task.type', function(){
-				activate({type:'test'}, {}, 'el');
+				activate({type:'test'}, 'el', 'scope');
 				expect(testSpy).toHaveBeenCalled();
 			});
 
 			it('should resolve when the callback is called', inject(function($rootScope){
 				var spy = jasmine.createSpy('then');
 				var callback;
-				activate({}, function(cb){callback = cb;}, 'el')
+				activate({$script:function(done){callback = done;}}, 'el', 'scope')
 					.then(spy);
 
 				$rootScope.$digest();
@@ -130,9 +131,27 @@ define(['require','angular','./taskModule'],function(require, angular){
 				expect(spy).toHaveBeenCalled();
 			}));
 
+			it('should invoke the activator with relevant locals', inject(function($rootScope){
+				$rootScope.global = {};
+				var spy = jasmine.createSpy('activator');
+				var $task;
+				function activator($scope, $element, global, task, script){
+					spy();
+					expect($scope).toBe('scope');
+					expect($element).toBe('element');
+					expect(global).toBe($rootScope.global);
+					expect(task).toBe($task);
+					expect(script).toBe($task.$script);
+				}
+				$task = {$script:activator};
+
+				activate($task, 'element', 'scope');
+				expect(spy).toHaveBeenCalled();
+			}));
+
 		});
 
-		describe('taskDirective', function() {
+		xdescribe('taskDirective', function() {
 
 			var loadDef, endDef, $scope, compile, $elm;
 

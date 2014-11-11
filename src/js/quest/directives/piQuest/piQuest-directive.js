@@ -71,8 +71,9 @@ define(function (require) {
 	directive.$inject = ['$compile', '$animate','$injector','piConsole'];
 	function directive($compile, $animate, $injector, piConsole){
 		return {
-			replace: true,
 			controller: piQuestCtrl,
+			terminal:true,
+			priority: 500,
 			link: function(scope, parentElement, attr, ctrl) {
 				var task = ctrl.task,
 					currentScope,

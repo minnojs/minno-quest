@@ -1,4 +1,4 @@
-define(['angular','./spinnerDirective'], function(angular, directive){
+define(['angular','./piSpinnerDirective'], function(angular, directive){
 
 	angular.module('piSpinner',[]).directive('piSpinner', directive);
 

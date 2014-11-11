@@ -5,6 +5,7 @@
 define(function (require) {
 
 	var angular = require('angular');
+	var _ = require('underscore');
 
 	var submodules = [
 		require('quest/questModule').name,
@@ -13,5 +14,21 @@ define(function (require) {
 		require('utils/console/consoleModule').name
 	];
 
-	return angular.module('piApp', submodules);
+	var app = angular.module('piApp', submodules);
+
+	// setup the global variable
+	app.run(['$rootScope', '$rootElement', '$parse', '$window', function($rootScope, $rootElement, $parse, $window){
+		// @TODO: get these out of here (app.config? app.run?)
+		var globalAttr = $rootElement.attr('pi-global');
+		var piGlobal = $parse(globalAttr)($window);
+
+		// create the global object
+		$rootScope.global = {};
+
+		if (piGlobal){
+			_.extend($rootScope.global, piGlobal);
+		}
+	}]);
+
+	return app;
 });

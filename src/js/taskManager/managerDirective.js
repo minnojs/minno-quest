@@ -8,27 +8,83 @@
 define(function(require){
 
 	var _ = require('underscore');
-	directive.$inject = ['$compile','$rootScope','managerGetScript','$parse', '$window'];
-	function directive($compile,$rootScope,getScript,$parse, $window){
+
+	managerControler.$inject = ['$scope', 'managerService', 'managerLoad'];
+	function managerControler($scope, ManagerService, managerLoad){
+		this.init = init;
+
+		function init(source){
+			var ctrl = this;
+
+			managerLoad(source).then(function(script){
+				// keep the script on scope
+				$scope.script = script;
+				// create the manager
+				ctrl.manager = new ManagerService($scope, script);
+
+				// activate first task
+				$scope.$emit('manager:next');
+			});
+		}
+	}
+
+	directive.$inject = ['managerService', '$q'];
+	function directive(managerService, $q){
 		return {
-			link:  function($scope, $element, attr){
+			priority: 1000,
+			replace:true,
+			template: '<div pi-swap><div pi-task="task"></div></div>',
+			controller: managerControler,
+			require: ['piManager', 'piSwap'],
+			link:  function($scope, $element, attr, ctrl){
+				var swap = ctrl[1], thisCtrl = ctrl[0];
+				var currentTask, prevTask;
 
-				var piGlobal = $parse(attr.piGlobal)($window);
+				thisCtrl.init(attr.piManager);
 
-				// create the global object
-				$rootScope.global = {};
+				$scope.$on('manager:loaded', loaded);
+				$scope.$on('task:done', taskDone);
 
-				if (piGlobal){
-					_.extend($rootScope.global, piGlobal);
+				function loaded(){
+					// keep previous task
+					prevTask = currentTask;
+
+					// get loaded task
+					currentTask = thisCtrl.manager.current();
+
+					// procced or and manager
+					currentTask ? proceed() : done();
 				}
 
-				$scope.task = {
-					type: 'quest',
-					scriptUrl: attr.piManager
-				};
+				function proceed(){
+					$q
+						.when(_.result(prevTask, 'post'))
+						.then(function(){
+							return $q.when(_.result(currentTask, 'pre'));
+						})
+						.then(function(){
+							return $q.when(swap.next({task:currentTask}));
+						});
+				}
 
-				$element.html('<div pi-task="task"></div>');
-				$compile($element.contents())($scope);
+				function done(){
+					$q
+						.when(_.result(prevTask, 'post'))
+						.then(function(){
+							return $q.when(swap.empty());
+						})
+						.then(function(){
+							return $q.when(_.result($scope.script, 'onEnd'));
+						})
+						.then(function(){
+							$scope.$emit('manager:done');
+						});
+				}
+
+				function taskDone(ev){
+					ev.stopPropagation();
+					$scope.$emit('manager:next');
+				}
 			}
 		};
 	}

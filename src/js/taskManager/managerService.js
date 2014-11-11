@@ -1,8 +1,8 @@
 define(function(require){
 	var _ = require('underscore');
 
-	managerProvider.$inject = ['$rootScope', '$q', 'managerSequence', 'taskLoad'];
-	function managerProvider($rootScope, $q, managerSequence, taskLoad){
+	managerService.$inject = ['$rootScope', '$q', 'managerSequence', 'taskLoad'];
+	function managerService($rootScope, $q, ManagerSequence, taskLoad){
 
 		/**
 		 * This is the constructor for the manager object.
@@ -10,6 +10,10 @@ define(function(require){
 		 * The manager is responsible for the interface between the managerDirective and the managerSequence
 		 * It deals with loading tasks (pulled from the sequence)
 		 * And notifying the directive that a new task is ready to be run.
+		 *
+		 * listens to manager:next and manager:prev ==> proceeds sequence
+		 *
+		 * emits manager:loaded <== when a script is loaded
 		 *
 		 * @param  {Scope} $scope The scope to be notified
 		 * @param  {Object} script The manager script to be parsed
@@ -28,33 +32,35 @@ define(function(require){
 			this.script = script;
 
 			// create sequence
-			this.sequence = managerSequence(script);
+			this.sequence = new ManagerSequence(script);
 
-			$scope.$on('manager:next', function(){self.next.call();});
-			$scope.$on('manager:prev', function(){self.prev.call();});
+			$scope.$on('manager:next', function(){self.next();});
+			$scope.$on('manager:prev', function(){self.prev();});
 		}
 
 		_.extend(manager.prototype, {
 			next: function(){
-				var task = this.sequence.next();
-				this.load(task);
+				this.sequence.next();
+				this.load();
 			},
 
 			prev: function(){
-				var task = this.sequence.prev();
-				this.load(task);
+				this.sequence.prev();
+				this.load();
 			},
 
 			current: function(){
 				var task = this.sequence.current() || {};
 				// taskLoad sets the loaded script into $script
-				return task.$script;
+				return task;
 			},
 
-			load: function(task){
+			load: function(){
+				var task = this.sequence.current() || {};
 				var $scope = this.$scope;
+				// @TODO: consider using managerLoadService instead
 				taskLoad(task).then(function(){
-					$scope.$emit('manager:loaded');
+					$scope.$emit('manager:loaded',task.$script);
 				});
 			}
 		});
@@ -62,8 +68,6 @@ define(function(require){
 		return manager;
 	}
 
-	return managerProvider;
+	return managerService;
 
 });
-
-

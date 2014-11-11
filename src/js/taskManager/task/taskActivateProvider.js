@@ -25,17 +25,18 @@ define(function(require){
 	function taskActivateProvider($q,$rootScope, $injector){
 		var self = this;
 
-		function taskActivate(task, script, $element, $scope){
+		function taskActivate(task, $element, $scope){
 			var activator;
 			var def = $q.defer();
 			var global = $rootScope.global;
+			var script = task.$script;
 
 			// get activation function
 			if (_.isFunction(script)){
 				activator = script;
 			}
 
-			if (!activator && _.isFunction(script.play)){
+			if (!activator && script && _.isFunction(script.play)){
 				activator = _.bind(script.play, script);
 			}
 
@@ -54,13 +55,14 @@ define(function(require){
 			 * @param {obj} props an object with all the stuff we think we could need...
 			 * @type {[type]}
 			 */
-			activator(_.bind(def.resolve,def), {
+
+			$injector.invoke(activator, null, {
+				done: _.bind(def.resolve,def),
 				task: task,
 				script: script,
 				$element: $element,
 				$scope: $scope,
-				global: global,
-				$injector: $injector
+				global: global
 			});
 
 			return def.promise;

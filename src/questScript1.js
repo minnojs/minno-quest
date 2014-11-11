@@ -3,9 +3,9 @@ define(['questAPI'], function(Quest){
 	var API = new Quest();
 
 	API.addSettings('DEBUG', {
-		tags: 'all',
+		tags: [],
 		//hideConsole: true, // default false : whether to display console
-		level: 'info' // ERROR > WARN > INFO > DEBUG || [E, W...] || warningsOnly: Error && WARNING
+		//level: 'none' // ERROR > WARN > INFO > DEBUG || [E, W...] || warningsOnly: Error && WARNING
 
 	});
 
@@ -52,7 +52,7 @@ define(['questAPI'], function(Quest){
 				}
 			]
 		},
-
+/*
 		{
 			prevText: '123',
 			prev:true,
@@ -182,6 +182,7 @@ define(['questAPI'], function(Quest){
 				}
 			]
 		}
+*/
 	]);
 
 	return API.script;

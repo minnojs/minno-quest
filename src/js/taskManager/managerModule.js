@@ -2,16 +2,15 @@ define(function(require){
 
 	var angular = require('angular');
 	var module = angular.module('taskManager',[
-		require('./task/taskModule').name
+		require('./task/taskModule').name,
+		require('utils/helperDirectives/helperDirectivesModule').name
 	]);
 
-	// @TODO: WTF?
-	module.value('managerGetScript', {});
-
-	module.service('managerProvider', require('./managerProvider'));
+	module.service('managerService', require('./managerService'));
 	module.service('managerSequence', require('./managerSequence'));
+	module.service('managerLoad', require('./managerLoadService'));
+	module.service('managerGetScript', require('./managerGetScriptService'));
 	module.directive('piManager', require('./managerDirective'));
-	module.directive('piSpinner', require('./spinner/spinnerDirective'));
 
 	return module;
 });
