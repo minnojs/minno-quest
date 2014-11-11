@@ -186,7 +186,7 @@ define(['require','./managerModule'], function(require){
 				$scope = $injector.get('$rootScope').$new();
 			}));
 
-			ddescribe(': setup', function(){
+			describe(': setup', function(){
 				it('should load a url from attr.piManager', inject(function(managerLoad){
 					compile('abc');
 					expect(managerLoad).toHaveBeenCalledWith('abc');

@@ -17,7 +17,7 @@ define(['questAPI'], function(Quest){
 
 	API.addSettings('onEnd', function(){
 		console.log('onEnd');
-		//location.href = location.href;
+		location.href = location.href;
 	});
 
 	API.addSequence([
