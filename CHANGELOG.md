@@ -1,3 +1,19 @@
+<a name="0.0.18"></a>
+### 0.0.18 (2014-11-11)
+
+
+#### Bug Fixes
+
+* **logger:** player proceeds correctly even when logging fails.. fix(manager): manager recogn ([18a46887](https://github.com/ProjectImplicit/PIquest/commit/18a4688739da76b6d1265e450334c105b13a2c3a), closes [#58](https://github.com/ProjectImplicit/PIquest/issues/58))
+
+
+#### Features
+
+* **manager:**
+  * support spinner. ([d0533b90](https://github.com/ProjectImplicit/PIquest/commit/d0533b90c18cb6e845659e4f3254a318a622577e), closes [#53](https://github.com/ProjectImplicit/PIquest/issues/53))
+  * manager up and going, still not ready for full use ([aad9c900](https://github.com/ProjectImplicit/PIquest/commit/aad9c9006f746c3bc3cebd98089b34e7e26d75d4))
+
+
 <a name="0.0.17"></a>
 ### 0.0.17 (2014-11-02)
 
