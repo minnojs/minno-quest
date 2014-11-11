@@ -42,13 +42,16 @@ String getBase = getProtocol+"://"+getDomain;
 		<!-- endbuild -->
 
 		<style type="text/css">
+
 			.container {padding-top: 15px;}
 
 			/* http://www.sitepoint.com/css3-responsive-centered-image/ */
-			img.pi-logo {position: absolute;max-width: 80%;top: 50%;left: 50%;margin-left: -32px;margin-top: -32px;border-radius: 3px;}
-			img.pi-logo:empty {margin: auto;-webkit-transform: translate(-50%, -50%);-moz-transform: translate(-50%, -50%);-ms-transform: translate(-50%, -50%);-o-transform: translate(-50%, -50%);transform: translate(-50%, -50%);}
-			@media screen and (orientation: portrait) {img.pi-logo { max-width: 90%; }}
-			@media screen and (orientation: landscape) {img.pi-logo { max-height: 90%; }}
+			.pi-spinner {
+				position: absolute;max-width: 80%;top: 50%;left: 50%;margin-left: -32px;margin-top: -32px;border-radius: 3px;
+				display: block; -moz-box-sizing: border-box; box-sizing: border-box; background: url(img/loader.gif) no-repeat; width: 64px;height: 64px;padding-left: 64px; /* Equal to width of new image */}
+			.pi-spinner:empty {margin: auto;-webkit-transform: translate(-50%, -50%);-moz-transform: translate(-50%, -50%);-ms-transform: translate(-50%, -50%);-o-transform: translate(-50%, -50%);transform: translate(-50%, -50%);}
+			@media screen and (orientation: portrait) {.pi-spinner { max-width: 90%; }}
+			@media screen and (orientation: landscape) {.pi-spinner { max-height: 90%; }}
 		</style>
 	</head>
 
@@ -58,11 +61,11 @@ String getBase = getProtocol+"://"+getDomain;
 		<![endif]-->
 
 		<div class="container">
-			<div pi-manager="<%= script %>">
-				<img class="pi-logo" src="img/loader.gif" />
-			</div>
+			<img class="pi-spinner" ng-hide="1"/>
+			<div pi-manager="<%= script %>" ></div>
 			<% if (org.uva.Implicit.IS_PRODUCTION == "false") {%><div pi-console></div><% } %>
 		</div>
+
 	</body>
 
 	<!-- Uncomment For debugging -->

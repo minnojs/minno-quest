@@ -33,7 +33,7 @@ define(function(require){
 		return {
 			priority: 1000,
 			replace:true,
-			template: '<div pi-swap><div pi-task="task"></div></div>',
+			template: '<div pi-swap><div pi-task="task" ng-class="{\'pi-spinner\':loading}"></div></div>',
 			controller: managerControler,
 			require: ['piManager', 'piSwap'],
 			link:  function($scope, $element, attr, ctrl){
@@ -44,8 +44,11 @@ define(function(require){
 
 				$scope.$on('manager:loaded', loaded);
 				$scope.$on('task:done', taskDone);
+				$scope.loading = true;
 
 				function loaded(){
+					$scope.loading = false;
+
 					// keep previous task
 					prevTask = currentTask;
 
@@ -83,6 +86,7 @@ define(function(require){
 
 				function taskDone(ev){
 					ev.stopPropagation();
+					$scope.loading = true;
 					$scope.$emit('manager:next');
 				}
 			}

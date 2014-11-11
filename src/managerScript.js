@@ -5,11 +5,11 @@ define(function(){
 		sequence: [
 			{
 				type:'quest',
-				scriptUrl: '/src/questScript1.js'
+				scriptUrl: 'questScript1.js'
 			},
 			{
 				type:'quest',
-				scriptUrl: '/src/questScript2.js'
+				scriptUrl: 'questScript2.js'
 			}
 		]
 	};
