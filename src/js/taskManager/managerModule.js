@@ -11,6 +11,7 @@ define(function(require){
 	module.service('managerLoad', require('./managerLoadService'));
 	module.service('managerGetScript', require('./managerGetScriptService'));
 	module.directive('piManager', require('./managerDirective'));
+	module.directive('piManagerTask', require('./managerTaskDirective'));
 
 	return module;
 });
