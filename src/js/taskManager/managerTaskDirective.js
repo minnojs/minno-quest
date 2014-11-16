@@ -1,4 +1,4 @@
-define(function(require){
+define(function(){
 
 	function directive(){
 		return {
@@ -8,9 +8,12 @@ define(function(require){
 				return {
 					// this need to be pre so that the wrapping directive gets rendered before the template
 					pre: function($scope, $element, $attr){
-
+						var taskSource;
 						var source = $attr.piManagerTask;
-						var taskSource = $scope.$eval(source);
+						try{
+							taskSource = $scope.$eval(source);
+						} catch(e){}
+
 						var task  = taskSource ? taskSource : {scriptUrl:source};
 
 						$scope.script = {

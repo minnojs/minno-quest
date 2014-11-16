@@ -16,7 +16,16 @@ define(function(require){
 
 		function init(source){
 			var ctrl = this;
-			var taskSource = $scope.$eval(source) || source; // if source is a plain string eval returns undefined so we want to load this as a url
+			var taskSource;
+
+			try {
+				taskSource = $scope.$eval(source); // if source is a plain string eval returns undefined so we want to load this as a url
+			} catch(e){
+				// don't do anything. This means that the source is un compilable...
+			} finally {
+				taskSource || (taskSource = source);
+			}
+
 			managerLoad(taskSource).then(function(script){
 				// keep the script on scope
 				$scope.script = script;
