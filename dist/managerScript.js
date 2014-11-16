@@ -1,1 +1,1 @@
-define([],function(){return{onEnd:function(){console.log("onEnd")},sequence:[{type:"quest",scriptUrl:"questScript1.js"},{type:"quest",scriptUrl:"questScript2.js"}]}});
+define(["managerAPI"],function(e){var t=new e;return t.addSettings("onEnd",function(){console.log("onEnd")}),t.addSequence([{type:"quest",scriptUrl:"questScript1.js"},{type:"quest",scriptUrl:"questScript2.js"}]),t.script});

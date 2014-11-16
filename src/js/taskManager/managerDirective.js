@@ -29,6 +29,8 @@ define(function(require){
 			managerLoad(taskSource).then(function(script){
 				// keep the script on scope
 				$scope.script = script;
+				$scope.settings = (script && script.settings) || {};
+
 				// create the manager
 				ctrl.manager = new ManagerService($scope, script);
 
@@ -87,7 +89,7 @@ define(function(require){
 							return $q.when(swap.empty());
 						})
 						.then(function(){
-							return $q.when(_.result($scope.script, 'onEnd'));
+							return $q.when(_.result($scope.settings, 'onEnd'));
 						})
 						.then(function(){
 							$scope.$emit('manager:done');

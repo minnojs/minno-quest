@@ -77,6 +77,7 @@ js/taskManager/managerSequence.js
 js/taskManager/managerLoadService.js
 js/taskManager/managerGetScriptService.js
 js/taskManager/managerDirective.js
+js/taskManager/managerTaskDirective.js
 js/taskManager/managerModule.js
 js/utils/animations/rafPolyfill.js
 js/utils/animations/dropInAnimation.js

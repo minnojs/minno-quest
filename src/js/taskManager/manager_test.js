@@ -149,6 +149,7 @@ define(['require','./managerModule'], function(require){
 
 			function compile(script){
 				var scriptTxt = angular.isString(script) ? script : angular.toJson(script || {});
+
 				var html = '<div pi-manager="' + scriptTxt + '"></div>';
 				element = angular.element(html);
 				$compile(element)($scope);
@@ -309,7 +310,8 @@ define(['require','./managerModule'], function(require){
 					var onEnd = jasmine.createSpy('onEnd').andCallFake(function(){
 						expect(piSwap.empty).toHaveBeenCalled();
 					});
-					compile({onEnd:onEnd});
+					compile();
+					$scope.settings = {onEnd:onEnd}; // the compile function isn't flexible enough to accept functions
 
 					currentSpy.andReturn(undefined);
 					$scope.$emit('manager:loaded');
@@ -323,7 +325,8 @@ define(['require','./managerModule'], function(require){
 						expect(onEnd).toHaveBeenCalled();
 					});
 
-					compile({onEnd:onEnd});
+					compile();
+					$scope.settings = {onEnd:onEnd}; // the compile function isn't flexible enough to accept functions
 
 					currentSpy.andReturn(undefined);
 					$scope.$on('manager:done', done);
