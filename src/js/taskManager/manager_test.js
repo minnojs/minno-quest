@@ -231,6 +231,27 @@ define(['require','./managerModule'], function(require){
 					expect(post).toHaveBeenCalled();
 				});
 
+				it('should apply post after preTask', function(){
+					var post = jasmine.createSpy('post');
+					var preTask = jasmine.createSpy('preTask').andCallFake(function(){
+						expect(post).not.toHaveBeenCalled();
+					});
+
+					compile();
+
+					// execute first task
+					currentSpy.andReturn({post:post});
+					$scope.settings = {onPreTask:preTask};
+					$scope.$emit('manager:loaded');
+					$scope.$digest();
+
+					$scope.$emit('manager:loaded');
+					$scope.$digest();
+
+					expect(post).toHaveBeenCalled(); // make sure the pre expect was run...
+					expect(preTask).toHaveBeenCalled();
+				});
+
 				it('should apply pre after post', function(){
 					var pre = jasmine.createSpy('pre');
 					var post = jasmine.createSpy('post').andCallFake(function(){
@@ -288,7 +309,7 @@ define(['require','./managerModule'], function(require){
 					expect(post).toHaveBeenCalled();
 				});
 
-				it('should call swap.emty after post', function(){
+				it('should call swap.empty after post', function(){
 					var post = jasmine.createSpy('post').andCallFake(function(){
 						expect(piSwap.empty).not.toHaveBeenCalled();
 					});

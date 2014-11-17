@@ -40,8 +40,8 @@ define(function(require){
 		}
 	}
 
-	directive.$inject = ['managerService', '$q'];
-	function directive(managerService, $q){
+	directive.$inject = ['managerService', '$q', '$injector'];
+	function directive(managerService, $q, $injector){
 		return {
 			priority: 1000,
 			replace:true,
@@ -72,28 +72,23 @@ define(function(require){
 				}
 
 				function proceed(){
-					$q
-						.when(_.result(prevTask, 'post'))
-						.then(function(){
-							return $q.when(_.result(currentTask, 'pre'));
-						})
-						.then(function(){
-							return $q.when(swap.next({task:currentTask}));
-						});
+					$qSequence([
+						$scope.settings.onPreTask,
+						prevTask && prevTask.post,
+						currentTask.pre,
+						_.bind(swap.next, swap, [{task:currentTask}])
+					]);
 				}
 
 				function done(){
-					$q
-						.when(_.result(prevTask, 'post'))
-						.then(function(){
-							return $q.when(swap.empty());
-						})
-						.then(function(){
-							return $q.when(_.result($scope.settings, 'onEnd'));
-						})
-						.then(function(){
+					$qSequence([
+						prevTask && prevTask.post,
+						_.bind(swap.empty, swap),
+						$scope.settings.onEnd,
+						function(){
 							$scope.$emit('manager:done');
-						});
+						}
+					]);
 				}
 
 				function taskDone(ev){
@@ -101,9 +96,32 @@ define(function(require){
 					$scope.loading = true;
 					$scope.$emit('manager:next');
 				}
+
+				/**
+				 * chain a series of functions/promises/undefined
+				 * @param  {Array} arr an array of functions etc.
+				 * @return {promise}
+				 */
+				function $qSequence(arr){
+					var promise = $q.when();
+
+					_(arr)
+						// map into then functions
+						.map(function(value){
+							return function(){
+								var prms = _.isFunction(value) ? $injector.invoke(value) : value;
+								return $q.when(prms);
+							};
+						})
+						.reduce(function(promise, value){
+							return promise.then(value);
+						}, promise);
+				}
+
 			}
 		};
 	}
+
 
 	return directive;
 });
