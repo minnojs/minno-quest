@@ -72,15 +72,17 @@ define(function(require){
 				}
 
 				function proceed(){
+					var locals = {prevTask: prevTask, currentTask: currentTask};
 					$qSequence([
 						$scope.settings.onPreTask,
 						prevTask && prevTask.post,
 						currentTask.pre,
-						_.bind(swap.next, swap, [{task:currentTask}])
-					]);
+						_.bind(swap.next, swap, {task:currentTask})
+					], locals);
 				}
 
 				function done(){
+					var locals = {prevTask: prevTask, currentTask: currentTask};
 					$qSequence([
 						prevTask && prevTask.post,
 						_.bind(swap.empty, swap),
@@ -88,7 +90,7 @@ define(function(require){
 						function(){
 							$scope.$emit('manager:done');
 						}
-					]);
+					], locals);
 				}
 
 				function taskDone(ev){
@@ -102,19 +104,19 @@ define(function(require){
 				 * @param  {Array} arr an array of functions etc.
 				 * @return {promise}
 				 */
-				function $qSequence(arr){
+				function $qSequence(arr, locals){
 					var promise = $q.when();
 
 					_(arr)
 						// map into then functions
 						.map(function(value){
 							return function(){
-								var prms = _.isFunction(value) ? $injector.invoke(value) : value;
+								var prms = _.isFunction(value) ? $injector.invoke(value,null,locals||{}) : value;
 								return $q.when(prms);
 							};
 						})
 						.reduce(function(promise, value){
-							return promise.then(value);
+							return promise['finally'](value);
 						}, promise);
 				}
 

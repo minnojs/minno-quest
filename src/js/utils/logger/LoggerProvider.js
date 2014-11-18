@@ -29,7 +29,7 @@ define(function(require){
 			this.settings = {};
 			this.meta = {};
 			this.suppress = false; // don't suppress send
-			this.dfltLogFn = dfltLogFn || function(){return arguments[0];};
+			this.dfltLogFn = dfltLogFn || function(a){return a;};
 		}
 
 		_.extend(Logger.prototype, {

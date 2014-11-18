@@ -231,6 +231,22 @@ define(['require','./managerModule'], function(require){
 					expect(post).toHaveBeenCalled();
 				});
 
+				it('should invoke onPreTask with task info', function(){
+					var preTask = jasmine.createSpy('preTask');
+					var task = {name:'123'};
+
+					preTask.$inject = ['currentTask'];
+
+					compile();
+					$scope.settings = {onPreTask: preTask};
+
+					// should not run at begining of task
+					currentSpy.andReturn(task);
+					$scope.$emit('manager:loaded');
+					$scope.$digest();
+					expect(preTask).toHaveBeenCalledWith(task);
+				});
+
 				it('should apply post after preTask', function(){
 					var post = jasmine.createSpy('post');
 					var preTask = jasmine.createSpy('preTask').andCallFake(function(){
