@@ -5,7 +5,14 @@ define(['managerAPI'], function(Manager){
 	API.addSettings('onEnd', function(){console.log('onEnd');});
 	API.addSettings('onPreTask', function(currentTask, $http){
 		var data = {taskName: currentTask.name, taskNumber: currentTask.$meta.number};
+		var settings = currentTask.$script.settings;
+		settings.logger = settings.logger || {};
+		settings.logger.logFn = logger;
 		return $http.post('task/advance/url', data);
+
+		function logger(log){
+			return angular.extend(log,data);
+		}
 	});
 
 	API.addSequence([
