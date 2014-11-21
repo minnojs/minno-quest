@@ -11,7 +11,7 @@ define(['require','./managerModule'], function(require){
 			var manager, $scope, loadedQ;
 
 			beforeEach(module(function($provide){
-				$provide.service('taskLoad', function($q){
+				$provide.service('managerTaskLoad', function($q){
 					loadedQ = $q.defer();
 					return function(){
 						return loadedQ.promise;
@@ -469,6 +469,55 @@ define(['require','./managerModule'], function(require){
 				def.resolve();
 				$rootScope.$digest();
 				expect(spy).toHaveBeenCalled();
+			});
+		});
+
+		describe('managerTaskLoad', function(){
+			var q, taskLoad, $rootScope;
+
+			beforeEach(module(function($provide){
+				$provide.value('managerGetScript', function(){
+					return q.promise;
+				});
+			}));
+
+			beforeEach(inject(function($q, _managerTaskLoad_, _$rootScope_){
+				$rootScope = _$rootScope_;
+				taskLoad = _managerTaskLoad_;
+				q = $q.defer();
+			}));
+
+			it('should return a resolved promise for a script', function(){
+				var script = {test:1};
+				var spy = jasmine.createSpy('then');
+				taskLoad({script:script}).then(spy);
+				$rootScope.$digest();
+				expect(spy).toHaveBeenCalled();
+			});
+
+			it('should return an unresolved promise for scriptUrl', function(){
+				var script = {test:1};
+				var spy = jasmine.createSpy('then');
+				taskLoad({scriptUrl:script}).then(spy);
+				$rootScope.$digest();
+				expect(spy).not.toHaveBeenCalled();
+				q.resolve(script);
+				$rootScope.$digest();
+				expect(spy).toHaveBeenCalled();
+			});
+
+			it('should throw if both script and scriptUrl are not set', function(){
+				expect(function(){
+					taskLoad({});
+				}).toThrow();
+			});
+
+			it('should extend the task with $script and $template', function(){
+				var task = {script:123, template: 345};
+				taskLoad(task);
+				$rootScope.$digest();
+				expect(task.$script).toBe(123);
+				expect(task.$template).toBe(345);
 			});
 		});
 

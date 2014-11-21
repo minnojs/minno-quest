@@ -1,7 +1,7 @@
 define(function(require){
 	var _ = require('underscore');
 
-	managerService.$inject = ['$rootScope', '$q', 'managerSequence', 'taskLoad'];
+	managerService.$inject = ['$rootScope', '$q', 'managerSequence', 'managerTaskLoad'];
 	function managerService($rootScope, $q, ManagerSequence, taskLoad){
 
 		/**
@@ -58,12 +58,13 @@ define(function(require){
 			load: function(){
 				var task = this.current();
 				var $scope = this.$scope;
-				// @TODO: consider using managerLoadService instead
+
 				if (task){
 					taskLoad(task).then(function(){
-						$scope.$emit('manager:loaded',task.$script);
+						$scope.$emit('manager:loaded',task.$script, task.$template);
 					});
 				} else {
+					// let the directive deal with the end of the sequence
 					$scope.$emit('manager:loaded');
 				}
 			}

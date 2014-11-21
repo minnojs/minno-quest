@@ -10,6 +10,7 @@ define(function(require){
 	module.service('managerSequence', require('./managerSequence'));
 	module.service('managerLoad', require('./managerLoadService'));
 	module.service('managerGetScript', require('./managerGetScriptService'));
+	module.service('managerTaskLoad', require('./managerTaskLoadService'));
 	module.directive('piManager', require('./managerDirective'));
 	module.directive('piManagerTask', require('./managerTaskDirective'));
 
