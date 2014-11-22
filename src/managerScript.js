@@ -17,6 +17,11 @@ define(['managerAPI'], function(Manager){
 
 	API.addSequence([
 		{
+			type: 'message',
+			//template: '<div>Does this work??</div>'
+			templateUrl: '../../message.html'
+		},
+		{
 			type:'quest',
 			name: 'first',
 			scriptUrl: 'questScript1.js'
