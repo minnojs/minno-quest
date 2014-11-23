@@ -20,7 +20,7 @@ define(['managerAPI'], function(Manager){
 			type: 'message',
 			//template: '<div>Does this work??</div>'
 			templateUrl: '../../message.html',
-			keys: 'a'
+			keys: ' '
 		},
 		{
 			type:'quest',
