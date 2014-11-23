@@ -1,1 +1,1 @@
-define(["require"],function(e){function t(t){function n(n){var r=t.defer();return e([n],function(e){r.resolve(e)},function(e){r.reject(e)}),r.promise}return n}return t.$inject=["$q"],t});
+define(["require"],function(e){function t(t){function n(n,r){var i=t.defer(),s=r?"text!":"";return e([s+n],function(e){i.resolve(e)},function(e){i.reject(e)}),i.promise}return n}return t.$inject=["$q"],t});

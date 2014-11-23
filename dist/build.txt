@@ -63,8 +63,9 @@ js/quest/task/parseProvider.js
 js/quest/task/dfltQuestLogger.js
 js/quest/task/task-module.js
 js/quest/questModule.js
-js/taskManager/task/taskGetScriptProvider.js
-js/taskManager/task/taskLoadProvider.js
+js/message/messageDirective.js
+js/message/messageDoneDirective.js
+js/message/messageModule.js
 js/taskManager/task/taskActivateProvider.js
 js/taskManager/task/taskDirective.js
 js/taskManager/task/taskModule.js
@@ -76,6 +77,7 @@ js/taskManager/managerService.js
 js/taskManager/managerSequence.js
 js/taskManager/managerLoadService.js
 js/taskManager/managerGetScriptService.js
+js/taskManager/managerTaskLoadService.js
 js/taskManager/managerDirective.js
 js/taskManager/managerTaskDirective.js
 js/taskManager/managerModule.js

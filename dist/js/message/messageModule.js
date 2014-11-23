@@ -1,0 +1,1 @@
+define(["require","angular","./messageDirective","./messageDoneDirective"],function(e){var t=e("angular"),n=t.module("pi.message",[]);return n.directive("piMessage",e("./messageDirective")),n.directive("piMessageDone",e("./messageDoneDirective")),n});
