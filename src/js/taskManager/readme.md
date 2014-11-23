@@ -65,4 +65,4 @@ Asset       | Description
 currentTask | The current (last) task object
 
 ### Inheritance
-piManager uses the same inheritance system used by piQuest. It has one type of set: the task set. In order to create task sets use `addTaskSet(set, list)`.
+piManager uses the same inheritance system used by piQuest. It has one type of set: the task set. In order to create task sets use `addTasksSet(set, list)`.

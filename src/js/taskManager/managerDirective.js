@@ -9,8 +9,8 @@ define(function(require){
 
 	var _ = require('underscore');
 
-	managerControler.$inject = ['$scope', 'managerService', 'managerLoad'];
-	function managerControler($scope, ManagerService, managerLoad){
+	managerControler.$inject = ['$scope', 'managerService', 'managerLoad', 'piConsole'];
+	function managerControler($scope, ManagerService, managerLoad, piConsole){
 		this.init = init;
 
 
@@ -26,7 +26,9 @@ define(function(require){
 				taskSource || (taskSource = source);
 			}
 
-			managerLoad(taskSource).then(function(script){
+			managerLoad(taskSource).then(success,error);
+
+			function success(script){
 				// keep the script on scope
 				$scope.script = script;
 				$scope.settings = (script && script.settings) || {};
@@ -36,12 +38,16 @@ define(function(require){
 
 				// activate first task
 				$scope.$emit('manager:next');
-			});
+			}
+
+			function error(e){
+				piConsole('manager').error(e);
+			}
 		}
 	}
 
-	directive.$inject = ['managerService', '$q', '$injector'];
-	function directive(managerService, $q, $injector){
+	directive.$inject = ['managerService', '$q', '$injector', 'piConsole'];
+	function directive(managerService, $q, $injector,piConsole){
 		return {
 			priority: 1000,
 			replace:true,
@@ -66,6 +72,7 @@ define(function(require){
 
 					// get loaded task
 					currentTask = thisCtrl.manager.current();
+					piConsole('manager').debug('Manager:currentTask', currentTask);
 
 					// procced or and manager
 					currentTask ? proceed() : done();

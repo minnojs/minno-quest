@@ -3,7 +3,8 @@ define(function(require){
 	var angular = require('angular');
 	var module = angular.module('taskManager',[
 		require('./task/taskModule').name,
-		require('utils/helperDirectives/helperDirectivesModule').name
+		require('utils/helperDirectives/helperDirectivesModule').name,
+		require('utils/console/consoleModule').name
 	]);
 
 	module.service('managerService', require('./managerService'));

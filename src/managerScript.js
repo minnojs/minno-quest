@@ -2,6 +2,21 @@ define(['managerAPI'], function(Manager){
 
 	var API = new Manager();
 
+	API.addTasksSet('instructions', {type:'message',templateUrl: '../../message.html', keys:' '});
+
+	API.addTasksSet('quests', [
+		{
+			type:'quest',
+			name: 'first',
+			scriptUrl: 'questScript1.js'
+		},
+		{
+			type:'quest',
+			name:'second',
+			scriptUrl: 'questScript2.js'
+		}
+	]);
+
 	API.addSettings('onEnd', function(){console.log('onEnd');});
 	API.addSettings('onPreTask', function(currentTask, $http){
 		var data = {taskName: currentTask.name, taskNumber: currentTask.$meta.number};
@@ -16,22 +31,10 @@ define(['managerAPI'], function(Manager){
 	});
 
 	API.addSequence([
-		{
-			type: 'message',
-			//template: '<div>Does this work??</div>'
-			templateUrl: '../../message.html',
-			keys: ' '
-		},
-		{
-			type:'quest',
-			name: 'first',
-			scriptUrl: 'questScript1.js'
-		},
-		{
-			type:'quest',
-			name:'second',
-			scriptUrl: 'questScript2.js'
-		}
+		{inherit:'instructions'},
+		{inherit:{type:'exRandom', set:'quests'}},
+		{inherit:'instructions'},
+		{inherit:{type:'exRandom', set:'quests'}}
 	]);
 
 	return API.script;
