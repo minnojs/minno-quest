@@ -26,6 +26,12 @@ define(function(require){
 			case 'number':
 				value = '' + value;
 				break;
+			case 'object':
+				if (value instanceof Error){
+					value = value.message;
+					break;
+				}
+			/* fall through */
 			default:
 				value = '<a href="javascript:void(0)">' + angular.toJson(value, !!pretty) + '</a>';
 		}
