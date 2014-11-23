@@ -19,7 +19,8 @@ define(['managerAPI'], function(Manager){
 		{
 			type: 'message',
 			//template: '<div>Does this work??</div>'
-			templateUrl: '../../message.html'
+			templateUrl: '../../message.html',
+			keys: 'a'
 		},
 		{
 			type:'quest',
