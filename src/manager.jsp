@@ -4,7 +4,7 @@
 
 StudySession studySession = (StudySession) session.getAttribute("studysession");
 String fullUrl = ((PageTask)studySession.getCurrentTask()).getUrl();
-String urlPath = fullUrl.substring(0,fullUrl.indexOf("quest.jsp"));
+String urlPath = fullUrl.substring(0,fullUrl.indexOf("manager.jsp"));
 
 String getProtocol=request.getScheme();
 String getDomain=request.getServerName();
