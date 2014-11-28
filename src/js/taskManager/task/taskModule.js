@@ -59,7 +59,5 @@ define(function(require){
 		activateProvider.set('message', activateMessage);
 	}]);
 
-
-
 	return module;
 });

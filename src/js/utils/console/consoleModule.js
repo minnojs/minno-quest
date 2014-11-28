@@ -27,6 +27,7 @@ define(function(require){
 				value = '' + value;
 				break;
 			case 'object':
+				// display the error message not the full thing...
 				if (value instanceof Error){
 					value = value.message;
 					break;

@@ -29,12 +29,23 @@ define(function(require){
 			managerLoad(taskSource).then(success,error);
 
 			function success(script){
+
+				// takes taskSource and returns a path or undefined
+				function getPath(path){
+					if (!_.isString(path)) {
+						return;
+					} else {
+						return path.substring(0, path.lastIndexOf('/'));
+					}
+				}
+
 				// keep the script on scope
 				$scope.script = script;
 				$scope.settings = (script && script.settings) || {};
 
 				// create the manager
 				ctrl.manager = new ManagerService($scope, script);
+				ctrl.manager.setBaseUrl(getPath(taskSource));
 
 				// activate first task
 				$scope.$emit('manager:next');

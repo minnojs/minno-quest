@@ -2,18 +2,18 @@ define(['managerAPI'], function(Manager){
 
 	var API = new Manager();
 
-	API.addTasksSet('instructions', {type:'message',templateUrl: 'message.html', keys:' '});
+	API.addTasksSet('instructions', {type:'message',templateUrl: '../example/message.html', keys:' '});
 
 	API.addTasksSet('quests', [
 		{
 			type:'quest',
 			name: 'first',
-			scriptUrl: 'questScript1'
+			scriptUrl: 'questScript1.js'
 		},
 		{
 			type:'quest',
 			name:'second',
-			scriptUrl: 'questScript2'
+			scriptUrl: 'questScript2.js'
 		}
 	]);
 

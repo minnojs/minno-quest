@@ -60,13 +60,17 @@ define(function(require){
 				var $scope = this.$scope;
 
 				if (task){
-					taskLoad(task).then(function(){
-						$scope.$emit('manager:loaded',task.$script, task.$template);
+					taskLoad(task, this.baseUrl).then(function(){
+						$scope.$emit('manager:loaded');
 					});
 				} else {
 					// let the directive deal with the end of the sequence
 					$scope.$emit('manager:loaded');
 				}
+			},
+
+			setBaseUrl: function(baseUrl){
+				this.baseUrl = baseUrl;
 			}
 		});
 

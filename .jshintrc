@@ -8,6 +8,7 @@
 	"globals": {
 		"define": false,
 		"require": false,
+		"requirejs": false,
 
 		"angular": false,
 
