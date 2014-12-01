@@ -1,6 +1,6 @@
 var file;
 var allTestFiles = [];
-var TEST_REGEXP = /_test\.js$/;
+var TEST_REGEXP = /^\/base\/src.*_test\.js$/; // base/src is needed to exclude bower_components
 
 var pathToModule = function(path) {
 	//return path.replace(/^\/base\//, '').replace(/\.js$/, '');

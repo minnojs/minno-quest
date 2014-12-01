@@ -3,6 +3,8 @@ define(function(require){
 	getScriptProvider.$inject = ['$q'];
 	function getScriptProvider($q){
 
+		// @TODO: separate the parsing into a different module (make this a dependency)
+
 		var base = getPath(getBaseUrl());
 
 		function getScript(url, baseUrl, isText){
