@@ -1,3 +1,22 @@
+<a name="0.0.20"></a>
+### 0.0.20 (2014-12-02)
+
+
+#### Bug Fixes
+
+* **manager:**
+  * display spinner until pre/post functions are called ([1e97679f](https://github.com/ProjectImplicit/PIquest/commit/1e97679f91ea9433e3442088b14388d7bee80f96))
+  * manager.jsp now works correctly ([69c5ec87](https://github.com/ProjectImplicit/PIquest/commit/69c5ec87df52e323482aa3f92b3c8ab9789149d8))
+* **pip:** correct lib urls ([fc665cea](https://github.com/ProjectImplicit/PIquest/commit/fc665cea0d2e4e71048302f4f8b720d2ecc61e52))
+
+
+#### Features
+
+* **manager:** support relative paths ([5ae8645e](https://github.com/ProjectImplicit/PIquest/commit/5ae8645e3da505420065bfa1f7fa79fc72dbb3c8))
+* **pip:** support for pip tasks ([5929fe39](https://github.com/ProjectImplicit/PIquest/commit/5929fe391c5cf713f4cc9d2fb0f817631cd82b1d))
+* **styles:** pull pip styles and change location of scss files ([a689f83d](https://github.com/ProjectImplicit/PIquest/commit/a689f83d988fab5046e84976e434acb153aa7405))
+
+
 <a name="0.0.19"></a>
 ### 0.0.19 (2014-11-23)
 
