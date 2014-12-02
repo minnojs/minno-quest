@@ -31,6 +31,12 @@ define(['managerAPI'], function(Manager){
 	});
 
 	API.addSequence([
+		{
+			type: 'pip',
+			name: 'dan',
+			scriptUrl: 'iat.js'
+		},
+
 		{inherit:'instructions'},
 		{inherit:{type:'exRandom', set:'quests'}},
 		{inherit:'instructions'},
