@@ -95,7 +95,10 @@ define(function(require){
 						$scope.settings.onPreTask,
 						prevTask && prevTask.post,
 						currentTask.pre,
-						_.bind(swap.next, swap, {task:currentTask})
+						_.bind(swap.next, swap, {task:currentTask}),
+						function(){
+							$scope.loading = false;
+						}
 					], locals);
 				}
 
@@ -106,6 +109,7 @@ define(function(require){
 						_.bind(swap.empty, swap),
 						$scope.settings.onEnd,
 						function(){
+							$scope.loading = false;
 							$scope.$emit('manager:done');
 						}
 					], locals);
