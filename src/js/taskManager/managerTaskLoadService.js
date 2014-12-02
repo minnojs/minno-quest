@@ -4,10 +4,11 @@
  */
 define(function(){
 
-	taskLoadService.$inject = ['$q', 'managerGetScript'];
-	function taskLoadService($q, getScript){
+	taskLoadService.$inject = ['$q', 'managerGetScript', 'piConsole'];
+	function taskLoadService($q, getScript, $console){
 
 		function taskLoad(task, baseUrl){
+
 			var promise, script, template;
 
 			script = task.scriptUrl ? getScript(task.scriptUrl, baseUrl) : task.script;
@@ -23,6 +24,8 @@ define(function(){
 				task.$script = promises.script;
 				task.$template = promises.template;
 				return task;
+			}, function(e){
+				$console('load').error(e);
 			});
 
 			return promise;
