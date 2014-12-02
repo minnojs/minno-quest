@@ -242,7 +242,9 @@ module.exports = function (grunt) {
 
 					// Tells Require.js to look at main.js for all shim and path configurations
 					mainConfigFile: '<%= settings.app %>/js/bootstrap.js',
+					fileExclusionRegExp: /\.scss$/,
 					paths: {
+						jquery: 'empty:',
 						underscore: 'empty:',
 						angular: 'empty:',
 						text: '../../bower_components/requirejs-text/text',
@@ -262,11 +264,11 @@ module.exports = function (grunt) {
 
 		sass: {
 			options: {
-				loadPath: 'bower_components/bootstrap-sass-official/assets/stylesheets/',
+				loadPath: ['bower_components/bootstrap-sass-official/assets/stylesheets/', 'bower_components/'],
 				style: 'compressed'
 			},
 			dist: {
-				files: {'src/styles/main.css':'resources/sass/main.scss'}
+				files: {'src/styles/main.css':'src/styles/main.scss'}
 			}
 		}
 	});
