@@ -2,7 +2,7 @@ define(['managerAPI'], function(Manager){
 
 	var API = new Manager();
 
-	API.addTasksSet('instructions', {type:'message',templateUrl: '../example/message.html', keys:' '});
+	API.addTasksSet('instructions', {type:'message', keys:' '});
 
 	API.addTasksSet('quests', [
 		{
@@ -31,15 +31,23 @@ define(['managerAPI'], function(Manager){
 	});
 
 	API.addSequence([
+		{inherit:'instructions', templateUrl: '../example/biat.html'},
 		{
 			type: 'pip',
-			name: 'dan',
-			scriptUrl: 'iat.js'
+			name: 'biat',
+			scriptUrl: 'biat.js'
 		},
 
-		{inherit:'instructions'},
+		{inherit:'instructions', templateUrl: '../example/iat.html'},
+
+		{
+			type: 'pip',
+			name: 'iat',
+			scriptUrl: 'iat.js'
+		},
+		{inherit:'instructions', template: 'Please answer the following questionnaire:'},
 		{inherit:{type:'exRandom', set:'quests'}},
-		{inherit:'instructions'},
+		{inherit:'instructions', template: 'Please answer the following questionnaire:'},
 		{inherit:{type:'exRandom', set:'quests'}}
 	]);
 
