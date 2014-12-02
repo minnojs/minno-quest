@@ -1,0 +1,35 @@
+{
+  "name": "PIPlayer",
+  "main": "dist/index.html",
+  "ignore": [
+    ".gitattributes",
+    ".gitignore",
+    ".jshintrc",
+    "bower_components",
+    "docs",
+    "Gruntfile.js",
+    "node_modules",
+    "package.json",
+    "README.md",
+    "resources",
+    "test",
+    "user"
+  ],
+  "devDependencies": {
+    "requirejs": "~2.1.14",
+    "lodash": "2.4.1",
+    "requirejs-text": "~2.0.12",
+    "backbone": "1.1.2",
+    "json2": "*",
+    "jquery": "components/jquery#~1.10.2"
+  },
+  "homepage": "https://github.com/ProjectImplicit/PIPlayer",
+  "_release": "cfa8036de7",
+  "_resolution": {
+    "type": "commit",
+    "commit": "cfa8036de7882c8867af61502951c05b97308ea1"
+  },
+  "_source": "git://github.com/ProjectImplicit/PIPlayer.git",
+  "_target": "cfa8036de7882c8867af61502951c05b97308ea1",
+  "_originalSource": "ProjectImplicit/PIPlayer"
+}

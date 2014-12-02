@@ -6,6 +6,14 @@
     "dist/js/API.js",
     "dist/js/bootstrap.js"
   ],
+   "ignore": [
+    ".gitattributes",
+    ".gitignore",
+    ".jshintrc",
+    "bower_components",
+    "Gruntfile.js",
+    "node_modules"
+  ],
   "repository": {
     "type": "git",
     "url": "git://github.com/ProjectImplicit/PIquest.git"
@@ -17,7 +25,8 @@
     "lodash": "2.4.1",
     "bootstrap-sass-official": "~3.2.0+2",
     "angular-animate": "1.2.26",
-    "backbone": "~1.1.2"
+    "backbone": "~1.1.2",
+    "PIPlayer": "ProjectImplicit/PIPlayer#cfa8036de7882c8867af61502951c05b97308ea1"
   },
   "devDependencies": {
     "angular-mocks": "1.2.26",
