@@ -178,6 +178,7 @@ define(['require','./managerModule'], function(require){
 				currentSpy = jasmine.createSpy('current').andReturn({});
 				$provide.value('managerService', jasmine.createSpy('managerService').andCallFake(function(){
 					this.current = currentSpy;
+					this.setBaseUrl = angular.noop;
 				}));
 			}));
 

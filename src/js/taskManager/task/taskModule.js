@@ -8,6 +8,7 @@ define(function(require){
 
 	var angular = require('angular');
 	var module = angular.module('pi.task',[]);
+	var _ = require('underscore');
 
 	module.provider('taskActivate', require('./taskActivateProvider'));
 	module.directive('piTask', require('./taskDirective'));
@@ -37,7 +38,6 @@ define(function(require){
 	}]);
 
 	module.config(['taskActivateProvider', function(activateProvider){
-
 		activateMessage.$inject = ['done', '$element', 'task', '$scope','$compile'];
 		function activateMessage(done, $canvas, task, $scope, $compile){
 			var $el;
@@ -59,7 +59,38 @@ define(function(require){
 		activateProvider.set('message', activateMessage);
 	}]);
 
+	module.config(['taskActivateProvider', function(activateProvider){
+		activatePIP.$inject = ['done', '$element', 'task', 'script'];
+		function activatePIP(done, $canvas, task, script){
+			var $el, req;
 
+			// load PIP
+			req = requirejs.config({
+				context: _.uniqueId(),
+				baseUrl:'../bower_components/PIPlayer/src/js',
+				paths: {
+					//plugins
+					text: ['//cdnjs.cloudflare.com/ajax/libs/require-text/2.0.3/text.min', "../../bower_components/requirejs-text/text"],
+
+					// Core Libraries
+					jquery: ["//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min","../../../jquery/dist/jquery.min"],
+					underscore: ["a//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min","../../bower_components/lodash/dist/lodash.min"],
+					backbone: ['//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min', "../../../bower_components/backbone/backbone-min"]
+				},
+
+				deps: ['jquery', 'backbone', 'underscore']
+			});
+
+			$canvas.append('<div pi-player></div>');
+			$el = $canvas.contents();
+
+			req(['app/activatePIP'], function(activatePIP){
+				activatePIP(script, done);
+			});
+		}
+
+		activateProvider.set('pip', activatePIP);
+	}]);
 
 	return module;
 });
