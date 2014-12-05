@@ -776,11 +776,11 @@ If the data property is set as a string, we assume it refers to the element hand
 * `{set: 'setName', type: 'byData', data: "myStimHandle"}` picks the element that has the "myStimHandle" handle
 
 **function**:
-You may also use a custom function to select your element.
+You may also use a custom function to select your element (the function here, fully replaces the inherit object).
 ```js
-{set: 'setName', type: function(definitions){
+function(definitions){
 	// definitions is the inherit object (including  set, type, and whatever other properties you'd like to use)
-}}
+}
 ```
 
 ##### Customization

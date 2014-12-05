@@ -1,5 +1,7 @@
 define(['underscore'],function(_){
 
+	// @TODO: repeat currently repeats only the last element, we need repeat = 'set' or something in order to prevent re-randomizing of exRandom...
+
 	RandomizerProvider.$inject = ['randomizeInt', 'randomizeRange', 'Collection'];
 	function RandomizerProvider(randomizeInt, randomizeRange, Collection){
 
