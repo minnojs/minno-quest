@@ -29,23 +29,30 @@ define(function(require){
 			// make model accesable from within scope
 			$scope.model = ngModel;
 
-			// set log and module
-			if (_.isUndefined(ngModelGet($scope.$parent))){
-				self.log = ngModel.$modelValue = log = {
-					name: data.name,
-					response: dfltValue,
-					// @TODO: this is a bit fragile and primitive.
-					// we should probably create a unique ID service of some sort...
-					serial: _.size($parse('current.questions')($scope.$parent))
-				};
-				$scope.response = ngModel.$viewValue = dfltValue;
+			log = ngModelGet($scope.$parent);
 
+			// init log
+
+			// create log if it doesn't exist yet
+			if (_.isUndefined(log)){
+				log = {};
 				ngModelGet.assign($scope.$parent, log);
 			} else {
-				log = self.log = ngModelGet($scope.$parent);
-				$scope.response = ngModel.$viewValue = log.response;
 				piConsole(['question']).debug('This question has already been in use: "' + log.name + '"');
 			}
+
+			// expose all the stuff...
+			self.log = ngModel.$modelValue = log;
+
+			_.defaults(log,{
+				name: data.name,
+				response: dfltValue,
+				// @TODO: this is a bit fragile and primitive.
+				// we should probably create a unique ID service of some sort...
+				serial: _.size($parse('current.questions')($scope.$parent))
+			});
+
+			$scope.response = ngModel.$viewValue = log.response;
 
 
 			// model --> view

@@ -44,7 +44,6 @@ define(['angular','./questDirectivesModule'], function(angular){
 			compile({name:123});
 			expect(scope.ctrl.registerModel).toBeDefined();
 			expect(scope.ctrl.scope).toBe(scope);
-			expect(log.name).toEqual(123);
 		});
 
 		it('should log a unique serial number for each question', inject(function($rootScope){
@@ -52,6 +51,22 @@ define(['angular','./questDirectivesModule'], function(angular){
 			compile({name:123});
 			expect(scope.ctrl.log.serial).toBe(2);
 		}));
+
+		describe(': initialize log', function(){
+
+			it('should set name to log', function(){
+				compile({name:123});
+				expect(log.name).toEqual(123);
+			});
+
+			it('should init even when log already exists', inject(function($rootScope){
+				$rootScope.current.logObj = {};
+				compile({name:'myName', dflt:'dflt'});
+				expect(log.name).toBe('myName');
+				expect(log.serial).toBe(0);
+				expect(log.response).toBe('dflt');
+			}));
+		});
 
 		// view -> model
 		it('should bind to a model', inject(function($rootScope){
@@ -124,14 +139,15 @@ define(['angular','./questDirectivesModule'], function(angular){
 				compile({dflt:""}, undefined, {dflt:456});
 				expect(log.response).toBe("");
 			});
+
+			it('should load data from ngModel to overide default', function(){
+				compile({dflt:123}, {response:234});
+				expect(scope.ctrl.log.response).toBe(234);
+				expect(scope.response).toBe(234);
+			});
 		});
 
 
-		it('should load data from ngModel to overide default', function(){
-			compile({dflt:123}, {response:234});
-			expect(scope.ctrl.log.response).toBe(234);
-			expect(scope.response).toBe(234);
-		});
 
 		it('should update log latency each time there is a change in scope.response', function(){
 			compile({});
