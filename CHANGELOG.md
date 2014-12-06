@@ -1,3 +1,15 @@
+<a name="0.0.21"></a>
+### 0.0.21 (2014-12-07)
+
+
+#### Bug Fixes
+
+* **docs:** fix inherit by functions docs ([7ce0b691](https://github.com/ProjectImplicit/PIquest/commit/7ce0b691aa4658ea03db0c349d1c8c4afb0608b4))
+* **manager:** made getScript fetch absolute paths better. still have a problem with relative p ([567724ca](https://github.com/ProjectImplicit/PIquest/commit/567724ca21a4051d7abc5ade72416dca2c97ef01))
+* **questController:** does not init questions that have a base object in global.current. ([6281aaff](https://github.com/ProjectImplicit/PIquest/commit/6281aaffde79be455f21f4c47f77038b830cd6c0), closes [#60](https://github.com/ProjectImplicit/PIquest/issues/60))
+* **selectOne:** when unselecting a button the activation does not go away. ([c731f177](https://github.com/ProjectImplicit/PIquest/commit/c731f177953a532fc471da9a9d3db75d5a5e5046), closes [#61](https://github.com/ProjectImplicit/PIquest/issues/61))
+
+
 <a name="0.0.20"></a>
 ### 0.0.20 (2014-12-02)
 
