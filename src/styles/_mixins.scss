@@ -1,3 +1,4 @@
+// over write the default button behaviour so that buttons in focus don't look active
 @mixin button-variant($color, $background, $border) {
   color: $color;
   background-color: $background;
