@@ -1,6 +1,6 @@
 /*jshint unused: vars */
 define([], function(){
-	var req = require.config({
+	require.config({
 		paths: {
 			// APIs
 			pipAPI: '../../bower_components/PIPlayer/src/js/app/API',
@@ -40,6 +40,4 @@ define([], function(){
 			angular.resumeBootstrap([app.name]);
 		});
 	});
-
-	return req;
 });

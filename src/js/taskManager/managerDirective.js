@@ -29,9 +29,9 @@ define(function(require){
 			managerLoad(taskSource).then(success,error);
 
 			function success(script){
-
 				// takes taskSource and returns a path or undefined
 				function getPath(path){
+
 					if (!_.isString(path)) {
 						return;
 					} else {

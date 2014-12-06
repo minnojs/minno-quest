@@ -70,12 +70,12 @@ define(function(require){
 				baseUrl:'../bower_components/PIPlayer/dist/js',
 				paths: {
 					//plugins
-					text: ['//cdnjs.cloudflare.com/ajax/libs/require-text/2.0.3/text.min', "../../bower_components/requirejs-text/text"],
+					text: ['//cdnjs.cloudflare.com/ajax/libs/require-text/2.0.3/text.min', "../../../requirejs-text/text"],
 
 					// Core Libraries
 					jquery: ["//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min","../../../jquery/dist/jquery.min"],
-					underscore: ["//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min","../../../bower_components/lodash/dist/lodash.min"],
-					backbone: ['//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min', "../../../bower_components/backbone/backbone-min"]
+					underscore: ["//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min","../../../lodash/dist/lodash.min"],
+					backbone: ['//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min', "../../../backbone/backbone"]
 				},
 
 				deps: ['jquery', 'backbone', 'underscore']
