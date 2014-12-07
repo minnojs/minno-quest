@@ -27,7 +27,7 @@ define(function(require){
 		// @param source - object to inflate
 		// @param type - trial stimulus or media
 		// @param recursive - whether this is a recursive call or not
-		var inflate = function(source, coll, randomizer, recursive, depth){
+		function inflate(source, coll, randomizer, recursive, depth){
 
 			// protection against infinte loops
 			// ***********************************

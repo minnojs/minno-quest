@@ -137,8 +137,10 @@ define(function(require){
 								return $q.when(prms);
 							};
 						})
-						.reduce(function(promise, value){
-							return promise['finally'](value);
+						.reduce(function(promise, fn){
+							return promise.then(fn, function(e){
+								piConsole('manager').error(e);
+							});
 						}, promise);
 				}
 
