@@ -34,7 +34,7 @@ define(['managerAPI'], function(Manager){
 
 	API.addSequence([
 
-		{inherit:'instructions', templateUrl: '../example/biat.html'},
+		//{inherit:'instructions', templateUrl: '../example/biat.html'},
 		{
 			type: 'pip',
 			name: 'biat',

@@ -251,6 +251,14 @@ module.exports = function (grunt) {
 						animate: '../../bower_components/angular-animate/angular-animate.min'
 					},
 
+					packages:[
+						{
+							name: 'pipScorer',
+							location: '../../bower_components/PIPlayer/src/js/extensions/dscore',
+							main: 'Scorer'
+						}
+					],
+
 					// Add banner
 					wrap: {
 						start: '<%= settings.banner.full %>',
