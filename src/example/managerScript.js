@@ -22,20 +22,20 @@ define(['managerAPI'], function(Manager){
 		var settings;
 		var data = {taskName: currentTask.name, taskNumber: currentTask.$meta.number};
 
-		if (data.type == 'quest'){
+		if (currentTask.type == 'quest' || currentTask.type == 'pip'){
 			settings = currentTask.$script.settings;
 			settings.logger = settings.logger || {};
-			settings.logger.logFn = logger;
+			settings.logger.meta = angular.extend(settings.logger.meta || {}, data);
 		}
 
 		return $http.post('implicit/PiManager', data);
 
-		function logger(log){
-			return angular.extend(log,data);
-		}
 	});
 
 	API.addSequence([
+		{inherit:'instructions', template: 'Please answer the following questionnaire:'},
+		{inherit:{type:'exRandom', set:'quests'}},
+
 		{inherit:'instructions', templateUrl: '../example/biat.html'},
 		{
 			type: 'pip',
@@ -50,8 +50,6 @@ define(['managerAPI'], function(Manager){
 			name: 'iat',
 			scriptUrl: 'iat.js'
 		},
-		{inherit:'instructions', template: 'Please answer the following questionnaire:'},
-		{inherit:{type:'exRandom', set:'quests'}},
 		{inherit:'instructions', template: 'Please answer the following questionnaire:'},
 		{inherit:{type:'exRandom', set:'quests'}}
 	]);

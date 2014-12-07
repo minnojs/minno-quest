@@ -3,7 +3,7 @@ define(['questAPI'], function(Quest){
 	var API = new Quest();
 
 	API.addSettings('DEBUG', {
-		tags: [],
+		tags: []
 		//hideConsole: true, // default false : whether to display console
 		//level: 'none' // ERROR > WARN > INFO > DEBUG || [E, W...] || warningsOnly: Error && WARNING
 
@@ -11,8 +11,7 @@ define(['questAPI'], function(Quest){
 
 	API.addSettings('logger', {
 		pulse: 2,
-		url: 'mine/sps'
-		//DEBUG:true
+		url: '/implicit/PiQuest'
 	});
 
 	API.addSettings('onEnd', function(){

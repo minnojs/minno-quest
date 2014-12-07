@@ -11,8 +11,7 @@ define(['questAPI'], function(Quest){
 
 	API.addSettings('logger', {
 		pulse: 2,
-		url: 'mine/sps'
-		//DEBUG:true
+		url: '/implicit/PiQuest'
 	});
 
 	API.addSettings('onEnd', function(){
