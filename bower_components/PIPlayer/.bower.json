@@ -24,12 +24,12 @@
     "jquery": "components/jquery#~1.10.2"
   },
   "homepage": "https://github.com/ProjectImplicit/PIPlayer",
-  "_release": "856e7ae2b6",
+  "_release": "17038055f7",
   "_resolution": {
     "type": "commit",
-    "commit": "856e7ae2b65cfe9e10b424dfcdd5ffeb4d1485dc"
+    "commit": "17038055f7a8739ec6261c17dc543c229fada469"
   },
   "_source": "git://github.com/ProjectImplicit/PIPlayer.git",
-  "_target": "856e7ae2b65cfe9e10b424dfcdd5ffeb4d1485dc",
+  "_target": "17038055f7a8739ec6261c17dc543c229fada469",
   "_originalSource": "ProjectImplicit/PIPlayer"
 }

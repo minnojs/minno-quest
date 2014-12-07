@@ -33,8 +33,6 @@ define(['managerAPI'], function(Manager){
 	});
 
 	API.addSequence([
-		{inherit:'instructions', template: 'Please answer the following questionnaire:'},
-		{inherit:{type:'exRandom', set:'quests'}},
 
 		{inherit:'instructions', templateUrl: '../example/biat.html'},
 		{
@@ -50,6 +48,8 @@ define(['managerAPI'], function(Manager){
 			name: 'iat',
 			scriptUrl: 'iat.js'
 		},
+		{inherit:'instructions', template: 'Please answer the following questionnaire:'},
+		{inherit:{type:'exRandom', set:'quests'}},
 		{inherit:'instructions', template: 'Please answer the following questionnaire:'},
 		{inherit:{type:'exRandom', set:'quests'}}
 	]);
