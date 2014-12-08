@@ -16,6 +16,7 @@ define([], function(){
 			// this lib is needed for pipScorer
 			jquery: ["//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min","../../bower_components/jquery/dist/jquery.min"]
 		},
+
 		packages:[
 			{
 				name: 'pipScorer',
@@ -28,7 +29,8 @@ define([], function(){
 			animate : {deps: ['angular'], exports: 'angular'}
 		},
 		deps: [
-			'angular', 'animate', 'underscore','text','questAPI','managerAPI'
+			// The APIs are preloaded into the app so we don't have to set them as dependencies here
+			'angular', 'animate', 'underscore','text'
 		]
 	});
 

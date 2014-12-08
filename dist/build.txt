@@ -87,3 +87,7 @@ js/utils/animations/fadeAnimation.js
 js/utils/animations/slideAnimation.js
 js/utils/animations/animationModule.js
 js/app.js
+js/../../bower_components/PIPlayer/dist/js/extensions/dscore/Scorer.js
+/home/eladzlot/public_html/quest/bower_components/PIPlayer/dist/js/app/API.js
+js/quest/API.js
+js/taskManager/API.js

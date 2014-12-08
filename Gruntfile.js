@@ -242,8 +242,9 @@ module.exports = function (grunt) {
 
 					// Tells Require.js to look at main.js for all shim and path configurations
 					mainConfigFile: '<%= settings.app %>/js/bootstrap.js',
-					fileExclusionRegExp: /\.scss$/,
+					fileExclusionRegExp: /\.(scss|md)$/,
 					paths: {
+						// Libs
 						jquery: 'empty:',
 						underscore: 'empty:',
 						angular: 'empty:',
@@ -265,6 +266,7 @@ module.exports = function (grunt) {
 						end: ''
 					},
 					name: 'app',
+					include: ['pipScorer', 'pipAPI','questAPI','managerAPI'],
 					exclude: ['angular']
 				}
 			}
