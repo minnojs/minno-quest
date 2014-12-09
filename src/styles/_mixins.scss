@@ -25,6 +25,7 @@
     &,
     &:hover,
     &:focus,
+    &.focus,
     &:active,
     &.active {
       background-color: $background;

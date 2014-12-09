@@ -1,6 +1,9 @@
 {
   "name": "PIPlayer",
-  "main": "dist/index.html",
+  "main": [
+    "dist/js/app/activatePIP",
+    "dist/js/app/API"
+  ],
   "ignore": [
     ".gitattributes",
     ".gitignore",
@@ -24,12 +27,12 @@
     "jquery": "components/jquery#~1.10.2"
   },
   "homepage": "https://github.com/ProjectImplicit/PIPlayer",
-  "_release": "17038055f7",
+  "_release": "65d1d1aa4a",
   "_resolution": {
     "type": "commit",
-    "commit": "17038055f7a8739ec6261c17dc543c229fada469"
+    "commit": "65d1d1aa4a05860ba52d50764c0ccdc3a786d3f7"
   },
   "_source": "git://github.com/ProjectImplicit/PIPlayer.git",
-  "_target": "17038055f7a8739ec6261c17dc543c229fada469",
+  "_target": "65d1d1aa4a05860ba52d50764c0ccdc3a786d3f7",
   "_originalSource": "ProjectImplicit/PIPlayer"
 }

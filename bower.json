@@ -6,7 +6,7 @@
     "dist/js/API.js",
     "dist/js/bootstrap.js"
   ],
-   "ignore": [
+  "ignore": [
     ".gitattributes",
     ".gitignore",
     ".jshintrc",
@@ -23,10 +23,10 @@
     "requirejs": "2.1.10",
     "requirejs-text": "2.0.10",
     "lodash": "2.4.1",
-    "bootstrap-sass-official": "~3.2.0+2",
     "angular-animate": "1.2.27",
     "backbone": "~1.1.2",
-    "PIPlayer": "ProjectImplicit/PIPlayer#17038055f7a8739ec6261c17dc543c229fada469"
+    "PIPlayer": "ProjectImplicit/PIPlayer#65d1d1aa4a05860ba52d50764c0ccdc3a786d3f7",
+    "bootstrap-sass-official": "~3.3.1"
   },
   "devDependencies": {
     "angular-mocks": "1.2.27",

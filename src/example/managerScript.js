@@ -33,6 +33,11 @@ define(['managerAPI'], function(Manager){
 	});
 
 	API.addSequence([
+		{
+			type:'quest',
+			name: 'first',
+			scriptUrl: 'questScript1.js'
+		},
 
 		//{inherit:'instructions', templateUrl: '../example/biat.html'},
 		{
