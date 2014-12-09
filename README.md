@@ -225,7 +225,7 @@ autoSubmit 		| (true or false; default: false) If this property is set to true t
 minlength 		| (Number) Validation: force at least this number of characters.
 maxlength		| (Number) Validation: force at most this number of characters.
 required		| (true of false; default: false) Validation: require a non-empty string as a response.
-pattern			| (text [supports regex]) Validation: require the response to match the regular expression set in pattern.
+pattern			| (text [supports regex]) Validation: require the response to match the regular expression set in pattern (takes either a string `"a|b"` or a regular expression `/a|b/`).
 correct 		| (true or false; default: false) Validation: require the response to be correct (set the target value using `correctValue`)
 correctValue 	| (*) Set the correct response value for the correct validation.
 errorMsg		| (Object: {}) This object has a property for each validation type. Setting the appropriate type changes the validation message. For instance setting the `required` property will change the validation message for instances where no response was given.

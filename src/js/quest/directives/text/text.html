@@ -4,7 +4,7 @@
 		ng-model="response"
 		ng-minlength="{{data.minlength}}"
 		ng-maxlength="{{data.maxlength}}"
-		ng-pattern="{{data.pattern}}"
+		ng-pattern="data.pattern | toRegex"
 		ng-required="{{data.required}}"
 	>
 	<p class="error" ng-show="form.$error.minlength">{{data.errorMsg.minlength || "Too short!"}}</p>

@@ -1,4 +1,4 @@
-define(['../questDirectivesModule'], function(){
+define(['underscore','../questDirectivesModule'], function(_){
 
 	describe('questText',function(){
 		var formElm, inputElm, scope, $compile, $sniffer, $browser, changeInputValueTo, addSpy = jasmine.createSpy('addQuest');
@@ -123,8 +123,8 @@ define(['../questDirectivesModule'], function(){
 			expect(formElm).toBeInvalid();
 		});
 
-		it('should support pattern',function(){
-			compile({pattern:"/^\\d\\d\\d-\\d\\d-\\d\\d\\d\\d$/", errorMsg:{pattern: 'pattern msg'}});
+		it('should support pattern regex',function(){
+			compile({pattern:/^\d\d\d-\d\d-\d\d\d\d$/, errorMsg:{pattern: 'pattern msg'}});
 			var errorElm = formElm.find('[ng-show="form.$error.pattern"]');
 			expect(errorElm.text()).toBe('pattern msg');
 
@@ -145,6 +145,29 @@ define(['../questDirectivesModule'], function(){
 			expect(formElm).toBeInvalid();
 		});
 
+		it('should support pattern string',function(){
+			compile({pattern:"^\\d\\d\\d-\\d\\d-\\d\\d\\d\\d$", errorMsg:{pattern: 'pattern msg'}});
+			var errorElm = formElm.find('[ng-show="form.$error.pattern"]');
+			expect(errorElm.text()).toBe('pattern msg');
+
+			changeInputValueTo('x000-00-0000x');
+			expect(formElm).toBeInvalid();
+
+			changeInputValueTo('000-00-0000');
+			expect(formElm).toBeValid();
+			expect(errorElm).toBeHidden();
+
+			changeInputValueTo('000-00-0000x');
+			expect(formElm).toBeInvalid();
+
+			changeInputValueTo('123-45-6789');
+			expect(formElm).toBeValid();
+
+			changeInputValueTo('x');
+			expect(formElm).toBeInvalid();
+		});
+
+
 		it('should support autoSubmit', function(){
 			var e = jqLite.Event('keypress', { keyCode: 13, which: 13 });
 			var submitSpy;
@@ -160,6 +183,42 @@ define(['../questDirectivesModule'], function(){
 			scope.$on('quest:submit:now', submitSpy);
 			inputElm.trigger(e);
 			expect(submitSpy).toHaveBeenCalled();
+		});
+	});
+
+	describe('toRegexFilter', function(){
+		var toRegex;
+
+		beforeEach(module('questDirectives'));
+
+		beforeEach(inject(function(toRegexFilter){
+			toRegex = toRegexFilter;
+		}));
+
+		it('should be good for undefined values', function(){
+			var re = toRegex();
+			expect(_.isRegExp(re)).toBeTruthy();
+			expect(re.toString()).toBe('/(?:)/');
+		});
+
+		it('should parse a string correctly', function(){
+			var re = toRegex('a|b');
+
+			expect(_.isRegExp(re)).toBeTruthy();
+			expect(re.toString()).toBe('/a|b/');
+		});
+
+		it('should parse a regex correctly', function(){
+			var re = toRegex(/a|b/);
+
+			expect(_.isRegExp(re)).toBeTruthy();
+			expect(re.toString()).toBe('/a|b/');
+		});
+
+		it('should throw for non regex values', function(){
+			expect(function(){
+				toRegex({});
+			}).toThrow();
 		});
 	});
 });
