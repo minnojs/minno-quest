@@ -29,7 +29,11 @@ define(function(require){
 		function toRegex(value) {
 			var err;
 
-			if (_.isRegExp(value) || _.isString(value) || _.isUndefined(value)){
+			if (_.isUndefined(value)){
+				return /(?:)/;
+			}
+
+			if (_.isRegExp(value) || _.isString(value)){
 				return new RegExp(value);
 			} else {
 				err = new Error('Question pattern is not a valid regular expression');
