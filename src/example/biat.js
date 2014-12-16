@@ -1,5 +1,5 @@
 // # Brief IAT
-define(['pipAPI','pipScorer'], function(APIConstructor,Scorer) {
+define(['/api/manager/pipAPI.js','pipScorer'], function(APIConstructor,Scorer) {
 
 	var API = new APIConstructor();
 	var scorer = new Scorer();
@@ -11,6 +11,13 @@ define(['pipAPI','pipScorer'], function(APIConstructor,Scorer) {
 	var category2 = 'White People';
 	var practiceCategory1 = 'Birds';
 	var practiceCategory2= 'Mammals';
+
+	API.setVersion('0.0.21');
+
+	API.script.buildBaseUrl = function(){
+		return '/pip/';
+	};
+
 
 	// Canvas settings
 	API.addSettings('canvas',{

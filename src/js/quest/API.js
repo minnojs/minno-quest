@@ -80,7 +80,6 @@ define(function(require){
 			}
 			_.merge(this.script.current, current);
 		}
-
 	});
 
 	return API;

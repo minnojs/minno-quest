@@ -3,7 +3,7 @@ define([], function(){
 	require.config({
 		paths: {
 			// APIs
-			pipAPI: '../../bower_components/PIPlayer/dist/js/app/API',
+			pipAPI: '../../bower_components/PIPlayer/dist/js/API',
 			questAPI: 'quest/API',
 			managerAPI: 'taskManager/API',
 
