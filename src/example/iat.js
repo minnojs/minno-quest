@@ -1,4 +1,4 @@
-define(['pipAPI','pipScorer'], function(APIConstructor,Scorer) {
+define(['/api/manager/pipAPI.js','pipScorer'], function(APIConstructor,Scorer) {
 // This wrapper is neccesary in order to activate the API
 
 	var API = new APIConstructor();
@@ -17,24 +17,15 @@ define(['pipAPI','pipScorer'], function(APIConstructor,Scorer) {
 		***********************************************************
 	*/
 
-	// set the canvas size
-	API.addSettings('canvas',{
-		maxWidth: 800,
-		proportions : 0.8
-	});
+	API.script.buildBaseUrl = function(){
+		return '/pip/';
+	};
 
 	// setting the base urls for images and templates
 	API.addSettings('base_url',{
 		image : 'example/images',
 		template : '../example/IAT'
 	});
-
-	// setting the way the logger works (how often we send data to the server and the url for the data)
-	API.addSettings('logger',{
-		pulse: 20,
-		url : '/implicit/PiPlayerApplet'
-	});
-
 
 	// ### Trials
 	/*

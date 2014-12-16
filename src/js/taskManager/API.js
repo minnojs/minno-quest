@@ -15,6 +15,8 @@ define(function(require){
 			global: {},
 			current: {}
 		};
+
+		this.settings = this.script.settings;
 	}
 
 	_.extend(API.prototype, {

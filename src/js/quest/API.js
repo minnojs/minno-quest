@@ -2,7 +2,6 @@ define(function(require){
 
 	var _ = require('underscore');
 
-
 	/**
 	 * Constructor for PIQuest script creator
 	 * @return {Object}		Script creator
@@ -16,6 +15,8 @@ define(function(require){
 			global: {},
 			current: {}
 		};
+
+		this.settings = this.script.settings;
 	}
 
 	_.extend(API.prototype, {

@@ -18,7 +18,6 @@ define(['/api/manager/pipAPI.js','pipScorer'], function(APIConstructor,Scorer) {
 		return '/pip/';
 	};
 
-
 	// Canvas settings
 	API.addSettings('canvas',{
 		maxWidth: 1000,

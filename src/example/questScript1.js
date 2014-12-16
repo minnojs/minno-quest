@@ -1,4 +1,4 @@
-define(['questAPI'], function(Quest){
+define(['/api/manager/questAPI.js'], function(Quest){
 
 	var API = new Quest();
 
@@ -7,11 +7,6 @@ define(['questAPI'], function(Quest){
 		//hideConsole: true, // default false : whether to display console
 		level: 'warn' // ERROR > WARN > INFO > DEBUG || [E, W...] || warningsOnly: Error && WARNING
 
-	});
-
-	API.addSettings('logger', {
-		pulse: 2,
-		url: '/implicit/PiQuest'
 	});
 
 	API.addSettings('onEnd', function(){

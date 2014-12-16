@@ -1,4 +1,4 @@
-define(['managerAPI'], function(Manager){
+define(['/api/manager/managerAPI.js'], function(Manager){
 
 	var API = new Manager();
 
@@ -18,21 +18,9 @@ define(['managerAPI'], function(Manager){
 	]);
 
 	API.addSettings('onEnd', function(){console.log('onEnd');});
-	API.addSettings('onPreTask', function(currentTask, $http){
-		var settings;
-		var data = {taskName: currentTask.name, taskNumber: currentTask.$meta.number};
-
-		if (currentTask.type == 'quest' || currentTask.type == 'pip'){
-			settings = currentTask.$script.settings;
-			settings.logger = settings.logger || {};
-			settings.logger.meta = angular.extend(settings.logger.meta || {}, data);
-		}
-
-		return $http.post('implicit/PiManager', data);
-
-	});
 
 	API.addSequence([
+		{inherit:{type:'exRandom', set:'quests'}},
 		//{inherit:'instructions', templateUrl: '../example/biat.html'},
 		{
 			type: 'pip',
@@ -45,6 +33,7 @@ define(['managerAPI'], function(Manager){
 		{
 			type: 'pip',
 			name: 'iat',
+			version: "0.0.12",
 			scriptUrl: 'iat.js'
 		},
 		{inherit:'instructions', template: 'Please answer the following questionnaire:'},
