@@ -38,7 +38,14 @@ define(function(require){
 
 			if (!activator && script && _.isFunction(script.play)){
 				activator = _.bind(script.play, script);
+				activator.$inject = $injector.annotate(script.play);
 			}
+
+			if (!activator && script && _.isArray(script.play)){
+				activator = _.bind(script.play[script.play.length-1], script);
+				activator.$inject = $injector.annotate(script.play);
+			}
+
 
 			if (!activator && task.type){
 				activator = self.get(task.type);

@@ -13,6 +13,8 @@ define(function(require){
 	module.provider('taskActivate', require('./taskActivateProvider'));
 	module.directive('piTask', require('./taskDirective'));
 
+	// the tasks defined here essentialy activate the default players for quest/message/pip.
+
 	module.config(['taskActivateProvider', function(activateProvider){
 
 		activateQuest.$inject = ['done', '$element', '$scope', '$compile', 'script'];
@@ -67,7 +69,7 @@ define(function(require){
 			// load PIP
 			req = requirejs.config({
 				context: _.uniqueId(),
-				baseUrl:'../bower_components/PIPlayer/dist/js',
+				baseUrl:'../bower_components/PIPlayer/dist/js', // can't use packages yet as urls in pip aren't relative...
 				paths: {
 					//plugins
 					text: ['//cdnjs.cloudflare.com/ajax/libs/require-text/2.0.3/text.min', "../../../requirejs-text/text"],
@@ -85,7 +87,7 @@ define(function(require){
 			$el = $canvas.contents();
 			$el.addClass('pi-spinner');
 
-			req(['app/activatePIP'], function(activate){
+			req(['activatePIP'], function(activate){
 				$el.removeClass('pi-spinner');
 				activate(script, done);
 			});

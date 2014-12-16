@@ -21,13 +21,25 @@ define(['require','angular','./taskModule'],function(require, angular){
 				expect(spy).toHaveBeenCalled();
 			});
 
-			it('should run a script.play function', function(){
+			it('should run and inject a script.play function', function(){
 				var spy = jasmine.createSpy('task').andCallFake(function(){
 					expect(this).toBe(script);
 				});
 				var script = {play:spy};
-				activate({$script:script}, 'el','scope');
-				expect(spy).toHaveBeenCalled();
+				var task = {$script:script};
+				spy.$inject = ['task'];
+				activate(task, 'el','scope');
+				expect(spy).toHaveBeenCalledWith(task);
+			});
+
+			it('should run and inject a script.play array/function', function(){
+				var spy = jasmine.createSpy('task').andCallFake(function(){
+					expect(this).toBe(script);
+				});
+				var script = {play:['task',spy]};
+				var task = {$script:script};
+				activate(task, 'el','scope');
+				expect(spy).toHaveBeenCalledWith(task);
 			});
 
 			it('should run as script by task.type', function(){
