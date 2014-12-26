@@ -70,8 +70,8 @@ define(function(require){
 				return false;
 			}
 
-			// check if these tags should be logged
-			if (targetTags !== 'all' && !_.intersection(tags, targetTags).length){
+			// check if these tags should be logged (fit targetTags)
+			if (targetTags !== 'all' && !_.intersection(tags, _.isArray(targetTags) ? targetTags : [targetTags]).length){
 				return false;
 			}
 

@@ -38,7 +38,7 @@ define(function(require){
 				log = {};
 				ngModelGet.assign($scope.$parent, log);
 			} else {
-				piConsole(['question']).debug('This question has already been in use: "' + log.name + '"');
+				piConsole(['question']).warn('This question has already been in use: "' + log.name + '"');
 			}
 
 			// expose all the stuff...

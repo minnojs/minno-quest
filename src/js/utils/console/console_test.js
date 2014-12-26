@@ -39,6 +39,27 @@ define(['underscore', './consoleModule'],function(_){
 					expect($console.shouldLog('debug')).not.toBeTruthy();
 				});
 
+				it('should respect settings.tags (String)', function(){
+					$console.settings.tags = 'question';
+
+					$console.tags = ['not question'];
+					expect($console.shouldLog('error')).not.toBeTruthy();
+
+					$console.tags = ['question'];
+					expect($console.shouldLog('error')).toBeTruthy();
+				});
+
+				it('should respect settings.tags (Array)', function(){
+					$console.settings.tags = ['question','manager'];
+
+					$console.tags = ['not question'];
+					expect($console.shouldLog('error')).not.toBeTruthy();
+
+					$console.tags = ['question'];
+					expect($console.shouldLog('error')).toBeTruthy();
+				});
+
+
 				it('should respect tags', function(){
 					$console.settings.tags = ['bling','rocket'];
 
