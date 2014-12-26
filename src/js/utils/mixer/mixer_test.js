@@ -389,7 +389,7 @@ define(['underscore','./mixer-module', 'utils/randomize/randomizeModuleMock'],fu
 					expect(mc({compare:'local.a'})).not.toBeTruthy();
 				});
 
-				it('should support a custom operator', function(){
+				it('should support an operator function', function(){
 					var opSpy = jasmine.createSpy('operator').andCallFake(function(){return true;});
 					expect(mc({
 						compare: 1,
@@ -397,7 +397,14 @@ define(['underscore','./mixer-module', 'utils/randomize/randomizeModuleMock'],fu
 						operator: opSpy
 					})).toBeTruthy();
 
-					expect(opSpy).toHaveBeenCalledWith(1,2);
+					expect(opSpy).toHaveBeenCalledWith(1,2, context);
+				});
+
+				it('should support the whole condition as a function', function(){
+					var opSpy = jasmine.createSpy('operator').andCallFake(function(){return true;});
+					expect(mc(opSpy)).toBeTruthy();
+
+					expect(opSpy).toHaveBeenCalledWith(undefined,undefined, context);
 				});
 
 				it('should support greaterThan', function(){

@@ -539,7 +539,7 @@ var cond = {
 
 Conditions should be treated as a type of equation.
 
-In `compare` and `to` you can use simple values or values that are actually the name of a variable: 
+In the `compare` and `to` properties you can set either straight forward values or references to a variable:
 ```js
 //Compares the variable time to the value 12
 var cond1 = {
@@ -565,6 +565,15 @@ operator 		| The type of comparison to do (read more about operators [here](#ope
 
 You may want to debug conditions by [activating the DEBUG `conditions` setting](#debugging). When activated, then any condition that is evaluated will be logged to the console.
 
+Advanced users may want to replace the whole condition object with a custom function that returns true or false. The context for the function is an object holding the *global*, *current* and *questions* objects.
+
+```js
+function cond(){
+	var global = this.global; // get the global from the context
+	return global.skip;
+}
+```
+
 
 ##### Operators
 The default comparison for a condition is to check equality (supports comparison of objects and arrays too). You can use the `operator` property to change the comparison method. The following checks if var is greater than otherVar:
@@ -584,7 +593,7 @@ exactly 			| Checks if *compare* is exactly equal to *to* (uses ===)
 greaterThan 		| *compare* > *to*
 greaterThanOrEquals | *compare* >= *to*
 in 					| *compare* is in the Array *to*;
-function(){} 		| This operator allows you to use a custom function of the form: `function(compareValue, toValue){return {Boolean}}`
+function(){} 		| This operator allows you to use a custom function of the form: `function(compareValue, toValue, context){return {Boolean}}`. The context is an object holding the *global*, *current* and *questions* objects.
 
 ##### Aggregation
 Sometimes you will want a branch to be activated only if more than one condition is true, or in some other complex specific condition. For cases like this, the mixer supports aggregation. The mixer supports applying logical operations on conditions in the following way:

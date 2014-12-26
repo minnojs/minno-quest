@@ -7,15 +7,22 @@ define(function(require){
 	function mixerConditionProvider(dotNotation, piConsole){
 
 		function mixerCondition(condition, context){
-			// @TODO angular.$parse may be a better candidate for doing this...
-			var left = dotNotation(condition.compare,context);
-			var right = dotNotation(condition.to,context);
-			var operator = condition.operator;
+			var left, right, operator;
+
+			// support a condition that is a plain function
+			if (_.isFunction(condition)){
+				operator = condition;
+			} else {
+				// @TODO angular.$parse may be a better candidate for doing this...
+				left = dotNotation(condition.compare,context);
+				right = dotNotation(condition.to,context);
+				operator = condition.operator;
+			}
 
 			piConsole(['conditions']).info('Condition: ', left, operator || 'equals', right, condition);
 
 			if (_.isFunction(operator)){
-				return !! operator.apply(context,[left, right]);
+				return !! operator.apply(context,[left, right, context]);
 			}
 
 			switch(operator){
