@@ -24,7 +24,8 @@ define(function (require) {
 		var piGlobal = $parse(globalAttr)($window);
 
 		// create the global object
-		$rootScope.global = {};
+		window.piGlobal || (window.piGlobal = {});
+		$rootScope.global = window.piGlobal;
 
 		if (piGlobal){
 			_.extend($rootScope.global, piGlobal);
