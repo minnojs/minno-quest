@@ -1,1 +1,1 @@
-define(["require","angular","./messageDirective","./messageDoneDirective"],function(e){var t=e("angular"),n=t.module("pi.message",[]);return n.directive("piMessage",e("./messageDirective")),n.directive("piMessageDone",e("./messageDoneDirective")),n});
+define(["require","angular","utils/console/consoleModule","./messageDirective","./messageDoneDirective"],function(e){var t=e("angular"),n=t.module("pi.message",[e("utils/console/consoleModule").name]);return n.directive("piMessage",e("./messageDirective")),n.directive("piMessageDone",e("./messageDoneDirective")),n});
