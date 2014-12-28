@@ -12,9 +12,13 @@ define(function (require) {
 				var events = 'keydown';
 				var script = $scope.script;
 				var newScope = $scope.newScope = $scope.$new();
+				var context = {
+					global : $rootScope.global,
+					current : $rootScope.current
+				};
+				var template = _.template(script.$template)(context);
 
-				$scope.global = $rootScope.global;
-				$scope.current = $rootScope.current;
+				_.extend($scope, context);
 				$scope.done = done;
 
 				// listen for events
@@ -23,7 +27,9 @@ define(function (require) {
 					$document.off(events, onKeydown);
 				});
 
-				$element.html(script.$template);
+
+
+				$element.html(template);
 				$compile($element.contents())(newScope);
 
 				// check if the we should proceed and if so call done
