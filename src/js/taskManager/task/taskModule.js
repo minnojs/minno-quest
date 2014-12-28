@@ -83,6 +83,9 @@ define(function(require){
 				deps: ['jquery', 'backbone', 'underscore']
 			});
 
+			// update script name
+			task.name && (script.name = task.name);
+
 			$canvas.append('<div pi-player></div>');
 			$el = $canvas.contents();
 			$el.addClass('pi-spinner');
