@@ -80,5 +80,5 @@ String getBase = getProtocol+"://"+getDomain;
 	<![endif]-->
 	<script language="JavaScript" type="text/javascript" src="/implicit/common/en-us/js/task.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.min.js" data-main="js/bootstrap.js"></script>
-	<script>window.require || document.write('<script src="../bower_components/requirejs/require.js" data-main="js/bootstrap.js"><\/script>');</script>
+	<script>window.require || document.write('<script src="../bower_components/requirejs/require.js" data-main="js/pibootstrap.js"><\/script>');</script>
 </html>

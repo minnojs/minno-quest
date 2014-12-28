@@ -232,16 +232,16 @@ module.exports = function (grunt) {
 		},
 
 		requirejs: {
-			compile: {
+			compile:{
 				options : {
 					// Creates a dist folder with optimized js
 					dir: "dist",
 					appDir: '<%= settings.app %>',
 					baseUrl: 'js',
 					//optimize:'none', // toggle this for fast optimized debuging
-
 					// Tells Require.js to look at main.js for all shim and path configurations
-					mainConfigFile: '<%= settings.app %>/js/bootstrap.js',
+					mainConfigFile: ['<%= settings.app %>/js/config.js'],
+
 					fileExclusionRegExp: /\.(scss|md)$/,
 					paths: {
 						// Libs
@@ -265,9 +265,33 @@ module.exports = function (grunt) {
 						start: '<%= settings.banner.full %>',
 						end: ''
 					},
-					name: 'app',
-					include: ['pipScorer', 'pipAPI','questAPI','managerAPI'],
-					exclude: ['angular']
+
+					modules: [
+						{
+							name: 'bootstrap',
+							include: ['app','pipScorer', 'pipAPI','questAPI','managerAPI'],
+							exclude: ['angular'],
+							override: {
+								paths:{
+									pipAPI: 'pip/API',
+									questAPI: 'quest/API',
+									managerAPI: 'taskManager/API'
+								}
+							}
+						},
+						{
+							name: 'pibootstrap',
+							include: ['app','pipScorer', 'pipAPI','questAPI','managerAPI'],
+							exclude: ['angular'],
+							override: {
+								paths:{
+									pipAPI: 'pi/pipAPI',
+									questAPI: 'pi/questAPI',
+									managerAPI: 'pi/managerAPI'
+								}
+							}
+						}
+					]
 				}
 			}
 		},

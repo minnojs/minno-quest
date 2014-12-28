@@ -1,11 +1,12 @@
 /*jshint unused: vars */
 define(['./config'], function(){
+
 	require.config({
 		paths: {
 			// APIs
-			pipAPI: 'pip/API',
-			questAPI: 'quest/API',
-			managerAPI: 'taskManager/API'
+			pipAPI: 'pi/pipAPI',
+			questAPI: 'pi/questAPI',
+			managerAPI: 'pi/managerAPI'
 		}
 	});
 

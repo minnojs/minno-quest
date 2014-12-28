@@ -1,4 +1,4 @@
-define(['/api/manager/managerAPI.js'], function(Manager){
+define(['managerAPI'], function(Manager){
 
 	var API = new Manager();
 
