@@ -5,18 +5,25 @@ define(function (require) {
 
 	var _ = require('underscore');
 
-	directive.$inject = ['$compile', '$rootScope', '$document'];
-	function directive($compile, $rootScope, $document){
+	directive.$inject = ['$compile', '$rootScope', '$document', 'piConsole'];
+	function directive($compile, $rootScope, $document, $console){
 		return {
 			link: function($scope, $element) {
 				var events = 'keydown';
 				var script = $scope.script;
 				var newScope = $scope.newScope = $scope.$new();
+				var template;
 				var context = {
 					global : $rootScope.global,
 					current : $rootScope.current
 				};
-				var template = _.template(script.$template)(context);
+
+				try {
+					template = _.template(script.$template)(context);
+				} catch(e){
+					template = script.$template;
+					$console('message').error(e);
+				}
 
 				_.extend($scope, context);
 				$scope.done = done;

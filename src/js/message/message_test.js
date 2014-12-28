@@ -27,6 +27,11 @@ define(['angular','./messageModule'], function(angular){
 				expect($element.text()).toBe('test123');
 			}));
 
+			it('should catch _.template errors', function(){
+				$scope.script = {$template:'test<%= current.content%>'};
+				expect(compile).not.toThrow();
+			});
+
 			it('should compile script.$template', function(){
 				$scope.spy = jasmine.createSpy('onCompile');
 				$scope.script.$template = '<div ng-init="spy()"></div>';
