@@ -57,7 +57,7 @@ define(function(require){
 		// load PIP
 		req = requirejs.config({
 			context: _.uniqueId(),
-			baseUrl: baseUrl+'/dist/js/', // can't use packages yet as urls in pip aren't relative...
+			baseUrl: baseUrl+ (isDev ? 'src/js' : '/dist/js/'), // can't use packages yet as urls in pip aren't relative...
 			paths: {
 				//plugins
 				text: ['//cdnjs.cloudflare.com/ajax/libs/require-text/2.0.3/text.min', baseUrl+"/bower_components/requirejs-text/text"],

@@ -46,7 +46,7 @@ define(['/api/manager/questAPI.js'], function(Quest){
 				}
 			]
 		},
-/*
+
 		{
 			prevText: '123',
 			prev:true,
@@ -176,7 +176,7 @@ define(['/api/manager/questAPI.js'], function(Quest){
 				}
 			]
 		}
-*/
+
 	]);
 
 	return API.script;
