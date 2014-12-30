@@ -43,7 +43,7 @@ define(function(require){
 			settings.logger.meta = angular.extend(settings.logger.meta || {}, data);
 		}
 
-		return isDev ? true : $http.post('implicit/PiManager', data);
+		return isDev ? true : $http.post('/implicit/PiManager', data);
 	}
 
 });
