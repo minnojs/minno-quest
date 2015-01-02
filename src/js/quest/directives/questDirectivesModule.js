@@ -26,12 +26,12 @@ define(function(require){
 	module.directive('piQuestValidation', function(){
 		return {
 			replace:true,
-			scope: {valid:'=piQuestValidation'},
-			template: ['<div class="alert alert-danger" role="alert" ng-show="valid">',
+			transclude: true,
+			scope: {unvalid:'=piQuestValidation'},
+			template: ['<div class="alert alert-danger" role="alert" ng-show="unvalid">',
 			  '<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>',
 			  '<span ng-transclude></span>',
-			'</div>'].join(''),
-			transclude: true
+			'</div>'].join('')
 		};
 	});
 

@@ -21,8 +21,7 @@
 			ng-click="submit()"
 			data-role="submit"
 			class="btn btn-primary"
-			ng-class="form"
-			ng-disabled="pageForm.$invalid"
+			ng-class="{form:true}"
 			ng-if="!page.noSubmit"
 		>{{page.submitText || "Submit"}}</button>
 

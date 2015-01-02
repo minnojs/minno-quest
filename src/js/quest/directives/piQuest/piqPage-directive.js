@@ -52,6 +52,10 @@ define(function (require) {
 		$scope.submit = function(skipValidation){
 			var valid = $scope.pageForm.$valid;
 
+			// mark this attempt for submitting
+			// useful for validation...
+			$scope.submitAttempt = true;
+
 			if (!valid && skipValidation !== true){
 				return true;
 			}
