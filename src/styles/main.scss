@@ -1,5 +1,10 @@
 // Core variables and mixins
 @import "bootstrap/variables";
+// set the path to glyphicons
+// http://stackoverflow.com/questions/19446845/how-does-icon-font-path-works-in-bootstrap-scss
+$icon-font-path: "../../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
+
+
 @import "bootstrap/mixins";
 @import "mixins";
 

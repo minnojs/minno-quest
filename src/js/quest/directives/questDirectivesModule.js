@@ -23,6 +23,18 @@ define(function(require){
 	module.directive('questSelectOne',require('./select/selectOneDirective'));
 	module.directive('questSelectMulti',require('./select/selectMultiDirective'));
 
+	module.directive('piQuestValidation', function(){
+		return {
+			replace:true,
+			scope: {valid:'=piQuestValidation'},
+			template: ['<div class="alert alert-danger" role="alert" ng-show="valid">',
+			  '<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>',
+			  '<span ng-transclude></span>',
+			'</div>'].join(''),
+			transclude: true
+		};
+	});
+
 	module.filter('toRegex', ['piConsole', function($console){
 		return toRegex;
 

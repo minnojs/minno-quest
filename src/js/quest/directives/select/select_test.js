@@ -149,6 +149,7 @@ define(['../questDirectivesModule', 'utils/randomize/randomizeModuleMock'], func
 			});
 
 			it('should log before autoSubmit', function () {
+				var submitSpy;
 				compileInput({answers: [1,2,3], autoSubmit: true});
 				submitSpy = jasmine.createSpy('quest:submit:now').andCallFake(function(){
 					expect(log.response).toBe(2);
@@ -160,7 +161,7 @@ define(['../questDirectivesModule', 'utils/randomize/randomizeModuleMock'], func
 
 			it('should support "correct" validation',function(){
 				compileInput({answers: [1,2,3], correct:true, correctValue: 1, errorMsg:{correct: 'correct msg'}});
-				var errorElm = element.find('[ng-show="model.$error.correct"]');
+				var errorElm = element.find('[pi-quest-validation="model.$error.correct"]');
 				expect(errorElm.text()).toBe('correct msg');
 
 				choose(0);
@@ -173,7 +174,7 @@ define(['../questDirectivesModule', 'utils/randomize/randomizeModuleMock'], func
 
 			it('should support "required" validation',function(){
 				compileInput({answers: [1,2,3], required:true, errorMsg:{required: 'required msg'}});
-				var errorElm = element.find('[ng-show="form.$error.required"]');
+				var errorElm = element.find('[pi-quest-validation="form.$error.required"]');
 				expect(errorElm.text()).toBe('required msg');
 
 				expect(element).toBeInvalid();
@@ -276,7 +277,7 @@ define(['../questDirectivesModule', 'utils/randomize/randomizeModuleMock'], func
 
 			it('should support "correct" validation',function(){
 				compileInput({answers: [1,2,3], correct:true, correctValue: 1, errorMsg:{correct: 'correct msg'}});
-				var errorElm = element.find('[ng-show="model.$error.correct"]');
+				var errorElm = element.find('[pi-quest-validation="model.$error.correct"]');
 				expect(errorElm.text()).toBe('correct msg');
 
 				choose(0);
@@ -289,7 +290,7 @@ define(['../questDirectivesModule', 'utils/randomize/randomizeModuleMock'], func
 
 			it('should support "required" validation',function(){
 				compileInput({answers: [1,2,3], required:true, errorMsg:{required: 'required msg'}});
-				var errorElm = element.find('[ng-show="model.$error.required"]');
+				var errorElm = element.find('[pi-quest-validation="model.$error.required"]');
 				expect(errorElm.text()).toBe('required msg');
 
 				expect(element).toBeInvalid();
@@ -363,7 +364,7 @@ define(['../questDirectivesModule', 'utils/randomize/randomizeModuleMock'], func
 
 			it('should support "correct" validation',function(){
 				compileInput({answers: [1,2,3], correct:true, correctValue: [1,2], errorMsg:{correct: 'correct msg'}});
-				var errorElm = element.find('[ng-show="model.$error.correct"]');
+				var errorElm = element.find('[pi-quest-validation="model.$error.correct"]');
 				expect(errorElm.text()).toBe('correct msg');
 
 				choose(0);
@@ -377,7 +378,7 @@ define(['../questDirectivesModule', 'utils/randomize/randomizeModuleMock'], func
 
 			it('should support "required" validation',function(){
 				compileInput({answers: [1,2,3], required:true, errorMsg:{required: 'required msg'}});
-				var errorElm = element.find('[ng-show="model.$error.required"]');
+				var errorElm = element.find('[pi-quest-validation="model.$error.required"]');
 				expect(errorElm.text()).toBe('required msg');
 
 				expect(element).toBeInvalid();
@@ -402,7 +403,4 @@ define(['../questDirectivesModule', 'utils/randomize/randomizeModuleMock'], func
 		});
 
 	});
-
-
-
 });

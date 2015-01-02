@@ -69,7 +69,7 @@ define(['underscore','../questDirectivesModule'], function(_){
 
 		it('should support required',function(){
 			compile({required:true, errorMsg:{required: 'required msg'}});
-			var errorElm = formElm.find('[ng-show="form.$error.required"]');
+			var errorElm = formElm.find('[pi-quest-validation="form.$error.required"]');
 			expect(errorElm.text()).toBe('required msg');
 
 			expect(formElm).toBeInvalid();
@@ -86,7 +86,7 @@ define(['underscore','../questDirectivesModule'], function(_){
 
 		it('should support maxlength',function(){
 			compile({maxlength:5, errorMsg:{maxlength: 'maxlength msg'}});
-			var errorElm = formElm.find('[ng-show="form.$error.maxlength"]');
+			var errorElm = formElm.find('[pi-quest-validation="form.$error.maxlength"]');
 			expect(errorElm.text()).toBe('maxlength msg');
 
 			changeInputValueTo('aaa');
@@ -99,7 +99,7 @@ define(['underscore','../questDirectivesModule'], function(_){
 
 		it('should support minlength',function(){
 			compile({minlength:5, errorMsg:{minlength: 'minlength msg'}});
-			var errorElm = formElm.find('[ng-show="form.$error.minlength"]');
+			var errorElm = formElm.find('[pi-quest-validation="form.$error.minlength"]');
 			expect(errorElm.text()).toBe('minlength msg');
 
 			changeInputValueTo('aaaaaaa');
@@ -112,7 +112,7 @@ define(['underscore','../questDirectivesModule'], function(_){
 
 		it('should support correct validation',function(){
 			compile({correct:true, correctValue: 123, errorMsg:{correct: 'correct msg'}});
-			var errorElm = formElm.find('[ng-show="model.$error.correct"]');
+			var errorElm = formElm.find('[pi-quest-validation="model.$error.correct"]');
 			expect(errorElm.text()).toBe('correct msg');
 
 			changeInputValueTo('123');
@@ -125,7 +125,7 @@ define(['underscore','../questDirectivesModule'], function(_){
 
 		it('should support pattern regex',function(){
 			compile({pattern:/^\d\d\d-\d\d-\d\d\d\d$/, errorMsg:{pattern: 'pattern msg'}});
-			var errorElm = formElm.find('[ng-show="form.$error.pattern"]');
+			var errorElm = formElm.find('[pi-quest-validation="form.$error.pattern"]');
 			expect(errorElm.text()).toBe('pattern msg');
 
 			changeInputValueTo('x000-00-0000x');
@@ -147,7 +147,7 @@ define(['underscore','../questDirectivesModule'], function(_){
 
 		it('should support pattern string',function(){
 			compile({pattern:"^\\d\\d\\d-\\d\\d-\\d\\d\\d\\d$", errorMsg:{pattern: 'pattern msg'}});
-			var errorElm = formElm.find('[ng-show="form.$error.pattern"]');
+			var errorElm = formElm.find('[pi-quest-validation="form.$error.pattern"]');
 			expect(errorElm.text()).toBe('pattern msg');
 
 			changeInputValueTo('x000-00-0000x');

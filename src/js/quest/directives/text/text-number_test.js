@@ -71,7 +71,7 @@ define(['../questDirectivesModule'],function(){
 
 		it('should support required',function(){
 			compile({required:true, errorMsg:{required: 'required msg'}});
-			var errorElm = formElm.find('[ng-show="form.$error.required"]');
+			var errorElm = formElm.find('[pi-quest-validation="form.$error.required"]');
 			expect(errorElm.text()).toBe('required msg');
 
 			expect(formElm).toBeInvalid();
@@ -87,7 +87,7 @@ define(['../questDirectivesModule'],function(){
 
 		it('should support max',function(){
 			compile({max:5, errorMsg:{max: 'max msg'}});
-			var errorElm = formElm.find('[ng-show="form.$error.max"]');
+			var errorElm = formElm.find('[pi-quest-validation="form.$error.max"]');
 			expect(errorElm.text()).toBe('max msg');
 
 			changeInputValueTo(3);
@@ -100,7 +100,7 @@ define(['../questDirectivesModule'],function(){
 
 		it('should support min',function(){
 			compile({min:5, errorMsg:{min: 'min msg'}});
-			var errorElm = formElm.find('[ng-show="form.$error.min"]');
+			var errorElm = formElm.find('[pi-quest-validation="form.$error.min"]');
 			expect(errorElm.text()).toBe('min msg');
 
 			changeInputValueTo(7);
@@ -113,7 +113,7 @@ define(['../questDirectivesModule'],function(){
 
 		it('should support correct validation',function(){
 			compile({correct:true, correctValue: 123, errorMsg:{correct: 'correct msg'}});
-			var errorElm = formElm.find('[ng-show="model.$error.correct"]');
+			var errorElm = formElm.find('[pi-quest-validation="model.$error.correct"]');
 			expect(errorElm.text()).toBe('correct msg');
 
 			changeInputValueTo('123');
