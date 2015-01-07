@@ -120,9 +120,6 @@ define(function(require){
 			log.declined = undefined;
 			log.submitLatency = self.stopper.now();
 		});
-
-		// $scope.$on('$destroy', function(a,b){
-		// })
 	}
 
 	return questController;

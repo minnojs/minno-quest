@@ -65,23 +65,33 @@ define(['underscore','../questDirectivesModule'], function(_){
 			expect(inputElm.val()).toBe('0');
 		});
 
+		describe(': required validation', function(){
+			var errorElm;
+			beforeEach(function(){
+				compile({required:true, errorMsg:{required: 'required msg'}});
+				errorElm = formElm.find('[pi-quest-validation="form.$error.required && $parent.$parent.submitAttempt"]');
+			});
 
+			it('should be valid at the begining', function(){
+				// expect(formElm).toBeValid(); // this isn't true because of the way angular works. The input truly isn't valid...
+				expect(errorElm).not.toBeShown();
 
-		it('should support required',function(){
-			compile({required:true, errorMsg:{required: 'required msg'}});
-			var errorElm = formElm.find('[pi-quest-validation="form.$error.required"]');
-			expect(errorElm.text()).toBe('required msg');
+			});
 
-			expect(formElm).toBeInvalid();
-			expect(errorElm).toBeShown();
+			it('should invalidate after "submitAttempt"', function(){
+				scope.$parent.submitAttempt = true;
+				scope.$digest();
+				expect(formElm).toBeInvalid();
+				expect(errorElm).toBeShown();
+			});
 
-
-			changeInputValueTo('hello');
-			expect(formElm).toBeValid();
-			expect(errorElm).toBeHidden();
-
-			changeInputValueTo('');
-			expect(formElm).toBeInvalid();
+			it('should be valid if there is any input', function(){
+				scope.$parent.submitAttempt = true;
+				scope.$digest();
+				changeInputValueTo('hello');
+				expect(formElm).toBeValid();
+				expect(errorElm).toBeHidden();
+			});
 		});
 
 		it('should support maxlength',function(){
