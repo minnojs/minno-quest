@@ -34,7 +34,7 @@ define(function(require){
 	 */
 	function onPreTask(currentTask, $http){
 		var settings;
-		var data = {taskName: currentTask.name, taskNumber: currentTask.$meta.number};
+		var data = {taskName: currentTask.name || 'namelessTask', taskNumber: currentTask.$meta.number};
 
 		// add logging meta
 		if (currentTask.type == 'quest' || currentTask.type == 'pip'){
