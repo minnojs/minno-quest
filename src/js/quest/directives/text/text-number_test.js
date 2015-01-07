@@ -109,7 +109,7 @@ define(['../questDirectivesModule'],function(){
 
 		it('should support max',function(){
 			compile({max:5, errorMsg:{max: 'max msg'}});
-			var errorElm = formElm.find('[pi-quest-validation="form.$error.max"]');
+			var errorElm = formElm.find('[pi-quest-validation="form.$error.qstMax"]');
 			expect(errorElm.text()).toBe('max msg');
 
 			changeInputValueTo(3);
@@ -118,11 +118,12 @@ define(['../questDirectivesModule'],function(){
 
 			changeInputValueTo(7);
 			expect(formElm).toBeInvalid();
+			expect(errorElm).toBeShown();
 		});
 
 		it('should support min',function(){
 			compile({min:5, errorMsg:{min: 'min msg'}});
-			var errorElm = formElm.find('[pi-quest-validation="form.$error.min"]');
+			var errorElm = formElm.find('[pi-quest-validation="form.$error.qstMin"]');
 			expect(errorElm.text()).toBe('min msg');
 
 			changeInputValueTo(7);
@@ -131,6 +132,7 @@ define(['../questDirectivesModule'],function(){
 
 			changeInputValueTo(3);
 			expect(formElm).toBeInvalid();
+			expect(errorElm).toBeShown();
 		});
 
 		it('should support correct validation',function(){

@@ -3,10 +3,11 @@
 	 	type="number"
 		ng-model="response"
 		ng-required="{{data.required}}"
+		class="form-control"
 	>
 	<div pi-quest-validation="form.$error.number">{{data.errorMsg.number || "Must be a number!"}}</div>
-	<div pi-quest-validation="form.$error.min">{{data.errorMsg.min || "Too small!"}}</div>
-	<div pi-quest-validation="form.$error.max">{{data.errorMsg.max || "Too big!"}}</div>
+	<div pi-quest-validation="form.$error.qstMin">{{data.errorMsg.min || "Too small!"}}</div>
+	<div pi-quest-validation="form.$error.qstMax">{{data.errorMsg.max || "Too big!"}}</div>
 	<div pi-quest-validation="form.$error.required && $parent.$parent.submitAttempt">{{data.errorMsg.required || "This field is required!"}}</div>
 	<div pi-quest-validation="model.$error.correct">{{data.errorMsg.correct || "You must answer the correct answer!"}}</div>
 </div>
