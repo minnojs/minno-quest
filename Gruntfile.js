@@ -242,7 +242,7 @@ module.exports = function (grunt) {
 					// Tells Require.js to look at main.js for all shim and path configurations
 					mainConfigFile: ['<%= settings.app %>/js/config.js'],
 
-					fileExclusionRegExp: /\.(scss|md)$/,
+					fileExclusionRegExp: /(\.scss|\.md|_test\.js)$/,
 					paths: {
 						// Libs
 						jquery: 'empty:',
