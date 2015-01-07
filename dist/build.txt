@@ -71,6 +71,9 @@ js/message/messageModule.js
 js/taskManager/task/taskActivateProvider.js
 js/taskManager/task/taskDirective.js
 js/taskManager/task/taskModule.js
+js/taskManager/canvas/canvasConstructor.js
+js/taskManager/canvas/managerCanvasService.js
+js/taskManager/canvas/canvasModule.js
 js/utils/helperDirectives/piSwap/piSwapDirective.js
 text!utils/helperDirectives/piSpinner/spinner.html
 js/utils/helperDirectives/piSpinner/piSpinnerDirective.js
@@ -162,6 +165,9 @@ js/message/messageModule.js
 js/taskManager/task/taskActivateProvider.js
 js/taskManager/task/taskDirective.js
 js/taskManager/task/taskModule.js
+js/taskManager/canvas/canvasConstructor.js
+js/taskManager/canvas/managerCanvasService.js
+js/taskManager/canvas/canvasModule.js
 js/utils/helperDirectives/piSwap/piSwapDirective.js
 text!utils/helperDirectives/piSpinner/spinner.html
 js/utils/helperDirectives/piSpinner/piSpinnerDirective.js

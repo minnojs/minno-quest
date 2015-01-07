@@ -1,0 +1,1 @@
+define(["require","angular","./managerCanvasService"],function(e){var t=e("angular"),n=t.module("pi.canvas",[]);return n.service("managerCanvas",e("./managerCanvasService")),n});

@@ -4,6 +4,7 @@
 		ng-options="answer.value as answer.text group by answer.group for answer in quest.answers"
 		ng-required="data.required"
 		ng-change="data.autoSubmit && autoSubmit($event)"
+		class="form-control"
 		>
 		<option value="">{{chooseText || "-- Choose an option --"}}</option>
 	</select>
