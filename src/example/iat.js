@@ -1,4 +1,4 @@
-define(['/api/manager/pipAPI.js','pipScorer'], function(APIConstructor,Scorer) {
+define(['pipAPI','pipScorer'], function(APIConstructor,Scorer) {
 // This wrapper is neccesary in order to activate the API
 
 	var API = new APIConstructor();

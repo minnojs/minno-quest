@@ -9,8 +9,8 @@ define(function(require){
 		var $body = angular.element($document[0].body);
 
 		var map = {
-			backgroundColor 	: {element: $body, property: 'backgroundColor'},
-			canvasColor 		: {element: $rootElement, property:'backgroundColor'},
+			background 			: {element: $body, property: 'backgroundColor'},
+			canvasBackground	: {element: $rootElement, property:'backgroundColor'},
 			fontSize 			: {element: $rootElement, property:'fontSize'},
 			fontColor 			: {element: $rootElement, property:'color'}
 		};

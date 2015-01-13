@@ -80,13 +80,13 @@ define(function(require){
 				canvas = managerCanvas;
 			}));
 
-			it('should apply backgroundColor', function(){
-				canvas({backgroundColor:'red'});
+			it('should apply background', function(){
+				canvas({background:'red'});
 				expect(redArr).toContain($body.css('backgroundColor'));
 			});
 
-			it('should apply canvasColor', function(){
-				canvas({canvasColor:'red'});
+			it('should apply canvasBackground', function(){
+				canvas({canvasBackground:'red'});
 				expect(redArr).toContain($root.css('backgroundColor'));
 			});
 

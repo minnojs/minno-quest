@@ -15,12 +15,12 @@ function onEnd($rootScope){
 ##### canvas
 `canvas` takes an object that describes the style of the task environment. Each property of the object changes a different style element.
 
-Property        | Changes
--------         | -----------
-backgroundColor | The overall background color.
-canvasColor     | Default font color.
-fontSize        | Default font size.
-fontColor       | Default font color.
+Property            | Changes
+-------             | -----------
+background          | The overall background color.
+canvasBackground    | Default canvas background color.
+fontColor           | Default font color.
+fontSize            | Default font size.
 
 In case you need to fine tune the styles even further you can add css rules into the raw HTML. Support for dynamically adding CSS is planned but not yet supported.
 
