@@ -8,7 +8,7 @@ define(['require','./managerModule'], function(require){
 		 * The provider responsible for the relationship between the sequence and the directive.
 		 */
 		describe('managerService', function(){
-			var manager, $scope, loadedQ;
+			var manager, $scope, loadedQ, canvasOff;
 
 			beforeEach(module(function($provide){
 				$provide.service('managerTaskLoad', function($q){
@@ -23,6 +23,10 @@ define(['require','./managerModule'], function(require){
 					this.prev = jasmine.createSpy('prev');
 					this.current = jasmine.createSpy('current');
 				});
+
+				$provide.value('managerCanvas', jasmine.createSpy('canvas').andCallFake(function(){
+					return (canvasOff = jasmine.createSpy('canvasOff'));
+				}));
 			}));
 
 			beforeEach(inject(function($rootScope, managerService){
@@ -37,6 +41,15 @@ define(['require','./managerModule'], function(require){
 			it('should create a sequence', inject(function(managerSequence){
 				expect(manager.sequence).toEqual(jasmine.any(managerSequence));
 			}));
+
+			it('should activate canvas', inject(function(managerCanvas){
+				expect(managerCanvas).toHaveBeenCalled();
+			}));
+
+			it('should remove canvas on $destroy', function(){
+				$scope.$destroy();
+				expect(canvasOff).toHaveBeenCalled();
+			});
 
 			it('should call next on manager:next', function(){
 				spyOn(manager, 'next');

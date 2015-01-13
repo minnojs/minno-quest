@@ -1,8 +1,8 @@
 define(function(require){
 	var _ = require('underscore');
 
-	managerService.$inject = ['$rootScope', '$q', 'managerSequence', 'managerTaskLoad'];
-	function managerService($rootScope, $q, ManagerSequence, taskLoad){
+	managerService.$inject = ['$rootScope', '$q', 'managerSequence', 'managerTaskLoad', 'managerCanvas'];
+	function managerService($rootScope, $q, ManagerSequence, taskLoad, canvas){
 
 		/**
 		 * This is the constructor for the manager object.
@@ -21,6 +21,8 @@ define(function(require){
 		 */
 		function manager($scope, script){
 			var self = this;
+			var canvasOff;
+
 			// make sure this works without a new statement
 			if (!(this instanceof manager)){
 				// jshint newcap:false
@@ -31,11 +33,14 @@ define(function(require){
 			this.$scope = $scope;
 			this.script = script;
 
+			canvasOff = canvas(script.settings && script.settings.canvas);
+
 			// create sequence
 			this.sequence = new ManagerSequence(script);
 
 			$scope.$on('manager:next', function(){self.next();});
 			$scope.$on('manager:prev', function(){self.prev();});
+			$scope.$on('$destroy', canvasOff);
 		}
 
 		_.extend(manager.prototype, {
