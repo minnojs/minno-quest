@@ -4,7 +4,7 @@ define(function(require){
 	var angular = require('angular');
 	var canvasConstructor = require('./canvasConstructor');
 
-
+	managerCanvasService.$inject = ['$rootElement', '$document'];
 	function managerCanvasService($rootElement, $document){
 		var $body = angular.element($document[0].body);
 
