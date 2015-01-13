@@ -3,6 +3,7 @@ define(function(require){
 	require('./canvasModule');
 	var canvasConstructor = require('./canvasConstructor');
 	var jqLite = require('angular').element;
+	var _ = require('underscore');
 
 	describe('canvas', function(){
 
@@ -14,7 +15,11 @@ define(function(require){
 				}).toThrow();
 			});
 
-			it('should throw if settings is not set', function(){
+			it('should return noop if settings is undefined', function(){
+				expect(canvasConstructor({}, undefined)).toBe(_.noop);
+			});
+
+			it('should throw if settings is not a plain object', function(){
 				expect(function(){
 					canvasConstructor({}, null);
 				}).toThrow();

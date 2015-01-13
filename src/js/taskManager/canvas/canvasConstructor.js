@@ -24,6 +24,12 @@ define(function(require){
 			throw new Error('canvas(map): You must set a rule map for canvas to work properly');
 		}
 
+		// if settings is undefined return a function that doesn't do anything
+		// just so we don't need to make sure that the user modifies the canvas
+		if (_.isUndefined(settings)){
+			return _.noop;
+		}
+
 		if (!_.isPlainObject(settings)){
 			throw new Error('canvas(settings): canvas settings must be an object');
 		}
@@ -38,7 +44,7 @@ define(function(require){
 			}
 		});
 
-		return function done(){
+		return function off(){
 			_.forEach(offArr, function(fn){fn.call();});
 		};
 	}

@@ -146,6 +146,14 @@ define(['require','angular','./taskModule'],function(require, angular){
 				$rootScope.$digest();
 				expect(spy).toHaveBeenCalled();
 			}));
+
+			it('should activate canvas before task', function(){
+
+			});
+
+			it('should deactivate canvas at the end of the task', function(){
+
+			});
 		});
 
 	});

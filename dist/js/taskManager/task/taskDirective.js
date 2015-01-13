@@ -1,1 +1,1 @@
-define([],function(){function e(e){return{scope:{task:"=piTask"},link:function(t,n){var r=t.task;if(!r)return;e(r,n,t.$new())["finally"](function(){t.$emit("task:done",arguments)})}}}return e.$inject=["taskActivate"],e});
+define([],function(){function e(e,t){return{scope:{task:"=piTask"},link:function(n,r){var i=n.task,s;if(!i)return;s=t(i.canvas),e(i,r,n.$new())["finally"](s)["finally"](function(){n.$emit("task:done",arguments)})}}}return e.$inject=["taskActivate","managerCanvas"],e});
