@@ -5,6 +5,8 @@ define(function(require){
 	var jqLite = require('angular').element;
 	var _ = require('underscore');
 
+	var redArr = ['rgb(255, 0, 0)', 'rgb(255,0,0)', '#ff0000','red']; // different browsers set colors differently, so when testing we need to compare to any of these.
+
 	describe('canvas', function(){
 
 		describe('constructor', function(){
@@ -35,15 +37,15 @@ define(function(require){
 				var $el = jqLite('<div>');
 				var rule = {element:$el, property:'color'};
 				canvasConstructor({test:rule}, {test:'red'});
-				expect($el.css('color')).toBe('red');
+				expect(redArr).toContain($el.css('color'));
 			});
 
 			it('should remove the rule when the cb is called', function(){
-				var $el = jqLite('<div>').css('color','green');
+				var $el = jqLite('<div>').css('color','red');
 				var rule = {element:$el, property:'color'};
-				var off = canvasConstructor({test:rule}, {test:'red'});
+				var off = canvasConstructor({test:rule}, {test:'green'});
 				off.apply();
-				expect($el.css('color')).toBe('green');
+				expect(redArr).toContain($el.css('color'));
 			});
 
 			it('should remove all rules when cb is called', function(){
@@ -68,6 +70,7 @@ define(function(require){
 		describe('service', function(){
 			var $root, $body, canvas;
 
+
 			beforeEach(module('pi.canvas'));
 
 			beforeEach(inject(function($rootElement, $document, managerCanvas){
@@ -78,24 +81,23 @@ define(function(require){
 			}));
 
 			it('should apply backgroundColor', function(){
-				// just for testing purposes we need this to be rgb
-				canvas({backgroundColor:'rgb(255, 0, 0)'});
-				expect($body.css('backgroundColor')).toBe('rgb(255, 0, 0)');
+				canvas({backgroundColor:'red'});
+				expect(redArr).toContain($body.css('backgroundColor'));
 			});
 
 			it('should apply canvasColor', function(){
 				canvas({canvasColor:'red'});
-				expect($root.css('background')).toBe('red');
+				expect(redArr).toContain($root.css('backgroundColor'));
 			});
 
 			it('should apply fontSize', function(){
-				canvas({fontSize:'3em'});
-				expect($root.css('fontSize')).toBe('3em');
+				canvas({fontSize:'48px'});
+				expect($root.css('fontSize')).toBe('48px');
 			});
 
 			it('should apply fontColor', function(){
 				canvas({fontColor:'red'});
-				expect($root.css('color')).toBe('red');
+				expect(redArr).toContain($root.css('color'));
 			});
 		});
 
