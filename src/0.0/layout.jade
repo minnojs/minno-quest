@@ -1,0 +1,51 @@
+doctype html
+html(lang="en")
+
+html
+
+	head
+		title=title||'Project Implicit'
+		meta(http-equiv="X-UA-Compatible" content="IE=edge,chrome=1")
+		meta(charset='utf-8')
+		meta(name='viewport', content='width=device-width, initial-scale=1.0')
+
+		link(rel='stylesheet', href='//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css')
+		link(rel='stylesheet', href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/sunburst.min.css')
+
+		style.
+			div#main {padding-top:50px}
+			.sidenav {background-color: #F7F5FA;border-radius: 5px;margin-bottom: 30px;margin-top: 30px;padding-bottom: 10px;padding-top: 10px;text-shadow: 0 1px 0 #FFFFFF;}
+			.sidenav.nav li > a {color: #999999;display: block;font-size: 13px;font-weight: 600;padding: 5px 20px;}
+			.sidenav.nav li > a:hover {text-decoration:none;color: #563D7C;}
+			.sidenav.nav .nav > li > a {font-weight: 500; padding: 3px 0px 3px 30px}
+
+			.sidenav.nav .nav > li > div {padding:3px 0px 3px 30px; font-weight: 500;}
+			.sidenav.nav .nav > li > div a {color: #999999; margin-right: 5px;}
+			.sidenav.nav .nav > li > div a:hover {text-decoration:none;color: #563D7C;}
+
+			/* just fill in for .hljs that the highlighter does not add... */
+			pre code{display:block;overflow-x:auto;padding:0.5em;background:#000;color:#f8f8f8;-webkit-text-size-adjust:none}
+
+		block head
+
+	body
+		nav.navbar.navbar-inverse.navbar-fixed-top(role="navigation")
+			div.container
+				div.navbar-header
+					button.navbar-toggle(type="button" data-toggle="collapse" data-target="#navbar")
+						span.sr-only Toggle navigation
+						span.icon-bar
+						span.icon-bar
+						span.icon-bar
+					a.navbar-brand(href="https://github.com/ProjectImplicit/PIquest") PI tasks
+
+				nav#navbar.navbar-collapse.bs-navbar-collapse(role="navigation")
+					ul.nav.navbar-nav
+						li: a(href="overview.html") piQuest
+						//li: a(href="overview.html") piManager
+
+					ul.nav.navbar-nav.navbar-right
+						li: a(href="about.html") About
+
+		div#main.container
+			block content

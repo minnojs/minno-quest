@@ -1,0 +1,1 @@
+define(["require","angular","./piSwap/piSwapDirective","./piSpinner/piSpinnerDirective"],function(e){var t=e("angular"),n=t.module("piHelperDirective",[]);return n.directive("piSwap",e("./piSwap/piSwapDirective")),n.directive("piSpinner",e("./piSpinner/piSpinnerDirective")),n});

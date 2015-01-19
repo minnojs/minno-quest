@@ -1,0 +1,1 @@
+define(["require","underscore"],function(e){function n(e,n){return t.isString(e)&&(e=e.split(".")),t.reduce(e,function(e,n){return t.isPlainObject(e)||t.isArray(e)?e[n]:undefined},n)}var t=e("underscore");return n});

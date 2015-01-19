@@ -1,0 +1,20 @@
+{
+  "name": "piqDocs",
+  "version": "0.0.0",
+  "authors": [
+    "eladzlot <eladzlot@gmail.com>"
+  ],
+  "description": "Documentation for piQuest and piManager",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "piquest": "https://github.com/ProjectImplicit/PIquest.git#~0.0.24"
+  }
+}

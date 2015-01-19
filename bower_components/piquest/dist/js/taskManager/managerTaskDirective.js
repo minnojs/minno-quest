@@ -1,0 +1,1 @@
+define([],function(){function e(){return{priority:1e3,template:'<div pi-manager="script"></div>',compile:function(){return{pre:function(e,t,n){var r,i=n.piManagerTask;try{r=e.$eval(i)}catch(s){}var o=r?r:{scriptUrl:i};e.script={sequence:[o]}}}}}}return e});

@@ -1,0 +1,1 @@
+define(["require","underscore"],function(e){function n(e){function n(r,i,s){var o,u=r[0];s=s||0;if(s++>=10)throw new Error("Mixer: the mixer allows a maximum depth of 10");return t.isUndefined(u.mixer)?r:(o=e(u,i),r.shift(),o=o.concat(r),t.isUndefined(o[0])||t.isUndefined(o[0].mixer)?o:n(o,i,s))}return n}var t=e("underscore");return n.$inject=["mixer"],n});

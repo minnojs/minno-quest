@@ -1,0 +1,950 @@
+<!DOCTYPE html><html lang="en"></html><html><head><title>Project Implicit</title><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/sunburst.min.css"><style>div#main {padding-top:50px}
+.sidenav {background-color: #F7F5FA;border-radius: 5px;margin-bottom: 30px;margin-top: 30px;padding-bottom: 10px;padding-top: 10px;text-shadow: 0 1px 0 #FFFFFF;}
+.sidenav.nav li > a {color: #999999;display: block;font-size: 13px;font-weight: 600;padding: 5px 20px;}
+.sidenav.nav li > a:hover {text-decoration:none;color: #563D7C;}
+.sidenav.nav .nav > li > a {font-weight: 500; padding: 3px 0px 3px 30px}
+
+.sidenav.nav .nav > li > div {padding:3px 0px 3px 30px; font-weight: 500;}
+.sidenav.nav .nav > li > div a {color: #999999; margin-right: 5px;}
+.sidenav.nav .nav > li > div a:hover {text-decoration:none;color: #563D7C;}
+
+/* just fill in for .hljs that the highlighter does not add... */
+pre code{display:block;overflow-x:auto;padding:0.5em;background:#000;color:#f8f8f8;-webkit-text-size-adjust:none}
+</style></head><body><nav role="navigation" class="navbar navbar-inverse navbar-fixed-top"><div class="container"><div class="navbar-header"><button type="button" data-toggle="collapse" data-target="#navbar" class="navbar-toggle"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="https://github.com/ProjectImplicit/PIquest" class="navbar-brand">PI tasks</a></div><nav id="navbar" role="navigation" class="navbar-collapse bs-navbar-collapse"><ul class="nav navbar-nav"><li><a href="overview.html">piQuest</a></li><!--li: a(href="overview.html") piManager--></ul><ul class="nav navbar-nav navbar-right"><li><a href="about.html">About</a></li></ul></nav></div></nav><div id="main" class="container"><div class="row"><div class="col-md-3"><ul class="nav affix-top sidenav"><li><a href="./overview.html">Overview</a></li><li><a href="./API.html">API</a></li><li><a href="./helloworld.html">Hello world</a></li><li><a href="./tutorial.html">Tutorial</a></li><li><a href="javascript:void(0)">Examples</a><ul class="nav"><li><div><a href="scripts/helloworld.js" target="_blank" title="View">Hello World</a><a href="scripts/helloworld.html" target="_blank" title="Play"><span class="glyphicon glyphicon-play"></span></a><a href="scripts/helloworld.js" download="helloworld.js" title="Download"><span class="glyphicon glyphicon-download"></span></a></div></li><li><div><a href="scripts/weight.js" target="_blank" title="View">Weight Demo</a><a href="scripts/weight.html" target="_blank" title="Play"><span class="glyphicon glyphicon-play"></span></a><a href="scripts/weight.js" download="weight.js" title="Download"><span class="glyphicon glyphicon-download"></span></a></div></li></ul></li></ul></div><div class="col-md-9"><h2 id="api">API</h2>
+<h3 id="table-of-contents">Table of contents</h3>
+<ul>
+<li><a href="#pages">Pages</a></li>
+<li><a href="#questions">Questions</a><ul>
+<li><a href="#text">text</a></li>
+<li><a href="#textnumber">textNumber</a></li>
+<li><a href="#select">select</a></li>
+<li><a href="#selectone-selectmulti">selectOne &amp; selectMulti</a></li>
+</ul>
+</li>
+<li><a href="#settings">Settings</a><ul>
+<li><a href="#onend">onEnd</a></li>
+<li><a href="#logger">logger</a></li>
+<li><a href="#debugging">Debugging</a></li>
+</ul>
+</li>
+<li><a href="#making-your-questionnaire-dynamic">Making your questionnaire Dynamic</a><ul>
+<li><a href="#mixer">The mixer </a><ul>
+<li><a href="#mixer-types">Mixer types</a></li>
+<li><a href="#conditions">Conditions</a></li>
+<li><a href="#operators">Operators</a></li>
+<li><a href="#aggregation">Aggregation</a></li>
+</ul>
+</li>
+<li><a href="#variables">Variables</a></li>
+<li><a href="#templates">Templates</a></li>
+<li><a href="#inheritance">Inheritance </a></li>
+</ul>
+</li>
+<li><a href="#development">Development</a></li>
+</ul>
+<h3 id="pages">Pages</h3>
+<p>The basic unit in PIquest is the <strong>page</strong>. A page is usually one screen in your questionnaire. If your questionnaire presents all its questions in one screen, it will probably have only one page. The properties within a page manage how the question(s) is(are) displayed and how the participants interact with it (e.g., select an answer and then click a submit button).</p>
+<table>
+<thead>
+<tr>
+<th>property</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td>(text) The identifier for this page, is used mainly for logging</td>
+</tr>
+<tr>
+<td>decline</td>
+<td>(true or false) Whether to allow participants decline to answer the questions on this page. This option displays a &quot;decline&quot; button that proceeds to the next page without validation and marks this response as &quot;declined&quot; (default value: false).</td>
+</tr>
+<tr>
+<td>declineText</td>
+<td>(text) The text for the decline button (default value: &quot;Decline to answer&quot;)</td>
+</tr>
+<tr>
+<td>prev</td>
+<td>(true or false) Whether to allow users to return to the previous page. The previous button does not appear on the first page (default value: false).</td>
+</tr>
+<tr>
+<td>prevText</td>
+<td>(text) The text for the previous button (default value: &quot;Go Back&quot;)</td>
+</tr>
+<tr>
+<td>noSubmit</td>
+<td>(true of false) remove submit button (useful when using the &#39;autoSubmit&#39; function of some questions; default value: false).</td>
+</tr>
+<tr>
+<td>submitText</td>
+<td>(text) The text of the submit button (default: &quot;Submit&quot;).</td>
+</tr>
+<tr>
+<td>header</td>
+<td>(text) Text for the page header.</td>
+</tr>
+<tr>
+<td>headerStyle</td>
+<td>(Object) An object to set the style of the header (has most css properties; see examples below).</td>
+</tr>
+<tr>
+<td>progressBar</td>
+<td>(text) Text for the progress bar (You might want to use a template for this, maybe something like: <code>&lt;%= pagesMeta.number %&gt; out of &lt;%= pagesMeta.outOf%&gt;</code>.).</td>
+</tr>
+<tr>
+<td>numbered</td>
+<td>(true of false) Whether to  display the number of each question (default value: false).</td>
+</tr>
+<tr>
+<td>numberStart</td>
+<td>(Number) The number for the first question in the page (default: 1).</td>
+</tr>
+<tr>
+<td>timeout</td>
+<td>(Number) If this is set to a positive integer <em>x</em>, the page auto-submits after <em>x</em> milliseconds (no validation allowed).</td>
+</tr>
+<tr>
+<td>timeoutMessage</td>
+<td>(text) An optional message to be displayed upon timeout. (default: &quot;&quot;)</td>
+</tr>
+<tr>
+<td>questions</td>
+<td>(Array or Object) an array of <a href="#questions">questions</a> to be displayed in the page. Note that the questions may be randomized and chosen conditionally using a <a href="#mixer">mixer</a>. This property also accepts a single question object if you want to present only a single question per page.</td>
+</tr>
+<tr>
+<td>lognow</td>
+<td>(true or false) Whether to log the questions on this page. This option is useful when you know that the page will not be accessed any more. It allows you to use the <code>pulse</code> option from the <a href="#logger">logger</a> to send questions as they are being answered instead of sending only at the end of the task. (default: false)</td>
+</tr>
+<tr>
+<td>animate</td>
+<td>(text) What types of animation to use when this page enters and leaves the screen. We currently support three animations: fade, slide, and drop-in. You can use any and all of them by adding them to the string (for example: &quot;slide fade&quot; will activate both of these animations).</td>
+</tr>
+</tbody>
+</table>
+<p>For example, a page can look something like this:</p>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> page = {
+    header: <span class="hljs-symbol">'Personal</span> information:',
+    headerStyle: {<span class="hljs-symbol">'background</span>-color':<span class="hljs-symbol">'re</span>d',color:<span class="hljs-symbol">'blu</span>e'},
+    decline: <span class="hljs-literal">true</span>,
+    declineText: <span class="hljs-symbol">'I</span> prefer to keep <span class="hljs-keyword">this</span> information to myself',
+    questions: [
+        {<span class="hljs-class"><span class="hljs-keyword">type</span>:</span><span class="hljs-symbol">'tex</span>t', stem:<span class="hljs-symbol">'What</span> is your name?'},
+        {<span class="hljs-class"><span class="hljs-keyword">type</span>:</span><span class="hljs-symbol">'tex</span>t', stem:<span class="hljs-symbol">'Where</span> do you live?'}
+    ]
+}
+</code></pre>
+<h3 id="questions">Questions</h3>
+<p>Here are the types of questions PIQuest currently supports:</p>
+<ul>
+<li><a href="#text">text</a></li>
+<li><a href="#textNumber">textNumber</a></li>
+<li><a href="#selectone-selectmulti">selectOne &amp; selectMulti</a></li>
+</ul>
+<p>All question types share some basic properties:</p>
+<table>
+<thead>
+<tr>
+<th>property</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td>(text; default: &#39;text&#39;) Controls the question type. See the possible types below. </td>
+</tr>
+<tr>
+<td>name</td>
+<td>(text) The name that this question is marked with when it is logged. Also allows you to refer to the question from within PIquest.</td>
+</tr>
+<tr>
+<td>stem</td>
+<td>(text; default: &#39;&#39;) The text for the question itself..</td>
+</tr>
+<tr>
+<td>help</td>
+<td>(true or false;  (default: false)) Whether to display the question help text.</td>
+</tr>
+<tr>
+<td>helpText</td>
+<td>(text) The question help text. (Some questions have default help texts, some don&#39;t).</td>
+</tr>
+<tr>
+<td>lognow</td>
+<td>(true or false) Whether to log this questions when the page is submited. This option is useful when you know that the question will not be accessed any more. It allows you to use the <code>pulse</code> option from the <a href="#logger">logger</a> to send questions as they are being answered instead of sending only at the end of the task. (default: false)</td>
+</tr>
+</tbody>
+</table>
+<p>You may want to debug questions by <a href="#debugging">activating the <code>question</code> DEBUG setting</a>. You will then be warned in the console if a question name is reused (note: sometimes a question is supposed to be reused, if this warning pops up just make sure the use case is correct).</p>
+<h5 id="text">Text</h5>
+<p>The <code>text</code> questions consist of a simple text input in which the users can type in text. These kind of questions have the following properties:</p>
+<table>
+<thead>
+<tr>
+<th>property</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dflt</td>
+<td>(test; default value: &quot;&quot;) The default value for this question.</td>
+</tr>
+<tr>
+<td>autoSubmit</td>
+<td>(true or false; default: false) If this property is set to true typing <code>Enter</code> while this input is focused will submit the page.</td>
+</tr>
+<tr>
+<td>minlength</td>
+<td>(Number) Validation: force at least this number of characters.</td>
+</tr>
+<tr>
+<td>maxlength</td>
+<td>(Number) Validation: force at most this number of characters.</td>
+</tr>
+<tr>
+<td>required</td>
+<td>(true of false; default: false) Validation: require a non-empty string as a response.</td>
+</tr>
+<tr>
+<td>pattern</td>
+<td>(text [supports regex]) Validation: require the response to match the regular expression set in pattern (takes either a string `&quot;a</td>
+<td>b&quot;<code>or a regular expression</code>/a</td>
+<td>b/`).</td>
+</tr>
+<tr>
+<td>correct</td>
+<td>(true or false; default: false) Validation: require the response to be correct (set the target value using <code>correctValue</code>)</td>
+</tr>
+<tr>
+<td>correctValue</td>
+<td>(*) Set the correct response value for the correct validation.</td>
+</tr>
+<tr>
+<td>errorMsg</td>
+<td>(Object: {}) This object has a property for each validation type. Setting the appropriate type changes the validation message. For instance setting the <code>required</code> property will change the validation message for instances where no response was given.</td>
+</tr>
+</tbody>
+</table>
+<p>For example, this is a text question that requires a valid email address (although there are better patterns out there for this purpose):</p>
+<pre><code class="lang-js"><span class="hljs-reserved">var</span> quest = {
+    <span class="hljs-attribute">stem</span>: <span class="hljs-string">"Please type your email address"</span>,
+    <span class="hljs-attribute">dflt</span>: <span class="hljs-string">"my@email.com"</span>,
+    <span class="hljs-attribute">required</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attribute">pattern</span>: <span class="hljs-regexp">/[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}/igm</span>,
+    <span class="hljs-attribute">errorMsg</span>: {
+        <span class="hljs-attribute">required</span>: <span class="hljs-string">"You must enter a valid email address."</span>,
+        <span class="hljs-attribute">pattern</span>: <span class="hljs-string">"This is not a valid email address"</span>
+    }
+}
+</code></pre>
+<h5 id="textnumber">textNumber</h5>
+<p>The <code>textNumber</code> questions consist of a simple text input that limits the participant to numeric responses only. This type of questions have the following parameters:</p>
+<table>
+<thead>
+<tr>
+<th>property</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dflt</td>
+<td>(Number; default: null) The default value for this question.</td>
+</tr>
+<tr>
+<td>autoSubmit</td>
+<td>(true or false; default: false) If this property is set to true typing <code>Enter</code> while this input is focused will submit the form.</td>
+</tr>
+<tr>
+<td>min</td>
+<td>(Number) Validation: minimum valid number.</td>
+</tr>
+<tr>
+<td>max</td>
+<td>(Number) Validation: maximum valid number.</td>
+</tr>
+<tr>
+<td>required</td>
+<td>(true or false; default: false) Validation: require a non empty string as a response.</td>
+</tr>
+<tr>
+<td>correct</td>
+<td>(true or false; default: false) Validation: require the response to be correct (set the target value using <code>correctValue</code>)</td>
+</tr>
+<tr>
+<td>correctValue</td>
+<td>(*) Set the correct response value for the correct validation.</td>
+</tr>
+<tr>
+<td>errorMsg</td>
+<td>(Object: {}) This object has a property for each validation type. Setting the appropriate type changes the validation message. For instance setting the <code>required</code> property will change the validation message for instances where no response was given. Note that their is a special property <code>number</code> that is triggered whenever the response is not a valid number.</td>
+</tr>
+</tbody>
+</table>
+<p>For example, this is a text question that asks for a number under 273:</p>
+<pre><code class="lang-js"><span class="hljs-built_in">var</span> quest <span class="hljs-subst">=</span> {
+    <span class="hljs-keyword">type</span>: <span class="hljs-string">'textNumber'</span>,
+    stem: <span class="hljs-string">"Please enter your height in cm"</span>,
+    <span class="hljs-keyword">max</span>: <span class="hljs-number">273</span>,
+    required: <span class="hljs-literal">true</span>,
+    errorMsg: {
+        <span class="hljs-keyword">max</span>: <span class="hljs-string">"That is a bit too much to believe... - even Robert Wadlow wasn't this tall!"</span>,
+        number: <span class="hljs-string">"Your height has to be a number"</span>
+    }
+}
+</code></pre>
+<h5 id="dropdown">dropdown</h5>
+<p>The <code>dropdown</code> question presents a dropdown that the user can use to select a single response. It has the following parameters: </p>
+<table>
+<thead>
+<tr>
+<th>property</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dflt</td>
+<td>The default <em>value</em> for this question.</td>
+</tr>
+<tr>
+<td>autoSubmit</td>
+<td>(true or false; default: false) If this property is set to true, selecting a response will submit the form.</td>
+</tr>
+<tr>
+<td>randomize</td>
+<td>(true or false; default: false) Shuffle response options after mixing them (the mixer is activated regardless of this parameter, this serves as a shortcut)</td>
+</tr>
+<tr>
+<td>reverse</td>
+<td>(true or false; default: false) Reverses the order of response options in this question. It is useful when you inherit a question and only wants to change the order of the response options. Or, if you want to have a between-participant condition that reverses the response scale for half of the participants.</td>
+</tr>
+<tr>
+<td>numericValues</td>
+<td>(true or false; default: false) If <code>numericValues</code> is true, default numeric values are set for each answer, they are set <em>before</em> randomization, but <em>after</em> the mixer is activated.</td>
+</tr>
+<tr>
+<td>answers</td>
+<td>(Array: []) The list of possible answers for this question. There are two acceptable formats; (1) an array of strings/numbers, (2) an array of objects with <code>text</code>, <code>value</code> and optionally <code>group</code> parameters. The <code>group</code> parameter will display the values devided into groups with the same name.</td>
+</tr>
+<tr>
+<td>required</td>
+<td>(true or false; default: false) Validation: require a response.</td>
+</tr>
+<tr>
+<td>correct</td>
+<td>(true or false; default: false) Validation: require the response to be correct (set the target value using <code>correctValue</code>)</td>
+</tr>
+<tr>
+<td>correctValue</td>
+<td>(*) Set the correct response value for the correct validation.</td>
+</tr>
+<tr>
+<td>errorMsg</td>
+<td>(Object: {}) This object has a property for each validation type. Setting the appropriate type changes the validation message. For instance setting the <code>correct</code> property will change the validation message for instances where the correct response was not given.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="selectone-selectmulti">selectOne &amp; selectMulti</h5>
+<p>The <code>selectOne</code> and <code>selectMulti</code> questions present a list of possible response options for the user to pick from. The only difference between them is that select Multi allows the user to select more than one response option. They have the following parameters:</p>
+<table>
+<thead>
+<tr>
+<th>property</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dflt</td>
+<td>The default <em>value</em> for this question; Use one value for <code>selectOne</code>, and an array of values for <code>selectMulti</code>.</td>
+</tr>
+<tr>
+<td>autoSubmit</td>
+<td>(true or false; default: false) If this property is set to true, Clicking twice on the same answer will submit the form. This options is not supported for <code>selectMulti</code>.</td>
+</tr>
+<tr>
+<td>randomize</td>
+<td>(true or false; default: false) Shuffle response options after mixing them (the mixer is activated regardless of this parameter, this serves as a shortcut)</td>
+</tr>
+<tr>
+<td>reverse</td>
+<td>(true or false; default: false) Reverses the order of response options in this question. It is useful when you inherit a question and only wants to change the order of the response options. Or, if you want to have a between-participant condition that reverses the response scale for half of the participants.</td>
+</tr>
+<tr>
+<td>numericValues</td>
+<td>(true or false; default: false) If <code>numericValues</code> is true, default numeric values are set for each answer, they are set <em>before</em> randomization, but <em>after</em> the mixer is activated.</td>
+</tr>
+<tr>
+<td>buttons</td>
+<td>(true or false; default: false) By default we use a vertical list format for this question. Set this property to true in order to use a horizontal scale (Likert style). This option  does not currently support extremely narrow screens.</td>
+</tr>
+<tr>
+<td>answers</td>
+<td>(Array: []) The list of possible answers for this question. There are two acceptable formats; (1) an array of strings/numbers, (2) an array of objects with <code>text</code> and <code>value</code> parameters.</td>
+</tr>
+<tr>
+<td>required</td>
+<td>(true or false; default: false) Validation: require a response.</td>
+</tr>
+<tr>
+<td>correct</td>
+<td>(true or false; default: false) Validation: require the response to be correct (set the target value using <code>correctValue</code>)</td>
+</tr>
+<tr>
+<td>correctValue</td>
+<td>(*) Set the correct response value for the correct validation (This should be an array for selectMulti).</td>
+</tr>
+<tr>
+<td>errorMsg</td>
+<td>(Object: {}) This object has a property for each validation type. Setting the appropriate type changes the validation message. For instance setting the <code>correct</code> property will change the validation message for instances where the correct response was not given.</td>
+</tr>
+</tbody>
+</table>
+<p>Each answer on the list has a value associated with it. By default the value is equal to the text of the answer. If <code>numericValues</code> is set, the value is set to the appropriate number. Using the object notation, you can set values of your own.</p>
+<p>For example, the following question uses the plain notations, using <code>numericValues</code> to abstract numbers out of the result.</p>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> quest = {
+    <span class="hljs-class"><span class="hljs-keyword">type</span>:</span> <span class="hljs-symbol">'selectOn</span>e',
+    stem: <span class="hljs-string">"Do you like bananas?"</span>
+    numericValues: <span class="hljs-literal">true</span>,
+    answers: [
+        <span class="hljs-symbol">'Very</span> much',    <span class="hljs-comment">// ==&gt; 0</span>
+        <span class="hljs-symbol">'I</span> guess',        <span class="hljs-comment">// ==&gt; 1</span>
+        <span class="hljs-symbol">'Not</span> at all'    <span class="hljs-comment">// ==&gt; 2</span>
+    ]
+}
+</code></pre>
+<p>The following question uses the object notation to do the exact same thing:</p>
+<pre><code class="lang-js">var quest = {
+<span class="hljs-label">    type:</span> <span class="hljs-string">'selectMulti'</span>,
+<span class="hljs-label">    stem:</span> <span class="hljs-string">"Do you like bananas?"</span>
+<span class="hljs-label">    numericValues:</span> <span class="hljs-literal">true</span>,
+<span class="hljs-label">    answers:</span> [
+        {<span class="hljs-string">text:</span><span class="hljs-string">'Very much'</span>, <span class="hljs-string">value:</span><span class="hljs-number">0</span>},    <span class="hljs-comment">// ==&gt; 0</span>
+        {<span class="hljs-string">text:</span><span class="hljs-string">'I guess'</span>, <span class="hljs-string">value:</span><span class="hljs-number">1</span>},        <span class="hljs-comment">// ==&gt; 1</span>
+        {<span class="hljs-string">text:</span><span class="hljs-string">'Not at all'</span>, <span class="hljs-string">value:</span><span class="hljs-number">2</span>}    <span class="hljs-comment">// ==&gt; 2</span>
+    ]
+}
+</code></pre>
+<h3 id="settings">settings</h3>
+<p>Settings allow you to control the generic way that the player works. Change the settings using the <code>addSettings</code> function. The first argument to the function is always the name of the setting, the second argument is the setting values. In case the setting is an object, subsequent objects will extend each other so that settings may be progressively added.</p>
+<h5 id="onend">onEnd</h5>
+<p><code>onEnd</code> is a function to be called as soon as the task ends. It should be taken care of automatically when PIQuest is run from within the task manager.</p>
+<pre><code class="lang-js">API.addSettings(<span class="hljs-string">'onEnd'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
+    // Do somethin<span class="hljs-variable">g:</span> <span class="hljs-keyword">for</span> instance, redirect <span class="hljs-keyword">to</span> <span class="hljs-string">'my/url.js'</span>
+    location.href = <span class="hljs-string">'my/url.js'</span>;
+});
+</code></pre>
+<h5 id="logger">logger</h5>
+<p>This setting controls the way that logging works within the player.</p>
+<pre><code class="lang-js">API.addSettings(<span class="hljs-string">"logger"</span>, {
+    pulse: <span class="hljs-number">34</span>,
+    url: '/<span class="hljs-keyword">my</span>/url',    
+    logfn: function(<span class="hljs-command">log</span>,pagesData, <span class="hljs-keyword">global</span>){
+<span class="hljs-command">        return</span> {<span class="hljs-property">name</span>: <span class="hljs-command">log</span>.<span class="hljs-property">name</span>, <span class="hljs-keyword">set</span>: <span class="hljs-keyword">global</span>.setName};
+    }
+});
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pulse</td>
+<td>(Number; Default: 0) How many rows to collect before posting to the server. 0 means that the player sends to the server only at the end of the task. Note that only questions and pages marked with the <code>lognow</code> property will be pulsed. All other questions will be sent at the end of the task.</td>
+</tr>
+<tr>
+<td>url</td>
+<td>(Text; default:&quot;&quot;) The URL to which we should post the data to.</td>
+</tr>
+<tr>
+<td>logfn</td>
+<td>(Function) The task has a default object that it logs, if you want to change the logged object itself, you may use a function of the form: <code>function(log, pagesData, global){return logObj;}</code></td>
+</tr>
+</tbody>
+</table>
+<p>Within the player, each question (as defined by unique question name) may be logged only once. By default questions are logged at the end of a page (on submit or decline), if you want to delay logging until the end of the task, you may do so by setting <code>nolog</code> in the appropriate page or question.</p>
+<p>If you want a question not to be logged at all, simply do not give it a name.</p>
+<p>You may want to debug the logger by <a href="#debugging">activating the DEBUG <code>logger</code> setting</a>. When activated, it prints each logged object into the console.</p>
+<h5 id="debugging">Debugging</h5>
+<p>PIQuest can supply some extra information regarding its inner workings, all you have to do is set the DEBUG setting property like so:</p>
+<pre><code class="lang-js"><span class="hljs-comment">// Log everything</span>
+<span class="hljs-tag">API</span><span class="hljs-class">.addSettings</span>(<span class="hljs-string">'DEBUG'</span>, {
+    <span class="hljs-attribute">level</span>: <span class="hljs-string">'warn'</span>, <span class="hljs-comment">// log errors and warnings</span>
+    <span class="hljs-attribute">tags</span>: [<span class="hljs-string">'page'</span>,<span class="hljs-string">'animation'</span>], <span class="hljs-comment">// Log page and animation related messages</span>
+    <span class="hljs-attribute">hideConsole</span>: true 
+});
+</code></pre>
+<p><strong>tags</strong>:
+Logs are broken down into subjects by tags. The tags property allows you to insert an array of tags that you want to be logged. If you want all tags to printed you may use the string <code>&#39;all&#39;</code> instead of an array (this is also the default).</p>
+<p>The tags currently available are as follows: <code>page</code>, <code>question</code>, <code>conditions</code> and <code>animate</code>.</p>
+<p><strong>level</strong>:
+The player has several levels of logging, by default it logs only <code>error</code> level logs. When you want to debug you should probably use <code>info</code> or <code>warn</code>. The precedence of logging levels is as follows: error&gt;warn&gt;info&gt;debug. Each logging level includes any levels higher than itself.</p>
+<table>
+<thead>
+<tr>
+<th>level</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>none</td>
+<td>Do not log any messages</td>
+</tr>
+<tr>
+<td>error</td>
+<td>Log messages that warn that something in the script is broken (this is the default level, and you should probably leave at least this level active).</td>
+</tr>
+<tr>
+<td>warn</td>
+<td>Log warning messages that something smells fishy, these are not neccesarily errors, but you might want to check them out.</td>
+</tr>
+<tr>
+<td>info</td>
+<td>Log General usefull information.</td>
+</tr>
+<tr>
+<td>debug</td>
+<td>Just spill everything out.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>hideConsole</strong>:
+This property allows you to control the display of logs inside the browser, if it is set to <code>true</code> then the logs will only be printed into your console.</p>
+<h3 id="making-your-questionnaire-dynamic">Making your questionnaire dynamic</h3>
+<p>There are several ways that you can make your questionnaire more dynamic. We will give a short overview and then get into the specifics.</p>
+<p>The basic elements of the player (pages or questions) are set into ordered lists (arrays). The player parses these lists into the questionnaire that the user eventually sees.</p>
+<p>The first level of parsing has to do with the order that the elements appear.The <a href="#mixer">mixer</a> allows you to control the order of the lists; it allows you to randomize the order, duplicate elements and even display them conditionally.</p>
+<p>The second level of parsing has to do with inheritance. Many times you want to present several elements that share some of the same features (for instance, you may want all your pages to have the same header or the same submit text). The <a href="#inheritance">inherit </a> feature allows you to create prototypes of elements that you may reuse thought your script.</p>
+<p>The third and last level of parsing has to do with templates. <a href="#templates">Templates</a> allow you to change the settings of your elements depending on existing data from within the player. For instance, you may want to refer to the answer of a previous question. </p>
+<p>Some sequence may be parsed more than once, for instance, the questions sequences get re-parsed each time a response is changed, and each time a user returns to a page it is re-parsed. By default, none of the parsing is repeated so that the questionnaires can stay fixed. For each type of parsing there is a property that lets the player know that you want it re-parsed.</p>
+<p>In order to re-parse mixers, set <code>remix</code> to true. In order to re-parse inheritance set <code>reinflate</code> to true. In order to re-parse templates set <code>regenerateTemplate</code> to true.</p>
+<p>Another consideration when creating complex sequnces is logging. By default the player logs user responses automaticaly as soon as the user submits. If you are creating a sequence that allows users to go back to previous questions etc. you should make sure you don&#39;t prematurely log the user response (use <code>nolog</code>. learn more <a href="#logger">here</a>).</p>
+<h3 id="mixer">Mixer</h3>
+<p>The mixer is responsible for managing lists (arrays) within PIQuest, it is capable of repeating, randomizing and even changing the list according to <a href="#variables">environmental variables</a>. You may use it within the sequence, for answer lists within pages and even for answers within the <code>selectOne</code> or <code>selectMulti</code> questions.
+The mixer allows wrapping a sub list in an object that allows you to manipulate the way in which it appears. You may insert such an object at any place within a list and it will be replaced by the appropriate objs.</p>
+<p>The basic structure of a mixer object is:</p>
+<pre><code class="lang-js"><span class="hljs-rules">{
+    <span class="hljs-rule"><span class="hljs-attribute">mixer</span>:<span class="hljs-value"> <span class="hljs-string">'functionType'</span>,
+    data: [obj1, obj2]
+</span></span></span>}
+</code></pre>
+<p>The <code>mixer</code> property defines the mixer type. It tells the mixer what to do with the list. The <code>data</code> property defines the list; an array of elements (either plain objects or mixer objects).</p>
+<p>A sequence can look something like this:</p>
+<pre><code class="lang-js">[
+    <span class="hljs-comment">// The first obj to present.</span>
+    firstobj,
+
+    <span class="hljs-comment">// Repeat the structure inside 10 time (so we get 40 objs)</span>
+    {
+        mixer: <span class="hljs-string">'repeat'</span>,
+        times: <span class="hljs-number">10</span>,
+        <span class="hljs-keyword">data</span>: [
+            <span class="hljs-comment">// Delay the mixing of these elements until after the `repeat`.</span>
+            {
+                mixer: <span class="hljs-string">'wrapper'</span>,
+                <span class="hljs-keyword">data</span>: [
+                    obj1,
+                    <span class="hljs-comment">// Randomize the order of the objectss within.</span>
+                    {
+                        mixer: <span class="hljs-string">'random'</span>,
+                        <span class="hljs-keyword">data</span>: [
+                            obj2,
+                            <span class="hljs-comment">// Keep obj 3 and 4 together.</span>
+                            {
+                                mixer: <span class="hljs-string">'wrapper'</span>,
+                                <span class="hljs-keyword">data</span>: [
+                                    obj3,
+                                    obj4
+                                ]
+                            }
+                        ]
+                    } <span class="hljs-comment">// end random</span>
+                ]
+            } <span class="hljs-comment">// end wrapper</span>
+        ]
+    }, <span class="hljs-comment">// end repeat</span>
+
+    <span class="hljs-comment">// the last obj to present</span>
+    lastobj
+]
+</code></pre>
+<p>This sequence has an opening and ending obj (<code>firstobj</code> and <code>lastobj</code>).
+Between them them we repeat a set of four objs ten times.
+The order of the four objs is randomized, so that <code>obj1</code> always comes first and the order of the following objs are randomized but <code>obj3</code> and <code>obj4</code> are wrapped together and therefore always stay consecutive.</p>
+<h5 id="mixer-types">Mixer types</h5>
+<p><strong>repeat</strong>:
+Repeats the element in <code>data</code> <code>times</code> times.</p>
+<ul>
+<li><code>{mixer:&#39;repeat&#39;, times:10, data: [obj1,obj2]}</code></li>
+</ul>
+<p><strong>random</strong>:
+Randomizes the order of elements in <code>data</code>.</p>
+<ul>
+<li><code>{mixer:&#39;random&#39;, data: [obj1,obj2]}</code></li>
+</ul>
+<p><strong>weightedRandom</strong>:
+Selects a single element using a weighted random algorithm. Each element in <code>data</code> is given the appropriate weight from <code>weights</code>. In the following example obj2 has four times the probability of being selected as obj1.</p>
+<ul>
+<li><code>{mixer:&#39;weightedRandom&#39;, weights: [0.2,0.8], data: [obj1,obj2]}</code></li>
+</ul>
+<p><strong>choose</strong>:
+Selects <code>n</code> random elements from <code>data</code> (by default the chooser picks one element).</p>
+<ul>
+<li><code>{mixer:&#39;choose&#39;, data: [obj1,obj2]}</code> pick one of these two objs</li>
+<li><code>{mixer:&#39;choose&#39;, n:2, data: [obj1,obj2,obj3]}</code> pick two of these three objs</li>
+</ul>
+<p><strong>wrapper</strong>:
+The wrapper mixer serves a sort of parenthesis for the mixer. In case you want to keep a set of elements as a block (when randomizing) simply wrap them and they&#39;ll stay together.</p>
+<ul>
+<li><code>{mixer:&#39;wrapper&#39;, data: [obj1,obj2]}</code></li>
+</ul>
+<p><strong>branch</strong>:</p>
+<ul>
+<li><code>{mixer:&#39;branch&#39;, conditions:[cond], data:[obj1,obj2]}</code></li>
+<li><code>{mixer:&#39;branch&#39;, conditions:[cond], data:[obj1,obj2], elseData: [obj3, obj4]}</code>
+Select the elements in <code>data</code> if all the conditions in the <code>conditions</code> array are true, select the elements in <code>elseData</code> if at least one of the conditions in <code>conditions</code> are not true. If <code>elseData</code> is not defined, or is left empty, then nothing happen in case the conditions are not true (See <a href="#conditions">conditions</a> to learn about how conditions work).</li>
+</ul>
+<p><strong>multiBranch</strong>:</p>
+<pre><code class="lang-js"><span class="hljs-collection">{
+    mixer: 'multiBranch',
+    branches: <span class="hljs-collection">[
+        <span class="hljs-collection">{conditions: <span class="hljs-collection">[]</span>,data: <span class="hljs-collection">[]</span>}</span>,
+        <span class="hljs-collection">{conditions: <span class="hljs-collection">[]</span>,data: <span class="hljs-collection">[]</span>}</span>
+    ]</span>,
+    elseData: <span class="hljs-collection">[]</span> // optional
+}</span>
+</code></pre>
+<p>Find the first object within <code>branches</code> for which <code>conditions</code> is true, and select the elements in that objects <code>data</code>. If no object is selected then select <code>elseData</code> (optional). (See <a href="#conditions">conditions</a> to learn about how conditions work).</p>
+<h5 id="conditions">Conditions</h5>
+<p>The conditional mixers allow you to change the content of a list according to <a href="#variables">environmental variables</a>. Each list has specific variables available to it, you can find the relevant details in the documentation for each list, but all lists have access to the <code>global</code> and <code>current</code> objects, so we&#39;ll use them for all examples here.</p>
+<p>A condition is a proposition, it is evaluated to either a <code>true</code> or <code>false</code> value. Conditions are used for decision making within the branching mixers. Conditions are represented by objects. The following condition object <code>compare</code>s <strong>global.var</strong> <code>to</code> <strong>local.otherVar</strong> and examines if they are equal (if you aren&#39;t sure what <strong>global.var</strong> means, see <a href="#variables">here</a>):</p>
+<pre><code class="lang-js">var cond = {
+    compare: <span class="hljs-symbol">'global</span>.myVar',
+    <span class="hljs-keyword">to</span>: <span class="hljs-symbol">'local</span>.myOtherVar'
+}
+</code></pre>
+<p>Conditions should be treated as a type of equation.</p>
+<p>In the <code>compare</code> and <code>to</code> properties you can set either straight forward values or references to a variable:</p>
+<pre><code class="lang-js"><span class="hljs-comment">//Compares the variable time to the value 12</span>
+<span class="hljs-built_in">var</span> cond1 <span class="hljs-subst">=</span> {
+    compare: <span class="hljs-string">'global.time'</span>,
+    <span class="hljs-keyword">to</span>: <span class="hljs-string">'12'</span>
+}
+<span class="hljs-comment">//Compare the variable gender to the value 'Female'</span>
+<span class="hljs-built_in">var</span> cond2 <span class="hljs-subst">=</span> {
+    compare: <span class="hljs-string">'Female'</span>,
+    <span class="hljs-keyword">to</span>: <span class="hljs-string">'local.gender'</span>
+}
+</code></pre>
+<p>When you want to refer to a variable, you use text with dots: <code>global.var</code>, <code>questions.q1.response</code>; these values will be treated as pointing to variables within the lists context. <code>questions.q1.response</code> will retrieve the value of the response for q1 from the questions object. The following checks whether the global variable var is equal to 15.</p>
+<p>Here are the condition&#39;s possible properties:</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>compare</td>
+<td>The left side of the equation.</td>
+</tr>
+<tr>
+<td>to</td>
+<td>The right side of the equation.</td>
+</tr>
+<tr>
+<td>operator</td>
+<td>The type of comparison to do (read more about operators <a href="#operators">here</a>).</td>
+</tr>
+</tbody>
+</table>
+<p>You may want to debug conditions by <a href="#debugging">activating the DEBUG <code>conditions</code> setting</a>. When activated, then any condition that is evaluated will be logged to the console.</p>
+<p>Advanced users may want to replace the whole condition object with a custom function that returns true or false. The context for the function is an object holding the <em>global</em>, <em>current</em> and <em>questions</em> objects.</p>
+<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">cond</span><span class="hljs-params">()</span></span>{
+    <span class="hljs-keyword">var</span> <span class="hljs-keyword">global</span> = this.<span class="hljs-keyword">global</span>; <span class="hljs-comment">// get the global from the context</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">global</span>.skip;
+}
+</code></pre>
+<h5 id="operators">Operators</h5>
+<p>The default comparison for a condition is to check equality (supports comparison of objects and arrays too). You can use the <code>operator</code> property to change the comparison method. The following checks if var is greater than otherVar:</p>
+<pre><code class="lang-js">var cond = {
+    compare: <span class="hljs-symbol">'global</span>.var',
+    <span class="hljs-keyword">to</span>: <span class="hljs-symbol">'local</span>.otherVar',
+    operator: <span class="hljs-symbol">'greaterThan'</span>
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Operator</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>equals</td>
+<td>This is the default operator. It checks if <em>compare</em> is equal to <em>to</em> (supports comparison of objects and arrays too)</td>
+</tr>
+<tr>
+<td>exactly</td>
+<td>Checks if <em>compare</em> is exactly equal to <em>to</em> (uses ===)</td>
+</tr>
+<tr>
+<td>greaterThan</td>
+<td><em>compare</em> &gt; <em>to</em></td>
+</tr>
+<tr>
+<td>greaterThanOrEquals</td>
+<td><em>compare</em> &gt;= <em>to</em></td>
+</tr>
+<tr>
+<td>in</td>
+<td><em>compare</em> is in the Array <em>to</em>;</td>
+</tr>
+<tr>
+<td>function(){}</td>
+<td>This operator allows you to use a custom function of the form: <code>function(compareValue, toValue, context){return {Boolean}}</code>. The context is an object holding the <em>global</em>, <em>current</em> and <em>questions</em> objects.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="aggregation">Aggregation</h5>
+<p>Sometimes you will want a branch to be activated only if more than one condition is true, or in some other complex specific condition. For cases like this, the mixer supports aggregation. The mixer supports applying logical operations on conditions in the following way:</p>
+<p>An aggregator object has a single property, denoting the type of aggregation, holding an array of conditions to aggregate. The following condition will only be true if <code>cond1</code> and <code>cond2</code> are both true:</p>
+<pre><code class="lang-js"><span class="hljs-built_in">var</span> cond <span class="hljs-subst">=</span> {<span class="hljs-literal">and</span>:<span class="hljs-preprocessor">[</span>cond1, cond2<span class="hljs-preprocessor">]</span><span class="hljs-markup">};</span>
+</code></pre>
+<p>The mixer supports several types of aggregators:</p>
+<table>
+<thead>
+<tr>
+<th>Aggregator</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>and</td>
+<td>If all conditions are true</td>
+</tr>
+<tr>
+<td>or</td>
+<td>If at least one condition is true</td>
+</tr>
+<tr>
+<td>nor</td>
+<td>If all conditions are false</td>
+</tr>
+<tr>
+<td>nand</td>
+<td>If at least one condition is false</td>
+</tr>
+</tbody>
+</table>
+<p>By default, if the mixer runs into an array instead of an object, it will treat it as an <code>and</code> aggregator and be true only if all conditions within the array are true.</p>
+<p>Following are several examples for how to create different aggregations:</p>
+<pre><code class="lang-js"><span class="hljs-comment">// cond1 &amp;&amp; cond2</span>
+<span class="hljs-keyword">var</span> conds = [cond1, cond2];
+
+<span class="hljs-comment">// cond1 &amp;&amp; (cond2 || cond3)</span>
+<span class="hljs-keyword">var</span> conds = [cond1, {<span class="hljs-keyword">or</span>:[cond2,cond3]}];
+
+<span class="hljs-comment">// (cond1 &amp;&amp; cond2) || cond2</span>
+<span class="hljs-keyword">var</span> conds = [{<span class="hljs-keyword">or</span>:[{<span class="hljs-keyword">and</span>:[cond1,cond2]},cond3]}]
+</code></pre>
+<h3 id="variables">Variables</h3>
+<p>Sometimes it is not enough to hard code behaviors into your tasks, sometimes you want behavior to depend on a previous response, or change texts according to randomization. In order to support these behaviors you can use variables.</p>
+<p>The <code>global</code> variable is the context of everything that happens within the task manager. It is an object that holds a property for each task that is run.
+The current task object is automatically set into the global, as well as any questions that the user completes. In addition you as a user may extend it manually using the <code>API.addGlobal</code> function. You can also set Global by using the <code>pi-global</code> attribute of <code>pi-task</code>;</p>
+<pre><code class="lang-js"><span class="hljs-tag">API</span><span class="hljs-class">.addGlobal</span>({
+    <span class="hljs-attribute">value</span>: <span class="hljs-number">123</span>,
+    <span class="hljs-attribute">variable</span>: [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>]
+})
+</code></pre>
+<p>Each <strong>PIQuest</strong> task has an object associated with it that logs anything that happens within the task. In the duration of the task, this object can be accessed using the <code>current</code> object. After the task ends, the object stays available from within the global object as <code>global.taskName</code>, where &quot;taskName&quot; is the name associated with this specific task.
+The task object is there for you to change. You can extend it to your hearts content using <code>API.addCurrent</code>:</p>
+<pre><code class="lang-js"><span class="hljs-tag">API</span><span class="hljs-class">.addCurrent</span>({
+    <span class="hljs-attribute">value</span>: <span class="hljs-number">123</span>,
+    <span class="hljs-attribute">variable</span>: [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>]
+})
+</code></pre>
+<p><strong>PIQuest</strong> task objects have a reserved property called <code>questions</code>. <code>questions</code> holds an object that keeps track of all questions answered throughout the questionnaire. Each question is logged on to the property with its name; for instance if you have a question named quest1, then <code>questions.quest1</code> will hold an object describing the user response.
+The following is a list of the response object properties:</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>response</td>
+<td>The user response itself.</td>
+</tr>
+<tr>
+<td>latency</td>
+<td>The time from the moment the question was displayed to the last time it was changed.</td>
+</tr>
+<tr>
+<td>pristineLatency</td>
+<td>The time from the moment the question was displayed to the first time it was changed.</td>
+</tr>
+<tr>
+<td>declined</td>
+<td>whether the user declined to answer this question.</td>
+</tr>
+</tbody>
+</table>
+<p>Throughout the player there are several components that refer to environmental variables. In particular you should check out <a href="#conditions">mixer conditions</a> and <a href="#templates">templates</a>.</p>
+<h3 id="templates">Templates</h3>
+<p>One of the ways to create dynamic questionnaires is using templates. Templates are a format that allows you to dynamically generate settings for your questions. You can replace any non-object setting from within your questions/pages with a template, and it will be rendered according to the <a href="#variables">environmental variables</a> (The exception to this rule is the <code>inherit</code> setting that cannot use templates).</p>
+<p>A template is a string that has a section of the form <code>&lt;%= %&gt;</code> in it. Within these brackets you can write any Javascript that you like and it will be evaluated and printed out. The main use of templates is probably accessing local and global variables. For instance, in order to print the global variable &quot;name&quot;, you could create a template that looks like this: <code>My name is &lt;%= global.name%&gt;</code>.</p>
+<p>The player uses <a href="http://lodash.com/docs#template">lodash templates</a> internally, you can look them up to see all the possible uses.</p>
+<p>Templates allow access only to a confined number of variables; following is a list of the variables that you can access from within templates:</p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>global</td>
+<td>The global object.</td>
+</tr>
+<tr>
+<td>current</td>
+<td>The current task object.</td>
+</tr>
+<tr>
+<td>questions</td>
+<td>The questions object.</td>
+</tr>
+<tr>
+<td>pagesData</td>
+<td>The &#39;data&#39; attribute from the page.</td>
+</tr>
+<tr>
+<td>questionsData</td>
+<td>The &#39;data&#39; attribute from the question (available only within questions).</td>
+</tr>
+<tr>
+<td>pagesMeta</td>
+<td>An object describing meta data about the page:</br> <code>number</code>: the serial number of this page, <code>outOf</code> the overall number of pages, <code>name</code>: the name of the current page. These can be used for instance to generate a description of your place within the questionnaire: <code>&lt;%= pagesMeta.number %&gt; out of &lt;%= pagesMeta.outOf%&gt;</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>Questions and Pages have access to the same local variables, with the exception of questionsData that is available only to questions.</p>
+<h3 id="inheritance">Inheritance</h3>
+<p>Each element in PIQuest (page/question) can inherit its attributes from an element set.</p>
+<h4 id="sets">Sets</h4>
+<p>The element sets are defined using the <code>addPagesSet</code> and <code>addQuestionsSet</code> function in the API.</p>
+<p>Each set is simply an array of elements that can later be referred to as a base for new elements. Note that the name that you give the set (in the example: base or demographics) is the handle that you later use to refer to it.</p>
+<pre><code class="lang-js"><span class="hljs-tag">API</span><span class="hljs-class">.addQuestionsSet</span>(<span class="hljs-string">'likert'</span>, [
+    {<span class="hljs-attribute">type</span>: <span class="hljs-string">'selectOne'</span>, <span class="hljs-attribute">numericValues</span>: true}
+]);
+
+<span class="hljs-tag">API</span><span class="hljs-class">.addQuestionsSet</span>(<span class="hljs-string">'sizeLikert'</span>, [
+    {<span class="hljs-attribute">inherit</span>: <span class="hljs-string">'likert'</span>, <span class="hljs-attribute">answers</span>: [<span class="hljs-string">'Big'</span>, <span class="hljs-string">'Medium'</span>, <span class="hljs-string">'Small'</span>]}
+]);
+</code></pre>
+<h4 id="inheriting">Inheriting</h4>
+<p>When inheriting an element the new element starts out with all of the parent&#39;s attributes and extends them with its own. This means that we use the parent element as a base and then copy in any properties that the child has, overwriting any existing properties.
+The only exception to this rule is the <code>data</code> objects which we attempt to merge (giving precedence to the child).</p>
+<p>Follow this pseudo code:</p>
+<pre><code class="lang-js"><span class="hljs-comment">// The parent page</span>
+{
+<span class="hljs-label">    data:</span> {<span class="hljs-string">name:</span> <span class="hljs-string">'jhon'</span>, <span class="hljs-string">family:</span><span class="hljs-string">'doe'</span>}
+<span class="hljs-label">    questions:</span> [
+        quest1,
+        quest2
+    ]
+}
+
+<span class="hljs-comment">// The child page which attempts to inherit the parent</span>
+{
+<span class="hljs-label">    inherit:</span> <span class="hljs-string">'parent'</span>,
+<span class="hljs-label">    data:</span> {<span class="hljs-string">name:</span> <span class="hljs-string">'jack'</span>}
+<span class="hljs-label">    questions:</span> [
+        quest3
+    ]
+}
+
+<span class="hljs-comment">// The result would be:</span>
+{
+<span class="hljs-label">    data:</span> {<span class="hljs-string">name:</span> <span class="hljs-string">'jack'</span>, <span class="hljs-string">family:</span><span class="hljs-string">'doe'</span>}     <span class="hljs-comment">// the child kept its own name but inherited the family name</span>
+<span class="hljs-label">    stimuli:</span> [                            <span class="hljs-comment">// the questions array was completely overwritten</span>
+        quest3
+    ]
+}
+</code></pre>
+<p>In order for an element to inherit another element it must use the <code>inherit</code> property of the inheriting element.</p>
+<pre><code class="lang-js"><span class="hljs-rules">{
+    <span class="hljs-rule"><span class="hljs-attribute">inherit</span>:<span class="hljs-value"> inheritObject
+</span></span></span>}
+</code></pre>
+<p>The inherit object has a <code>set</code> property defining which element set it should inherit from.
+It also has a <code>type</code> property that defines what type of inheritance we should use.</p>
+<p>We have implemented several types of inheritance:</p>
+<p><strong>random</strong>:
+Randomly selects an element from the set (in case the set has only one element, the same element will always be selected, of course). </p>
+<ul>
+<li><code>&#39;setName&#39;</code></li>
+<li><code>{set: &#39;setName&#39;}</code></li>
+<li><code>{set: &#39;setName&#39;, type:&#39;random&#39;}</code>
+<code>random</code> this is the default inheritance type, so it is not obligatory to use the <code>type</code> property. You can also use a short cut and set the <code>set</code> using only its name, like we did in the example above:<pre><code class="lang-js"><span class="hljs-collection">{
+  inherit: 'parent',
+  data: <span class="hljs-collection">{name: 'jack'}</span>
+  questions: <span class="hljs-collection">[
+      quest3
+  ]</span>
+}</span>
+</code></pre>
+</li>
+</ul>
+<p><strong>exRandom</strong>:
+Selects a random element without repeating the same element until we&#39;ve gone through the whole set</p>
+<ul>
+<li><code>{set: &#39;setName&#39;, type:&#39;exRandom&#39;}</code></li>
+</ul>
+<p><strong>bySequence</strong>:
+Selects the elements by the order they were inserted into the set</p>
+<ul>
+<li><code>{set: &#39;setName&#39;, type:&#39;bySequence&#39;}</code></li>
+</ul>
+<p><strong>byData</strong>:
+Selects a specific element from the set.
+We compare the <code>data</code> property to the <code>element.data</code> property and if <code>data</code> is a subset of <code>element.data</code> it selects the element (this means that if all properties of data property equal to the properties of the same name in element.data it is a fit).
+This function will select only the first element to fit the data.
+If the data property is set as a string, we assume it refers to the element handle.</p>
+<ul>
+<li><code>{set: &#39;setName&#39;, type: &#39;byData&#39;, data: {block:1, row:2}}</code> picks the element with both block:1 and row:2</li>
+<li><code>{set: &#39;setName&#39;, type: &#39;byData&#39;, data: &quot;myStimHandle&quot;}</code> picks the element that has the &quot;myStimHandle&quot; handle</li>
+</ul>
+<p><strong>function</strong>:
+You may also use a custom function to select your element (the function here, fully replaces the inherit object).</p>
+<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(definitions)</span></span>{
+    <span class="hljs-comment">// definitions is the inherit object (including  set, type, and whatever other properties you'd like to use)</span>
+}
+</code></pre>
+<h5 id="customization">Customization</h5>
+<p>Each question/page can also define a <code>customize</code> method, this method is called once the element is inherited but before it is activated.
+It accepts two argument: the source object on which it is called (the page or question object), and the global object (in which you can find the current object etc.). The source object is also the context for the function.</p>
+<pre><code class="lang-js"><span class="hljs-rules">{
+    <span class="hljs-rule"><span class="hljs-attribute">inherit</span>:<span class="hljs-value"> <span class="hljs-string">'something'</span>,
+    customize : <span class="hljs-function">function</span>(source){
+        source.questions.<span class="hljs-function">push</span>(quest)</span></span>;
+    <span class="hljs-rule">}</span></span>
+}
+</code></pre>
+</div></div></div></body></html>

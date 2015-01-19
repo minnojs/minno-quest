@@ -1,0 +1,1 @@
+define(["require","underscore"],function(e){function n(e,n){function r(r){var i=t.isString(r)?n(r):r;return e.when(i)}return r}var t=e("underscore");return n.$inject=["$q","managerGetScript"],n});

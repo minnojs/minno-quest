@@ -1,0 +1,1 @@
+define(["require","text!./spinner.html"],function(e){function n(){return{transclude:!0,replace:!0,template:t,require:[],scope:{spinner:"=piSpinner"}}}var t=e("text!./spinner.html");return n.$inject=[],n});

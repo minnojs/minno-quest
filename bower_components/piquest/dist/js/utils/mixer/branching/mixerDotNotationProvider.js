@@ -1,0 +1,1 @@
+define(["require","underscore"],function(e){function n(e){function n(n,r){var i=/[^\/]\./;return t.isString(n)?i.test(n)?e(n,r):n.replace("/.","."):n}return n}var t=e("underscore");return n.$inject=["dotNotation"],n});

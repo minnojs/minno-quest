@@ -1,0 +1,1 @@
+define([],function(){function e(e){function t(){this.startTime=e()}return t.prototype.now=function(){return e()-this.startTime},t}return e.$inject=["timerNow"],e});

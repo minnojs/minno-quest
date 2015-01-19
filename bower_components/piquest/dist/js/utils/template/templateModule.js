@@ -1,0 +1,1 @@
+define(["require","angular","./templateFilter","./templateObjProvider"],function(e){var t=e("angular"),n=t.module("template",[]);return n.filter("template",e("./templateFilter")),n.service("templateObj",e("./templateObjProvider")),n.constant("templateDefaultContext",{}),n});

@@ -1,0 +1,10 @@
+<!DOCTYPE html><html lang="en"><head><title>PI questionnaire</title><base href="../../bower_components/piquest/src/"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="stylesheet" href="styles/main.css"><style>.container {padding-top: 15px;}
+.pi-spinner {position: absolute;max-width: 80%;top: 50%;left: 50%;margin-left: -32px;margin-top: -32px;border-radius: 3px;display: block; -moz-box-sizing: border-box; box-sizing: border-box; background: url(img/loader.gif) no-repeat; width: 64px;height: 64px;padding-left: 64px; /* Equal to width of new image */}
+.pi-spinner:empty {margin: auto;-webkit-transform: translate(-50%, -50%);-moz-transform: translate(-50%, -50%);-ms-transform: translate(-50%, -50%);-o-transform: translate(-50%, -50%);transform: translate(-50%, -50%);}
+@media screen and (orientation: portrait) {.pi-spinner { max-width: 90%; }}
+@media screen and (orientation: landscape) {.pi-spinner { max-height: 90%; }}
+</style><script>function post(){console.log(324)}
+</script></head><body ng-app><div class="container"><img ng-hide="1" class="pi-spinner"><div pi-manager-task="{type:'quest',scriptUrl:'../../../../0.0/scripts/weight.js'}"></div></div></body><!--[if lte IE 8]>
+<script src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/3.4.0/es5-shim.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]--><script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.min.js" data-main="js/pibootstrap.js"></script></html>

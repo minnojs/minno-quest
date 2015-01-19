@@ -1,0 +1,120 @@
+<!DOCTYPE html><html lang="en"></html><html><head><title>Project Implicit</title><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/sunburst.min.css"><style>div#main {padding-top:50px}
+.sidenav {background-color: #F7F5FA;border-radius: 5px;margin-bottom: 30px;margin-top: 30px;padding-bottom: 10px;padding-top: 10px;text-shadow: 0 1px 0 #FFFFFF;}
+.sidenav.nav li > a {color: #999999;display: block;font-size: 13px;font-weight: 600;padding: 5px 20px;}
+.sidenav.nav li > a:hover {text-decoration:none;color: #563D7C;}
+.sidenav.nav .nav > li > a {font-weight: 500; padding: 3px 0px 3px 30px}
+
+.sidenav.nav .nav > li > div {padding:3px 0px 3px 30px; font-weight: 500;}
+.sidenav.nav .nav > li > div a {color: #999999; margin-right: 5px;}
+.sidenav.nav .nav > li > div a:hover {text-decoration:none;color: #563D7C;}
+
+/* just fill in for .hljs that the highlighter does not add... */
+pre code{display:block;overflow-x:auto;padding:0.5em;background:#000;color:#f8f8f8;-webkit-text-size-adjust:none}
+</style></head><body><nav role="navigation" class="navbar navbar-inverse navbar-fixed-top"><div class="container"><div class="navbar-header"><button type="button" data-toggle="collapse" data-target="#navbar" class="navbar-toggle"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="https://github.com/ProjectImplicit/PIquest" class="navbar-brand">PI tasks</a></div><nav id="navbar" role="navigation" class="navbar-collapse bs-navbar-collapse"><ul class="nav navbar-nav"><li><a href="overview.html">piQuest</a></li><!--li: a(href="overview.html") piManager--></ul><ul class="nav navbar-nav navbar-right"><li><a href="about.html">About</a></li></ul></nav></div></nav><div id="main" class="container"><div class="row"><div class="col-md-3"><ul class="nav affix-top sidenav"><li><a href="./overview.html">Overview</a></li><li><a href="./API.html">API</a></li><li><a href="./helloworld.html">Hello world</a></li><li><a href="./tutorial.html">Tutorial</a></li><li><a href="javascript:void(0)">Examples</a><ul class="nav"><li><div><a href="scripts/helloworld.js" target="_blank" title="View">Hello World</a><a href="scripts/helloworld.html" target="_blank" title="Play"><span class="glyphicon glyphicon-play"></span></a><a href="scripts/helloworld.js" download="helloworld.js" title="Download"><span class="glyphicon glyphicon-download"></span></a></div></li><li><div><a href="scripts/weight.js" target="_blank" title="View">Weight Demo</a><a href="scripts/weight.html" target="_blank" title="Play"><span class="glyphicon glyphicon-play"></span></a><a href="scripts/weight.js" download="weight.js" title="Download"><span class="glyphicon glyphicon-download"></span></a></div></li></ul></li></ul></div><div class="col-md-9"><h1 id="hello-world">Hello world</h1>
+<h3 id="contents">Contents</h3>
+<ul>
+<li><a href="#structure">Structure</a></li>
+<li><a href="#pages-questions">Pages &amp; Questions</a></li>
+<li><a href="#thats-it">Thats it</a></li>
+</ul>
+<h3 id="structure">Structure</h3>
+<p>The first step learning to use piQuest is getting to know the structure of a piQuest script. The scripts are written in javascript, although all you really need to know is how to use our very specific API (this means that if you&#39;re in to that sort of thing, you can write any javascript that you like...).</p>
+<p>Each script is wrapped within a <a href="require.js/@@@@.html#AMD"><code>define</code></a> statement. At the beginning you create the API object, and at the end you return the script that you have created. This basic structure stays more or less constant across any script that you create. In other words: you can always just copy paste this portion of the script and get on with building your questionnaire:</p>
+<pre><code class="lang-js">define([<span class="hljs-string">'questAPI'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(Quest)</span></span>{
+    <span class="hljs-comment">// create new quest API</span>
+    <span class="hljs-keyword">var</span> API = <span class="hljs-keyword">new</span> Quest();
+
+    <span class="hljs-comment">/**
+     * This is where the magic happens...
+     */</span>
+
+    <span class="hljs-comment">// return questionnaire script to the player gods...</span>
+    <span class="hljs-keyword">return</span> API.script;
+});
+</code></pre>
+<p>Between the declaration of the API and returning the script, we use the API to put the task together. The full functionality of the API is described in the <a href="API.html">documentation </a>. This tutorial will walk you through using it to create a very basic questionnaire. You can use it as a template for creating your own questionnaires in the future.</p>
+<p>We will use the API to setup the questionnaire environment (using <code>addSettings</code>), then we will create prototypes for pages and questions within the questionnaire (using <code>addPagesSet</code> and <code>addQuestionsSet</code>), and finally we will setup the sequence of questions that will be presented to the subjects (using <code>addSequence</code>).</p>
+<pre><code class="lang-js">define([<span class="hljs-string">'questAPI'</span>], <span class="hljs-keyword">function</span>(Quest){
+    // create new quest API
+    var API = new Quest();
+
+    // setup the environment
+    API.addSettings(/* <span class="hljs-keyword">...</span> */);
+
+    // create the prototypes
+    API.addPagesSet(/* <span class="hljs-keyword">...</span> */);
+    API.addQuestionsSet(/* <span class="hljs-keyword">...</span> */);
+
+    // create questionnaire sequence
+    API.addSequence(/* <span class="hljs-keyword">...</span> */);
+
+    // <span class="hljs-keyword">return</span> questionnaire script to the player gods...
+    <span class="hljs-keyword">return</span> API.script;
+});
+</code></pre>
+<p>Before we jump into learning how each of these functions work, let us take a look at the basic building block of the questionnaire; pages and questions.</p>
+<h3 id="pages-questions">Pages &amp; questions</h3>
+<p>The basic building blocks within piQuest are <strong>pages</strong> and <strong>questions</strong>.</p>
+<p>A page is an object that describes one screen within your questionnaire. If your questionnaire presents all of its questions in one screen, it will probably have only one page. The properties within a page manage how the question(s) is(are) displayed and how the participants interact with it (e.g., select an answer and then click a submit button).</p>
+<p>For the purpose of this presentation we will create a page that has a &quot;Hello world!&quot; header, and allows participants to decline answering the questions. Further documentation of the properties of pages may be found in the <a href="API.html#pages">API docs</a>.</p>
+<pre><code class="lang-js">var page = {
+    header: 'Hello world!',
+    decline: <span class="hljs-constant">true</span>,
+    declineText: 'I prefer <span class="hljs-keyword">to</span> keep this information <span class="hljs-keyword">to</span> myself',
+    questions: [
+        /* This <span class="hljs-keyword">is</span> <span class="hljs-keyword">where</span> we will soon <span class="hljs-keyword">set</span> our questions */
+    ]
+}
+</code></pre>
+<p>Within our page we want to ask the participant a question: &#39;When you say good morning, what do you mean?&#39;. We want the user to select the correct answer out of a list, so we pick the <em>type</em> <code>selectOne</code> and set the answers within the <em>answers</em> property. Further documentation of the properties of questions may be found in the <a href="API.html#questions">API docs</a>.</p>
+<pre><code class="lang-js">var quest = {
+    type: 'selectOne',
+    stem: 'When you say good morning, what <span class="hljs-operator"><span class="hljs-keyword">do</span> you mean?<span class="hljs-string">',
+    answers: [
+        '</span><span class="hljs-keyword">Do</span> you wish me a good morning<span class="hljs-string">',
+        '</span><span class="hljs-keyword">Or</span> mean that it <span class="hljs-keyword">is</span> a good morning whether I want it <span class="hljs-keyword">or</span> <span class="hljs-keyword">not</span><span class="hljs-string">',
+        '</span><span class="hljs-keyword">Or</span> that you feel good this morning<span class="hljs-string">',
+        '</span><span class="hljs-keyword">Or</span> that it <span class="hljs-keyword">is</span> a morning <span class="hljs-keyword">to</span> be good <span class="hljs-keyword">on</span><span class="hljs-string">',
+        '</span><span class="hljs-keyword">All</span> <span class="hljs-keyword">of</span> them <span class="hljs-keyword">at</span> once<span class="hljs-string">'
+    ]
+}</span></span>
+</code></pre>
+<p>We will put the page and question together in a moment, but first let us get back to the API object and how we actually use these questions and objects.</p>
+<h3 id="thats-it">Thats it</h3>
+<p>The most important part of every questionnaire is the sequence. This is where you tell piQuest how to interact with the participants. In our case we want to simply present a single page with a single question so we get something like this:</p>
+<pre><code class="lang-js">define([<span class="hljs-symbol">'questAP</span>I'], function(<span class="hljs-type">Quest</span>){
+    <span class="hljs-comment">// create new quest API</span>
+    <span class="hljs-keyword">var</span> <span class="hljs-type">API</span> = <span class="hljs-keyword">new</span> <span class="hljs-type">Quest</span>();
+
+    <span class="hljs-comment">// create questionnaire sequence</span>
+    <span class="hljs-type">API</span>.addSequence([
+        <span class="hljs-comment">// page begins</span>
+        {
+            header: <span class="hljs-symbol">'Hello</span> world!',
+            decline: <span class="hljs-literal">true</span>,
+            declineText: <span class="hljs-symbol">'I</span> prefer to keep <span class="hljs-keyword">this</span> information to myself',
+            questions: [
+                <span class="hljs-comment">// question begins</span>
+                {
+                    <span class="hljs-class"><span class="hljs-keyword">type</span>:</span> <span class="hljs-symbol">'selectOn</span>e',
+                    stem: <span class="hljs-symbol">'When</span> you say good morning, what do you mean?',
+                    answers: [
+                        <span class="hljs-symbol">'Do</span> you wish me a good morning',
+                        <span class="hljs-symbol">'Or</span> mean that it is a good morning whether <span class="hljs-type">I</span> want it or not',
+                        <span class="hljs-symbol">'Or</span> that you feel good <span class="hljs-keyword">this</span> morning',
+                        <span class="hljs-symbol">'Or</span> that it is a morning to be good on',
+                        <span class="hljs-symbol">'All</span> of them at once'
+                    ]
+                }
+                <span class="hljs-comment">// question ends</span>
+            ]
+        }
+        <span class="hljs-comment">// page ends</span>
+    ]);
+
+    <span class="hljs-comment">// return questionnaire script to the player gods...</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-type">API</span>.script;
+});
+</code></pre>
+<p>The code we put together is enough to run in your browser: <a href="scripts\helloworld.html">check it out</a>.</p>
+</div></div></div></body></html>

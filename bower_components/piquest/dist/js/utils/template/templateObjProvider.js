@@ -1,0 +1,1 @@
+define(["require","underscore"],function(e){function n(e){function r(e,r){return t.forIn(e,function(e,i,s){t.isString(e)&&(s[i]=n(e,r))}),e}var n=e("template");return r}var t=e("underscore");return n.$inject=["$filter"],n});

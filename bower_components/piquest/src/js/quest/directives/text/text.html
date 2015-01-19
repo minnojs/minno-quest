@@ -1,0 +1,16 @@
+<div ng-form>
+	<input
+	 	type="text"
+		ng-model="response"
+		ng-minlength="{{data.minlength}}"
+		ng-maxlength="{{data.maxlength}}"
+		ng-pattern="data.pattern | toRegex"
+		ng-required="{{data.required}}"
+		class="form-control"
+	>
+	<div pi-quest-validation="form.$error.minlength">{{data.errorMsg.minlength || "Too short!"}}</div>
+	<div pi-quest-validation="form.$error.maxlength">{{data.errorMsg.maxlength || "Too long!"}}</div>
+	<div pi-quest-validation="form.$error.pattern">{{data.errorMsg.pattern || "wrong pattern!"}}</div>
+	<div pi-quest-validation="form.$error.required && $parent.$parent.submitAttempt">{{data.errorMsg.required || "This field is required!"}}</div>
+	<div pi-quest-validation="model.$error.correct">{{data.errorMsg.correct || "You must answer the correct answer!"}}</div>
+</div>

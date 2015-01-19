@@ -1,0 +1,30 @@
+define(['underscore','./settings'],function(_,settingsGetter){
+	/*
+	 * build the url for this src (add the generic base_url)
+	 */
+
+	return function(url, type){
+		var settings = settingsGetter();
+		var base_url;
+
+		// the base url setting may be either a string, or an object with the type as a field
+		if (_.isString(settings.base_url)) {
+			base_url = settings.base_url;
+		} else {
+			if (_.isObject(settings.base_url)) {
+				base_url = settings.base_url[type];
+			}
+		}
+
+		// make sure base url is set, and add trailing slash if needed
+		if (!base_url) {
+			base_url="";
+		} else {
+			if (base_url[base_url.length-1] != "/") {
+				base_url+="/";
+			}
+		}
+
+		return base_url + url;
+	};
+});

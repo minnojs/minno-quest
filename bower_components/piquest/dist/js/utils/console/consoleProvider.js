@@ -1,0 +1,1 @@
+define(["require","underscore"],function(e){function n(e){function n(n,r){var i=t.create(e);return t.extend(i,{tags:t.isArray(n)?n:[n],force:!!r}),i}function r(t){e.settings=t}return n.setSettings=r,n}var t=e("underscore");return n.$inject=["piConsolePrototype"],n});

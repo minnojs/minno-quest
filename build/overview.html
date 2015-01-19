@@ -1,0 +1,119 @@
+<!DOCTYPE html><html lang="en"></html><html><head><title>Project Implicit</title><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/sunburst.min.css"><style>div#main {padding-top:50px}
+.sidenav {background-color: #F7F5FA;border-radius: 5px;margin-bottom: 30px;margin-top: 30px;padding-bottom: 10px;padding-top: 10px;text-shadow: 0 1px 0 #FFFFFF;}
+.sidenav.nav li > a {color: #999999;display: block;font-size: 13px;font-weight: 600;padding: 5px 20px;}
+.sidenav.nav li > a:hover {text-decoration:none;color: #563D7C;}
+.sidenav.nav .nav > li > a {font-weight: 500; padding: 3px 0px 3px 30px}
+
+.sidenav.nav .nav > li > div {padding:3px 0px 3px 30px; font-weight: 500;}
+.sidenav.nav .nav > li > div a {color: #999999; margin-right: 5px;}
+.sidenav.nav .nav > li > div a:hover {text-decoration:none;color: #563D7C;}
+
+/* just fill in for .hljs that the highlighter does not add... */
+pre code{display:block;overflow-x:auto;padding:0.5em;background:#000;color:#f8f8f8;-webkit-text-size-adjust:none}
+</style></head><body><nav role="navigation" class="navbar navbar-inverse navbar-fixed-top"><div class="container"><div class="navbar-header"><button type="button" data-toggle="collapse" data-target="#navbar" class="navbar-toggle"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="https://github.com/ProjectImplicit/PIquest" class="navbar-brand">PI tasks</a></div><nav id="navbar" role="navigation" class="navbar-collapse bs-navbar-collapse"><ul class="nav navbar-nav"><li><a href="overview.html">piQuest</a></li><!--li: a(href="overview.html") piManager--></ul><ul class="nav navbar-nav navbar-right"><li><a href="about.html">About</a></li></ul></nav></div></nav><div id="main" class="container"><div class="row"><div class="col-md-3"><ul class="nav affix-top sidenav"><li><a href="./overview.html">Overview</a></li><li><a href="./API.html">API</a></li><li><a href="./helloworld.html">Hello world</a></li><li><a href="./tutorial.html">Tutorial</a></li><li><a href="javascript:void(0)">Examples</a><ul class="nav"><li><div><a href="scripts/helloworld.js" target="_blank" title="View">Hello World</a><a href="scripts/helloworld.html" target="_blank" title="Play"><span class="glyphicon glyphicon-play"></span></a><a href="scripts/helloworld.js" download="helloworld.js" title="Download"><span class="glyphicon glyphicon-download"></span></a></div></li><li><div><a href="scripts/weight.js" target="_blank" title="View">Weight Demo</a><a href="scripts/weight.html" target="_blank" title="Play"><span class="glyphicon glyphicon-play"></span></a><a href="scripts/weight.js" download="weight.js" title="Download"><span class="glyphicon glyphicon-download"></span></a></div></li></ul></li></ul></div><div class="col-md-9"><h2 id="overview">Overview</h2>
+<p>PIquest is a framework for administering on-line questionnaires.</p>
+<p>It is written in JavaScript and is built to be extremely versatile and customizable. The scripts for are written as JavaScript objects. This format allows writing simple and straightforward scripts using a constrained scripting language. The format also allows advanced users to easily create complex and dynamic scripts using in-line JavaScript.</p>
+<h3 id="table-of-contents">Table of contents</h3>
+<ul>
+<li><a href="#central-concepts">Central concepts</a></li>
+<li><a href="#a-short-introduction">A short introduction </a></li>
+</ul>
+<h3 id="central-concepts">Central concepts</h3>
+<p>The player treats each questionnaire a <strong>sequence</strong> of <strong>pages</strong>. Each page may have one or more <strong>questions</strong>.</p>
+<p>The pages are set into a sequence and presented sequentially. This is essentially all you need to know in order to start writing questionnaires.</p>
+<p>The sequence supports <strong><em>mixers</em></strong> that allow randomizing the order of the pages (or questions) that you create, and other features often needed when creating the sequence of a questionnaire. The questionnaire also supports an <em>inheritance</em> system, that allows abstracting questionnaires and makes them shorter, simpler, more dynamic, and most important, reusable.</p>
+<p>Questionnaires are created by writing a Java-script object that has several property objects: <code>settings</code>, <code>sequence</code>, <code>pages</code>, <code>questions</code>, <code>global</code> and <code>current</code>. Some of these properties have to do with advanced uses of the player. The only objects that you <strong>have</strong> to know are <code>sequence</code> and <code>settings</code>. We&#39;ll first show a simple questionnaire, then go through each of the more advanced options.</p>
+<h3 id="a-short-introduction">A short introduction</h3>
+<p>The basic unit in PIquest&#39;s scripts is the page. A page represents one screen in the questionnaire. A page can have a few properties to define its settings, and, most importantly, a list of one or more questions that will be displayed in the page. Here is the most basic page. It only has the <code>questions</code> property. It creates a simple page with no header/progress-bar/decline button, and other features.</p>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> page = {
+    questions: []
+}
+</code></pre>
+<p>There are plenty of additional features that <a href="#pages">pages have</a>, but this is the very minimum that you&#39;ll need.</p>
+<p>Well, you also need to define the questions. There are several <a href="./API.html#questions">types of questions</a>. All share a few basic properties.</p>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> question = {
+    <span class="hljs-class"><span class="hljs-keyword">type</span>:</span> <span class="hljs-symbol">'tex</span>t',
+    name: <span class="hljs-symbol">'myQuestNam</span>e',
+    stem: <span class="hljs-symbol">'What</span> would you like to know?'
+}
+</code></pre>
+<p>The <code>type</code> of question is the first decision that you have to make, it defines the question type and interface. This is where you decide if you want the user to enter some text, choose from a list or use a slider. The <code>name</code> is the question&#39;s name to save when logged to the server. The name also allows you to refer to the question from other objects. Finally, <code>stem</code> is the text that will be displayed.</p>
+<p>The question in the example above shows a text input with the question &#39;What would you like to know?&#39;. </p>
+<p>Here is an example of a <code>selectOne</code> question that prompts the user to choose one response out of a list of answers: red, blue or green.</p>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> question = {
+    <span class="hljs-class"><span class="hljs-keyword">type</span>:</span> <span class="hljs-symbol">'selectOn</span>e',
+    name: <span class="hljs-symbol">'mySelectQues</span>t',
+    stem: <span class="hljs-symbol">'What</span> color is the sky?',
+    answers: [
+        <span class="hljs-symbol">'re</span>d',
+        <span class="hljs-symbol">'blu</span>e',
+        <span class="hljs-symbol">'gree</span>n'
+    ]
+}
+</code></pre>
+<p>Now that we know how to create questions, let&#39;s create the sequence. The main component of your questionnaire will always be the sequence. The sequence describes the course of your questionnaire; most of the time it is possible to create everything that you want just within the sequence (i.e., define all the pages and all the questions when you define the sequence). The sequence is a javascript array of page objects that are activated one after the other. The following sequence includes two pages, the first has two questions, the second only one:</p>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> sequence = [
+    <span class="hljs-comment">// 1. This is a page object</span>
+    {
+        <span class="hljs-comment">// It has a questions property</span>
+        questions:[
+            <span class="hljs-comment">// 1a. This is the first question (a text input):</span>
+            {
+                <span class="hljs-class"><span class="hljs-keyword">type</span>:</span> <span class="hljs-symbol">'tex</span>t',
+                stem: <span class="hljs-symbol">'What</span> is your name?'
+            },
+            <span class="hljs-comment">// 1b. This is a second question (a select one input)</span>
+            {
+                <span class="hljs-class"><span class="hljs-keyword">type</span>:</span> <span class="hljs-symbol">'selectOn</span>e',
+                stem: <span class="hljs-symbol">'How</span> are you?',
+                answers: [<span class="hljs-symbol">'goo</span>d', <span class="hljs-symbol">'fai</span>r' ,<span class="hljs-symbol">'ba</span>d']
+            }
+        ]
+    },
+    <span class="hljs-comment">// 2. This is the second page object</span>
+    {
+        <span class="hljs-comment">// It has the same structure as the previous one</span>
+        questions:[
+            <span class="hljs-comment">// 2a. But only one question</span>
+            {
+                <span class="hljs-class"><span class="hljs-keyword">type</span>:</span> <span class="hljs-symbol">'tex</span>t',
+                stem: <span class="hljs-symbol">'What</span> is your name again?'
+            }
+        ]
+    }
+]
+</code></pre>
+<p>The sequence also supports randomization and branching. Read about it <a href="#./API.html#mixer">here</a>.</p>
+<p>Now that we&#39;ve created the sequence, let&#39;s put it into the player. The first and last two lines are the same for all scripts (they have to do with the way Javascript works), you can simply ignore them. The <code>API</code> object assists you in putting your script together, you will <a href="#API">eventually</a> learn more about its functionality, but for now we only need to know that the <code>addSequence</code> function is responsible for adding pages into the sequence. You may call it as many times as you like.</p>
+<pre><code class="lang-js">define([<span class="hljs-symbol">'questAP</span>I'], function(quest){
+    <span class="hljs-keyword">var</span> <span class="hljs-type">API</span> = <span class="hljs-keyword">new</span> quest();
+
+    <span class="hljs-type">API</span>.addSequence([
+        {
+            questions:[
+                {
+                    <span class="hljs-class"><span class="hljs-keyword">type</span>:</span> <span class="hljs-symbol">'tex</span>t',
+                    stem: <span class="hljs-symbol">'What</span> is your name?'
+                },
+                {
+                    <span class="hljs-class"><span class="hljs-keyword">type</span>:</span> <span class="hljs-symbol">'selectOn</span>e',
+                    stem: <span class="hljs-symbol">'How</span> are you?',
+                    answers: [<span class="hljs-symbol">'goo</span>d', <span class="hljs-symbol">'fai</span>r' ,<span class="hljs-symbol">'ba</span>d']
+                }
+            ]
+        },
+        {
+            questions:[
+                {
+                    <span class="hljs-class"><span class="hljs-keyword">type</span>:</span> <span class="hljs-symbol">'tex</span>t',
+                    stem: <span class="hljs-symbol">'What</span> is your name again?'
+                }
+            ]
+        }
+    ]);
+
+    <span class="hljs-keyword">return</span> <span class="hljs-type">API</span>.script;
+});
+</code></pre>
+<p>That&#39;s it! PIquest has loads of additional features (as you can read below), but this was the very basic information that you must know first. (by the way, if you want to log the responses to your questions you should learn about the <a href="./API.html#settings"> logger setting </a>).</p>
+</div></div></div></body></html>

@@ -1,0 +1,1 @@
+define(["require","angular","./LoggerProvider","utils/console/consoleModule"],function(e){var t=e("angular"),n=e("./LoggerProvider"),r=t.module("logger",[e("utils/console/consoleModule").name]);return r.provider("Logger",n),r});

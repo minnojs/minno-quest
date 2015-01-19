@@ -1,0 +1,1 @@
+define(["require","quest/directives/questDirectivesModule","quest/task/task-module"],function(e){e("quest/directives/questDirectivesModule"),e("quest/task/task-module");var t=angular.module("piQuest",["questDirectives","task"]);return t.config(["$sceProvider",function(e){e.enabled(!1)}]),t});
