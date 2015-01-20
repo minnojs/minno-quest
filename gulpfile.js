@@ -18,7 +18,7 @@ gulp.task('clean', function(cb){
 
 // get README from master branch and copy it into 0.0/API.md
 gulp.task('build:getapi' ,function(cb){
-	exec('mkdir -p src/0.0 && git show master:README.md > src/0.0/API.md', cb);
+	exec('mkdir -p src/0.0 && git show master:src/js/quest/API.md > src/0.0/API.md', cb);
 });
 
 gulp.task('build:md', ['build:getapi'] ,function () {

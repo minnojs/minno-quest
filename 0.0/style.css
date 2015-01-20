@@ -144,14 +144,14 @@ body {
       padding-left: 20px; } }
   .bs-docs-sidebar .nav {
     /* Nav: second level (shown on .active) */ }
-    .bs-docs-sidebar .nav > li > a {
+    .bs-docs-sidebar .nav > li > a, .bs-docs-sidebar .nav > li > div {
       display: block;
       padding: 4px 20px;
       font-size: 14px;
       font-weight: 500;
       color: #767676;
       font-weight: bold; }
-      .bs-docs-sidebar .nav > li > a:hover, .bs-docs-sidebar .nav > li > a:focus {
+      .bs-docs-sidebar .nav > li > a:hover, .bs-docs-sidebar .nav > li > a:focus, .bs-docs-sidebar .nav > li > div:hover, .bs-docs-sidebar .nav > li > div:focus {
         padding-left: 19px;
         color: #563d7c;
         text-decoration: none;

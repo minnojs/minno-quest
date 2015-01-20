@@ -3,4 +3,4 @@
 This tutorial will walk you through creating a fairly complex questionnaire. You can download the final script right [here](scripts/tutorial.js).
 
 
-# in process!!
+# Comming soon!!

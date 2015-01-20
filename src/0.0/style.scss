@@ -175,7 +175,7 @@ body {
   /* All levels of nav */
   .nav {
 
-    > li > a {
+    > li > a, > li > div {
       display: block;
       padding: 4px 20px;
       font-size: 14px;
