@@ -9,10 +9,10 @@ var del = require('del');
 var path = require('path');
 var git = require('gulp-git');
 var exec = require('child_process').exec;
-
+var sass = require('gulp-sass');
 
 gulp.task('clean', function(cb){
-	del(['build'],cb);
+	del([],cb);
 });
 
 
@@ -29,32 +29,39 @@ gulp.task('build:md', ['build:getapi'] ,function () {
 				return highlight.highlightAuto(code).value;
 			}
 		}))
-		.pipe(applyTemplate({engine:'jade', template: function(context,file){
-			return path.join(path.dirname(file.path), 'md.jade');
+		.pipe(applyTemplate({engine:'swig', template: function(context,file){
+			context.basename = path.basename(file.path,'.html');
+			return path.join(path.dirname(file.path), 'md.swig');
 		}}))
 		.pipe(rename({extname: '.html'}))
 		.pipe(gulp.dest('.'));
 });
 
-gulp.task('build:js', ['clean'], function(){
+gulp.task('build:js', function(){
 	var cloneSink = clone.sink();
 
 	return gulp.src('src/**/*.js')
 		// create activation pages using clone
 		.pipe(cloneSink)
-		.pipe(applyTemplate({engine:'jade', template: function(context, file){
-			context.url = path.relative('.', file.path);
-			return path.join(path.dirname(file.path), 'js.jade');
+		.pipe(applyTemplate({engine:'swig', template: function(context, file){
+			context.url = path.join(path.relative('bower_components/piquest/src/', '0.0/scripts'), path.basename(file.path));
+			return path.join(path.dirname(file.path), 'js.swig');
 		}}))
 		.pipe(rename({extname: '.html'}))
 		.pipe(cloneSink.tap())
-		.pipe(gulp.dest('build'));
+		.pipe(gulp.dest('.'));
 });
 
-gulp.task('build',  ['build:js', 'build:md']);
+gulp.task('build:css', function(){
+	return gulp.src('src/**/*.scss')
+		.pipe(sass({errLogToConsole: true}))
+		.pipe(gulp.dest('.'));
+});
+
+gulp.task('build',  ['build:js', 'build:md', 'build:css']);
 
 gulp.task('watch', function(){
-	gulp.watch(['0.0/**/*'], ['build']);
+	gulp.watch(['src/**/*'], ['build']);
 });
 
 gulp.task('build:bower', function(cb){

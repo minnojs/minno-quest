@@ -1,5 +1,7 @@
 # Hello world
 
+This tutorial will walk you through the first steps of creating a piQuest questionnaire. You can download or activate it from the bar on the right.
+
 ### Contents
 
 * [Structure](#structure)
@@ -10,7 +12,7 @@
 
 The first step learning to use piQuest is getting to know the structure of a piQuest script. The scripts are written in javascript, although all you really need to know is how to use our very specific API (this means that if you're in to that sort of thing, you can write any javascript that you like...).
 
-Each script is wrapped within a [`define`](require.js/@@@@.html#AMD) statement. At the beginning you create the API object, and at the end you return the script that you have created. This basic structure stays more or less constant across any script that you create. In other words: you can always just copy paste this portion of the script and get on with building your questionnaire:
+Each script is wrapped within a [`define`](http://requirejs.org/docs/whyamd.html#amd) statement. At the beginning you create the API object, and at the end you return the script that you have created. This basic structure stays more or less constant across any script that you create. In other words: you can always just copy paste this portion of the script and get on with building your questionnaire:
 
 ```js
 define(['questAPI'], function(Quest){
@@ -128,4 +130,4 @@ define(['questAPI'], function(Quest){
 });
 ```
 
-The code we put together is enough to run in your browser: [check it out](scripts\helloworld.html).
+The code we put together is enough to run in your browser: [check it out](scripts/helloworld.html).
