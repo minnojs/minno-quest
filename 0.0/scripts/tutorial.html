@@ -13,6 +13,10 @@
 		<base href="../../bower_components/piquest/src/"></base>
 		<link rel="stylesheet" href="styles/main.css" />
 
+		<!-- Favicons -->
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+		<link rel="icon" href="/favicon.ico">
+
 		<style type="text/css">
 
 			.container {padding-top: 15px;}

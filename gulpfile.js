@@ -69,8 +69,11 @@ gulp.task('build:bower', function(cb){
 });
 
 gulp.task('deploy', function(){
-	gulp.run(['build'])
-	// update bower
+	gulp.run(['build']);
+	// get dist etc.
+	// git --work-tree=0.0 checkout master -- dist
+	// needs git reset or git add . to clean tree.
+
 	// copy latest api.md(s) into the correct folder (using git.exec('git show master:quest/API.md'))
 	// build
 	// git add

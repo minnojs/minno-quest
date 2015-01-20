@@ -29,8 +29,8 @@
 		<![endif]-->
 
 		<!-- Favicons -->
-		<link rel="apple-touch-icon" href="/apple-touch-icon.png">
-		<link rel="icon" href="/favicon.ico">
+		<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+		<link rel="icon" href="../favicon.ico">
 	</head>
 
 	<body>
@@ -46,7 +46,7 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a href="https://implicit.harvard.edu/implicit" class="navbar-brand">Project Implicit</a>
+					<a href="../" class="navbar-brand">Project Implicit</a>
 				</div>
 				<nav class="collapse navbar-collapse bs-navbar-collapse">
 					<ul class="nav navbar-nav">
