@@ -77,9 +77,12 @@ gulp.task('deploy:update', function(cb){
 });
 
 gulp.task('deploy', function(cb){
-	gulp.start('deploy:update', function(){
-		gulp.start('clean', function(){
-			gulp.start('build',function(){
+	gulp.start('deploy:update', function(err){
+		if (err) {throw err;}
+		gulp.start('clean', function(err){
+			if (err) {throw err;}
+			gulp.start('build',function(err){
+				if (err) {throw err;}
 				exec('git add . && git commit -am "chore(deploy): auto commit"', cb);
 			});
 		});
