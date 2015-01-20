@@ -98,6 +98,20 @@ body {
  *
  * Jumbotron-esque headers at the top of every page that's not the homepage.
  */
+.bs-docs-header {
+  position: relative;
+  padding: 30px 15px;
+  color: #cdbfe3;
+  text-align: center;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+  background-color: #6f5499;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#563d7c), to(#6f5499));
+  background-image: -webkit-linear-gradient(top, #563d7c 0%, #6f5499 100%);
+  background-image: -o-linear-gradient(top, #563d7c 0%, #6f5499 100%);
+  background-image: linear-gradient(to bottom, #563d7c 0%, #6f5499 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#563d7c', endColorstr='#6F5499', GradientType=0);
+  background-repeat: repeat-x; }
+
 /* Page headers */
 .bs-docs-header {
   margin-bottom: 40px;
@@ -144,14 +158,14 @@ body {
       padding-left: 20px; } }
   .bs-docs-sidebar .nav {
     /* Nav: second level (shown on .active) */ }
-    .bs-docs-sidebar .nav > li > a {
+    .bs-docs-sidebar .nav > li > a, .bs-docs-sidebar .nav > li > div {
       display: block;
       padding: 4px 20px;
       font-size: 14px;
       font-weight: 500;
       color: #767676;
       font-weight: bold; }
-      .bs-docs-sidebar .nav > li > a:hover, .bs-docs-sidebar .nav > li > a:focus {
+      .bs-docs-sidebar .nav > li > a:hover, .bs-docs-sidebar .nav > li > a:focus, .bs-docs-sidebar .nav > li > div:hover, .bs-docs-sidebar .nav > li > div:focus {
         padding-left: 19px;
         color: #563d7c;
         text-decoration: none;

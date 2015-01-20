@@ -64,6 +64,12 @@
 			</div>
 		</header>
 
+		<div id="content" class="bs-docs-header">
+			<div class="container">
+				<h1>{{ frontMatter.title }}</h1>
+				<p>{{ frontMatter.description }}</p>
+			</div>
+		</div>
 
 		<div class="container bs-docs-container">
 			<div class="row">
