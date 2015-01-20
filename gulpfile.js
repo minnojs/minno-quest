@@ -55,7 +55,7 @@ gulp.task('build:js', function(){
 		// create activation pages using clone
 		.pipe(cloneSink)
 		.pipe(applyTemplate({engine:'swig', template: function(context, file){
-			context.url = path.join(path.relative('bower_components/piquest/src/', '0.0/scripts'), path.basename(file.path));
+			context.url = path.join('scripts/', path.basename(file.path));
 			return path.join(path.dirname(file.path), 'js.swig');
 		}}))
 		.pipe(rename({extname: '.html'}))
@@ -71,24 +71,24 @@ gulp.task('build:css', function(){
 
 gulp.task('build',  ['build:js', 'build:md', 'build:css']);
 
+
+gulp.task('deploy:update', function(cb){
+	exec('./scripts/getSource.sh', cb);
+});
+
+gulp.task('deploy', function(cb){
+	gulp.start('deploy:update', function(){
+		gulp.start('clean', function(){
+			gulp.start('build',function(){
+				exec('git add . && git commit -am "chore(deploy): auto commit"', cb);
+			});
+		});
+	});
+});
+
 gulp.task('watch', function(){
 	gulp.watch(['src/**/*'], ['build']);
 });
 
-gulp.task('build:bower', function(cb){
-	exec('bower update', cb);
-});
-
-gulp.task('deploy', function(){
-	gulp.run(['build']);
-	// get dist etc.
-	// git --work-tree=0.0 checkout master -- dist
-	// needs git reset or git add . to clean tree.
-
-	// copy latest api.md(s) into the correct folder (using git.exec('git show master:quest/API.md'))
-	// build
-	// git add
-	// git push
-});
 
 gulp.task('default', ['build']);

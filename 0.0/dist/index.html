@@ -1,3 +1,4 @@
+
 <!doctype html>
 <!--[if IE 7]>				 <html class="no-js lt-ie9 lt-ie8" id="ng-app" ng-app=""> <![endif]-->
 <!--[if IE 8]>				 <html class="no-js lt-ie9" id="ng-app" ng-app=""> <![endif]-->
@@ -5,17 +6,20 @@
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>PI questionnaire</title>
 		<meta name="description" content="Project Implicit Questionnaire">
 		<meta name="viewport" content="width=device-width">
 
-		<title>PI questionnaire</title>
-
-		<base href="../dist/"></base>
+		<!-- build:css styles/vendor.css -->
+		<!-- bower:css -->
+		<!-- <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css" /> -->
 		<link rel="stylesheet" href="styles/main.css" />
+		<!-- endbower -->
+		<!-- endbuild -->
 
-		<!-- Favicons -->
-		<link rel="apple-touch-icon" href="/apple-touch-icon.png">
-		<link rel="icon" href="/favicon.ico">
+		<!-- build:css({.tmp,app}) styles/main.css -->
+		<!-- <link rel="stylesheet" href="styles/main.css"> -->
+		<!-- endbuild -->
 
 		<style type="text/css">
 
@@ -31,6 +35,8 @@
 		</style>
 	</head>
 
+	<!-- <script type="text/javascript">var require = {urlArgs: "bust=" +  (new Date()).getTime()}</script> -->
+
 	<body>
 		<!--[if lt IE 7]>
 			<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
@@ -38,7 +44,8 @@
 
 		<div class="container" ng-app>
 			<img class="pi-spinner" ng-hide="1"/>
-			<div pi-manager-task="{type:'quest',scriptUrl:'../../scripts/helloworld.js'}"></div>
+			<div pi-manager="/presentation/managerScript.js"></div>
+			<div spi-manager-task="{type:'pip',scriptUrl:'/quest/src/example/iat.js'}"></div>
 			<div pi-console></div>
 		</div>
 
