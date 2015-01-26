@@ -13,16 +13,7 @@ gulp.task('clean', function(cb){
 
 // get README from master branch and copy it into 0.0/API.md
 gulp.task('build:getapi' ,function(cb){
-	// add front matter to the API
-	var APIfrontMatter = [
-		'---',
-		'title: API',
-		'description: All the little details...',
-		'---',
-		'\n'
-	].join("\n");
-
-	exec('mkdir -p src/0.0 && echo "' +APIfrontMatter+ ' $(git show master:src/js/quest/API.md)" > src/0.0/API.md', cb);
+	exec('scripts/getAPImd.sh', cb);
 });
 
 gulp.task('build:md', ['build:getapi'] ,function () {

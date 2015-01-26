@@ -3,7 +3,7 @@ title: API
 description: All the little details...
 ---
 
- # piQuest API
+# piQuest API
 
 ### Table of contents
 
