@@ -1,55 +1,30 @@
 #!/usr/bin/env bash
 
-PROGNAME=$(basename $0)
-function error_exit
-{
+# get base dir so that we source from the correct location
+DIR="${BASH_SOURCE%/*}"
+if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi
 
-#	----------------------------------------------------------------
-#	Function for exit due to fatal program error
-#		Accepts 1 argument:
-#			string containing descriptive error message
-#	----------------------------------------------------------------
+# get helpers
+source "$DIR/errorExit.sh" || error_exit "$LINENO: errorExit not found."
+source "$DIR/cleanGitTree.sh" || error_exit "$LINENO: cleanGitTree not found."
 
-	echo "${PROGNAME}: ${1:-"Unknown Error"}" 1>&2
-	exit 1
-}
-
-
-require_clean_work_tree () {
-    # Update the index
-    git update-index -q --ignore-submodules --refresh
-    err=0
-
-    # Disallow unstaged changes in the working tree
-    if ! git diff-files --quiet --ignore-submodules --
-    then
-        echo >&2 "cannot $1: you have unstaged changes."
-        git diff-files --name-status -r --ignore-submodules -- >&2
-        err=1
-    fi
-
-    # Disallow uncommitted changes in the index
-    if ! git diff-index --cached --quiet HEAD --ignore-submodules --
-    then
-        echo >&2 "cannot $1: your index contains uncommitted changes."
-        git diff-index --cached --name-status -r --ignore-submodules HEAD -- >&2
-        err=1
-    fi
-
-    if [ $err = 1 ]
-    then
-        echo >&2 "Please commit or stash them."
-        exit 1
-    fi
-}
-
+# make sure that this directory has no changes
 require_clean_work_tree "get piQuest 0.0 source"
 
+# create temporary directory that we can use for our stuff...
 # http://unix.stackexchange.com/questions/30091/fix-or-alternative-for-mktemp-in-os-x
 TMPDIR=`mktemp -d 2>/dev/null || mktemp -d -t 'myTMPDIR'`
-echo "git --work-tree=$TMPDIR checkout master -- dist"
-git --work-tree=$TMPDIR checkout master -- dist || error_exit "$LINENO: failed getting dist."
-git --work-tree=$TMPDIR checkout master -- bower_components || error_exit "$LINENO: failed getting bower_components."
 
+# checkout master
+git checkout master || error_exit "$LINENO: could not checkout master."
+
+# copy dirs that we want to temporary dir
+cp -r dist $TMPDIR || error_exit "$LINENO: could not export to TMPDIR."
+cp -r bower_components $TMPDIR || error_exit "$LINENO: could not export to TMPDIR."
+
+# come back to gh-pages
+git checkout gh-pages || error_exit "$LINENO: could not checkout gh-pages."
+
+# copy dirs that we want back to gh-pages
 rm -rf 0.0/{dist,bower_components}
-mv $TMPDIR/** 0.0
+mv $TMPDIR/** 0.0 || error_exit "$LINENO: could not import from TMPDIR."
