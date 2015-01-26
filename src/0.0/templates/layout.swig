@@ -95,7 +95,6 @@
 						<ul class="nav bs-docs-sidenav">
 							{{ navitem("Overview", "overview", data.basename) }}
 							{{ navitem("Introduction", "introduction", data.basename) }}
-							{{ navitem("Tutorial", "tutorial", data.basename) }}
 							<li>
 								<a href="helloworldDocco.html">Examples</a>
 								<ul class="nav">

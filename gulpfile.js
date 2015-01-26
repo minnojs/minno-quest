@@ -1,19 +1,13 @@
 var gulp = require('gulp');
-var marked = require('gulp-marked');
 var applyTemplate = require('gulp-apply-template');
-var clone = require('gulp-clone');
 var rename = require('gulp-rename');
-var highlight = require('highlight.js');
 var data = require('gulp-data');
-var del = require('del');
 var path = require('path');
 var exec = require('child_process').exec;
-var sass = require('gulp-sass');
-var frontMatter = require('gulp-front-matter');
-var docco = require('docco');
 //var debug = require('gulp-debug');
 
 gulp.task('clean', function(cb){
+	var del = require('del');
 	del(['0.0/*'],cb);
 });
 
@@ -32,6 +26,10 @@ gulp.task('build:getapi' ,function(cb){
 });
 
 gulp.task('build:md', ['build:getapi'] ,function () {
+	var marked = require('gulp-marked');
+	var highlight = require('highlight.js');
+	var frontMatter = require('gulp-front-matter');
+
 	return gulp.src('src/**/*.md')
 		.pipe(frontMatter({remove:true, property:'data'})) 		// set front matter into data
 		.pipe(data(function(file){								// set basename into data
@@ -51,6 +49,8 @@ gulp.task('build:md', ['build:getapi'] ,function () {
 
 gulp.task('build:js', function(){
 	var es = require('event-stream');
+	var clone = require('gulp-clone');
+	var docco = require('docco');
 
 	// add scripts to stream
 	var scripts = gulp.src('src/**/*.js');
@@ -94,6 +94,7 @@ gulp.task('build:js', function(){
 });
 
 gulp.task('build:css', function(){
+	var sass = require('gulp-sass');
 	return gulp.src('src/**/*.scss')
 		.pipe(sass({errLogToConsole: true}))
 		.pipe(gulp.dest('.'));

@@ -1,6 +1,6 @@
 ---
 title: Introduction
-description: This tutorial will walk you through the first steps of creating a piQuest questionnaire. You can download or activate it from the bar on the right.
+description: This tutorial will walk you through the first steps of creating a piQuest questionnaire. You can download or activate it from the "Hello world" section in the bar on the right.
 ---
 
 ### Contents
@@ -131,4 +131,4 @@ define(['questAPI'], function(Quest){
 });
 ```
 
-The code we put together is enough to run in your browser: [check it out](scripts/helloworld.html).
+The code we put together is enough to run in your browser: [check it out](helloworldPlay.html).

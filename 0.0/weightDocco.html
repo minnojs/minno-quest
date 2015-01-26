@@ -75,400 +75,502 @@
 				<div class="col-md-9" role="main">
 					
 	
-		
+		<p>The weight questionnaire is a solid example of how we create a fairly complex questionnaire.
+It is heavily commented so that you can follow everything that goes on.
+After reading the documentation feel free to download the file and modify it according to your needs.</p>
+<h3 id="opening-section">Opening section</h3>
+<p>The opening section of each script is always more or less the same.
+We create the wrapper for the script (<code>define</code>), and create a new instance of a questionnaire.</p>
+
 
 		
 		  <div class='highlight'><pre>define([<span class="hljs-string">'questAPI'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(Quest)</span></span>{
 
-	<span class="hljs-keyword">var</span> API = <span class="hljs-keyword">new</span> Quest();
+  <span class="hljs-keyword">var</span> API = <span class="hljs-keyword">new</span> Quest();</pre></div>
+		
+	
+		<h3 id="creating-page-and-questions-sets">Creating page and questions sets</h3>
+<p>The first thing we do in this script is create prototypes of the pages and questions that we will use.
+Many times (usually?), questionnaires use similar settings to describe the <strong>pages</strong> and <strong>questions</strong> in their studies.
+piQuest provides a system that allows us to prototype them so that our script may be shorter and easier to maintain
+(it’s better to make a change in one place and have it affect all your questions than having to go through each question and change it individually).
+It’s worth while to mention that it is not strictly necessary to use prototypes and inheritance,
+you can create your pages and questions from scratch from within the <a href="API.html#sequence">sequence</a>.</p>
+<p>The prototyping system uses <code>API.addPagesSet</code> and <code>API.addQuestionsSet</code> in order to create sets of prototypical pages/questions,
+later on we can <code>inherit</code> them into our sequence.
+Essentially, inheritance means that we use the object that we inherit as a base for the creation of a new object
+(see the <a href="API.html#inheritance">API</a> for more details).</p>
 
-	<span class="hljs-comment">/**
-	 * Question prototypes
-	 */</span>
-	API.addQuestionsSet(<span class="hljs-string">'basicSelect'</span>,{
-		type: <span class="hljs-string">'selectOne'</span>,
-		autoSubmit:<span class="hljs-literal">true</span>,
-		numericValues:<span class="hljs-literal">true</span>,
-		help: <span class="hljs-string">'&lt;%= pagesMeta.number &lt; 3 %&gt;'</span>, <span class="hljs-comment">// show the help message only for the first three pages</span>
-		helpText: <span class="hljs-string">'Selecting an answer once colors it blue.&lt;br/&gt;You can change your answer by selecting another option.&lt;br/&gt;To confirm, click the selected (blue) button a second time.'</span>
-	});
 
-	API.addQuestionsSet(<span class="hljs-string">'basicDropdown'</span>,{
-		type: <span class="hljs-string">'dropdown'</span>,
-		autoSubmit:<span class="hljs-literal">true</span>,
-		numericValues:<span class="hljs-literal">true</span>
-	});
+		
+	
+		<h4 id="page-prototype">Page prototype</h4>
+<p>Here we create a prototype for the <a href="API.html#pages">pages</a> in our group.
+The prototype belongs to a group that we arbitrarily call ‘basicPage’, we will later use this name in order to inherit this page.
+We will be using auto submit within the questions, so we disable the submit button for all pages (<code>noSubmit</code>).
+And finally we add a progress bar that will track the location of the participants within the questionnaire (<code>progressBar</code>).</p>
 
-	<span class="hljs-comment">/**
-	 * Page prototype
-	 */</span>
-	API.addPagesSet(<span class="hljs-string">'basicPage'</span>,{
-		progressBar: <span class="hljs-string">'&lt;%= pagesMeta.number %&gt; out of 15'</span>,
-		noSubmit:<span class="hljs-literal">true</span>,
-		numbered: <span class="hljs-literal">false</span>
-	});
 
-	<span class="hljs-comment">/**
-	 * Sequence
-	 *
-	 * This questionniare has several demographic/personal questions that appear at the begining in a constant order.
-	 * After them we have a series of general questions that appear in a random order.
-	 */</span>
-	API.addSequence([
-		<span class="hljs-comment">/**
-		 * Basic weight segment
-		 * This segment has 6 demographic/personal questions.
-		 */</span>
-		{
-			inherit : <span class="hljs-string">'basicPage'</span>,
-			questions : [{
-				inherit : <span class="hljs-string">'basicSelect'</span>,
-				name: <span class="hljs-string">'weightpref'</span>,
-				stem: <span class="hljs-string">'Which statement best describes you?'</span>,
-				answers: [
-					<span class="hljs-string">'I strongly prefer Thin People to Fat People.'</span>,
-					<span class="hljs-string">'I moderately prefer Thin People to Fat People.'</span>,
-					<span class="hljs-string">'I slightly prefer Thin People to Fat People.'</span>,
-					<span class="hljs-string">'I like Thin People and Fat People equally.'</span>,
-					<span class="hljs-string">'I slightly prefer Fat People to Thin People.'</span>,
-					<span class="hljs-string">'I moderately prefer Fat People to Thin People.'</span>,
-					<span class="hljs-string">'I strongly prefer Fat People to Thin People.'</span>
-				]
-			}]
-		},
-		{
-			inherit : <span class="hljs-string">'basicPage'</span>,
-			questions : [{
-				inherit : <span class="hljs-string">'basicSelect'</span>,
-				name: <span class="hljs-string">'tempfat'</span>,
-				stem: <span class="hljs-string">'How warm or cold do you feel towards &lt;b&gt;fat people&lt;/b&gt;?'</span>,
-				answers: [
-					<span class="hljs-string">'Extremely warm'</span>,
-					<span class="hljs-string">'Very warm'</span>,
-					<span class="hljs-string">'Moderately warm'</span>,
-					<span class="hljs-string">'Somewhat warm'</span>,
-					<span class="hljs-string">'Slightly warm'</span>,
-					<span class="hljs-string">'Neither warm nor cold'</span>,
-					<span class="hljs-string">'Slightly cold'</span>,
-					<span class="hljs-string">'Somewhat cold'</span>,
-					<span class="hljs-string">'Moderately cold'</span>,
-					<span class="hljs-string">'Very cold'</span>,
-					<span class="hljs-string">'Extremely cold'</span>
-				]
-			}]
-		},
-		{
-			inherit : <span class="hljs-string">'basicPage'</span>,
-			questions : [{
-				inherit : <span class="hljs-string">'basicSelect'</span>,
-				name: <span class="hljs-string">'tempthin'</span>,
-				stem: <span class="hljs-string">'How warm or cold do you feel towards &lt;b&gt;thin people&lt;/b&gt;?'</span>,
-				answers: [
-					<span class="hljs-string">'Extremely warm'</span>,
-					<span class="hljs-string">'Very warm'</span>,
-					<span class="hljs-string">'Moderately warm'</span>,
-					<span class="hljs-string">'Somewhat warm'</span>,
-					<span class="hljs-string">'Slightly warm'</span>,
-					<span class="hljs-string">'Neither warm nor cold'</span>,
-					<span class="hljs-string">'Slightly cold'</span>,
-					<span class="hljs-string">'Somewhat cold'</span>,
-					<span class="hljs-string">'Moderately cold'</span>,
-					<span class="hljs-string">'Very cold'</span>,
-					<span class="hljs-string">'Extremely cold'</span>
-				]
-			}]
-		},
-		{
-			inherit : <span class="hljs-string">'basicPage'</span>,
-			questions : [{
-				inherit : <span class="hljs-string">'basicDropdown'</span>,
-				name: <span class="hljs-string">'myheight'</span>,
-				stem: <span class="hljs-string">'Please indicate your height by selecting the most accurate option.'</span>,
-				answers: [
-					<span class="hljs-string">'3 ft 0 in :: 91 cm'</span>,
-					<span class="hljs-string">'3 ft 1 in :: 94 cm'</span>,
-					<span class="hljs-string">'3 ft 2 in :: 97 cm'</span>,
-					<span class="hljs-string">'3 ft 3 in :: 99 cm'</span>,
-					<span class="hljs-string">'3 ft 4 in :: 102 cm'</span>,
-					<span class="hljs-string">'3 ft 5 in :: 104 cm'</span>,
-					<span class="hljs-string">'3 ft 6 in :: 107 cm'</span>,
-					<span class="hljs-string">'3 ft 7 in :: 109 cm'</span>,
-					<span class="hljs-string">'3 ft 8 in :: 112 cm'</span>,
-					<span class="hljs-string">'3 ft 9 in :: 114 cm'</span>,
-					<span class="hljs-string">'3 ft 10 in :: 117 cm'</span>,
-					<span class="hljs-string">'3 ft 11 in :: 119 cm'</span>,
-					<span class="hljs-string">'4 ft 0 in :: 122 cm'</span>,
-					<span class="hljs-string">'4 ft 1 in :: 124 cm'</span>,
-					<span class="hljs-string">'4 ft 2 in :: 127 cm'</span>,
-					<span class="hljs-string">'4 ft 3 in :: 130 cm'</span>,
-					<span class="hljs-string">'4 ft 4 in :: 132 cm'</span>,
-					<span class="hljs-string">'4 ft 5 in :: 135 cm'</span>,
-					<span class="hljs-string">'4 ft 6 in :: 137 cm'</span>,
-					<span class="hljs-string">'4 ft 7 in :: 140 cm'</span>,
-					<span class="hljs-string">'4 ft 8 in :: 142 cm'</span>,
-					<span class="hljs-string">'4 ft 9 in :: 145 cm'</span>,
-					<span class="hljs-string">'4 ft 10 in :: 147 cm'</span>,
-					<span class="hljs-string">'4 ft 11 in :: 150 cm'</span>,
-					<span class="hljs-string">'5 ft 0 in :: 152 cm'</span>,
-					<span class="hljs-string">'5 ft 1 in :: 155 cm'</span>,
-					<span class="hljs-string">'5 ft 2 in :: 157 cm'</span>,
-					<span class="hljs-string">'5 ft 3 in :: 160 cm'</span>,
-					<span class="hljs-string">'5 ft 4 in :: 163 cm'</span>,
-					<span class="hljs-string">'5 ft 5 in :: 165 cm'</span>,
-					<span class="hljs-string">'5 ft 6 in :: 168 cm'</span>,
-					<span class="hljs-string">'5 ft 7 in :: 170 cm'</span>,
-					<span class="hljs-string">'5 ft 8 in :: 173 cm'</span>,
-					<span class="hljs-string">'5 ft 9 in :: 175 cm'</span>,
-					<span class="hljs-string">'5 ft 10 in :: 178 cm'</span>,
-					<span class="hljs-string">'5 ft 11 in :: 180 cm'</span>,
-					<span class="hljs-string">'6 ft 0 in :: 183 cm'</span>,
-					<span class="hljs-string">'6 ft 1 in :: 185 cm'</span>,
-					<span class="hljs-string">'6 ft 2 in :: 188 cm'</span>,
-					<span class="hljs-string">'6 ft 3 in :: 191 cm'</span>,
-					<span class="hljs-string">'6 ft 4 in :: 193 cm'</span>,
-					<span class="hljs-string">'6 ft 5 in :: 196 cm'</span>,
-					<span class="hljs-string">'6 ft 6 in :: 198 cm'</span>,
-					<span class="hljs-string">'6 ft 7 in :: 201 cm'</span>,
-					<span class="hljs-string">'6 ft 8 in :: 203 cm'</span>,
-					<span class="hljs-string">'6 ft 9 in :: 206 cm'</span>,
-					<span class="hljs-string">'6 ft 10 in :: 208 cm'</span>,
-					<span class="hljs-string">'6 ft 11 in :: 211 cm'</span>,
-					<span class="hljs-string">'7 ft 0 in :: 213 cm'</span>,
-					<span class="hljs-string">'7 ft 1 in :: 216 cm'</span>,
-					<span class="hljs-string">'7 ft 2 in :: 218 cm'</span>,
-					<span class="hljs-string">'7 ft 3 in :: 221 cm'</span>,
-					<span class="hljs-string">'7 ft 4 in :: 224 cm'</span>,
-					<span class="hljs-string">'7 ft 5 in :: 226 cm'</span>,
-					<span class="hljs-string">'7 ft 6 in :: 229 cm'</span>,
-					<span class="hljs-string">'7 ft 7 in :: 231 cm'</span>,
-					<span class="hljs-string">'7 ft 8 in :: 234 cm'</span>,
-					<span class="hljs-string">'7 ft 9 in :: 236 cm'</span>,
-					<span class="hljs-string">'7 ft 10 in :: 239 cm'</span>,
-					<span class="hljs-string">'7 ft 11 in :: 241 cm'</span>,
-					<span class="hljs-string">'8 ft 0 in :: 244 cm'</span>,
-					<span class="hljs-string">'8 ft 1 in :: 246 cm'</span>,
-					<span class="hljs-string">'8 ft 2 in :: 249 cm'</span>,
-					<span class="hljs-string">'8 ft 3 in :: 251 cm'</span>,
-					<span class="hljs-string">'8 ft 4 in :: 254 cm'</span>,
-					<span class="hljs-string">'8 ft 5 in :: 257 cm'</span>,
-					<span class="hljs-string">'8 ft 6 in:: 259 cm'</span>
-				]
-			}]
-		},
-		{
-			inherit : <span class="hljs-string">'basicPage'</span>,
-			questions : [{
-				inherit : <span class="hljs-string">'basicDropdown'</span>,
-				name: <span class="hljs-string">'myweight'</span>,
-				stem: <span class="hljs-string">'Please indicate your weight by selecting the most accurate option.'</span>,
-				answers: [
-					<span class="hljs-string">'50 lb :: 23 kg'</span>,
-					<span class="hljs-string">'55 lb :: 25 kg'</span>,
-					<span class="hljs-string">'60 lb :: 27 kg'</span>,
-					<span class="hljs-string">'65 lb :: 30 kg'</span>,
-					<span class="hljs-string">'70 lb :: 32 kg'</span>,
-					<span class="hljs-string">'75 lb :: 34 kg'</span>,
-					<span class="hljs-string">'80 lb :: 36 kg'</span>,
-					<span class="hljs-string">'85 lb :: 39 kg'</span>,
-					<span class="hljs-string">'90 lb :: 41 kg'</span>,
-					<span class="hljs-string">'95 lb :: 43 kg'</span>,
-					<span class="hljs-string">'100 lb :: 45 kg'</span>,
-					<span class="hljs-string">'105 lb :: 48 kg'</span>,
-					<span class="hljs-string">'110 lb :: 50 kg'</span>,
-					<span class="hljs-string">'115 lb :: 52 kg'</span>,
-					<span class="hljs-string">'120 lb :: 55 kg'</span>,
-					<span class="hljs-string">'125 lb :: 57 kg'</span>,
-					<span class="hljs-string">'130 lb :: 59 kg'</span>,
-					<span class="hljs-string">'135 lb :: 61 kg'</span>,
-					<span class="hljs-string">'140 lb :: 64 kg'</span>,
-					<span class="hljs-string">'145 lb :: 66 kg'</span>,
-					<span class="hljs-string">'150 lb :: 68 kg'</span>,
-					<span class="hljs-string">'155 lb :: 70 kg'</span>,
-					<span class="hljs-string">'160 lb :: 73 kg'</span>,
-					<span class="hljs-string">'165 lb :: 75 kg'</span>,
-					<span class="hljs-string">'170 lb :: 77 kg'</span>,
-					<span class="hljs-string">'175 lb :: 80 kg'</span>,
-					<span class="hljs-string">'180 lb :: 82 kg'</span>,
-					<span class="hljs-string">'185 lb :: 84 kg'</span>,
-					<span class="hljs-string">'190 lb :: 86 kg'</span>,
-					<span class="hljs-string">'195 lb :: 89 kg'</span>,
-					<span class="hljs-string">'200 lb :: 91 kg'</span>,
-					<span class="hljs-string">'205 lb :: 93 kg'</span>,
-					<span class="hljs-string">'210 lb :: 95 kg'</span>,
-					<span class="hljs-string">'215 lb :: 98 kg'</span>,
-					<span class="hljs-string">'220 lb :: 100 kg'</span>,
-					<span class="hljs-string">'225 lb :: 102 kg'</span>,
-					<span class="hljs-string">'230 lb :: 105 kg'</span>,
-					<span class="hljs-string">'235 lb :: 107 kg'</span>,
-					<span class="hljs-string">'240 lb :: 109 kg'</span>,
-					<span class="hljs-string">'245 lb :: 111 kg'</span>,
-					<span class="hljs-string">'250 lb :: 114 kg'</span>,
-					<span class="hljs-string">'255 lb :: 116 kg'</span>,
-					<span class="hljs-string">'260 lb :: 118 kg'</span>,
-					<span class="hljs-string">'265 lb :: 120 kg'</span>,
-					<span class="hljs-string">'270 lb :: 123 kg'</span>,
-					<span class="hljs-string">'275 lb :: 125 kg'</span>,
-					<span class="hljs-string">'280 lb :: 127 kg'</span>,
-					<span class="hljs-string">'285 lb :: 130 kg'</span>,
-					<span class="hljs-string">'290 lb :: 132 kg'</span>,
-					<span class="hljs-string">'295 lb :: 134 kg'</span>,
-					<span class="hljs-string">'300 lb :: 136 kg'</span>,
-					<span class="hljs-string">'305 lb :: 139 kg'</span>,
-					<span class="hljs-string">'310 lb :: 141 kg'</span>,
-					<span class="hljs-string">'315 lb :: 143 kg'</span>,
-					<span class="hljs-string">'320 lb :: 145 kg'</span>,
-					<span class="hljs-string">'325 lb :: 148 kg'</span>,
-					<span class="hljs-string">'330 lb :: 150 kg'</span>,
-					<span class="hljs-string">'335 lb :: 152 kg'</span>,
-					<span class="hljs-string">'340 lb :: 155 kg'</span>,
-					<span class="hljs-string">'345 lb :: 157 kg'</span>,
-					<span class="hljs-string">'350 lb :: 159 kg'</span>,
-					<span class="hljs-string">'355 lb :: 161 kg'</span>,
-					<span class="hljs-string">'360 lb :: 164 kg'</span>,
-					<span class="hljs-string">'365 lb :: 166 kg'</span>,
-					<span class="hljs-string">'370 lb :: 168 kg'</span>,
-					<span class="hljs-string">'375 lb :: 170 kg'</span>,
-					<span class="hljs-string">'380 lb :: 173 kg'</span>,
-					<span class="hljs-string">'385 lb :: 175 kg'</span>,
-					<span class="hljs-string">'390 lb :: 177 kg'</span>,
-					<span class="hljs-string">'395 lb :: 180 kg'</span>,
-					<span class="hljs-string">'400 lb :: 182 kg'</span>,
-					<span class="hljs-string">'405 lb :: 184 kg'</span>,
-					<span class="hljs-string">'410 lb :: 186 kg'</span>,
-					<span class="hljs-string">'415 lb :: 189 kg'</span>,
-					<span class="hljs-string">'420 lb :: 191 kg'</span>,
-					<span class="hljs-string">'425 lb :: 193 kg'</span>,
-					<span class="hljs-string">'430 lb :: 195 kg'</span>,
-					<span class="hljs-string">'435 lb :: 198 kg'</span>,
-					<span class="hljs-string">'440 lb :: 200 kg'</span>,
-					<span class="hljs-string">'&gt;440 lb :: &gt;200kg'</span>
-				]
-			}]
-		}, <span class="hljs-comment">// end basic weight</span>
+		
+		  <div class='highlight'><pre>
+  <span class="hljs-comment">/**
+   * Page prototype
+   */</span>
+  API.addPagesSet(<span class="hljs-string">'basicPage'</span>,{
+    noSubmit:<span class="hljs-literal">true</span>,
+    progressBar: <span class="hljs-string">'&lt;%= pagesMeta.number %&gt; out of 15'</span>
+  });</pre></div>
+		
+	
+		<p>Note the use of templates within the progress bar.
+Templates are strings that have the <code>&lt;%= %&gt;</code> delimiters, they allow you to access environmental variables,
+in this case we access the <code>pagesMeta</code> variable and get the current page number.
+You can use templates anywhere you like within piQuest.
+Both <a href="API.html#templates">templates</a> and <a href="API.html#variables">environmental variables</a> are fully documented within the API.</p>
 
-		<span class="hljs-comment">/**
-		 * Weight segment.
-		 * This segment has several generic questions, their order is randomized using a `random` mixer.
-		 */</span>
-		{
-			mixer: <span class="hljs-string">'random'</span>,
-			data:[
-				{
-					inherit : <span class="hljs-string">'basicPage'</span>,
-					questions : [{
-						inherit : <span class="hljs-string">'basicSelect'</span>,
-						name: <span class="hljs-string">'mostpref'</span>,
-						stem: <span class="hljs-string">'Do most people prefer fat people or thin people?'</span>,
-						answers: [
-							<span class="hljs-string">'Most people strongly prefer Fat People to Thin People'</span>,<span class="hljs-string">'Most people somewhat prefer Fat People to Thin People'</span>,<span class="hljs-string">'Most people slightly prefer Fat People to Thin People'</span>,<span class="hljs-string">'Most people like Fat People and Thin People equally '</span>,<span class="hljs-string">'Most people slightly prefer Thin People to Fat People'</span>,	<span class="hljs-string">'Most people somewhat prefer Thin People to Fat People'</span>,<span class="hljs-string">'Most people strongly prefer Thin People to Fat People'</span>
-						]
-					}]
-				},
-				{
-					inherit : <span class="hljs-string">'basicPage'</span>,
-					questions : [{
-						inherit : <span class="hljs-string">'basicSelect'</span>,
-						name: <span class="hljs-string">'controlyou'</span>,
-						stem: <span class="hljs-string">'How much control do you have over your weight?'</span>,
-						answers: [
-							<span class="hljs-string">'Complete control'</span>,<span class="hljs-string">'A lot of control'</span>,<span class="hljs-string">'Some control '</span>,<span class="hljs-string">'A little control'</span>,	<span class="hljs-string">'No control'</span>
-						]
-					}]
-				},
-				{
-					inherit : <span class="hljs-string">'basicPage'</span>,
-					questions : [{
-						inherit : <span class="hljs-string">'basicSelect'</span>,
-						name: <span class="hljs-string">'controlother'</span>,
-						stem: <span class="hljs-string">'How much control do people have over their weight?'</span>,
-						answers: [
-							<span class="hljs-string">'Complete control'</span>,<span class="hljs-string">'A lot of control'</span>,<span class="hljs-string">'Some control '</span>,<span class="hljs-string">'A little control'</span>,	<span class="hljs-string">'No control'</span>
-						]
-					}]
-				},
-				{
-					inherit : <span class="hljs-string">'basicPage'</span>,
-					questions : [{
-						inherit : <span class="hljs-string">'basicSelect'</span>,
-						name: <span class="hljs-string">'iam'</span>,
-						stem: <span class="hljs-string">'Currently, I am:'</span>,
-						answers: [
-							<span class="hljs-string">'Very underweight'</span>,<span class="hljs-string">'Moderately underweight'</span>,	<span class="hljs-string">'Slightly underweight'</span>,<span class="hljs-string">'Neither underweight nor overweight'</span>,<span class="hljs-string">'Slightly overweight'</span>,<span class="hljs-string">'Moderately overweight'</span>,<span class="hljs-string">'Very overweight'</span>
-						]
-					}]
-				},
-				{
-					inherit : <span class="hljs-string">'basicPage'</span>,
-					questions : [{
-						inherit : <span class="hljs-string">'basicSelect'</span>,
-						name: <span class="hljs-string">'othersay'</span>,
-						stem: <span class="hljs-string">'Other people would say that I am:'</span>,
-						answers: [
-							<span class="hljs-string">'Very underweight'</span>,<span class="hljs-string">'Moderately underweight'</span>,	<span class="hljs-string">'Slightly underweight'</span>,<span class="hljs-string">'Neither underweight nor overweight'</span>,<span class="hljs-string">'Slightly overweight'</span>,<span class="hljs-string">'Moderately overweight'</span>,<span class="hljs-string">'Very overweight'</span>
-						]
-					}]
-				},
-				{
-					inherit : <span class="hljs-string">'basicPage'</span>,
-					questions : [{
-						inherit : <span class="hljs-string">'basicSelect'</span>,
-						name: <span class="hljs-string">'comptomost'</span>,
-						stem: <span class="hljs-string">'Compared to most people I interact with, I am:'</span>,
-						answers: [
-							<span class="hljs-string">'Much thinner'</span>,<span class="hljs-string">'Moderately thinner'</span>,<span class="hljs-string">'Slightly thinner'</span>,<span class="hljs-string">'About the same'</span>,<span class="hljs-string">'Slightly fatter'</span>,<span class="hljs-string">'Moderately fatter'</span>,<span class="hljs-string">'Much fatter'</span>
-						]
-					}]
-				},
-				{
-					inherit : <span class="hljs-string">'basicPage'</span>,
-					questions : [{
-						inherit : <span class="hljs-string">'basicSelect'</span>,
-						name: <span class="hljs-string">'important'</span>,
-						stem: <span class="hljs-string">'How important is your weight to your sense of who you are?'</span>,
-						answers: [
-							<span class="hljs-string">'Not at all important'</span>,<span class="hljs-string">'Slightly important'</span>,<span class="hljs-string">'Moderately important'</span>,<span class="hljs-string">'Very important'</span>,<span class="hljs-string">'Extremely important'</span>
-						]
-					}]
-				},
-				{
-					inherit : <span class="hljs-string">'basicPage'</span>,
-					questions : [{
-						inherit : <span class="hljs-string">'basicSelect'</span>,
-						name: <span class="hljs-string">'idfat'</span>,
-						stem: <span class="hljs-string">'How much do you feel similar to people who are fat?'</span>,
-						answers: [
-							<span class="hljs-string">'Not at all similar'</span>,<span class="hljs-string">'Somewhat similar'</span>,<span class="hljs-string">'Moderately similar'</span>,<span class="hljs-string">'Very similar'</span>,<span class="hljs-string">'Extremely similar'</span>
-						]
-					}]
-				},
-				{
-					inherit : <span class="hljs-string">'basicPage'</span>,
-					questions : [{
-						inherit : <span class="hljs-string">'basicSelect'</span>,
-						name: <span class="hljs-string">'idthin'</span>,
-						stem: <span class="hljs-string">'How much do you feel similar to people who are thin?'</span>,
-						answers: [
-							<span class="hljs-string">'Not at all similar'</span>,<span class="hljs-string">'Somewhat similar'</span>,<span class="hljs-string">'Moderately similar'</span>,<span class="hljs-string">'Very similar'</span>,<span class="hljs-string">'Extremely similar'</span>
-						]
-					}]
-				},
-				{
-					inherit : <span class="hljs-string">'basicPage'</span>,
-					questions : [{
-						inherit : <span class="hljs-string">'basicSelect'</span>,
-						name: <span class="hljs-string">'easytolose'</span>,
-						stem: <span class="hljs-string">'How easy or difficult would it be for you to lose 5 to 10 pounds if you wanted to?'</span>,
-						answers: [
-							<span class="hljs-string">'Very easy'</span>,<span class="hljs-string">'Moderately easy'</span>,<span class="hljs-string">'Somewhat easy'</span>,<span class="hljs-string">'Somewhat difficult'</span>,<span class="hljs-string">'Moderately difficult'</span>,<span class="hljs-string">'Very difficult'</span>
-						]
-					}]
-				}
-			]
-		}
 
-	]);
+		
+	
+		<h4 id="question-prototypes">Question prototypes</h4>
+<p>We are going to use two types of <a href="API.html#questions">questions</a> throughout this questionnaire, and we’ll create a prototype for each of them.</p>
+<p>The first question type is a simple <a href="API.html#selectone-selectmulti">multiple choice input</a> (<code>type: &#39;selelctOne&#39;</code>).
+We set it to <code>autoSubmit</code> thus making the submit button redundant (autoSumit means that double clicking a response submits the page).
+Then we request <code>numericValues</code> so that the player logs the responses to questions as numbers instead of plain text.
+And finally we activate <code>help</code> for each of the questions and set the <code>helpText</code> for it.
+Note the use of templates again here to return a true/false value so that the help message is shown only on the first three pages.</p>
 
-	<span class="hljs-keyword">return</span> API.script;
+
+		
+		  <div class='highlight'><pre>
+  <span class="hljs-comment">/**
+   * Question prototypes
+   */</span>
+  API.addQuestionsSet(<span class="hljs-string">'basicSelect'</span>,{
+    type: <span class="hljs-string">'selectOne'</span>,
+    autoSubmit:<span class="hljs-literal">true</span>,
+    numericValues:<span class="hljs-literal">true</span>,
+    help: <span class="hljs-string">'&lt;%= pagesMeta.number &lt; 3 %&gt;'</span>, <span class="hljs-comment">// show the help message only for the first three pages</span>
+    helpText: <span class="hljs-string">'Selecting an answer once colors it blue.&lt;br/&gt;You can change your answer by selecting another option.&lt;br/&gt;To confirm, click the selected (blue) button a second time.'</span>
+  });</pre></div>
+		
+	
+		<p>The second question is a drop-down input. It mostly shares the same properties as the multiple choice question.</p>
+
+
+		
+		  <div class='highlight'><pre>
+  API.addQuestionsSet(<span class="hljs-string">'basicDropdown'</span>,{
+    type: <span class="hljs-string">'dropdown'</span>,
+    autoSubmit:<span class="hljs-literal">true</span>,
+    numericValues:<span class="hljs-literal">true</span>
+  });</pre></div>
+		
+	
+		<h3 id="the-sequence">The Sequence</h3>
+<p>The sequence is an ordered list of all the pages that you want to present.
+This is where you tell piQuest how to interact with the participants.
+The sequence is created using the <code>API.addSequence</code> function which takes a single array of pages.</p>
+<p>This questionnaire has several demographic/personal questions that appear at the beginning in a constant order.
+After them we have a series of general questions that appear in a randomized order.</p>
+
+
+		
+		  <div class='highlight'><pre>
+  API.addSequence([</pre></div>
+		
+	
+		<h4 id="personal-questions-segment">Personal questions segment</h4>
+<p>This segment has 6 demographic/personal questions.
+They are simply listed consecutively within the sequence array.</p>
+<p>Each page inherits the <em>basicPage</em> prototype that we defined previously (<code>inherit</code>) and manually create the questions for it.
+Each page has one question set into into it, inheriting either from the <em>basicSelect</em> or <em>basicDropdown</em> sets.
+The questions each have a unique <code>name</code> set into them here as well
+as the <code>stem</code> which is the question itself
+and the <code>answers</code> array that holds the possible answers for multiple choice questions.</p>
+<p>The concept that you should keep in mind reading this code is that the inherit property extends each object with its parents properties,
+so that each page inherits the <code>noSubmit</code> that we set into the <em>basicPage</em> prototype.</p>
+
+
+		
+		  <div class='highlight'><pre>
+    {
+      inherit : <span class="hljs-string">'basicPage'</span>,
+      questions : [{
+        inherit : <span class="hljs-string">'basicSelect'</span>,
+        name: <span class="hljs-string">'weightpref'</span>,
+        stem: <span class="hljs-string">'Which statement best describes you?'</span>,
+        answers: [
+          <span class="hljs-string">'I strongly prefer Thin People to Fat People.'</span>,
+          <span class="hljs-string">'I moderately prefer Thin People to Fat People.'</span>,
+          <span class="hljs-string">'I slightly prefer Thin People to Fat People.'</span>,
+          <span class="hljs-string">'I like Thin People and Fat People equally.'</span>,
+          <span class="hljs-string">'I slightly prefer Fat People to Thin People.'</span>,
+          <span class="hljs-string">'I moderately prefer Fat People to Thin People.'</span>,
+          <span class="hljs-string">'I strongly prefer Fat People to Thin People.'</span>
+        ]
+      }]
+    },
+    {
+      inherit : <span class="hljs-string">'basicPage'</span>,
+      questions : [{
+        inherit : <span class="hljs-string">'basicSelect'</span>,
+        name: <span class="hljs-string">'tempfat'</span>,
+        stem: <span class="hljs-string">'How warm or cold do you feel towards &lt;b&gt;fat people&lt;/b&gt;?'</span>,
+        answers: [
+          <span class="hljs-string">'Extremely warm'</span>,
+          <span class="hljs-string">'Very warm'</span>,
+          <span class="hljs-string">'Moderately warm'</span>,
+          <span class="hljs-string">'Somewhat warm'</span>,
+          <span class="hljs-string">'Slightly warm'</span>,
+          <span class="hljs-string">'Neither warm nor cold'</span>,
+          <span class="hljs-string">'Slightly cold'</span>,
+          <span class="hljs-string">'Somewhat cold'</span>,
+          <span class="hljs-string">'Moderately cold'</span>,
+          <span class="hljs-string">'Very cold'</span>,
+          <span class="hljs-string">'Extremely cold'</span>
+        ]
+      }]
+    },
+    {
+      inherit : <span class="hljs-string">'basicPage'</span>,
+      questions : [{
+        inherit : <span class="hljs-string">'basicSelect'</span>,
+        name: <span class="hljs-string">'tempthin'</span>,
+        stem: <span class="hljs-string">'How warm or cold do you feel towards &lt;b&gt;thin people&lt;/b&gt;?'</span>,
+        answers: [
+          <span class="hljs-string">'Extremely warm'</span>,
+          <span class="hljs-string">'Very warm'</span>,
+          <span class="hljs-string">'Moderately warm'</span>,
+          <span class="hljs-string">'Somewhat warm'</span>,
+          <span class="hljs-string">'Slightly warm'</span>,
+          <span class="hljs-string">'Neither warm nor cold'</span>,
+          <span class="hljs-string">'Slightly cold'</span>,
+          <span class="hljs-string">'Somewhat cold'</span>,
+          <span class="hljs-string">'Moderately cold'</span>,
+          <span class="hljs-string">'Very cold'</span>,
+          <span class="hljs-string">'Extremely cold'</span>
+        ]
+      }]
+    },
+    {
+      inherit : <span class="hljs-string">'basicPage'</span>,
+      questions : [{
+        inherit : <span class="hljs-string">'basicDropdown'</span>,
+        name: <span class="hljs-string">'myheight'</span>,
+        stem: <span class="hljs-string">'Please indicate your height by selecting the most accurate option.'</span>,
+        answers: [
+          <span class="hljs-string">'3 ft 0 in :: 91 cm'</span>,
+          <span class="hljs-string">'3 ft 1 in :: 94 cm'</span>,
+          <span class="hljs-string">'3 ft 2 in :: 97 cm'</span>,
+          <span class="hljs-string">'3 ft 3 in :: 99 cm'</span>,
+          <span class="hljs-string">'3 ft 4 in :: 102 cm'</span>,
+          <span class="hljs-string">'3 ft 5 in :: 104 cm'</span>,
+          <span class="hljs-string">'3 ft 6 in :: 107 cm'</span>,
+          <span class="hljs-string">'3 ft 7 in :: 109 cm'</span>,
+          <span class="hljs-string">'3 ft 8 in :: 112 cm'</span>,
+          <span class="hljs-string">'3 ft 9 in :: 114 cm'</span>,
+          <span class="hljs-string">'3 ft 10 in :: 117 cm'</span>,
+          <span class="hljs-string">'3 ft 11 in :: 119 cm'</span>,
+          <span class="hljs-string">'4 ft 0 in :: 122 cm'</span>,
+          <span class="hljs-string">'4 ft 1 in :: 124 cm'</span>,
+          <span class="hljs-string">'4 ft 2 in :: 127 cm'</span>,
+          <span class="hljs-string">'4 ft 3 in :: 130 cm'</span>,
+          <span class="hljs-string">'4 ft 4 in :: 132 cm'</span>,
+          <span class="hljs-string">'4 ft 5 in :: 135 cm'</span>,
+          <span class="hljs-string">'4 ft 6 in :: 137 cm'</span>,
+          <span class="hljs-string">'4 ft 7 in :: 140 cm'</span>,
+          <span class="hljs-string">'4 ft 8 in :: 142 cm'</span>,
+          <span class="hljs-string">'4 ft 9 in :: 145 cm'</span>,
+          <span class="hljs-string">'4 ft 10 in :: 147 cm'</span>,
+          <span class="hljs-string">'4 ft 11 in :: 150 cm'</span>,
+          <span class="hljs-string">'5 ft 0 in :: 152 cm'</span>,
+          <span class="hljs-string">'5 ft 1 in :: 155 cm'</span>,
+          <span class="hljs-string">'5 ft 2 in :: 157 cm'</span>,
+          <span class="hljs-string">'5 ft 3 in :: 160 cm'</span>,
+          <span class="hljs-string">'5 ft 4 in :: 163 cm'</span>,
+          <span class="hljs-string">'5 ft 5 in :: 165 cm'</span>,
+          <span class="hljs-string">'5 ft 6 in :: 168 cm'</span>,
+          <span class="hljs-string">'5 ft 7 in :: 170 cm'</span>,
+          <span class="hljs-string">'5 ft 8 in :: 173 cm'</span>,
+          <span class="hljs-string">'5 ft 9 in :: 175 cm'</span>,
+          <span class="hljs-string">'5 ft 10 in :: 178 cm'</span>,
+          <span class="hljs-string">'5 ft 11 in :: 180 cm'</span>,
+          <span class="hljs-string">'6 ft 0 in :: 183 cm'</span>,
+          <span class="hljs-string">'6 ft 1 in :: 185 cm'</span>,
+          <span class="hljs-string">'6 ft 2 in :: 188 cm'</span>,
+          <span class="hljs-string">'6 ft 3 in :: 191 cm'</span>,
+          <span class="hljs-string">'6 ft 4 in :: 193 cm'</span>,
+          <span class="hljs-string">'6 ft 5 in :: 196 cm'</span>,
+          <span class="hljs-string">'6 ft 6 in :: 198 cm'</span>,
+          <span class="hljs-string">'6 ft 7 in :: 201 cm'</span>,
+          <span class="hljs-string">'6 ft 8 in :: 203 cm'</span>,
+          <span class="hljs-string">'6 ft 9 in :: 206 cm'</span>,
+          <span class="hljs-string">'6 ft 10 in :: 208 cm'</span>,
+          <span class="hljs-string">'6 ft 11 in :: 211 cm'</span>,
+          <span class="hljs-string">'7 ft 0 in :: 213 cm'</span>,
+          <span class="hljs-string">'7 ft 1 in :: 216 cm'</span>,
+          <span class="hljs-string">'7 ft 2 in :: 218 cm'</span>,
+          <span class="hljs-string">'7 ft 3 in :: 221 cm'</span>,
+          <span class="hljs-string">'7 ft 4 in :: 224 cm'</span>,
+          <span class="hljs-string">'7 ft 5 in :: 226 cm'</span>,
+          <span class="hljs-string">'7 ft 6 in :: 229 cm'</span>,
+          <span class="hljs-string">'7 ft 7 in :: 231 cm'</span>,
+          <span class="hljs-string">'7 ft 8 in :: 234 cm'</span>,
+          <span class="hljs-string">'7 ft 9 in :: 236 cm'</span>,
+          <span class="hljs-string">'7 ft 10 in :: 239 cm'</span>,
+          <span class="hljs-string">'7 ft 11 in :: 241 cm'</span>,
+          <span class="hljs-string">'8 ft 0 in :: 244 cm'</span>,
+          <span class="hljs-string">'8 ft 1 in :: 246 cm'</span>,
+          <span class="hljs-string">'8 ft 2 in :: 249 cm'</span>,
+          <span class="hljs-string">'8 ft 3 in :: 251 cm'</span>,
+          <span class="hljs-string">'8 ft 4 in :: 254 cm'</span>,
+          <span class="hljs-string">'8 ft 5 in :: 257 cm'</span>,
+          <span class="hljs-string">'8 ft 6 in:: 259 cm'</span>
+        ]
+      }]
+    },
+    {
+      inherit : <span class="hljs-string">'basicPage'</span>,
+      questions : [{
+        inherit : <span class="hljs-string">'basicDropdown'</span>,
+        name: <span class="hljs-string">'myweight'</span>,
+        stem: <span class="hljs-string">'Please indicate your weight by selecting the most accurate option.'</span>,
+        answers: [
+          <span class="hljs-string">'50 lb :: 23 kg'</span>,
+          <span class="hljs-string">'55 lb :: 25 kg'</span>,
+          <span class="hljs-string">'60 lb :: 27 kg'</span>,
+          <span class="hljs-string">'65 lb :: 30 kg'</span>,
+          <span class="hljs-string">'70 lb :: 32 kg'</span>,
+          <span class="hljs-string">'75 lb :: 34 kg'</span>,
+          <span class="hljs-string">'80 lb :: 36 kg'</span>,
+          <span class="hljs-string">'85 lb :: 39 kg'</span>,
+          <span class="hljs-string">'90 lb :: 41 kg'</span>,
+          <span class="hljs-string">'95 lb :: 43 kg'</span>,
+          <span class="hljs-string">'100 lb :: 45 kg'</span>,
+          <span class="hljs-string">'105 lb :: 48 kg'</span>,
+          <span class="hljs-string">'110 lb :: 50 kg'</span>,
+          <span class="hljs-string">'115 lb :: 52 kg'</span>,
+          <span class="hljs-string">'120 lb :: 55 kg'</span>,
+          <span class="hljs-string">'125 lb :: 57 kg'</span>,
+          <span class="hljs-string">'130 lb :: 59 kg'</span>,
+          <span class="hljs-string">'135 lb :: 61 kg'</span>,
+          <span class="hljs-string">'140 lb :: 64 kg'</span>,
+          <span class="hljs-string">'145 lb :: 66 kg'</span>,
+          <span class="hljs-string">'150 lb :: 68 kg'</span>,
+          <span class="hljs-string">'155 lb :: 70 kg'</span>,
+          <span class="hljs-string">'160 lb :: 73 kg'</span>,
+          <span class="hljs-string">'165 lb :: 75 kg'</span>,
+          <span class="hljs-string">'170 lb :: 77 kg'</span>,
+          <span class="hljs-string">'175 lb :: 80 kg'</span>,
+          <span class="hljs-string">'180 lb :: 82 kg'</span>,
+          <span class="hljs-string">'185 lb :: 84 kg'</span>,
+          <span class="hljs-string">'190 lb :: 86 kg'</span>,
+          <span class="hljs-string">'195 lb :: 89 kg'</span>,
+          <span class="hljs-string">'200 lb :: 91 kg'</span>,
+          <span class="hljs-string">'205 lb :: 93 kg'</span>,
+          <span class="hljs-string">'210 lb :: 95 kg'</span>,
+          <span class="hljs-string">'215 lb :: 98 kg'</span>,
+          <span class="hljs-string">'220 lb :: 100 kg'</span>,
+          <span class="hljs-string">'225 lb :: 102 kg'</span>,
+          <span class="hljs-string">'230 lb :: 105 kg'</span>,
+          <span class="hljs-string">'235 lb :: 107 kg'</span>,
+          <span class="hljs-string">'240 lb :: 109 kg'</span>,
+          <span class="hljs-string">'245 lb :: 111 kg'</span>,
+          <span class="hljs-string">'250 lb :: 114 kg'</span>,
+          <span class="hljs-string">'255 lb :: 116 kg'</span>,
+          <span class="hljs-string">'260 lb :: 118 kg'</span>,
+          <span class="hljs-string">'265 lb :: 120 kg'</span>,
+          <span class="hljs-string">'270 lb :: 123 kg'</span>,
+          <span class="hljs-string">'275 lb :: 125 kg'</span>,
+          <span class="hljs-string">'280 lb :: 127 kg'</span>,
+          <span class="hljs-string">'285 lb :: 130 kg'</span>,
+          <span class="hljs-string">'290 lb :: 132 kg'</span>,
+          <span class="hljs-string">'295 lb :: 134 kg'</span>,
+          <span class="hljs-string">'300 lb :: 136 kg'</span>,
+          <span class="hljs-string">'305 lb :: 139 kg'</span>,
+          <span class="hljs-string">'310 lb :: 141 kg'</span>,
+          <span class="hljs-string">'315 lb :: 143 kg'</span>,
+          <span class="hljs-string">'320 lb :: 145 kg'</span>,
+          <span class="hljs-string">'325 lb :: 148 kg'</span>,
+          <span class="hljs-string">'330 lb :: 150 kg'</span>,
+          <span class="hljs-string">'335 lb :: 152 kg'</span>,
+          <span class="hljs-string">'340 lb :: 155 kg'</span>,
+          <span class="hljs-string">'345 lb :: 157 kg'</span>,
+          <span class="hljs-string">'350 lb :: 159 kg'</span>,
+          <span class="hljs-string">'355 lb :: 161 kg'</span>,
+          <span class="hljs-string">'360 lb :: 164 kg'</span>,
+          <span class="hljs-string">'365 lb :: 166 kg'</span>,
+          <span class="hljs-string">'370 lb :: 168 kg'</span>,
+          <span class="hljs-string">'375 lb :: 170 kg'</span>,
+          <span class="hljs-string">'380 lb :: 173 kg'</span>,
+          <span class="hljs-string">'385 lb :: 175 kg'</span>,
+          <span class="hljs-string">'390 lb :: 177 kg'</span>,
+          <span class="hljs-string">'395 lb :: 180 kg'</span>,
+          <span class="hljs-string">'400 lb :: 182 kg'</span>,
+          <span class="hljs-string">'405 lb :: 184 kg'</span>,
+          <span class="hljs-string">'410 lb :: 186 kg'</span>,
+          <span class="hljs-string">'415 lb :: 189 kg'</span>,
+          <span class="hljs-string">'420 lb :: 191 kg'</span>,
+          <span class="hljs-string">'425 lb :: 193 kg'</span>,
+          <span class="hljs-string">'430 lb :: 195 kg'</span>,
+          <span class="hljs-string">'435 lb :: 198 kg'</span>,
+          <span class="hljs-string">'440 lb :: 200 kg'</span>,
+          <span class="hljs-string">'&gt;440 lb :: &gt;200kg'</span>
+        ]
+      }]
+    }, <span class="hljs-comment">// end personal segment</span></pre></div>
+		
+	
+		<h4 id="general-questions-segment">General questions segment</h4>
+<p>This segment has several generic questions.
+As far as the questions are concerned it follows the same principle that the previous segment followed.
+The main difference is that we want to randomize the order in which the questions appear.</p>
+<p>The sequence offers a tool for controlling the flow of pages within the sequence (or questions within a page).
+Instead of putting pages in the sequence you may put objects called mixers that allow you to manipulate “sub sequences” in different ways.
+In this case we will be using the <code>random</code> mixer in order to randomize a sub sequence of pages.</p>
+<p>Just to get a better  idea of what is going on here, you should know that mixers usually take the following form:</p>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> mixer = {
+ mixer : <span class="hljs-string">'random'</span>, <span class="hljs-comment">// the type of mixer that we should use</span>
+ data : [] <span class="hljs-comment">// the subsequence to which we apply the mixer</span>
+}
+</code></pre>
+<p>In this case we wrap the pages that with general questions within the <code>data</code> property of a <code>type:&#39;random&#39;</code> mixer.</p>
+
+
+		
+		  <div class='highlight'><pre>
+    {
+      mixer: <span class="hljs-string">'random'</span>,
+      data:[
+        {
+          inherit : <span class="hljs-string">'basicPage'</span>,
+          questions : [{
+            inherit : <span class="hljs-string">'basicSelect'</span>,
+            name: <span class="hljs-string">'mostpref'</span>,
+            stem: <span class="hljs-string">'Do most people prefer fat people or thin people?'</span>,
+            answers: [
+              <span class="hljs-string">'Most people strongly prefer Fat People to Thin People'</span>,<span class="hljs-string">'Most people somewhat prefer Fat People to Thin People'</span>,<span class="hljs-string">'Most people slightly prefer Fat People to Thin People'</span>,<span class="hljs-string">'Most people like Fat People and Thin People equally '</span>,<span class="hljs-string">'Most people slightly prefer Thin People to Fat People'</span>, <span class="hljs-string">'Most people somewhat prefer Thin People to Fat People'</span>,<span class="hljs-string">'Most people strongly prefer Thin People to Fat People'</span>
+            ]
+          }]
+        },
+        {
+          inherit : <span class="hljs-string">'basicPage'</span>,
+          questions : [{
+            inherit : <span class="hljs-string">'basicSelect'</span>,
+            name: <span class="hljs-string">'controlyou'</span>,
+            stem: <span class="hljs-string">'How much control do you have over your weight?'</span>,
+            answers: [
+              <span class="hljs-string">'Complete control'</span>,<span class="hljs-string">'A lot of control'</span>,<span class="hljs-string">'Some control '</span>,<span class="hljs-string">'A little control'</span>,   <span class="hljs-string">'No control'</span>
+            ]
+          }]
+        },
+        {
+          inherit : <span class="hljs-string">'basicPage'</span>,
+          questions : [{
+            inherit : <span class="hljs-string">'basicSelect'</span>,
+            name: <span class="hljs-string">'controlother'</span>,
+            stem: <span class="hljs-string">'How much control do people have over their weight?'</span>,
+            answers: [
+              <span class="hljs-string">'Complete control'</span>,<span class="hljs-string">'A lot of control'</span>,<span class="hljs-string">'Some control '</span>,<span class="hljs-string">'A little control'</span>,   <span class="hljs-string">'No control'</span>
+            ]
+          }]
+        },
+        {
+          inherit : <span class="hljs-string">'basicPage'</span>,
+          questions : [{
+            inherit : <span class="hljs-string">'basicSelect'</span>,
+            name: <span class="hljs-string">'iam'</span>,
+            stem: <span class="hljs-string">'Currently, I am:'</span>,
+            answers: [
+              <span class="hljs-string">'Very underweight'</span>,<span class="hljs-string">'Moderately underweight'</span>,    <span class="hljs-string">'Slightly underweight'</span>,<span class="hljs-string">'Neither underweight nor overweight'</span>,<span class="hljs-string">'Slightly overweight'</span>,<span class="hljs-string">'Moderately overweight'</span>,<span class="hljs-string">'Very overweight'</span>
+            ]
+          }]
+        },
+        {
+          inherit : <span class="hljs-string">'basicPage'</span>,
+          questions : [{
+            inherit : <span class="hljs-string">'basicSelect'</span>,
+            name: <span class="hljs-string">'othersay'</span>,
+            stem: <span class="hljs-string">'Other people would say that I am:'</span>,
+            answers: [
+              <span class="hljs-string">'Very underweight'</span>,<span class="hljs-string">'Moderately underweight'</span>,    <span class="hljs-string">'Slightly underweight'</span>,<span class="hljs-string">'Neither underweight nor overweight'</span>,<span class="hljs-string">'Slightly overweight'</span>,<span class="hljs-string">'Moderately overweight'</span>,<span class="hljs-string">'Very overweight'</span>
+            ]
+          }]
+        },
+        {
+          inherit : <span class="hljs-string">'basicPage'</span>,
+          questions : [{
+            inherit : <span class="hljs-string">'basicSelect'</span>,
+            name: <span class="hljs-string">'comptomost'</span>,
+            stem: <span class="hljs-string">'Compared to most people I interact with, I am:'</span>,
+            answers: [
+              <span class="hljs-string">'Much thinner'</span>,<span class="hljs-string">'Moderately thinner'</span>,<span class="hljs-string">'Slightly thinner'</span>,<span class="hljs-string">'About the same'</span>,<span class="hljs-string">'Slightly fatter'</span>,<span class="hljs-string">'Moderately fatter'</span>,<span class="hljs-string">'Much fatter'</span>
+            ]
+          }]
+        },
+        {
+          inherit : <span class="hljs-string">'basicPage'</span>,
+          questions : [{
+            inherit : <span class="hljs-string">'basicSelect'</span>,
+            name: <span class="hljs-string">'important'</span>,
+            stem: <span class="hljs-string">'How important is your weight to your sense of who you are?'</span>,
+            answers: [
+              <span class="hljs-string">'Not at all important'</span>,<span class="hljs-string">'Slightly important'</span>,<span class="hljs-string">'Moderately important'</span>,<span class="hljs-string">'Very important'</span>,<span class="hljs-string">'Extremely important'</span>
+            ]
+          }]
+        },
+        {
+          inherit : <span class="hljs-string">'basicPage'</span>,
+          questions : [{
+            inherit : <span class="hljs-string">'basicSelect'</span>,
+            name: <span class="hljs-string">'idfat'</span>,
+            stem: <span class="hljs-string">'How much do you feel similar to people who are fat?'</span>,
+            answers: [
+              <span class="hljs-string">'Not at all similar'</span>,<span class="hljs-string">'Somewhat similar'</span>,<span class="hljs-string">'Moderately similar'</span>,<span class="hljs-string">'Very similar'</span>,<span class="hljs-string">'Extremely similar'</span>
+            ]
+          }]
+        },
+        {
+          inherit : <span class="hljs-string">'basicPage'</span>,
+          questions : [{
+            inherit : <span class="hljs-string">'basicSelect'</span>,
+            name: <span class="hljs-string">'idthin'</span>,
+            stem: <span class="hljs-string">'How much do you feel similar to people who are thin?'</span>,
+            answers: [
+              <span class="hljs-string">'Not at all similar'</span>,<span class="hljs-string">'Somewhat similar'</span>,<span class="hljs-string">'Moderately similar'</span>,<span class="hljs-string">'Very similar'</span>,<span class="hljs-string">'Extremely similar'</span>
+            ]
+          }]
+        },
+        {
+          inherit : <span class="hljs-string">'basicPage'</span>,
+          questions : [{
+            inherit : <span class="hljs-string">'basicSelect'</span>,
+            name: <span class="hljs-string">'easytolose'</span>,
+            stem: <span class="hljs-string">'How easy or difficult would it be for you to lose 5 to 10 pounds if you wanted to?'</span>,
+            answers: [
+              <span class="hljs-string">'Very easy'</span>,<span class="hljs-string">'Moderately easy'</span>,<span class="hljs-string">'Somewhat easy'</span>,<span class="hljs-string">'Somewhat difficult'</span>,<span class="hljs-string">'Moderately difficult'</span>,<span class="hljs-string">'Very difficult'</span>
+            ]
+          }]
+        }
+      ]
+    }</pre></div>
+		
+	
+		<p>Now, we just close the sequence.</p>
+
+
+		
+		  <div class='highlight'><pre>  ]);</pre></div>
+		
+	
+		<h3 id="closing-section">Closing section</h3>
+<p>And finally, we close the script.
+Here again, all scripts look more or less the same.
+We return the <code>script</code> and close the <code>define</code> wrapper.</p>
+
+
+		
+		  <div class='highlight'><pre>  <span class="hljs-keyword">return</span> API.script;
 });</pre></div>
 		
 	
@@ -491,11 +593,6 @@
 							
 							<li class="">
 								<a href="introduction.html">Introduction</a>
-							</li>
-						
-							
-							<li class="">
-								<a href="tutorial.html">Tutorial</a>
 							</li>
 						
 							<li>
