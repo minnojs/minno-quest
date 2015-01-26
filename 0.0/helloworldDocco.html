@@ -75,42 +75,40 @@
 				<div class="col-md-9" role="main">
 					
 	
-		
+		<h3 id="opening-section">Opening section</h3>
+<p>This script is a companion for the <a href="introduction.html">introduction turorial</a>.
+Refer there to get a deeper explanation of what is going on.</p>
+<p>The opening section of each script is always more or less the same.
+We create the wrapper for the script (<code>define</code>), and create a new instance of a questionnaire.</p>
+
 
 		
-		  <div class='highlight'><pre>define([<span class="hljs-string">'questAPI'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(Quest)</span></span>{</pre></div>
+		  <div class='highlight'><pre>
+define([<span class="hljs-string">'questAPI'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(Quest)</span></span>{
+    <span class="hljs-keyword">var</span> API = <span class="hljs-keyword">new</span> Quest();</pre></div>
 		
 	
-		<p>create new quest API</p>
+		<h3 id="the-sequence">The sequence</h3>
+<p>The most important part of every questionnaire is the sequence.
+This is where you tell piQuest how to interact with the participants.
+In our case we want to simply present a single page with a single question so we get something like this:</p>
 
 
 		
-		  <div class='highlight'><pre>    <span class="hljs-keyword">var</span> API = <span class="hljs-keyword">new</span> Quest();</pre></div>
-		
-	
-		<p>create questionnaire sequence</p>
-
-
-		
-		  <div class='highlight'><pre>    API.addSequence([</pre></div>
+		  <div class='highlight'><pre>
+    API.addSequence([</pre></div>
 		
 	
-		<p>page begins</p>
+		<p>Settings for the page environment</p>
 
 
 		
-		  <div class='highlight'><pre>        {
+		  <div class='highlight'><pre>        { <span class="hljs-comment">// page begins</span>
             header: <span class="hljs-string">'Hello world!'</span>,
             decline: <span class="hljs-literal">true</span>,
             declineText: <span class="hljs-string">'I prefer to keep this information to myself'</span>,
-            questions: [</pre></div>
-		
-	
-		<p>question begins</p>
-
-
-		
-		  <div class='highlight'><pre>                {
+            questions: [
+                { <span class="hljs-comment">// question begins</span>
                     type: <span class="hljs-string">'selectOne'</span>,
                     stem: <span class="hljs-string">'When you say good morning, what do you mean?'</span>,
                     answers: [
@@ -120,25 +118,15 @@
                         <span class="hljs-string">'Or that it is a morning to be good on'</span>,
                         <span class="hljs-string">'All of them at once'</span>
                     ]
-                }</pre></div>
+                } <span class="hljs-comment">// question ends</span>
+            ]
+        } <span class="hljs-comment">// page ends</span>
+
+    ]);</pre></div>
 		
 	
-		<p>question ends</p>
-
-
-		
-		  <div class='highlight'><pre>            ]
-        }</pre></div>
-		
-	
-		<p>page ends</p>
-
-
-		
-		  <div class='highlight'><pre>    ]);</pre></div>
-		
-	
-		<p>return questionnaire script to the player gods…</p>
+		<h3 id="closing-section">Closing section</h3>
+<p>return questionnaire script to the player gods…</p>
 
 
 		

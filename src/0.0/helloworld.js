@@ -1,17 +1,27 @@
+// ### Opening section
+//
+// This script is a companion for the [introduction turorial](introduction.html).
+// Refer there to get a deeper explanation of what is going on.
+//
+// The opening section of each script is always more or less the same.
+// We create the wrapper for the script (`define`), and create a new instance of a questionnaire.
+
 define(['questAPI'], function(Quest){
-    // create new quest API
     var API = new Quest();
 
-    // create questionnaire sequence
+    // ### The sequence
+    // The most important part of every questionnaire is the sequence.
+    // This is where you tell piQuest how to interact with the participants.
+    // In our case we want to simply present a single page with a single question so we get something like this:
+
     API.addSequence([
-        // page begins
-        {
+        // Settings for the page environment
+        { // page begins
             header: 'Hello world!',
             decline: true,
             declineText: 'I prefer to keep this information to myself',
             questions: [
-                // question begins
-                {
+                { // question begins
                     type: 'selectOne',
                     stem: 'When you say good morning, what do you mean?',
                     answers: [
@@ -21,13 +31,13 @@ define(['questAPI'], function(Quest){
                         'Or that it is a morning to be good on',
                         'All of them at once'
                     ]
-                }
-                // question ends
+                } // question ends
             ]
-        }
-        // page ends
+        } // page ends
+
     ]);
 
+    // ### Closing section
     // return questionnaire script to the player gods...
     return API.script;
 });
