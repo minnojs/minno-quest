@@ -22,9 +22,3 @@ mkdir -p "$DIR/../src/0.0"
 
 # create API.md
 echo "$APItext" > "$DIR/../src/0.0/API.md"
-
-
-
-
-#
-# echo "$APIfrontMatter $(git show master:src/js/quest/API.md)" > ../src/0.0/API.md
