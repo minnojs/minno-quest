@@ -64,8 +64,8 @@
 		<div id="content" class="bs-docs-header">
 			<div class="container">
 				
-	<h1>Tutorial</h1>
-	<p>This tutorial will walk you through creating a fairly complex questionnaire.</p>
+	<h1>Helloworld</h1>
+	<p>Documentation for helloworld.js </p>
 
 			</div>
 		</div>
@@ -74,10 +74,78 @@
 			<div class="row">
 				<div class="col-md-9" role="main">
 					
-	<p>You can download the final script right <a href="scripts/tutorial.js">here</a>.</p>
-<p>If you haven’t reviewed the hello world tutorial, you should probably go over it before you get into this tutorial.</p>
-<p>This tutorial will walk you through creating a fairly complex questionnaire. We will administer a short demographics questionnaire, following it by a set</p>
+	
+		
 
+		
+		  <div class='highlight'><pre>define([<span class="hljs-string">'questAPI'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(Quest)</span></span>{</pre></div>
+		
+	
+		<p>create new quest API</p>
+
+
+		
+		  <div class='highlight'><pre>    <span class="hljs-keyword">var</span> API = <span class="hljs-keyword">new</span> Quest();</pre></div>
+		
+	
+		<p>create questionnaire sequence</p>
+
+
+		
+		  <div class='highlight'><pre>    API.addSequence([</pre></div>
+		
+	
+		<p>page begins</p>
+
+
+		
+		  <div class='highlight'><pre>        {
+            header: <span class="hljs-string">'Hello world!'</span>,
+            decline: <span class="hljs-literal">true</span>,
+            declineText: <span class="hljs-string">'I prefer to keep this information to myself'</span>,
+            questions: [</pre></div>
+		
+	
+		<p>question begins</p>
+
+
+		
+		  <div class='highlight'><pre>                {
+                    type: <span class="hljs-string">'selectOne'</span>,
+                    stem: <span class="hljs-string">'When you say good morning, what do you mean?'</span>,
+                    answers: [
+                        <span class="hljs-string">'Do you wish me a good morning'</span>,
+                        <span class="hljs-string">'Or mean that it is a good morning whether I want it or not'</span>,
+                        <span class="hljs-string">'Or that you feel good this morning'</span>,
+                        <span class="hljs-string">'Or that it is a morning to be good on'</span>,
+                        <span class="hljs-string">'All of them at once'</span>
+                    ]
+                }</pre></div>
+		
+	
+		<p>question ends</p>
+
+
+		
+		  <div class='highlight'><pre>            ]
+        }</pre></div>
+		
+	
+		<p>page ends</p>
+
+
+		
+		  <div class='highlight'><pre>    ]);</pre></div>
+		
+	
+		<p>return questionnaire script to the player gods…</p>
+
+
+		
+		  <div class='highlight'><pre>    <span class="hljs-keyword">return</span> API.script;
+});</pre></div>
+		
+	
 
 				</div>
 
@@ -100,7 +168,7 @@
 							</li>
 						
 							
-							<li class=" active ">
+							<li class="">
 								<a href="tutorial.html">Tutorial</a>
 							</li>
 						
@@ -108,7 +176,7 @@
 								<a href="helloworldDocco.html">Examples</a>
 								<ul class="nav">
 									
-							<li class="">
+							<li class=" active ">
 								<div>
 									<a href="helloworldDocco.html">Hello world</a>
 									<a href="helloworld.js" download="helloworld.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>

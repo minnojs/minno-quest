@@ -1,4 +1,5 @@
 define(['questAPI', function(Quest){
+
 	// create new quest API
 	var API = new Quest();
 
@@ -7,6 +8,6 @@ define(['questAPI', function(Quest){
 
     ]);
 
-    // return questionnaire script to the player gods...
+    // return questionnaire script to the player gods ...
     return API.script;
 }]);

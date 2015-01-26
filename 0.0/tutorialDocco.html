@@ -14,13 +14,10 @@
 		<!-- Bootstrap core CSS -->
 		<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
 		<link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/sunburst.min.css" rel="stylesheet">
-		<link href="style.css" rel="stylesheet">
+		<link href="css/style.css" rel="stylesheet">
 		<style type="text/css">
 			pre {display:block;overflow-x:auto;padding:0.5em;background:#000;color:#f8f8f8;-webkit-text-size-adjust:none}
 		</style>
-
-		<!-- Optional Bootstrap Theme -->
-		<!-- <link href="data:text/css;charset=utf-8," data-href="../dist/css/bootstrap-theme.min.css" rel="stylesheet" id="bs-theme-stylesheet"> -->
 
 		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 		<!--[if lt IE 9]>
@@ -66,43 +63,95 @@
 
 		<div id="content" class="bs-docs-header">
 			<div class="container">
-				<h1>{{ frontMatter.title }}</h1>
-				<p>{{ frontMatter.description }}</p>
+				
+	<h1>Tutorial</h1>
+	<p>Documentation for tutorial.js </p>
+
 			</div>
 		</div>
 
 		<div class="container bs-docs-container">
 			<div class="row">
 				<div class="col-md-9" role="main">
-					{{ contents|safe }}
+					
+	
+		
+
+		
+		  <div class='highlight'><pre>define([<span class="hljs-string">'questAPI'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(Quest)</span></span>{</pre></div>
+		
+	
+		<p>create new quest API</p>
+
+
+		
+		  <div class='highlight'><pre>	<span class="hljs-keyword">var</span> API = <span class="hljs-keyword">new</span> Quest();</pre></div>
+		
+	
+		<p>create questionnaire sequence</p>
+
+
+		
+		  <div class='highlight'><pre>    API.addSequence([
+
+    ]);</pre></div>
+		
+	
+		<p>return questionnaire script to the player gods …</p>
+
+
+		
+		  <div class='highlight'><pre>    <span class="hljs-keyword">return</span> API.script;
+}]);</pre></div>
+		
+	
+
 				</div>
 
 				<div class="col-md-3" role="complementary">
 					<nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm">
 
-						{% macro navitem(name, filename, current) %}
-							<li class="{%if filename == current %} active {% endif %}">
-								<a href="{{ filename }}.html">{{ name }}</a>
-							</li>
-						{% endmacro listitem %}
+						
 
-						{% macro example(name, filename) %}
-							<li><div>
-								<a href="scripts/{{ filename }}.js" target="_blank">{{ name }}</a>
-								<a href="scripts/{{ filename }}.js" download="{{filename}}.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-								<a href="scripts/{{ filename }}.html" target="_blank" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-							</div></li>
-						{% endmacro example %}
+						
 
 						<ul class="nav bs-docs-sidenav">
-							{{ navitem("Overview", "overview", basename) }}
-							{{ navitem("Hello world", "helloworld", basename) }}
-							{{ navitem("Tutorial", "tutorial", basename) }}
+							
+							<li class="">
+								<a href="overview.html">Overview</a>
+							</li>
+						
+							
+							<li class="">
+								<a href="introduction.html">Introduction</a>
+							</li>
+						
+							
+							<li class=" active ">
+								<a href="tutorial.html">Tutorial</a>
+							</li>
+						
 							<li>
-								<a href="javascript:void(0)">Examples</a>
+								<a href="helloworldDocco.html">Examples</a>
 								<ul class="nav">
-									{{ example("Hello world", "helloworld") }}
-									{{ example("Weight demo", "weight") }}
+									
+							<li class="">
+								<div>
+									<a href="helloworldDocco.html">Hello world</a>
+									<a href="helloworld.js" download="helloworld.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="helloworldPlay.html" target="_blank" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="weightDocco.html">Weight demo</a>
+									<a href="weight.js" download="weight.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="weightPlay.html" target="_blank" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
 								</ul>
 							</li>
 							<li><a href="API.html">API</a></li>

@@ -1,17 +1,17 @@
 var gulp = require('gulp');
-var util = require('gulp-util');
 var marked = require('gulp-marked');
 var applyTemplate = require('gulp-apply-template');
 var clone = require('gulp-clone');
 var rename = require('gulp-rename');
 var highlight = require('highlight.js');
+var data = require('gulp-data');
 var del = require('del');
 var path = require('path');
-var git = require('gulp-git');
 var exec = require('child_process').exec;
 var sass = require('gulp-sass');
 var frontMatter = require('gulp-front-matter');
-
+var docco = require('docco');
+//var debug = require('gulp-debug');
 
 gulp.task('clean', function(cb){
 	del(['0.0/*'],cb);
@@ -33,34 +33,64 @@ gulp.task('build:getapi' ,function(cb){
 
 gulp.task('build:md', ['build:getapi'] ,function () {
 	return gulp.src('src/**/*.md')
-		.pipe(frontMatter({remove:true}))
-		.pipe(marked({
+		.pipe(frontMatter({remove:true, property:'data'})) 		// set front matter into data
+		.pipe(data(function(file){								// set basename into data
+			return {basename:path.basename(file.path,'.md')};
+		}))
+		.pipe(marked({											// highlight pre
 			highlight: function(code){
 				return highlight.highlightAuto(code).value;
 			}
 		}))
 		.pipe(applyTemplate({engine:'swig', template: function(context,file){
-			context.frontMatter = file.frontMatter;
-			context.basename = path.basename(file.path,'.html');
-			return path.join(path.dirname(file.path), 'md.swig');
+			return path.join(path.dirname(file.path), 'templates','md.swig');
 		}}))
 		.pipe(rename({extname: '.html'}))
 		.pipe(gulp.dest('.'));
 });
 
 gulp.task('build:js', function(){
-	var cloneSink = clone.sink();
+	var es = require('event-stream');
 
-	return gulp.src('src/**/*.js')
-		// create activation pages using clone
-		.pipe(cloneSink)
+	// add scripts to stream
+	var scripts = gulp.src('src/**/*.js');
+
+	// add activation pages
+	var playPages = scripts
+		.pipe(clone())
 		.pipe(applyTemplate({engine:'swig', template: function(context, file){
-			context.url = path.join('scripts/', path.basename(file.path));
-			return path.join(path.dirname(file.path), 'js.swig');
+			context.url = path.basename(file.path);
+			return path.join(path.dirname(file.path), 'templates', 'play.swig');
 		}}))
-		.pipe(rename({extname: '.html'}))
-		.pipe(cloneSink.tap())
-		.pipe(gulp.dest('.'));
+		.pipe(rename({suffix:'Play',extname: '.html'}));
+
+	// add docco pages
+	var doccoPages = scripts
+		.pipe(clone())
+		.pipe(data(function(file){
+			// use config instead of the global languages object.
+			// we set the comment matcher and filter manually in order to bypass the config function of docco which uses explicit files
+			var config = {
+				languages: {
+					".js": {name: "javascript",symbol: "//",commentMatcher : new RegExp("^\\s*//\\s?"),commentFilter : /(^#![/]|^\s*#\{)/}
+				}
+			};
+
+			// Docco
+			var sections = docco.parse(file.path, file.contents.toString('utf8'), config);
+			docco.format(file.path, sections, config); // Format (adds highlighting to the sections object)
+
+			return {sections: sections, basename: path.basename(file.path,'.js')};
+		}))
+		.pipe(applyTemplate({engine:'swig', template: function(context,file){
+			// context.frontMatter = file.frontMatter;
+			// context.basename = path.basename(file.path,'.html');
+			return path.join(path.dirname(file.path), 'templates','docco.swig');
+		}}))
+		.pipe(rename({suffix:'Docco',extname: '.html'}));
+
+
+	return es.merge(scripts, playPages, doccoPages).pipe(gulp.dest('.'));
 });
 
 gulp.task('build:css', function(){

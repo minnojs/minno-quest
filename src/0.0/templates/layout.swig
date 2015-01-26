@@ -63,68 +63,44 @@
 
 		<div id="content" class="bs-docs-header">
 			<div class="container">
-				
-	<h1>Tutorial</h1>
-	<p>This tutorial will walk you through creating a fairly complex questionnaire.</p>
-
+				{% block title %} Project Implicit {% endblock%}
 			</div>
 		</div>
 
 		<div class="container bs-docs-container">
 			<div class="row">
 				<div class="col-md-9" role="main">
-					
-	<p>You can download the final script right <a href="scripts/tutorial.js">here</a>.</p>
-<p>If you haven’t reviewed the hello world tutorial, you should probably go over it before you get into this tutorial.</p>
-<p>This tutorial will walk you through creating a fairly complex questionnaire. We will administer a short demographics questionnaire, following it by a set</p>
-
-
+					{% block content %}{% endblock%}
 				</div>
 
 				<div class="col-md-3" role="complementary">
 					<nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm">
 
-						
+						{% macro navitem(name, filename, current) %}
+							<li class="{%if filename == current %} active {% endif %}">
+								<a href="{{ filename }}.html">{{ name }}</a>
+							</li>
+						{% endmacro listitem %}
 
-						
+						{% macro example(name, filename, current) %}
+							<li class="{%if filename == current %} active {% endif %}">
+								<div>
+									<a href="{{ filename }}Docco.html">{{ name }}</a>
+									<a href="{{ filename }}.js" download="{{filename}}.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="{{ filename }}Play.html" target="_blank" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						{% endmacro example %}
 
 						<ul class="nav bs-docs-sidenav">
-							
-							<li class="">
-								<a href="overview.html">Overview</a>
-							</li>
-						
-							
-							<li class="">
-								<a href="introduction.html">Introduction</a>
-							</li>
-						
-							
-							<li class=" active ">
-								<a href="tutorial.html">Tutorial</a>
-							</li>
-						
+							{{ navitem("Overview", "overview", data.basename) }}
+							{{ navitem("Introduction", "introduction", data.basename) }}
+							{{ navitem("Tutorial", "tutorial", data.basename) }}
 							<li>
 								<a href="helloworldDocco.html">Examples</a>
 								<ul class="nav">
-									
-							<li class="">
-								<div>
-									<a href="helloworldDocco.html">Hello world</a>
-									<a href="helloworld.js" download="helloworld.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="helloworldPlay.html" target="_blank" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-									
-							<li class="">
-								<div>
-									<a href="weightDocco.html">Weight demo</a>
-									<a href="weight.js" download="weight.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="weightPlay.html" target="_blank" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
+									{{ example("Hello world", "helloworld", data.basename) }}
+									{{ example("Weight demo", "weight", data.basename) }}
 								</ul>
 							</li>
 							<li><a href="API.html">API</a></li>

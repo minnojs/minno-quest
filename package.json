@@ -10,10 +10,13 @@
   "license": "ISC",
   "dependencies": {
     "del": "^1.1.1",
+    "docco": "^0.6.3",
+    "event-stream": "^3.2.1",
     "gulp": "^3.8.10",
     "gulp-apply-template": "0.0.2",
     "gulp-clone": "^1.0.0",
     "gulp-data": "^1.1.1",
+    "gulp-docco": "0.0.4",
     "gulp-front-matter": "^1.2.0",
     "gulp-git": "^0.5.6",
     "gulp-rename": "^1.2.0",

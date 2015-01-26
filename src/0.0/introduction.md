@@ -1,5 +1,5 @@
 ---
-title: Hello world
+title: Introduction
 description: This tutorial will walk you through the first steps of creating a piQuest questionnaire. You can download or activate it from the bar on the right.
 ---
 

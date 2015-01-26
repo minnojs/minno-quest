@@ -192,9 +192,12 @@ body {
             text-decoration: none; }
         .bs-docs-sidebar .nav .nav > li > a:hover, .bs-docs-sidebar .nav .nav > li > a:focus, .bs-docs-sidebar .nav .nav > li > div:hover, .bs-docs-sidebar .nav .nav > li > div:focus {
           padding-left: 29px; }
-      .bs-docs-sidebar .nav .nav > .active > a, .bs-docs-sidebar .nav .nav > .active:hover > a, .bs-docs-sidebar .nav .nav > .active:focus > a {
+      .bs-docs-sidebar .nav .nav > .active > div, .bs-docs-sidebar .nav .nav > .active:hover > div, .bs-docs-sidebar .nav .nav > .active:focus > div {
         padding-left: 28px;
-        font-weight: 500; }
+        font-weight: 500;
+        color: #563d7c;
+        background-color: transparent;
+        border-left: 2px solid #563d7c; }
     @media (min-width: 992px) {
       .bs-docs-sidebar .nav > .active > ul {
         display: block; } }
