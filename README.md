@@ -4,5 +4,5 @@
 
 This is the repository for piQuest && piManager.
 
-You can find the documentation at [projectimplicit.github.io/PIquest/](projectimplicit.github.io/PIquest/).
+You can find the documentation at [projectimplicit.github.io/PIquest/](http://projectimplicit.github.io/PIquest/).
 
