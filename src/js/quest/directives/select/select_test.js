@@ -198,7 +198,7 @@ define(['../questDirectivesModule', 'utils/randomize/randomizeModuleMock'], func
 				scope.$digest();
 				log = element.data('$questSelectOneController').log;
 
-				formElm = element.children().first();
+				formElm = element.children().first().children().first();
 			};
 
 			beforeEach(module('ui.bootstrap.buttons',function($compileProvider, $provide){

@@ -10,11 +10,10 @@ define(function (require) {
 	var template = require('text!./selectOne.html');
 	var angular = require('angular');
 
-	directive.$inject = ['questSelectMixer', 'buttonConfig'];
-	function directive(mixer, buttonConfig){
+	directive.$inject = ['questSelectMixer', 'buttonConfig', '$compile'];
+	function directive(mixer, buttonConfig, $compile){
 		return {
 			replace: true,
-			template:template,
 			require: ['ngModel'],
 			controller: 'questController',
 			controllerAs: 'ctrl',
@@ -24,6 +23,10 @@ define(function (require) {
 			link: function(scope, element, attr, ctrls) {
 				var ngModel = ctrls[0];
 				var ctrl = scope.ctrl;
+
+				// compile the template (this is currently the only way to use a scope dependent template)
+				element.html(template);
+				$compile(element.contents())(scope);
 
 				ctrl.registerModel(ngModel, {
 					dflt: NaN
@@ -44,6 +47,17 @@ define(function (require) {
 				});
 
 				/**
+				 * Required
+				 * Since we don't control the ngModel element any more we need to manually create a required validation
+				 * we don't implement $observe since in our case required is static
+				 */
+
+				if (scope.data.required){
+					ngModel.$formatters.push(requiredValidator);
+					ngModel.$parsers.unshift(requiredValidator);
+				}
+
+				/**
 				 * Manage auto submit
 				 * @param  {event} e [description]
 				 */
@@ -59,6 +73,17 @@ define(function (require) {
 						scope.$emit('quest:submit:now');
 					}
 				};
+
+				function requiredValidator(value){
+					var ctrl = ngModel;
+					if (ctrl.$isEmpty(value)) {
+						ctrl.$setValidity('required', false);
+						return;
+					} else {
+						ctrl.$setValidity('required', true);
+						return value;
+					}
+				}
 			}
 		};
 	}
