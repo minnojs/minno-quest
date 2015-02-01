@@ -21,6 +21,7 @@ define(function (require) {
 			link: function(scope, element, attr, ctrls) {
 				var ctrl = scope.ctrl;
 				var ngModel = ctrls[1];
+				var data = scope.data;
 
 				ctrl.registerModel(ngModel, {
 					dflt: []
@@ -42,6 +43,38 @@ define(function (require) {
 						answer.chosen = true;
 					}
 				});
+
+				/**
+				 * Compute list styles
+				 */
+
+				// back support for "buttons"
+				// @DEPRICATED
+				if (scope.data.buttons){
+					scope.data.style = 'horizontal';
+				} else {
+					scope.data.style == 'horizontal' && (scope.data.buttons = true);
+				}
+
+				scope.listClass = {
+					'btn-group btn-group-justified btn-group-lg' : data.style == 'horizontal',
+					'btn-toolbar' : data.style == 'multiButtons',
+					'list-group' : !data.style || data.style == 'list'
+				};
+
+				// the active class is set by interpolation in class instead of ngClass
+				scope.listItemClass = {
+					'btn btn-success' : data.style == 'horizontal',
+					'btn  btn-success' : data.style == 'multiButtons',
+					'list-group-item' : !data.style || data.style == 'list'
+				};
+
+				// multiButtons needs some specific css added to the list
+				scope.listCss = {};
+				scope.listItemCss = {};
+				data.style == 'multiButtons' && (scope.listCss.lineHeight = 2.8);
+				data.hasOwnProperty('minWidth') && (scope.listItemCss.minWidth = data.minWidth);
+
 
 				// update controller with the response
 				scope.$watch('quest.answers',function(newValue, oldValue){

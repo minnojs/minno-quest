@@ -6,9 +6,8 @@
  */
 define(function (require) {
 
-	// This is the only way to get a non js file relatively
-	var template = require('text!./selectOne.html');
 	var angular = require('angular');
+	var template = require('text!./selectOne.html');
 
 	directive.$inject = ['questSelectMixer', 'buttonConfig', '$compile'];
 	function directive(mixer, buttonConfig, $compile){
@@ -23,6 +22,7 @@ define(function (require) {
 			link: function(scope, element, attr, ctrls) {
 				var ngModel = ctrls[0];
 				var ctrl = scope.ctrl;
+				var data = scope.data;
 
 				// compile the template (this is currently the only way to use a scope dependent template)
 				element.html(template);
@@ -56,6 +56,37 @@ define(function (require) {
 					ngModel.$formatters.push(requiredValidator);
 					ngModel.$parsers.unshift(requiredValidator);
 				}
+
+				/**
+				 * Compute list styles
+				 */
+
+				// back support for "buttons"
+				// @DEPRICATED
+				if (scope.data.buttons){
+					scope.data.style = 'horizontal';
+				} else {
+					scope.data.style == 'horizontal' && (scope.data.buttons = true);
+				}
+
+				scope.listClass = {
+					'btn-group btn-group-justified btn-group-lg' : data.style == 'horizontal',
+					'btn-toolbar' : data.style == 'multiButtons',
+					'list-group' : !data.style || data.style == 'list'
+				};
+
+				// the active class is set by interpolation in class instead of ngClass
+				scope.listItemClass = {
+					'btn btn-success' : data.style == 'horizontal',
+					'btn  btn-success' : data.style == 'multiButtons',
+					'list-group-item' : !data.style || data.style == 'list'
+				};
+
+				// multiButtons needs some specific css added to the list
+				scope.listCss = {};
+				scope.listItemCss = {};
+				data.style == 'multiButtons' && (scope.listCss.lineHeight = 2.8);
+				data.hasOwnProperty('minWidth') && (scope.listItemCss.minWidth = data.minWidth);
 
 				/**
 				 * Manage auto submit

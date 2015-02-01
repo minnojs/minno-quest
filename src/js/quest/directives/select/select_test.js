@@ -245,15 +245,36 @@ define(['../questDirectivesModule', 'utils/randomize/randomizeModuleMock'], func
 				expect(formElm.children().eq(2)).toHaveClass('active');
 			});
 
-			it('should support the buttons/likert version', function(){
-				compileInput({answers: [1,2,3]});
-				expect(formElm).toHaveClass('list-group');
-				expect(formElm.children().eq(2)).toHaveClass('list-group-item');
+			describe(': style', function(){
+				it('should support the list version by default', function(){
+					compileInput({answers: [1,2,3]});
+					expect(formElm).toHaveClass('list-group');
+					expect(formElm.children().eq(2)).toHaveClass('list-group-item');
+				});
 
+				it('should support the multiButton version', function(){
+					compileInput({answers: [1,2,3], style:'multiButtons'});
+					expect(formElm).toHaveClass('btn-toolbar');
+					expect(+formElm.css('lineHeight')).toBe(2.8);
+					expect(formElm.children().eq(2)).toHaveClass('btn');
+				});
 
-				compileInput({answers: [1,2,3], buttons:true});
-				expect(formElm).toHaveClass('btn-group');
-				expect(formElm.children().eq(2)).toHaveClass('btn');
+				it('should support the horizontal version', function(){
+					compileInput({answers: [1,2,3], style:'horizontal'});
+					expect(formElm).toHaveClass('btn-group');
+					expect(formElm.children().eq(2)).toHaveClass('btn');
+				});
+
+				it('should support the horizontal version (legacy)', function(){
+					compileInput({answers: [1,2,3], buttons:true});
+					expect(formElm).toHaveClass('btn-group');
+					expect(formElm.children().eq(2)).toHaveClass('btn');
+				});
+
+				it('should set minWidth', function(){
+					compileInput({answers: [1,2,3], minWidth:'10px'});
+					expect(formElm.children().eq(2).css('minWidth')).toBe('10px');
+				});
 			});
 
 			it('should support autoSubmit', function(){
@@ -360,6 +381,38 @@ define(['../questDirectivesModule', 'utils/randomize/randomizeModuleMock'], func
 			it('should display the correct number of answers', function(){
 				compileInput({answers: [1,2,3]});
 				expect(formElm.children().length).toBe(3);
+			});
+
+			describe(': style', function(){
+				it('should support the list version by default', function(){
+					compileInput({answers: [1,2,3]});
+					expect(formElm).toHaveClass('list-group');
+					expect(formElm.children().eq(2)).toHaveClass('list-group-item');
+				});
+
+				it('should support the multiButton version', function(){
+					compileInput({answers: [1,2,3], style:'multiButtons'});
+					expect(formElm).toHaveClass('btn-toolbar');
+					expect(+formElm.css('lineHeight')).toBe(2.8);
+					expect(formElm.children().eq(2)).toHaveClass('btn');
+				});
+
+				it('should support the horizontal version', function(){
+					compileInput({answers: [1,2,3], style:'horizontal'});
+					expect(formElm).toHaveClass('btn-group');
+					expect(formElm.children().eq(2)).toHaveClass('btn');
+				});
+
+				it('should support the horizontal version (legacy)', function(){
+					compileInput({answers: [1,2,3], buttons:true});
+					expect(formElm).toHaveClass('btn-group');
+					expect(formElm.children().eq(2)).toHaveClass('btn');
+				});
+
+				it('should set minWidth', function(){
+					compileInput({answers: [1,2,3], minWidth:'10px'});
+					expect(formElm.children().eq(2).css('minWidth')).toBe('10px');
+				});
 			});
 
 			it('should support "correct" validation',function(){
