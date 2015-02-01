@@ -94,22 +94,22 @@
 <p>There are plenty of additional features that <a href="API.html#pages">pages have</a>, but this is the very minimum that you’ll need.</p>
 <p>Well, you also need to define the questions. There are several <a href="API.html#questions">types of questions</a>. All share a few basic properties.</p>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> question = {
-    <span class="hljs-class"><span class="hljs-keyword">type</span>:</span> <span class="hljs-symbol">'tex</span>t',
-    name: <span class="hljs-symbol">'myQuestNam</span>e',
-    stem: <span class="hljs-symbol">'What</span> would you like to know?'
+    type: <span class="hljs-string">'text'</span>,
+    name: <span class="hljs-string">'myQuestName'</span>,
+    stem: <span class="hljs-string">'What would you like to know?'</span>
 }
 </code></pre>
 <p>The <code>type</code> of question is the first decision that you have to make, it defines the question type and interface. This is where you decide if you want the user to enter some text, choose from a list or use a slider. The <code>name</code> is the question’s name to save when logged to the server. The name also allows you to refer to the question from other objects. Finally, <code>stem</code> is the text that will be displayed.</p>
 <p>The question in the example above shows a text input with the question ‘What would you like to know?’. </p>
 <p>Here is an example of a <code>selectOne</code> question that prompts the user to choose one response out of a list of answers: red, blue or green.</p>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> question = {
-    <span class="hljs-class"><span class="hljs-keyword">type</span>:</span> <span class="hljs-symbol">'selectOn</span>e',
-    name: <span class="hljs-symbol">'mySelectQues</span>t',
-    stem: <span class="hljs-symbol">'What</span> color is the sky?',
+    type: <span class="hljs-string">'selectOne'</span>,
+    name: <span class="hljs-string">'mySelectQuest'</span>,
+    stem: <span class="hljs-string">'What color is the sky?'</span>,
     answers: [
-        <span class="hljs-symbol">'re</span>d',
-        <span class="hljs-symbol">'blu</span>e',
-        <span class="hljs-symbol">'gree</span>n'
+        <span class="hljs-string">'red'</span>,
+        <span class="hljs-string">'blue'</span>,
+        <span class="hljs-string">'green'</span>
     ]
 }
 </code></pre>
@@ -121,14 +121,14 @@
         questions:[
             <span class="hljs-comment">// 1a. This is the first question (a text input):</span>
             {
-                <span class="hljs-class"><span class="hljs-keyword">type</span>:</span> <span class="hljs-symbol">'tex</span>t',
-                stem: <span class="hljs-symbol">'What</span> is your name?'
+                type: <span class="hljs-string">'text'</span>,
+                stem: <span class="hljs-string">'What is your name?'</span>
             },
             <span class="hljs-comment">// 1b. This is a second question (a select one input)</span>
             {
-                <span class="hljs-class"><span class="hljs-keyword">type</span>:</span> <span class="hljs-symbol">'selectOn</span>e',
-                stem: <span class="hljs-symbol">'How</span> are you?',
-                answers: [<span class="hljs-symbol">'goo</span>d', <span class="hljs-symbol">'fai</span>r' ,<span class="hljs-symbol">'ba</span>d']
+                type: <span class="hljs-string">'selectOne'</span>,
+                stem: <span class="hljs-string">'How are you?'</span>,
+                answers: [<span class="hljs-string">'good'</span>, <span class="hljs-string">'fair'</span> ,<span class="hljs-string">'bad'</span>]
             }
         ]
     },
@@ -138,8 +138,8 @@
         questions:[
             <span class="hljs-comment">// 2a. But only one question</span>
             {
-                <span class="hljs-class"><span class="hljs-keyword">type</span>:</span> <span class="hljs-symbol">'tex</span>t',
-                stem: <span class="hljs-symbol">'What</span> is your name again?'
+                type: <span class="hljs-string">'text'</span>,
+                stem: <span class="hljs-string">'What is your name again?'</span>
             }
         ]
     }
@@ -147,34 +147,34 @@
 </code></pre>
 <p>The sequence also supports randomization and branching. Read about it <a href="API.html#mixer">here</a>.</p>
 <p>Now that we’ve created the sequence, let’s put it into the player. The first and last two lines are the same for all scripts (they have to do with the way Javascript works), you can simply ignore them. The <code>API</code> object assists you in putting your script together, you will <a href="API.html#API">eventually</a> learn more about its functionality, but for now we only need to know that the <code>addSequence</code> function is responsible for adding pages into the sequence. You may call it as many times as you like.</p>
-<pre><code class="lang-js">define([<span class="hljs-symbol">'questAP</span>I'], function(quest){
-    <span class="hljs-keyword">var</span> <span class="hljs-type">API</span> = <span class="hljs-keyword">new</span> quest();
+<pre><code class="lang-js">define([<span class="hljs-string">'questAPI'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(quest)</span></span>{
+    <span class="hljs-keyword">var</span> API = <span class="hljs-keyword">new</span> quest();
 
-    <span class="hljs-type">API</span>.addSequence([
+    API.addSequence([
         {
             questions:[
                 {
-                    <span class="hljs-class"><span class="hljs-keyword">type</span>:</span> <span class="hljs-symbol">'tex</span>t',
-                    stem: <span class="hljs-symbol">'What</span> is your name?'
+                    type: <span class="hljs-string">'text'</span>,
+                    stem: <span class="hljs-string">'What is your name?'</span>
                 },
                 {
-                    <span class="hljs-class"><span class="hljs-keyword">type</span>:</span> <span class="hljs-symbol">'selectOn</span>e',
-                    stem: <span class="hljs-symbol">'How</span> are you?',
-                    answers: [<span class="hljs-symbol">'goo</span>d', <span class="hljs-symbol">'fai</span>r' ,<span class="hljs-symbol">'ba</span>d']
+                    type: <span class="hljs-string">'selectOne'</span>,
+                    stem: <span class="hljs-string">'How are you?'</span>,
+                    answers: [<span class="hljs-string">'good'</span>, <span class="hljs-string">'fair'</span> ,<span class="hljs-string">'bad'</span>]
                 }
             ]
         },
         {
             questions:[
                 {
-                    <span class="hljs-class"><span class="hljs-keyword">type</span>:</span> <span class="hljs-symbol">'tex</span>t',
-                    stem: <span class="hljs-symbol">'What</span> is your name again?'
+                    type: <span class="hljs-string">'text'</span>,
+                    stem: <span class="hljs-string">'What is your name again?'</span>
                 }
             ]
         }
     ]);
 
-    <span class="hljs-keyword">return</span> <span class="hljs-type">API</span>.script;
+    <span class="hljs-keyword">return</span> API.script;
 });
 </code></pre>
 <p>That’s it! PIquest has loads of additional features (as you can read below), but this was the very basic information that you must know first. (by the way, if you want to log the responses to your questions you should learn about the <a href="API.html#settings"> logger setting </a>).</p>

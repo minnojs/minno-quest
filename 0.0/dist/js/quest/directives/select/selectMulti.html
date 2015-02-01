@@ -1,14 +1,13 @@
 <div required="{{data.required}}">
-	<div ng-class="listClass" ng-style="listCss">
+	<div class="list-group" >
 		<!-- track by in the ng-repeat allows us to keep the repeated object clean so that angular doesn't add a $$hashkey property -->
 		<a
 			href="javascript:void(0);"
 			ng-repeat="answer in quest.answers track by answer.order"
+			class="list-group-item"
 			ng-model="answer.chosen"
 			btn-checkbox
-			ng-class="$parent.listItemClass"
-			ng-style="listItemCss"
-			class="{{ answer.chosen ? 'active' : '' }}"
+			ng-class="{active:answer.chosen}"
 			uncheckable
 			ng-bind-html="answer.text"
 			unselectable="on"

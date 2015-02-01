@@ -4,27 +4,37 @@
 DIR="${BASH_SOURCE%/*}"
 if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi
 
-# get helpers
-source "$DIR/errorExit.sh" || error_exit "$LINENO: errorExit not found."
-source "$DIR/cleanGitTree.sh" || error_exit "$LINENO: cleanGitTree not found."
+# get absolute path to the base repository
+DIR=$(readlink -f $DIR/..)
 
-# make sure that this directory has no changes
-require_clean_work_tree "get piQuest 0.0 source"
+# get helpers
+source "$DIR/scripts/errorExit.sh" || error_exit "$LINENO: errorExit not found."
 
 # create temporary directory that we can use for our stuff...
 # http://unix.stackexchange.com/questions/30091/fix-or-alternative-for-mktemp-in-os-x
 TMPDIR=`mktemp -d 2>/dev/null || mktemp -d -t 'myTMPDIR'`
+TMPDIR=$(readlink -f $TMPDIR)
+trap "rm -Rf $TEMPDIR" EXIT
 
-# checkout master
-git checkout master || error_exit "$LINENO: could not checkout master."
+git fetch --quiet
 
-# copy dirs that we want to temporary dir
-cp -r dist $TMPDIR || error_exit "$LINENO: could not export to TMPDIR."
-cp -r bower_components $TMPDIR || error_exit "$LINENO: could not export to TMPDIR."
+# create repository clone
+cd $TMPDIR
+git clone --quiet $DIR .
 
-# come back to gh-pages
-git checkout gh-pages || error_exit "$LINENO: could not checkout gh-pages."
+# Get new tags from remote
+git fetch --quiet --tags
 
-# copy dirs that we want back to gh-pages
-rm -rf 0.0/{dist,bower_components}
-mv $TMPDIR/** 0.0 || error_exit "$LINENO: could not import from TMPDIR."
+VERSION="0.0"
+
+# Get latest tag name
+LATESTTAG=$(git describe --tags $(git rev-list --tags="v$VERSION*" --max-count=1))
+
+# Checkout latest tag
+git checkout --quiet $LATESTTAG || error_exit "$LINENO: could not checkout LATESTTAG."
+
+# copy dirs that we want to gh-pages
+rm -rf $DIR/$VERSION/{dist,bower_components}
+
+cp -r dist $DIR/$VERSION/ || error_exit "$LINENO: could not import dist."
+cp -r bower_components $DIR/$VERSION/ || error_exit "$LINENO: could not import bower_components."

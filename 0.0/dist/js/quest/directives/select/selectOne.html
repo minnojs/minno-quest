@@ -1,15 +1,12 @@
-<div>
-	<div ng-class="listClass" ng-style="listCss">
+<div required="{{data.required}}">
+	<div ng-class="{'list-group':!data.buttons, 'btn-group btn-group-justified btn-group-lg':data.buttons}">
 		<!-- track by in the ng-repeat allows us to keep the repeated object clean so that angular doesn't add a $$hashkey property -->
-		<!-- using interpolation within class, so that we can keep the style info separate within the directive -->
 		<a
 			tabindex="-1"
 			ng-repeat="answer in quest.answers track by answer.order"
 			ng-model="$parent.responseObj"
 			btn-radio="answer"
-			ng-class="$parent.listItemClass"
-			ng-style="listItemCss"
-			class="{{ $parent.response == answer.value ? 'active' : '' }}"
+			ng-class="{active:$parent.response === answer.value, 'list-group-item': !$parent.data.buttons, 'btn btn-success': $parent.data.buttons}"
 			uncheckable
 			ng-click="data.autoSubmit && autoSubmit($event)"
 			ng-bind-html="answer.text"
