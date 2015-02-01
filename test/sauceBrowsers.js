@@ -13,7 +13,7 @@ module.exports = {
 	sl_firefox: {
 		base: 'SauceLabs',
 		browserName: 'firefox',
-		version: '27'
+		version: '35'
 	},
 	sl_ie_11: {
 		base: 'SauceLabs',

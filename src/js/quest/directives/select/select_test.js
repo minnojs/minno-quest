@@ -254,8 +254,10 @@ define(['../questDirectivesModule', 'utils/randomize/randomizeModuleMock'], func
 
 				it('should support the multiButton version', function(){
 					compileInput({answers: [1,2,3], style:'multiButtons'});
+
+					var copmutedLineHeight = parseInt(formElm.css('fontSize'),10) * 2.8;
+					expect(['2.8', copmutedLineHeight + 'px']).toContain(formElm.css('lineHeight'));
 					expect(formElm).toHaveClass('btn-toolbar');
-					expect(+formElm.css('lineHeight')).toBe(2.8);
 					expect(formElm.children().eq(2)).toHaveClass('btn');
 				});
 
@@ -392,8 +394,10 @@ define(['../questDirectivesModule', 'utils/randomize/randomizeModuleMock'], func
 
 				it('should support the multiButton version', function(){
 					compileInput({answers: [1,2,3], style:'multiButtons'});
+
+					var copmutedLineHeight = parseInt(formElm.css('fontSize'),10) * 2.8;
+					expect(['2.8', copmutedLineHeight + 'px']).toContain(formElm.css('lineHeight'));
 					expect(formElm).toHaveClass('btn-toolbar');
-					expect(+formElm.css('lineHeight')).toBe(2.8);
 					expect(formElm.children().eq(2)).toHaveClass('btn');
 				});
 
