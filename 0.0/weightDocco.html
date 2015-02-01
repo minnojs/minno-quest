@@ -154,13 +154,16 @@ Note the use of templates again here to return a true/false value so that the he
   });</pre></div>
 		
 	
-		<p>The second question is a drop-down input. It mostly shares the same properties as the multiple choice question.</p>
+		<p>The second question is a another selectOne input. This time we use the multiButtons style.
+This is usefull for questions with very many answers.</p>
 
 
 		
 		  <div class='highlight'><pre>
   API.addQuestionsSet(<span class="hljs-string">'basicDropdown'</span>,{
-    type: <span class="hljs-string">'dropdown'</span>,
+    type: <span class="hljs-string">'selectOne'</span>,
+    style: <span class="hljs-string">'multiButtons'</span>,
+    minWidth: <span class="hljs-string">'150px'</span>,
     autoSubmit:<span class="hljs-literal">true</span>,
     numericValues:<span class="hljs-literal">true</span>
   });</pre></div>

@@ -68,10 +68,13 @@ define(['questAPI'], function(Quest){
     helpText: 'Selecting an answer once colors it blue.<br/>You can change your answer by selecting another option.<br/>To confirm, click the selected (blue) button a second time.'
   });
 
-  // The second question is a drop-down input. It mostly shares the same properties as the multiple choice question.
+  // The second question is a another selectOne input. This time we use the multiButtons style.
+  // This is usefull for questions with very many answers.
 
   API.addQuestionsSet('basicDropdown',{
-    type: 'dropdown',
+    type: 'selectOne',
+    style: 'multiButtons',
+    minWidth: '150px',
     autoSubmit:true,
     numericValues:true
   });
