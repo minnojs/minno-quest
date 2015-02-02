@@ -81,7 +81,7 @@ lognow 			| (true or false) Whether to log this questions when the page is submi
 
 You may want to debug questions by [activating the `question` DEBUG setting](#debugging). You will then be warned in the console if a question name is reused (note: sometimes a question is supposed to be reused, if this warning pops up just make sure the use case is correct).
 
-##### Text
+#### Text
 The `text` questions consist of a simple text input in which the users can type in text. These kind of questions have the following properties:
 
 property		| description
@@ -91,7 +91,7 @@ autoSubmit 		| (true or false; default: false) If this property is set to true t
 minlength 		| (Number) Validation: force at least this number of characters.
 maxlength		| (Number) Validation: force at most this number of characters.
 required		| (true of false; default: false) Validation: require a non-empty string as a response.
-pattern			| (text [supports regex]) Validation: require the response to match the regular expression set in pattern (takes either a string `"a|b"` or a regular expression `/a|b/`).
+pattern			| (text [supports regex]) Validation: require the response to match the regular expression set in pattern (takes either a string <code>"a&#124;b"</code> or a regular expression <code>/a&#124;b/</code>).
 correct 		| (true or false; default: false) Validation: require the response to be correct (set the target value using `correctValue`)
 correctValue 	| (*) Set the correct response value for the correct validation.
 errorMsg		| (Object: {}) This object has a property for each validation type. Setting the appropriate type changes the validation message. For instance setting the `required` property will change the validation message for instances where no response was given.
@@ -111,7 +111,7 @@ var quest = {
 }
 ```
 
-##### textNumber
+#### textNumber
 The `textNumber` questions consist of a simple text input that limits the participant to numeric responses only. This type of questions have the following parameters:
 
 property		| description
@@ -140,7 +140,7 @@ var quest = {
 }
 ```
 
-##### dropdown
+#### dropdown
 The `dropdown` question presents a dropdown that the user can use to select a single response. It has the following parameters: 
 
 property		| description
@@ -156,7 +156,7 @@ correct 		| (true or false; default: false) Validation: require the response to 
 correctValue 	| (*) Set the correct response value for the correct validation.
 errorMsg		| (Object: {}) This object has a property for each validation type. Setting the appropriate type changes the validation message. For instance setting the `correct` property will change the validation message for instances where the correct response was not given.
 
-##### selectOne & selectMulti
+#### selectOne & selectMulti
 The `selectOne` and `selectMulti` questions present a list of possible response options for the user to pick from. The only difference between them is that select Multi allows the user to select more than one response option. They have the following parameters:
 
 property		| description
@@ -210,7 +210,7 @@ var quest = {
 ### settings
 Settings allow you to control the generic way that the player works. Change the settings using the `addSettings` function. The first argument to the function is always the name of the setting, the second argument is the setting values. In case the setting is an object, subsequent objects will extend each other so that settings may be progressively added.
 
-##### onEnd
+#### onEnd
 `onEnd` is a function to be called as soon as the task ends. It should be taken care of automatically when PIQuest is run from within the task manager.
 
 ```js
@@ -220,7 +220,7 @@ API.addSettings('onEnd', function(){
 });
 ```
 
-##### logger
+#### logger
 This setting controls the way that logging works within the player.
 
 ```js
@@ -245,7 +245,7 @@ If you want a question not to be logged at all, simply do not give it a name.
 
 You may want to debug the logger by [activating the DEBUG `logger` setting](#debugging). When activated, it prints each logged object into the console.
 
-##### Debugging
+#### Debugging
 PIQuest can supply some extra information regarding its inner workings, all you have to do is set the DEBUG setting property like so:
 
 ```js
@@ -352,7 +352,7 @@ This sequence has an opening and ending obj (`firstobj` and `lastobj`).
 Between them them we repeat a set of four objs ten times.
 The order of the four objs is randomized, so that `obj1` always comes first and the order of the following objs are randomized but `obj3` and `obj4` are wrapped together and therefore always stay consecutive.
 
-##### Mixer types
+#### Mixer types
 
 **repeat**:
 Repeats the element in `data` `times` times.
@@ -393,7 +393,7 @@ Select the elements in `data` if all the conditions in the `conditions` array ar
 ```
 Find the first object within `branches` for which `conditions` is true, and select the elements in that objects `data`. If no object is selected then select `elseData` (optional). (See [conditions](#conditions) to learn about how conditions work).
 
-##### Conditions
+#### Conditions
 The conditional mixers allow you to change the content of a list according to [environmental variables](#variables). Each list has specific variables available to it, you can find the relevant details in the documentation for each list, but all lists have access to the `global` and `current` objects, so we'll use them for all examples here.
 
 A condition is a proposition, it is evaluated to either a `true` or `false` value. Conditions are used for decision making within the branching mixers. Conditions are represented by objects. The following condition object `compare`s **global.var** `to` **local.otherVar** and examines if they are equal (if you aren't sure what **global.var** means, see [here](#variables)):
@@ -443,7 +443,7 @@ function cond(){
 ```
 
 
-##### Operators
+#### Operators
 The default comparison for a condition is to check equality (supports comparison of objects and arrays too). You can use the `operator` property to change the comparison method. The following checks if var is greater than otherVar:
 
 ```js
@@ -463,7 +463,7 @@ greaterThanOrEquals | *compare* >= *to*
 in 					| *compare* is in the Array *to*;
 function(){} 		| This operator allows you to use a custom function of the form: `function(compareValue, toValue, context){return {Boolean}}`. The context is an object holding the *global*, *current* and *questions* objects.
 
-##### Aggregation
+#### Aggregation
 Sometimes you will want a branch to be activated only if more than one condition is true, or in some other complex specific condition. For cases like this, the mixer supports aggregation. The mixer supports applying logical operations on conditions in the following way:
 
 An aggregator object has a single property, denoting the type of aggregation, holding an array of conditions to aggregate. The following condition will only be true if `cond1` and `cond2` are both true:
@@ -660,7 +660,7 @@ function(definitions){
 }
 ```
 
-##### Customization
+#### Customization
 
 Each question/page can also define a `customize` method, this method is called once the element is inherited but before it is activated.
 It accepts two argument: the source object on which it is called (the page or question object), and the global object (in which you can find the current object etc.). The source object is also the context for the function.
