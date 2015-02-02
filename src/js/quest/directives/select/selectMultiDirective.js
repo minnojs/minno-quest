@@ -64,8 +64,8 @@ define(function (require) {
 
 				// the active class is set by interpolation in class instead of ngClass
 				scope.listItemClass = {
-					'btn btn-success' : data.style == 'horizontal',
-					'btn  btn-success' : data.style == 'multiButtons',
+					'btn btn-select' : data.style == 'horizontal',
+					'btn  btn-select' : data.style == 'multiButtons',
 					'list-group-item' : !data.style || data.style == 'list'
 				};
 
