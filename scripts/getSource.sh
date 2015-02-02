@@ -33,8 +33,35 @@ LATESTTAG=$(git describe --tags $(git rev-list --tags="v$VERSION*" --max-count=1
 # Checkout latest tag
 git checkout --quiet $LATESTTAG || error_exit "$LINENO: could not checkout LATESTTAG."
 
-# copy dirs that we want to gh-pages
-rm -rf $DIR/$VERSION/{dist,bower_components}
 
-cp -r dist $DIR/$VERSION/ || error_exit "$LINENO: could not import dist."
-cp -r bower_components $DIR/$VERSION/ || error_exit "$LINENO: could not import bower_components."
+
+###################################################################
+#	copy in all the interestin files...
+###################################################################
+
+
+# creat the 0.0 directory just in case
+mkdir -p $DIR/$VERSION
+
+# copy dirs that we want to gh-pages
+rm -rf $DIR/$VERSION/{dist,bower_components,package.json}
+cp -r $TMPDIR/{dist,bower_components,package.json} $DIR/$VERSION/ || error_exit "$LINENO: could not import dist/bower_components."
+
+echo $LATESTTAG
+exit 0
+# Concatenate front matter and API.md
+# http://stackoverflow.com/questions/23929235/bash-multi-line-string-with-extra-space
+read -r -d '' APItext <<- EOM
+	---
+	title: API
+	description: All the little details...
+	---
+
+	$(git show $LATESTTAG:src/js/quest/API.md)
+EOM
+
+# create 0.0 directory if needed
+mkdir -p "$DIR/../src/0.0"
+
+# create API.md
+echo "$APItext" > "$DIR/src/0.0/API.md"

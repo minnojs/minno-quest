@@ -11,12 +11,7 @@ gulp.task('clean', function(cb){
 	del(['0.0/*'],cb);
 });
 
-// get README from master branch and copy it into 0.0/API.md
-gulp.task('build:getapi' ,function(cb){
-	exec('scripts/getAPImd.sh', cb);
-});
-
-gulp.task('build:md', ['build:getapi'] ,function () {
+gulp.task('build:md', function () {
 	var marked = require('gulp-marked');
 	var highlight = require('highlight.js');
 	var frontMatter = require('gulp-front-matter');
@@ -93,21 +88,9 @@ gulp.task('build:css', function(){
 
 gulp.task('build',  ['build:js', 'build:md', 'build:css']);
 
-
-gulp.task('deploy:update', function(cb){
-	exec('./scripts/getSource.sh', cb);
-});
-
 gulp.task('deploy', function(cb){
-	gulp.start('deploy:update', function(err){
-		if (err) {throw err;}
-		gulp.start('clean', function(err){
-			if (err) {throw err;}
-			gulp.start('build',function(err){
-				if (err) {throw err;}
-				exec('git add . && git commit -am "chore(deploy): auto commit"', cb);
-			});
-		});
+	exec('scripts/deploy.sh', function(){
+		gulp.run('build', cb);
 	});
 });
 
