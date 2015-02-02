@@ -47,8 +47,6 @@ mkdir -p $DIR/$VERSION
 rm -rf $DIR/$VERSION/{dist,bower_components,package.json}
 cp -r $TMPDIR/{dist,bower_components,package.json} $DIR/$VERSION/ || error_exit "$LINENO: could not import dist/bower_components."
 
-echo $LATESTTAG
-exit 0
 # Concatenate front matter and API.md
 # http://stackoverflow.com/questions/23929235/bash-multi-line-string-with-extra-space
 read -r -d '' APItext <<- EOM
