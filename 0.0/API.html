@@ -129,7 +129,7 @@
 </tr>
 <tr>
 <td>decline</td>
-<td>(true or false) Whether to allow participants decline to answer the questions on this page. This option displays a “decline” button that proceeds to the next page without validation and marks this response as “declined” (default value: false).</td>
+<td>(true, false, ‘double’. default:false) Whether to allow participants decline to answer the questions on this page. This option displays a “decline” button that proceeds to the next page without validation and marks this response as “declined”. If decline is set to ‘double’ then two click are required in order to decline answering.</td>
 </tr>
 <tr>
 <td>declineText</td>
@@ -191,6 +191,10 @@
 <td>animate</td>
 <td>(text) What types of animation to use when this page enters and leaves the screen. We currently support three animations: fade, slide, and drop-in. You can use any and all of them by adding them to the string (for example: “slide fade” will activate both of these animations).</td>
 </tr>
+<tr>
+<td>v1style</td>
+<td>(true or false) Activate in order to use the version 0.1 style. Currently this only affects the way that the submit/decline buttons are presented.</td>
+</tr>
 </tbody>
 </table>
 <p>For example, a page can look something like this:</p>
@@ -248,7 +252,7 @@
 </tbody>
 </table>
 <p>You may want to debug questions by <a href="#debugging">activating the <code>question</code> DEBUG setting</a>. You will then be warned in the console if a question name is reused (note: sometimes a question is supposed to be reused, if this warning pops up just make sure the use case is correct).</p>
-<h5 id="text">Text</h5>
+<h4 id="text">Text</h4>
 <p>The <code>text</code> questions consist of a simple text input in which the users can type in text. These kind of questions have the following properties:</p>
 <table>
 <thead>
@@ -280,9 +284,7 @@
 </tr>
 <tr>
 <td>pattern</td>
-<td>(text [supports regex]) Validation: require the response to match the regular expression set in pattern (takes either a string `”a</td>
-<td>b”<code>or a regular expression</code>/a</td>
-<td>b/`).</td>
+<td>(text [supports regex]) Validation: require the response to match the regular expression set in pattern (takes either a string <code>“a&#124;b”</code> or a regular expression <code>/a&#124;b/</code>).</td>
 </tr>
 <tr>
 <td>correct</td>
@@ -310,7 +312,7 @@
     }
 }
 </code></pre>
-<h5 id="textnumber">textNumber</h5>
+<h4 id="textnumber">textNumber</h4>
 <p>The <code>textNumber</code> questions consist of a simple text input that limits the participant to numeric responses only. This type of questions have the following parameters:</p>
 <table>
 <thead>
@@ -366,7 +368,7 @@
     }
 }
 </code></pre>
-<h5 id="dropdown">dropdown</h5>
+<h4 id="dropdown">dropdown</h4>
 <p>The <code>dropdown</code> question presents a dropdown that the user can use to select a single response. It has the following parameters: </p>
 <table>
 <thead>
@@ -418,7 +420,7 @@
 </tr>
 </tbody>
 </table>
-<h5 id="selectone-selectmulti">selectOne &amp; selectMulti</h5>
+<h4 id="selectone-selectmulti">selectOne &amp; selectMulti</h4>
 <p>The <code>selectOne</code> and <code>selectMulti</code> questions present a list of possible response options for the user to pick from. The only difference between them is that select Multi allows the user to select more than one response option. They have the following parameters:</p>
 <table>
 <thead>
@@ -509,14 +511,14 @@
 </code></pre>
 <h3 id="settings">settings</h3>
 <p>Settings allow you to control the generic way that the player works. Change the settings using the <code>addSettings</code> function. The first argument to the function is always the name of the setting, the second argument is the setting values. In case the setting is an object, subsequent objects will extend each other so that settings may be progressively added.</p>
-<h5 id="onend">onEnd</h5>
+<h4 id="onend">onEnd</h4>
 <p><code>onEnd</code> is a function to be called as soon as the task ends. It should be taken care of automatically when PIQuest is run from within the task manager.</p>
 <pre><code class="lang-js">API.addSettings(<span class="hljs-string">'onEnd'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{
     <span class="hljs-comment">// Do something: for instance, redirect to 'my/url.js'</span>
     location.href = <span class="hljs-string">'my/url.js'</span>;
 });
 </code></pre>
-<h5 id="logger">logger</h5>
+<h4 id="logger">logger</h4>
 <p>This setting controls the way that logging works within the player.</p>
 <pre><code class="lang-js">API.addSettings(<span class="hljs-string">"logger"</span>, {
     pulse: <span class="hljs-number">34</span>,
@@ -551,7 +553,7 @@
 <p>Within the player, each question (as defined by unique question name) may be logged only once. By default questions are logged at the end of a page (on submit or decline), if you want to delay logging until the end of the task, you may do so by setting <code>nolog</code> in the appropriate page or question.</p>
 <p>If you want a question not to be logged at all, simply do not give it a name.</p>
 <p>You may want to debug the logger by <a href="#debugging">activating the DEBUG <code>logger</code> setting</a>. When activated, it prints each logged object into the console.</p>
-<h5 id="debugging">Debugging</h5>
+<h4 id="debugging">Debugging</h4>
 <p>PIQuest can supply some extra information regarding its inner workings, all you have to do is set the DEBUG setting property like so:</p>
 <pre><code class="lang-js"><span class="hljs-comment">// Log everything</span>
 API.addSettings(<span class="hljs-string">'DEBUG'</span>, {
@@ -658,7 +660,7 @@ The mixer allows wrapping a sub list in an object that allows you to manipulate 
 <p>This sequence has an opening and ending obj (<code>firstobj</code> and <code>lastobj</code>).
 Between them them we repeat a set of four objs ten times.
 The order of the four objs is randomized, so that <code>obj1</code> always comes first and the order of the following objs are randomized but <code>obj3</code> and <code>obj4</code> are wrapped together and therefore always stay consecutive.</p>
-<h5 id="mixer-types">Mixer types</h5>
+<h4 id="mixer-types">Mixer types</h4>
 <p><strong>repeat</strong>:
 Repeats the element in <code>data</code> <code>times</code> times.</p>
 <ul>
@@ -702,7 +704,7 @@ Select the elements in <code>data</code> if all the conditions in the <code>cond
 }
 </code></pre>
 <p>Find the first object within <code>branches</code> for which <code>conditions</code> is true, and select the elements in that objects <code>data</code>. If no object is selected then select <code>elseData</code> (optional). (See <a href="#conditions">conditions</a> to learn about how conditions work).</p>
-<h5 id="conditions">Conditions</h5>
+<h4 id="conditions">Conditions</h4>
 <p>The conditional mixers allow you to change the content of a list according to <a href="#variables">environmental variables</a>. Each list has specific variables available to it, you can find the relevant details in the documentation for each list, but all lists have access to the <code>global</code> and <code>current</code> objects, so we’ll use them for all examples here.</p>
 <p>A condition is a proposition, it is evaluated to either a <code>true</code> or <code>false</code> value. Conditions are used for decision making within the branching mixers. Conditions are represented by objects. The following condition object <code>compare</code>s <strong>global.var</strong> <code>to</code> <strong>local.otherVar</strong> and examines if they are equal (if you aren’t sure what <strong>global.var</strong> means, see <a href="#variables">here</a>):</p>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> cond = {
@@ -754,7 +756,7 @@ Select the elements in <code>data</code> if all the conditions in the <code>cond
     <span class="hljs-keyword">return</span> global.skip;
 }
 </code></pre>
-<h5 id="operators">Operators</h5>
+<h4 id="operators">Operators</h4>
 <p>The default comparison for a condition is to check equality (supports comparison of objects and arrays too). You can use the <code>operator</code> property to change the comparison method. The following checks if var is greater than otherVar:</p>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> cond = {
     compare: <span class="hljs-string">'global.var'</span>,
@@ -796,7 +798,7 @@ Select the elements in <code>data</code> if all the conditions in the <code>cond
 </tr>
 </tbody>
 </table>
-<h5 id="aggregation">Aggregation</h5>
+<h4 id="aggregation">Aggregation</h4>
 <p>Sometimes you will want a branch to be activated only if more than one condition is true, or in some other complex specific condition. For cases like this, the mixer supports aggregation. The mixer supports applying logical operations on conditions in the following way:</p>
 <p>An aggregator object has a single property, denoting the type of aggregation, holding an array of conditions to aggregate. The following condition will only be true if <code>cond1</code> and <code>cond2</code> are both true:</p>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> cond = {and:[cond1, cond2]};
@@ -1016,7 +1018,7 @@ You may also use a custom function to select your element (the function here, fu
     <span class="hljs-comment">// definitions is the inherit object (including  set, type, and whatever other properties you'd like to use)</span>
 }
 </code></pre>
-<h5 id="customization">Customization</h5>
+<h4 id="customization">Customization</h4>
 <p>Each question/page can also define a <code>customize</code> method, this method is called once the element is inherited but before it is activated.
 It accepts two argument: the source object on which it is called (the page or question object), and the global object (in which you can find the current object etc.). The source object is also the context for the function.</p>
 <pre><code class="lang-js">{

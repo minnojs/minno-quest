@@ -18,7 +18,3 @@ rm -rf "$DIR/scripts/../0.0" || error_exit "$LINENO: could not remove 0.0"
 
 # get piQuest source
 source "$DIR/scripts/getSource.sh" || error_exit "$LINENO: could not get piQuest source."
-
-# get API.md
-source "$DIR/scripts/getAPImd.sh" || error_exit "$LINENO: could not get API.md"
-

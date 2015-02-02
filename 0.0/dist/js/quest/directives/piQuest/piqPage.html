@@ -8,12 +8,11 @@
 		</li>
 	</ol>
 
-	<div class="btn-group pull-right">
+	<div class="pull-right" ng-class="{'btn-group': !page.v1style, 'btn-toolbar': page.v1style}">
 		<button
 			ng-click="prev()"
 			data-role="submit"
 			class="btn"
-			ng-class="form"
 			ng-if="page.prev && page.$meta.number > 1"
 		>{{page.prevText || "Go Back"}}</button>
 
@@ -21,15 +20,14 @@
 			ng-click="submit()"
 			data-role="submit"
 			class="btn btn-primary"
-			ng-class="{form:true}"
 			ng-if="!page.noSubmit"
 		>{{page.submitText || "Submit"}}</button>
 
 		<button
-			ng-click="decline()"
+			ng-click="decline($event)"
 			data-role="submit"
 			class="btn btn-warning"
-			ng-class="form"
+			ng-class="{'btn-active-accented':page.v1style}"
 			ng-if="page.decline"
 		>{{page.declineText || "Decline to Answer"}}</button>
 	</div>
