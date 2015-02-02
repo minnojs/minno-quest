@@ -43,7 +43,11 @@ define(function(require){
 			settings.logger.meta = angular.extend(settings.logger.meta || {}, data);
 		}
 
+		// set last task flag
+		if (currentTask.last){
+			data.sessionStatus = "C";
+		}
+
 		return isDev ? true : $http.post('/implicit/PiManager', data);
 	}
-
 });
