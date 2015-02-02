@@ -261,7 +261,7 @@ define(['../questDirectivesModule'],function(){
 			});
 
 			describe(': decline', function(){
-				var $scope;
+				var $scope, $el, $event;
 
 				beforeEach(function(){
 					compile({
@@ -270,25 +270,42 @@ define(['../questDirectivesModule'],function(){
 					$scope = element.scope();
 					$scope.current.questions.old = {};
 					spyOn(controller, 'proceed');
+
+					$scope.page = {};
+					$el = angular.element('<button>');
+					$event = {target:$el};
 				});
 
 				it('should proceed, even if page is not valid', function(){
 					$scope.pageForm.$setValidity('test', false);
-					$scope.decline();
+					$scope.decline($event);
+					expect(controller.proceed).toHaveBeenCalled();
+				});
+
+				it('should not proceed if !active && page.decline = "double"', function(){
+					$scope.page.decline = 'double';
+					$scope.decline($event);
+					expect(controller.proceed).not.toHaveBeenCalled();
+				});
+
+				it('should proceed if active && page.decline = "double"', function(){
+					$scope.page.decline = 'double';
+					$el.addClass('active');
+					$scope.decline($event);
 					expect(controller.proceed).toHaveBeenCalled();
 				});
 
 				it('should broadcast quest:declined', function(){
 					var spy = jasmine.createSpy('decline');
 					$scope.$on('quest:decline', spy);
-					$scope.decline();
+					$scope.decline($event);
 					expect(spy).toHaveBeenCalled();
 				});
 
 				it('should broadcast quest:next', function(){
 					var spy = jasmine.createSpy('next');
 					$scope.$on('quest:next', spy);
-					$scope.submit(true); // don't mess around with validation
+					$scope.decline($event);
 					expect(spy).toHaveBeenCalled();
 				});
 			});

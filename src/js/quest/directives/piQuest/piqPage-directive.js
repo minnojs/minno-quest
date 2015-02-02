@@ -13,6 +13,7 @@
 define(function (require) {
 	var template = require('text!./piqPage.html');
 	var _ = require('underscore');
+	var angular = require('angular');
 
 	piqPageCtrl.$inject = ['$scope','$timeout', '$rootScope'];
 	function piqPageCtrl($scope,$timeout, $rootScope){
@@ -70,12 +71,20 @@ define(function (require) {
 		/**
 		 * Decline to answer. mark all questions on this page as declined
 		 */
-		$scope.decline = function(){
-			// broadcast to the quest controller
-			$scope.$broadcast('quest:decline');
+		$scope.decline = function($event){
+			var $el = angular.element($event.target);
+			var notDoubleClick = (this.page.decline !== 'double');
 
-			self.proceed();
-			$scope.$emit('quest:next');
+			// decline and proceed to next page
+			// unless this is a double style decline and then simply set "active"
+			if (notDoubleClick || $el.hasClass('active')){
+				// broadcast to the quest controller
+				$scope.$broadcast('quest:decline');
+				self.proceed();
+				$scope.$emit('quest:next');
+			} else {
+				$el.addClass('active');
+			}
 		};
 
 		/**
