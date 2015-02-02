@@ -56,24 +56,28 @@ define(function (require) {
 					scope.data.style == 'horizontal' && (scope.data.buttons = true);
 				}
 
-				scope.listClass = {
-					'btn-group btn-group-justified btn-group-lg' : data.style == 'horizontal',
-					'btn-toolbar' : data.style == 'multiButtons',
-					'list-group' : !data.style || data.style == 'list'
-				};
-
-				// the active class is set by interpolation in class instead of ngClass
-				scope.listItemClass = {
-					'btn btn-select' : data.style == 'horizontal',
-					'btn  btn-select' : data.style == 'multiButtons',
-					'list-group-item' : !data.style || data.style == 'list'
-				};
-
-				// multiButtons needs some specific css added to the list
+				// some specific css added to the list
 				scope.listCss = {};
 				scope.listItemCss = {};
-				data.style == 'multiButtons' && (scope.listCss.lineHeight = 2.8);
-				data.hasOwnProperty('minWidth') && (scope.listItemCss.minWidth = data.minWidth);
+
+				switch (data.style){
+					case 'horizontal' :
+						scope.listClass = 'btn-group btn-group-justified btn-group-lg';
+						scope.listItemClass = 'btn btn-select';
+						break;
+					case 'multiButtons':
+						scope.listClass = 'btn-toolbar';
+						scope.listItemClass = 'btn  btn-select';
+						scope.listCss.lineHeight = 2.8;
+						break;
+					case 'list':
+						/* fall through */
+					default:
+						scope.listClass = 'list-group';
+						scope.listItemClass = 'list-group-item';
+				}
+
+				data.minWidth && (scope.listItemCss.minWidth = data.minWidth);
 
 
 				// update controller with the response
