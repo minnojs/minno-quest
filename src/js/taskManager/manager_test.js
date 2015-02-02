@@ -520,6 +520,14 @@ define(['require','./managerModule'], function(require){
 				expect(spy).toHaveBeenCalled();
 			});
 
+			it('should throw if a scriptUrl is undefined', function(){
+				expect(function(){
+					taskLoad({scriptUrl: 123});
+					q.resolve(undefined);
+					$rootScope.$digest();
+				}).toThrow();
+			});
+
 			it('should throw if both script and scriptUrl are not set', function(){
 				expect(function(){
 					taskLoad({});

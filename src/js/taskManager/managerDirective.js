@@ -52,7 +52,7 @@ define(function(require){
 			}
 
 			function error(e){
-				piConsole('manager').error(e);
+				piConsole('manager').error('Failed to load ' + taskSource, e);
 			}
 		}
 	}
@@ -139,7 +139,7 @@ define(function(require){
 						})
 						.reduce(function(promise, fn){
 							return promise.then(fn, function(e){
-								piConsole('manager').error(e);
+								piConsole('manager').error('There was an error in the task sequence. ',e);
 							});
 						}, promise);
 				}

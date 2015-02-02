@@ -2,12 +2,30 @@
  * @name: taskLoadProvider
  * @returns {$q} A $q.promise that returns the target script
  */
-define(function(){
+define(function(require){
+	var _ = require('underscore');
 
 	taskLoadService.$inject = ['$q', 'managerGetScript', 'piConsole'];
-	function taskLoadService($q, getScript, $console){
+	function taskLoadService($q, managerGetScript, $console){
+
+		function getScript(url, baseUrl, isText){
+			return managerGetScript(url, baseUrl, isText)
+				// make sure that the script is defined
+				// and if not throw an appropriate error
+				.then(function(script){
+					var e;
+					if (_.isUndefined(script)){
+						e = new Error('Task ' + url + ' failed or has not been found. Make sure that you returned the script and that your script does not have any errors');
+						$console('task').error(e);
+						throw e;
+					}
+
+					return script;
+				});
+		}
 
 		function taskLoad(task, baseUrl){
+
 
 			var promise, script, template;
 
@@ -25,7 +43,7 @@ define(function(){
 				task.$template = promises.template;
 				return task;
 			}, function(e){
-				$console('load').error(e);
+				$console('load').error('Failed to load task script - make sure that your URLs are all correct.',e);
 			});
 
 			return promise;
