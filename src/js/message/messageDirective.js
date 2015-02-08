@@ -15,14 +15,16 @@ define(function (require) {
 				var template;
 				var context = {
 					global : $rootScope.global,
-					current : $rootScope.current
+					current : $rootScope.current,
+					task: script
 				};
 
+				// try to render template
 				try {
 					template = _.template(script.$template)(context);
 				} catch(e){
 					template = script.$template;
-					$console('message').error(e);
+					$console('message').error('failed to render template', e);
 				}
 
 				_.extend($scope, context);
@@ -33,8 +35,6 @@ define(function (require) {
 				$scope.$on('$destroy',function(){
 					$document.off(events, onKeydown);
 				});
-
-
 
 				$element.html(template);
 				$compile($element.contents())(newScope);
@@ -47,6 +47,8 @@ define(function (require) {
 						return _.isString(value) ? value.toUpperCase().charCodeAt(0) : value;
 					});
 
+					// event is in the keys array
+					// ~ return 0 only if target was not found
 					if (~_.indexOf(keys, e.which)){
 						$scope.done();
 					}

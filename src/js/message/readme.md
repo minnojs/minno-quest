@@ -15,6 +15,8 @@ var task = {
 The message tasks are extremely simple, all they do is present simple html templates. In order to load a template simply set it into the `template` property as a string, or set the appropriate URL into `templateUrl`. Thats it. 
 (This is most likely not relevant to you, but the templates are rendered using angularjs $compile and therefore all the relevant services are available).
 
+The context for the element has the following variables available: {global, current, task}.
+
 You can use any element in your template as a proceed button, all you have to do is add the `pi-message-done` attribute to the appropriate element.
 
 ```

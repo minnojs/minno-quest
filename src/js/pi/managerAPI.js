@@ -1,10 +1,9 @@
 define(function(require){
 
-
-
 	var Constructor = require('taskManager/API');
 	var _ = require('underscore');
 	var isDev = /^(localhost|127.0.0.1)/.test(location.host);
+	var messageTemplate = require('text!pi/messageTemplate.html');
 
 	/**
 	 * Constructor for PIPlayer script creator
@@ -19,7 +18,7 @@ define(function(require){
 	_.extend(API.prototype, Constructor.prototype);
 
 	// annotate onPreTask
-	onPreTask.$inject = ['currentTask', '$http'];
+	onPreTask.$inject = ['currentTask', '$http','$rootScope'];
 
 	return API;
 
@@ -32,7 +31,8 @@ define(function(require){
 	 * @param  {Object} $http       The $http service
 	 * @return {Promise}            Resolved when server responds
 	 */
-	function onPreTask(currentTask, $http){
+	function onPreTask(currentTask, $http, $rootScope){
+		var global = $rootScope.global;
 		var settings;
 		var data = {taskName: currentTask.name || 'namelessTask', taskNumber: currentTask.$meta.number};
 
@@ -41,6 +41,15 @@ define(function(require){
 			settings = currentTask.$script.settings;
 			settings.logger = settings.logger || {};
 			settings.logger.meta = angular.extend(settings.logger.meta || {}, data);
+		}
+
+		if (currentTask.type == 'message' && currentTask.piTemplate){
+			currentTask.$template = _.template(messageTemplate,{
+				content: currentTask.$template,
+				global: global,
+				current: global.current,
+				task: currentTask
+			});
 		}
 
 		// set last task flag
