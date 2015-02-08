@@ -42,6 +42,11 @@ define(['require','./managerModule'], function(require){
 				expect(manager.sequence).toEqual(jasmine.any(managerSequence));
 			}));
 
+			it('should set title if it exists', inject(function($document,managerService){
+				manager = managerService($scope, {settings:{title:'test123'}});
+				expect($document[0].title).toBe('test123');
+			}));
+
 			it('should activate canvas', inject(function(managerCanvas){
 				expect(managerCanvas).toHaveBeenCalled();
 			}));

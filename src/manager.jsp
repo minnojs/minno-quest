@@ -27,7 +27,7 @@ String getBase = getProtocol+"://"+getDomain;
 		<base href="<%= getBase + "/implicit" + urlPath %>">
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<title>PI questionnaire</title>
+		<title>Experiment</title>
 		<meta name="description" content="Project Implicit Questionnaire">
 		<meta name="viewport" content="width=device-width">
 

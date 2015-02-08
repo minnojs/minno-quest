@@ -154,6 +154,16 @@ define(['require','angular','./taskModule'],function(require, angular){
 			it('should deactivate canvas at the end of the task', function(){
 
 			});
+
+			it('should activate title before task', function(){
+
+			});
+
+			it('should deactivate title at the end of the task', function(){
+
+			});
+
+
 		});
 
 	});

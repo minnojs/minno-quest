@@ -12,7 +12,7 @@ function onEnd($rootScope){
 }
 ```
 
-##### canvas
+#### canvas
 `canvas` takes an object that describes the style of the task environment. Each property of the object changes a different style element.
 
 Property            | Changes
@@ -24,7 +24,7 @@ fontSize            | Default font size.
 
 In case you need to fine tune the styles even further you can add css rules into the raw HTML. Support for dynamically adding CSS is planned but not yet supported.
 
-##### onPreTask
+#### onPreTask
 `onPreTask` is a function to be called before each task is called.
 
 ```js
@@ -38,7 +38,7 @@ Asset       | Description
 currentTask | The current task object
 prevTask    | The previous task object (this may be used as a post task action as well...)
 
-##### onEnd
+#### onEnd
 `onEnd` is a function to be called as soon as the task sequence ends.
 
 ```js
@@ -52,6 +52,8 @@ Asset       | Description
 -------     | -----------
 currentTask | The current (last) task object
 
+#### title
+`title` is a string to be used as the page title (the name displayed on the tag).
 
 ### Tasks
 The basic unit in piManager is the **task**. The manager currently suports two types of tasks `quest` and `message`. You should just cue them into the sequence (you can use mixers to your hearts content as well).
@@ -63,15 +65,16 @@ type        | Type of task (quest/message).
 pre         | A function to invoke before the task (may return a promise).
 post        | A function to invoke after the task (may return a promise).
 canvas      | A canvas object (as defined under [settings](#canvas)) to invoke at the begining of the task and remove 
+title       | A string to be used as the page title (the name displayed on the tag). It is reset at the end of the task.
 
-##### Quest
+#### Quest
 
 Property    | Description
 ----------- | -------------
 script      | The actual script object for the quest task.
 scriptUrl   | The url for the quest script.
 
-##### Message
+#### Message
 Property    | Description
 ----------- | -------------
 template    | the actual html to display as a string.

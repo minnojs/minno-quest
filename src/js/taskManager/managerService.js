@@ -1,8 +1,8 @@
 define(function(require){
 	var _ = require('underscore');
 
-	managerService.$inject = ['$rootScope', '$q', 'managerSequence', 'managerTaskLoad', 'managerCanvas'];
-	function managerService($rootScope, $q, ManagerSequence, taskLoad, canvas){
+	managerService.$inject = ['$rootScope', '$q', 'managerSequence', 'managerTaskLoad', 'managerCanvas','$document'];
+	function managerService($rootScope, $q, ManagerSequence, taskLoad, canvas, $document){
 
 		/**
 		 * This is the constructor for the manager object.
@@ -33,14 +33,21 @@ define(function(require){
 			this.$scope = $scope;
 			this.script = script;
 
-			canvasOff = canvas(script.settings && script.settings.canvas);
-
 			// create sequence
 			this.sequence = new ManagerSequence(script);
 
+			// activate canvas
+			canvasOff = canvas(script.settings && script.settings.canvas);
+			$scope.$on('$destroy', canvasOff);
+
+			// activate titles
+			if (script.settings && script.settings.title){
+				$document[0].title = script.settings.title;
+			}
+
 			$scope.$on('manager:next', function(){self.next();});
 			$scope.$on('manager:prev', function(){self.prev();});
-			$scope.$on('$destroy', canvasOff);
+
 		}
 
 		_.extend(manager.prototype, {

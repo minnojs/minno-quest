@@ -2,27 +2,36 @@
  * @name: taskDirective
  */
 define(function(){
-	directive.$inject = ['taskActivate','managerCanvas'];
-	function directive(activateTask, canvas){
+	directive.$inject = ['taskActivate','managerCanvas','$document'];
+	function directive(activateTask, canvas, $document){
 		return {
 			scope:{
 				task: '=piTask'
 			},
 			link: function($scope, $element){
 				var task = $scope.task;
-				var off;
+				var canvasOff, oldTitle;
+				var def;
 
 				if (!task){
 					return;
 				}
 
-				off = canvas(task.canvas); // apply canvas settings
+				def = activateTask(task, $element, $scope.$new());
 
-				activateTask(task, $element, $scope.$new())
-					['finally'](off) // remove canvas settings
-					['finally'](function(){
-						$scope.$emit('task:done', arguments);
-					});
+				canvasOff = canvas(task.canvas); // apply canvas settings
+				def['finally'](canvasOff); // remove canvas settings
+
+				// if task.title is set, set the title and remove at the end...
+				if (task.title){
+					oldTitle = $document[0].title;
+					$document[0].title = task.title;
+					def['finally'](function(){$document[0].title = oldTitle;});
+				}
+
+				def['finally'](function(){
+					$scope.$emit('task:done', arguments);
+				});
 			}
 		};
 	}
