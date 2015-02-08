@@ -69,7 +69,7 @@ define(['questAPI'], function(Quest){
   });
 
   // The second question is a another selectOne input. This time we use the multiButtons style.
-  // This is usefull for questions with very many answers.
+  // This is useful for questions with very many answers. Note the use of `minWidth` here, this allows us to set the width of the buttons, thus making sure they line up symmetrically.
 
   API.addQuestionsSet('basicDropdown',{
     type: 'selectOne',
