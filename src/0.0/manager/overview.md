@@ -1,0 +1,18 @@
+---
+title: Overview
+description: piManager is responsible for managing several piTasks sequentially.
+---
+
+piManager is a player intent on presenting a series of tasks to the users. It uses the same overall API used throught the project implicit tasks.
+
+It is written in JavaScript and is built to be extremely versatile and customizable. The scripts are written as JavaScript objects. This format allows writing simple and straightforward scripts using a constrained scripting language. The format also allows advanced users to easily create complex and dynamic scripts using in-line JavaScript.
+
+### Central concepts
+
+The basic unit it PImanager scripts is the task. A task is represented by a single object, the properties of the object define the task to be activated and some settings relevant to it. Tasks are organized and presented using the task sequence. The sequence is an ordered list of tasks.
+
+Within the sequence you can use several tools in order to control the flow of your tasks. **mixers** control the order in which your tasks are presented (and allow you to change the sequence conditionally). **inheritance** allows abstracting tasks and makes them shorter, simpler, more dynamic, and most important, reusable. And finally **templates** allow you to micro manage the style of your tasks.
+
+### Tasks
+
+There are two types of tasks built into piManager [piQuest](../quest/overview.html) and [messages](messages.html). You can run new tasks in several ways (see the [API](API.html#tasks)).

@@ -10,7 +10,7 @@
 
 		<title>PI questionnaire</title>
 
-		<base href="./dist/"></base>
+		<base href="../dist/"></base>
 		<link rel="stylesheet" href="styles/main.css" />
 
 		<!-- Favicons -->
@@ -38,7 +38,11 @@
 
 		<div class="container" ng-app>
 			<img class="pi-spinner" ng-hide="1"/>
-			<div pi-manager-task="{type:'quest',scriptUrl:'../../{{ url }}'}"></div>
+			{% if data.dirname == 'quest' %}
+				<div pi-manager-task="{type:'quest',scriptUrl:'../../{{ url }}'}"></div>
+			{% elseif data.dirname == 'manager' %}
+				<div pi-manager="../../manager/{{ url }}"></div>
+			{% endif %}
 			<div pi-console></div>
 		</div>
 

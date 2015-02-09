@@ -5,7 +5,7 @@
  *		takes a media object such as {word: 'Morning'} (we do our best for the object to have only one property)
  *		the context is the object used for templating
  */
-define(['jquery','underscore'],function($,_){
+define(['jquery','underscore', 'utils/preloader'],function($,_, preload){
 
 	var html = function(media, context){
 
@@ -17,7 +17,7 @@ define(['jquery','underscore'],function($,_){
 		else if (media.image) {
 			media.displayType = 'element';
 			media.type = 'image';
-			media.el = $('<img>',{src:media.image});
+			media.el = preload.getImage(media.image);
 		}
 		else if (media.jquery) {
 			media.displayType = 'element';

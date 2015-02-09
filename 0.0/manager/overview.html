@@ -14,7 +14,7 @@
 		<!-- Bootstrap core CSS -->
 		<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
 		<link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/sunburst.min.css" rel="stylesheet">
-		<link href="css/style.css" rel="stylesheet">
+		<link href="../css/style.css" rel="stylesheet">
 		<style type="text/css">
 			pre {display:block;overflow-x:auto;padding:0.5em;background:#000;color:#f8f8f8;-webkit-text-size-adjust:none}
 			table {padding: 0;}
@@ -50,17 +50,17 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a href="../" class="navbar-brand">Project Implicit</a>
+					<a href="../../" class="navbar-brand">Project Implicit</a>
 				</div>
 				<nav class="collapse navbar-collapse bs-navbar-collapse">
 					<ul class="nav navbar-nav">
-						<li class="active">
-							<a href="overview.html">piQuest</a>
+						<li class="">
+							<a href="../quest/overview.html">piQuest</a>
 						</li>
-<!-- 						<li >
-							<a href="../css/">CSS</a>
+						<li class=" active ">
+							<a href="../manager/overview.html">piManager</a>
 						</li>
- -->					</ul>
+					</ul>
 					<ul class="nav navbar-nav navbar-right">
 						<li><a href="https://github.com/ProjectImplicit/PIquest">Github</a></li>
 					</ul>
@@ -71,8 +71,8 @@
 		<div id="content" class="bs-docs-header">
 			<div class="container">
 				
-	<h1>Tutorial</h1>
-	<p>This tutorial will walk you through creating a fairly complex questionnaire.</p>
+	<h1>Overview</h1>
+	<p>piManager is responsible for managing several piTasks sequentially.</p>
 
 			</div>
 		</div>
@@ -81,9 +81,13 @@
 			<div class="row">
 				<div class="col-md-9" role="main">
 					
-	<p>You can download the final script right <a href="scripts/tutorial.js">here</a>.</p>
-<p>If you haven’t reviewed the hello world tutorial, you should probably go over it before you get into this tutorial.</p>
-<p>This tutorial will walk you through creating a fairly complex questionnaire. We will administer a short demographics questionnaire, following it by a set</p>
+	<p>piManager is a player intent on presenting a series of tasks to the users. It uses the same overall API used throught the project implicit tasks.</p>
+<p>It is written in JavaScript and is built to be extremely versatile and customizable. The scripts are written as JavaScript objects. This format allows writing simple and straightforward scripts using a constrained scripting language. The format also allows advanced users to easily create complex and dynamic scripts using in-line JavaScript.</p>
+<h3 id="central-concepts">Central concepts</h3>
+<p>The basic unit it PImanager scripts is the task. A task is represented by a single object, the properties of the object define the task to be activated and some settings relevant to it. Tasks are organized and presented using the task sequence. The sequence is an ordered list of tasks.</p>
+<p>Within the sequence you can use several tools in order to control the flow of your tasks. <strong>mixers</strong> control the order in which your tasks are presented (and allow you to change the sequence conditionally). <strong>inheritance</strong> allows abstracting tasks and makes them shorter, simpler, more dynamic, and most important, reusable. And finally <strong>templates</strong> allow you to micro manage the style of your tasks.</p>
+<h3 id="tasks">Tasks</h3>
+<p>There are two types of tasks built into piManager <a href="../quest/overview.html">piQuest</a> and <a href="messages.html">messages</a>. You can run new tasks in several ways (see the <a href="API.html#tasks">API</a>).</p>
 
 
 				</div>
@@ -96,40 +100,39 @@
 						
 
 						<ul class="nav bs-docs-sidenav">
+						
+
 							
-							<li class="">
+							<li class=" active ">
 								<a href="overview.html">Overview</a>
 							</li>
 						
 							
 							<li class="">
-								<a href="introduction.html">Introduction</a>
+								<a href="messages.html">Messages</a>
 							</li>
 						
 							<li>
-								<a href="helloworldDocco.html">Examples</a>
+								<a href="javascript:void(0)">Examples</a>
 								<ul class="nav">
 									
 							<li class="">
 								<div>
-									<a href="helloworldDocco.html">Hello world</a>
-									<a href="helloworld.js" download="helloworld.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="helloworldPlay.html" target="_blank" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-									
-							<li class="">
-								<div>
-									<a href="weightDocco.html">Weight demo</a>
-									<a href="weight.js" download="weight.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="weightPlay.html" target="_blank" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+									<a href="weightManagerDocco.html">Weight experiment</a>
+									<a href="weightManager.js" download="weightManager.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="weightManagerPlay.html" target="_blank" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
 								</div>
 							</li>
 						
 								</ul>
 							</li>
-							<li><a href="API.html">API</a></li>
+							
+							<li class="">
+								<a href="API.html">API</a>
+							</li>
+						
+
+						
 						</ul>
 						<!-- <a class="back-to-top" href="#top">
 							Back to top
@@ -146,7 +149,7 @@
 				<p>Created by Project Implicit for the benefit of all.</p>
 				<!-- <p>Code licensed under <a href="https://github.com/twbs/bootstrap/blob/master/LICENSE" target="_blank">MIT</a>, documentation under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p> -->
 				<ul class="bs-docs-footer-links text-muted">
-					<li>Currently v0.0.24</li>
+					<li>Currently v0.0.27</li>
 					<li>&middot;</li>
 					<li><a href="https://github.com/ProjectImplicit/PIquest">GitHub</a></li>
 					<li>&middot;</li>

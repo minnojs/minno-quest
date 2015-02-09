@@ -14,7 +14,7 @@
 		<!-- Bootstrap core CSS -->
 		<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
 		<link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/sunburst.min.css" rel="stylesheet">
-		<link href="css/style.css" rel="stylesheet">
+		<link href="../css/style.css" rel="stylesheet">
 		<style type="text/css">
 			pre {display:block;overflow-x:auto;padding:0.5em;background:#000;color:#f8f8f8;-webkit-text-size-adjust:none}
 			table {padding: 0;}
@@ -50,17 +50,17 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a href="../" class="navbar-brand">Project Implicit</a>
+					<a href="../../" class="navbar-brand">Project Implicit</a>
 				</div>
 				<nav class="collapse navbar-collapse bs-navbar-collapse">
 					<ul class="nav navbar-nav">
-						<li class="active">
-							<a href="overview.html">piQuest</a>
+						<li class="{% if data.dirname == 'quest' %} active {% endif %}">
+							<a href="../quest/overview.html">piQuest</a>
 						</li>
-<!-- 						<li >
-							<a href="../css/">CSS</a>
+						<li class="{% if data.dirname == 'manager' %} active {% endif %}">
+							<a href="../manager/overview.html">piManager</a>
 						</li>
- -->					</ul>
+					</ul>
 					<ul class="nav navbar-nav navbar-right">
 						<li><a href="https://github.com/ProjectImplicit/PIquest">Github</a></li>
 					</ul>
@@ -100,6 +100,8 @@
 						{% endmacro example %}
 
 						<ul class="nav bs-docs-sidenav">
+						{% if data.dirname == 'quest' %}
+
 							{{ navitem("Overview", "overview", data.basename) }}
 							{{ navitem("Introduction", "introduction", data.basename) }}
 							<li>
@@ -109,7 +111,21 @@
 									{{ example("Weight demo", "weight", data.basename) }}
 								</ul>
 							</li>
-							<li><a href="API.html">API</a></li>
+							{{ navitem("API", "API", data.basename) }}
+
+						{% elseif data.dirname == 'manager' %}
+
+							{{ navitem("Overview", "overview", data.basename) }}
+							{{ navitem("Messages", "messages", data.basename) }}
+							<li>
+								<a href="javascript:void(0)">Examples</a>
+								<ul class="nav">
+									{{ example("Weight experiment", "weightManager", data.basename) }}
+								</ul>
+							</li>
+							{{ navitem("API", "API", data.basename) }}
+
+						{% endif %}
 						</ul>
 						<!-- <a class="back-to-top" href="#top">
 							Back to top
@@ -126,7 +142,7 @@
 				<p>Created by Project Implicit for the benefit of all.</p>
 				<!-- <p>Code licensed under <a href="https://github.com/twbs/bootstrap/blob/master/LICENSE" target="_blank">MIT</a>, documentation under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p> -->
 				<ul class="bs-docs-footer-links text-muted">
-					<li>Currently v0.0.24</li>
+					<li>Currently v0.0.27</li>
 					<li>&middot;</li>
 					<li><a href="https://github.com/ProjectImplicit/PIquest">GitHub</a></li>
 					<li>&middot;</li>

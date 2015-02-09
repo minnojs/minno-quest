@@ -10,7 +10,7 @@
 
 		<title>PI questionnaire</title>
 
-		<base href="./dist/"></base>
+		<base href="../dist/"></base>
 		<link rel="stylesheet" href="styles/main.css" />
 
 		<!-- Favicons -->
@@ -38,7 +38,9 @@
 
 		<div class="container" ng-app>
 			<img class="pi-spinner" ng-hide="1"/>
-			<div pi-manager-task="{type:'quest',scriptUrl:'../../tutorial.js'}"></div>
+			
+				<div pi-manager="../../manager/weightManager.js"></div>
+			
 			<div pi-console></div>
 		</div>
 

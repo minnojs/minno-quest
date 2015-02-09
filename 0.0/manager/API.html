@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<!-- Meta, title, CSS, favicons, etc. -->
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="Bootstrap, a sleek, intuitive, and powerful mobile first front-end framework for faster and easier web development.">
+		<meta name="keywords" content="HTML, CSS, JS, JavaScript, framework, bootstrap, front-end, frontend, web development">
+		<meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+
+		<title>piQuest &middot; V0.0</title>
+
+		<!-- Bootstrap core CSS -->
+		<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+		<link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/sunburst.min.css" rel="stylesheet">
+		<link href="../css/style.css" rel="stylesheet">
+		<style type="text/css">
+			pre {display:block;overflow-x:auto;padding:0.5em;background:#000;color:#f8f8f8;-webkit-text-size-adjust:none}
+			table {padding: 0;}
+			table tr {border-top: 1px solid #cccccc;background-color: white;margin: 0;padding: 0;}
+			table tr:nth-child(2n) {background-color: #f8f8f8;}
+			table tr th {font-weight: bold;border: 1px solid #cccccc;text-align: left;margin: 0;padding: 6px 13px;}
+			table tr td {border: 1px solid #cccccc;text-align: left;margin: 0;padding: 6px 13px;}
+			table tr th :first-child, table tr td :first-child {margin-top: 0;}
+			table tr th :last-child, table tr td :last-child {margin-bottom: 0;}
+		</style>
+
+		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+		<!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+			<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+		<![endif]-->
+
+		<!-- Favicons -->
+		<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+		<link rel="icon" href="../favicon.ico">
+	</head>
+
+	<body>
+		<a id="skippy" class="sr-only sr-only-focusable" href="#content"><div class="container"><span class="skiplink-text">Skip to main content</span></div></a>
+
+		<!-- Docs master nav -->
+		<header class="navbar navbar-static-top bs-docs-nav" id="top" role="banner">
+			<div class="container">
+				<div class="navbar-header">
+					<button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a href="../../" class="navbar-brand">Project Implicit</a>
+				</div>
+				<nav class="collapse navbar-collapse bs-navbar-collapse">
+					<ul class="nav navbar-nav">
+						<li class="">
+							<a href="../quest/overview.html">piQuest</a>
+						</li>
+						<li class=" active ">
+							<a href="../manager/overview.html">piManager</a>
+						</li>
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="https://github.com/ProjectImplicit/PIquest">Github</a></li>
+					</ul>
+				</nav>
+			</div>
+		</header>
+
+		<div id="content" class="bs-docs-header">
+			<div class="container">
+				
+	<h1>API</h1>
+	<p>All the little details...</p>
+
+			</div>
+		</div>
+
+		<div class="container bs-docs-container">
+			<div class="row">
+				<div class="col-md-9" role="main">
+					
+	<h2 id="pimanager">piManager</h2>
+<p>The piManager is responsible for managing several piTasks sequentially. It uses the same API used throught the project implicit tasks.</p>
+<h3 id="settings">Settings</h3>
+<p>Settings allow you to control the generic way that the player works. Change the settings using the <code>addSettings</code> function. The first argument to the function is always the name of the setting, the second argument is the setting values. In case the setting is an object, subsequent objects will extend each other so that settings may be progressively added.
+All the functions within settings are invoked using angular. This means that you have access to any service you like, as well as some specific asssets. <a href="https://docs.angularjs.org/api/auto/service/$injector">In order to access the services</a> simply use arguments with the appropriate name. For instance, this is how you would access <code>$rootScope</code>:</p>
+<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">onEnd</span><span class="hljs-params">($rootScope)</span></span>{
+    $rootScope.$emit(<span class="hljs-string">'end!!'</span>);
+}
+</code></pre>
+<h4 id="canvas">canvas</h4>
+<p><code>canvas</code> takes an object that describes the style of the task environment. Each property of the object changes a different style element.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Changes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>background</td>
+<td>The overall background color.</td>
+</tr>
+<tr>
+<td>canvasBackground</td>
+<td>Default canvas background color.</td>
+</tr>
+<tr>
+<td>fontColor</td>
+<td>Default font color.</td>
+</tr>
+<tr>
+<td>fontSize</td>
+<td>Default font size.</td>
+</tr>
+</tbody>
+</table>
+<p>In case you need to fine tune the styles even further you can add css rules into the raw HTML. Support for dynamically adding CSS is planned but not yet supported.</p>
+<h4 id="onpretask">onPreTask</h4>
+<p><code>onPreTask</code> is a function to be called before each task is called.</p>
+<pre><code class="lang-js">API.addSettings(<span class="hljs-string">'onPreTask'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(currentTask)</span></span>{
+    doSomethingWith(currentTask);
+});
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Asset</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>currentTask</td>
+<td>The current task object</td>
+</tr>
+<tr>
+<td>prevTask</td>
+<td>The previous task object (this may be used as a post task action as well…)</td>
+</tr>
+</tbody>
+</table>
+<h4 id="onend">onEnd</h4>
+<p><code>onEnd</code> is a function to be called as soon as the task sequence ends.</p>
+<pre><code class="lang-js">API.addSettings(<span class="hljs-string">'onEnd'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{
+    <span class="hljs-comment">// Do something: for instance, redirect to 'my/url.js'</span>
+    location.href = <span class="hljs-string">'my/url.js'</span>;
+});
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Asset</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>currentTask</td>
+<td>The current (last) task object</td>
+</tr>
+</tbody>
+</table>
+<h4 id="title">title</h4>
+<p><code>title</code> is a string to be used as the page title (the name displayed on the tag).</p>
+<h3 id="tasks">Tasks</h3>
+<p>The basic unit in piManager is the <strong>task</strong>. The manager currently suports two types of tasks <code>quest</code> and <code>message</code>. You should just cue them into the sequence (you can use mixers to your hearts content as well).</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td>Task name.</td>
+</tr>
+<tr>
+<td>type</td>
+<td>Type of task (quest/message).</td>
+</tr>
+<tr>
+<td>pre</td>
+<td>A function to invoke before the task (may return a promise).</td>
+</tr>
+<tr>
+<td>post</td>
+<td>A function to invoke after the task (may return a promise).</td>
+</tr>
+<tr>
+<td>canvas</td>
+<td>A canvas object (as defined under <a href="#canvas">settings</a>) to invoke at the begining of the task and remove </td>
+</tr>
+<tr>
+<td>title</td>
+<td>A string to be used as the page title (the name displayed on the tag). It is reset at the end of the task.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="quest">Quest</h4>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>script</td>
+<td>The actual script object for the quest task.</td>
+</tr>
+<tr>
+<td>scriptUrl</td>
+<td>The url for the quest script.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="message">Message</h4>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>template</td>
+<td>the actual html to display as a string.</td>
+</tr>
+<tr>
+<td>templateUrl</td>
+<td>The url for the message html file.</td>
+</tr>
+<tr>
+<td>keys</td>
+<td>Controls the proceed key: either a key (i.e. <code>&#39;a&#39;</code>) a keyCode (i.e. <code>65</code>) or an array of such (i.e. <code>[&#39;a&#39;,&#39;b&#39;]</code>).</td>
+</tr>
+</tbody>
+</table>
+<h3 id="inheritance">Inheritance</h3>
+<p>piManager uses the same inheritance system used by piQuest. It has one type of set: the task set. In order to create task sets use <code>addTasksSet(set, list)</code>.</p>
+
+
+				</div>
+
+				<div class="col-md-3" role="complementary">
+					<nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm">
+
+						
+
+						
+
+						<ul class="nav bs-docs-sidenav">
+						
+
+							
+							<li class="">
+								<a href="overview.html">Overview</a>
+							</li>
+						
+							
+							<li class="">
+								<a href="messages.html">Messages</a>
+							</li>
+						
+							<li>
+								<a href="javascript:void(0)">Examples</a>
+								<ul class="nav">
+									
+							<li class="">
+								<div>
+									<a href="weightManagerDocco.html">Weight experiment</a>
+									<a href="weightManager.js" download="weightManager.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="weightManagerPlay.html" target="_blank" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+								</ul>
+							</li>
+							
+							<li class=" active ">
+								<a href="API.html">API</a>
+							</li>
+						
+
+						
+						</ul>
+						<!-- <a class="back-to-top" href="#top">
+							Back to top
+						</a> -->
+					</nav>
+				</div>
+			</div>
+		</div>
+
+		<!-- Footer
+		================================================== -->
+		<footer class="bs-docs-footer" role="contentinfo">
+			<div class="container">
+				<p>Created by Project Implicit for the benefit of all.</p>
+				<!-- <p>Code licensed under <a href="https://github.com/twbs/bootstrap/blob/master/LICENSE" target="_blank">MIT</a>, documentation under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p> -->
+				<ul class="bs-docs-footer-links text-muted">
+					<li>Currently v0.0.27</li>
+					<li>&middot;</li>
+					<li><a href="https://github.com/ProjectImplicit/PIquest">GitHub</a></li>
+					<li>&middot;</li>
+					<li><a href="https://github.com/ProjectImplicit/PIquest/releases">Releases</a></li>
+				</ul>
+			</div>
+		</footer>
+
+	</body>
+</html>

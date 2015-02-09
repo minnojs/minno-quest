@@ -19,7 +19,10 @@ gulp.task('build:md', function () {
 	return gulp.src('src/**/*.md')
 		.pipe(frontMatter({remove:true, property:'data'})) 		// set front matter into data
 		.pipe(data(function(file){								// set basename into data
-			return {basename:path.basename(file.path,'.md')};
+			return {
+				basename:path.basename(file.path,'.md'), // file name
+				dirname: path.dirname(file.path).match(/[^\/]*$/)[0] // only the last segment of the dirname
+			};
 		}))
 		.pipe(marked({											// highlight pre
 			highlight: function(code){
@@ -27,7 +30,7 @@ gulp.task('build:md', function () {
 			}
 		}))
 		.pipe(applyTemplate({engine:'swig', template: function(context,file){
-			return path.join(path.dirname(file.path), 'templates','md.swig');
+			return path.join(path.dirname(file.path), '../templates','md.swig');
 		}}))
 		.pipe(rename({extname: '.html'}))
 		.pipe(gulp.dest('.'));
@@ -44,9 +47,14 @@ gulp.task('build:js', function(){
 	// add activation pages
 	var playPages = scripts
 		.pipe(clone())
+		.pipe(data(function(file){
+			return {
+				dirname: path.dirname(file.path).match(/[^\/]*$/)[0] // only the last segment of the dirname
+			};
+		}))
 		.pipe(applyTemplate({engine:'swig', template: function(context, file){
 			context.url = path.basename(file.path);
-			return path.join(path.dirname(file.path), 'templates', 'play.swig');
+			return path.join(path.dirname(file.path), '../templates', 'play.swig');
 		}}))
 		.pipe(rename({suffix:'Play',extname: '.html'}));
 
@@ -66,12 +74,16 @@ gulp.task('build:js', function(){
 			var sections = docco.parse(file.path, file.contents.toString('utf8'), config);
 			docco.format(file.path, sections, config); // Format (adds highlighting to the sections object)
 
-			return {sections: sections, basename: path.basename(file.path,'.js')};
+			return {
+				sections: sections,
+				basename: path.basename(file.path,'.js'),
+				dirname: path.dirname(file.path).match(/[^\/]*$/)[0] // only the last segment of the dirname
+			};
 		}))
 		.pipe(applyTemplate({engine:'swig', template: function(context,file){
 			// context.frontMatter = file.frontMatter;
 			// context.basename = path.basename(file.path,'.html');
-			return path.join(path.dirname(file.path), 'templates','docco.swig');
+			return path.join(path.dirname(file.path), '../templates','docco.swig');
 		}}))
 		.pipe(rename({suffix:'Docco',extname: '.html'}));
 
