@@ -122,32 +122,25 @@ define(['./logger-module'],function(){
 				expect($http.post).not.toHaveBeenCalled();
 			}));
 
+			it('should throw a warning if there was a log but a url was not set',inject(function($http,$log,piConsole){
+				piConsole.setSettings({level:'debug'}); // activate low level logging
+				spyOn($http,'post');
+
+				logger.log(1);
+				logger.settings.url = undefined;
+				logger.send();
+
+				expect($http.post).not.toHaveBeenCalled(); // make sure we don't try to post anything
+				expect($log.warn.logs.length).toBe(1); // make sure we throw the warning
+
+			}));
+
 			it('should remove logged objects from the stack and save them after each send', function(){
 				logger.log(1);
 				logger.log(2);
 				logger.log(3);
 				expect(logger.sent.length).toBe(3);
 				expect(logger.pending.length).toBe(0);
-				$httpBackend.flush();
-			});
-
-			it('should throw an error only if there was a log but a url was not set',function(){
-				expect(function(){
-					logger.send();
-				}).not.toThrow();
-
-				logger.log(1);
-
-				expect(function(){
-					logger.send();
-				}).not.toThrow();
-
-				logger.log(1);
-				logger.settings.url = undefined;
-
-				expect(function(){
-					logger.send();
-				}).toThrow();
 				$httpBackend.flush();
 			});
 

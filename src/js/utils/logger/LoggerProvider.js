@@ -55,7 +55,7 @@ define(function(require){
 			},
 
 			send: function(){
-				var i, e;
+				var i;
 				var settings = this.settings;
 				var sendData = this.pending;
 				var def = $q.defer();
@@ -67,9 +67,9 @@ define(function(require){
 				}
 
 				if (_.isUndefined(settings.url)){
-					e = new Error('The logger url is not set.');
-					piConsole('logger').error(e);
-					throw e;
+					piConsole('logger').warn('The logger url is not set.');
+					def.resolve();
+					return def.promise;
 				}
 
 				// empty the pending stack
