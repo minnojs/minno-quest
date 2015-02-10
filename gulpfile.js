@@ -6,9 +6,17 @@ var path = require('path');
 var exec = require('child_process').exec;
 //var debug = require('gulp-debug');
 
+var pagesPath = 'src/[0-9].[0-9]/{quest,manager}/';
+
 gulp.task('clean', function(cb){
 	var del = require('del');
 	del(['0.0/*'],cb);
+});
+
+// just copy html over
+gulp.task('build:html', function(){
+	return gulp.src(pagesPath + '*.html')
+		.pipe(gulp.dest('.'));
 });
 
 gulp.task('build:md', function () {
@@ -16,7 +24,7 @@ gulp.task('build:md', function () {
 	var highlight = require('highlight.js');
 	var frontMatter = require('gulp-front-matter');
 
-	return gulp.src('src/**/*.md')
+	return gulp.src(pagesPath + '*.md')
 		.pipe(frontMatter({remove:true, property:'data'})) 		// set front matter into data
 		.pipe(data(function(file){								// set basename into data
 			return {
@@ -36,13 +44,28 @@ gulp.task('build:md', function () {
 		.pipe(gulp.dest('.'));
 });
 
+gulp.task('build:swig', function(){
+	return gulp.src(pagesPath + '*.swig')
+		.pipe(data(function(file){								// set basename into data
+			return {
+				basename:path.basename(file.path,'.md'), // file name
+				dirname: path.dirname(file.path).match(/[^\/]*$/)[0] // only the last segment of the dirname
+			};
+		}))
+		.pipe(applyTemplate({engine:'swig', template: function(context,file){
+			return file.path;
+		}}))
+		.pipe(rename({extname: '.html'}))
+		.pipe(gulp.dest('.'));
+});
+
 gulp.task('build:js', function(){
 	var es = require('event-stream');
 	var clone = require('gulp-clone');
 	var docco = require('docco');
 
 	// add scripts to stream
-	var scripts = gulp.src('src/**/*.js');
+	var scripts = gulp.src(pagesPath + '*.js');
 
 	// add activation pages
 	var playPages = scripts
@@ -98,7 +121,7 @@ gulp.task('build:css', function(){
 		.pipe(gulp.dest('.'));
 });
 
-gulp.task('build',  ['build:js', 'build:md', 'build:css']);
+gulp.task('build',  ['build:js', 'build:md', 'build:css', 'build:swig','build:html']);
 
 gulp.task('deploy', function(cb){
 	exec('scripts/deploy.sh', function(){
@@ -109,6 +132,5 @@ gulp.task('deploy', function(cb){
 gulp.task('watch', function(){
 	gulp.watch(['src/**/*'], ['build']);
 });
-
 
 gulp.task('default', ['build']);

@@ -12,7 +12,8 @@
 
 		<title>piQuest &middot; V0.0</title>
 
-		{% block head %}
+		
+	
 		<!-- Bootstrap core CSS -->
 		<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
 		<link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/sunburst.min.css" rel="stylesheet">
@@ -27,7 +28,18 @@
 			table tr th :first-child, table tr td :first-child {margin-top: 0;}
 			table tr th :last-child, table tr td :last-child {margin-bottom: 0;}
 		</style>
-		{% endblock head %}
+		
+	<script src="//cdn.jsdelivr.net/ace/1.1.8/min/ace.js" type="text/javascript" charset="utf-8"></script>
+	<style type="text/css" media="screen">
+	    #editor {
+	    	margin-top: 1em;
+	        border-radius: 4px 4px 0;
+	        border: 1px solid #ddd;
+	        height: 30em;
+	        font-size: 14px;
+	    }
+	</style>
+
 
 		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 		<!--[if lt IE 9]>
@@ -58,10 +70,10 @@
 				</div>
 				<nav class="collapse navbar-collapse bs-navbar-collapse">
 					<ul class="nav navbar-nav">
-						<li class="{% if data.dirname == 'quest' %} active {% endif %}">
+						<li class=" active ">
 							<a href="../quest/overview.html">piQuest</a>
 						</li>
-						<li class="{% if data.dirname == 'manager' %} active {% endif %}">
+						<li class="">
 							<a href="../manager/overview.html">piManager</a>
 						</li>
 					</ul>
@@ -74,63 +86,117 @@
 
 		<div id="content" class="bs-docs-header">
 			<div class="container">
-				{% block title %} Project Implicit {% endblock%}
+				
+	<h1>Playground</h1>
+	<p>You can play around with the player right here. All you need to do is write your script and then click the activate button.</p>
+
 			</div>
 		</div>
 
 		<div class="container bs-docs-container">
 			<div class="row">
 				<div class="col-md-9" role="main">
-					{% block content %}{% endblock%}
+					
+		<p>
+			<button class="btn btn-default btn-lg btn-block" onclick="window.click()" type="button">Activate</button>
+		</p>
+		<div id="editor">
+define(['questAPI'], function(Quest){
+
+	var API = new Quest();
+
+	API.addSequence([
+		{
+			header: 'Hello World',
+			questions: [
+				{
+					type: 'selectOne',
+					stem: 'What is you favorite color?',
+					answers: ['red', 'blue', 'green']
+				}
+			]
+		}
+	]);
+
+	return API.script;
+});
+		</div>
+
+		<script>
+		    var editor = ace.edit("editor");
+		    editor.setTheme("ace/theme/monokai");
+		    editor.getSession().setMode("ace/mode/javascript");
+		    var win;
+
+		    function click(){
+		    	if (win){
+		    		win.close();
+		    		win = null;
+		    	}
+		    	win = window.open('playquest.html', 'questionnaire');
+		    	win.onload = function(){
+		    		win.piActivate(editor.getValue());
+		    	};
+		    }
+		</script>
+
 				</div>
 
 				<div class="col-md-3" role="complementary">
 					<nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm">
 
-						{% macro navitem(name, filename, current) %}
-							<li class="{%if filename == current %} active {% endif %}">
-								<a href="{{ filename }}.html">{{ name }}</a>
-							</li>
-						{% endmacro listitem %}
+						
 
-						{% macro example(name, filename, current) %}
-							<li class="{%if filename == current %} active {% endif %}">
-								<div>
-									<a href="{{ filename }}Docco.html">{{ name }}</a>
-									<a href="{{ filename }}.js" download="{{filename}}.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="{{ filename }}Play.html" target="_blank" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						{% endmacro example %}
+						
 
 						<ul class="nav bs-docs-sidenav">
-						{% if data.dirname == 'quest' %}
+						
 
-							{{ navitem("Overview", "overview", data.basename) }}
-							{{ navitem("Introduction", "introduction", data.basename) }}
+							
+							<li class="">
+								<a href="overview.html">Overview</a>
+							</li>
+						
+							
+							<li class="">
+								<a href="introduction.html">Introduction</a>
+							</li>
+						
 							<li>
 								<a href="helloworldDocco.html">Examples</a>
 								<ul class="nav">
-									{{ example("Hello world", "helloworld", data.basename) }}
-									{{ example("Weight demo", "weight", data.basename) }}
+									
+							<li class="">
+								<div>
+									<a href="helloworldDocco.html">Hello world</a>
+									<a href="helloworld.js" download="helloworld.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="helloworldPlay.html" target="_blank" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="weightDocco.html">Weight demo</a>
+									<a href="weight.js" download="weight.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="weightPlay.html" target="_blank" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
 								</ul>
 							</li>
-							{{ navitem("API", "API", data.basename) }}
-							{{ navitem("Playground", "playground", data.basename) }}
-
-						{% elseif data.dirname == 'manager' %}
-
-							{{ navitem("Overview", "overview", data.basename) }}
-							{{ navitem("Messages", "messages", data.basename) }}
-							<li>
-								<a href="javascript:void(0)">Examples</a>
-								<ul class="nav">
-									{{ example("Weight experiment", "weightManager", data.basename) }}
-								</ul>
+							
+							<li class="">
+								<a href="API.html">API</a>
 							</li>
-							{{ navitem("API", "API", data.basename) }}
+						
+							
+							<li class="">
+								<a href="playground.html">Playground</a>
+							</li>
+						
 
-						{% endif %}
+						
 						</ul>
 						<!-- <a class="back-to-top" href="#top">
 							Back to top
