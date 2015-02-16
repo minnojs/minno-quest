@@ -16,6 +16,27 @@
 	        height: 30em;
 	        font-size: 14px;
 	    }
+
+		@-webkit-keyframes fadeIn {
+		  0% {opacity: 0;}
+		  20% {opacity: 1;}
+		  80% {opacity: 1;}
+		  100% {opacity: 0;}
+		}
+
+		@keyframes fadeIn {
+		  0% {opacity: 0;}
+		  20% {opacity: 1;}
+		  80% {opacity: 1;}
+		  100% {opacity: 0;}
+		}
+
+		.fadeIn {
+		  	-webkit-animation-name: fadeIn;
+		    animation-name: fadeIn;
+		    animation-duration: 6s;
+			opacity:0;
+		}
 	</style>
 {% endblock %}
 
@@ -24,7 +45,15 @@
 		<p>
 			<button class="btn btn-default btn-lg btn-block" onclick="window.click()" type="button">Activate</button>
 		</p>
-		<div id="editor">
+
+		<div id="success" role="alert" class="alert alert-success" style="display:none">
+			<strong>Well Done!</strong> The questionnaire has been successfully completed.
+		</div>
+		<div id="error" role="alert" class="alert alert-danger" style="display:none">
+			<strong>Oh Snap!</strong> Something went wrong with the questionnaire. Why don't you fix it and try again?
+		</div>
+
+   		<div id="editor">
 define(['questAPI'], function(Quest){
 
 	var API = new Quest();
@@ -51,16 +80,46 @@ define(['questAPI'], function(Quest){
 		    editor.setTheme("ace/theme/monokai");
 		    editor.getSession().setMode("ace/mode/javascript");
 		    var win;
+		    var feedbackId = 'success';
 
 		    function click(){
+		    	// assume the feedback is success
+				feedbackId = 'success';
+
+				// clean out open window
 		    	if (win){
 		    		win.close();
 		    		win = null;
 		    	}
+
 		    	win = window.open('playquest.html', 'questionnaire');
+
 		    	win.onload = function(){
-		    		win.piActivate(editor.getValue());
+		    		// first set the unload listener
+					win.addEventListener('unload', function(event) {
+						var el = document.getElementById(feedbackId);
+						window.focus();
+						fade(el);
+					});
+
+					// then activate the player (this ensures that when )
+					win.piActivate(editor.getValue());
 		    	};
 		    }
+
+	    	window.addEventListener('error', function(e){
+	    		console.error(e);
+	    		feedbackId = 'error';
+	    	});
+
+	    	function fade(el){
+				el.style.display = 'block';
+				el.classList.add('fadeIn');
+				setTimeout(function(){
+					el.style.display = 'none';
+					el.classList.remove('fadeIn');
+				}, 6000);
+	    	}
+
 		</script>
 {% endblock %}
