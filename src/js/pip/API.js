@@ -57,6 +57,10 @@ define(function(require){
 			return this;
 		},
 
+		getGlobal: function(){
+			return window.piGlobal;
+		},
+
 		addGlobal: function(global){
 			if (!_.isPlainObject(global)){
 				throw new Error('global must be an object');
@@ -64,19 +68,15 @@ define(function(require){
 			_.merge(this.getGlobal(), global);
 		},
 
-		getGlobal: function(){
-			return window.piGlobal;
+		getCurrent: function(){
+			return this.script.current;
 		},
 
 		addCurrent: function(current){
 			if (!_.isPlainObject(current)){
 				throw new Error('current must be an object');
 			}
-			_.merge(this.script.current, current);
-		},
-
-		getCurrent: function(){
-			return this.script.current;
+			_.merge(this.getCurrent(), current);
 		},
 
 		// push a whole script
