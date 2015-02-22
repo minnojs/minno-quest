@@ -51,7 +51,34 @@ The project implicit build has an optional "meta template" that you may use by s
 
 property        | description
 --------------- | ---------------------
-piTemplate      | Activate the PI template.
+piTemplate      | (true, false or 'debrief') Activates the PI template. If set to 'debrief' activates the debrief template, and makes the debrief functions available.
 header          | Header text.
 footer          | Footer text.
 buttonText      | Text for the proceed button (Defaults to: Click Here or press the space button to Proceed).
+
+The project implicit template supports a debrief template activated by setting `piTemplate` to 'debrief'. If it is activated, there are two additional functions exposed from within the template.
+They can be used like so: `<%= showPanel('body','header','footer') %>`
+
+##### showPanel(body, header, footer)
+`showPanel` displays content within a stylized panel.
+
+argument        | description
+--------------- | ---------------------
+body            | The main text of the panel
+header          | The panel header (optional)
+footer          | The panel footer (optional)
+
+##### showFeedback(options)
+`showFeedback` automatically gathers feedback from the global object and displays it within your page. It takes an options object as its single argument.
+
+property        | description
+--------------- | ---------------------
+pre             | A string to be injected before each feedback (default :'<p>').
+post            | A string to be injected after each feedback (default :'</p>').
+wrap            | Whether to wrap the results in a panel (default: true).
+header          | If wrapped within a panel, set the panel heading.
+noFeedback      | The text to show if no feedback is found (default: '<p>No feedback was found</p>').
+property        | The default property in which to look for the feedback string (default: 'feedback').
+exclude         | An array of task names to skip when gathering feedback.
+
+The feedback is gathered from the global object by going through each tasks object and searching for the feedback property. It depends on the individual tasks respecting this convention.

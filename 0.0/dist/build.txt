@@ -192,5 +192,7 @@ js/pi/pipAPI.js
 js/quest/API.js
 js/pi/questAPI.js
 js/taskManager/API.js
-text!pi/messageTemplate.html
+text!pi/messageTemplate.jst
+text!pi/messageTemplateDebrief.jst
+text!pi/messageTemplatePanel.jst
 js/pi/managerAPI.js
