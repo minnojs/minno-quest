@@ -13,8 +13,8 @@ define(function(require){
 	var angular = require('angular');
 	var _ = require('underscore');
 
-	inflateProvider.$inject = ['databaseQuery','$rootScope'];
-	function inflateProvider(query, $rootScope){
+	inflateProvider.$inject = ['databaseQuery','$rootScope','piConsole'];
+	function inflateProvider(query, $rootScope, $console){
 
 		function customize(source){
 			// check for a custom function and run it if it exists
@@ -43,7 +43,8 @@ define(function(require){
 
 			var parent
 				// create child
-				, child = angular.copy(source);
+				, child = angular.copy(source)
+				, err;
 
 
 			// no inheritance
@@ -62,7 +63,9 @@ define(function(require){
 
 			// if inherit target was not found
 			if (!parent){
-				throw new Error('Query failed, object (' + JSON.stringify(source.inherit) +	') not found.');
+				err = new Error('Query failed, object (' + JSON.stringify(source.inherit) +	') not found.');
+				$console('query').error(err);
+				throw err;
 			}
 
 			// inflate parent (recursively)
@@ -97,7 +100,7 @@ define(function(require){
 
 			// return inflated trial
 			return child;
-		};
+		}
 
 		return inflate;
 	}

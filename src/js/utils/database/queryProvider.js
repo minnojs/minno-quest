@@ -1,7 +1,7 @@
 define(['underscore'],function(_){
 
-	queryProvider.$inject = ['Collection'];
-	function queryProvider(Collection){
+	queryProvider.$inject = ['Collection','piConsole'];
+	function queryProvider(Collection, $console){
 
 		function queryFn(query, collection, randomizer){
 			var coll = new Collection(collection);
@@ -42,6 +42,7 @@ define(['underscore'],function(_){
 			var length = coll.length;
 			var repeat = query.repeat;
 			var at;
+			var err;
 
 			switch (query.type){
 				case undefined:
@@ -66,7 +67,9 @@ define(['underscore'],function(_){
 			}
 
 			if (_.isUndefined(coll.at(at))) {
-				throw new Error('Query failed, object (' + JSON.stringify(query) +	') not found. If you are trying to apply a template, you should know that they are not supported for inheritance.');
+				err = new Error('Query failed, object (' + JSON.stringify(query) +	') not found. If you are trying to apply a template, you should know that they are not supported for inheritance.');
+				$console('query').error(err);
+				throw err;
 			}
 
 			return coll.at(at);

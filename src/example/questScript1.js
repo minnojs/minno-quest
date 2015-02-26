@@ -16,14 +16,14 @@ define(['/api/manager/questAPI.js'], function(Quest){
 
 	API.addSequence([
 		{
-			animate:"fade drop-in fakeAnimation",
+			//animate:"fade drop-in fakeAnimation",
 			prevText: '123',
 			prev:true,
 			progressBar: '<%= pagesMeta.number %> out of <%= pagesMeta.outOf%>',
 			header: 'Questionnaire: example for realtime branching',
-
 			questions: [
 				{
+					inherit: 'pango',
 					name: 'myName',
 					stem: "What is your name? (try yba!)",
 					autoSubmit: true
