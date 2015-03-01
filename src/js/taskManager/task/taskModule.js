@@ -17,9 +17,12 @@ define(function(require){
 
 	module.config(['taskActivateProvider', function(activateProvider){
 
-		activateQuest.$inject = ['done', '$element', '$scope', '$compile', 'script'];
-		function activateQuest(done, $canvas, $scope, $compile, script){
+		activateQuest.$inject = ['done', '$element', '$scope', '$compile', 'script','task'];
+		function activateQuest(done, $canvas, $scope, $compile, script, task){
 			var $el;
+
+			// update script name
+			task.name && (script.name = task.name);
 
 			$scope.script = script;
 
@@ -45,6 +48,8 @@ define(function(require){
 			var $el;
 
 			$scope.script = task;
+
+
 
 			$canvas.append('<div pi-message></div>');
 			$el = $canvas.contents();
