@@ -10,11 +10,14 @@
 		<meta name="keywords" content="HTML, CSS, JS, JavaScript, framework, bootstrap, front-end, frontend, web development">
 		<meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
 
-		<title>piQuest &middot; V0.0</title>
+		<title>
+			{% if data.dirname == 'quest' %} piQuest {% elseif data.dirname == 'manager' %} piManager {% endif %}
+			&middot; V0.0
+		</title>
 
 		{% block head %}
 		<!-- Bootstrap core CSS -->
-		<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+		<link href="../../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 		<link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/sunburst.min.css" rel="stylesheet">
 		<link href="../css/style.css" rel="stylesheet">
 		<style type="text/css">
@@ -64,6 +67,9 @@
 						<li class="{% if data.dirname == 'manager' %} active {% endif %}">
 							<a href="../manager/overview.html">piManager</a>
 						</li>
+						<li>
+							<a href="/PIPlayer">piPlayer</a>
+						</li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
 						<li><a href="https://github.com/ProjectImplicit/PIquest">Github</a></li>
@@ -74,14 +80,14 @@
 
 		<div id="content" class="bs-docs-header">
 			<div class="container">
-				{% block title %} Project Implicit {% endblock%}
+				{% block title %} Project Implicit {% endblock %}
 			</div>
 		</div>
 
 		<div class="container bs-docs-container">
 			<div class="row">
 				<div class="col-md-9" role="main">
-					{% block content %}{% endblock%}
+					{% block content %}{% endblock %}
 				</div>
 
 				<div class="col-md-3" role="complementary">
@@ -115,9 +121,6 @@
 									{{ example("Weight demo", "weight", data.basename) }}
 								</ul>
 							</li>
-							{{ navitem("API", "API", data.basename) }}
-							{{ navitem("Playground", "playground", data.basename) }}
-
 						{% elseif data.dirname == 'manager' %}
 
 							{{ navitem("Overview", "overview", data.basename) }}
@@ -128,9 +131,9 @@
 									{{ example("Weight experiment", "weightManager", data.basename) }}
 								</ul>
 							</li>
-							{{ navitem("API", "API", data.basename) }}
-
 						{% endif %}
+						{{ navitem("API", "API", data.basename) }}
+						{{ navitem("Playground", data.dirname + "playground", data.basename) }}
 						</ul>
 						<!-- <a class="back-to-top" href="#top">
 							Back to top

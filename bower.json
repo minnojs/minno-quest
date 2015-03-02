@@ -15,6 +15,7 @@
     "tests"
   ],
   "dependencies": {
-    "piquest": "https://github.com/ProjectImplicit/PIquest.git#~0.0.24"
+    "bootstrap": "~3.3.2",
+    "ace-builds": "~1.1.8"
   }
 }
