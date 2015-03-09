@@ -50,7 +50,7 @@ define(['managerAPI'], function(Manager){
     {
       type: 'quest',
       name: 'weightQuest',
-      scriptUrl: '../quest/weight.js'
+      scriptUrl: '../../quest/weight.js'
     }
 
     // Now, we just close the sequence.

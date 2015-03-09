@@ -104,7 +104,7 @@
 								<div>
 									<a href="{{ filename }}Docco.html">{{ name }}</a>
 									<a href="{{ filename }}.js" download="{{filename}}.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="{{ filename }}Play.html" target="_blank" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+									<a href="{{ filename }}Play.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
 								</div>
 							</li>
 						{% endmacro example %}

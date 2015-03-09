@@ -1,64 +1,120 @@
-<!doctype html>
-<!--[if IE 7]>				 <html class="no-js lt-ie9 lt-ie8" id="ng-app" ng-app=""> <![endif]-->
-<!--[if IE 8]>				 <html class="no-js lt-ie9" id="ng-app" ng-app=""> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" > <!--<![endif]-->
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="description" content="Project Implicit Questionnaire">
-		<meta name="viewport" content="width=device-width">
+{% extends "./layout.swig" %}
 
-		<title>PI questionnaire</title>
+{% block title %}
+	<h1>{{ data.basename | capitalize }}</h1>
+	{% if data.basename == 'playground' %}
+		<p>You can play around in the playground right here. All you need to do is change the script and then click the activate button.</p>
+	{% else %}
+		<p>You can play around with {{ data.basename }}.js right here. All you need to do is change the script and then click the activate button.</p>
+	{% endif %}
+{% endblock %}
 
-		<base href="../dist/"></base>
-		<link rel="stylesheet" href="styles/main.css" />
+{% block head %}
+	{% parent %}
+	<script src="../../bower_components/ace-builds/src-min/ace.js" type="text/javascript" charset="utf-8"></script>
+	<style type="text/css" media="screen">
+	    #editor {
+	    	margin-top: 1em;
+	        border-radius: 4px 4px 0;
+	        border: 1px solid #ddd;
+	        height: 80vh;
+	        font-size: 14px;
+	    }
 
-		<!-- Favicons -->
-		<link rel="apple-touch-icon" href="/apple-touch-icon.png">
-		<link rel="icon" href="/favicon.ico">
+		/* IE8 only */
+		@media \0screen {
+		    #editor {height:80px;}
+		}
 
-		<style type="text/css">
+		@-webkit-keyframes fadeIn {
+		  0% {opacity: 0;}
+		  20% {opacity: 1;}
+		  80% {opacity: 1;}
+		  100% {opacity: 0;}
+		}
 
-			.container {padding-top: 15px;}
+		@keyframes fadeIn {
+		  0% {opacity: 0;}
+		  20% {opacity: 1;}
+		  80% {opacity: 1;}
+		  100% {opacity: 0;}
+		}
 
-			/* http://www.sitepoint.com/css3-responsive-centered-image/ */
-			.pi-spinner {
-				position: absolute;max-width: 80%;top: 50%;left: 50%;margin-left: -32px;margin-top: -32px;border-radius: 3px;
-				display: block; -moz-box-sizing: border-box; box-sizing: border-box; background: url(img/loader.gif) no-repeat; width: 64px;height: 64px;padding-left: 64px; /* Equal to width of new image */}
-			.pi-spinner:empty {margin: auto;-webkit-transform: translate(-50%, -50%);-moz-transform: translate(-50%, -50%);-ms-transform: translate(-50%, -50%);-o-transform: translate(-50%, -50%);transform: translate(-50%, -50%);}
-			@media screen and (orientation: portrait) {.pi-spinner { max-width: 90%; }}
-			@media screen and (orientation: landscape) {.pi-spinner { max-height: 90%; }}
-		</style>
-	</head>
+		.fadeIn {
+		  	-webkit-animation-name: fadeIn;
+		    animation-name: fadeIn;
+		    animation-duration: 6s;
+			opacity:0;
+		}
+	</style>
+{% endblock %}
 
-	<body>
-		<!--[if lt IE 7]>
-			<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-		<![endif]-->
 
-		<div class="container" ng-app>
-			<img class="pi-spinner" ng-hide="1"/>
-			{% if data.dirname == 'quest' %}
-				<div pi-manager-task="{type:'quest',scriptUrl:'../../{{ url }}'}"></div>
-			{% elseif data.dirname == 'manager' %}
-				<div pi-manager="../../manager/{{ url }}"></div>
-			{% endif %}
-			<div pi-console></div>
+{% block content %}
+		<p>
+			<button class="btn btn-default btn-lg btn-block" onclick="window.click(event)" type="button">Activate</button>
+		</p>
+
+		<div id="success" role="alert" class="alert alert-success" style="display:none">
+			<strong>Well Done!</strong> The task has been successfully completed.
+		</div>
+		<div id="error" role="alert" class="alert alert-danger" style="display:none">
+			<strong>Oh Snap!</strong> Something went wrong with the task. Why don't you fix it and try again?
 		</div>
 
-	</body>
+   		<div id="editor">
+{{ data.filecontents }}
+		</div>
 
-	<!-- Uncomment For debugging -->
-	<!-- <script type="text/javascript" src="libs/jquery/dist/jquery.js"></script> -->
+		<script>
+		    var editor = ace.edit("editor");
+		    editor.setTheme("ace/theme/monokai");
+		    editor.getSession().setMode("ace/mode/javascript");
+		    editor.setOption("showPrintMargin", false);
+		    var win;
+		    var feedbackId = 'success';
 
-	<!--[if lt IE 7]>
-		<script src="//cdnjs.cloudflare.com/ajax/libs/json3/3.3.1/json3.min.js"></script>
-	<![endif]-->
-	<!--[if lte IE 8]>
-		<script src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/3.4.0/es5-shim.min.js"></script>
-		 <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
-	<![endif]-->
-	<script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.min.js" data-main="js/pibootstrap.js"></script>
-	<script>window.require || document.write('<script src="../bower_components/requirejs/require.js" data-main="js/bootstrap.js"><\/script>');</script>
+		    function click(event){
+		    	event.target.blur();
 
-</html>
+		    	// assume the feedback is success
+				feedbackId = 'success';
+
+				// clean out open window
+		    	if (win){
+		    		win.close();
+		    		win = null;
+		    	}
+
+		    	win = window.open('{{ data.dirname }}activate.html', 'pip');
+		    	win.focus();
+
+		    	win.onload = function(){
+		    		// first set the unload listener
+					win.addEventListener('unload', function(event) {
+						var el = document.getElementById(feedbackId);
+						window.focus();
+						fade(el);
+					});
+
+					// then activate the player (this ensures that when )
+					win.piActivate(editor.getValue());
+		    	};
+		    }
+
+	    	window.addEventListener('error', function(e){
+	    		console.error(e);
+	    		feedbackId = 'error';
+	    	});
+
+	    	function fade(el){
+				el.style.display = 'block';
+				el.classList.add('fadeIn');
+				setTimeout(function(){
+					el.style.display = 'none';
+					el.classList.remove('fadeIn');
+				}, 6000);
+	    	}
+
+		</script>
+{% endblock content %}

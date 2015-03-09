@@ -72,6 +72,8 @@ gulp.task('build:js', function(){
 		.pipe(clone())
 		.pipe(data(function(file){
 			return {
+				filecontents: file.contents.toString('utf8'),
+				basename: path.basename(file.path,'.js'),
 				dirname: path.dirname(file.path).match(/[^\/]*$/)[0] // only the last segment of the dirname
 			};
 		}))
