@@ -3,7 +3,7 @@ define(function(require){
 	var angular = require('angular');
 
 	var module = angular.module('mixer',[
-		require('utils/randomize/randomizeModule').name,
+		require('../randomize/randomizeModule').name,
 		require('utils/console/consoleModule').name
 	]);
 
@@ -11,7 +11,6 @@ define(function(require){
 	module.service('mixerSequential', require('./mixerSequential'));
 	module.service('mixerRecursive', require('./mixerRecursive'));
 	module.service('MixerSequence', require('./mixerSequenceProvider'));
-
 
 	module.value('dotNotation', require('./branching/dotNotation'));
 	module.service('mixerDotNotation', require('./branching/mixerDotNotationProvider'));

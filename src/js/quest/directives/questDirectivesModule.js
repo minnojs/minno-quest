@@ -7,7 +7,7 @@ define(function(require){
 	var module = angular.module('questDirectives',[
 		require('utils/timer/timer-module').name,
 		require('./buttons/buttons').name,
-		require('utils/template/templateModule').name,
+		require('utils/database/template/templateModule').name,
 		require('utils/console/consoleModule').name
 	]);
 

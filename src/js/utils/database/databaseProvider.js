@@ -1,8 +1,8 @@
 define(function(require){
 	var _ = require('underscore');
 
-	DatabaseProvider.$inject = ['DatabaseStore', 'DatabaseRandomizer', 'databaseInflate'];
-	function DatabaseProvider(Store, Randomizer, inflate){
+	DatabaseProvider.$inject = ['DatabaseStore', 'DatabaseRandomizer', 'databaseInflate', 'templateObj', 'databaseSequence'];
+	function DatabaseProvider(Store, Randomizer, inflate, templateObj, DatabaseSequence){
 
 		function Database(){
 			this.store = new Store();
@@ -10,16 +10,39 @@ define(function(require){
 		}
 
 		_.extend(Database.prototype, {
-			inflate: function(namespace, query){
-				var coll = this.store.read(namespace);
-				return inflate(query, coll, this.randomizer);
-			},
 			createColl: function(namespace){
 				this.store.create(namespace);
 			},
-			add: function(namespace, obj){
+
+			getColl: function(namespace){
+				return this.store.read(namespace);
+			},
+
+			add: function(namespace, query){
 				var coll = this.store.read(namespace);
-				coll.add(obj);
+				coll.add(query);
+			},
+
+			inflate: function(namespace, query, context){
+				var coll = this.getColl(namespace);
+
+				// inflate
+				if (!query.$inflated || query.reinflate) {
+					query.$inflated = inflate(query, coll, this.randomizer);
+				}
+
+				// interpolate
+				if (!query.$templated || query.regenerateTemplate){
+					context[namespace + 'Data'] = query.$inflated.data || {};
+					context[namespace + 'Meta'] = query.$meta;
+					query.$templated = templateObj(query.$inflated, context);
+				}
+
+				return query.$templated;
+			},
+
+			sequence: function(namespace, arr){
+				return new DatabaseSequence(namespace, arr, this);
 			}
 		});
 

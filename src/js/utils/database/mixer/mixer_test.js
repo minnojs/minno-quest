@@ -1,4 +1,4 @@
-define(['underscore','./mixer-module', 'utils/randomize/randomizeModuleMock'],function(){
+define(['underscore','./mixerModule', '../randomize/randomizeModuleMock'],function(){
 
 	describe('Mixer', function(){
 		var mixer;

@@ -1,15 +1,14 @@
 define(function(require){
 	var _ = require('underscore');
 
-	SequenceProvider.$inject = ['TaskSequence'];
-	function SequenceProvider(TaskSequence){
+	function SequenceProvider(){
 
 		function Sequence(arr, db){
 			if (!db){
 				throw new Error('Sequences need to take a db as the second argument');
 			}
 
-			this.sequence = new TaskSequence('pages', arr, db);
+			this.sequence = db.sequence('pages', arr);
 			this.db = db;
 		}
 
@@ -38,7 +37,7 @@ define(function(require){
 					questionsArr = [];
 				}
 
-				var questions = new TaskSequence('questions', questionsArr, this.db).all({
+				var questions = this.db.sequence('questions', questionsArr).all({
 					pagesData: page.data,
 					pagesMeta: page.$meta
 				});

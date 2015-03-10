@@ -1,8 +1,8 @@
 define(function(require){
 	var _ = require('underscore');
 
-	sequenceProvider.$inject = ['TaskSequence','Database'];
-	function sequenceProvider(TaskSequence, Database){
+	sequenceProvider.$inject = ['Database'];
+	function sequenceProvider(Database){
 
 		/**
 		 * The sequence for the manager (essentialy the model).
@@ -24,7 +24,7 @@ define(function(require){
 			db.add('tasks', script.tasks || []);
 
 			// setup sequence
-			this.sequence = new TaskSequence('tasks', script.sequence, db);
+			this.sequence = db.sequence('tasks', script.sequence);
 		}
 
 		_.extend(sequence.prototype, {

@@ -1,4 +1,4 @@
-define(['./database-module'], function(){
+define(['../databaseModule'], function(){
 	var
 		rand,
 		resultObj = {}, // we use this to verify that the correct object is indeed returned

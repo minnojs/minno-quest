@@ -14,7 +14,23 @@ define(['/api/manager/questAPI.js'], function(Quest){
 		//location.href = location.href;
 	});
 
+	API.addQuestionsSet('basicSelect',{
+		type: 'selectOne',
+		autoSubmit:true,
+		numericValues:true,
+		help: '<%= pagesMeta.number < 3 %>',
+		helpText: 'Selecting an answer once colors it blue.<br/>You can change your answer by selecting another option.<br/>To confirm, click the selected (blue) button a second time.'
+	});
+
 	API.addSequence([
+		{
+			header: 'header',
+			questions: 		{
+				inherit: 'basicSelect',
+				stem:'bong',
+				answers:[1,2,3]
+			}
+		},
 		{
 			//animate:"fade drop-in fakeAnimation",
 			prevText: '123',
@@ -23,7 +39,6 @@ define(['/api/manager/questAPI.js'], function(Quest){
 			header: 'Questionnaire: example for realtime branching',
 			questions: [
 				{
-					inherit: 'pango',
 					name: 'myName',
 					stem: "What is your name? (try yba!)",
 					autoSubmit: true

@@ -1,4 +1,4 @@
-define(['../questDirectivesModule', 'utils/randomize/randomizeModuleMock'], function(){
+define(['../questDirectivesModule', 'utils/database/randomize/randomizeModuleMock'], function(){
 
 	describe('select', function(){
 		var mixerSpy = jasmine.createSpy('mixer').andCallFake(function(a){return a;});

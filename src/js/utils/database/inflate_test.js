@@ -1,4 +1,4 @@
-define(['./database-module'],function(){
+define(['./databaseModule'],function(){
 
 	describe('database inflate',function(){
 

@@ -1,8 +1,8 @@
 define(function(require){
 	var _ = require('underscore');
 
-	SequenceProvider.$inject = ['MixerSequence', 'templateObj'];
-	function SequenceProvider(MixerSequence, templateObj){
+	SequenceProvider.$inject = ['MixerSequence'];
+	function SequenceProvider(MixerSequence){
 
 		/**
 		 * Sequence Constructor:
@@ -47,19 +47,7 @@ define(function(require){
 					return obj;
 				}
 
-				// inflate
-				if (!obj.$inflated || obj.reinflate) {
-					obj.$inflated = this.db.inflate(this.namespace, obj);
-				}
-
-				// interpolate
-				if (!obj.$templated || obj.regenerateTemplate){
-					context[this.namespace + 'Data'] = obj.$inflated.data || {};
-					context[this.namespace + 'Meta'] = obj.$meta;
-					obj.$templated = templateObj(obj.$inflated, context);
-				}
-
-				return obj.$templated;
+				return this.db.inflate(this.namespace, obj, context);
 			},
 
 			/**

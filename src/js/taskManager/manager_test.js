@@ -120,13 +120,9 @@ define(['require','./managerModule'], function(require){
 				$provide.value('Database', function(){
 					this.add = jasmine.createSpy('add');
 					this.createColl = jasmine.createSpy('createColl');
-				});
-
-				$provide.value('TaskSequence', function(){
-					this.args = [arguments[0], arguments[1], arguments[2]];
-					this.next = jasmine.createSpy('next');
-					this.prev = jasmine.createSpy('prev');
-					this.current = jasmine.createSpy('current');
+					this.sequence = jasmine.createSpy('sequence').andCallFake(function(){
+						return jasmine.createSpyObj('sequence',['next','prev','current']);
+					});
 				});
 			}));
 
@@ -141,10 +137,9 @@ define(['require','./managerModule'], function(require){
 				expect(sequence.db.add).toHaveBeenCalledWith('tasks',script.tasks);
 			});
 
-			it('should create a taskSequence correctly', inject(function(TaskSequence){
-				expect(sequence.sequence).toEqual(jasmine.any(TaskSequence));
-				expect(sequence.sequence.args).toEqual(['tasks', script.sequence, sequence.db]);
-			}));
+			it('should create a sequence', function(){
+				expect(sequence.db.sequence).toHaveBeenCalledWith('tasks',script.sequence);
+			});
 
 			it('should call next', function(){
 				sequence.next();

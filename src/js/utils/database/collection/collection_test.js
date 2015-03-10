@@ -1,4 +1,4 @@
-define(['underscore','./database-module'],function(_){
+define(['underscore','../databaseModule'],function(_){
 
 	describe('Collection',function(){
 
