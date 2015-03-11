@@ -1,8 +1,8 @@
 define(function(require){
 	var _ = require('underscore');
 
-	templateFilter.$inject = ['$rootScope','$log','templateDefaultContext'];
-	function templateFilter($rootScope, $log, defaultContext){
+	templateFilter.$inject = ['$log','templateDefaultContext'];
+	function templateFilter($log, defaultContext){
 
 		function template(input, context){
 

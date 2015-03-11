@@ -11,9 +11,7 @@ define(function(require){
 	 * Just plain random
 	 */
 
-	module.value('randomizeRandom', function(){
-		return Math.random();
-	});
+	module.value('randomizeRandom', Math.random);
 
 	/**
 	 * Just lodash shuffle...

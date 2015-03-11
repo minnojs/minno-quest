@@ -13,6 +13,7 @@ define(function(require){
 		.service('databaseInflate', require('./inflateProvider'))
 		.service('DatabaseStore', require('./store/storeProvider'))
 		.service('Database', require('./databaseProvider'))
+		//.value('Database', require('./main')) // tests the use of the non angular variation
 		.service('databaseSequence', require('./databaseSequenceProvider'));
 
 	return module;

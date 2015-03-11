@@ -8,8 +8,8 @@ define(function(require){
 	]);
 
 	module.service('mixer', require('./mixer'));
-	module.service('mixerSequential', require('./mixerSequential'));
-	module.service('mixerRecursive', require('./mixerRecursive'));
+	module.service('mixerSequential', require('./mixerSequential')); // is this even in use?
+	module.service('mixerRecursive', require('./mixerRecursive')); // is this even in use?
 	module.service('MixerSequence', require('./mixerSequenceProvider'));
 
 	module.value('dotNotation', require('./branching/dotNotation'));

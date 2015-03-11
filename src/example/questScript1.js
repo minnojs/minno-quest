@@ -1,4 +1,4 @@
-define(['/api/manager/questAPI.js'], function(Quest){
+define(['questAPI'], function(Quest){
 
 	var API = new Quest();
 
