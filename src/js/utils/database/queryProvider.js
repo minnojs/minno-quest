@@ -28,7 +28,9 @@ define(['underscore'],function(_){
 			// narrow down by data
 			// ****************************
 			if (_.isString(query.data)){
-				coll = coll.where({handle:query.data});
+				coll = coll.filter(function(q){
+					return q.handle === query.data || (q.data && q.data.handle === query.data);
+				});
 			}
 
 			if (_.isPlainObject(query.data)){

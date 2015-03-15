@@ -1,0 +1,1 @@
+define(["require","./templateObjProvider","./templateFilter"],function(e){return e("./templateObjProvider")(function(){return e("./templateFilter")(console,{})})});

@@ -1,1 +1,0 @@
-define(["require","angular","./collection"],function(e){var t=e("angular"),n=e("./collection"),r=t.module("collection",[]);return r.value("Collection",n),r});
