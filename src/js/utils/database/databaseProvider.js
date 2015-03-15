@@ -42,6 +42,9 @@ define(function(require){
 			},
 
 			sequence: function(namespace, arr){
+				if (!_.isArray(arr)){
+					throw new Error('Sequence must be an array.');
+				}
 				return new DatabaseSequence(namespace, arr, this);
 			}
 		});

@@ -22,7 +22,7 @@ requirejs.config({
 	baseUrl: '/base/src/js',
 
 	paths: {
-		underscore: "../../bower_components/lodash/dist/lodash",
+		underscore: "../../bower_components/lodash-compat/lodash",
 		angular: '../../bower_components/angular/angular',
 		animate: ['../../bower_components/angular-animate/angular-animate.min'],
 		angularMocks: '../../bower_components/angular-mocks/angular-mocks',

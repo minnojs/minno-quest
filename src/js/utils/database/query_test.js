@@ -9,7 +9,7 @@ define(['./databaseModule'],function(){
 				{set:1, data:{val:1, other:'value'}},
 				{set:1, data:{val:2}},
 				{set:2, data:{val:3}},
-				{set:2, data:{val:4}}
+				{set:2, data:{val:4}, handle:'testHandle'}
 			]
 			, q;
 
@@ -57,6 +57,14 @@ define(['./databaseModule'],function(){
 
 			q({data:function(value){return value.data.val === 3;}});
 			expect(result).toBe(coll[2]);
+		});
+
+		it('should support querying by a data:String (handle)', function(){
+			// the query only returns one row, we should reset the randomizer accordingly
+			randomizer.random.andReturn(0);
+
+			q({data:'testHandle'});
+			expect(result).toBe(coll[3]);
 		});
 
 		it('should throw an error if an object was not found', function(){

@@ -63,7 +63,7 @@ define(['underscore'],function(_){
 
 			choose: function(obj){
 				var sequence = obj.data || [];
-				return _.first(shuffle(sequence), obj.n ? obj.n : 1);
+				return _.take(shuffle(sequence), obj.n ? obj.n : 1);
 			},
 
 			weightedRandom: function(obj){

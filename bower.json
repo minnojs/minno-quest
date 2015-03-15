@@ -22,7 +22,7 @@
     "angular": "1.2.27",
     "requirejs": "2.1.10",
     "requirejs-text": "2.0.10",
-    "lodash": "2.4.1",
+    "lodash-compat": "3.5.0",
     "angular-animate": "1.2.27",
     "backbone": "~1.1.2",
     "PIPlayer": "ProjectImplicit/PIPlayer#b1f5713b184f98cb0cf4b4151c91117b32f67cfa",

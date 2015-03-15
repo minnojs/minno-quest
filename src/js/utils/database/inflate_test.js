@@ -38,13 +38,19 @@ define(['./databaseModule'],function(){
 			expect(spy).toHaveBeenCalledWith(source,global);
 		}));
 
-		it('should run obj.customize function when there is inheritance', inject(function($rootScope){
-			var spy = jasmine.createSpy('customize');
-			var unspy = jasmine.createSpy('later customize');
+		it('should run obj.customize function when there is no more inheritance', inject(function($rootScope){
+			var spy = jasmine.createSpy('customize').andReturn();
 			var global = {global:'obj'};
 			$rootScope.global = global;
 			inflate({inherit:true}, [{customize:spy}]);
 			expect(spy).toHaveBeenCalledWith({inherit:true, customize:spy}, global);
+		}));
+
+		it('should not run obj.customize function when there is more inheritance', inject(function($rootScope){
+			var spy = jasmine.createSpy('customize');
+			var unspy = jasmine.createSpy('later customize');
+			var global = {global:'obj'};
+			$rootScope.global = global;
 
 			inflate({inherit:true, customize:spy}, [{customize:unspy}]);
 			expect(spy).toHaveBeenCalledWith({inherit:true, customize:spy}, global);

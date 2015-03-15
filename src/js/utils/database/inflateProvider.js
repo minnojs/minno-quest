@@ -10,7 +10,6 @@
  * @param depth: private use only, a counter for the depth of the recursion
  */
 define(function(require){
-	var angular = require('angular');
 	var _ = require('underscore');
 
 	inflateProvider.$inject = ['databaseQuery','$rootScope','piConsole'];
@@ -43,7 +42,7 @@ define(function(require){
 
 			var parent
 				// create child
-				, child = angular.copy(source)
+				, child = _.cloneDeep(source)
 				, err;
 
 
@@ -84,14 +83,14 @@ define(function(require){
 			_.each(parent, function(value, key){
 				// if this key is not set yet, copy it out of the parent
 				if (!(key in child)){
-					child[key] = angular.copy(value);
+					child[key] = _.isFunction(value) ? value : _.cloneDeep(value);
 				}
 			});
 
 			// we want to extend the childs data even if it already exists
 			// its ok to shallow extend here (because by definition parent was created for this inflation)
 			if (parent.data){
-				child.data = angular.extend(parent.data, child.data || {});
+				child.data = _.extend(parent.data, child.data || {});
 			}
 
 			// Personal customization functions - only if this is the last iteration of inflate

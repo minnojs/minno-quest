@@ -1,7 +1,5 @@
 define(function(require){
 	var _ = require('underscore');
-	var angular = require('angular');
-
 
 	mixerConditionProvider.$inject = ['mixerDotNotation', 'piConsole'];
 	function mixerConditionProvider(dotNotation, piConsole){
@@ -54,7 +52,7 @@ define(function(require){
 					if (_.isUndefined(right)){
 						return !!left;
 					}
-					return angular.equals(left, right);
+					return _.isEqual(left, right);
 			}
 
 			return operator;

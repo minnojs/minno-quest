@@ -27,6 +27,10 @@ define(['underscore'],function(_){
 
 			// narrow down by data
 			// ****************************
+			if (_.isString(query.data)){
+				coll = coll.where({handle:query.data});
+			}
+
 			if (_.isPlainObject(query.data)){
 				coll = coll.where({data:query.data});
 			}

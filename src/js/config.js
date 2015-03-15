@@ -3,7 +3,7 @@ define(function(){
 	require.config({
 		paths: {
 			// libs
-			underscore: ["//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min","../../bower_components/lodash/dist/lodash.min"],
+			underscore: ["//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.5.0/lodash.min","../../bower_components/lodash-compat/lodash.min"],
 			//angular: '../../bower_components/angular/angular',
 			angular: ['//ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min','../../bower_components/angular/angular.min'],
 			animate: ['//ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular-animate.min', '../../bower_components/angular-animate/angular-animate.min'],
