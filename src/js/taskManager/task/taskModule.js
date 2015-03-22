@@ -77,12 +77,12 @@ define(function(require){
 				baseUrl:'../bower_components/PIPlayer/dist/js', // can't use packages yet as urls in pip aren't relative...
 				paths: {
 					//plugins
-					text: ['//cdnjs.cloudflare.com/ajax/libs/require-text/2.0.3/text.min', "../../../requirejs-text/text"],
+					text: ['//cdnjs.cloudflare.com/ajax/libs/require-text/2.0.3/text.min', "../../bower_components/requirejs-text/text"],
 
 					// Core Libraries
-					jquery: ["//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min","../../../jquery/dist/jquery.min"],
-					underscore: ["//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min","../../../lodash-compat/lodash.min"],
-					backbone: ['//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min', "../../../backbone/backbone"]
+					jquery: ["//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min","../../bower_components/jquery/dist/jquery.min"],
+					underscore: ["//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.5.0/lodash.min","../../bower_components/lodash-compat/lodash.min"],
+					backbone: ['//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min', "../../bower_components/backbone/backbone"]
 				},
 
 				deps: ['jquery', 'backbone', 'underscore']
