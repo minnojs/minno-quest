@@ -61,10 +61,10 @@ define(function(require){
 					showPanel: showPanel
 				});
 
-				currentTask.$template = _.template(messageTemplateDebrief,context); // insert into meta template
-				currentTask.$template = _.template(currentTask.$template,context); // render secondary template with extended context
+				currentTask.$template = _.template(messageTemplateDebrief)(context); // insert into meta template
+				currentTask.$template = _.template(currentTask.$template)(context); // render secondary template with extended context
 			} else {
-				currentTask.$template = _.template(messageTemplate,context); // insert into meta template
+				currentTask.$template = _.template(messageTemplate)(context); // insert into meta template
 			}
 		}
 
