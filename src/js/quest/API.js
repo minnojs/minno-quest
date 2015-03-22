@@ -1,6 +1,7 @@
 define(function(require){
 
 	var _ = require('underscore');
+	var angular = require('angular');
 
 	/**
 	 * Constructor for PIQuest script creator
@@ -88,6 +89,14 @@ define(function(require){
 				throw new Error('current must be an object');
 			}
 			_.merge(this.getCurrent(), current);
+		},
+
+		post: function(url, obj){
+			var $injector = angular.injector(['ng']);
+
+			return $injector.invoke(['$http', function($http){
+				return $http.post(url, obj);
+			}]);
 		}
 	});
 
