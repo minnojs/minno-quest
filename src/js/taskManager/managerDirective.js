@@ -57,8 +57,8 @@ define(function(require){
 		}
 	}
 
-	directive.$inject = ['managerService', '$q', '$injector', 'piConsole'];
-	function directive(managerService, $q, $injector,piConsole){
+	directive.$inject = ['$q', '$injector', 'piConsole'];
+	function directive($q, $injector,piConsole){
 		return {
 			priority: 1000,
 			replace:true,
@@ -95,7 +95,7 @@ define(function(require){
 						$scope.settings.onPreTask,
 						prevTask && prevTask.post,
 						currentTask.pre,
-						_.bind(swap.next, swap, {task:currentTask}),
+						_.bind(swap.next, swap, {task:currentTask, settings:$scope.settings}),
 						function(){
 							$scope.loading = false;
 						}
@@ -115,10 +115,16 @@ define(function(require){
 					], locals);
 				}
 
-				function taskDone(ev){
+				/**
+				 * This is called uppon task:done
+				 * It is responsible for proceeding to the following task
+				 * @param  {Event} ev   The event that triggered the taskdone
+				 * @param  {Object} args An object that describes the direction of proceeding
+				 */
+				function taskDone(ev, args){
 					ev.stopPropagation();
 					$scope.loading = true;
-					$scope.$emit('manager:next');
+					$scope.$emit('manager:next', args);
 				}
 
 				/**

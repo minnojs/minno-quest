@@ -25,8 +25,6 @@ define(function(require){
 		}
 
 		function taskLoad(task, baseUrl){
-
-
 			var promise, script, template;
 
 			script = task.scriptUrl ? getScript(task.scriptUrl, baseUrl) : task.script;

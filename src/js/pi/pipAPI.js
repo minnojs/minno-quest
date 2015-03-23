@@ -82,6 +82,14 @@ define(function(require){
 			$el.removeClass('pi-spinner');
 			activate(script, done);
 		});
+
+		return function destroyPIP(){
+			$el.remove();
+			req(['app/task/main_view'], function(main){
+				main.deferred.resolve();
+				main.destroy();
+			});
+		};
 	}
 
 	/**

@@ -51,6 +51,7 @@ define(['require','angular','./taskModule'],function(require, angular){
 				var spy = jasmine.createSpy('then');
 				var callback;
 				activate({$script:function(done){callback = done;}}, 'el', 'scope')
+					.promise
 					.then(spy);
 
 				$rootScope.$digest();

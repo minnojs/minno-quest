@@ -32,11 +32,13 @@ define(function(require){
 
 			// clean up piQuest
 			$el.controller('piQuest').task.promise['finally'](function(){
-				$el.scope().$destroy();
-				$el.remove();
 				done();
 			});
 
+			return function questDestroy(){
+				$el.scope().$destroy();
+				$el.remove();
+			};
 		}
 
 		activateProvider.set('quest', activateQuest);
@@ -57,10 +59,13 @@ define(function(require){
 
 			// clean up
 			$scope.$on('message:done', function(){
-				$scope.$destroy();
-				$el.remove();
 				done();
 			});
+
+			return function destroyMessage(){
+				$scope.$destroy();
+				$el.remove();
+			};
 		}
 
 		activateProvider.set('message', activateMessage);
@@ -99,6 +104,14 @@ define(function(require){
 				$el.removeClass('pi-spinner');
 				activate(script, done);
 			});
+
+			return function destroyPIP(){
+				$el.remove();
+				req(['app/task/main_view'], function(main){
+					main.deferred.resolve();
+					main.destroy();
+				});
+			};
 		}
 
 		activateProvider.set('pip', activatePIP);

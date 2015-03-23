@@ -58,9 +58,20 @@ define(['require','./managerModule'], function(require){
 
 			it('should call next on manager:next', function(){
 				spyOn(manager, 'next');
+				spyOn(manager, 'prev');
+				spyOn(manager, 'load');
+
 				$scope.$emit('manager:next');
 				$scope.$digest();
 				expect(manager.next).toHaveBeenCalled();
+
+				$scope.$emit('manager:next',{type:'prev'});
+				$scope.$digest();
+				expect(manager.prev).toHaveBeenCalled();
+
+				$scope.$emit('manager:next',{type:'current'});
+				$scope.$digest();
+				expect(manager.load).toHaveBeenCalled();
 			});
 
 			it('should call prev on manager:prev', function(){
@@ -400,10 +411,11 @@ define(['require','./managerModule'], function(require){
 
 				it('should trigger a manager:next event', function(){
 					var spy = jasmine.createSpy('next');
+					var args = {};
 					compile({});
 					$scope.$on('manager:next', spy);
-					$scope.$emit('task:done');
-					expect(spy).toHaveBeenCalled();
+					$scope.$emit('task:done', args);
+					expect(spy).toHaveBeenCalledWith(jasmine.any(Object), args);
 				});
 			});
 		});

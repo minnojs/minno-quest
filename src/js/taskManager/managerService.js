@@ -22,6 +22,7 @@ define(function(require){
 		function manager($scope, script){
 			var self = this;
 			var canvasOff;
+			var settings = script.settings || {};
 
 			// make sure this works without a new statement
 			if (!(this instanceof manager)){
@@ -37,15 +38,29 @@ define(function(require){
 			this.sequence = new ManagerSequence(script);
 
 			// activate canvas
-			canvasOff = canvas(script.settings && script.settings.canvas);
+			canvasOff = canvas(settings.canvas);
 			$scope.$on('$destroy', canvasOff);
 
 			// activate titles
-			if (script.settings && script.settings.title){
+			if (settings.title){
 				$document[0].title = script.settings.title;
 			}
 
-			$scope.$on('manager:next', function(){self.next();});
+			$scope.$on('manager:next', function(event, target){
+				target || (target = {type:'next'});
+				switch (target.type){
+					case 'current':
+						self.load();
+						break;
+					case 'prev':
+						self.prev();
+						break;
+					case 'next':
+						/* fall through */
+					default:
+						self.next();
+				}
+			});
 			$scope.$on('manager:prev', function(){self.prev();});
 
 		}
@@ -62,9 +77,8 @@ define(function(require){
 			},
 
 			current: function(){
-				var task = this.sequence.current();
 				// taskLoad sets the loaded script into $script
-				return task;
+				return this.sequence.current();
 			},
 
 			load: function(){

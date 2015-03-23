@@ -30,6 +30,7 @@ define(function(require){
 			var def = $q.defer();
 			var global = $rootScope.global;
 			var script = task.$script;
+			var destroy;
 
 			// get activation function
 			if (_.isFunction(script)){
@@ -63,7 +64,7 @@ define(function(require){
 			 * @type {[type]}
 			 */
 
-			$injector.invoke(activator, null, {
+			destroy = $injector.invoke(activator, null, {
 				done: _.bind(def.resolve,def),
 				task: task,
 				script: script,
@@ -72,7 +73,10 @@ define(function(require){
 				global: global
 			});
 
-			return def.promise;
+			// if activator returns a function use it to clean up the task
+			_.isFunction(destroy) && def.promise['finally'](destroy);
+
+			return def;
 		}
 
 		return taskActivate;
