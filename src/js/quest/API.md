@@ -26,8 +26,8 @@
 ### Pages
 The basic unit in PIquest is the **page**. A page is usually one screen in your questionnaire. If your questionnaire presents all its questions in one screen, it will probably have only one page. The properties within a page manage how the question(s) is(are) displayed and how the participants interact with it (e.g., select an answer and then click a submit button).
 
- property		| description
- -------------- | ---------------------
+property		| description
+--------------- | ---------------------
 name 			| (text) The identifier for this page, is used mainly for logging
 decline 		| (true, false, 'double'. default:false) Whether to allow participants decline to answer the questions on this page. This option displays a "decline" button that proceeds to the next page without validation and marks this response as "declined". If decline is set to 'double' then two click are required in order to decline answering.
 declineText		| (text) The text for the decline button (default value: "Decline to answer")

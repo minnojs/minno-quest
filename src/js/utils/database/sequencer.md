@@ -1,4 +1,3 @@
-
 * [Overview ](#overview)
 * [The mixer ](#mixer)
     - [Mixer types](#mixer-types)
@@ -8,10 +7,16 @@
 * [Variables](#variables)
 * [Templates](#templates)
 * [Inheritance ](#inheritance)
+    - [Sets](#sets)
+    - [Inheriting](#inheriting)
+    - [Types](#type)
+    - [Repeat](#repeat)
+    - [Seeds](#seed)    
+    - [Customize](#customize)
 
 ### Overview
 
-All pi tasks use the same frame work to manage their elements. Its purpose is to allow dynamic creation and management of your elements. It has three critical components: The sequence mixer, inheritance and templating.
+All PI tasks use the same framework to manage their elements. Its purpose is to allow dynamic creation and management of your elements. It has three critical components: The sequence mixer, inheritance and templating.
 
 Each pi task is composed of a series of elements sequentially activated and presented to the users (these are trials for piPlayer, pages for piQuest and tasks for piManager). The sequence mixer is responsible for the order of the elements presented to the users, it is capable of randomization as well as various other manipulations on the structure of the sequence.
 
@@ -253,34 +258,22 @@ API.addCurrent({
 Tasks add any data that they log into their task object. For instance, piQuest maintains a `current.questions` object that holds the responses for all questions.
 
 ### Templates
-One of the ways to create dynamic questionnaires is using templates. Templates are a format that allows you to dynamically generate settings for your questions. You can replace any non-object setting from within your questions/pages with a template, and it will be rendered according to the [environmental variables](#variables) (The exception to this rule is the `inherit` setting that cannot use templates).
+One of the ways to create dynamic questionnaires is using templates. Templates are a format that allows you to dynamically generate settings for your questions. You can replace any non-object setting from within your elements with a template, and it will be rendered according to the [environmental variables](#variables) (The exception to this rule is the `inherit` setting that cannot use templates).
 
 A template is a string that has a section of the form `<%= %>` in it. Within these brackets you can write any Javascript that you like and it will be evaluated and printed out. The main use of templates is probably accessing local and global variables. For instance, in order to print the global variable "name", you could create a template that looks like this: `My name is <%= global.name%>`.
 
 The player uses [lodash templates](http://lodash.com/docs#template) internally, you can look them up to see all the possible uses.
 
-Templates allow access only to a confined number of variables; following is a list of the variables that you can access from within templates:
-
-Variable    | Description
------------ | -------------
-global      | The global object.
-current     | The current task object.
-questions   | The questions object.
-pagesData   | The 'data' attribute from the page.
-questionsData   | The 'data' attribute from the question (available only within questions).
-pagesMeta   | An object describing meta data about the page:</br> `number`: the serial number of this page, `outOf` the overall number of pages, `name`: the name of the current page. These can be used for instance to generate a description of your place within the questionnaire: `<%= pagesMeta.number %> out of <%= pagesMeta.outOf%>`.
-
-Questions and Pages have access to the same local variables, with the exception of questionsData that is available only to questions.
+Templates allow access only to a confined number of variables; These vary a bit between different tasks, but you can expect the templates to have access to the `global` and `current` objects. Element templates also have access to their own data property as {namespace}Data (so that trials will have a `trialData` object, and stimuli a `mediaData` property). Some objects have access to additional properties, you can find them in their respective documentation.
 
 ### Inheritance
 
-Each element in PIQuest (page/question) can inherit its attributes from an element set.
-
 #### Sets
+Each element in the PI tasks can inherit its attributes from an element set.
 
-The element sets are defined using the `addPagesSet` and `addQuestionsSet` function in the API.
+The element sets are defined using the `add{namespace}Set` functions in the API (for instance `addTrialSets` in piPlayer, `addQuestionsSets` in piQuest).
 
-Each set is simply an array of elements that can later be referred to as a base for new elements. Note that the name that you give the set (in the example: base or demographics) is the handle that you later use to refer to it.
+Each set holds an array of elements that can later be referred to as a base for new elements. 
 
 ```js
 API.addQuestionsSet('likert', [
@@ -292,10 +285,14 @@ API.addQuestionsSet('sizeLikert', [
 ]);
 ```
 
+Note that the name that you give the set (in the example: likert or sizeLikert) is the handle that you later use to refer to it.
+
 #### Inheriting
 
-When inheriting an element the new element starts out with all of the parent's attributes and extends them with its own. This means that we use the parent element as a base and then copy in any properties that the child has, overwriting any existing properties.
-The only exception to this rule is the `data` objects which we attempt to merge (giving precedence to the child).
+Inheritance means that we use one element as the prototype for another.
+
+When inheriting an element, the child element starts out with all of the parent's attributes and extends them with its own. This means that we use the parent element as a base and then copy in any properties that the child has, overwriting any existing properties.
+One exception to this rule is the `data` objects which we attempt to merge (giving precedence to the child).
 
 Follow this pseudo code:
 ```js
@@ -319,51 +316,51 @@ Follow this pseudo code:
 
 // The result would be:
 {
-    data: {name: 'jack', family:'doe'}  // the child kept its own name but inherited the family name
-    stimuli: [                          // the questions array was completely overwritten
+    // the child kept its own name but inherited the family name
+    data: {name: 'jack', family:'doe'}
+    // the questions array was completely overwritten
+    stimuli: [                          
         quest3
     ]
 }
 ```
 
-In order for an element to inherit another element it must use the `inherit` property of the inheriting element.
+In order for an element to inherit another element it must use the `inherit` property. `inherit` takes an object or a string, with instructions for which element to inherit.
 
 ```js
 {
-    inherit: inheritObject
+    inherit: {set:'mySetName', type:'random'}
 }
 ```
 
-The inherit object has a `set` property defining which element set it should inherit from.
-It also has a `type` property that defines what type of inheritance we should use.
+property        | description
+--------------- | ---------------------
+set             | The set from which we want to inherit.
+type            | The inheritance type - essentially how to pick from within the set (random by default).
+merge           | An array of property names that we want to merge instead of overwrite.
+seed            | The randomization seed (see [docs](#seed)).
+repeat          | Repeat the result of the last randomization (see [docs](#repeat)).
 
+#### Type
 We have implemented several types of inheritance:
 
-**random**:
+##### random:
 Randomly selects an element from the set (in case the set has only one element, the same element will always be selected, of course). 
 * `'setName'`
 * `{set: 'setName'}`
 * `{set: 'setName', type:'random'}`
-`random` this is the default inheritance type, so it is not obligatory to use the `type` property. You can also use a short cut and set the `set` using only its name, like we did in the example above:
-```js
-{
-    inherit: 'parent',
-    data: {name: 'jack'}
-    questions: [
-        quest3
-    ]
-}
-```
 
-**exRandom**:
+This is the default inheritance type, so it is not obligatory to use the `type` property. You can also use a short cut and set the `set` using only its name, like we did in the example above
+
+##### exRandom:
 Selects a random element without repeating the same element until we've gone through the whole set
 * `{set: 'setName', type:'exRandom'}`
 
-**bySequence**:
+##### bySequence:
 Selects the elements by the order they were inserted into the set
 * `{set: 'setName', type:'bySequence'}`
 
-**byData**:
+##### byData:
 Selects a specific element from the set.
 We compare the `data` property to the `element.data` property and if `data` is a subset of `element.data` it selects the element (this means that if all properties of data property equal to the properties of the same name in element.data it is a fit).
 This function will select only the first element to fit the data.
@@ -372,61 +369,75 @@ If the data property is set as a string, we assume it refers to the element hand
 * `{set: 'setName', type: 'byData', data: {block:1, row:2}}` picks the element with both block:1 and row:2
 * `{set: 'setName', type: 'byData', data: "myStimHandle"}` picks the element that has the "myStimHandle" handle
 
-**function**:
+##### function:
 You may also use a custom function to select your element (the function here, fully replaces the inherit object).
 ```js
-function(definitions){
-    // definitions is the inherit object (including  set, type, and whatever other properties you'd like to use)
+function(collection){
+    // The collection holds all the elements within the namespace you are querying.
+    // Simply return the element you want to inherit.
 }
+```
+
+#### Repeat
+Sometimes we have need to repeat a previous choice done by the inheritance picker (especially in cases of randomization). In order to do this, all you have to do is set the `repeat` property to true.
+
+For instance, the following sequence will display a random element from the trials set twice.
+```js
+[
+    {
+        inherit:{set:'trials',type:'random'}
+    },
+    {
+        inherit:{set:'trials',type:'random', repeat:true}
+    }
+]
+```
+
+The `repeat` property can used within any type of randomization. We've seen a simple use, but its true power comes when combined with [seeds](#seeds).
+
+#### Seed
+Each inheritance query automatically gets assigned to a "seed". That is used to track its progress. For instance, it is used to keep track of the current element in the `bySequence` type inheritance.
+Most of the time, the seed is transparent to the user, but sometimes it becomes useful to manually control the inheritance seed. For instance, if you want to reset an `exRandom` inheritance. Or if you want to keep two instances of a `bySequence` inheritance.
+It is important to take note that if you create custom seeds, it is your responsibility that they query sets of the same length. If you try to inherit two sets with different lengths the sequencer will throw an error.
+In order to create a new seed all you have to do is set the `seed` property.
+
+In the following example, both elements inherit exRandomly from the trials set. But the second element restarts the randomization.
+```js
+[
+    {
+        inherit: {set:'trials', type:'exRandom',seed:'block1'}
+    },
+    {
+        inherit: {set:'trials', type:'exRandom',seed:'block2'}
+    }
+]
+
+```
+
+Seeds are not confined to a specific set, and not even to a specific element type. The following example uses the same exRandom seed to pick a both a trial and the two stimuli associated with it (the n<sup>th</sup> element in trials is always associated with the n<sup>th</sup> elements of stimuli-1 and stimuli-2).
+
+```js
+[
+    {
+        inherit: {set:'trials', type:'exRandom', seed:'mySeed'}
+        stimuli:[
+            {inherit: {set:'stimuli-1', type:'exRandom', seed:'mySeed', repeat:true}
+            {inherit: {set:'stimuli-2', type:'exRandom', seed:'mySeed', repeat:true}
+        ]
+    }
+]
 ```
 
 #### Customization
 
-Each question/page can also define a `customize` method, this method is called once the element is inherited but before it is activated.
+Each element can also define a `customize` method, this method is called once the element is inherited but before it is activated.
 It accepts two argument: the source object on which it is called (the page or question object), and the global object (in which you can find the current object etc.). The source object is also the context for the function.
 
 ```js
-{
-    inherit: 'something',
+{    
+    inherit: 'mySet',
     customize : function(source){
         source.questions.push(quest);
     }
 }
 ```
-
-
-
-
-
-
-# Garbage collection
-
-### Making your questionnaire dynamic
-There are several ways that you can make your questionnaire more dynamic. We will give a short overview and then get into the specifics.
-
-The basic elements of the player (pages or questions) are set into ordered lists (arrays). The player parses these lists into the questionnaire that the user eventually sees.
-
-The first level of parsing has to do with the order that the elements appear.The [mixer](#mixer) allows you to control the order of the lists; it allows you to randomize the order, duplicate elements and even display them conditionally.
-
-The second level of parsing has to do with inheritance. Many times you want to present several elements that share some of the same features (for instance, you may want all your pages to have the same header or the same submit text). The [inherit ](#inheritance) feature allows you to create prototypes of elements that you may reuse thought your script.
-
-The third and last level of parsing has to do with templates. [Templates](#templates) allow you to change the settings of your elements depending on existing data from within the player. For instance, you may want to refer to the answer of a previous question. 
-
-Some sequence may be parsed more than once, for instance, the questions sequences get re-parsed each time a response is changed, and each time a user returns to a page it is re-parsed. By default, none of the parsing is repeated so that the questionnaires can stay fixed. For each type of parsing there is a property that lets the player know that you want it re-parsed.
-
-In order to re-parse mixers, set `remix` to true. In order to re-parse inheritance set `reinflate` to true. In order to re-parse templates set `regenerateTemplate` to true.
-
-Another consideration when creating complex sequnces is logging. By default the player logs user responses automaticaly as soon as the user submits. If you are creating a sequence that allows users to go back to previous questions etc. you should make sure you don't prematurely log the user response (use `nolog`. learn more [here](#logger)).
-
-### variables
-**PIQuest** task objects have a reserved property called `questions`. `questions` holds an object that keeps track of all questions answered throughout the questionnaire. Each question is logged on to the property with its name; for instance if you have a question named quest1, then `questions.quest1` will hold an object describing the user response.
-The following is a list of the response object properties:
-
-Property            | Description
-------------------- | --------------
-response            | The user response itself.
-latency             | The time from the moment the question was displayed to the last time it was changed.
-pristineLatency     | The time from the moment the question was displayed to the first time it was changed.
-declined            | whether the user declined to answer this question.
-
-Throughout the player there are several components that refer to environmental variables. In particular you should check out [mixer conditions](#conditions) and [templates](#templates).
