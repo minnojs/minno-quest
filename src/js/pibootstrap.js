@@ -2,12 +2,11 @@
 define(['./config'], function(){
 
 	require.config({
-		paths: {
-			// APIs
-			pipAPI: 'pi/pipAPI',
-			questAPI: 'pi/questAPI',
-			managerAPI: 'pi/managerAPI'
-		}
+		packages: [
+			{name: 'pipAPI', location:'APIs', main:'pi/pipAPI'},
+			{name: 'questAPI', location:'APIs', main:'pi/questAPI'},
+			{name: 'managerAPI', location:'APIs', main:'pi/managerAPI'}
+		]
 	});
 
 	require(['angular','app'], function(angular, app) {

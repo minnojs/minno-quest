@@ -1,6 +1,6 @@
 define(function(require){
 
-	var Constructor = require('quest/API');
+	var Constructor = require('../questAPI');
 	var _ = require('underscore');
 
 	/**

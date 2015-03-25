@@ -1,6 +1,6 @@
 define(function(require){
 
-	var Constructor = require('pip/API');
+	var Constructor = require('../pipAPI');
 	var _ = require('underscore');
 	var isDev = /^(localhost|127.0.0.1)/.test(location.host);
 

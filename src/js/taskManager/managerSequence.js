@@ -21,7 +21,7 @@ define(function(require){
 			// setup database
 			db = this.db = new Database();
 			db.createColl('tasks');
-			db.add('tasks', script.tasks || []);
+			db.add('tasks', script.tasksSets || []);
 
 			// setup sequence
 			this.sequence = db.sequence('tasks', script.sequence);

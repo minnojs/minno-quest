@@ -1,12 +1,12 @@
 /*jshint unused: vars */
 define(['./config'], function(){
+
 	require.config({
-		paths: {
-			// APIs
-			pipAPI: 'pip/API',
-			questAPI: 'quest/API',
-			managerAPI: 'taskManager/API'
-		}
+		packages: [
+			{name: 'pipAPI', location:'APIs', main:'pipAPI'},
+			{name: 'questAPI', location:'APIs', main:'questAPI'},
+			{name: 'managerAPI', location:'APIs', main:'managerAPI'}
+		]
 	});
 
 	require(['angular','app'], function(angular, app) {
