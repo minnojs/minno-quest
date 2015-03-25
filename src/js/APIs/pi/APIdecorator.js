@@ -17,7 +17,7 @@ define(function(require){
 
 		var meta = {
 			taskName: script.name,
-			taskNumber: (script.$meta || {}).number || 0
+			taskNumber: script.serial || 0
 		};
 
 		var arr = _.map(obj, function(value, key){

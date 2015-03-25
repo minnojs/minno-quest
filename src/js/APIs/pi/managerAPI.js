@@ -3,6 +3,7 @@ define(function(require){
 	var Constructor = require('../managerAPI');
 	var _ = require('underscore');
 	var isDev = /^(localhost|127.0.0.1)/.test(location.host);
+	var decorator = require('APIs/pi/APIdecorator');
 
 	var messageTemplate = require('text!./messageTemplate.jst');
 	var messageTemplateDebrief = require('text!./messageTemplateDebrief.jst');
@@ -16,6 +17,8 @@ define(function(require){
 		Constructor.call(this);
 		this.settings.onPreTask = onPreTask;
 	}
+
+	decorator(API);
 
 	// create API functions
 	_.extend(API.prototype, Constructor.prototype);
@@ -42,6 +45,7 @@ define(function(require){
 
 		// add logging meta
 		if (currentTask.type == 'quest' || currentTask.type == 'pip'){
+			currentTask.$script.serial = currentTask.$meta.number;
 			settings = currentTask.$script.settings;
 			settings.logger = settings.logger || {};
 			settings.logger.meta = angular.extend(settings.logger.meta || {}, data);

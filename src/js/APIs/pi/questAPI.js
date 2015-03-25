@@ -1,6 +1,7 @@
 define(function(require){
 
 	var Constructor = require('../questAPI');
+	var decorator = require('APIs/pi/APIdecorator');
 	var _ = require('underscore');
 
 	/**
@@ -14,6 +15,8 @@ define(function(require){
 			url: '/implicit/PiQuest'
 		};
 	}
+
+	decorator(API);
 
 	// create API functions
 	_.extend(API.prototype, Constructor.prototype);

@@ -17,6 +17,7 @@ define(function(require){
 
 		function API(){
 			var script = this.script = {
+				name: 'anonymous ' + options.type,
 				settings: {},
 				current: {}, // this is the actual namespace for this PIP
 				sequence: []
@@ -28,10 +29,6 @@ define(function(require){
 			_.forEach(options.sets, function(set){
 				script[set + 'Sets'] = [];
 			});
-
-			// set default name
-			this.name = 'anonymous ' + options.type;
-
 		}
 
 		_.forEach(options.sets, function(set){
@@ -105,7 +102,15 @@ define(function(require){
 			post: function(url, obj){
 				// just so we can use this in standalone PIP
 				if (require.defined('jquery')){
-					return require('jquery' + '').post(url, obj);
+					return require('jquery' + '').ajax({
+						type: "POST",
+						url: url,
+						data: JSON.stringify(obj),
+						contentType: "application/json; charset=utf-8",
+						dataType: "json"
+					});
+
+					//.post(url, JSON.stringify(obj));
 				} else {
 					var $injector = angular.injector(['ng']);
 
