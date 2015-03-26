@@ -202,6 +202,11 @@ module.exports = function (grunt) {
 			options: {
 				configFile: 'test/karma.conf.js'
 			},
+			local: {
+				singleRun: false,
+				autoWatch: true,
+				reporters: 'progress'
+			},
 			unit:{
 				singleRun: true,
 				reporters : grunt.option('report') ? ['spec'] : ['progress'],
@@ -272,11 +277,11 @@ module.exports = function (grunt) {
 							include: ['app','pipScorer', 'pipAPI','questAPI','managerAPI'],
 							exclude: ['angular'],
 							override: {
-								paths:{
-									pipAPI: 'pip/API',
-									questAPI: 'quest/API',
-									managerAPI: 'taskManager/API'
-								}
+								packages: [
+									{name: 'pipAPI', location:'APIs', main:'pipAPI'},
+									{name: 'questAPI', location:'APIs', main:'questAPI'},
+									{name: 'managerAPI', location:'APIs', main:'managerAPI'}
+								]
 							}
 						},
 						{
@@ -284,11 +289,11 @@ module.exports = function (grunt) {
 							include: ['app','pipScorer', 'pipAPI','questAPI','managerAPI'],
 							exclude: ['angular'],
 							override: {
-								paths:{
-									pipAPI: 'pi/pipAPI',
-									questAPI: 'pi/questAPI',
-									managerAPI: 'pi/managerAPI'
-								}
+								packages: [
+									{name: 'pipAPI', location:'APIs', main:'pi/pipAPI'},
+									{name: 'questAPI', location:'APIs', main:'pi/questAPI'},
+									{name: 'managerAPI', location:'APIs', main:'pi/managerAPI'}
+								]
 							}
 						}
 					]

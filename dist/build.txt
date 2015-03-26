@@ -93,9 +93,10 @@ js/utils/animations/slideAnimation.js
 js/utils/animations/animationModule.js
 js/app.js
 js/../../bower_components/PIPlayer/dist/js/extensions/dscore/Scorer.js
-js/pip/API.js
-js/quest/API.js
-js/taskManager/API.js
+js/APIs/APIConstructor.js
+js/APIs/pipAPI.js
+js/APIs/questAPI.js
+js/APIs/managerAPI.js
 
 js/pibootstrap.js
 ----------------
@@ -187,12 +188,14 @@ js/utils/animations/slideAnimation.js
 js/utils/animations/animationModule.js
 js/app.js
 js/../../bower_components/PIPlayer/dist/js/extensions/dscore/Scorer.js
-js/pip/API.js
-js/pi/pipAPI.js
-js/quest/API.js
-js/pi/questAPI.js
-js/taskManager/API.js
-text!pi/messageTemplate.jst
-text!pi/messageTemplateDebrief.jst
-text!pi/messageTemplatePanel.jst
-js/pi/managerAPI.js
+js/APIs/APIConstructor.js
+js/APIs/pipAPI.js
+js/APIs/pi/APIdecorator.js
+js/APIs/pi/pipAPI.js
+js/APIs/questAPI.js
+js/APIs/pi/questAPI.js
+js/APIs/managerAPI.js
+text!managerAPI/pi/messageTemplate.jst
+text!managerAPI/pi/messageTemplateDebrief.jst
+text!managerAPI/pi/messageTemplatePanel.jst
+js/APIs/pi/managerAPI.js
