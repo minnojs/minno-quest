@@ -138,14 +138,14 @@ define(['require','./managerModule'], function(require){
 			}));
 
 			beforeEach(inject(function(managerSequence){
-				script = {tasks:{},sequence:[]};
+				script = {taskSets:[],sequence:[]};
 				sequence = managerSequence(script);
 			}));
 
 			it('should create a db correctly', function(){
 				expect(sequence.db).toEqual(jasmine.any(Object));
 				expect(sequence.db.createColl).toHaveBeenCalledWith('tasks');
-				expect(sequence.db.add).toHaveBeenCalledWith('tasks',script.tasks);
+				expect(sequence.db.add).toHaveBeenCalledWith('tasks',script.taskSets);
 			});
 
 			it('should create a sequence', function(){

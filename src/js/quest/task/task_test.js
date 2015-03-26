@@ -126,9 +126,9 @@ define(['underscore','./task-module'],function(){
 
 	describe('parser', function(){
 		var script = {
-				pages: {},
-				questions: {},
-				sequence: {}
+				pagesSets: [],
+				questionsSets: [],
+				sequence: []
 			},
 
 			db = jasmine.createSpyObj('db', ['createColl', 'add']),
@@ -147,8 +147,8 @@ define(['underscore','./task-module'],function(){
 		});
 
 		it('should add appropriate elements to the tables', function(){
-			expect(db.add.argsForCall[0]).toEqual(['pages', script.pages]);
-			expect(db.add.argsForCall[1]).toEqual(['questions', script.questions]);
+			expect(db.add.argsForCall[0]).toEqual(['pages', script.pagesSets]);
+			expect(db.add.argsForCall[1]).toEqual(['questions', script.questionsSets]);
 		});
 	});
 
