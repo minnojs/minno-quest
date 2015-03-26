@@ -28,7 +28,7 @@ define(function(require){
 			}, meta);
 		});
 
-		return this.post('implicit/PiQuest', arr);
+		return this.post('/implicit/PiQuest', arr);
 	}
 
 });
