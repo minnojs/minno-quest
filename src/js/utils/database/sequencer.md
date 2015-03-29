@@ -9,6 +9,7 @@
 * [Inheritance ](#inheritance)
     - [Sets](#sets)
     - [Inheriting](#inheriting)
+    - [Merge](#merge)
     - [Types](#type)
     - [Repeat](#repeat)
     - [Seeds](#seed)    
@@ -94,7 +95,7 @@ Repeats the element in `data` `times` times.
 * `{mixer:'repeat', times:10, data: [obj1,obj2]}`
 
 **random**:
-Randomizes the order of elements in `data`.
+Randomizes the order of elements in `data`. Please note that the randomizer pre-mixes all the content in data, so that any branching mixers will be branched according to the environment as it is when the random mixer is reached. If you want to delay the branching until it is reached, simply wrap it within a `wrapper` mixer.
 * `{mixer:'random', data: [obj1,obj2]}`
 
 **weightedRandom**:
@@ -340,6 +341,36 @@ type            | The inheritance type - essentially how to pick from within the
 merge           | An array of property names that we want to merge instead of overwrite.
 seed            | The randomization seed (see [docs](#seed)).
 repeat          | Repeat the result of the last randomization (see [docs](#repeat)).
+
+#### Merge
+By default, inheritance overwrites each property of the parent that the child already has. In order to change this behavior, you can add property names to the `merge` array, and the sequencer will attempt to merge the data from the parent into the child.
+This can look something like this:
+```js
+// The parent page
+{    
+    set: 'parent'
+    stimuli: [
+        stim1        
+    ]
+}
+
+// The child page which attempts to inherit the parent
+{
+    inherit: {set:'parent', merge:['stimuli']},    
+    stimuli: [
+        stim2
+    ]
+}
+
+// The result would be:
+{
+    // the stimuli array was merged instead of overwritten
+    stimuli: [                          
+        stim1,
+        stim2
+    ]
+}
+```
 
 #### Type
 We have implemented several types of inheritance:
