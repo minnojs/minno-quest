@@ -1,0 +1,1 @@
+define(["require","../questAPI","APIs/pi/APIdecorator","underscore"],function(e){function i(){t.call(this),this.settings.logger={url:"/implicit/PiQuest"}}var t=e("../questAPI"),n=e("APIs/pi/APIdecorator"),r=e("underscore");return n(i),r.extend(i.prototype,t.prototype),i});

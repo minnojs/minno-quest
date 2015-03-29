@@ -1,1 +1,0 @@
-define(["require","underscore"],function(e){function n(e,n,r){function i(e,i){if(!~e.indexOf("<%"))return e;i=t.extend(i||{},r);try{return t.template(e,i)}catch(s){return n.error('ERROR: "'+s.message+'" in the following template: ',e),""}}return i}var t=e("underscore");return n.$inject=["$rootScope","$log","templateDefaultContext"],n});

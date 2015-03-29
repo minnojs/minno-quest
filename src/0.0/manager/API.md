@@ -60,6 +60,9 @@ currentTask | The current (last) task object
 #### title
 `title` is a string to be used as the page title (the name displayed on the tag).
 
+#### skip
+Whether to activate the skip and refresh option. If activated, clicking `F5` reloads the current task, clicking `escape` and then the right or left arrows skips to the next or previous tasks.
+
 ### Tasks
 The basic unit in piManager is the **task**. The manager currently suports two types of tasks `quest` and `message`. You should just cue them into the sequence (you can use mixers to your hearts content as well).
 

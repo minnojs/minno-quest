@@ -1,1 +1,0 @@
-define([],function(){function e(e){return Math.floor(Math.random()*e)}return e});

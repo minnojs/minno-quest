@@ -1,1 +1,0 @@
-define(["require","angular","underscore"],function(e){var t=e("angular"),n=e("underscore"),r=t.module("randomize",[]);return r.value("randomizeRandom",function(){return Math.random()}),r.value("randomizeShuffle",n.shuffle),r.value("randomizeInt",function(t){return Math.floor(Math.random()*t)}),r.value("randomizeRange",function(t){return n.shuffle(n.range(t))}),r});

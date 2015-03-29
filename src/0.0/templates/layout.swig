@@ -125,6 +125,7 @@
 
 							{{ navitem("Overview", "overview", data.basename) }}
 							{{ navitem("Messages", "messages", data.basename) }}
+							{{ navitem("Sequencer", "sequencer", data.basename) }}
 							<li>
 								<a href="javascript:void(0)">Examples</a>
 								<ul class="nav">

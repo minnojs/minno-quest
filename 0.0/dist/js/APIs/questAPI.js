@@ -1,0 +1,1 @@
+define(["require","APIs/APIConstructor"],function(e){var t=e("APIs/APIConstructor");return t({type:"quest",sets:["pages","questions"]})});
