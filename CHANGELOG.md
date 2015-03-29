@@ -1,3 +1,12 @@
+<a name="0.0.35"></a>
+### 0.0.35 (2015-03-29)
+
+
+#### Bug Fixes
+
+* **mixer:** random now mixes the sequence before randomizing ([0b436687](https://github.com/ProjectImplicit/PIquest/commit/0b4366876392c4e4f1f64bbec02f381e4061e6f4))
+
+
 <a name="0.0.21"></a>
 ### 0.0.21 (2014-12-07)
 
