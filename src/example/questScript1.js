@@ -26,9 +26,9 @@ define(['questAPI'], function(Quest){
 		{
 			header: 'header',
 			questions: 		{
-				inherit: 'basicSelect',
 				stem:'bong',
-				answers:[1,2,3]
+				type:'text',
+				inline:true
 			}
 		},
 		{

@@ -15,7 +15,9 @@ define(['underscore','../questDirectivesModule'], function(_){
 			log = scope.current.logObj;
 		};
 
-		beforeEach(module('questDirectives', function($compileProvider){
+
+		beforeEach(module('questDirectives', function($compileProvider, $sceProvider){
+			$sceProvider.enabled(false);
 			//this is a hack to get the piq-page controller registered by the directive
 			$compileProvider.directive('piqPageInject', function(){
 				return {
@@ -52,6 +54,17 @@ define(['underscore','../questDirectivesModule'], function(_){
 
 			changeInputValueTo('band');
 			expect(log.response).toBe('band');
+		});
+
+		it('should show stem inline if inline=true', function(){
+			compile({stem:'Hello', inline:true});
+			var label = formElm.children('label');
+			expect(label).not.toBeHidden();
+			expect(label.text()).toBe('Hello');
+
+			compile({stem:'Hello'});
+			label = formElm.children('label');
+			expect(label).toBeHidden();
 		});
 
 		it('should support dflt',function(){

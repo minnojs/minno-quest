@@ -39,7 +39,12 @@ define(['../questDirectivesModule'], function(){
 
 		it('should render stem', function(){
 			compile({stem:'Hello'});
-			expect(elm.find('label').text()).toBe('Hello');
+			expect(elm.children('label').text()).toBe('Hello');
+		});
+
+		it('should hide stem when inline=true', function(){
+			compile({stem:'Hello', inline:true});
+			expect(elm.children('label')).toBeHidden();
 		});
 
 		it('should render help', function(){

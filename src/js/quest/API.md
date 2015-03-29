@@ -88,6 +88,7 @@ The `text` questions consist of a simple text input in which the users can type 
 property		| description
 --------------- | ---------------------
 dflt 			| (test; default value: "") The default value for this question.
+inline 			| Show the stem in the same line as the input box (this will make the input box narrower as well).
 autoSubmit 		| (true or false; default: false) If this property is set to true typing `Enter` while this input is focused will submit the page.
 minlength 		| (Number) Validation: force at least this number of characters.
 maxlength		| (Number) Validation: force at most this number of characters.
@@ -118,6 +119,7 @@ The `textNumber` questions consist of a simple text input that limits the partic
 property		| description
 --------------- | ---------------------
 dflt 			| (Number; default: null) The default value for this question.
+inline 			| Show the stem in the same line as the input box (this will make the input box narrower as well).
 autoSubmit 		| (true or false; default: false) If this property is set to true typing `Enter` while this input is focused will submit the form.
 min 			| (Number) Validation: minimum valid number.
 max				| (Number) Validation: maximum valid number.

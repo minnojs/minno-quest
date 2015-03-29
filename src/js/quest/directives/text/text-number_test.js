@@ -15,7 +15,9 @@ define(['../questDirectivesModule'],function(){
 			log = formElm.data('$questTextNumberController').log;
 		};
 
-		beforeEach(module('questDirectives'));
+		beforeEach(module('questDirectives', function($sceProvider){
+			$sceProvider.enabled(false);
+		}));
 		beforeEach(inject(function($injector, _$sniffer_) {
 			$sniffer = _$sniffer_;
 			$compile = $injector.get('$compile');
@@ -61,6 +63,17 @@ define(['../questDirectivesModule'],function(){
 		it('should support dflt',function(){
 			compile({name:1, dflt:123123});
 			expect(inputElm.val()).toBe('123123');
+		});
+
+		it('should show stem inline if inline=true', function(){
+			compile({stem:234, inline:true});
+			var label = formElm.children('label');
+			expect(label).not.toBeHidden();
+			expect(label.text()).toBe('234');
+
+			compile({stem:234});
+			label = formElm.children('label');
+			expect(label).toBeHidden();
 		});
 
 		it('should support dflt even if the default value is 0',function(){
