@@ -1,3 +1,17 @@
+<a name="0.0.36"></a>
+### 0.0.36 (2015-03-31)
+
+
+#### Bug Fixes
+
+* **PI:** updates to the debrief template ([e96744fd](https://github.com/ProjectImplicit/PIquest/commit/e96744fd91ce3c9e98a8a7004c71c6d8762169ed))
+
+
+#### Features
+
+* **questDirectives:** text input in the same line as the stem. ([0058e136](https://github.com/ProjectImplicit/PIquest/commit/0058e136d5815f8a08a81a258cba6d95932cb838), closes [#72](https://github.com/ProjectImplicit/PIquest/issues/72))
+
+
 <a name="0.0.35"></a>
 ### 0.0.35 (2015-03-29)
 
