@@ -40,7 +40,7 @@ headerStyle		| (Object) An object to set the style of the header (has most css p
 progressBar 	| (text) Text for the progress bar (You might want to use a template for this, maybe something like: `<%= pagesMeta.number %> out of <%= pagesMeta.outOf%>`.).
 numbered 		| (true of false) Whether to  display the number of each question (default value: false).
 numberStart		| (Number) The number for the first question in the page (default: 1).
-timeout 		| (Number) If this is set to a positive integer *x*, the page auto-submits after *x* milliseconds (no validation allowed).
+timer 			| (Object) This property controls the page timer, its properties are documented right [here](#page-timer).
 timeoutMessage	| (text) An optional message to be displayed upon timeout. (default: "")
 questions 		| (Array or Object) an array of [questions](#questions) to be displayed in the page. Note that the questions may be randomized and chosen conditionally using a [mixer](#mixer). This property also accepts a single question object if you want to present only a single question per page.
 lognow 			| (true or false) Whether to log the questions on this page. This option is useful when you know that the page will not be accessed any more. It allows you to use the `pulse` option from the [logger](#logger) to send questions as they are being answered instead of sending only at the end of the task. (default: false)
@@ -62,6 +62,17 @@ var page = {
 }
 ```
 
+#### Page timer
+The page timer allows you to constrain the time that users have to answer their questions. In order to control it, you may use the following properties.
+
+property		| description
+--------------- | ---------------------
+duration 		| (number) How long (in seconds) before the timer ends.
+submitOnEnd 	| (true or false) Whether to submit when the timer ends (true by default).
+show 			| (true or false) Whether to display a visual countdown (true by default).
+direction 		| ("up" or "down") Whether to use a countdown or to count up ("down" by default).
+removeOnEnd 	| (true or false) Whether to remove the visual timer when the countdown ends (if you don't auto proceed when the timer ends. ).		
+ 
 ### Questions
 
 Here are the types of questions PIQuest currently supports:

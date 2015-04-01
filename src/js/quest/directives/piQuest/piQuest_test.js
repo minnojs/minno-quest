@@ -124,7 +124,7 @@ define(['../questDirectivesModule'],function(){
 	});
 
 	describe('piqPage', function(){
-		var $rootScope,scope;
+		var $rootScope,scope, now;
 		function compile(data){
 			element = jqLite('<div piq-page></div>');
 			scope.page = data;
@@ -136,6 +136,11 @@ define(['../questDirectivesModule'],function(){
 		beforeEach(module('task', 'questDirectives', function($provide, $sceProvider){
 			// don't load Task currently
 			$provide.value('Task', function(){});
+
+			// for the timer directive
+			now = 0;
+			$provide.value('timerNow', function(){return now;});
+
 			$sceProvider.enabled(false);
 		}));
 
@@ -458,37 +463,49 @@ define(['../questDirectivesModule'],function(){
 				});
 			}); // end describe page directive
 
-			describe('timeout', function(){
+			describe('timer', function(){
 				var $timeout;
+
+				function advance(time){
+					now = time;
+					$timeout.flush(time);
+				}
 
 				beforeEach(inject(function(_$timeout_){
 					$timeout = _$timeout_;
-					compile({timeout: 100});
 				}));
 
-				it('should submit',function(){
+				it('should submit by default',function(){
+					compile({timer:{duration:0.1}});
 					spyOn(scope, 'submit');
-					$timeout.flush();
+					advance(1000);
 					expect(scope.submit).toHaveBeenCalled();
-					expect(controller.log.timeout).toBeDefined();
 				});
 
-				it('should proceed even upon error', function(){
-					spyOn(controller,'proceed');
-					scope.pageForm.$setValidity('test', false);
-					$timeout.flush();
-					expect(controller.proceed).toHaveBeenCalled();
+				it('should not submit if submitOnEnd is falsy',function(){
+					compile({timer:{duration:0.1,submitOnEnd:false}});
+					spyOn(scope, 'submit');
+					advance(1000);
+					expect(scope.submit).not.toHaveBeenCalled();
 				});
 
-				it('should not trigger if submit was called before it', function(){
-					scope.submit(true);
-					$timeout.flush();
-					expect(controller.log.timeout).not.toBeDefined();
+				it('should emit quest:timeout onEnd', function(){
+					compile({timer:{duration:0.1}});
+					var spy = jasmine.createSpy('quest:timeout');
+					scope.$on('quest:timeout', spy);
+					advance(1000);
+					expect(spy).toHaveBeenCalled();
 				});
 
-				it('should optionally display a timer on the page', function(){});
+				it('should stop when controller.proceed is called', function(){
+					compile({timer:{duration:0.1,submitOnEnd:true}});
+					spyOn(scope, 'submit');
+					controller.proceed();
+					advance(1000);
+					expect(scope.submit).not.toHaveBeenCalled();
+				});
 
-				it('should show a custom message', function(){});
+
 			});
 		});
 	});

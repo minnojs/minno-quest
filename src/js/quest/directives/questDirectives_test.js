@@ -112,6 +112,14 @@ define(['angular','./questDirectivesModule'], function(angular){
 
 		});
 
+		describe(': timeout', function(){
+			it('should set timeout', function(){
+				compile({});
+				scope.$emit('quest:timeout');
+				expect(log.timeout).toBeTruthy();
+			});
+		});
+
 		describe(': defaults', function(){
 			it('should use NaN by default', function(){
 				// natural default

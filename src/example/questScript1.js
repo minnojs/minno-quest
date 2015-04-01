@@ -25,6 +25,7 @@ define(['questAPI'], function(Quest){
 	API.addSequence([
 		{
 			header: 'header',
+			timer: {duration:30, show:true, submitOnEnd:true},
 			questions: 		{
 				stem:'bong',
 				type:'text',

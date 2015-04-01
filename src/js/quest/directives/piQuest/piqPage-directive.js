@@ -24,6 +24,8 @@ define(function (require) {
 
 		/**
 		 * Harvest piqPage questions, and log them.
+		 * by default logging is deferred to the end (so that we can go back to questions...)
+		 * This can be changed by setting lognow to true (page.lognow)
 		 */
 		this.harvest = function(lognow){
 			var questions = $scope.current.questions;
@@ -32,7 +34,7 @@ define(function (require) {
 				// don't log if we don't have a name or if lognow is'nt true
 				if (!q.name || !(lognow || q.lognow)){return;}
 
-				// get the appropriate log
+				// get the appropriate log object
 				var log = questions[q.name];
 
 				// don't log if this has already been logged
@@ -62,9 +64,12 @@ define(function (require) {
 			}
 
 			// broadcast to the quest controller
+			// so that it can set submit latency
 			$scope.$broadcast('quest:submit');
 
 			self.proceed();
+
+			// emit to the piQuest directive so that it knows to advance to the next page
 			$scope.$emit('quest:next');
 		};
 
@@ -76,9 +81,9 @@ define(function (require) {
 			var notDoubleClick = (this.page.decline !== 'double');
 
 			// decline and proceed to next page
-			// unless this is a double style decline and then simply set "active"
+			// unless this is a double style decline and then simply set "active".
 			if (notDoubleClick || $el.hasClass('active')){
-				// broadcast to the quest controller
+				// broadcast to the quest controller (so that it marks logs as declined and marks decline time)
 				$scope.$broadcast('quest:decline');
 				self.proceed();
 				$scope.$emit('quest:next');
@@ -98,30 +103,26 @@ define(function (require) {
 
 
 		/**
-		 * Proceed to the next page.
-		 * After canceling timeout, and harvesting.
-		 * @todo: optional harvesting
+		 * Wraps up page setup
+		 * Closes timer stuff.
+		 * Harvests if needed.
 		 */
 		this.proceed = function(){
 
 			// remove timeout if needed
-			if (self.timeoutDeferred){
-				$timeout.cancel(self.timeoutDeferred);
-				delete(self.timeoutDeferred);
-			}
+			self.timer.stop();
 
 			// by default, harvest after every page..
 			self.harvest($scope.page.lognow);
 		};
 
-		// setup page on page refresh
-		pageSetup($scope.page);
+		this.setup = pageSetup;
 
 		// refresh page on question change (deep watch)
 		// should refresh this directive without animating the whole page in...
 		$scope.$watch('current.questions', pageRefresh, true);
 
-		// listen for auto submit calls
+		// listen for auto submit calls (from textDirective etc.)
 		$scope.$on('quest:submit:now', function(){
 			$scope.submit();
 		});
@@ -132,7 +133,10 @@ define(function (require) {
 			$scope.$emit('quest:refresh');
 		}
 
-		function pageSetup(newPage){
+		function pageSetup(timer){
+			var newPage = $scope.page;
+			self.timer = timer;
+
 			// set the page log object
 			self.log = {
 				name: newPage.name,
@@ -140,13 +144,15 @@ define(function (require) {
 			};
 
 			// If there is a timeout set, submit when it runs out.
-			if (newPage.timeout){
-				self.timeoutDeferred = $timeout(function(){
+			if (newPage.timer){
+				timer.start(newPage.timer);
+				timer.getScope().$on('timer-end', function(){
 					self.log.timeout = true;
-					$scope.submit(true);
+					$scope.$broadcast('quest:timeout');
+					(newPage.timer.submitOnEnd || _.isUndefined(newPage.timer.submitOnEnd)) && $scope.submit(true);
 					/* global alert */
 					newPage.timeoutMessage && alert(newPage.timeoutMessage);
-				}, newPage.timeout, false);
+				});
 			}
 		}
 	}
@@ -155,7 +161,11 @@ define(function (require) {
 		return {
 			replace: true,
 			controller: piqPageCtrl,
-			template:template
+			template:template,
+			require: ['piqPage','piTimer'],
+			link: function($scope, $el, $attr, $ctrl){
+				$ctrl[0].setup($ctrl[1]);
+			}
 		};
 	}
 

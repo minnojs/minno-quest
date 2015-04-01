@@ -109,16 +109,21 @@ define(function(require){
 			}
 		};
 
+		$scope.$on('quest:submit', function(event){
+			event.preventDefault();
+			log.declined = undefined;
+			log.submitLatency = self.stopper.now();
+		});
+
 		$scope.$on('quest:decline', function(event){
 			event.preventDefault();
 			log.declined = true;
 			log.submitLatency = self.stopper.now();
 		});
 
-		$scope.$on('quest:submit', function(event){
+		$scope.$on('quest:timeout', function(event){
 			event.preventDefault();
-			log.declined = undefined;
-			log.submitLatency = self.stopper.now();
+			log.timeout = true;
 		});
 	}
 
