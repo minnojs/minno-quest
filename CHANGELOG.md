@@ -1,3 +1,14 @@
+<a name="0.0.37"></a>
+### 0.0.37 (2015-04-02)
+
+
+#### Features
+
+* **timer:**
+  * support displaying message at end of timer ([89fdb6b0](https://github.com/ProjectImplicit/PIquest/commit/89fdb6b084e4f55f0c039343bdb92d952944663f))
+  * timer directive ([5894b397](https://github.com/ProjectImplicit/PIquest/commit/5894b39710fbbb4806dd4439e3680706f2acc6de))
+
+
 <a name="0.0.36"></a>
 ### 0.0.36 (2015-03-31)
 
