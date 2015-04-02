@@ -505,6 +505,18 @@ define(['../questDirectivesModule'],function(){
 					expect(scope.submit).not.toHaveBeenCalled();
 				});
 
+				it('should display a message if message is set', function(){
+
+				});
+
+				it('should expand a string message into a message object', function(){
+
+				});
+
+				it('should not proceed until message close is called', function(){
+
+				});
+
 
 			});
 		});

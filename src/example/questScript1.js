@@ -25,7 +25,7 @@ define(['questAPI'], function(Quest){
 	API.addSequence([
 		{
 			header: 'header',
-			timer: {duration:30, show:true, submitOnEnd:true},
+			timer: {duration:1.5, show:true, submitOnEnd:true,removeOnEnd:true, message:{body:'doooooo'}},
 			questions: 		{
 				stem:'bong',
 				type:'text',
@@ -38,6 +38,7 @@ define(['questAPI'], function(Quest){
 			prev:true,
 			progressBar: '<%= pagesMeta.number %> out of <%= pagesMeta.outOf%>',
 			header: 'Questionnaire: example for realtime branching',
+			timer: {duration:1.5, show:true, submitOnEnd:true,removeOnEnd:true, message:'doooooo'},
 			questions: [
 				{
 					name: 'myName',

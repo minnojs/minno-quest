@@ -8,6 +8,7 @@ js/bootstrap.js
 js/config.js
 js/bootstrap.js
 js/utils/timer/timerStopper.js
+js/utils/timer/timerDirective.js
 js/utils/timer/timerNow.js
 js/utils/timer/timer-module.js
 js/quest/directives/buttons/buttons.js
@@ -19,6 +20,9 @@ js/utils/console/consolePrototypeProvider.js
 text!utils/console/console.html
 js/utils/console/consoleDirective.js
 js/utils/console/consoleModule.js
+text!utils/modal/modal.html
+js/utils/modal/modalService.js
+js/utils/modal/modalModule.js
 js/quest/directives/questController.js
 text!quest/directives/piQuest/piQuest.html
 js/quest/directives/piQuest/piQuest-directive.js
@@ -103,6 +107,7 @@ js/pibootstrap.js
 js/config.js
 js/pibootstrap.js
 js/utils/timer/timerStopper.js
+js/utils/timer/timerDirective.js
 js/utils/timer/timerNow.js
 js/utils/timer/timer-module.js
 js/quest/directives/buttons/buttons.js
@@ -114,6 +119,9 @@ js/utils/console/consolePrototypeProvider.js
 text!utils/console/console.html
 js/utils/console/consoleDirective.js
 js/utils/console/consoleModule.js
+text!utils/modal/modal.html
+js/utils/modal/modalService.js
+js/utils/modal/modalModule.js
 js/quest/directives/questController.js
 text!quest/directives/piQuest/piQuest.html
 js/quest/directives/piQuest/piQuest-directive.js

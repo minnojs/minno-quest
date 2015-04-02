@@ -15,8 +15,8 @@ define(function (require) {
 	var _ = require('underscore');
 	var angular = require('angular');
 
-	piqPageCtrl.$inject = ['$scope','$timeout', '$rootScope'];
-	function piqPageCtrl($scope,$timeout, $rootScope){
+	piqPageCtrl.$inject = ['$scope','$timeout', '$rootScope', 'piModal'];
+	function piqPageCtrl($scope,$timeout, $rootScope, piModal){
 		var self = this;
 
 		$scope.global = $rootScope.global;
@@ -146,13 +146,47 @@ define(function (require) {
 			// If there is a timeout set, submit when it runs out.
 			if (newPage.timer){
 				timer.start(newPage.timer);
-				timer.getScope().$on('timer-end', function(){
-					self.log.timeout = true;
-					$scope.$broadcast('quest:timeout');
-					(newPage.timer.submitOnEnd || _.isUndefined(newPage.timer.submitOnEnd)) && $scope.submit(true);
-					/* global alert */
-					newPage.timeoutMessage && alert(newPage.timeoutMessage);
-				});
+				timer.getScope().$on('timer-end', timerEnd);
+			}
+
+			function timerEnd(){
+				var message = newPage.timer.message; // timer must be defined to get here...
+				var context;
+				// mark logs as timeout
+				self.log.timeout = true;
+				$scope.$broadcast('quest:timeout');
+
+				// proceed
+				if (message){
+					// create context for message tempates
+					context = {
+						pagesMeta: newPage.$meta,
+						pagesData: newPage.data,
+						global: $rootScope.global,
+						current: $rootScope.current
+					};
+
+					// create message object out of string
+					_.isString(message) && (message = {body: message});
+
+					// extend message object with scope and context
+					_.defaults(message, {
+						header: 'Timer Done',
+						$context: context,
+						$scope: $scope
+					});
+
+					// activate message and only then proceed
+					piModal.open(message).then(timerProceed);
+				} else {
+					// if there is no messgae proceed imidiately
+					timerProceed();
+				}
+			}
+
+			function timerProceed(){
+				var submit = newPage.timer.submitOnEnd || _.isUndefined(newPage.timer.submitOnEnd);
+				submit && $scope.submit(true);
 			}
 		}
 	}

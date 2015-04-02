@@ -62,7 +62,7 @@ var page = {
 }
 ```
 
-#### Page timer
+#### Page Timer
 The page timer allows you to constrain the time that users have to answer their questions. In order to control it, you may use the following properties.
 
 property		| description
@@ -72,7 +72,19 @@ submitOnEnd 	| (true or false) Whether to submit when the timer ends (true by de
 show 			| (true or false) Whether to display a visual countdown (true by default).
 direction 		| ("up" or "down") Whether to use a countdown or to count up ("down" by default).
 removeOnEnd 	| (true or false) Whether to remove the visual timer when the countdown ends (if you don't auto proceed when the timer ends. ).		
- 
+message 		| (String or Object) Display a message at the end the timer duration. You can imput a simple string here, but if you want finer control over the content of the message you can use the [object API](#page-message.
+
+#### Page Messagse
+You may want to display a message to the users when they run out of time at the end of a timer. Messages can be simple strings, or if you want finer control over the content of the message you can use the object API, that may be used as follows:
+
+property		| description
+--------------- | ---------------------
+header 			| The header text for the message (defaults to "Timer Done").
+body 			| The body of the message.
+button 			| The close button (defaults to "close").
+
+All these strings may use templates, and have access to the following objects: `global`, `current`, `pageData`, `pageMeta`.
+
 ### Questions
 
 Here are the types of questions PIQuest currently supports:

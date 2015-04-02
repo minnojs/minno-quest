@@ -26,7 +26,7 @@
     "angular-animate": "1.2.27",
     "backbone": "~1.1.2",
     "PIPlayer": "ProjectImplicit/PIPlayer#b1f5713b184f98cb0cf4b4151c91117b32f67cfa",
-    "bootstrap-sass-official": "~3.3.1"
+    "bootstrap-sass-official": "~3.3.4"
   },
   "devDependencies": {
     "angular-mocks": "1.2.27",

@@ -1,4 +1,5 @@
-<div ng-form name="pageForm">
+<div ng-form name="pageForm" pi-timer>
+	<div pi-timer="page.timer"></div>
 	<div ng-if="page.progressBar" class="text-center" ng-bind-html="page.progressBar"></div>
 	<h3 ng-if="page.header" ng-bind-html="page.header" ng-style="page.headerStyle"></h3>
 	<div ng-bind-html="page.text"></div>

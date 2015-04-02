@@ -8,7 +8,8 @@ define(function(require){
 		require('utils/timer/timer-module').name,
 		require('./buttons/buttons').name,
 		require('utils/database/template/templateModule').name,
-		require('utils/console/consoleModule').name
+		require('utils/console/consoleModule').name,
+		require('utils/modal/modalModule').name
 	]);
 
 	module.controller('questController', require('./questController'));
@@ -28,10 +29,12 @@ define(function(require){
 			replace:true,
 			transclude: true,
 			scope: {unvalid:'=piQuestValidation'},
-			template: ['<div class="alert alert-danger" role="alert" ng-show="unvalid">',
-			  '<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>',
-			  '<span ng-transclude></span>',
-			'</div>'].join('')
+			template: [
+				'<div class="alert alert-danger" role="alert" ng-show="unvalid">',
+			  		'<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>',
+			  		'<span ng-transclude></span>',
+				'</div>'
+			].join('')
 		};
 	});
 
