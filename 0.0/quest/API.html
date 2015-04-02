@@ -91,10 +91,9 @@
 			<div class="row">
 				<div class="col-md-9" role="main">
 					
-	<h1 id="piquest-api">piQuest API</h1>
-<h3 id="table-of-contents">Table of contents</h3>
+	<h3 id="table-of-contents">Table of contents</h3>
 <ul>
-<li><a href="#pages">Pages</a></li>
+<li><a href="#pages">Pages</a>    </li>
 <li><a href="#questions">Questions</a><ul>
 <li><a href="#text">text</a></li>
 <li><a href="#textnumber">textNumber</a></li>
@@ -182,12 +181,8 @@
 <td>(Number) The number for the first question in the page (default: 1).</td>
 </tr>
 <tr>
-<td>timeout</td>
-<td>(Number) If this is set to a positive integer <em>x</em>, the page auto-submits after <em>x</em> milliseconds (no validation allowed).</td>
-</tr>
-<tr>
-<td>timeoutMessage</td>
-<td>(text) An optional message to be displayed upon timeout. (default: “”)</td>
+<td>timer</td>
+<td>(Object) This property controls the page timer, its properties are documented right <a href="#page-timer">here</a>.</td>
 </tr>
 <tr>
 <td>questions</td>
@@ -219,6 +214,67 @@
     ]
 }
 </code></pre>
+<h4 id="page-timer">Page Timer</h4>
+<p>The page timer allows you to constrain the time that users have to answer their questions. In order to control it, you may use the following properties.</p>
+<table>
+<thead>
+<tr>
+<th>property</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>duration</td>
+<td>(number) How long (in seconds) before the timer ends.</td>
+</tr>
+<tr>
+<td>submitOnEnd</td>
+<td>(true or false) Whether to submit when the timer ends (true by default).</td>
+</tr>
+<tr>
+<td>show</td>
+<td>(true or false) Whether to display a visual countdown (true by default).</td>
+</tr>
+<tr>
+<td>direction</td>
+<td>(“up” or “down”) Whether to use a countdown or to count up (“down” by default).</td>
+</tr>
+<tr>
+<td>removeOnEnd</td>
+<td>(true or false) Whether to remove the visual timer when the countdown ends (if you don’t auto proceed when the timer ends. ).        </td>
+</tr>
+<tr>
+<td>message</td>
+<td>(String or Object) Display a message at the end the timer duration. You can imput a simple string here, but if you want finer control over the content of the message you can use the <a href="#page-messages">object API</a>.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="page-messages">Page Messages</h4>
+<p>You may want to display a message to the users when they run out of time at the end of a timer. Messages can be simple strings, or if you want finer control over the content of the message you can use the object API, that may be used as follows:</p>
+<table>
+<thead>
+<tr>
+<th>property</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>header</td>
+<td>The header text for the message (defaults to “Timer Done”).</td>
+</tr>
+<tr>
+<td>body</td>
+<td>The body of the message.</td>
+</tr>
+<tr>
+<td>button</td>
+<td>The close button (defaults to “close”).</td>
+</tr>
+</tbody>
+</table>
+<p>All these strings may use templates, and have access to the following objects: <code>global</code>, <code>current</code>, <code>pageData</code>, <code>pageMeta</code>.</p>
 <h3 id="questions">Questions</h3>
 <p>Here are the types of questions PIQuest currently supports:</p>
 <ul>
@@ -275,6 +331,10 @@
 <tr>
 <td>dflt</td>
 <td>(test; default value: “”) The default value for this question.</td>
+</tr>
+<tr>
+<td>inline</td>
+<td>Show the stem in the same line as the input box (this will make the input box narrower as well).</td>
 </tr>
 <tr>
 <td>autoSubmit</td>
@@ -335,6 +395,10 @@
 <tr>
 <td>dflt</td>
 <td>(Number; default: null) The default value for this question.</td>
+</tr>
+<tr>
+<td>inline</td>
+<td>Show the stem in the same line as the input box (this will make the input box narrower as well).</td>
 </tr>
 <tr>
 <td>autoSubmit</td>

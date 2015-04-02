@@ -1,1 +1,1 @@
-define(["require","angular","./timerStopper","./timerNow"],function(e){var t=e("angular"),n=t.module("timer",[]);return n.service("timerStopper",e("./timerStopper")),n.value("timerNow",e("./timerNow")),n});
+define(["require","angular","./timerStopper","./timerDirective","./timerNow"],function(e){var t=e("angular"),n=t.module("timer",[]);return n.service("timerStopper",e("./timerStopper")),n.directive("piTimer",e("./timerDirective")),n.value("timerNow",e("./timerNow")),n});
