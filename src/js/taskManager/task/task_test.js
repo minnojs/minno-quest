@@ -148,6 +148,21 @@ define(['require','angular','./taskModule'],function(require, angular){
 				expect(spy).toHaveBeenCalled();
 			}));
 
+			it('should create a "current" quest object', inject(function($rootScope){
+				expect($rootScope.global.myName).toEqual(jasmine.any(Object));
+				expect($rootScope.global.myName.questions).toEqual(jasmine.any(Object));
+				expect(scope.current).toBe($rootScope.global.myName);
+			}));
+
+			it('should extend the "current" quest object with script.current', function(){
+				expect(scope.current.extendCurrent).toBeTruthy();
+			});
+
+			it('should extend the "globa" object with script.global', function(){
+				expect(scope.global.extendGlobal).toBeTruthy();
+			});
+
+
 			it('should activate canvas before task', function(){
 
 			});

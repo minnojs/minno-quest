@@ -1,8 +1,6 @@
-# piQuest API
-
 ### Table of contents
 
-* [Pages](#pages)
+* [Pages](#pages)	
 * [Questions](#questions)
 	- [text](#text)
 	- [textNumber](#textnumber)
@@ -41,7 +39,6 @@ progressBar 	| (text) Text for the progress bar (You might want to use a templat
 numbered 		| (true of false) Whether to  display the number of each question (default value: false).
 numberStart		| (Number) The number for the first question in the page (default: 1).
 timer 			| (Object) This property controls the page timer, its properties are documented right [here](#page-timer).
-timeoutMessage	| (text) An optional message to be displayed upon timeout. (default: "")
 questions 		| (Array or Object) an array of [questions](#questions) to be displayed in the page. Note that the questions may be randomized and chosen conditionally using a [mixer](#mixer). This property also accepts a single question object if you want to present only a single question per page.
 lognow 			| (true or false) Whether to log the questions on this page. This option is useful when you know that the page will not be accessed any more. It allows you to use the `pulse` option from the [logger](#logger) to send questions as they are being answered instead of sending only at the end of the task. (default: false)
 animate 		| (text) What types of animation to use when this page enters and leaves the screen. We currently support three animations: fade, slide, and drop-in. You can use any and all of them by adding them to the string (for example: "slide fade" will activate both of these animations).
@@ -72,9 +69,9 @@ submitOnEnd 	| (true or false) Whether to submit when the timer ends (true by de
 show 			| (true or false) Whether to display a visual countdown (true by default).
 direction 		| ("up" or "down") Whether to use a countdown or to count up ("down" by default).
 removeOnEnd 	| (true or false) Whether to remove the visual timer when the countdown ends (if you don't auto proceed when the timer ends. ).		
-message 		| (String or Object) Display a message at the end the timer duration. You can imput a simple string here, but if you want finer control over the content of the message you can use the [object API](#page-message.
+message 		| (String or Object) Display a message at the end the timer duration. You can imput a simple string here, but if you want finer control over the content of the message you can use the [object API](#page-messages).
 
-#### Page Messagse
+#### Page Messages
 You may want to display a message to the users when they run out of time at the end of a timer. Messages can be simple strings, or if you want finer control over the content of the message you can use the object API, that may be used as follows:
 
 property		| description

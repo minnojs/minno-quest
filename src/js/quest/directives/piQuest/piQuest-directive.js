@@ -19,21 +19,10 @@ define(function (require) {
 		var self = this;
 		var task = self.task = new Task($scope.script);
 		var defaultContext; // for templates and the mixer
-		var global = $rootScope.global;
-		var script = $scope.script;
+		var global = $rootScope.global; // setup in app.run
+		var current = $rootScope.current || {}; // setup in taskDirective
 
-		// create the "current" object and expose "questions"
-		var current = $rootScope.global[script.name || 'current'] = $rootScope.current = {questions: {}};
-
-		// extend global and current with settings...
-		// @TODO: should move to task
-		if (script.current) {
-			_.extend(current, script.current);
-		}
-
-		if (script.global) {
-			_.extend(global, script.global);
-		}
+		current.questions = {};
 
 		// create default context
 		defaultContext = {

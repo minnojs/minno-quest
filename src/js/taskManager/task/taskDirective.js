@@ -1,9 +1,12 @@
 /*
  * @name: taskDirective
  */
-define(function(){
-	directive.$inject = ['taskActivate','managerCanvas','$document'];
-	function directive(activateTask, canvas, $document){
+define(function(require){
+
+	var _ = require('underscore');
+
+	directive.$inject = ['taskActivate','managerCanvas','$document', '$window', '$rootScope'];
+	function directive(activateTask, canvas, $document, $window, $rootScope){
 		return {
 			scope:{
 				task: '=piTask'
@@ -15,6 +18,7 @@ define(function(){
 				var promise;
 				var proceedObject;
 				var settings = $scope.$parent.settings || {};
+				var script = task.$script || {};
 
 				if (!task){
 					return;
@@ -29,6 +33,17 @@ define(function(){
 						$document.off('keydown', proceedListener);
 						$document.off('keydown', skipListener);
 					});
+				}
+
+				/**
+				 * Setup current object
+				 */
+				$rootScope.current = $window.piGlobal.current = script.current || {};
+				if (script.name){
+					// extend current script with the piGlobal object
+					_.extend($rootScope.current, $window.piGlobal[script.name] || {});
+					// set the current object back into the global
+					$window.piGlobal[script.name] = script.current;
 				}
 
 				/**

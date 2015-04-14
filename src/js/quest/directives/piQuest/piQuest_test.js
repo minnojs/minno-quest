@@ -32,7 +32,8 @@ define(['../questDirectivesModule'],function(){
 		beforeEach(inject(function($injector){
 			$compile = $injector.get('$compile');
 			var rootScope = $injector.get('$rootScope');
-			rootScope.global = {};
+			rootScope.global = {current:{questions:{}}};
+			rootScope.current = rootScope.global.current;
 			scope = rootScope.$new();
 		}));
 
@@ -72,20 +73,6 @@ define(['../questDirectivesModule'],function(){
 			it('should listen for "quest:log" and log accordingly', function(){
 				scope.$new().$emit('quest:log', 1, 'currentPageData');
 				expect(taskSpyObj.log).toHaveBeenCalledWith(1, 'currentPageData', scope.global);
-			});
-
-			it('should create a "current" quest object', inject(function($rootScope){
-				expect($rootScope.global.myName).toEqual(jasmine.any(Object));
-				expect($rootScope.global.myName.questions).toEqual(jasmine.any(Object));
-				expect(scope.current).toBe($rootScope.global.myName);
-			}));
-
-			it('should extend the "current" quest object with script.current', function(){
-				expect(scope.current.extendCurrent).toBeTruthy();
-			});
-
-			it('should extend the "globa" object with script.global', function(){
-				expect(scope.global.extendGlobal).toBeTruthy();
 			});
 
 			it('should setup the templateDefaultContext', inject(function(templateDefaultContext){
