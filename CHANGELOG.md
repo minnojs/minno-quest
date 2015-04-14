@@ -1,3 +1,13 @@
+<a name="0.0.38"></a>
+### 0.0.38 (2015-04-14)
+
+
+#### Bug Fixes
+
+* **PI:** debrief next URL is now implicit/Assign ([73f9c687](https://github.com/ProjectImplicit/PIquest/commit/73f9c68780f00acb70b7c5fa2fbb2cffce49e945))
+* **manager:** setup global.current correctly ([7b6751d9](https://github.com/ProjectImplicit/PIquest/commit/7b6751d96f925166a76d0dfa7cabf38e45c17296))
+
+
 <a name="0.0.37"></a>
 ### 0.0.37 (2015-04-02)
 
