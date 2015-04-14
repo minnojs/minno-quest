@@ -20,7 +20,6 @@ define(['questAPI'], function(Quest){
 
 	API.addSequence([
 		{
-			animate:"fade",
 			prevText: '123',
 			prev:true,
 			progressBar: '<%= pagesMeta.number %> out of <%= pagesMeta.outOf%>',

@@ -18,8 +18,15 @@ define(['managerAPI'], function(Manager){
 	]);
 
 	API.addSettings('onEnd', function(){console.log('onEnd');});
+	API.addSettings('skip', true);
 
 	API.addSequence([
+		{
+			type: 'pip',
+			name: 'biat',
+			scriptUrl: '/test/distance.js'
+		},
+
 		{inherit:{type:'exRandom', set:'quests'}},
 		//{inherit:'instructions', templateUrl: '../example/biat.html'},
 		{

@@ -24,10 +24,10 @@ define(['questAPI'], function(Quest){
 
 	API.addSequence([
 		{
-			header: 'header',
-			timer: {duration:5, show:true, submitOnEnd:true, message:{heading:'Hi Yoav',body:'Isn\'n this cool? I support templates as well...', button:'Click here to proceed to the next page'}},
+			header: 'Header',
+			//timer: {duration:5, show:true, submitOnEnd:true, message:{heading:'Hi Yoav',body:'Isn\'n this cool? I support templates as well...', button:'Click here to proceed to the next page'}},
 			questions: 		{
-				stem:'bong',
+				stem:'Stem',
 				type:'text',
 				inline:true
 			}
