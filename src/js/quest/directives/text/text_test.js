@@ -265,4 +265,31 @@ define(['underscore','../questDirectivesModule'], function(_){
 			}).toThrow();
 		});
 	});
+
+	describe('dfltUnitsFilter', function(){
+		var dfltUnits;
+
+		beforeEach(module('questDirectives'));
+
+		beforeEach(inject(function(dfltUnitsFilter){
+			dfltUnits = dfltUnitsFilter;
+		}));
+
+		it('should append px by default', function(){
+			expect(dfltUnits(1)).toBe('1px');
+		});
+
+		it('should append "unit" if it is defined', function(){
+			expect(dfltUnits(1,'unit')).toBe('1unit');
+		});
+
+		it('should always treat units as string', function(){
+			expect(dfltUnits(1,2)).toBe('12');
+		});
+
+		it('should not append to not numeric stings', function(){
+			expect(dfltUnits('1px','unit')).toBe('1px');
+		});
+	});
+
 });

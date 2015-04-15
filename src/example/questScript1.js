@@ -32,8 +32,7 @@ define(['questAPI'], function(Quest){
 				//maxlength: 4,
 				maxlengthLimit:true,
 				inline:false,
-				rows:25,
-				columns: 0
+				columns: 30
 			}
 		},
 		{
