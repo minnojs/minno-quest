@@ -29,9 +29,11 @@ define(['questAPI'], function(Quest){
 			questions: 		{
 				stem:'Stem',
 				type:'text',
-				maxlength: 4,
+				//maxlength: 4,
 				maxlengthLimit:true,
-				inline:true
+				inline:false,
+				rows:25,
+				columns: 0
 			}
 		},
 		{

@@ -3,22 +3,26 @@
  */
 define(function (require) {
 	// This is the only way to get a non js file relatively
-	var template = require('text!./text.html');
+	var textTemplate = require('text!./text.html');
+	var textareaTemplate = require('text!./textarea.html');
 	var angular = require('angular');
 
 	function textDirective(){
 		return {
 			replace: true,
-			template:template,
-			require: ['form', 'ngModel', 'questText'],
+			template: function(el,attr){
+				return 'questText' in attr ? textTemplate : textareaTemplate;
+			},
+			require: ['form', 'ngModel'],
 			controller: 'questController',
+			controllerAs: 'ctrl',
 			scope:{
 				data: '=questData'
 			},
 			link: function(scope, element, attr, ctrls) {
 				var form = ctrls[0];
 				var ngModel = ctrls[1];
-				var ctrl = ctrls[2];
+				var ctrl = scope.ctrl;
 				var data = scope.data;
 
 				scope.form = form;

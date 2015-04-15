@@ -1,6 +1,6 @@
 <div ng-form ng-class="{'form-inline':data.inline}">
 	<label ng-show="data.inline" for="{{data.name}}" ng-bind-html="data.stem"></label>
-	<input
+	<textarea
 	 	type="text"
 		ng-model="response"
 		ng-minlength="{{data.minlength}}"
@@ -8,6 +8,10 @@
 		ng-pattern="data.pattern | toRegex"
 		ng-required="{{data.required}}"
 		class="form-control"
+
+		style="resize:none;{{data.columns && 'width:auto;'}}"
+		cols="{{data.columns}}"
+		rows="{{data.rows}}"
 
 		ng-keydown="data.maxlengthLimit && maxlengthLimit($event)"
 		ng-keyup="data.maxlengthLimit && maxlengthLimit($event)"

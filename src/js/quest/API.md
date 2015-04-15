@@ -2,9 +2,8 @@
 
 * [Pages](#pages)	
 * [Questions](#questions)
-	- [text](#text)
-	- [textNumber](#textnumber)
-	- [select](#select)
+	- [text & textarea](#text-textarea)
+	- [textNumber](#textNumber)
 	- [selectOne & selectMulti](#selectone-selectmulti)
 * [Settings](#settings)
 	- [onEnd](#onend)
@@ -85,7 +84,7 @@ All these strings may use templates, and have access to the following objects: `
 ### Questions
 
 Here are the types of questions PIQuest currently supports:
-- [text](#text)
+- [text & textarea](#text-textarea)
 - [textNumber](#textNumber)
 - [selectOne & selectMulti](#selectone-selectmulti)
 
@@ -102,8 +101,9 @@ lognow 			| (true or false) Whether to log this questions when the page is submi
 
 You may want to debug questions by [activating the `question` DEBUG setting](#debugging). You will then be warned in the console if a question name is reused (note: sometimes a question is supposed to be reused, if this warning pops up just make sure the use case is correct).
 
-#### Text
-The `text` questions consist of a simple text input in which the users can type in text. These kind of questions have the following properties:
+#### Text & Textarea
+The `text` and `textarea` questions consist of a simple text input in which the users can type in text. The difference between them is that text questions consist of a single line, whereas textareas are multiline. There are also several properties that are unique to textareas.
+Both types of questions support the following properties.
 
 property		| description
 --------------- | ---------------------
@@ -119,7 +119,14 @@ correct 		| (true or false; default: false) Validation: require the response to 
 correctValue 	| (*) Set the correct response value for the correct validation.
 errorMsg		| (Object: {}) This object has a property for each validation type. Setting the appropriate type changes the validation message. For instance setting the `required` property will change the validation message for instances where no response was given.
 
-For example, this is a text question that requires a valid email address (although there are better patterns out there for this purpose):
+The following properties are supported only by `textarea`s:
+
+property		| description
+--------------- | ---------------------
+rows 			| The number of visible text lines.
+columns 		| The visible width of the textarea, in average character widths.
+
+For example, this is a text question that requires a valid email address (although there are better *patterns* out there for this purpose):
 
 ```js
 var quest = {
