@@ -109,6 +109,7 @@ property		| description
 --------------- | ---------------------
 dflt 			| (test; default value: "") The default value for this question.
 inline 			| Show the stem in the same line as the input box (this will make the input box narrower as well).
+width 			| (Number or text) The width of the input box (By default numbers are translated to pixels, but you can use text to use other units).
 autoSubmit 		| (true or false; default: false) If this property is set to true typing `Enter` while this input is focused will submit the page.
 minlength 		| (Number) Validation: force at least this number of characters.
 maxlength		| (Number) Validation: force at most this number of characters.
@@ -124,7 +125,7 @@ The following properties are supported only by `textarea`s:
 property		| description
 --------------- | ---------------------
 rows 			| The number of visible text lines.
-columns 		| The visible width of the textarea, in average character widths.
+columns 		| The visible width of the textarea, in average character widths (this setting overrides the width setting).
 
 For example, this is a text question that requires a valid email address (although there are better *patterns* out there for this purpose):
 

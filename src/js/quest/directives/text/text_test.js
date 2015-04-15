@@ -84,6 +84,11 @@ define(['underscore','../questDirectivesModule'], function(_){
 				expect(inputElm.val()).toBe('0');
 			});
 
+			it('should support width', function(){
+				compile({name:2,width:100});
+				expect(inputElm.css('width')).toBe('100px');
+			});
+
 			describe('maxlengthLimit', function(){
 				it('should limit input length', function(){
 					compile({name:2,maxlengthLimit:true, maxlength:4});
@@ -274,6 +279,12 @@ define(['underscore','../questDirectivesModule'], function(_){
 		beforeEach(inject(function(dfltUnitsFilter){
 			dfltUnits = dfltUnitsFilter;
 		}));
+
+		it('should return an empty string for empty values', function(){
+			expect(dfltUnits()).toBe('');
+			expect(dfltUnits(0)).toBe('0px');
+			expect(dfltUnits('0')).toBe('0px');
+		});
 
 		it('should append px by default', function(){
 			expect(dfltUnits(1)).toBe('1px');

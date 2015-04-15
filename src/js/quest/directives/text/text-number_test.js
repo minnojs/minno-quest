@@ -81,6 +81,10 @@ define(['../questDirectivesModule'],function(){
 			expect(inputElm.val()).toBe('0');
 		});
 
+		it('should support width', function(){
+			compile({name:2,width:100});
+			expect(inputElm.css('width')).toBe('100px');
+		});
 
 		describe(': required validation', function(){
 			var errorElm;
