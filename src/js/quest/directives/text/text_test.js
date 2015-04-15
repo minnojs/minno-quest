@@ -42,6 +42,8 @@ define(['underscore','../questDirectivesModule'], function(_){
 			changeInputValueTo = function(value) {
 				inputElm.val(value);
 				inputElm.trigger($sniffer.hasEvent('input') ? 'input' : 'change');
+				inputElm.trigger('keydown');
+				inputElm.trigger('keyup');
 			};
 		}));
 
@@ -76,6 +78,20 @@ define(['underscore','../questDirectivesModule'], function(_){
 		it('should support dflt even if the default value is 0',function(){
 			compile({name:2,dflt:0});
 			expect(inputElm.val()).toBe('0');
+		});
+
+		describe('maxlengthLimit', function(){
+			it('should limit input length', function(){
+				compile({name:2,maxlengthLimit:true, maxlength:4});
+				changeInputValueTo('aaaaa');
+				expect(inputElm.val()).toBe('aaaa');
+			});
+
+			it('should not show a warning message', function(){
+				compile({name:2,maxlengthLimit:true, maxlength:4});
+				changeInputValueTo('aaaaa');
+				expect(formElm).toBeValid();
+			});
 		});
 
 		describe(': required validation', function(){

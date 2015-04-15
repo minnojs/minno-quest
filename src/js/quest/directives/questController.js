@@ -19,7 +19,35 @@ define(function(require){
 		this.stopper = new Stopper();
 
 
-		this.registerModel = function(ngModel, options){
+		this.registerModel = registerModel;
+
+		/**
+		 * Listen for quest events
+		 */
+		$scope.$on('quest:submit', function(event){
+			event.preventDefault();
+			log.declined = undefined;
+			log.submitLatency = self.stopper.now();
+		});
+
+		$scope.$on('quest:decline', function(event){
+			event.preventDefault();
+			log.declined = true;
+			log.submitLatency = self.stopper.now();
+		});
+
+		$scope.$on('quest:timeout', function(event){
+			event.preventDefault();
+			log.timeout = true;
+		});
+
+
+		/**
+		 * Get the model and options from the directive
+		 * @param  {Object} ngModel
+		 * @param  {Object} options
+		 */
+		function registerModel(ngModel, options){
 
 			options = _.defaults(options || {}, defaults);
 
@@ -54,7 +82,6 @@ define(function(require){
 
 			$scope.response = ngModel.$viewValue = log.response;
 
-
 			// model --> view
 			// should probably never be called (since our model is an object and not a primitive)
 			ngModel.$formatters.push(function(modelValue) {
@@ -85,7 +112,7 @@ define(function(require){
 				newValue !== oldValue && ngModel.$setViewValue(newValue);
 			});
 
-			var correctValidator = function(value) {
+			function correctValidator(value) {
 				var response = value.response;
 				var correctValue = data.correctValue;
 
@@ -101,30 +128,13 @@ define(function(require){
 				}
 
 				return value;
-			};
+			}
 
 			if (data.correct) {
 				ngModel.$parsers.push(correctValidator);
 				data.response = correctValidator(this.log);
 			}
-		};
-
-		$scope.$on('quest:submit', function(event){
-			event.preventDefault();
-			log.declined = undefined;
-			log.submitLatency = self.stopper.now();
-		});
-
-		$scope.$on('quest:decline', function(event){
-			event.preventDefault();
-			log.declined = true;
-			log.submitLatency = self.stopper.now();
-		});
-
-		$scope.$on('quest:timeout', function(event){
-			event.preventDefault();
-			log.timeout = true;
-		});
+		}
 	}
 
 	return questController;

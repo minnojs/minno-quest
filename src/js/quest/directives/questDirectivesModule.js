@@ -16,7 +16,7 @@ define(function(require){
 	module.directive('piQuest', require('./piQuest/piQuest-directive'));
 	module.directive('piqPage', require('./piQuest/piqPage-directive'));
 	module.directive('questWrapper', require('./wrapper/wrapper-directive'));
-	module.directive('questText', require('./text/text-directive'));
+	module.directive('questText', require('./text/textDirective'));
 	module.directive('questTextNumber', require('./text/text-number-directive'));
 
 	module.service('questSelectMixer', require('./select/selectMixerProvider'));

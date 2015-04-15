@@ -112,6 +112,7 @@ inline 			| Show the stem in the same line as the input box (this will make the 
 autoSubmit 		| (true or false; default: false) If this property is set to true typing `Enter` while this input is focused will submit the page.
 minlength 		| (Number) Validation: force at least this number of characters.
 maxlength		| (Number) Validation: force at most this number of characters.
+maxlengthLimit 	| (true or false) Do not allow the user to input more characters than defined by `maxlength` (if maxlength is not defined, any number of characters will be allowed).
 required		| (true of false; default: false) Validation: require a non-empty string as a response.
 pattern			| (text [supports regex]) Validation: require the response to match the regular expression set in pattern (takes either a string <code>"a&#124;b"</code> or a regular expression <code>/a&#124;b/</code>).
 correct 		| (true or false; default: false) Validation: require the response to be correct (set the target value using `correctValue`)

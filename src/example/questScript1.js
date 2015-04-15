@@ -29,6 +29,8 @@ define(['questAPI'], function(Quest){
 			questions: 		{
 				stem:'Stem',
 				type:'text',
+				maxlength: 4,
+				maxlengthLimit:true,
 				inline:true
 			}
 		},

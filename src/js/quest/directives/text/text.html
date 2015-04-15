@@ -8,6 +8,9 @@
 		ng-pattern="data.pattern | toRegex"
 		ng-required="{{data.required}}"
 		class="form-control"
+
+		ng-keydown="data.maxlengthLimit && maxlengthLimit($event)"
+		ng-keyup="data.maxlengthLimit && maxlengthLimit($event)"
 	>
 	<div pi-quest-validation="form.$error.minlength">{{data.errorMsg.minlength || "Too short!"}}</div>
 	<div pi-quest-validation="form.$error.maxlength">{{data.errorMsg.maxlength || "Too long!"}}</div>
