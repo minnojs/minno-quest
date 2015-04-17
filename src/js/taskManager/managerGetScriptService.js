@@ -4,23 +4,18 @@ define(function(require){
 	function getScriptProvider($q){
 
 		// @TODO: separate the parsing into a different module (make this a dependency)
-		function getScript(url, baseUrl, isText){
+		function getScript(url, options){
+			options || (options = {});
 			var def = $q.defer(),
 				target = "";
 
-			// starts with / or has :
-            if (/^\/|:/.test(url)){
-            	// assume this is a full url
-            	target = url;
-            } else {
-            	// add baseUrl
+			// if url doesn't starts with / or has : then add baseUrl
+           	/^\/|:/.test(url) || (target += options.baseUrl ? options.baseUrl + '/' : "");
 
-            	baseUrl = baseUrl ? baseUrl + '/' : "";
+            target += url;
 
-	            target += baseUrl + url;
-            }
-
-            isText && (target = 'text!' + target);
+            options.isText && (target = 'text!' + target);
+            options.bustCache && (target += "?bust=" + (new Date()).getTime());
 
 			require([target], function(script){
 				def.resolve(script);

@@ -21,17 +21,19 @@ define(['managerAPI'], function(Manager){
 	API.addSettings('skip', true);
 
 	API.addSequence([
-		{
-			type: 'pip',
-			name: 'biat',
-			scriptUrl: '/test/distance.js'
-		},
+		{inherit:'instructions', templateUrl: 'iat.html'},
+		// {
+		// 	type: 'pip',
+		// 	name: 'biat',
+		// 	scriptUrl: '/test/distance.js'
+		// },
 
 		{inherit:{type:'exRandom', set:'quests'}},
 		//{inherit:'instructions', templateUrl: '../example/biat.html'},
 		{
 			type: 'pip',
 			name: 'biat',
+			version: '1',
 			scriptUrl: 'biat.js'
 		},
 

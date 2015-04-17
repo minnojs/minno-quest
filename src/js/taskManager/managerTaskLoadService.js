@@ -8,8 +8,8 @@ define(function(require){
 	taskLoadService.$inject = ['$q', 'managerGetScript', 'piConsole'];
 	function taskLoadService($q, managerGetScript, $console){
 
-		function getScript(url, baseUrl, isText){
-			return managerGetScript(url, baseUrl, isText)
+		function getScript(url, options){
+			return managerGetScript(url, options)
 				// make sure that the script is defined
 				// and if not throw an appropriate error
 				.then(function(script){
@@ -24,11 +24,22 @@ define(function(require){
 				});
 		}
 
-		function taskLoad(task, baseUrl){
+		function taskLoad(task, options){
 			var promise, script, template;
 
-			script = task.scriptUrl ? getScript(task.scriptUrl, baseUrl) : task.script;
-			template = task.templateUrl ? getScript(task.templateUrl, baseUrl,true) : task.template;
+			// script def
+			if (task.scriptUrl){
+				script = getScript(task.scriptUrl, options);
+			} else {
+				script = task.script;
+			}
+
+			// template def
+			if (task.templateUrl){
+				template = getScript(task.templateUrl, _.extend({isText:true},options));
+			} else {
+				template = task.template;
+			}
 
 			if (!script && !template){
 				throw new Error('Tasks must have either a "script" property or a "scriptUrl" property (or a "template" property in specific cases).');

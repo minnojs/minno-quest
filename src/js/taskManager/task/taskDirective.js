@@ -79,12 +79,14 @@ define(function(require){
 				 * @param  {Event} e
 				 */
 				function proceedListener(e){
-					var which = e.which || e.keyCode;
+					var which = e.key || e.which || e.keyCode;
 
-					if (which == 116) {
+					// ctrl r ==> refresh
+					if (which == 82 && e.ctrlKey) {
 						proceed(e, 'current');
 					}
 
+					// esc ==> listen for skip direction (once)
 					if(which == 27) {
 						$document.one('keydown', skipListener);
 			        }
@@ -100,7 +102,7 @@ define(function(require){
 				// end task and proceed where needed
 				function proceed(e, target){
 					e.preventDefault();
-					proceedObject = {type:target};
+					proceedObject = {type:target, bustCache:true}; // when the deferred is resolved this object is used to tell piqPage where to proceed.
 					def.resolve();
 				}
 

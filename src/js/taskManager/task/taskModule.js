@@ -51,8 +51,6 @@ define(function(require){
 
 			$scope.script = task;
 
-
-
 			$canvas.append('<div pi-message></div>');
 			$el = $canvas.contents();
 			$compile($el)($scope);

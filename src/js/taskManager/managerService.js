@@ -50,15 +50,15 @@ define(function(require){
 				target || (target = {type:'next'});
 				switch (target.type){
 					case 'current':
-						self.load();
+						self.load(target);
 						break;
 					case 'prev':
-						self.prev();
+						self.prev(target);
 						break;
 					case 'next':
 						/* fall through */
 					default:
-						self.next();
+						self.next(target);
 				}
 			});
 			$scope.$on('manager:prev', function(){self.prev();});
@@ -66,14 +66,14 @@ define(function(require){
 		}
 
 		_.extend(manager.prototype, {
-			next: function(){
+			next: function(target){
 				this.sequence.next();
-				this.load();
+				this.load(target);
 			},
 
-			prev: function(){
+			prev: function(target){
 				this.sequence.prev();
-				this.load();
+				this.load(target);
 			},
 
 			current: function(){
@@ -81,12 +81,16 @@ define(function(require){
 				return this.sequence.current();
 			},
 
-			load: function(){
+			load: function(target){
 				var task = this.current();
 				var $scope = this.$scope;
+				var loadOptions = {
+					baseUrl: this.baseUrl,
+					bustCache: target && target.bustCache
+				};
 
 				if (task){
-					taskLoad(task, this.baseUrl).then(function(){
+					taskLoad(task, loadOptions).then(function(){
 						$scope.$emit('manager:loaded');
 					});
 				} else {

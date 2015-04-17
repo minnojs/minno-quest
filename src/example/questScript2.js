@@ -23,7 +23,7 @@ define(['questAPI'], function(Quest){
 			prevText: '123',
 			prev:true,
 			progressBar: '<%= pagesMeta.number %> out of <%= pagesMeta.outOf%>',
-			header: 'Yoooo we are on!!!!!!!',
+			header: 'Yoo hoo we are on!!!!!!!',
 
 			questions: [
 				{

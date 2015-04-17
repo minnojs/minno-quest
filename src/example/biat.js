@@ -1,5 +1,5 @@
 // # Brief IAT
-define(['/api/manager/pipAPI.js','pipScorer'], function(APIConstructor,Scorer) {
+define(['pipAPI','pipScorer'], function(APIConstructor,Scorer) {
 
 	var API = new APIConstructor();
 	var scorer = new Scorer();
