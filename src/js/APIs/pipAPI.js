@@ -10,5 +10,9 @@ define(function(require){
 	api.prototype.addStimulusSets = api.prototype.addStimulusSet;
 	api.prototype.addMediaSets = api.prototype.addMediaSet;
 
+	api.prototype.getLogs = function getLogs(){
+		return this.script.current.logs;
+	};
+
 	return api;
 });
