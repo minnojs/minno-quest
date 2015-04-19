@@ -1,7 +1,8 @@
 {% extends "./layout.swig" %}
 
 {% block title %}
-	<h1>{{ data.basename | capitalize }}</h1>
+	<h1>{{ data.basename | replace("([A-Z])", " $1", "g") | capitalize }}</h1>
+
 	<p>Documentation for {{ data.basename }}.js </p>
 {% endblock %}
 
