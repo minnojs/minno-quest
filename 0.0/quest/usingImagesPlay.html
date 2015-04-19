@@ -16,6 +16,7 @@
 		</title>
 
 		
+	
 		<!-- Bootstrap core CSS -->
 		<link href="../../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 		<link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/sunburst.min.css" rel="stylesheet">
@@ -31,6 +32,43 @@
 			table tr th :last-child, table tr td :last-child {margin-bottom: 0;}
 		</style>
 		
+	<script src="../../bower_components/ace-builds/src-min/ace.js" type="text/javascript" charset="utf-8"></script>
+	<style type="text/css" media="screen">
+	    #editor {
+	    	margin-top: 1em;
+	        border-radius: 4px 4px 0;
+	        border: 1px solid #ddd;
+	        height: 80vh;
+	        font-size: 14px;
+	    }
+
+		/* IE8 only */
+		@media \0screen {
+		    #editor {height:80px;}
+		}
+
+		@-webkit-keyframes fadeIn {
+		  0% {opacity: 0;}
+		  20% {opacity: 1;}
+		  80% {opacity: 1;}
+		  100% {opacity: 0;}
+		}
+
+		@keyframes fadeIn {
+		  0% {opacity: 0;}
+		  20% {opacity: 1;}
+		  80% {opacity: 1;}
+		  100% {opacity: 0;}
+		}
+
+		.fadeIn {
+		  	-webkit-animation-name: fadeIn;
+		    animation-name: fadeIn;
+		    animation-duration: 6s;
+			opacity:0;
+		}
+	</style>
+
 
 		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 		<!--[if lt IE 9]>
@@ -81,8 +119,10 @@
 		<div id="content" class="bs-docs-header">
 			<div class="container">
 				
-	<h1>Tutorial</h1>
-	<p>This tutorial will walk you through creating a fairly complex questionnaire.</p>
+	<h1>Using images</h1>
+	
+		<p>You can play around with usingImages.js right here. All you need to do is change the script and then click the activate button.</p>
+	
 
 			</div>
 		</div>
@@ -91,10 +131,149 @@
 			<div class="row">
 				<div class="col-md-9" role="main">
 					
-	<p>You can download the final script right <a href="scripts/tutorial.js">here</a>.</p>
-<p>If you haven’t reviewed the hello world tutorial, you should probably go over it before you get into this tutorial.</p>
-<p>This tutorial will walk you through creating a fairly complex questionnaire. We will administer a short demographics questionnaire, following it by a set</p>
+		<p>
+			<button class="btn btn-default btn-lg btn-block" onclick="window.click(event)" type="button">Activate</button>
+		</p>
 
+		<div id="success" role="alert" class="alert alert-success" style="display:none">
+			<strong>Well Done!</strong> The task has been successfully completed.
+		</div>
+		<div id="error" role="alert" class="alert alert-danger" style="display:none">
+			<strong>Oh Snap!</strong> Something went wrong with the task. Why don't you fix it and try again?
+		</div>
+
+   		<div id="editor">
+define([&#39;questAPI&#39;], function(Quest){
+	var API = new Quest();
+
+	// This is just a trick you can use in order to simplify the use of images;
+	// set the baseUrl into your current object, and use templates in order to inject them into your questions.
+	API.addCurrent({
+		baseURL: &#39;../../images/&#39;
+	});
+
+	// ### Questions
+	// Create the general structure of our questions
+	API.addQuestionsSet(&#39;basicSelect&#39;, {
+		type: &#39;selectOne&#39;,
+		autoSubmit:true,
+		numericValues:true,
+		help: &#39;&lt;%= pagesMeta.number &lt; 3 %&gt;&#39;,
+		helpText: &#39;Selecting an answer once colors it blue.&lt;br/&gt;&#39; +
+			&#39;You can change your answer by selecting another option.&lt;br/&gt;&#39; +
+			&#39;To confirm, click the selected (blue) button a second time.&#39;
+	});
+
+	// ### Pages
+	// Create the generic pages template:
+	// * `decline`: allow participants to decline answering
+	// * `noSubmit`: do not display the submit button (we rely on `autoSubmit` for submitting)
+	API.addPagesSet(&#39;basicPage&#39;, {
+		progressBar: &#39;&lt;%= pagesMeta.number %&gt; out of 3&#39;,
+		headerStyle : {&#39;font-size&#39;:&#39;1.2em&#39;},
+		decline:true,
+		noSubmit:true
+	});
+
+	// ### Sequence
+	// We put the questions together within the sequence here.
+	// The stem here includes an image. It uses plain html, but this is a template you can definitely use yourself.
+	// Note that we use a template to set the baseUrl for the images, this is useful so that you can easily change the location of you images.
+	API.addSequence(
+	[
+		{
+			mixer : &#39;random&#39;,
+			data :[
+				{
+					inherit: &#39;basicPage&#39;,
+					header: &#39;How much do you like this man?&#39;,
+					questions: {
+						inherit: &#39;basicSelect&#39;,
+						name: &#39;like&#39;,
+						stem :  &#39;&lt;h4&gt;Chris&lt;/h4&gt;&lt;img class=&quot;img-responsive&quot; src=&quot;&lt;%=current.baseURL%&gt;face1.jpg&quot;&gt;&#39;,
+						answers: [&quot;Dislike extremely&quot;, &quot;Dislike moderately&quot;, &quot;Dislike slightly&quot;,&quot;Neither like or dislike&quot;, &quot;Like slightly&quot;, &quot;Like moderately&quot;, &quot;Like extremely&quot;]
+					}
+				},
+				{
+					inherit: &#39;basicPage&#39;,
+					header: &#39;How friendly do you think that this man is?&#39;,
+					questions: {
+						inherit: &#39;basicSelect&#39;,
+						name: &#39;friendly&#39;,
+						stem :  &#39;&lt;h4&gt;Chris&lt;/h4&gt;&lt;img class=&quot;img-responsive&quot; src=&quot;&lt;%=current.baseURL%&gt;face1.jpg&quot;&gt;&#39;,
+						answers: [&quot;Extremely unfriendly&quot;, &quot;Moderately unfriendly&quot;, &quot;Slightly unfriendly&quot;,&quot;Neither friendly nor unfriendly&quot;, &quot;Slightly friendly&quot;, &quot;Moderately friendly&quot;, &quot;Extremely friendly&quot;]
+					}
+				},
+				{
+					inherit: &#39;basicPage&#39;,
+					header: &#39;How trustworthy do you think that this man is?&#39;,
+					questions: {
+						inherit: &#39;basicSelect&#39;,
+						name: &#39;trustworthy&#39;,
+						stem :  &#39;&lt;h4&gt;Chris&lt;/h4&gt;&lt;img class=&quot;img-responsive&quot; src=&quot;&lt;%=current.baseURL%&gt;face1.jpg&quot;&gt;&#39;,
+						answers: [&quot;Extremely untrustworthy&quot;, &quot;Moderately untrustworthy&quot;, &quot;Slightly untrustworthy&quot;,&quot;Neither trustworthy nor untrustworthy&quot;, &quot;Slightly trustworthy&quot;, &quot;Moderately trustworthy&quot;, &quot;Extremely trustworthy&quot;]
+					}
+				}
+			]
+		}
+	]);
+
+	// Return the script to piquest&#39;s god, or something of that sort.
+	return API.script;
+});
+		</div>
+
+		<script>
+		    var editor = ace.edit("editor");
+		    editor.setTheme("ace/theme/monokai");
+		    editor.getSession().setMode("ace/mode/javascript");
+		    editor.setOption("showPrintMargin", false);
+		    var win;
+		    var feedbackId = 'success';
+
+		    function click(event){
+		    	event.target.blur();
+
+		    	// assume the feedback is success
+				feedbackId = 'success';
+
+				// clean out open window
+		    	if (win){
+		    		win.close();
+		    		win = null;
+		    	}
+
+		    	win = window.open('../quest/questactivate.html', 'pip');
+		    	win.focus();
+
+		    	win.onload = function(){
+		    		// first set the unload listener
+					win.addEventListener('unload', function(event) {
+						var el = document.getElementById(feedbackId);
+						window.focus();
+						fade(el);
+					});
+
+					// then activate the player (this ensures that when )
+					win.piActivate(editor.getValue());
+		    	};
+		    }
+
+	    	window.addEventListener('error', function(e){
+	    		console.error(e);
+	    		feedbackId = 'error';
+	    	});
+
+	    	function fade(el){
+				el.style.display = 'block';
+				el.classList.add('fadeIn');
+				setTimeout(function(){
+					el.style.display = 'none';
+					el.classList.remove('fadeIn');
+				}, 6000);
+	    	}
+
+		</script>
 
 				</div>
 

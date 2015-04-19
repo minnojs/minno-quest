@@ -12,7 +12,15 @@ define(['questAPI'], function(Quest){
 		type: 'selectOne',
 		autoSubmit:true,
 		numericValues:true,
-		answers: ["1- Not at all true about me", "2", "3", "4", "5", "6", "7 - Very true about me"],
+		answers: [
+			"1- Not at all true about me",
+			"2",
+			"3",
+			"4",
+			"5",
+			"6",
+			"7 - Very true about me"
+		],
 		help: '<%= pagesMeta.number < 3 %>',
 		helpText: 'Selecting an answer once colors it blue.<br/>' +
 			'You can change your answer by selecting another option.<br/>' +

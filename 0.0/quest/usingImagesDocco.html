@@ -81,8 +81,9 @@
 		<div id="content" class="bs-docs-header">
 			<div class="container">
 				
-	<h1>Tutorial</h1>
-	<p>This tutorial will walk you through creating a fairly complex questionnaire.</p>
+	<h1>Using images</h1>
+
+	<p>Documentation for usingImages.js </p>
 
 			</div>
 		</div>
@@ -91,10 +92,112 @@
 			<div class="row">
 				<div class="col-md-9" role="main">
 					
-	<p>You can download the final script right <a href="scripts/tutorial.js">here</a>.</p>
-<p>If you haven’t reviewed the hello world tutorial, you should probably go over it before you get into this tutorial.</p>
-<p>This tutorial will walk you through creating a fairly complex questionnaire. We will administer a short demographics questionnaire, following it by a set</p>
+	
+		
 
+		
+		  <div class='highlight'><pre>define([<span class="hljs-string">'questAPI'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(Quest)</span></span>{
+	<span class="hljs-keyword">var</span> API = <span class="hljs-keyword">new</span> Quest();</pre></div>
+		
+	
+		<p>This is just a trick you can use in order to simplify the use of images;
+set the baseUrl into your current object, and use templates in order to inject them into your questions.</p>
+
+
+		
+		  <div class='highlight'><pre>	API.addCurrent({
+		baseURL: <span class="hljs-string">'../../images/'</span>
+	});</pre></div>
+		
+	
+		<h3 id="questions">Questions</h3>
+<p>Create the general structure of our questions</p>
+
+
+		
+		  <div class='highlight'><pre>	API.addQuestionsSet(<span class="hljs-string">'basicSelect'</span>, {
+		type: <span class="hljs-string">'selectOne'</span>,
+		autoSubmit:<span class="hljs-literal">true</span>,
+		numericValues:<span class="hljs-literal">true</span>,
+		help: <span class="hljs-string">'&lt;%= pagesMeta.number &lt; 3 %&gt;'</span>,
+		helpText: <span class="hljs-string">'Selecting an answer once colors it blue.&lt;br/&gt;'</span> +
+			<span class="hljs-string">'You can change your answer by selecting another option.&lt;br/&gt;'</span> +
+			<span class="hljs-string">'To confirm, click the selected (blue) button a second time.'</span>
+	});</pre></div>
+		
+	
+		<h3 id="pages">Pages</h3>
+<p>Create the generic pages template:</p>
+<ul>
+<li><code>decline</code>: allow participants to decline answering</li>
+<li><code>noSubmit</code>: do not display the submit button (we rely on <code>autoSubmit</code> for submitting)</li>
+</ul>
+
+
+		
+		  <div class='highlight'><pre>	API.addPagesSet(<span class="hljs-string">'basicPage'</span>, {
+		progressBar: <span class="hljs-string">'&lt;%= pagesMeta.number %&gt; out of 3'</span>,
+		headerStyle : {<span class="hljs-string">'font-size'</span>:<span class="hljs-string">'1.2em'</span>},
+		decline:<span class="hljs-literal">true</span>,
+		noSubmit:<span class="hljs-literal">true</span>
+	});</pre></div>
+		
+	
+		<h3 id="sequence">Sequence</h3>
+<p>We put the questions together within the sequence here.
+The stem here includes an image. It uses plain html, but this is a template you can definitely use yourself.
+Note that we use a template to set the baseUrl for the images, this is useful so that you can easily change the location of you images.</p>
+
+
+		
+		  <div class='highlight'><pre>	API.addSequence(
+	[
+		{
+			mixer : <span class="hljs-string">'random'</span>,
+			data :[
+				{
+					inherit: <span class="hljs-string">'basicPage'</span>,
+					header: <span class="hljs-string">'How much do you like this man?'</span>,
+					questions: {
+						inherit: <span class="hljs-string">'basicSelect'</span>,
+						name: <span class="hljs-string">'like'</span>,
+						stem :  <span class="hljs-string">'&lt;h4&gt;Chris&lt;/h4&gt;&lt;img class="img-responsive" src="&lt;%=current.baseURL%&gt;face1.jpg"&gt;'</span>,
+						answers: [<span class="hljs-string">"Dislike extremely"</span>, <span class="hljs-string">"Dislike moderately"</span>, <span class="hljs-string">"Dislike slightly"</span>,<span class="hljs-string">"Neither like or dislike"</span>, <span class="hljs-string">"Like slightly"</span>, <span class="hljs-string">"Like moderately"</span>, <span class="hljs-string">"Like extremely"</span>]
+					}
+				},
+				{
+					inherit: <span class="hljs-string">'basicPage'</span>,
+					header: <span class="hljs-string">'How friendly do you think that this man is?'</span>,
+					questions: {
+						inherit: <span class="hljs-string">'basicSelect'</span>,
+						name: <span class="hljs-string">'friendly'</span>,
+						stem :  <span class="hljs-string">'&lt;h4&gt;Chris&lt;/h4&gt;&lt;img class="img-responsive" src="&lt;%=current.baseURL%&gt;face1.jpg"&gt;'</span>,
+						answers: [<span class="hljs-string">"Extremely unfriendly"</span>, <span class="hljs-string">"Moderately unfriendly"</span>, <span class="hljs-string">"Slightly unfriendly"</span>,<span class="hljs-string">"Neither friendly nor unfriendly"</span>, <span class="hljs-string">"Slightly friendly"</span>, <span class="hljs-string">"Moderately friendly"</span>, <span class="hljs-string">"Extremely friendly"</span>]
+					}
+				},
+				{
+					inherit: <span class="hljs-string">'basicPage'</span>,
+					header: <span class="hljs-string">'How trustworthy do you think that this man is?'</span>,
+					questions: {
+						inherit: <span class="hljs-string">'basicSelect'</span>,
+						name: <span class="hljs-string">'trustworthy'</span>,
+						stem :  <span class="hljs-string">'&lt;h4&gt;Chris&lt;/h4&gt;&lt;img class="img-responsive" src="&lt;%=current.baseURL%&gt;face1.jpg"&gt;'</span>,
+						answers: [<span class="hljs-string">"Extremely untrustworthy"</span>, <span class="hljs-string">"Moderately untrustworthy"</span>, <span class="hljs-string">"Slightly untrustworthy"</span>,<span class="hljs-string">"Neither trustworthy nor untrustworthy"</span>, <span class="hljs-string">"Slightly trustworthy"</span>, <span class="hljs-string">"Moderately trustworthy"</span>, <span class="hljs-string">"Extremely trustworthy"</span>]
+					}
+				}
+			]
+		}
+	]);</pre></div>
+		
+	
+		<p>Return the script to piquest’s god, or something of that sort.</p>
+
+
+		
+		  <div class='highlight'><pre>	<span class="hljs-keyword">return</span> API.script;
+});</pre></div>
+		
+	
 
 				</div>
 

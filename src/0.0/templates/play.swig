@@ -1,7 +1,7 @@
 {% extends "./layout.swig" %}
 
 {% block title %}
-	<h1>{{ data.basename | capitalize }}</h1>
+	<h1>{{ data.basename | replace("([A-Z])", " $1", "g") | capitalize }}</h1>
 	{% if data.basename == 'playground' %}
 		<p>You can play around in the playground right here. All you need to do is change the script and then click the activate button.</p>
 	{% else %}
