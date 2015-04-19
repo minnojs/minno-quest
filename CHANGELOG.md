@@ -1,3 +1,23 @@
+<a name="0.0.39"></a>
+### 0.0.39 (2015-04-19)
+
+
+#### Bug Fixes
+
+* **manager:** force scripts to reload when skip=true ([680c24ba](https://github.com/ProjectImplicit/PIquest/commit/680c24babb258801b551d72e5ae8f7039b400e58))
+* **pipAPI:** support getLogs ([b8e497da](https://github.com/ProjectImplicit/PIquest/commit/b8e497daeb248719e6aa53c682fdfabce705014a))
+* **style:** removed .container padding ([da8a40d4](https://github.com/ProjectImplicit/PIquest/commit/da8a40d4eaeee555f053069be740f03defd59154))
+
+
+#### Features
+
+* **questDirectives:**
+  * support width for text and textNumber ([e89a1e17](https://github.com/ProjectImplicit/PIquest/commit/e89a1e17ca1d01f677ece5fdfeb2d760a8714805))
+  * dfltUnits filter ([8359fc72](https://github.com/ProjectImplicit/PIquest/commit/8359fc72e53d0d3b2df3e9df22d8f5f3bdf9471d))
+  * support textarea question. ([fd055e54](https://github.com/ProjectImplicit/PIquest/commit/fd055e540a3e6c78cce7a23803f2e6d01bd1d581), closes [#95](https://github.com/ProjectImplicit/PIquest/issues/95))
+  * questText supports maxlengthLimit. ([13d6fb2f](https://github.com/ProjectImplicit/PIquest/commit/13d6fb2f103adca4ce6f9093daebdde6389ef1c4), closes [#71](https://github.com/ProjectImplicit/PIquest/issues/71))
+
+
 <a name="0.0.38"></a>
 ### 0.0.38 (2015-04-14)
 

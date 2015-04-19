@@ -1,0 +1,1 @@
+define(["require","underscore"],function(e){function n(e){function n(n){var r;if(t.isUndefined(n))return/(?:)/;if(t.isRegExp(n)||t.isString(n))return new RegExp(n);throw r=new Error("Question pattern is not a valid regular expression"),e("text").error(r,n),r}return n}var t=e("underscore");return n.$inject=["piConsole"],n});
