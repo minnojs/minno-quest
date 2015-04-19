@@ -11,11 +11,12 @@
 		<meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
 
 		<title>
-			 piManager 
+			
 			&middot; V0.0
 		</title>
 
 		
+	
 		<!-- Bootstrap core CSS -->
 		<link href="../../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 		<link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/sunburst.min.css" rel="stylesheet">
@@ -31,6 +32,38 @@
 			table tr th :last-child, table tr td :last-child {margin-bottom: 0;}
 		</style>
 		
+	<script src="../../bower_components/ace-builds/src-min/ace.js" type="text/javascript" charset="utf-8"></script>
+	<style type="text/css" media="screen">
+	    #editor {
+	    	margin-top: 1em;
+	        border-radius: 4px 4px 0;
+	        border: 1px solid #ddd;
+	        height: 30em;
+	        font-size: 14px;
+	    }
+
+		@-webkit-keyframes fadeIn {
+		  0% {opacity: 0;}
+		  20% {opacity: 1;}
+		  80% {opacity: 1;}
+		  100% {opacity: 0;}
+		}
+
+		@keyframes fadeIn {
+		  0% {opacity: 0;}
+		  20% {opacity: 1;}
+		  80% {opacity: 1;}
+		  100% {opacity: 0;}
+		}
+
+		.fadeIn {
+		  	-webkit-animation-name: fadeIn;
+		    animation-name: fadeIn;
+		    animation-duration: 6s;
+			opacity:0;
+		}
+	</style>
+
 
 		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 		<!--[if lt IE 9]>
@@ -64,7 +97,7 @@
 						<li class="">
 							<a href="../quest/overview.html">piQuest</a>
 						</li>
-						<li class=" active ">
+						<li class="">
 							<a href="../manager/overview.html">piManager</a>
 						</li>
 						<li>
@@ -81,8 +114,8 @@
 		<div id="content" class="bs-docs-header">
 			<div class="container">
 				
-	<h1>Overview</h1>
-	<p>piManager is responsible for managing several piTasks sequentially.</p>
+	<h1>Playground</h1>
+	<p>You can play around with the player right here. All you need to do is write your script and then click the activate button.</p>
 
 			</div>
 		</div>
@@ -91,14 +124,68 @@
 			<div class="row">
 				<div class="col-md-9" role="main">
 					
-	<p>piManager is a player intent on presenting a series of tasks to the users. It uses the same overall API used throught the project implicit tasks.</p>
-<p>It is written in JavaScript and is built to be extremely versatile and customizable. The scripts are written as JavaScript objects. This format allows writing simple and straightforward scripts using a constrained scripting language. The format also allows advanced users to easily create complex and dynamic scripts using in-line JavaScript.</p>
-<h3 id="central-concepts">Central concepts</h3>
-<p>The basic unit it PImanager scripts is the task. A task is represented by a single object, the properties of the object define the task to be activated and some settings relevant to it. Tasks are organized and presented using the task sequence. The sequence is an ordered list of tasks.</p>
-<p>Within the sequence you can use several tools in order to control the flow of your tasks. <strong>mixers</strong> control the order in which your tasks are presented (and allow you to change the sequence conditionally). <strong>inheritance</strong> allows abstracting tasks and makes them shorter, simpler, more dynamic, and most important, reusable. And finally <strong>templates</strong> allow you to micro manage the style of your tasks.</p>
-<h3 id="tasks">Tasks</h3>
-<p>There are two types of tasks built into piManager <a href="../quest/overview.html">piQuest</a> and <a href="messages.html">messages</a>. You can run new tasks in several ways (see the <a href="API.html#tasks">API</a>).</p>
+		<p>
+			<button class="btn btn-default btn-lg btn-block" onclick="window.click()" type="button">Activate</button>
+		</p>
 
+		<div id="success" role="alert" class="alert alert-success" style="display:none">
+			<strong>Well Done!</strong> The questionnaire has been successfully completed.
+		</div>
+		<div id="error" role="alert" class="alert alert-danger" style="display:none">
+			<strong>Oh Snap!</strong> Something went wrong with the questionnaire. Why don't you fix it and try again?
+		</div>
+
+   		<div id="editor">
+
+		</div>
+
+		<script>
+		    var editor = ace.edit("editor");
+		    editor.setTheme("ace/theme/monokai");
+		    editor.getSession().setMode("ace/mode/javascript");
+		    var win;
+		    var feedbackId = 'success';
+
+		    function click(){
+		    	// assume the feedback is success
+				feedbackId = 'success';
+
+				// clean out open window
+		    	if (win){
+		    		win.close();
+		    		win = null;
+		    	}
+
+		    	win = window.open('questExamplesactivate.html', 'Questexamples');
+
+		    	win.onload = function(){
+		    		// first set the unload listener
+					win.addEventListener('unload', function(event) {
+						var el = document.getElementById(feedbackId);
+						window.focus();
+						fade(el);
+					});
+
+					// then activate the player (this ensures that when )
+					win.piActivate(editor.getValue());
+		    	};
+		    }
+
+	    	window.addEventListener('error', function(e){
+	    		console.error(e);
+	    		feedbackId = 'error';
+	    	});
+
+	    	function fade(el){
+				el.style.display = 'block';
+				el.classList.add('fadeIn');
+				setTimeout(function(){
+					el.style.display = 'none';
+					el.classList.remove('fadeIn');
+				}, 6000);
+	    	}
+
+		</script>
 
 				</div>
 
@@ -113,29 +200,56 @@
 						
 
 							
-							<li class=" active ">
-								<a href="overview.html">Overview</a>
+							<li class="">
+								<a href="../quest/overview.html">Overview</a>
 							</li>
 						
 							
 							<li class="">
-								<a href="messages.html">Messages</a>
-							</li>
-						
-							
-							<li class="">
-								<a href="sequencer.html">Sequencer</a>
+								<a href="../quest/introduction.html">Introduction</a>
 							</li>
 						
 							<li>
-								<a href="javascript:void(0)">Examples</a>
+								<a href="helloworldDocco.html">Examples</a>
 								<ul class="nav">
 									
 							<li class="">
 								<div>
-									<a href="weightManagerDocco.html">Weight experiment</a>
-									<a href="weightManager.js" download="weightManager.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="weightManagerPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+									<a href="../quest/helloworldDocco.html">Hello world</a>
+									<a href="../quest/helloworld.js" download="../quest/helloworld.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../quest/helloworldPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../quest/weightDocco.html">Weight demo</a>
+									<a href="../quest/weight.js" download="../quest/weight.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../quest/weightPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+								</ul>
+							</li>
+							<li>
+								<a href="javascript:void(0)">Questions</a>
+								<ul class="nav">
+									
+							<li class="">
+								<div>
+									<a href="../questExamples/textQuestDocco.html">Text</a>
+									<a href="../questExamples/textQuest.js" download="../questExamples/textQuest.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../questExamples/textQuestPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../questExamples/textQuestDocco.html">Textarea</a>
+									<a href="../questExamples/textQuest.js" download="../questExamples/textQuest.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../questExamples/textQuestPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
 								</div>
 							</li>
 						
@@ -143,12 +257,12 @@
 							</li>
 							
 							<li class="">
-								<a href="../manager/API.html">API</a>
+								<a href="../quest/API.html">API</a>
 							</li>
 						
 							
 							<li class="">
-								<a href="../manager/managerplayground.html">Playground</a>
+								<a href="../quest/questplayground.html">Playground</a>
 							</li>
 						
 						

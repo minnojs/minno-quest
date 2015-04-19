@@ -86,7 +86,7 @@
 		    		win = null;
 		    	}
 
-		    	win = window.open('{{ data.dirname }}activate.html', 'pip');
+		    	win = window.open('../{{ data.typeName }}/{{ data.typeName }}activate.html', 'pip');
 		    	win.focus();
 
 		    	win.onload = function(){

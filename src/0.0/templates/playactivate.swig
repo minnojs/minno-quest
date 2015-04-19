@@ -9,7 +9,7 @@
 		<meta name="viewport" content="width=device-width">
 
 		<title>
-			{% if data.dirname == 'quest' %} piQuest {% elseif data.dirname == 'manager' %} piManager {% endif %}
+			{% if data.typeName == 'quest' %} piQuest {% elseif data.typeName == 'manager' %} piManager {% endif %}
 			&middot; V0.0
 		</title>
 
@@ -41,9 +41,9 @@
 
 		<div class="container" ng-app>
 			<img class="pi-spinner" ng-hide="1"/>
-				{% if data.dirname == 'quest' %}
+				{% if data.typeName == 'quest' %}
 					<div pi-manager-task="{type:'quest',scriptUrl:'myTask'}"></div>
-				{% elseif data.dirname == 'manager' %}
+				{% elseif data.typeName == 'manager' %}
 					<div pi-manager="'myTask'"></div>
 				{% endif %}
 			<div pi-console></div>

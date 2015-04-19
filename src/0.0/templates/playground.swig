@@ -54,7 +54,7 @@
 		</div>
 
    		<div id="editor">
-{% if data.dirname == 'quest' %}
+{% if data.typeName == 'quest' %}
 define(['questAPI'], function(Quest){
 
 	var API = new Quest();
@@ -74,7 +74,7 @@ define(['questAPI'], function(Quest){
 
 	return API.script;
 });
-{% elseif data.dirname == 'manager' %}
+{% elseif data.typeName == 'manager' %}
 define(['managerAPI'], function(Manager){
 
     var API = new Manager();

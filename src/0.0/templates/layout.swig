@@ -11,7 +11,7 @@
 		<meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
 
 		<title>
-			{% if data.dirname == 'quest' %} piQuest {% elseif data.dirname == 'manager' %} piManager {% endif %}
+			{% if data.typeName == 'quest' %} piQuest {% elseif data.typeName == 'manager' %} piManager {% endif %}
 			&middot; V0.0
 		</title>
 
@@ -61,10 +61,10 @@
 				</div>
 				<nav class="collapse navbar-collapse bs-navbar-collapse">
 					<ul class="nav navbar-nav">
-						<li class="{% if data.dirname == 'quest' %} active {% endif %}">
+						<li class="{% if data.typeName == 'quest' %} active {% endif %}">
 							<a href="../quest/overview.html">piQuest</a>
 						</li>
-						<li class="{% if data.dirname == 'manager' %} active {% endif %}">
+						<li class="{% if data.typeName == 'manager' %} active {% endif %}">
 							<a href="../manager/overview.html">piManager</a>
 						</li>
 						<li>
@@ -110,18 +110,30 @@
 						{% endmacro example %}
 
 						<ul class="nav bs-docs-sidenav">
-						{% if data.dirname == 'quest' %}
+						{% if data.typeName == 'quest' %}
 
-							{{ navitem("Overview", "overview", data.basename) }}
-							{{ navitem("Introduction", "introduction", data.basename) }}
+							{{ navitem("Overview", "../quest/overview", data.basename) }}
+							{{ navitem("Introduction", "../quest/introduction", data.basename) }}
 							<li>
 								<a href="helloworldDocco.html">Examples</a>
 								<ul class="nav">
-									{{ example("Hello world", "helloworld", data.basename) }}
-									{{ example("Weight demo", "weight", data.basename) }}
+									{{ example("Hello world", "../quest/helloworld", data.basename) }}
+									{{ example("Weight demo", "../quest/weight", data.basename) }}
 								</ul>
 							</li>
-						{% elseif data.dirname == 'manager' %}
+							<li>
+								<a href="javascript:void(0)">Questions</a>
+								<ul class="nav">
+									{{ example("Text", "../questExamples/text", data.basename) }}
+									{{ example("Textarea", "../questExamples/textarea", data.basename) }}
+									{{ example("Text Number", "../questExamples/textNumber", data.basename) }}
+									{{ example("Select One", "../questExamples/selectOne", data.basename) }}
+									{{ example("Select Multi", "../questExamples/selectMulti", data.basename) }}
+								</ul>
+							</li>
+							{{ navitem("API", "../quest/API", data.basename) }}
+							{{ navitem("Playground", "../quest/questplayground", data.basename) }}
+						{% elseif data.typeName == 'manager' %}
 
 							{{ navitem("Overview", "overview", data.basename) }}
 							{{ navitem("Messages", "messages", data.basename) }}
@@ -132,9 +144,9 @@
 									{{ example("Weight experiment", "weightManager", data.basename) }}
 								</ul>
 							</li>
+							{{ navitem("API", "../manager/API", data.basename) }}
+							{{ navitem("Playground", "../manager/managerplayground", data.basename) }}
 						{% endif %}
-						{{ navitem("API", "API", data.basename) }}
-						{{ navitem("Playground", data.dirname + "playground", data.basename) }}
 						</ul>
 						<!-- <a class="back-to-top" href="#top">
 							Back to top

@@ -38,9 +38,14 @@
 	    	margin-top: 1em;
 	        border-radius: 4px 4px 0;
 	        border: 1px solid #ddd;
-	        height: 30em;
+	        height: 80vh;
 	        font-size: 14px;
 	    }
+
+		/* IE8 only */
+		@media \0screen {
+		    #editor {height:80px;}
+		}
 
 		@-webkit-keyframes fadeIn {
 		  0% {opacity: 0;}
@@ -114,8 +119,10 @@
 		<div id="content" class="bs-docs-header">
 			<div class="container">
 				
-	<h1>Playground</h1>
-	<p>You can play around with the player right here. All you need to do is write your script and then click the activate button.</p>
+	<h1>Selectmulti</h1>
+	
+		<p>You can play around with selectMulti.js right here. All you need to do is change the script and then click the activate button.</p>
+	
 
 			</div>
 		</div>
@@ -125,36 +132,44 @@
 				<div class="col-md-9" role="main">
 					
 		<p>
-			<button class="btn btn-default btn-lg btn-block" onclick="window.click()" type="button">Activate</button>
+			<button class="btn btn-default btn-lg btn-block" onclick="window.click(event)" type="button">Activate</button>
 		</p>
 
 		<div id="success" role="alert" class="alert alert-success" style="display:none">
-			<strong>Well Done!</strong> The questionnaire has been successfully completed.
+			<strong>Well Done!</strong> The task has been successfully completed.
 		</div>
 		<div id="error" role="alert" class="alert alert-danger" style="display:none">
-			<strong>Oh Snap!</strong> Something went wrong with the questionnaire. Why don't you fix it and try again?
+			<strong>Oh Snap!</strong> Something went wrong with the task. Why don't you fix it and try again?
 		</div>
 
    		<div id="editor">
+// ### Select One question
+// An example for a multi select question.
+// It allows you to pick one or more answers to the question.
+// In this case we use the multiButtons style in order to have the buttons line up horizontally.
+// Note the use of minWidth in order to keep all buttons on the same line.
+define([&#39;questAPI&#39;], function(Quest){
+    var API = new Quest();
 
-define(['questAPI'], function(Quest){
+    API.addSequence([
+        { // page begins
+            header: &#39;Select questions&#39;,
+            questions: [
+                { // question begins
+                    type: &#39;selectMulti&#39;,
+                    stem: &#39;On which days last week did you have breakfast?:&#39;,
+                    style: &#39;multiButtons&#39;,
+                    minWidth: &#39;13%&#39;,
+                    answers: [
+                        1,2,3,4,5,6,7
+                    ]
+                } // question ends
+            ]
+        } // page ends
 
-	var API = new Quest();
+    ]);
 
-	API.addSequence([
-		{
-			header: 'Hello World',
-			questions: [
-				{
-					type: 'selectOne',
-					stem: 'What is you favorite color?',
-					answers: ['red', 'blue', 'green']
-				}
-			]
-		}
-	]);
-
-	return API.script;
+    return API.script;
 });
 
 		</div>
@@ -163,10 +178,13 @@ define(['questAPI'], function(Quest){
 		    var editor = ace.edit("editor");
 		    editor.setTheme("ace/theme/monokai");
 		    editor.getSession().setMode("ace/mode/javascript");
+		    editor.setOption("showPrintMargin", false);
 		    var win;
 		    var feedbackId = 'success';
 
-		    function click(){
+		    function click(event){
+		    	event.target.blur();
+
 		    	// assume the feedback is success
 				feedbackId = 'success';
 
@@ -176,7 +194,8 @@ define(['questAPI'], function(Quest){
 		    		win = null;
 		    	}
 
-		    	win = window.open('questactivate.html', 'Quest');
+		    	win = window.open('../quest/questactivate.html', 'pip');
+		    	win.focus();
 
 		    	win.onload = function(){
 		    		// first set the unload listener

@@ -6,7 +6,13 @@ var path = require('path');
 var exec = require('child_process').exec;
 //var debug = require('gulp-debug');
 
-var pagesPath = 'src/[0-9].[0-9]/{quest,manager}/';
+var pagesPath = 'src/[0-9].[0-9]/{quest,questExamples,manager}/';
+
+function addNames(file,obj){
+	obj.dirname = path.dirname(file.path).match(/[^\/]*$/)[0]; // only the last segment of the dirname
+	obj.typeName = obj.dirname == 'manager' ? 'manager' : 'quest';
+	return obj;
+}
 
 gulp.task('clean', function(cb){
 	var del = require('del');
@@ -27,10 +33,9 @@ gulp.task('build:md', function () {
 	return gulp.src(pagesPath + '*.md')
 		.pipe(frontMatter({remove:true, property:'data'})) 		// set front matter into data
 		.pipe(data(function(file){								// set basename into data
-			return {
-				basename:path.basename(file.path,'.md'), // file name
-				dirname: path.dirname(file.path).match(/[^\/]*$/)[0] // only the last segment of the dirname
-			};
+			return addNames(file,{
+				basename:path.basename(file.path,'.md') // file name
+			});
 		}))
 		.pipe(marked({											// highlight pre
 			highlight: function(code){
@@ -47,10 +52,10 @@ gulp.task('build:md', function () {
 gulp.task('build:swig', function(){
 	return gulp.src(pagesPath + '*.swig')
 		.pipe(data(function(file){								// set basename into data
-			return {
-				basename:path.basename(file.path,'.md'), // file name
-				dirname: path.dirname(file.path).match(/[^\/]*$/)[0] // only the last segment of the dirname
-			};
+			return addNames(file,{
+				basename:path.basename(file.path,'.md') // file name
+
+			});
 		}))
 		.pipe(applyTemplate({engine:'swig', template: function(context,file){
 			return file.path;
@@ -71,11 +76,10 @@ gulp.task('build:js', function(){
 	var playPages = scripts
 		.pipe(clone())
 		.pipe(data(function(file){
-			return {
+			return addNames(file,{
 				filecontents: file.contents.toString('utf8'),
-				basename: path.basename(file.path,'.js'),
-				dirname: path.dirname(file.path).match(/[^\/]*$/)[0] // only the last segment of the dirname
-			};
+				basename: path.basename(file.path,'.js')
+			});
 		}))
 		.pipe(applyTemplate({engine:'swig', template: function(context, file){
 			context.url = path.basename(file.path);
@@ -99,11 +103,10 @@ gulp.task('build:js', function(){
 			var sections = docco.parse(file.path, file.contents.toString('utf8'), config);
 			docco.format(file.path, sections, config); // Format (adds highlighting to the sections object)
 
-			return {
+			return addNames(file,{
 				sections: sections,
-				basename: path.basename(file.path,'.js'),
-				dirname: path.dirname(file.path).match(/[^\/]*$/)[0] // only the last segment of the dirname
-			};
+				basename: path.basename(file.path,'.js')
+			});
 		}))
 		.pipe(applyTemplate({engine:'swig', template: function(context,file){
 			// context.frontMatter = file.frontMatter;
