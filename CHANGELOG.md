@@ -1,3 +1,12 @@
+<a name="0.0.40"></a>
+### 0.0.40 (2015-04-19)
+
+
+#### Bug Fixes
+
+* **questDirectives:** support for width on IE ([22f2812d](https://github.com/ProjectImplicit/PIquest/commit/22f2812d718b6d9e0c33b10827b105b176892437))
+
+
 <a name="0.0.39"></a>
 ### 0.0.39 (2015-04-19)
 
