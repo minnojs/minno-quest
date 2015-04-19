@@ -81,8 +81,8 @@
 		<div id="content" class="bs-docs-header">
 			<div class="container">
 				
-	<h1>Selectmulti</h1>
-	<p>Documentation for selectMulti.js </p>
+	<h1>Bodyawareness</h1>
+	<p>Documentation for bodyAwareness.js </p>
 
 			</div>
 		</div>
@@ -92,36 +92,180 @@
 				<div class="col-md-9" role="main">
 					
 	
-		<h3 id="select-one-question">Select One question</h3>
-<p>An example for a multi select question.
-It allows you to pick one or more answers to the question.
-In this case we use the multiButtons style in order to have the buttons line up horizontally.
-Note the use of minWidth in order to keep all buttons on the same line.</p>
-
+		
 
 		
 		  <div class='highlight'><pre>define([<span class="hljs-string">'questAPI'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(Quest)</span></span>{
-    <span class="hljs-keyword">var</span> API = <span class="hljs-keyword">new</span> Quest();
+	<span class="hljs-keyword">var</span> API = <span class="hljs-keyword">new</span> Quest();</pre></div>
+		
+	
+		<h3 id="questions">Questions</h3>
 
-    API.addSequence([
-        { <span class="hljs-comment">// page begins</span>
-            header: <span class="hljs-string">'Select questions'</span>,
-            questions: [
-                { <span class="hljs-comment">// question begins</span>
-                    type: <span class="hljs-string">'selectMulti'</span>,
-                    stem: <span class="hljs-string">'On which days last week did you have breakfast?:'</span>,
-                    style: <span class="hljs-string">'multiButtons'</span>,
-                    minWidth: <span class="hljs-string">'13%'</span>,
-                    answers: [
-                        <span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>,<span class="hljs-number">6</span>,<span class="hljs-number">7</span>
-                    ]
-                } <span class="hljs-comment">// question ends</span>
-            ]
-        } <span class="hljs-comment">// page ends</span>
 
-    ]);
+		
+	
+		<p>Create the generic question template:</p>
+<ul>
+<li><code>autoSubmit</code>: submit when an answer is clicked twice.</li>
+<li><code>answers</code>: the text for all answers (in our case only the questions change…)</li>
+<li><code>help</code>: add help text (only for the first three questions presented).</li>
+</ul>
 
-    <span class="hljs-keyword">return</span> API.script;
+
+		
+		  <div class='highlight'><pre>	API.addQuestionsSet(<span class="hljs-string">'basicSelect'</span>, {
+		type: <span class="hljs-string">'selectOne'</span>,
+		autoSubmit:<span class="hljs-literal">true</span>,
+		numericValues:<span class="hljs-literal">true</span>,
+		answers: [<span class="hljs-string">"1- Not at all true about me"</span>, <span class="hljs-string">"2"</span>, <span class="hljs-string">"3"</span>, <span class="hljs-string">"4"</span>, <span class="hljs-string">"5"</span>, <span class="hljs-string">"6"</span>, <span class="hljs-string">"7 - Very true about me"</span>],
+		help: <span class="hljs-string">'&lt;%= pagesMeta.number &lt; 3 %&gt;'</span>,
+		helpText: <span class="hljs-string">'Selecting an answer once colors it blue.&lt;br/&gt;'</span> +
+			<span class="hljs-string">'You can change your answer by selecting another option.&lt;br/&gt;'</span> +
+			<span class="hljs-string">'To confirm, click the selected (blue) button a second time.'</span>
+	});</pre></div>
+		
+	
+		<p>Create a set with all the questions that we are going to use.
+Each questions <code>inherit</code>s our <em>basicSelect</em>, sets a <code>name</code> and sets the questions text (<code>stem</code>).</p>
+
+
+		
+		  <div class='highlight'><pre>	API.addQuestionsSet(<span class="hljs-string">'baQuestions'</span>, [
+		{
+			inherit : <span class="hljs-string">'basicSelect'</span>,
+			name : <span class="hljs-string">'ba1'</span>,
+			stem : <span class="hljs-string">"I notice differences in the way my body reacts to various foods."</span>
+		},
+		{
+			inherit : <span class="hljs-string">'basicSelect'</span>,
+			name : <span class="hljs-string">'ba2'</span>,
+			stem : <span class="hljs-string">"I can always tell when I bump myself whether or not it will become a bruise."</span>
+		},
+		{
+			inherit : <span class="hljs-string">'basicSelect'</span>,
+			name : <span class="hljs-string">'ba3'</span>,
+			stem : <span class="hljs-string">"I always know when I've exerted myself to the point where I'll be sore the next day."</span>
+		},
+		{
+			inherit : <span class="hljs-string">'basicSelect'</span>,
+			name : <span class="hljs-string">'ba4'</span>,
+			stem : <span class="hljs-string">"I'm always aware of changes in my energy level when I eat certain foods."</span>
+		},
+		{
+			inherit : <span class="hljs-string">'basicSelect'</span>,
+			name : <span class="hljs-string">'ba5'</span>,
+			stem : <span class="hljs-string">"I know in advance when I'm getting the flu."</span>
+		},
+		{
+			inherit : <span class="hljs-string">'basicSelect'</span>,
+			name : <span class="hljs-string">'ba6'</span>,
+			stem : <span class="hljs-string">"I know I'm running a fever without taking my temperature."</span>
+		},
+		{
+			inherit : <span class="hljs-string">'basicSelect'</span>,
+			name : <span class="hljs-string">'ba7'</span>,
+			stem : <span class="hljs-string">"I can distinguish between tiredness because of hunger and tiredness because of lack of sleep."</span>
+		},
+		{
+			inherit : <span class="hljs-string">'basicSelect'</span>,
+			name : <span class="hljs-string">'ba8'</span>,
+			stem : <span class="hljs-string">"I can accurately predict what time of day lack of sleep will catch up with me."</span>
+		},
+		{
+			inherit : <span class="hljs-string">'basicSelect'</span>,
+			name : <span class="hljs-string">'ba9'</span>,
+			stem : <span class="hljs-string">"I am aware of a cycle in my activity level throughout the day."</span>
+		},
+		{
+			inherit : <span class="hljs-string">'basicSelect'</span>,
+			name : <span class="hljs-string">'ba10'</span>,
+			stem : <span class="hljs-string">"I &lt;b&gt;don't&lt;/b&gt; notice seasonal rhythms and cycles in the way my body functions."</span>
+		},
+		{
+			inherit : <span class="hljs-string">'basicSelect'</span>,
+			name : <span class="hljs-string">'ba11'</span>,
+			stem : <span class="hljs-string">"As soon as I wake up in the morning I know how much energy I'll have during the day."</span>
+		},
+		{
+			inherit : <span class="hljs-string">'basicSelect'</span>,
+			name : <span class="hljs-string">'ba12'</span>,
+			stem : <span class="hljs-string">"I can tell when I go to bed how well I will sleep that night."</span>
+		},
+		{
+			inherit : <span class="hljs-string">'basicSelect'</span>,
+			name : <span class="hljs-string">'ba13'</span>,
+			stem : <span class="hljs-string">"I notice distinct body reactions when I am fatigued."</span>
+		},
+		{
+			inherit : <span class="hljs-string">'basicSelect'</span>,
+			name : <span class="hljs-string">'ba14'</span>,
+			stem : <span class="hljs-string">"I notice specific body responses to changes in the weather."</span>
+		},
+		{
+			inherit : <span class="hljs-string">'basicSelect'</span>,
+			name : <span class="hljs-string">'ba15'</span>,
+			stem : <span class="hljs-string">"I can predict how much sleep I will need at night in order to wake up refreshed."</span>
+		},
+		{
+			inherit : <span class="hljs-string">'basicSelect'</span>,
+			name : <span class="hljs-string">'ba16'</span>,
+			stem : <span class="hljs-string">"When my exercise habits change, I can predict very accurately how that will affect my energy level."</span>
+		},
+		{
+			inherit : <span class="hljs-string">'basicSelect'</span>,
+			name : <span class="hljs-string">'ba17'</span>,
+			stem : <span class="hljs-string">"There seems to be a best time for me to go to sleep at night."</span>
+		},
+		{
+			inherit : <span class="hljs-string">'basicSelect'</span>,
+			name : <span class="hljs-string">'ba18'</span>,
+			stem : <span class="hljs-string">"I notice specific bodily reactions to being overhungry."</span>
+		}
+	]);</pre></div>
+		
+	
+		<h3 id="pages">Pages</h3>
+<p>Create the generic pages template:</p>
+<ul>
+<li><code>decline</code>: allow participants to decline answering</li>
+<li><code>noSubmit</code>: do not display the submit button (we rely on <code>autoSubmit</code> for submitting)</li>
+</ul>
+
+
+		
+		  <div class='highlight'><pre>	API.addPagesSet(<span class="hljs-string">'basicPage'</span>, {
+		progressBar: <span class="hljs-string">'&lt;%= pagesMeta.number %&gt; out of 18'</span>,
+		header: <span class="hljs-string">'Please rate your agreement with the following statement'</span>,
+		headerStyle : {<span class="hljs-string">'font-size'</span>:<span class="hljs-string">'1em'</span>},
+		questions : {inherit:{set:<span class="hljs-string">'baQuestions'</span>, type:<span class="hljs-string">'exRandom'</span>}},
+		decline:<span class="hljs-literal">true</span>,
+		noSubmit:<span class="hljs-literal">true</span>
+	});</pre></div>
+		
+	
+		<h3 id="sequence">Sequence</h3>
+<p>We use a simple mixer here to repeat a simple page that inherits from the basicPage.
+The basic page randomly inherits a question, therfore we get a different question for every page.
+We use exRandom in the basicPage page so that questions don’t randomly appear more than once.</p>
+
+
+		
+		  <div class='highlight'><pre>	API.addSequence([
+		{
+			mixer : <span class="hljs-string">'repeat'</span>,
+			times : <span class="hljs-number">18</span>,
+			data : [
+				{inherit : <span class="hljs-string">'basicPage'</span>}
+			]
+		}
+	]);</pre></div>
+		
+	
+		<p>Return the script to piquest’s god, or something of that sort.</p>
+
+
+		
+		  <div class='highlight'><pre>	<span class="hljs-keyword">return</span> API.script;
 });</pre></div>
 		
 	

@@ -16,6 +16,7 @@
 		</title>
 
 		
+	
 		<!-- Bootstrap core CSS -->
 		<link href="../../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 		<link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/sunburst.min.css" rel="stylesheet">
@@ -31,6 +32,43 @@
 			table tr th :last-child, table tr td :last-child {margin-bottom: 0;}
 		</style>
 		
+	<script src="../../bower_components/ace-builds/src-min/ace.js" type="text/javascript" charset="utf-8"></script>
+	<style type="text/css" media="screen">
+	    #editor {
+	    	margin-top: 1em;
+	        border-radius: 4px 4px 0;
+	        border: 1px solid #ddd;
+	        height: 80vh;
+	        font-size: 14px;
+	    }
+
+		/* IE8 only */
+		@media \0screen {
+		    #editor {height:80px;}
+		}
+
+		@-webkit-keyframes fadeIn {
+		  0% {opacity: 0;}
+		  20% {opacity: 1;}
+		  80% {opacity: 1;}
+		  100% {opacity: 0;}
+		}
+
+		@keyframes fadeIn {
+		  0% {opacity: 0;}
+		  20% {opacity: 1;}
+		  80% {opacity: 1;}
+		  100% {opacity: 0;}
+		}
+
+		.fadeIn {
+		  	-webkit-animation-name: fadeIn;
+		    animation-name: fadeIn;
+		    animation-duration: 6s;
+			opacity:0;
+		}
+	</style>
+
 
 		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 		<!--[if lt IE 9]>
@@ -81,8 +119,10 @@
 		<div id="content" class="bs-docs-header">
 			<div class="container">
 				
-	<h1>Selectmulti</h1>
-	<p>Documentation for selectMulti.js </p>
+	<h1>Bodyawareness</h1>
+	
+		<p>You can play around with bodyAwareness.js right here. All you need to do is change the script and then click the activate button.</p>
+	
 
 			</div>
 		</div>
@@ -91,40 +131,221 @@
 			<div class="row">
 				<div class="col-md-9" role="main">
 					
-	
-		<h3 id="select-one-question">Select One question</h3>
-<p>An example for a multi select question.
-It allows you to pick one or more answers to the question.
-In this case we use the multiButtons style in order to have the buttons line up horizontally.
-Note the use of minWidth in order to keep all buttons on the same line.</p>
+		<p>
+			<button class="btn btn-default btn-lg btn-block" onclick="window.click(event)" type="button">Activate</button>
+		</p>
+
+		<div id="success" role="alert" class="alert alert-success" style="display:none">
+			<strong>Well Done!</strong> The task has been successfully completed.
+		</div>
+		<div id="error" role="alert" class="alert alert-danger" style="display:none">
+			<strong>Oh Snap!</strong> Something went wrong with the task. Why don't you fix it and try again?
+		</div>
+
+   		<div id="editor">
+define([&#39;questAPI&#39;], function(Quest){
+	var API = new Quest();
 
 
-		
-		  <div class='highlight'><pre>define([<span class="hljs-string">'questAPI'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(Quest)</span></span>{
-    <span class="hljs-keyword">var</span> API = <span class="hljs-keyword">new</span> Quest();
+	// ### Questions
 
-    API.addSequence([
-        { <span class="hljs-comment">// page begins</span>
-            header: <span class="hljs-string">'Select questions'</span>,
-            questions: [
-                { <span class="hljs-comment">// question begins</span>
-                    type: <span class="hljs-string">'selectMulti'</span>,
-                    stem: <span class="hljs-string">'On which days last week did you have breakfast?:'</span>,
-                    style: <span class="hljs-string">'multiButtons'</span>,
-                    minWidth: <span class="hljs-string">'13%'</span>,
-                    answers: [
-                        <span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>,<span class="hljs-number">6</span>,<span class="hljs-number">7</span>
-                    ]
-                } <span class="hljs-comment">// question ends</span>
-            ]
-        } <span class="hljs-comment">// page ends</span>
+	// Create the generic question template:
+	// * `autoSubmit`: submit when an answer is clicked twice.
+	// * `answers`: the text for all answers (in our case only the questions change...)
+	// * `help`: add help text (only for the first three questions presented).
+	API.addQuestionsSet(&#39;basicSelect&#39;, {
+		type: &#39;selectOne&#39;,
+		autoSubmit:true,
+		numericValues:true,
+		answers: [&quot;1- Not at all true about me&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;, &quot;6&quot;, &quot;7 - Very true about me&quot;],
+		help: &#39;&lt;%= pagesMeta.number &lt; 3 %&gt;&#39;,
+		helpText: &#39;Selecting an answer once colors it blue.&lt;br/&gt;&#39; +
+			&#39;You can change your answer by selecting another option.&lt;br/&gt;&#39; +
+			&#39;To confirm, click the selected (blue) button a second time.&#39;
+	});
 
-    ]);
+	// Create a set with all the questions that we are going to use.
+	// Each questions `inherit`s our *basicSelect*, sets a `name` and sets the questions text (`stem`).
+	API.addQuestionsSet(&#39;baQuestions&#39;, [
+		{
+			inherit : &#39;basicSelect&#39;,
+			name : &#39;ba1&#39;,
+			stem : &quot;I notice differences in the way my body reacts to various foods.&quot;
+		},
+		{
+			inherit : &#39;basicSelect&#39;,
+			name : &#39;ba2&#39;,
+			stem : &quot;I can always tell when I bump myself whether or not it will become a bruise.&quot;
+		},
+		{
+			inherit : &#39;basicSelect&#39;,
+			name : &#39;ba3&#39;,
+			stem : &quot;I always know when I&#39;ve exerted myself to the point where I&#39;ll be sore the next day.&quot;
+		},
+		{
+			inherit : &#39;basicSelect&#39;,
+			name : &#39;ba4&#39;,
+			stem : &quot;I&#39;m always aware of changes in my energy level when I eat certain foods.&quot;
+		},
+		{
+			inherit : &#39;basicSelect&#39;,
+			name : &#39;ba5&#39;,
+			stem : &quot;I know in advance when I&#39;m getting the flu.&quot;
+		},
+		{
+			inherit : &#39;basicSelect&#39;,
+			name : &#39;ba6&#39;,
+			stem : &quot;I know I&#39;m running a fever without taking my temperature.&quot;
+		},
+		{
+			inherit : &#39;basicSelect&#39;,
+			name : &#39;ba7&#39;,
+			stem : &quot;I can distinguish between tiredness because of hunger and tiredness because of lack of sleep.&quot;
+		},
+		{
+			inherit : &#39;basicSelect&#39;,
+			name : &#39;ba8&#39;,
+			stem : &quot;I can accurately predict what time of day lack of sleep will catch up with me.&quot;
+		},
+		{
+			inherit : &#39;basicSelect&#39;,
+			name : &#39;ba9&#39;,
+			stem : &quot;I am aware of a cycle in my activity level throughout the day.&quot;
+		},
+		{
+			inherit : &#39;basicSelect&#39;,
+			name : &#39;ba10&#39;,
+			stem : &quot;I &lt;b&gt;don&#39;t&lt;/b&gt; notice seasonal rhythms and cycles in the way my body functions.&quot;
+		},
+		{
+			inherit : &#39;basicSelect&#39;,
+			name : &#39;ba11&#39;,
+			stem : &quot;As soon as I wake up in the morning I know how much energy I&#39;ll have during the day.&quot;
+		},
+		{
+			inherit : &#39;basicSelect&#39;,
+			name : &#39;ba12&#39;,
+			stem : &quot;I can tell when I go to bed how well I will sleep that night.&quot;
+		},
+		{
+			inherit : &#39;basicSelect&#39;,
+			name : &#39;ba13&#39;,
+			stem : &quot;I notice distinct body reactions when I am fatigued.&quot;
+		},
+		{
+			inherit : &#39;basicSelect&#39;,
+			name : &#39;ba14&#39;,
+			stem : &quot;I notice specific body responses to changes in the weather.&quot;
+		},
+		{
+			inherit : &#39;basicSelect&#39;,
+			name : &#39;ba15&#39;,
+			stem : &quot;I can predict how much sleep I will need at night in order to wake up refreshed.&quot;
+		},
+		{
+			inherit : &#39;basicSelect&#39;,
+			name : &#39;ba16&#39;,
+			stem : &quot;When my exercise habits change, I can predict very accurately how that will affect my energy level.&quot;
+		},
+		{
+			inherit : &#39;basicSelect&#39;,
+			name : &#39;ba17&#39;,
+			stem : &quot;There seems to be a best time for me to go to sleep at night.&quot;
+		},
+		{
+			inherit : &#39;basicSelect&#39;,
+			name : &#39;ba18&#39;,
+			stem : &quot;I notice specific bodily reactions to being overhungry.&quot;
+		}
+	]);
 
-    <span class="hljs-keyword">return</span> API.script;
-});</pre></div>
-		
-	
+
+	// ### Pages
+	// Create the generic pages template:
+	// * `decline`: allow participants to decline answering
+	// * `noSubmit`: do not display the submit button (we rely on `autoSubmit` for submitting)
+	API.addPagesSet(&#39;basicPage&#39;, {
+		progressBar: &#39;&lt;%= pagesMeta.number %&gt; out of 18&#39;,
+		header: &#39;Please rate your agreement with the following statement&#39;,
+		headerStyle : {&#39;font-size&#39;:&#39;1em&#39;},
+		questions : {inherit:{set:&#39;baQuestions&#39;, type:&#39;exRandom&#39;}},
+		decline:true,
+		noSubmit:true
+	});
+
+
+
+	// ### Sequence
+	// We use a simple mixer here to repeat a simple page that inherits from the basicPage.
+	// The basic page randomly inherits a question, therfore we get a different question for every page.
+	// We use exRandom in the basicPage page so that questions don&#39;t randomly appear more than once.
+	API.addSequence([
+		{
+			mixer : &#39;repeat&#39;,
+			times : 18,
+			data : [
+				{inherit : &#39;basicPage&#39;}
+			]
+		}
+	]);
+
+
+	// Return the script to piquest&#39;s god, or something of that sort.
+	return API.script;
+});
+		</div>
+
+		<script>
+		    var editor = ace.edit("editor");
+		    editor.setTheme("ace/theme/monokai");
+		    editor.getSession().setMode("ace/mode/javascript");
+		    editor.setOption("showPrintMargin", false);
+		    var win;
+		    var feedbackId = 'success';
+
+		    function click(event){
+		    	event.target.blur();
+
+		    	// assume the feedback is success
+				feedbackId = 'success';
+
+				// clean out open window
+		    	if (win){
+		    		win.close();
+		    		win = null;
+		    	}
+
+		    	win = window.open('../quest/questactivate.html', 'pip');
+		    	win.focus();
+
+		    	win.onload = function(){
+		    		// first set the unload listener
+					win.addEventListener('unload', function(event) {
+						var el = document.getElementById(feedbackId);
+						window.focus();
+						fade(el);
+					});
+
+					// then activate the player (this ensures that when )
+					win.piActivate(editor.getValue());
+		    	};
+		    }
+
+	    	window.addEventListener('error', function(e){
+	    		console.error(e);
+	    		feedbackId = 'error';
+	    	});
+
+	    	function fade(el){
+				el.style.display = 'block';
+				el.classList.add('fadeIn');
+				setTimeout(function(){
+					el.style.display = 'none';
+					el.classList.remove('fadeIn');
+				}, 6000);
+	    	}
+
+		</script>
 
 				</div>
 

@@ -12,7 +12,6 @@ define(['questAPI'], function(Quest){
                     type: 'selectOne',
                     stem: 'When you say good morning, what do you mean?',
                     autoSubmit: true,
-                    noSubmit: true,
                     answers: [
                         'Do you wish me a good morning',
                         'Or mean that it is a good morning whether I want it or not',
@@ -25,7 +24,8 @@ define(['questAPI'], function(Quest){
                         'You can change your answer by selecting another option.<br/>' +
                         'To confirm, click the selected (blue) button a second time.'
                 } // question ends
-            ]
+            ],
+            noSubmit: true
         } // page ends
 
     ]);
