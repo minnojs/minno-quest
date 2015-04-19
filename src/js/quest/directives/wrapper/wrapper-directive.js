@@ -22,7 +22,7 @@ define(function (require) {
 			},
 			link: function(scope,element) {
 				var type = scope.data.type || 'text';
-				var questElement = element.children().eq(1);
+				var questElement = element.children().eq(2);
 				var SNAKE_CASE_REGEXP = /[A-Z]/g;
 				var attrName = prefix + capitaliseFirstLetter(type);
 

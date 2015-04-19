@@ -28,6 +28,7 @@ define(['questAPI'], function(Quest){
 			//timer: {duration:5, show:true, submitOnEnd:true, message:{heading:'Hi Yoav',body:'Isn\'n this cool? I support templates as well...', button:'Click here to proceed to the next page'}},
 			questions: 		{
 				stem:'Stem',
+				description: 'asdf',
 				type:'textarea',
 				//maxlength: 4,
 				maxlengthLimit:true,

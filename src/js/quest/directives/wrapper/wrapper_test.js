@@ -34,12 +34,17 @@ define(['../questDirectivesModule'], function(){
 
 		it('should render the quest "type"', function(){
 			compile({type:'fake'});
-			expect(elm.children().eq(1).attr('quest-fake')).toBeTruthy();
+			expect(elm.children().eq(2).attr('quest-fake')).toBeTruthy();
 		});
 
 		it('should render stem', function(){
 			compile({stem:'Hello'});
 			expect(elm.children('label').text()).toBe('Hello');
+		});
+
+		it('should render description', function(){
+			compile({description:'Boom'});
+			expect(elm.children('div').first().text()).toBe('Boom');
 		});
 
 		it('should hide stem when inline=true', function(){

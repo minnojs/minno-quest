@@ -95,6 +95,7 @@ property		| description
 type 			| (text; default: 'text') Controls the question type. See the possible types below. 
 name 			| (text) The name that this question is marked with when it is logged. Also allows you to refer to the question from within PIquest.
 stem 			| (text; default: '') The text for the question itself..
+description 	| (text; default: '') Any additional text you want in order to extend the question description.
 help			| (true or false;  (default: false)) Whether to display the question help text.
 helpText		| (text) The question help text. (Some questions have default help texts, some don't).
 lognow 			| (true or false) Whether to log this questions when the page is submited. This option is useful when you know that the question will not be accessed any more. It allows you to use the `pulse` option from the [logger](#logger) to send questions as they are being answered instead of sending only at the end of the task. (default: false)
