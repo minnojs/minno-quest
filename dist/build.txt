@@ -31,7 +31,8 @@ js/quest/directives/piQuest/piqPage-directive.js
 text!quest/directives/wrapper/wrapper.html
 js/quest/directives/wrapper/wrapper-directive.js
 text!quest/directives/text/text.html
-js/quest/directives/text/text-directive.js
+text!quest/directives/text/textarea.html
+js/quest/directives/text/textDirective.js
 text!quest/directives/text/text-number.html
 js/quest/directives/text/text-number-directive.js
 js/quest/directives/select/selectMixerProvider.js
@@ -41,6 +42,8 @@ text!quest/directives/select/selectOne.html
 js/quest/directives/select/selectOneDirective.js
 text!quest/directives/select/selectMulti.html
 js/quest/directives/select/selectMultiDirective.js
+js/quest/directives/toRegexFilter.js
+js/quest/directives/dfltUnitsFilter.js
 js/quest/directives/questDirectivesModule.js
 js/utils/logger/LoggerProvider.js
 js/utils/logger/logger-module.js
@@ -130,7 +133,8 @@ js/quest/directives/piQuest/piqPage-directive.js
 text!quest/directives/wrapper/wrapper.html
 js/quest/directives/wrapper/wrapper-directive.js
 text!quest/directives/text/text.html
-js/quest/directives/text/text-directive.js
+text!quest/directives/text/textarea.html
+js/quest/directives/text/textDirective.js
 text!quest/directives/text/text-number.html
 js/quest/directives/text/text-number-directive.js
 js/quest/directives/select/selectMixerProvider.js
@@ -140,6 +144,8 @@ text!quest/directives/select/selectOne.html
 js/quest/directives/select/selectOneDirective.js
 text!quest/directives/select/selectMulti.html
 js/quest/directives/select/selectMultiDirective.js
+js/quest/directives/toRegexFilter.js
+js/quest/directives/dfltUnitsFilter.js
 js/quest/directives/questDirectivesModule.js
 js/utils/logger/LoggerProvider.js
 js/utils/logger/logger-module.js
