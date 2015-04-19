@@ -202,6 +202,7 @@ module.exports = function (grunt) {
 			options: {
 				configFile: 'test/karma.conf.js'
 			},
+			// test on localhost:8080
 			local: {
 				singleRun: false,
 				autoWatch: true,

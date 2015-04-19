@@ -8,7 +8,7 @@
 		ng-pattern="data.pattern | toRegex"
 		ng-required="{{data.required}}"
 		class="form-control"
-		style="width:{{data.width | dfltUnits}}"
+		ng-attr-style="width:{{data.width | dfltUnits}}"
 
 		ng-keydown="data.maxlengthLimit && maxlengthLimit($event)"
 		ng-keyup="data.maxlengthLimit && maxlengthLimit($event)"

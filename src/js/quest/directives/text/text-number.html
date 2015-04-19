@@ -5,7 +5,7 @@
 		ng-model="response"
 		ng-required="{{data.required}}"
 		class="form-control"
-		style="width:{{data.width | dfltUnits}}"
+		ng-attr-style="width:{{data.width | dfltUnits}}"
 	>
 	<div pi-quest-validation="form.$error.number">{{data.errorMsg.number || "Must be a number!"}}</div>
 	<div pi-quest-validation="form.$error.qstMin">{{data.errorMsg.min || "Too small!"}}</div>
