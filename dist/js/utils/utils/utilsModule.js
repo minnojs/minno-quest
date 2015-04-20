@@ -1,0 +1,1 @@
+define(["require","angular","underscore"],function(e){var t=e("angular"),n=e("underscore"),r=t.module("pi.utils",[]);return r.service("piInvoke",["$injector",function(e){function r(r,i){var s=t.global||{};if(!r)return;e.invoke(r,null,n.extend(i,{global:s,current:s.current}))}var t=e.get("$rootScope");return r}]),r});

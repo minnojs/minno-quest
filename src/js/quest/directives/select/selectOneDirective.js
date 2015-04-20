@@ -56,6 +56,7 @@ define(function (require) {
 				if (scope.data.required){
 					ngModel.$formatters.push(requiredValidator);
 					ngModel.$parsers.unshift(requiredValidator);
+					requiredValidator(scope.response); // check validity at the begining - without need for change...
 				}
 
 				/**

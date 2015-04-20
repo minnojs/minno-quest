@@ -1,11 +1,10 @@
 define(function(require){
 	var angular = require('angular');
-	var _ = require('underscore');
-
 
 	// set modules that are requirements for the quest module
 	var module = angular.module('questDirectives',[
 		require('utils/timer/timer-module').name,
+		require('utils/utils/utilsModule').name,
 		require('./buttons/buttons').name,
 		require('utils/database/template/templateModule').name,
 		require('utils/console/consoleModule').name,

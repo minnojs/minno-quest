@@ -315,7 +315,6 @@ define(['../questDirectivesModule', 'utils/database/randomize/randomizeModuleMoc
 				compileInput({answers: [1,2,3], required:true, errorMsg:{required: 'required msg'}});
 				var errorElm = element.find('[pi-quest-validation="model.$error.required && $parent.$parent.submitAttempt"]');
 				expect(errorElm.text()).toBe('required msg');
-
 				expect(element).toBeInvalid();
 
 				choose(0);

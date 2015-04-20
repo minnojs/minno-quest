@@ -68,6 +68,19 @@ define(['angular','./questDirectivesModule'], function(angular){
 			}));
 		});
 
+		it('should call data.onCreate', function(){
+			var spy = jasmine.createSpy('onCreate');
+			compile({onCreate:spy});
+			expect(spy).toHaveBeenCalled();
+		});
+
+		it('should call data.onDestroy', function(){
+			var spy = jasmine.createSpy('onDestroy');
+			compile({onDestroy:spy});
+			scope.$destroy();
+			expect(spy).toHaveBeenCalled();
+		});
+
 		// view -> model
 		it('should bind to a model', inject(function($rootScope){
 			compile({});
@@ -78,6 +91,16 @@ define(['angular','./questDirectivesModule'], function(angular){
 			expect(log.response).toBe(123);
 			expect($rootScope.current.logObj).toBe(log);
 		}));
+
+		it('should call data.onChange', function(){
+			var spy = jasmine.createSpy('onCreate');
+			compile({onChange:spy});
+			expect(spy).not.toHaveBeenCalled();
+
+			scope.response = 123;
+			scope.$digest();
+			expect(spy).toHaveBeenCalled();
+		});
 
 		describe(': decline', function(){
 			it('should decline this question if quest:decline is broadcast', function(){
@@ -91,7 +114,14 @@ define(['angular','./questDirectivesModule'], function(angular){
 				timerStack = [10,20,40];
 				compile({});
 				scope.$emit('quest:decline');
-				expect(log.submitLatency).toBe(30);
+				expect(log.submitLatency).toBe(10);
+			});
+
+			it('should call data.onDecline', function(){
+				var spy = jasmine.createSpy('onDecline');
+				compile({onDecline:spy});
+				scope.$emit('quest:decline');
+				expect(spy).toHaveBeenCalled();
 			});
 		});
 
@@ -100,7 +130,7 @@ define(['angular','./questDirectivesModule'], function(angular){
 				timerStack = [10,20,40];
 				compile({});
 				scope.$emit('quest:submit');
-				expect(log.submitLatency).toBe(30);
+				expect(log.submitLatency).toBe(10);
 			});
 
 			it('should un-decline a question that is answered', function(){
@@ -110,6 +140,12 @@ define(['angular','./questDirectivesModule'], function(angular){
 				expect(log.declined).not.toBeTruthy();
 			});
 
+			it('should call data.onSubmit', function(){
+				var spy = jasmine.createSpy('onSubmit');
+				compile({onSubmit:spy});
+				scope.$emit('quest:submit');
+				expect(spy).toHaveBeenCalled();
+			});
 		});
 
 		describe(': timeout', function(){
@@ -117,6 +153,13 @@ define(['angular','./questDirectivesModule'], function(angular){
 				compile({});
 				scope.$emit('quest:timeout');
 				expect(log.timeout).toBeTruthy();
+			});
+
+			it('should call data.onTimeout', function(){
+				var spy = jasmine.createSpy('onTimeout');
+				compile({onTimeout:spy});
+				scope.$emit('quest:timeout');
+				expect(spy).toHaveBeenCalled();
 			});
 		});
 
@@ -154,8 +197,6 @@ define(['angular','./questDirectivesModule'], function(angular){
 				expect(scope.response).toBe(234);
 			});
 		});
-
-
 
 		it('should update log latency each time there is a change in scope.response', function(){
 			compile({});

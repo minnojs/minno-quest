@@ -6,8 +6,8 @@
 define(function(require){
 	var _ = require('underscore');
 
-	questController.$inject = ['$scope', 'timerStopper', '$parse', '$attrs','piConsole'];
-	function questController($scope, Stopper, $parse, $attr, piConsole){
+	questController.$inject = ['$scope', 'timerStopper', '$parse', '$attrs','piConsole', 'piInvoke'];
+	function questController($scope, Stopper, $parse, $attr, piConsole, invoke){
 		var self = this;
 		var log;
 		var data = $scope.data;
@@ -28,17 +28,20 @@ define(function(require){
 			event.preventDefault();
 			log.declined = undefined;
 			log.submitLatency = self.stopper.now();
+			invoke(data.onSubmit, {log:log});
 		});
 
 		$scope.$on('quest:decline', function(event){
 			event.preventDefault();
 			log.declined = true;
 			log.submitLatency = self.stopper.now();
+			invoke(data.onDecline, {log:log});
 		});
 
 		$scope.$on('quest:timeout', function(event){
 			event.preventDefault();
 			log.timeout = true;
+			invoke(data.onTimeout, {log:log});
 		});
 
 
@@ -109,8 +112,23 @@ define(function(require){
 			});
 
 			$scope.$watch('response',function(newValue, oldValue /*, scope*/){
-				newValue !== oldValue && ngModel.$setViewValue(newValue);
+				if (!_.isEqual(newValue, oldValue)){
+				//if (newValue !== oldValue){
+					ngModel.$setViewValue(newValue);
+					invoke(data.onChange, {log:log});
+				}
 			});
+
+			$scope.$on('$destroy', function(){
+				invoke(data.onDestroy, {log:log});
+			});
+
+			if (data.correct) {
+				ngModel.$parsers.push(correctValidator);
+				data.response = correctValidator(this.log);
+			}
+
+			invoke(data.onCreate, {log:log});
 
 			function correctValidator(value) {
 				var response = value.response;
@@ -130,10 +148,6 @@ define(function(require){
 				return value;
 			}
 
-			if (data.correct) {
-				ngModel.$parsers.push(correctValidator);
-				data.response = correctValidator(this.log);
-			}
 		}
 	}
 

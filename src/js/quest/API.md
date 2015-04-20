@@ -102,6 +102,34 @@ lognow 			| (true or false) Whether to log this questions when the page is submi
 
 You may want to debug questions by [activating the `question` DEBUG setting](#debugging). You will then be warned in the console if a question name is reused (note: sometimes a question is supposed to be reused, if this warning pops up just make sure the use case is correct).
 
+#### Hooks
+
+Questions have hooks that allow you to respond to many events in the life time of the question. Each hook is invoked with `global`, `current` and the question `log`. 
+
+property		| description
+--------------- | ---------------------
+onCreate 		| At the creation of the question.
+onChange 		| At each change of the question response (note that this hook may be called many times for each question).
+onSubmit 		| When the question is submited.
+onDecline 		| When the question is declined.
+onTimeout 		| When the timer finishes.
+onDestroy 		| When the question is removed from the screen (either decline or submit).
+
+For example, in case the participant made an error you can mark it on the current object:
+
+```js
+var questions = {
+	stem: 'Please write "Hello"',
+	onSubmit: function(log, current){
+		// if the question response is not correct
+		if (log.response !== 'Hello'){
+			// mark an arbitrary flag so that it may be accessed somewhere else
+			current.error = true;
+		}
+	}
+}
+```
+
 #### Text & Textarea
 The `text` and `textarea` questions consist of a simple text input in which the users can type in text. The difference between them is that text questions consist of a single line, whereas textareas are multiline. There are also several properties that are unique to textareas.
 Both types of questions support the following properties.
