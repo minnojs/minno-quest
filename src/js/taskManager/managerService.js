@@ -1,8 +1,8 @@
 define(function(require){
 	var _ = require('underscore');
 
-	managerService.$inject = ['$rootScope', '$q', 'managerSequence', 'managerTaskLoad', 'managerCanvas','$document'];
-	function managerService($rootScope, $q, ManagerSequence, taskLoad, canvas, $document){
+	managerService.$inject = ['$rootScope', '$q', 'managerSequence', 'managerTaskLoad', '$injector'];
+	function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector){
 
 		/**
 		 * This is the constructor for the manager object.
@@ -21,7 +21,6 @@ define(function(require){
 		 */
 		function manager($scope, script){
 			var self = this;
-			var canvasOff;
 			var settings = script.settings || {};
 
 			// make sure this works without a new statement
@@ -37,14 +36,8 @@ define(function(require){
 			// create sequence
 			this.sequence = new ManagerSequence(script);
 
-			// activate canvas
-			canvasOff = canvas(settings.canvas);
-			$scope.$on('$destroy', canvasOff);
-
-			// activate titles
-			if (settings.title){
-				$document[0].title = script.settings.title;
-			}
+			// activate all setup stuff
+			setup($scope, settings);
 
 			$scope.$on('manager:next', function(event, target){
 				target || (target = {type:'next'});
@@ -105,7 +98,29 @@ define(function(require){
 		});
 
 		return manager;
+
+		// just to separate the activation of all the settings: KISS
+		function setup($scope, settings){
+			var canvas = $injector.get('managerCanvas');
+			var $document = $injector.get('$document');
+			var preloader = $injector.get('piPreloader');
+			var canvasOff;
+
+			// activate canvas
+			canvasOff = canvas(settings.canvas);
+			$scope.$on('$destroy', canvasOff);
+
+			// preload images
+			preloader.loadArr('image',settings.preloadImages || []);
+
+			// activate titles
+			if (settings.title){
+				$document[0].title = settings.title;
+			}
+		}
+
 	}
+
 
 	return managerService;
 

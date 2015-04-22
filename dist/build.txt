@@ -11,6 +11,8 @@ js/utils/timer/timerStopper.js
 js/utils/timer/timerDirective.js
 js/utils/timer/timerNow.js
 js/utils/timer/timer-module.js
+js/utils/utils/preloaderService.js
+js/utils/utils/preloaderDecorator.js
 js/utils/utils/utilsModule.js
 js/quest/directives/buttons/buttons.js
 js/utils/database/template/templateFilter.js
@@ -114,6 +116,8 @@ js/utils/timer/timerStopper.js
 js/utils/timer/timerDirective.js
 js/utils/timer/timerNow.js
 js/utils/timer/timer-module.js
+js/utils/utils/preloaderService.js
+js/utils/utils/preloaderDecorator.js
 js/utils/utils/utilsModule.js
 js/quest/directives/buttons/buttons.js
 js/utils/database/template/templateFilter.js

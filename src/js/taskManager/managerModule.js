@@ -4,6 +4,7 @@ define(function(require){
 	var module = angular.module('taskManager',[
 		require('./task/taskModule').name,
 		require('./canvas/canvasModule').name,
+		require('utils/utils/utilsModule').name,
 		require('utils/helperDirectives/helperDirectivesModule').name,
 		require('utils/console/consoleModule').name
 	]);

@@ -19,7 +19,6 @@ define(function (require) {
 
 	// setup the global variable
 	app.run(['$rootScope', '$rootElement', '$parse', '$window', function($rootScope, $rootElement, $parse, $window){
-
 		// @TODO: get these out of here (app.config? app.run?)
 		var globalAttr = $rootElement.attr('pi-global');
 		var piGlobal = $parse(globalAttr)($window);

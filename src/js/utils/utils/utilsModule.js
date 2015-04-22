@@ -3,6 +3,13 @@ define(function(require){
 	var _ = require('underscore');
 	var module = angular.module('pi.utils',[]);
 
+	module.service('piPreloader', require('./preloaderService'));
+	module.config(['$provide', function($provide){
+		$provide.decorator('piPreloader', require('./preloaderDecorator'));
+	}]);
+
+
+
 	/**
 	 * Wrapper for angular invoke.
 	 * Injects global and current automatically.

@@ -42,6 +42,14 @@ define(['require','./managerModule'], function(require){
 				expect(manager.sequence).toEqual(jasmine.any(managerSequence));
 			}));
 
+			it('should preload images', inject(function(piPreloader, managerService){
+				spyOn(piPreloader,'loadArr');
+				var images = [1,2,3];
+				manager = managerService($scope, {settings:{preloadImages:images}});
+				expect(piPreloader.loadArr).toHaveBeenCalledWith('image',images);
+
+			}));
+
 			it('should set title if it exists', inject(function($document,managerService){
 				manager = managerService($scope, {settings:{title:'test123'}});
 				expect($document[0].title).toBe('test123');
