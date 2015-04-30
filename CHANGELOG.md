@@ -1,3 +1,21 @@
+<a name="0.0.41"></a>
+### 0.0.41 (2015-04-30)
+
+
+#### Bug Fixes
+
+* **manager:** current object should be set into piGlobal[task.name] ([96b8c775](https://github.com/ProjectImplicit/PIquest/commit/96b8c7751e85b6d0aabc31eb5d358aef562f7126))
+
+
+#### Features
+
+* **preloader:** create preloader and implement imagePreload for manager. ([02aef089](https://github.com/ProjectImplicit/PIquest/commit/02aef0899aa54ac5f27622973436725724ac3074), closes [#79](https://github.com/ProjectImplicit/PIquest/issues/79))
+* **questController:** add event hooks to questions. ([d960074b](https://github.com/ProjectImplicit/PIquest/commit/d960074b30dc222f52f7227fc0800885d1cc6858), closes [#64](https://github.com/ProjectImplicit/PIquest/issues/64))
+* **questDirectives:**
+  * support preliminary slider ([735e50af](https://github.com/ProjectImplicit/PIquest/commit/735e50afecf73897e4dc55207015943ef26024c1))
+  * support question description ([0cbdc895](https://github.com/ProjectImplicit/PIquest/commit/0cbdc895407e3413c1f34a9eaa530d8ee569e841))
+
+
 <a name="0.0.40"></a>
 ### 0.0.40 (2015-04-19)
 
