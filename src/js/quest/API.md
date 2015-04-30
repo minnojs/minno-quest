@@ -700,9 +700,9 @@ Randomly selects an element from the set (in case the set has only one element, 
 Selects a random element without repeating the same element until we've gone through the whole set
 * `{set: 'setName', type:'exRandom'}`
 
-**bySequence**:
+**sequential**:
 Selects the elements by the order they were inserted into the set
-* `{set: 'setName', type:'bySequence'}`
+* `{set: 'setName', type:'sequential'}`
 
 **byData**:
 Selects a specific element from the set.
