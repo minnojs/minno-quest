@@ -24,6 +24,9 @@ define(function(require){
 	module.directive('questSelectOne',require('./select/selectOneDirective'));
 	module.directive('questSelectMulti',require('./select/selectMultiDirective'));
 
+	module.directive('questSlider',require('./slider/sliderDirective'));
+	module.directive('ovtsSlider',require('./slider/slider'));
+
 	module.directive('piQuestValidation', function(){
 		return {
 			replace:true,

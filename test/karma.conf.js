@@ -38,6 +38,18 @@ module.exports = function(config) {
 		// possible values: LOG_DISABLE || LOG_ERROR || LOG_WARN || LOG_INFO || LOG_DEBUG
 		logLevel: config.LOG_INFO,
 
+		customLaunchers: {
+			'PhantomJS_Desktop': {
+				base: 'PhantomJS',
+				options: {
+					viewportSize: {
+						width: 1228,
+						height: 1000
+					}
+				}
+			}
+		},
+
 
 		// enable / disable watching file and executing tests whenever any file changes
 		autoWatch: false,
@@ -50,8 +62,8 @@ module.exports = function(config) {
 		// - Safari (only Mac)
 		// - PhantomJS
 		// - IE (only Windows)
-		browsers: ['PhantomJS'],
-		//browsers: ['Chrome'],
+		// browsers: ['PhantomJS'],
+		browsers: ['PhantomJS_Desktop'],
 
 		// Continuous Integration mode
 		// if true, it capture browsers, run tests and exit

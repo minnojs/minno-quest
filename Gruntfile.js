@@ -211,7 +211,7 @@ module.exports = function (grunt) {
 			unit:{
 				singleRun: true,
 				reporters : grunt.option('report') ? ['spec'] : ['progress'],
-				browsers: ['PhantomJS']
+				browsers: ['PhantomJS_Desktop']
 			},
 			sauce:{
 				sauceLabs: {
