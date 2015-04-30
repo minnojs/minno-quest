@@ -19,6 +19,7 @@ define(function(require){
 				var proceedObject;
 				var settings = $scope.$parent.settings || {};
 				var script = task.$script || {};
+				var taskName = task.name || script.name;
 
 				if (!task){
 					return;
@@ -39,11 +40,11 @@ define(function(require){
 				 * Setup current object
 				 */
 				$rootScope.current = $window.piGlobal.current = script.current || {};
-				if (script.name){
+				if (taskName){
 					// extend current script with the piGlobal object
-					_.extend($rootScope.current, $window.piGlobal[script.name] || {});
+					_.extend($rootScope.current, $window.piGlobal[taskName] || {});
 					// set the current object back into the global
-					$window.piGlobal[script.name] = script.current;
+					$window.piGlobal[taskName] = script.current;
 				}
 
 				/**
