@@ -1,5 +1,5 @@
 <div ng-form ng-class="{'form-inline':data.inline}">
-	<label ng-show="data.inline" for="{{data.name}}" ng-bind-html="data.stem"></label>
+	<label ng-show="data.inline" for="{{data.name}}" ng-bind-html="data.stem" ng-style="data.stemCss"></label>
 	<input
 	 	type="text"
 		ng-model="response"

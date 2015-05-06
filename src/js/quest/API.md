@@ -35,7 +35,7 @@ prevText		| (text) The text for the previous button (default value: "Go Back")
 noSubmit		| (true of false) remove submit button (useful when using the 'autoSubmit' function of some questions; default value: false).
 submitText		| (text) The text of the submit button (default: "Submit").
 header  		| (text) Text for the page header.
-headerStyle		| (Object) An object to set the style of the header (has most css properties; see examples below).
+headerStyle		| (Object) A A [css object](#http://api.jquery.com/css/#css-properties)  to set the style of the header (see examples below).
 progressBar 	| (text) Text for the progress bar (You might want to use a template for this, maybe something like: `<%= pagesMeta.number %> out of <%= pagesMeta.outOf%>`.).
 numbered 		| (true of false) Whether to  display the number of each question (default value: false).
 numberStart		| (Number) The number for the first question in the page (default: 1).
@@ -99,6 +99,7 @@ property		| description
 type 			| (text; default: 'text') Controls the question type. See the possible types below. 
 name 			| (text) The name that this question is marked with when it is logged. Also allows you to refer to the question from within PIquest.
 stem 			| (text; default: '') The text for the question itself..
+stemCss			| A [css object](#http://api.jquery.com/css/#css-properties) to be applied to the stem.
 description 	| (text; default: '') Any additional text you want in order to extend the question description.
 help			| (true or false;  (default: false)) Whether to display the question help text.
 helpText		| (text) The question help text. (Some questions have default help texts, some don't).
@@ -278,8 +279,8 @@ These are the supported properties:
 
 Propery     | Description
 ----------- | -----------
-min         | Maximum slider value.
-max         | Minimum slider value.
+min         | Maximum slider value (default:0).
+max         | Minimum slider value (default:100).
 steps       | How many steps the slider should be divided into. These intervals are marked with pips and the handle snaps to them.
 leftLabel   | A label to display on the top left of the slider.
 rightLabel  | A label to display on the top right of te slider.
@@ -294,11 +295,11 @@ The most common use of the slider is the creation of a visual analog scale (VAS)
 ```js
 var quest = {
 	type: 'slider',
-	stem: 'How often do you feel blue?',
+	stem: 'Sliders are exremely useful.',
 	min:1,
 	max:7,
 	steps:7,
-	labels: ['Never', 'Sometimes', 'Always']	
+	labels: ['Strongly Agree', 'Neutral', 'Strongly Disagree']	
 }
 ```
 
