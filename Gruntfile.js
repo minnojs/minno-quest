@@ -304,7 +304,8 @@ module.exports = function (grunt) {
 
 		sass: {
 			options: {
-				loadPath: ['bower_components/bootstrap-sass-official/assets/stylesheets/', 'bower_components/'],
+				includePaths: ['bower_components/bootstrap-sass-official/assets/stylesheets/', 'bower_components/'],
+				sourceMap: true,
 				style: 'compressed'
 			},
 			dist: {
