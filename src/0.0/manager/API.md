@@ -60,6 +60,9 @@ currentTask | The current (last) task object
 #### title
 `title` is a string to be used as the page title (the name displayed on the tag).
 
+#### preloadImages
+Accepts an array of image urls to preload. The manager will **not** wait until all images are loaded, but it will make images displayed later in the manager sequence be displayed significantly faster.
+
 #### skip
 Whether to activate the skip and refresh option. If activated, clicking `ctrl r` reloads the current task (this feature may not be supported on older browsers), clicking `escape` and then the right or left arrows skips to the next or previous tasks.
 

@@ -100,11 +100,40 @@ property		| description
 type 			| (text; default: 'text') Controls the question type. See the possible types below. 
 name 			| (text) The name that this question is marked with when it is logged. Also allows you to refer to the question from within PIquest.
 stem 			| (text; default: '') The text for the question itself..
+description 	| (text; default: '') Any additional text you want in order to extend the question description.
 help			| (true or false;  (default: false)) Whether to display the question help text.
 helpText		| (text) The question help text. (Some questions have default help texts, some don't).
 lognow 			| (true or false) Whether to log this questions when the page is submited. This option is useful when you know that the question will not be accessed any more. It allows you to use the `pulse` option from the [logger](#logger) to send questions as they are being answered instead of sending only at the end of the task. (default: false)
 
 You may want to debug questions by [activating the `question` DEBUG setting](#debugging). You will then be warned in the console if a question name is reused (note: sometimes a question is supposed to be reused, if this warning pops up just make sure the use case is correct).
+
+#### Hooks
+
+Questions have hooks that allow you to respond to many events in the life time of the question. Each hook is invoked with `global`, `current` and the question `log`. 
+
+property		| description
+--------------- | ---------------------
+onCreate 		| At the creation of the question.
+onChange 		| At each change of the question response (note that this hook may be called many times for each question).
+onSubmit 		| When the question is submited.
+onDecline 		| When the question is declined.
+onTimeout 		| When the timer finishes.
+onDestroy 		| When the question is removed from the screen (either decline or submit).
+
+For example, in case the participant made an error you can mark it on the current object:
+
+```js
+var questions = {
+	stem: 'Please write "Hello"',
+	onSubmit: function(log, current){
+		// if the question response is not correct
+		if (log.response !== 'Hello'){
+			// mark an arbitrary flag so that it may be accessed somewhere else
+			current.error = true;
+		}
+	}
+}
+```
 
 #### Text & Textarea
 The `text` and `textarea` questions consist of a simple text input in which the users can type in text. The difference between them is that text questions consist of a single line, whereas textareas are multiline. There are also several properties that are unique to textareas.
@@ -676,9 +705,9 @@ Randomly selects an element from the set (in case the set has only one element, 
 Selects a random element without repeating the same element until we've gone through the whole set
 * `{set: 'setName', type:'exRandom'}`
 
-**bySequence**:
+**sequential**:
 Selects the elements by the order they were inserted into the set
-* `{set: 'setName', type:'bySequence'}`
+* `{set: 'setName', type:'sequential'}`
 
 **byData**:
 Selects a specific element from the set.

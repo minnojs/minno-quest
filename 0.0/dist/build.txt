@@ -11,6 +11,9 @@ js/utils/timer/timerStopper.js
 js/utils/timer/timerDirective.js
 js/utils/timer/timerNow.js
 js/utils/timer/timer-module.js
+js/utils/utils/preloaderService.js
+js/utils/utils/preloaderDecorator.js
+js/utils/utils/utilsModule.js
 js/quest/directives/buttons/buttons.js
 js/utils/database/template/templateFilter.js
 js/utils/database/template/templateObjProvider.js
@@ -42,6 +45,9 @@ text!quest/directives/select/selectOne.html
 js/quest/directives/select/selectOneDirective.js
 text!quest/directives/select/selectMulti.html
 js/quest/directives/select/selectMultiDirective.js
+text!quest/directives/slider/slider.html
+js/quest/directives/slider/sliderDirective.js
+js/quest/directives/slider/slider.js
 js/quest/directives/toRegexFilter.js
 js/quest/directives/dfltUnitsFilter.js
 js/quest/directives/questDirectivesModule.js
@@ -113,6 +119,9 @@ js/utils/timer/timerStopper.js
 js/utils/timer/timerDirective.js
 js/utils/timer/timerNow.js
 js/utils/timer/timer-module.js
+js/utils/utils/preloaderService.js
+js/utils/utils/preloaderDecorator.js
+js/utils/utils/utilsModule.js
 js/quest/directives/buttons/buttons.js
 js/utils/database/template/templateFilter.js
 js/utils/database/template/templateObjProvider.js
@@ -144,6 +153,9 @@ text!quest/directives/select/selectOne.html
 js/quest/directives/select/selectOneDirective.js
 text!quest/directives/select/selectMulti.html
 js/quest/directives/select/selectMultiDirective.js
+text!quest/directives/slider/slider.html
+js/quest/directives/slider/sliderDirective.js
+js/quest/directives/slider/slider.js
 js/quest/directives/toRegexFilter.js
 js/quest/directives/dfltUnitsFilter.js
 js/quest/directives/questDirectivesModule.js

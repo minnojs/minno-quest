@@ -499,10 +499,10 @@ This can look something like this:</p>
 <ul>
 <li><code>{set: &#39;setName&#39;, type:&#39;exRandom&#39;}</code></li>
 </ul>
-<h5 id="bysequence-">bySequence:</h5>
+<h5 id="sequential-">sequential:</h5>
 <p>Selects the elements by the order they were inserted into the set</p>
 <ul>
-<li><code>{set: &#39;setName&#39;, type:&#39;bySequence&#39;}</code></li>
+<li><code>{set: &#39;setName&#39;, type:&#39;sequential&#39;}</code></li>
 </ul>
 <h5 id="bydata-">byData:</h5>
 <p>Selects a specific element from the set.
@@ -534,8 +534,8 @@ If the data property is set as a string, we assume it refers to the element hand
 </code></pre>
 <p>The <code>repeat</code> property can used within any type of randomization. We’ve seen a simple use, but its true power comes when combined with <a href="#seeds">seeds</a>.</p>
 <h4 id="seed">Seed</h4>
-<p>Each inheritance query automatically gets assigned to a “seed”. That is used to track its progress. For instance, it is used to keep track of the current element in the <code>bySequence</code> type inheritance.
-Most of the time, the seed is transparent to the user, but sometimes it becomes useful to manually control the inheritance seed. For instance, if you want to reset an <code>exRandom</code> inheritance. Or if you want to keep two instances of a <code>bySequence</code> inheritance.
+<p>Each inheritance query automatically gets assigned to a “seed”. That is used to track its progress. For instance, it is used to keep track of the current element in the <code>sequential</code> type inheritance.
+Most of the time, the seed is transparent to the user, but sometimes it becomes useful to manually control the inheritance seed. For instance, if you want to reset an <code>exRandom</code> inheritance. Or if you want to keep two instances of a <code>sequential</code> inheritance.
 It is important to take note that if you create custom seeds, it is your responsibility that they query sets of the same length. If you try to inherit two sets with different lengths the sequencer will throw an error.
 In order to create a new seed all you have to do is set the <code>seed</code> property.</p>
 <p>In the following example, both elements inherit exRandomly from the trials set. But the second element restarts the randomization.</p>

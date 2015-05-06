@@ -1,0 +1,1 @@
+define(["require","underscore"],function(e){function n(e){return e.register("image",r),e}function r(e){var n=this.$q.defer(),r=new Image;return r.onload=t.bind(n.resolve,n,r),r.onerror=t.bind(n.reject,n,r),r.src=e,n.promise}var t=e("underscore");return n.$inject=["$delegate"],n});

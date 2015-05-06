@@ -1,0 +1,1 @@
+define(["require","underscore","text!./slider.html"],function(e){function n(){return{replace:!0,template:e("text!./slider.html"),require:["ngModel"],controller:"questController",controllerAs:"ctrl",scope:{data:"=questData"},link:function(e,t,n,r){var i=r[0],s=e.ctrl;s.registerModel(i,{dflt:0})}}}var t=e("underscore");return t,n.$inject=[],n});

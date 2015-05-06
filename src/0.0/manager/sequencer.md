@@ -392,9 +392,9 @@ This is the default inheritance type, so it is not obligatory to use the `type` 
 Selects a random element without repeating the same element until we've gone through the whole set
 * `{set: 'setName', type:'exRandom'}`
 
-##### bySequence:
+##### sequential:
 Selects the elements by the order they were inserted into the set
-* `{set: 'setName', type:'bySequence'}`
+* `{set: 'setName', type:'sequential'}`
 
 ##### byData:
 Selects a specific element from the set.
@@ -432,8 +432,8 @@ For instance, the following sequence will display a random element from the tria
 The `repeat` property can used within any type of randomization. We've seen a simple use, but its true power comes when combined with [seeds](#seeds).
 
 #### Seed
-Each inheritance query automatically gets assigned to a "seed". That is used to track its progress. For instance, it is used to keep track of the current element in the `bySequence` type inheritance.
-Most of the time, the seed is transparent to the user, but sometimes it becomes useful to manually control the inheritance seed. For instance, if you want to reset an `exRandom` inheritance. Or if you want to keep two instances of a `bySequence` inheritance.
+Each inheritance query automatically gets assigned to a "seed". That is used to track its progress. For instance, it is used to keep track of the current element in the `sequential` type inheritance.
+Most of the time, the seed is transparent to the user, but sometimes it becomes useful to manually control the inheritance seed. For instance, if you want to reset an `exRandom` inheritance. Or if you want to keep two instances of a `sequential` inheritance.
 It is important to take note that if you create custom seeds, it is your responsibility that they query sets of the same length. If you try to inherit two sets with different lengths the sequencer will throw an error.
 In order to create a new seed all you have to do is set the `seed` property.
 
