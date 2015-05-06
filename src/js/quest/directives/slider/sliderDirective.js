@@ -9,18 +9,26 @@ define(function(require){
 		return {
 			replace: true,
 			template: require('text!./slider.html'),
-			require: ['ngModel'],
+			require: ['form', 'ngModel'],
 			controller: 'questController',
 			controllerAs: 'ctrl',
 			scope:{
 				data: '=questData'
 			},
 			link: function(scope, element, attr, ctrls) {
-				var ngModel = ctrls[0];
+				var form = ctrls[0];
+				var ngModel = ctrls[1];
 				var ctrl = scope.ctrl;
+				var data = scope.data;
+
+				scope.form = form;
 
 				ctrl.registerModel(ngModel, {
-					dflt: 0
+					dflt: undefined
+				});
+
+				data.autoSubmit && scope.$on('slider:change', function(){
+					scope.$emit('quest:submit:now');
 				});
 			}
 

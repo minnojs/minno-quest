@@ -4,7 +4,9 @@
 * [Questions](#questions)
 	- [text & textarea](#text-textarea)
 	- [textNumber](#textNumber)
+	- [dropdown](#dropdown)
 	- [selectOne & selectMulti](#selectone-selectmulti)
+	- [slider](#slider)
 * [Settings](#settings)
 	- [onEnd](#onend)
 	- [logger](#logger)
@@ -84,9 +86,11 @@ All these strings may use templates, and have access to the following objects: `
 ### Questions
 
 Here are the types of questions PIQuest currently supports:
-- [text & textarea](#text-textarea)
-- [textNumber](#textNumber)
-- [selectOne & selectMulti](#selectone-selectmulti)
+* [text & textarea](#text-textarea)
+* [textNumber](#textNumber)
+* [dropdown](#dropdown)
+* [selectOne & selectMulti](#selectone-selectmulti)
+* [slider](#slider)
 
 All question types share some basic properties:
 
@@ -265,6 +269,36 @@ var quest = {
 		{text:'I guess', value:1},		// ==> 1
 		{text:'Not at all', value:2}	// ==> 2
 	]
+}
+```
+
+#### slider
+The slider question presents a slider that allows the user to pick a response along a preassigned range. It allows either the creation a continuous scale or dividing the range into steps. The values of the slider are always numbers.
+These are the supported properties:
+
+Propery     | Description
+----------- | -----------
+min         | Maximum slider value.
+max         | Minimum slider value.
+steps       | How many steps the slider should be divided into. These intervals are marked with pips and the handle snaps to them.
+leftLabel   | A label to display on the top left of the slider.
+rightLabel  | A label to display on the top right of te slider.
+labels		| An array of labels to display underneath the slider. They will be spread evenly across the slider.
+highlight   | Show highlight to left of handle.
+required	| (true of false; default: false) Validation: require a non-empty string as a response.
+dflt 		| The default value for the slider. If no default value is defined, the handle will not be displayed until the slider is first clicked.
+autosubmit	| Submit automatically on click or when handle is drop.
+
+The most common use of the slider is the creation of a visual analog scale (VAS). This is an example of using a slider to create a Likert type scale:
+
+```js
+var quest = {
+	type: 'slider',
+	stem: 'How often do you feel blue?',
+	min:1,
+	max:7,
+	steps:7,
+	labels: ['Never', 'Sometimes', 'Always']	
 }
 ```
 

@@ -3,15 +3,17 @@
         // AMD. Register as an anonymous module.
         define([], factory);
     } else {
-        var app = angular.module('ovts', []);
-        app.directive('ovtsSlider', factory(root.angular));
+        var app = angular.module('pi', []);
+        app.directive('piSlider', factory(root.angular));
     }
 }(this, function () {
+  var SLIDER_CHANGE_EVENT = 'slider:change';
+
   sliderDirective.$inject = ["$document", "$sce"];
   function sliderDirective($document) {
     return {
       scope: {
-        options: '=ovtsSliderOptions'
+        options: '=piSliderOptions'
       },
       replace: true,
       require: 'ngModel',
@@ -26,7 +28,10 @@
               '<div class="slider-handle" ng-mousedown="onHandleMousedown($event)" ng-style="handleStyle"></div>',
             '</div>',
             '<ul class="slider-pips">',
-                '<li ng-repeat="i in getNumber(steps) track by $index" ng-style="{width: pipWidth + \'%\'}"></li>',
+                '<li ng-repeat="i in getNumber(steps) track by $index" ng-style="{width: pipWidth + \'%\'}" ng-class="{last:$last}"></li>',
+            '</ul>',
+            '<ul class="slider-labels">',
+                '<li ng-repeat="label in labels track by $index" ng-style="{width: labelsWidth + \'%\'}" ng-class="{first:$first, last:$last}">{{label}}</li>',
             '</ul>',
           '</div>'].join('\n'),
 
@@ -38,11 +43,15 @@
 
         scope.ngModel = ngModel;
 
-        scope.steps = options.steps || 0;
         scope.min = options.min || 0;
         scope.max = options.max || (scope.min + 100);
         scope.range = scope.max - scope.min;
-        scope.pipWidth = options.steps && 100/options.steps;
+
+        scope.steps = options.steps ? options.steps - 1 : 0;
+        scope.pipWidth = options.steps && 100/scope.steps;
+
+        scope.labels = options.labels;
+        scope.labelsWidth = options.labels && 100 / options.labels.length;
 
         ngModel.$isEmpty = isEmpty;
         ngModel.$render = renderView;
@@ -56,6 +65,11 @@
         // http://stackoverflow.com/questions/16824853/way-to-ng-repeat-defined-number-of-times-instead-of-repeating-over-array
         scope.getNumber = function getNumber(num){return new Array(num);};
 
+        function setValue(percentage){
+          ngModel.$setViewValue(percentage);
+          ngModel.$render();
+        }
+
         // limit percenatge by step size
         function steppedPercentage(percentage){
           if (!scope.steps || ngModel.$isEmpty(percentage)){
@@ -63,10 +77,6 @@
           }
 
           return Math.round(percentage * scope.steps) / scope.steps;
-        }
-
-        function isEmpty(n){
-          return isNaN(parseFloat(n)) || !isFinite(n);
         }
 
         // manage placing the handle as well as the highlight correctly
@@ -100,28 +110,32 @@
           fixEvent(event);
           var basePercentage, basePosition;
           event.preventDefault();
+          event.stopPropagation(); // prevent propogation to slider so that change is fired for the beginin of a drag interaction
           basePosition = event.pageX;
           basePercentage = ngModel.$viewValue;
 
           $document.on('mousemove', mouseMove);
           $document.on('mouseup', mouseUp);
 
+          // drag
           function mouseMove(event) {
             fixEvent(event);
+            event.preventDefault();
             var percentage = basePercentage + (event.pageX - basePosition) / (element.prop('clientWidth') - sliderHandleWidth);
             // don't allow extending beyond slider size
             percentage = Math.min(percentage, 1);
             percentage = Math.max(percentage, 0);
 
             scope.$apply(function(){
-              ngModel.$setViewValue(percentage);
-              ngModel.$render();
+              setValue(percentage);
             });
           }
 
+          // drop
           function mouseUp() {
             $document.off('mousemove', mouseMove);
             $document.off('mouseup', mouseUp);
+            scope.$emit(SLIDER_CHANGE_EVENT, ngModel.$viewValue); // emit only on mouse drop
           }
         }
 
@@ -133,14 +147,16 @@
           var sliderPosition = element[0].getBoundingClientRect().left;
           var percentage = (event.pageX - sliderPosition) / (sliderWidth - sliderHandleWidth);
           // auto "$apply" by ng-mousedown
-          ngModel.$setViewValue(percentage);
-          ngModel.$render();
+          setValue(percentage);
+          scope.$emit(SLIDER_CHANGE_EVENT, ngModel.$viewValue);
         }
 
 
       }
     };
   }
+
+  return sliderDirective;
 
   // fix IE8 events (missing pageX) - from jquery
   function fixEvent(event){
@@ -156,9 +172,9 @@
     }
   }
 
-
-  return sliderDirective;
-
+  function isEmpty(n){
+    return isNaN(parseFloat(n)) || !isFinite(n);
+  }
 }));
 
 

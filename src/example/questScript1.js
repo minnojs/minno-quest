@@ -35,8 +35,7 @@ define(['questAPI'], function(Quest){
 				dflt: 0.5,
 				min: 0,
 				max: 1,
-				// inline:false,
-				//columns: 30,
+				labels: ['right', 'center', 'left'],
 				width: 50
 			}
 		},
