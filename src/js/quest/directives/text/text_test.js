@@ -145,10 +145,24 @@ define(['underscore','../questDirectivesModule'], function(_){
 				expect(formElm).toBeInvalid();
 			});
 
+			// @DEPRECATED
 			it('should support minlength',function(){
 				compile({minlength:5, errorMsg:{minlength: 'minlength msg'}});
 				var errorElm = formElm.find('[pi-quest-validation="form.$error.minlength"]');
 				expect(errorElm.text()).toBe('minlength msg');
+
+				changeInputValueTo('aaaaaaa');
+				expect(formElm).toBeValid();
+				expect(errorElm).toBeHidden();
+
+				changeInputValueTo('aaa');
+				expect(formElm).toBeInvalid();
+			});
+
+			it('should support minLength',function(){
+				compile({minlength:5, errorMsg:{minLength: 'minLength msg'}});
+				var errorElm = formElm.find('[pi-quest-validation="form.$error.minlength"]');
+				expect(errorElm.text()).toBe('minLength msg');
 
 				changeInputValueTo('aaaaaaa');
 				expect(formElm).toBeValid();

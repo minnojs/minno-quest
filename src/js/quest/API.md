@@ -145,7 +145,8 @@ dflt 			| (test; default value: "") The default value for this question.
 inline 			| Show the stem in the same line as the input box (this will make the input box narrower as well).
 width 			| (Number or text) The width of the input box (By default numbers are translated to pixels, but you can use text to use other units).
 autoSubmit 		| (true or false; default: false) If this property is set to true typing `Enter` while this input is focused will submit the page.
-minlength 		| (Number) Validation: force at least this number of characters.
+minLength 		| (Number) Validation: force at least this number of characters.
+minlength 		| @DEPRECATED see minLength. (Number) Validation: force at least this number of characters.
 maxlength		| (Number) Validation: force at most this number of characters.
 maxlengthLimit 	| (true or false) Do not allow the user to input more characters than defined by `maxlength` (if maxlength is not defined, any number of characters will be allowed).
 required		| (true of false; default: false) Validation: require a non-empty string as a response.
