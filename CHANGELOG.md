@@ -1,3 +1,20 @@
+<a name="0.0.42"></a>
+### 0.0.42 (2015-05-13)
+
+
+#### Bug Fixes
+
+* **questDirectives:** minlength should be minLength. ([07f5c001](https://github.com/ProjectImplicit/PIquest/commit/07f5c001cee45e44c5f2d233a55a51607ec51907), closes [#96](https://github.com/ProjectImplicit/PIquest/issues/96))
+
+
+#### Features
+
+* **questDirectives:**
+  * support grid type questions. ([4cd6cc84](https://github.com/ProjectImplicit/PIquest/commit/4cd6cc8437a71223f6c976319289b2c60715bebd), closes [#97](https://github.com/ProjectImplicit/PIquest/issues/97))
+  * support stemCss. ([f7e99b02](https://github.com/ProjectImplicit/PIquest/commit/f7e99b0249e640b8b3183d390290d0d40080b967), closes [#98](https://github.com/ProjectImplicit/PIquest/issues/98))
+  * slider ready for use. ([146b9828](https://github.com/ProjectImplicit/PIquest/commit/146b98287e2c477e524cbb2dc12907d037da4fde), closes [#26](https://github.com/ProjectImplicit/PIquest/issues/26))
+
+
 <a name="0.0.41"></a>
 ### 0.0.41 (2015-04-30)
 

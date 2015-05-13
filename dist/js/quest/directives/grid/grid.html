@@ -1,24 +1,19 @@
 <div>
-	<table class="table">
+	<table class="table table-hover">
 		<thead>
 			<tr>
 				<th></th>
-				<th ng-repeat="column in data.columns">{{column}}</th>
+				<th ng-repeat="column in columns">{{column.stem}}</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr
-				ng-repeat="row in data.rows"
+				ng-repeat="row in rows"
 				quest-grid-row="row"
-				ng-model="current[row.name]"
+				quest-grid-data="data"
+				ng-model="$parent.$parent.current.questions[row.name]"
 				ng-required="{{data.required}}"
-			>
-				<th scope="row">{{row.stem}}</th>
-				<td ng-repeat="column in data.columns">
-					<button btn-radio="column.value || $index" ng-model="$parent.response" class="btn"></button>
-
-				</td>
-			</tr>
+			></tr>
 		</tbody>
 	</table>
 </div>
