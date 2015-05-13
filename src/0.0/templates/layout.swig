@@ -131,6 +131,8 @@
 									{{ example("Text Number", "../questExamples/textNumber", data.basename) }}
 									{{ example("Select One", "../questExamples/selectOne", data.basename) }}
 									{{ example("Select Multi", "../questExamples/selectMulti", data.basename) }}
+									{{ example("Grid", "../questExamples/grid", data.basename) }}
+									{{ example("Slider", "../questExamples/slider", data.basename) }}
 								</ul>
 							</li>
 							{{ navitem("API", "../quest/API", data.basename) }}

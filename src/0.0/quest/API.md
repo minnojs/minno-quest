@@ -314,7 +314,7 @@ Here is a simple example of using a grid:
 var grid = 	{
 	type: 'grid',
 	columns: ['Strongly agree' , 'agree' , 'don\’t know' , 'disagree' , 'Strongly disagree'],
-	rows: ['I like grids', 'I like bannanas too'],
+	rows: ['I like grids', 'I like bannanas too']
 }
 ```
 
