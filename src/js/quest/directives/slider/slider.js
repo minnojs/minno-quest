@@ -27,7 +27,7 @@
               '<div class="slider-bar-stub"></div>',
               '<div class="slider-handle" ng-mousedown="onHandleMousedown($event)" ng-style="handleStyle"></div>',
             '</div>',
-            '<ul class="slider-pips">',
+            '<ul class="slider-pips" ng-if="!options.hidePips">',
                 '<li ng-repeat="i in getNumber(steps) track by $index" ng-style="{width: pipWidth + \'%\'}" ng-class="{last:$last}"></li>',
             '</ul>',
             '<ul class="slider-labels">',

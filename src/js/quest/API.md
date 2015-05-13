@@ -347,11 +347,13 @@ Property     | Description
 ----------- | -----------
 min         | Maximum slider value (default:0).
 max         | Minimum slider value (default:100).
+highlight   | Show highlight to left of handle.
 steps       | How many steps the slider should be divided into. These intervals are marked with pips and the handle snaps to them.
+hidePips 	| When the slider is divided into steps, do not display the step pips.
 leftLabel   | A label to display on the top left of the slider.
 rightLabel  | A label to display on the top right of te slider.
 labels		| An array of labels to display underneath the slider. They will be spread evenly across the slider.
-highlight   | Show highlight to left of handle.
+displayValue| Display the value of the slider, beneath the slider control.
 required	| (true of false; default: false) Validation: require a non-empty string as a response.
 dflt 		| The default value for the slider. If no default value is defined, the handle will not be displayed until the slider is first clicked.
 autosubmit	| Submit automatically on click or when handle is drop.
