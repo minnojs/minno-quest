@@ -1,0 +1,19 @@
+<div>
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th></th>
+				<th ng-repeat="column in columns">{{column.stem}}</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr
+				ng-repeat="row in rows"
+				quest-grid-row="row"
+				quest-grid-data="data"
+				ng-model="$parent.$parent.current.questions[row.name]"
+				ng-required="{{data.required}}"
+			></tr>
+		</tbody>
+	</table>
+</div>

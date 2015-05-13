@@ -9,7 +9,10 @@ description: All the little details...
 * [Questions](#questions)
 	- [text & textarea](#text-textarea)
 	- [textNumber](#textNumber)
+	- [dropdown](#dropdown)
 	- [selectOne & selectMulti](#selectone-selectmulti)
+	- [grid](#grid)
+	- [slider](#slider)
 * [Settings](#settings)
 	- [onEnd](#onend)
 	- [logger](#logger)
@@ -38,7 +41,7 @@ prevText		| (text) The text for the previous button (default value: "Go Back")
 noSubmit		| (true of false) remove submit button (useful when using the 'autoSubmit' function of some questions; default value: false).
 submitText		| (text) The text of the submit button (default: "Submit").
 header  		| (text) Text for the page header.
-headerStyle		| (Object) An object to set the style of the header (has most css properties; see examples below).
+headerStyle		| (Object) A A [css object](#http://api.jquery.com/css/#css-properties)  to set the style of the header (see examples below).
 progressBar 	| (text) Text for the progress bar (You might want to use a template for this, maybe something like: `<%= pagesMeta.number %> out of <%= pagesMeta.outOf%>`.).
 numbered 		| (true of false) Whether to  display the number of each question (default value: false).
 numberStart		| (Number) The number for the first question in the page (default: 1).
@@ -89,9 +92,11 @@ All these strings may use templates, and have access to the following objects: `
 ### Questions
 
 Here are the types of questions PIQuest currently supports:
-- [text & textarea](#text-textarea)
-- [textNumber](#textNumber)
-- [selectOne & selectMulti](#selectone-selectmulti)
+* [text & textarea](#text-textarea)
+* [textNumber](#textNumber)
+* [dropdown](#dropdown)
+* [selectOne & selectMulti](#selectone-selectmulti)
+* [slider](#slider)
 
 All question types share some basic properties:
 
@@ -100,6 +105,7 @@ property		| description
 type 			| (text; default: 'text') Controls the question type. See the possible types below. 
 name 			| (text) The name that this question is marked with when it is logged. Also allows you to refer to the question from within PIquest.
 stem 			| (text; default: '') The text for the question itself..
+stemCss			| A [css object](#http://api.jquery.com/css/#css-properties) to be applied to the stem.
 description 	| (text; default: '') Any additional text you want in order to extend the question description.
 help			| (true or false;  (default: false)) Whether to display the question help text.
 helpText		| (text) The question help text. (Some questions have default help texts, some don't).
@@ -145,7 +151,8 @@ dflt 			| (test; default value: "") The default value for this question.
 inline 			| Show the stem in the same line as the input box (this will make the input box narrower as well).
 width 			| (Number or text) The width of the input box (By default numbers are translated to pixels, but you can use text to use other units).
 autoSubmit 		| (true or false; default: false) If this property is set to true typing `Enter` while this input is focused will submit the page.
-minlength 		| (Number) Validation: force at least this number of characters.
+minLength 		| (Number) Validation: force at least this number of characters.
+minlength 		| @DEPRECATED see minLength. (Number) Validation: force at least this number of characters.
 maxlength		| (Number) Validation: force at most this number of characters.
 maxlengthLimit 	| (true or false) Do not allow the user to input more characters than defined by `maxlength` (if maxlength is not defined, any number of characters will be allowed).
 required		| (true of false; default: false) Validation: require a non-empty string as a response.
@@ -270,6 +277,74 @@ var quest = {
 		{text:'I guess', value:1},		// ==> 1
 		{text:'Not at all', value:2}	// ==> 2
 	]
+}
+```
+
+#### grid
+The grid question allows you to group multiple "multiple choice" questions into a single table. This is often useful when asking several likert type questions using the same scale.
+
+The grid question itself keeps track of the sum of the row questions (excluding any questions that have non-number values).
+
+Propery     | Description
+----------- | -----------
+columns 	| An array of column descriptions. You can use a string here or a column object as described [below](#gridcolumns).
+rows 		| An array of row descriptions. You can use a string here or a row object as described [below](#gridrows).
+shuffle 	| Whether to shuffle the order of the questions.
+
+##### grid.columns
+If you set a string instead of a column object it will be treated as if you set only the stem and all other values will be set by default.
+
+Propery     | Description
+----------- | -----------
+stem 		| (text) The description of this column.
+value 		| The value to set for this column. Defaults to the number of the column (starting from 1, so that the response for choosing the third column is 3).
+
+##### grid.rows
+If you set a string instead of a row object it will be treated as if you set only the stem and all other values will be set by default.
+
+Propery     | Description
+----------- | -----------
+stem 		| (text) The description of this column.
+name 		| The name you want this row to be called within the `questions` object. If this is not set the grid automatically sets it according to the grid name. So that if grid.name is "myGrid" then you're first row will be called by default "myGrid001".
+reverse 	| When calculating the default value for this row, should we reverse the order of columns (high to low and vise versa).
+
+Here is a simple example of using a grid:
+
+```js
+var grid = 	{
+	type: 'grid',
+	columns: ['Strongly agree' , 'agree' , 'don\’t know' , 'disagree' , 'Strongly disagree'],
+	rows: ['I like grids', 'I like bannanas too'],
+}
+```
+
+#### slider
+The slider question presents a slider that allows the user to pick a response along a preassigned range. It allows either the creation a continuous scale or dividing the range into steps. The values of the slider are always numbers.
+These are the supported properties:
+
+Propery     | Description
+----------- | -----------
+min         | Maximum slider value (default:0).
+max         | Minimum slider value (default:100).
+steps       | How many steps the slider should be divided into. These intervals are marked with pips and the handle snaps to them.
+leftLabel   | A label to display on the top left of the slider.
+rightLabel  | A label to display on the top right of te slider.
+labels		| An array of labels to display underneath the slider. They will be spread evenly across the slider.
+highlight   | Show highlight to left of handle.
+required	| (true of false; default: false) Validation: require a non-empty string as a response.
+dflt 		| The default value for the slider. If no default value is defined, the handle will not be displayed until the slider is first clicked.
+autosubmit	| Submit automatically on click or when handle is drop.
+
+The most common use of the slider is the creation of a visual analog scale (VAS). This is an example of using a slider to create a Likert type scale:
+
+```js
+var quest = {
+	type: 'slider',
+	stem: 'Sliders are exremely useful.',
+	min:1,
+	max:7,
+	steps:7,
+	labels: ['Strongly Agree', 'Neutral', 'Strongly Disagree']	
 }
 ```
 
