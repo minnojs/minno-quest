@@ -145,7 +145,7 @@
           event.preventDefault();
           var sliderWidth = element.prop('clientWidth');
           var sliderPosition = element[0].getBoundingClientRect().left;
-          var percentage = (event.pageX - sliderPosition) / (sliderWidth - sliderHandleWidth);
+          var percentage = (event.pageX - sliderPosition - sliderHandleWidth/2) / (sliderWidth - sliderHandleWidth);
           // auto "$apply" by ng-mousedown
           setValue(percentage);
           scope.$emit(SLIDER_CHANGE_EVENT, ngModel.$viewValue);
