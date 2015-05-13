@@ -1,0 +1,1 @@
+define([],function(){function e(){return{require:["ngModel"],controller:"questController",controllerAs:"ctrl",scope:{data:"=questGridRow"},link:function(e,t,n,r){var i=r[0],s=e.ctrl;s.registerModel(i,{dflt:undefined})}}}return e});

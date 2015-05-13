@@ -40,7 +40,7 @@ define(['angular','./questDirectivesModule'], function(angular){
 			timerStack = [0,0,0,0,0];
 		}));
 
-		it('should expose a value function as well as the scope', function(){
+		it('should expose a registering function as well as the scope', function(){
 			compile({name:123});
 			expect(scope.ctrl.registerModel).toBeDefined();
 			expect(scope.ctrl.scope).toBe(scope);
@@ -160,6 +160,18 @@ define(['angular','./questDirectivesModule'], function(angular){
 				compile({onTimeout:spy});
 				scope.$emit('quest:timeout');
 				expect(spy).toHaveBeenCalled();
+			});
+		});
+
+		describe(': data', function(){
+			it('should use $scope.data by default', function(){
+				compile({name:123}); // as set within the compile function
+				expect(log.name).toEqual(123);
+			});
+
+			it('should give precedence to options.data', function(){
+				compile({name:123}, null, {data:{name:456}}); // as set within the compile function
+				expect(log.name).toEqual(456);
 			});
 		});
 

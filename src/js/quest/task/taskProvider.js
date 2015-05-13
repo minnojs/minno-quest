@@ -1,7 +1,7 @@
 define(['underscore', 'angular'], function(_, angular){
 
 	TaskProvider.$inject = ['$q','Database','Logger','QuestSequence','taskParse', 'dfltQuestLogger', '$rootScope'];
-	function TaskProvider($q, Database, Logger, Sequence, parse, dfltQuestLogger,$rootScope){
+	function TaskProvider($q, Database, Logger, QuestSequence, parse, dfltQuestLogger,$rootScope){
 		function Task(script){
 			var self = this;
 			var settings = script.settings || {};
@@ -17,7 +17,7 @@ define(['underscore', 'angular'], function(_, angular){
 				throw new Error('Task: no sequence was defined');
 			}
 
-			this.sequence = new Sequence(script.sequence, this.db);
+			this.sequence = new QuestSequence(script.sequence, this.db);
 
 			this.promise = this.q.promise
 				.then(function(){

@@ -2835,6 +2835,19 @@ label {
     border-color: #337ab7; }
 .btn-active-accented.active {
   color: black; }
+[quest-grid-row] .btn:before, [quest-grid-row] .slider-pips li.btn.last:after, .slider-pips [quest-grid-row] li.btn.last:after {
+  content: " "; }
+[quest-grid-row] .btn.active:before, [quest-grid-row] .slider-pips li.btn.active.last:after, .slider-pips [quest-grid-row] li.btn.active.last:after {
+  content: "\e013";
+  position: relative;
+  top: 1px;
+  display: inline-block;
+  font-family: 'Glyphicons Halflings';
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; }
 .slider-label-left, .slider-label-right {
   float: left;
   text-transform: capitalize;

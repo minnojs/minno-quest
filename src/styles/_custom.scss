@@ -89,3 +89,18 @@ label {
 .btn-active-accented.active{
 	color:black;
 }
+
+[quest-grid]{
+	thead th, td {
+		text-align:center;
+	}
+
+	.btn:before {
+		@extend .glyphicon;
+		@extend .glyphicon-ok;
+		visibility: hidden;
+	}
+	.btn.active:before {
+		visibility: visible;
+	}
+}

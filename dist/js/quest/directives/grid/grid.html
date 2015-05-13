@@ -1,0 +1,24 @@
+<div>
+	<table class="table">
+		<thead>
+			<tr>
+				<th></th>
+				<th ng-repeat="column in data.columns">{{column}}</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr
+				ng-repeat="row in data.rows"
+				quest-grid-row="row"
+				ng-model="current[row.name]"
+				ng-required="{{data.required}}"
+			>
+				<th scope="row">{{row.stem}}</th>
+				<td ng-repeat="column in data.columns">
+					<button btn-radio="column.value || $index" ng-model="$parent.response" class="btn"></button>
+
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

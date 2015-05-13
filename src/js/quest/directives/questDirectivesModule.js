@@ -1,5 +1,6 @@
 define(function(require){
 	var angular = require('angular');
+	var _ = require('underscore');
 
 	// set modules that are requirements for the quest module
 	var module = angular.module('questDirectives',[
@@ -15,6 +16,7 @@ define(function(require){
 	module.directive('piQuest', require('./piQuest/piQuest-directive'));
 	module.directive('piqPage', require('./piQuest/piqPage-directive'));
 	module.directive('questWrapper', require('./wrapper/wrapper-directive'));
+
 	module.directive('questText', require('./text/textDirective'));
 	module.directive('questTextarea', require('./text/textDirective')); // uses the same directive as questText
 	module.directive('questTextNumber', require('./text/text-number-directive'));
@@ -23,6 +25,10 @@ define(function(require){
 	module.directive('questDropdown',require('./select/dropdownDirective'));
 	module.directive('questSelectOne',require('./select/selectOneDirective'));
 	module.directive('questSelectMulti',require('./select/selectMultiDirective'));
+
+	module.value('questShuffle', _.shuffle); // we already have this in database but I don't want the directives to be too interdependant
+	module.directive('questGrid', require('./grid/gridDirective'));
+	module.directive('questGridRow', require('./grid/gridRowDirective'));
 
 	module.directive('questSlider',require('./slider/sliderDirective'));
 	module.directive('piSlider',require('./slider/slider'));

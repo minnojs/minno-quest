@@ -6,6 +6,7 @@
 	- [textNumber](#textNumber)
 	- [dropdown](#dropdown)
 	- [selectOne & selectMulti](#selectone-selectmulti)
+	- [grid](#grid)
 	- [slider](#slider)
 * [Settings](#settings)
 	- [onEnd](#onend)
@@ -273,6 +274,34 @@ var quest = {
 	]
 }
 ```
+
+#### grid
+The grid question allows you to group multiple "multiple choice" questions into a single table. This is often useful when asking several likert type questions using the same scale.
+
+The grid question itself keeps track of the sum of the row questions (excluding any questions that have non-number values).
+
+Propery     | Description
+----------- | -----------
+columns 	| An array of column descriptions. You can use a string here or a column object as described [below](#gridcolumns).
+rows 		| An array of row descriptions. You can use a string here or a row object as described [below](#gridrows).
+shuffle 	| Whether to shuffle the order of the questions.
+
+##### grid.columns
+If you set a string instead of a column object it will be treated as if you set only the stem and all other values will be set by default.
+
+Propery     | Description
+----------- | -----------
+stem 		| (text) The description of this column.
+value 		| The value to set for this column. Defaults to the number of the column (starting from 1, so that the response for choosing the third column is 3).
+
+##### grid.rows
+If you set a string instead of a row object it will be treated as if you set only the stem and all other values will be set by default.
+
+Propery     | Description
+----------- | -----------
+stem 		| (text) The description of this column.
+name 		| The name you want this row to be called within the `questions` object. If this is not set the grid automatically sets it according to the grid name. So that if grid.name is "myGrid" then you're first row will be called by default "myGrid001".
+reverse 	| When calculating the default value for this row, should we reverse the order of columns (high to low and vise versa).
 
 #### slider
 The slider question presents a slider that allows the user to pick a response along a preassigned range. It allows either the creation a continuous scale or dividing the range into steps. The values of the slider are always numbers.

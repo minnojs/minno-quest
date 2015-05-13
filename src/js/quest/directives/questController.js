@@ -6,13 +6,14 @@
 define(function(require){
 	var _ = require('underscore');
 
-	questController.$inject = ['$scope', 'timerStopper', '$parse', '$attrs','piConsole', 'piInvoke'];
-	function questController($scope, Stopper, $parse, $attr, piConsole, invoke){
+	questController.$inject = ['$scope', 'timerStopper', '$parse', '$attrs','piConsole', 'piInvoke', '$rootScope'];
+	function questController($scope, Stopper, $parse, $attr, piConsole, invoke, $rootScope){
 		var self = this;
 		var log;
-		var data = $scope.data;
+		var data;
 		var defaults = {
-			dflt: NaN
+			dflt: NaN,
+			data: $scope.data
 		};
 
 		this.scope = $scope;
@@ -51,19 +52,20 @@ define(function(require){
 		 * @param  {Object} options
 		 */
 		function registerModel(ngModel, options){
-
 			options = _.defaults(options || {}, defaults);
+			data = options.data;
 
 			var ngModelGet = $parse($attr.ngModel);
-			var dfltValue = ("dflt" in data) ? data.dflt : options.dflt; // use "in" to cover cases where dflt is set to "" or explicitly undefined
+			var dfltValue = data.hasOwnProperty('dflt') ? data.dflt : options.dflt;
 
 			// make model accesable from within scope
 			$scope.model = ngModel;
 
+			// has to be evaluated in the context of the parent scope because we're assuming that the quest directives have an isolated scope
 			log = ngModelGet($scope.$parent);
 
 			// init log
-
+			// ********
 			// create log if it doesn't exist yet
 			if (_.isUndefined(log)){
 				log = {};
@@ -79,8 +81,10 @@ define(function(require){
 				name: data.name,
 				response: dfltValue,
 				// @TODO: this is a bit fragile and primitive.
+				// besides, who says this is where "current" will be...
 				// we should probably create a unique ID service of some sort...
-				serial: _.size($parse('current.questions')($scope.$parent))
+				// maybe just grab it off of rootscope
+				serial: _.size($rootScope.current && $rootScope.current.questions)
 			});
 
 			$scope.response = ngModel.$viewValue = log.response;

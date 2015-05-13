@@ -3,8 +3,9 @@
  */
 define(function (require) {
 
-	var prefix = 'quest';
+	var PREFIX = 'quest';
 	var template = require('text!./wrapper.html');
+	var _ = require('underscore');
 
 	function capitaliseFirstLetter(string){
 		return string.charAt(0).toUpperCase() + string.slice(1);
@@ -23,8 +24,7 @@ define(function (require) {
 			link: function(scope,element) {
 				var type = scope.data.type || 'text';
 				var questElement = element.children().eq(2);
-				var SNAKE_CASE_REGEXP = /[A-Z]/g;
-				var attrName = prefix + capitaliseFirstLetter(type);
+				var attrName = PREFIX + capitaliseFirstLetter(type);
 
 				// Make sure that this directive exists
 				if (!$injector.has(attrName + 'Directive')){
@@ -32,9 +32,7 @@ define(function (require) {
 				}
 
 				// snake case the attr name
-				attrName = attrName.replace(SNAKE_CASE_REGEXP, function(letter, pos) {
-					return (pos ? '-' : '') + letter.toLowerCase();
-				});
+				attrName = _.kebabCase(attrName);
 
 				// add the appropriate attribute to the directive and compile it
 				questElement.attr(attrName,true);
