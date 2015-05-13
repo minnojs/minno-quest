@@ -64,5 +64,10 @@ define(['../questDirectivesModule'], function(){
 				compile({type:'error test'});
 			}).toThrow();
 		});
+
+		it('should respect maxWidth', function(){
+			compile({maxWidth: '200px'});
+			expect(elm.find('[quest-data]').css('max-width')).toBe('200px');
+		});
 	});
 });
