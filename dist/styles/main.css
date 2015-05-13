@@ -149,7 +149,7 @@ td, th {
   font-family: 'Glyphicons Halflings';
   src: url('../../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/glyphicons-halflings-regular.eot');
   src: url('../../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/glyphicons-halflings-regular.woff2') format('woff2'), url('../../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/glyphicons-halflings-regular.woff') format('woff'), url('../../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/glyphicons-halflings-regular.ttf') format('truetype'), url('../../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg'); }
-.glyphicon {
+.glyphicon, [quest-grid] .btn:before, [quest-grid] .slider-pips li.btn.last:after, .slider-pips [quest-grid] li.btn.last:after {
   position: relative;
   top: 1px;
   display: inline-block;
@@ -195,7 +195,7 @@ td, th {
   content: "\e011"; }
 .glyphicon-th-list:before, .slider-pips li.glyphicon-th-list.last:after {
   content: "\e012"; }
-.glyphicon-ok:before, .slider-pips li.glyphicon-ok.last:after {
+.glyphicon-ok:before, [quest-grid] .btn:before, [quest-grid] .slider-pips li.btn.last:after, .slider-pips [quest-grid] li.btn.last:after, .slider-pips li.glyphicon-ok.last:after {
   content: "\e013"; }
 .glyphicon-remove:before, .slider-pips li.glyphicon-remove.last:after {
   content: "\e014"; }
@@ -2810,7 +2810,7 @@ label {
   overflow: hidden; }
 [pi-quest-validation] {
   margin: 10px 0; }
-  [pi-quest-validation] .glyphicon {
+  [pi-quest-validation] .glyphicon, [pi-quest-validation] [quest-grid] .btn:before, [quest-grid] [pi-quest-validation] .btn:before, [pi-quest-validation] [quest-grid] .slider-pips li.btn.last:after, [quest-grid] .slider-pips [pi-quest-validation] li.btn.last:after, [pi-quest-validation] .slider-pips [quest-grid] li.btn.last:after, .slider-pips [quest-grid] [pi-quest-validation] li.btn.last:after {
     margin-right: 5px; }
 [pi-console] {
   margin: 20px 0px; }
@@ -2835,19 +2835,12 @@ label {
     border-color: #337ab7; }
 .btn-active-accented.active {
   color: black; }
-[quest-grid-row] .btn:before, [quest-grid-row] .slider-pips li.btn.last:after, .slider-pips [quest-grid-row] li.btn.last:after {
-  content: " "; }
-[quest-grid-row] .btn.active:before, [quest-grid-row] .slider-pips li.btn.active.last:after, .slider-pips [quest-grid-row] li.btn.active.last:after {
-  content: "\e013";
-  position: relative;
-  top: 1px;
-  display: inline-block;
-  font-family: 'Glyphicons Halflings';
-  font-style: normal;
-  font-weight: normal;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale; }
+[quest-grid] thead th, [quest-grid] td {
+  text-align: center; }
+[quest-grid] .btn:before, [quest-grid] .slider-pips li.btn.last:after, .slider-pips [quest-grid] li.btn.last:after {
+  visibility: hidden; }
+[quest-grid] .btn.active:before, [quest-grid] .slider-pips li.btn.active.last:after, .slider-pips [quest-grid] li.btn.active.last:after {
+  visibility: visible; }
 .slider-label-left, .slider-label-right {
   float: left;
   text-transform: capitalize;

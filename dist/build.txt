@@ -47,6 +47,7 @@ text!quest/directives/select/selectMulti.html
 js/quest/directives/select/selectMultiDirective.js
 text!quest/directives/grid/grid.html
 js/quest/directives/grid/gridDirective.js
+text!quest/directives/grid/gridRow.html
 js/quest/directives/grid/gridRowDirective.js
 text!quest/directives/slider/slider.html
 js/quest/directives/slider/sliderDirective.js
@@ -158,6 +159,7 @@ text!quest/directives/select/selectMulti.html
 js/quest/directives/select/selectMultiDirective.js
 text!quest/directives/grid/grid.html
 js/quest/directives/grid/gridDirective.js
+text!quest/directives/grid/gridRow.html
 js/quest/directives/grid/gridRowDirective.js
 text!quest/directives/slider/slider.html
 js/quest/directives/slider/sliderDirective.js
