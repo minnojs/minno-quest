@@ -316,6 +316,10 @@
 <td>(text; default: ‘’) Any additional text you want in order to extend the question description.</td>
 </tr>
 <tr>
+<td>maxWidth</td>
+<td>Force question inputs to have this maximum width.</td>
+</tr>
+<tr>
 <td>help</td>
 <td>(true or false;  (default: false)) Whether to display the question help text.</td>
 </tr>
@@ -747,7 +751,8 @@ Both types of questions support the following properties.</p>
 <p>Here is a simple example of using a grid:</p>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> grid =     {
     type: <span class="hljs-string">'grid'</span>,
-    columns: [<span class="hljs-string">'Strongly agree'</span> , <span class="hljs-string">'agree'</span> , <span class="hljs-string">'don\’t know'</span> , <span class="hljs-string">'disagree'</span> , <span class="hljs-string">'Strongly disagree'</span>],
+    name:<span class="hljs-string">'grid'</span>,
+    columns: [<span class="hljs-string">'Strongly agree'</span> , <span class="hljs-string">'agree'</span> , <span class="hljs-string">'don\'t know'</span> , <span class="hljs-string">'disagree'</span> , <span class="hljs-string">'Strongly disagree'</span>],
     rows: [<span class="hljs-string">'I like grids'</span>, <span class="hljs-string">'I like bannanas too'</span>]
 }
 </code></pre>

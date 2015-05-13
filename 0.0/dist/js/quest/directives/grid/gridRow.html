@@ -1,4 +1,9 @@
 <th scope="row">{{row.stem}}</th>
 <td ng-repeat="column in $parent.columns">
-	<button btn-radio="row.reverse ? data.columns.length - column.value + 1 : column.value" ng-model="$parent.response" class="btn btn-default"></button>
+	<button
+		btn-radio="row.reverse ? data.columns.length - column.value + 1 : column.value"
+		ng-model="$parent.response"
+		class="btn btn-default"
+		uncheckable
+	></button>
 </td>
