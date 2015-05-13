@@ -3584,6 +3584,8 @@ label {
 .btn-active-accented.active {
   color: black; }
 
+[quest-grid] table {
+  table-layout: fixed; }
 [quest-grid] thead th, [quest-grid] td {
   text-align: center; }
 [quest-grid] .btn:before, [quest-grid] .slider-pips li.btn.last:after, .slider-pips [quest-grid] li.btn.last:after {
@@ -3611,6 +3613,7 @@ label {
   height: 5px;
   background: #9DA8B7;
   margin-top: -2.5px;
+  cursor: pointer;
   overflow: hidden;
   position: absolute;
   width: 100%;
@@ -3628,7 +3631,7 @@ label {
   width: 20px;
   border-radius: 50%;
   position: absolute;
-  cursor: pointer;
+  cursor: move;
   background-repeat: no-repeat;
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUBAMAAAB/pwA+AAAAGFBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABWNxwqAAAAB3RSTlMA41r7rZcIBwufZAAAAFdJREFUCNdjYGBgUxE2dEpgAAHFciAQArFYy8EgAMgMhzBLGRiYyqFAgSERxhRjUIcxixjcYcwSBnEYs5DBHMYsRmYiFCBrQxiGbAXCYoRzUB2JcDrCQwBDe0aHCiFO8QAAAABJRU5ErkJggg==);
   top: 0; }

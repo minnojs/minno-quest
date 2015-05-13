@@ -91,6 +91,10 @@ label {
 }
 
 [quest-grid]{
+	table {
+		table-layout: fixed;
+	}
+
 	thead th, td {
 		text-align:center;
 	}
