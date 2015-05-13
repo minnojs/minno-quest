@@ -3,7 +3,7 @@
 * [Pages](#pages)	
 * [Questions](#questions)
 	- [text & textarea](#text-textarea)
-	- [textNumber](#textNumber)
+	- [textNumber](#textnumber)
 	- [dropdown](#dropdown)
 	- [selectOne & selectMulti](#selectone-selectmulti)
 	- [grid](#grid)
@@ -88,7 +88,7 @@ All these strings may use templates, and have access to the following objects: `
 
 Here are the types of questions PIQuest currently supports:
 * [text & textarea](#text-textarea)
-* [textNumber](#textNumber)
+* [textNumber](#textnumber)
 * [dropdown](#dropdown)
 * [selectOne & selectMulti](#selectone-selectmulti)
 * [slider](#slider)

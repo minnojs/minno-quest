@@ -1,3 +1,19 @@
+<a name="0.0.43"></a>
+### 0.0.43 (2015-05-13)
+
+
+#### Bug Fixes
+
+* **questDirectives:**
+  * slider click accuracy fix ([46f8dd6d](https://github.com/ProjectImplicit/PIquest/commit/46f8dd6dddc6d12f935706218b447d9f822b8864))
+  * minor grid fixes ([25194b6e](https://github.com/ProjectImplicit/PIquest/commit/25194b6e69833630f5fed35318c21e7006c2d115))
+
+
+#### Features
+
+* **questDirectives:** added a general option to set maxWidth to questions ([2ce1355a](https://github.com/ProjectImplicit/PIquest/commit/2ce1355a710695a89f1101f2769fb070d4eb970a))
+
+
 <a name="0.0.42"></a>
 ### 0.0.42 (2015-05-13)
 

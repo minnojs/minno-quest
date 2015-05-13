@@ -3611,7 +3611,6 @@ label {
   height: 5px;
   background: #9DA8B7;
   margin-top: -2.5px;
-  cursor: pointer;
   overflow: hidden;
   position: absolute;
   width: 100%;
@@ -3629,7 +3628,7 @@ label {
   width: 20px;
   border-radius: 50%;
   position: absolute;
-  cursor: move;
+  cursor: pointer;
   background-repeat: no-repeat;
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUBAMAAAB/pwA+AAAAGFBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABWNxwqAAAAB3RSTlMA41r7rZcIBwufZAAAAFdJREFUCNdjYGBgUxE2dEpgAAHFciAQArFYy8EgAMgMhzBLGRiYyqFAgSERxhRjUIcxixjcYcwSBnEYs5DBHMYsRmYiFCBrQxiGbAXCYoRzUB2JcDrCQwBDe0aHCiFO8QAAAABJRU5ErkJggg==);
   top: 0; }
