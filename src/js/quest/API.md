@@ -303,6 +303,17 @@ stem 		| (text) The description of this column.
 name 		| The name you want this row to be called within the `questions` object. If this is not set the grid automatically sets it according to the grid name. So that if grid.name is "myGrid" then you're first row will be called by default "myGrid001".
 reverse 	| When calculating the default value for this row, should we reverse the order of columns (high to low and vise versa).
 
+Here is a simple example of using a grid:
+
+```js
+var grid = 	{
+	type: 'grid',
+	name:'grid',
+	columns: ['Strongly agree' , 'agree' , 'don\'t know' , 'disagree' , 'Strongly disagree'],
+	rows: ['I like grids', 'I like bannanas too']
+}
+```
+
 #### slider
 The slider question presents a slider that allows the user to pick a response along a preassigned range. It allows either the creation a continuous scale or dividing the range into steps. The values of the slider are always numbers.
 These are the supported properties:
