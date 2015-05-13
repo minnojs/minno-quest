@@ -2,6 +2,8 @@
 // An example for a simple text question.
 // It allows you to input some text.
 // In this caase, we require the user to respond to the question, and set a custom error message.
+//
+// Full documentation is right [here](../quest/API.html#text-textarea).
 define(['questAPI'], function(Quest){
     var API = new Quest();
 

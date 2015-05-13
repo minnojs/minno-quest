@@ -1,6 +1,8 @@
 // ### Select One question
 // An example for a multi select question.
 // It allows you to pick one or more answers to the question. In this case we use it with the `autoSubmit` option, and add some help text for good measure.
+//
+// Full documentation is right [here](../quest/API.html#selectone-selectmulti).
 define(['questAPI'], function(Quest){
     var API = new Quest();
 

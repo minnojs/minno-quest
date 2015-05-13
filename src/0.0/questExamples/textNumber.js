@@ -2,6 +2,9 @@
 // An example for a simple textNumber question.
 // It allows you to input some numbers.
 // In this case we require an answer between 1 and 10.
+//
+// Full documentation is right [here](../quest/API.html#textnumber).
+
 define(['questAPI'], function(Quest){
     var API = new Quest();
 

@@ -2,6 +2,9 @@
 // An example for a textarea question.
 // It allows you to input some text. In particular it is good for larger amounts of text as it allows better control of the text area size.
 // In this case, we use a text area 3 rows deep and require at least 80 characters of text.
+//
+// Full documentation is right [here](../quest/API.html#text-textarea).
+
 define(['questAPI'], function(Quest){
     var API = new Quest();
 

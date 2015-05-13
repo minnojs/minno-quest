@@ -3,6 +3,8 @@
 // It allows you to pick one or more answers to the question.
 // In this case we use the multiButtons style in order to have the buttons line up horizontally.
 // Note the use of minWidth in order to keep all buttons on the same line.
+//
+// Full documentation is right [here](../quest/API.html#selectone-selectmulti).
 define(['questAPI'], function(Quest){
     var API = new Quest();
 

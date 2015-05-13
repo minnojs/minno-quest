@@ -1,6 +1,8 @@
 // ### Grid question
 // An example for a simple grid question.
 // It allows you to create a series of multiple choice questions.
+//
+// Full documentation is right [here](../quest/API.html#grid).
 define(['questAPI'], function(Quest){
     var API = new Quest();
 
