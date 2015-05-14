@@ -4,8 +4,9 @@ define(function (require) {
 	gridDirective.$inject = ['questShuffle'];
 	function gridDirective(shuffle){
 		return {
+			replace: true,
 			template: require('text!./grid.html'),
-			require: ['ngModel'],
+			require: ['ngModel','form'],
 			controller: 'questController',
 			controllerAs: 'ctrl',
 			scope:{
@@ -17,6 +18,7 @@ define(function (require) {
 				var ctrl = scope.ctrl;
 				var data = scope.data;
 
+				scope.form = ctrls[1];
 
 				scope.columns = mapColumns(data.columns);
 				scope.rows = mapRows(data.rows, data);

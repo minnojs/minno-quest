@@ -286,6 +286,7 @@ Propery     | Description
 columns 	| An array of column descriptions. You can use a string here or a column object as described [below](#gridcolumns).
 rows 		| An array of row descriptions. You can use a string here or a row object as described [below](#gridrows).
 shuffle 	| Whether to shuffle the order of the questions.
+required 	| Require the user to respond to all rows (true or false).
 
 ##### grid.columns
 If you set a string instead of a column object it will be treated as if you set only the stem and all other values will be set by default.
@@ -303,6 +304,7 @@ Propery     | Description
 stem 		| (text) The description of this column.
 name 		| The name you want this row to be called within the `questions` object. If this is not set the grid automatically sets it according to the grid name. So that if grid.name is "myGrid" then you're first row will be called by default "myGrid001".
 reverse 	| When calculating the default value for this row, should we reverse the order of columns (high to low and vise versa).
+required 	| Require the user to respond to this row (this property is redundant if you've already set main questions required property to true).
 
 Here is a simple example of using a grid:
 

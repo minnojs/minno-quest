@@ -108,5 +108,43 @@ define(function(require){
 				expect($rootScope.current.questions.test.response).toBe(2);
 			});
 		});
+
+		describe(': required validation', function(){
+			var VALIDATION_ELEMENT = '[pi-quest-validation="form.$error.required && $parent.$parent.submitAttempt"]';
+
+			it('should be required', function(){
+				compile({rows:[1,2], columns: [111,222], required:true});
+				expect($table).toBeInvalid(); // no input
+				choose(1,1);
+				expect($table).toBeInvalid(); // partial input
+				choose(2,1);
+				expect($table).toBeValid(); // full input
+			});
+
+			it('should not show validation message before submitAttempt', function(){
+				compile({rows:[1,2], columns: [111,222], required:true});
+				var errorElm = $table.find(VALIDATION_ELEMENT);
+				expect(errorElm).not.toBeShown();
+			});
+
+			it('should show validation message after submitAttempt', function(){
+				compile({rows:[1,2], columns: [111,222], required:true});
+				$scope.$parent.submitAttempt = true;
+				$scope.$digest();
+				var errorElm = $table.find(VALIDATION_ELEMENT);
+				expect(errorElm).toBeShown();
+			});
+
+			it('should require a single row', function(){
+				compile({rows:[1,{required:true},3], columns: [111,222]});
+				choose(1,1);
+				expect($table).toBeInvalid(); // partial input
+				choose(2,1);
+				expect($table).toBeValid(); // partial input including row
+
+			});
+
+		});
+
 	});
 });

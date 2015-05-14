@@ -1,4 +1,4 @@
-<div class="table-responsive">
+<div ng-form class="table-responsive">
 	<table class="table table-hover">
 		<thead>
 			<tr>
@@ -12,8 +12,9 @@
 				quest-grid-row="row"
 				quest-grid-data="data"
 				ng-model="$parent.$parent.current.questions[row.name]"
-				ng-required="{{data.required}}"
+				ng-required="{{data.required || row.required}}"
 			></tr>
 		</tbody>
 	</table>
+	<div pi-quest-validation="form.$error.required && $parent.$parent.submitAttempt">{{data.errorMsg.required || "This field is required!"}}</
 </div>
