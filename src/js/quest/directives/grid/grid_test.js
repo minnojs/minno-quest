@@ -75,7 +75,18 @@ define(function(require){
 			it('should know how to row.reverse', function(){
 				compile({rows:[{name:'name', reverse:true}], columns: [111,222,{value:'abc'}]});
 				choose(1,1);
-				expect($scope.current.questions.name.response).toBe(3);
+				expect($scope.current.questions.name.response).toBe('abc');
+				choose(1,3);
+				expect($scope.current.questions.name.response).toBe(1);
+			});
+
+			it('should ignore columns with noReverse when reversing',function(){
+				compile({rows:[{name:'name', reverse:true}], columns: [111,222,{value:'abc', noReverse:true}]});
+				choose(1,1);
+				expect($scope.current.questions.name.response).toBe(2);
+				choose(1,3);
+				expect($scope.current.questions.name.response).toBe('abc');
+
 			});
 
 			it('should auto generate row names', function(){
@@ -91,6 +102,7 @@ define(function(require){
 				expect($rows.eq(0).text()).toBe('t2');
 				expect($rows.eq(1).text()).toBe('t1');
 			});
+
 		});
 
 		describe(': table', function(){

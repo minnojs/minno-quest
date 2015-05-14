@@ -41,8 +41,16 @@ define(function (require) {
 		function mapColumns(columns){
 			return _(columns || [])
 				.map(objectify)
-				.each(function setColumnValue(column, index){
+				.each(function setValues(column, index){
 					column.hasOwnProperty('value') || (column.value = index+1);
+				})
+				.tap(function setReverseValues(columns){
+					_(columns)
+						.filter(function(column){return !column.noReverse;}) // ignore columns that shouldn't be reveresed
+						.each(function(column, index, columns){
+							column.reverseValue = columns[columns.length - index - 1].value; // set the value from the mirroring column
+						})
+						.commit(); // activate chain, since we aren't using _.value here
 				})
 				.value();
 		}

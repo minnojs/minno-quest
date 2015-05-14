@@ -1,5 +1,5 @@
 define(function (require) {
-
+	var _ = require('underscore');
 	function gridRowDirective(){
 		return {
 			template: require('text!./gridRow.html'),

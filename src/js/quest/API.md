@@ -295,6 +295,7 @@ Property     | Description
 ----------- | -----------
 stem 		| (text) The description of this column.
 value 		| The value to set for this column. Defaults to the number of the column (starting from 1, so that the response for choosing the third column is 3).
+noReverse 	| When reverseing row values, ignore this column (it will rettain its normal value).
 
 ##### grid.rows
 If you set a string instead of a row object it will be treated as if you set only the stem and all other values will be set by default.
@@ -303,7 +304,7 @@ Property     | Description
 ----------- | -----------
 stem 		| (text) The description of this column.
 name 		| The name you want this row to be called within the `questions` object. If this is not set the grid automatically sets it according to the grid name. So that if grid.name is "myGrid" then you're first row will be called by default "myGrid001".
-reverse 	| When calculating the default value for this row, should we reverse the order of columns (high to low and vise versa - note that this only works for default values!!).
+reverse 	| When calculating the default value for this row, should we reverse the order of columns (high to low and vise versa).
 required 	| Require the user to respond to this row (this property is redundant if you've already set main questions required property to true).
 
 Here is a simple example of using a grid:
@@ -329,7 +330,7 @@ var grid = 	{
 		'don\'t know',
 		'disagree',
 		'Strongly disagree',
-		{stem:'Decline to answer', value:'n/a'}
+		{stem:'Decline to answer', value:'n/a', noReverse:true}
 	],
 	rows: [
 		{stem:'I like grids',name:'likeGrids'},
