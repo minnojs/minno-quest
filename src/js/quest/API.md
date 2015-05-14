@@ -295,7 +295,7 @@ Property     | Description
 ----------- | -----------
 stem 		| (text) The description of this column.
 value 		| The value to set for this column. Defaults to the number of the column (starting from 1, so that the response for choosing the third column is 3).
-noReverse 	| When reverseing row values, ignore this column (it will rettain its normal value).
+noReverse 	| When reversing row values, ignore this column (it will retain its normal value).
 
 ##### grid.rows
 If you set a string instead of a row object it will be treated as if you set only the stem and all other values will be set by default.

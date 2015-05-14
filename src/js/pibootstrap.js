@@ -10,6 +10,18 @@ define(['./config'], function(){
 	});
 
 	require(['angular','app'], function(angular, app) {
+
+		// integrate with erroception
+		app.config(['$provide',function($provide) {
+			$provide.decorator("$exceptionHandler", ['$delegate','$window', function($delegate, $window) {
+				return function(exception, cause) {
+					$window._errs && $window._errs.push(exception);
+					$delegate(exception, cause);
+				};
+			}]);
+		}]);
+
+		// resume boot strap
 		angular.element().ready(function() {
 			angular.resumeBootstrap([app.name]);
 		});
