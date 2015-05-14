@@ -105,7 +105,7 @@ description 	| (text; default: '') Any additional text you want in order to exte
 maxWidth 		| Force question inputs to have this maximum width.
 help			| (true or false;  (default: false)) Whether to display the question help text.
 helpText		| (text) The question help text. (Some questions have default help texts, some don't).
-lognow 			| (true or false) Whether to log this questions when the page is submited. This option is useful when you know that the question will not be accessed any more. It allows you to use the `pulse` option from the [logger](#logger) to send questions as they are being answered instead of sending only at the end of the task. (default: false)
+lognow 			| (true or false) Whether to log this questions when the page is submitted. This option is useful when you know that the question will not be accessed any more. It allows you to use the `pulse` option from the [logger](#logger) to send questions as they are being answered instead of sending only at the end of the task. (default: false)
 
 You may want to debug questions by [activating the `question` DEBUG setting](#debugging). You will then be warned in the console if a question name is reused (note: sometimes a question is supposed to be reused, if this warning pops up just make sure the use case is correct).
 
@@ -117,7 +117,7 @@ property		| description
 --------------- | ---------------------
 onCreate 		| At the creation of the question.
 onChange 		| At each change of the question response (note that this hook may be called many times for each question).
-onSubmit 		| When the question is submited.
+onSubmit 		| When the question is submitted.
 onDecline 		| When the question is declined.
 onTimeout 		| When the timer finishes.
 onDestroy 		| When the question is removed from the screen (either decline or submit).
@@ -219,7 +219,7 @@ autoSubmit 		| (true or false; default: false) If this property is set to true, 
 randomize 		| (true or false; default: false) Shuffle response options after mixing them (the mixer is activated regardless of this parameter, this serves as a shortcut)
 reverse 		| (true or false; default: false) Reverses the order of response options in this question. It is useful when you inherit a question and only wants to change the order of the response options. Or, if you want to have a between-participant condition that reverses the response scale for half of the participants.
 numericValues 	| (true or false; default: false) If `numericValues` is true, default numeric values are set for each answer, they are set *before* randomization, but *after* the mixer is activated.
-answers			| (Array: []) The list of possible answers for this question. There are two acceptable formats; (1) an array of strings/numbers, (2) an array of objects with `text`, `value` and optionally `group` parameters. The `group` parameter will display the values devided into groups with the same name.
+answers			| (Array: []) The list of possible answers for this question. There are two acceptable formats; (1) an array of strings/numbers, (2) an array of objects with `text`, `value` and optionally `group` parameters. The `group` parameter will display the values divided into groups with the same name.
 required		| (true or false; default: false) Validation: require a response.
 correct 		| (true or false; default: false) Validation: require the response to be correct (set the target value using `correctValue`)
 correctValue 	| (*) Set the correct response value for the correct validation.
@@ -281,7 +281,7 @@ The grid question allows you to group multiple "multiple choice" questions into 
 
 The grid question itself keeps track of the sum of the row questions (excluding any questions that have non-number values).
 
-Propery     | Description
+Property     | Description
 ----------- | -----------
 columns 	| An array of column descriptions. You can use a string here or a column object as described [below](#gridcolumns).
 rows 		| An array of row descriptions. You can use a string here or a row object as described [below](#gridrows).
@@ -291,7 +291,7 @@ required 	| Require the user to respond to all rows (true or false).
 ##### grid.columns
 If you set a string instead of a column object it will be treated as if you set only the stem and all other values will be set by default.
 
-Propery     | Description
+Property     | Description
 ----------- | -----------
 stem 		| (text) The description of this column.
 value 		| The value to set for this column. Defaults to the number of the column (starting from 1, so that the response for choosing the third column is 3).
@@ -299,11 +299,11 @@ value 		| The value to set for this column. Defaults to the number of the column
 ##### grid.rows
 If you set a string instead of a row object it will be treated as if you set only the stem and all other values will be set by default.
 
-Propery     | Description
+Property     | Description
 ----------- | -----------
 stem 		| (text) The description of this column.
 name 		| The name you want this row to be called within the `questions` object. If this is not set the grid automatically sets it according to the grid name. So that if grid.name is "myGrid" then you're first row will be called by default "myGrid001".
-reverse 	| When calculating the default value for this row, should we reverse the order of columns (high to low and vise versa).
+reverse 	| When calculating the default value for this row, should we reverse the order of columns (high to low and vise versa - note that this only works for default values!!).
 required 	| Require the user to respond to this row (this property is redundant if you've already set main questions required property to true).
 
 Here is a simple example of using a grid:
@@ -313,15 +313,36 @@ var grid = 	{
 	type: 'grid',
 	name:'grid',
 	columns: ['Strongly agree' , 'agree' , 'don\'t know' , 'disagree' , 'Strongly disagree'],
-	rows: ['I like grids', 'I like bannanas too']
+	rows: ['I like grids', 'I like bananas too']
 }
 ```
 
+You can, of course have tighter control over the way things work:
+
+```js
+var grid = 	{
+	type: 'grid',
+	name:'grid',
+	columns: [
+		'Strongly agree',
+		'agree',
+		'don\'t know',
+		'disagree',
+		'Strongly disagree',
+		{stem:'Decline to answer', value:'n/a'}
+	],
+	rows: [
+		{stem:'I like grids',name:'likeGrids'},
+		// This questions scores will be reversed so that the sum of scores is meaningful 
+		{stem:'I hate bananas', name:'likeBananas', reverse:true}
+	]
+}
+```
 #### slider
 The slider question presents a slider that allows the user to pick a response along a preassigned range. It allows either the creation a continuous scale or dividing the range into steps. The values of the slider are always numbers.
 These are the supported properties:
 
-Propery     | Description
+Property     | Description
 ----------- | -----------
 min         | Maximum slider value (default:0).
 max         | Minimum slider value (default:100).
@@ -409,8 +430,8 @@ level 	| Description
 ----- 	| -----------
 none 	| Do not log any messages
 error 	| Log messages that warn that something in the script is broken (this is the default level, and you should probably leave at least this level active).
-warn 	| Log warning messages that something smells fishy, these are not neccesarily errors, but you might want to check them out.
-info 	| Log General usefull information.
+warn 	| Log warning messages that something smells fishy, these are not necessarily errors, but you might want to check them out.
+info 	| Log General useful information.
 debug 	| Just spill everything out.
 
 **hideConsole**:
@@ -431,7 +452,7 @@ Some sequence may be parsed more than once, for instance, the questions sequence
 
 In order to re-parse mixers, set `remix` to true. In order to re-parse inheritance set `reinflate` to true. In order to re-parse templates set `regenerateTemplate` to true.
 
-Another consideration when creating complex sequnces is logging. By default the player logs user responses automaticaly as soon as the user submits. If you are creating a sequence that allows users to go back to previous questions etc. you should make sure you don't prematurely log the user response (use `nolog`. learn more [here](#logger)).
+Another consideration when creating complex sequences is logging. By default the player logs user responses automatically as soon as the user submits. If you are creating a sequence that allows users to go back to previous questions etc. you should make sure you don't prematurely log the user response (use `nolog`. learn more [here](#logger)).
 
 ### Mixer
 The mixer is responsible for managing lists (arrays) within PIQuest, it is capable of repeating, randomizing and even changing the list according to [environmental variables](#variables). You may use it within the sequence, for answer lists within pages and even for answers within the `selectOne` or `selectMulti` questions.
