@@ -1,3 +1,20 @@
+<a name="0.0.44"></a>
+### 0.0.44 (2015-05-15)
+
+
+#### Bug Fixes
+
+* **questDirectives:** reverse now works correctly.. Closes #104 ([bb00ed92](https://github.com/ProjectImplicit/PIquest/commit/bb00ed926421ce3e10ec7cbb3d321a24c69a76d5), closes [#107](https://github.com/ProjectImplicit/PIquest/issues/107))
+
+
+#### Features
+
+* **database:** deep templating where needed. ([00e18758](https://github.com/ProjectImplicit/PIquest/commit/00e1875817fec929df88b5ddad7f46f6e94127e3), closes [#99](https://github.com/ProjectImplicit/PIquest/issues/99))
+* **questDirectives:**
+  * support slider hidePips, displayValue and fix pointer ([bcac0d8b](https://github.com/ProjectImplicit/PIquest/commit/bcac0d8b0c4ebe89dc5a06b0f45190fb79b2bda5))
+  * grid required. ([56d1c12e](https://github.com/ProjectImplicit/PIquest/commit/56d1c12ef476b7e0ca1fbf5b3cde88d3cf528797), closes [#104](https://github.com/ProjectImplicit/PIquest/issues/104))
+
+
 <a name="0.0.43"></a>
 ### 0.0.43 (2015-05-13)
 

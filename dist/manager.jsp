@@ -37,6 +37,10 @@ String getBase = getProtocol+"://"+getDomain;
 			    c.src="//beacon.errorception.com/"+s+".js";c.async=!0;b.parentNode.insertBefore(c,b)};
 			    _.addEventListener?_.addEventListener("load",b,!1):_.attachEvent("onload",b)})
 			    (window,document,"script","55530734a1b3d51609003d1c");
+				_errs.meta = {
+					script: '<%= script %>',
+					session: '<%= session.getId() %>'
+				}
 			</script>
 		<% } %>
 
