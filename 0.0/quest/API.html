@@ -96,7 +96,7 @@
 <li><a href="#pages">Pages</a>    </li>
 <li><a href="#questions">Questions</a><ul>
 <li><a href="#text-textarea">text &amp; textarea</a></li>
-<li><a href="#textNumber">textNumber</a></li>
+<li><a href="#textnumber">textNumber</a></li>
 <li><a href="#dropdown">dropdown</a></li>
 <li><a href="#selectone-selectmulti">selectOne &amp; selectMulti</a></li>
 <li><a href="#grid">grid</a></li>
@@ -281,7 +281,7 @@
 <p>Here are the types of questions PIQuest currently supports:</p>
 <ul>
 <li><a href="#text-textarea">text &amp; textarea</a></li>
-<li><a href="#textNumber">textNumber</a></li>
+<li><a href="#textnumber">textNumber</a></li>
 <li><a href="#dropdown">dropdown</a></li>
 <li><a href="#selectone-selectmulti">selectOne &amp; selectMulti</a></li>
 <li><a href="#slider">slider</a></li>
@@ -329,7 +329,7 @@
 </tr>
 <tr>
 <td>lognow</td>
-<td>(true or false) Whether to log this questions when the page is submited. This option is useful when you know that the question will not be accessed any more. It allows you to use the <code>pulse</code> option from the <a href="#logger">logger</a> to send questions as they are being answered instead of sending only at the end of the task. (default: false)</td>
+<td>(true or false) Whether to log this questions when the page is submitted. This option is useful when you know that the question will not be accessed any more. It allows you to use the <code>pulse</code> option from the <a href="#logger">logger</a> to send questions as they are being answered instead of sending only at the end of the task. (default: false)</td>
 </tr>
 </tbody>
 </table>
@@ -354,7 +354,7 @@
 </tr>
 <tr>
 <td>onSubmit</td>
-<td>When the question is submited.</td>
+<td>When the question is submitted.</td>
 </tr>
 <tr>
 <td>onDecline</td>
@@ -570,7 +570,7 @@ Both types of questions support the following properties.</p>
 </tr>
 <tr>
 <td>answers</td>
-<td>(Array: []) The list of possible answers for this question. There are two acceptable formats; (1) an array of strings/numbers, (2) an array of objects with <code>text</code>, <code>value</code> and optionally <code>group</code> parameters. The <code>group</code> parameter will display the values devided into groups with the same name.</td>
+<td>(Array: []) The list of possible answers for this question. There are two acceptable formats; (1) an array of strings/numbers, (2) an array of objects with <code>text</code>, <code>value</code> and optionally <code>group</code> parameters. The <code>group</code> parameter will display the values divided into groups with the same name.</td>
 </tr>
 <tr>
 <td>required</td>
@@ -685,7 +685,7 @@ Both types of questions support the following properties.</p>
 <table>
 <thead>
 <tr>
-<th>Propery</th>
+<th>Property</th>
 <th>Description</th>
 </tr>
 </thead>
@@ -702,6 +702,10 @@ Both types of questions support the following properties.</p>
 <td>shuffle</td>
 <td>Whether to shuffle the order of the questions.</td>
 </tr>
+<tr>
+<td>required</td>
+<td>Require the user to respond to all rows (true or false).</td>
+</tr>
 </tbody>
 </table>
 <h5 id="grid-columns">grid.columns</h5>
@@ -709,7 +713,7 @@ Both types of questions support the following properties.</p>
 <table>
 <thead>
 <tr>
-<th>Propery</th>
+<th>Property</th>
 <th>Description</th>
 </tr>
 </thead>
@@ -722,6 +726,10 @@ Both types of questions support the following properties.</p>
 <td>value</td>
 <td>The value to set for this column. Defaults to the number of the column (starting from 1, so that the response for choosing the third column is 3).</td>
 </tr>
+<tr>
+<td>noReverse</td>
+<td>When reversing row values, ignore this column (it will retain its normal value).</td>
+</tr>
 </tbody>
 </table>
 <h5 id="grid-rows">grid.rows</h5>
@@ -729,7 +737,7 @@ Both types of questions support the following properties.</p>
 <table>
 <thead>
 <tr>
-<th>Propery</th>
+<th>Property</th>
 <th>Description</th>
 </tr>
 </thead>
@@ -746,6 +754,10 @@ Both types of questions support the following properties.</p>
 <td>reverse</td>
 <td>When calculating the default value for this row, should we reverse the order of columns (high to low and vise versa).</td>
 </tr>
+<tr>
+<td>required</td>
+<td>Require the user to respond to this row (this property is redundant if you’ve already set main questions required property to true).</td>
+</tr>
 </tbody>
 </table>
 <p>Here is a simple example of using a grid:</p>
@@ -753,7 +765,26 @@ Both types of questions support the following properties.</p>
     type: <span class="hljs-string">'grid'</span>,
     name:<span class="hljs-string">'grid'</span>,
     columns: [<span class="hljs-string">'Strongly agree'</span> , <span class="hljs-string">'agree'</span> , <span class="hljs-string">'don\'t know'</span> , <span class="hljs-string">'disagree'</span> , <span class="hljs-string">'Strongly disagree'</span>],
-    rows: [<span class="hljs-string">'I like grids'</span>, <span class="hljs-string">'I like bannanas too'</span>]
+    rows: [<span class="hljs-string">'I like grids'</span>, <span class="hljs-string">'I like bananas too'</span>]
+}
+</code></pre>
+<p>You can, of course have tighter control over the way things work:</p>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> grid =     {
+    type: <span class="hljs-string">'grid'</span>,
+    name:<span class="hljs-string">'grid'</span>,
+    columns: [
+        <span class="hljs-string">'Strongly agree'</span>,
+        <span class="hljs-string">'agree'</span>,
+        <span class="hljs-string">'don\'t know'</span>,
+        <span class="hljs-string">'disagree'</span>,
+        <span class="hljs-string">'Strongly disagree'</span>,
+        {stem:<span class="hljs-string">'Decline to answer'</span>, value:<span class="hljs-string">'n/a'</span>, noReverse:<span class="hljs-literal">true</span>}
+    ],
+    rows: [
+        {stem:<span class="hljs-string">'I like grids'</span>,name:<span class="hljs-string">'likeGrids'</span>},
+        <span class="hljs-comment">// This questions scores will be reversed so that the sum of scores is meaningful </span>
+        {stem:<span class="hljs-string">'I hate bananas'</span>, name:<span class="hljs-string">'likeBananas'</span>, reverse:<span class="hljs-literal">true</span>}
+    ]
 }
 </code></pre>
 <h4 id="slider">slider</h4>
@@ -762,7 +793,7 @@ These are the supported properties:</p>
 <table>
 <thead>
 <tr>
-<th>Propery</th>
+<th>Property</th>
 <th>Description</th>
 </tr>
 </thead>
@@ -776,8 +807,16 @@ These are the supported properties:</p>
 <td>Minimum slider value (default:100).</td>
 </tr>
 <tr>
+<td>highlight</td>
+<td>Show highlight to left of handle.</td>
+</tr>
+<tr>
 <td>steps</td>
 <td>How many steps the slider should be divided into. These intervals are marked with pips and the handle snaps to them.</td>
+</tr>
+<tr>
+<td>hidePips</td>
+<td>When the slider is divided into steps, do not display the step pips.</td>
 </tr>
 <tr>
 <td>leftLabel</td>
@@ -792,8 +831,8 @@ These are the supported properties:</p>
 <td>An array of labels to display underneath the slider. They will be spread evenly across the slider.</td>
 </tr>
 <tr>
-<td>highlight</td>
-<td>Show highlight to left of handle.</td>
+<td>displayValue</td>
+<td>Display the value of the slider, beneath the slider control.</td>
 </tr>
 <tr>
 <td>required</td>
@@ -895,11 +934,11 @@ The player has several levels of logging, by default it logs only <code>error</c
 </tr>
 <tr>
 <td>warn</td>
-<td>Log warning messages that something smells fishy, these are not neccesarily errors, but you might want to check them out.</td>
+<td>Log warning messages that something smells fishy, these are not necessarily errors, but you might want to check them out.</td>
 </tr>
 <tr>
 <td>info</td>
-<td>Log General usefull information.</td>
+<td>Log General useful information.</td>
 </tr>
 <tr>
 <td>debug</td>
@@ -917,7 +956,7 @@ This property allows you to control the display of logs inside the browser, if i
 <p>The third and last level of parsing has to do with templates. <a href="#templates">Templates</a> allow you to change the settings of your elements depending on existing data from within the player. For instance, you may want to refer to the answer of a previous question. </p>
 <p>Some sequence may be parsed more than once, for instance, the questions sequences get re-parsed each time a response is changed, and each time a user returns to a page it is re-parsed. By default, none of the parsing is repeated so that the questionnaires can stay fixed. For each type of parsing there is a property that lets the player know that you want it re-parsed.</p>
 <p>In order to re-parse mixers, set <code>remix</code> to true. In order to re-parse inheritance set <code>reinflate</code> to true. In order to re-parse templates set <code>regenerateTemplate</code> to true.</p>
-<p>Another consideration when creating complex sequnces is logging. By default the player logs user responses automaticaly as soon as the user submits. If you are creating a sequence that allows users to go back to previous questions etc. you should make sure you don’t prematurely log the user response (use <code>nolog</code>. learn more <a href="#logger">here</a>).</p>
+<p>Another consideration when creating complex sequences is logging. By default the player logs user responses automatically as soon as the user submits. If you are creating a sequence that allows users to go back to previous questions etc. you should make sure you don’t prematurely log the user response (use <code>nolog</code>. learn more <a href="#logger">here</a>).</p>
 <h3 id="mixer">Mixer</h3>
 <p>The mixer is responsible for managing lists (arrays) within PIQuest, it is capable of repeating, randomizing and even changing the list according to <a href="#variables">environmental variables</a>. You may use it within the sequence, for answer lists within pages and even for answers within the <code>selectOne</code> or <code>selectMulti</code> questions.
 The mixer allows wrapping a sub list in an object that allows you to manipulate the way in which it appears. You may insert such an object at any place within a list and it will be replaced by the appropriate objs.</p>
@@ -1498,7 +1537,7 @@ It accepts two argument: the source object on which it is called (the page or qu
 				<p>Created by Project Implicit for the benefit of all.</p>
 				<!-- <p>Code licensed under <a href="https://github.com/twbs/bootstrap/blob/master/LICENSE" target="_blank">MIT</a>, documentation under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p> -->
 				<ul class="bs-docs-footer-links text-muted">
-					<li>Currently v0.0.40</li>
+					<li>Currently v0.0.44</li>
 					<li>&middot;</li>
 					<li><a href="https://github.com/ProjectImplicit/PIquest">GitHub</a></li>
 					<li>&middot;</li>

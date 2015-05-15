@@ -153,7 +153,7 @@ define([&#39;questAPI&#39;], function(Quest){
 
     API.addSequence([
         { // page begins
-            header: &#39;Grid questions&#39;,
+            header: &#39;Grid questions simple&#39;,
             questions: [
                 {
                     type: &#39;grid&#39;,
@@ -162,8 +162,29 @@ define([&#39;questAPI&#39;], function(Quest){
                     rows: [&#39;I like grids&#39;, &#39;I like bannanas too&#39;]
                 }
             ]
+        }, // page ends
+        { // page begins
+            header: &#39;Grid questions advanced&#39;,
+            questions: [
+                {
+                    type: &#39;grid&#39;,
+                    name:&#39;grid&#39;,
+                    columns: [
+                        &#39;Strongly agree&#39;,
+                        &#39;agree&#39;,
+                        &#39;don\&#39;t know&#39;,
+                        &#39;disagree&#39;,
+                        &#39;Strongly disagree&#39;,
+                        {stem:&#39;Decline to answer&#39;, value:&#39;n/a&#39;, noReverse:true}
+                    ],
+                    rows: [
+                        {stem:&#39;I like grids&#39;,name:&#39;likeGrids&#39;},
+                        // This questions scores will be reversed so that the sum of scores is meaningful
+                        {stem:&#39;I hate bananas&#39;, name:&#39;likeBananas&#39;, reverse:true}
+                    ]
+                }
+            ]
         } // page ends
-
     ]);
 
     return API.script;
@@ -381,7 +402,7 @@ define([&#39;questAPI&#39;], function(Quest){
 				<p>Created by Project Implicit for the benefit of all.</p>
 				<!-- <p>Code licensed under <a href="https://github.com/twbs/bootstrap/blob/master/LICENSE" target="_blank">MIT</a>, documentation under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p> -->
 				<ul class="bs-docs-footer-links text-muted">
-					<li>Currently v0.0.40</li>
+					<li>Currently v0.0.44</li>
 					<li>&middot;</li>
 					<li><a href="https://github.com/ProjectImplicit/PIquest">GitHub</a></li>
 					<li>&middot;</li>

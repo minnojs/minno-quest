@@ -5,5 +5,6 @@
 		pi-slider-options="data"
 		ng-required="{{data.required}}"
 	></div>
+	<h4 ng-if="data.displayValue" class="text-center"><span class="label label-info">{{ response | number }}</span></h4>
 	<div pi-quest-validation="form.$error.required && $parent.$parent.submitAttempt">{{data.errorMsg.required || "This field is required!"}}</div>
 </div>

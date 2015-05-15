@@ -30,6 +30,19 @@ String getBase = getProtocol+"://"+getDomain;
 		<title>Experiment</title>
 		<meta name="description" content="Project Implicit Questionnaire">
 		<meta name="viewport" content="width=device-width">
+		<% if (org.uva.Implicit.IS_PRODUCTION == "true") {%>
+			<script>
+			    (function(_,e,rr,s){_errs=[s];var c=_.onerror;_.onerror=function(){var a=arguments;_errs.push(a);
+			    c&&c.apply(this,a)};var b=function(){var c=e.createElement(rr),b=e.getElementsByTagName(rr)[0];
+			    c.src="//beacon.errorception.com/"+s+".js";c.async=!0;b.parentNode.insertBefore(c,b)};
+			    _.addEventListener?_.addEventListener("load",b,!1):_.attachEvent("onload",b)})
+			    (window,document,"script","55530734a1b3d51609003d1c");
+				_errs.meta = {
+					script: '<%= script %>',
+					session: '<%= session.getId() %>'
+				}
+			</script>
+		<% } %>
 
 		<!-- build:css styles/vendor.css -->
 		<!-- bower:css -->

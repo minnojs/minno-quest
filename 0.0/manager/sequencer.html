@@ -371,8 +371,22 @@ The task object is there for you to change. You can extend it to your hearts con
 <p>Tasks add any data that they log into their task object. For instance, piQuest maintains a <code>current.questions</code> object that holds the responses for all questions.</p>
 <h3 id="templates">Templates</h3>
 <p>One of the ways to create dynamic questionnaires is using templates. Templates are a format that allows you to dynamically generate settings for your questions. You can replace any non-object setting from within your elements with a template, and it will be rendered according to the <a href="#variables">environmental variables</a> (The exception to this rule is the <code>inherit</code> setting that cannot use templates).</p>
-<p>A template is a string that has a section of the form <code>&lt;%= %&gt;</code> in it. Within these brackets you can write any Javascript that you like and it will be evaluated and printed out. The main use of templates is probably accessing local and global variables. For instance, in order to print the global variable “name”, you could create a template that looks like this: <code>My name is &lt;%= global.name%&gt;</code>.</p>
-<p>The player uses <a href="http://lodash.com/docs#template">lodash templates</a> internally, you can look them up to see all the possible uses.</p>
+<p>A template is a string that has a section of the form <code>&lt;%= %&gt;</code> in it. Within these brackets you can write any Javascript that you like and it will be evaluated and printed out. The player uses <a href="http://lodash.com/docs#template">lodash templates</a> internally, you can look them up to see all the possible uses.</p>
+<p>By default the templater affects only strings set directly into your elements. If you want to template strings that are within sub arrays or objects, you can use the deepTemplate property of the element to tell the templater which properties to deep expand.</p>
+<pre><code class="lang-js"><span class="hljs-comment">// by default answers won't be templated</span>
+<span class="hljs-keyword">var</span> element = {    
+    stem: <span class="hljs-string">'&lt;%= global.foo %&gt;'</span>
+    answers: [<span class="hljs-string">'&lt;%= global.bar %&gt;'</span>]
+}
+
+<span class="hljs-comment">// add "deepTemplate" in order for it to be templated</span>
+<span class="hljs-keyword">var</span> element = {
+    deepTemplate: [<span class="hljs-string">'answers'</span>],
+    stem: <span class="hljs-string">'&lt;%= global.foo %&gt;'</span>
+    answers: [<span class="hljs-string">'&lt;%= global.thing %&gt;'</span>]
+}
+</code></pre>
+<p>The main use of templates is probably accessing local and global variables. For instance, in order to print the global variable “name”, you could create a template that looks like this: <code>My name is &lt;%= global.name%&gt;</code>.</p>
 <p>Templates allow access only to a confined number of variables; These vary a bit between different tasks, but you can expect the templates to have access to the <code>global</code> and <code>current</code> objects. Element templates also have access to their own data property as {namespace}Data (so that trials will have a <code>trialData</code> object, and stimuli a <code>mediaData</code> property). Some objects have access to additional properties, you can find them in their respective documentation.</p>
 <h3 id="inheritance">Inheritance</h3>
 <h4 id="sets">Sets</h4>
@@ -639,7 +653,7 @@ It accepts two argument: the source object on which it is called (the page or qu
 				<p>Created by Project Implicit for the benefit of all.</p>
 				<!-- <p>Code licensed under <a href="https://github.com/twbs/bootstrap/blob/master/LICENSE" target="_blank">MIT</a>, documentation under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p> -->
 				<ul class="bs-docs-footer-links text-muted">
-					<li>Currently v0.0.40</li>
+					<li>Currently v0.0.44</li>
 					<li>&middot;</li>
 					<li><a href="https://github.com/ProjectImplicit/PIquest">GitHub</a></li>
 					<li>&middot;</li>
