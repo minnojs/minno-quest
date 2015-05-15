@@ -2,8 +2,12 @@
 	<table class="table table-hover">
 		<thead>
 			<tr>
-				<th></th>
-				<th ng-repeat="column in columns" ng-bind-html="column.stem"></th>
+				<th ng-style="data.columnStemCss"></th>
+				<th
+					ng-repeat="column in columns"
+					ng-bind-html="column.stem"
+					ng-style="data.columnStemCss"
+				></th>
 			</tr>
 		</thead>
 		<tbody>

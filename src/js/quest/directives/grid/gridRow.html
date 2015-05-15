@@ -1,4 +1,8 @@
-<th scope="row" ng-bind-html="row.stem"></th>
+<th
+	scope="row"
+	ng-bind-html="row.stem"
+	ng-style="data.rowStemCss"
+></th>
 <td ng-repeat="column in $parent.columns">
 	<button
 		btn-radio="row.reverse && !column.noReverse ? column.reverseValue : column.value"

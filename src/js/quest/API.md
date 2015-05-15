@@ -281,12 +281,14 @@ The grid question allows you to group multiple "multiple choice" questions into 
 
 The grid question itself keeps track of the sum of the row questions (excluding any questions that have non-number values).
 
-Property     | Description
------------ | -----------
-columns 	| An array of column descriptions. You can use a string here or a column object as described [below](#gridcolumns).
-rows 		| An array of row descriptions. You can use a string here or a row object as described [below](#gridrows).
-shuffle 	| Whether to shuffle the order of the questions.
-required 	| Require the user to respond to all rows (true or false).
+Property    	| Description
+----------- 	| -----------
+columns 		| An array of column descriptions. You can use a string here or a column object as described [below](#gridcolumns).
+rows 			| An array of row descriptions. You can use a string here or a row object as described [below](#gridrows).
+shuffle 		| Whether to shuffle the order of the questions.
+required 		| Require the user to respond to all rows (true or false).
+columnStemCss	| CSS object for the column stems (Applying `width` here will affect the whole column).
+rowStemCss		| CSS object for the row stems.
 
 ##### grid.columns
 If you set a string instead of a column object it will be treated as if you set only the stem and all other values will be set by default.
