@@ -99,6 +99,10 @@ label {
 		text-align:center;
 	}
 
+	&.pi-page-submitted tr.ng-invalid-required {
+		background-color: #f2dede;
+	}
+
 	.btn:before {
 		@extend .glyphicon;
 		@extend .glyphicon-ok;

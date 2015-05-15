@@ -3588,6 +3588,8 @@ label {
   table-layout: fixed; }
 [quest-grid] thead th, [quest-grid] td {
   text-align: center; }
+[quest-grid].pi-page-submitted tr.ng-invalid-required {
+  background-color: #f2dede; }
 [quest-grid] .btn:before, [quest-grid] .slider-pips li.btn.last:after, .slider-pips [quest-grid] li.btn.last:after {
   visibility: hidden; }
 [quest-grid] .btn.active:before, [quest-grid] .slider-pips li.btn.active.last:after, .slider-pips [quest-grid] li.btn.active.last:after {

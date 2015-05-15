@@ -33,6 +33,11 @@ define(function(require){
 	module.directive('questSlider',require('./slider/sliderDirective'));
 	module.directive('piSlider',require('./slider/slider'));
 
+	// @TODO: move to utils or something
+	module.config(['$sceProvider', function($sceProvider){
+		$sceProvider.enabled(false);
+	}]);
+
 	module.directive('piQuestValidation', function(){
 		return {
 			replace:true,

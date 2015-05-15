@@ -1,9 +1,9 @@
-<div ng-form class="table-responsive">
+<div ng-form class="table-responsive" ng-class="{'pi-page-submitted':$parent.$parent.submitAttempt}">
 	<table class="table table-hover">
 		<thead>
 			<tr>
 				<th></th>
-				<th ng-repeat="column in columns">{{column.stem}}</th>
+				<th ng-repeat="column in columns" ng-bind-html="column.stem"></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -16,5 +16,5 @@
 			></tr>
 		</tbody>
 	</table>
-	<div pi-quest-validation="form.$error.required && $parent.$parent.submitAttempt">{{data.errorMsg.required || "This field is required!"}}</
+	<div pi-quest-validation="form.$error.required && $parent.$parent.submitAttempt">{{data.errorMsg.required || "This field is required!"}}</div>
 </div>

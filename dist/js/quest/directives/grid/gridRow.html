@@ -1,7 +1,7 @@
-<th scope="row">{{row.stem}}</th>
+<th scope="row" ng-bind-html="row.stem"></th>
 <td ng-repeat="column in $parent.columns">
 	<button
-		btn-radio="row.reverse ? data.columns.length - column.value + 1 : column.value"
+		btn-radio="row.reverse && !column.noReverse ? column.reverseValue : column.value"
 		ng-model="$parent.response"
 		class="btn btn-default"
 		uncheckable
