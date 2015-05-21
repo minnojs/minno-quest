@@ -300,7 +300,7 @@ Property    | Description
 stem 		| (text) The description of this column.
 value 		| The value to set for this column. Defaults to the number of the column (starting from 1, so that the response for choosing the third column is 3).
 noReverse 	| When reversing row values, ignore this column (it will retain its normal value).
-type		| What type of interface should this column have. The default is "checkbox". You can set it to text instead in order to display text of you choice (use the `textProperty` property to set row property that will be used as text).
+type		| What type of interface should this column have. The default is "checkbox". You can set it to text instead in order to display text of you choice (use the `textProperty` property to set the row property that will be used as text). For example `{type: 'text', textProperty:'rightStem'}` will use the `rightStem` property of each row as the text content.
 
 ##### grid.rows
 If you set a string instead of a row object it will be treated as if you set only the stem and all other values will be set by default.

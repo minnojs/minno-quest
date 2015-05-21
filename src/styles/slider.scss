@@ -1,5 +1,5 @@
 $slider-bg: #3B4A5E;
-$slider-highlight: #5bc0de; // #C7E37D;
+$slider-highlight: #5bc0de;
 $slider-handle: #9DA8B7;
 $slider-height: 20px;
 $slider-bar-height: $slider-height / 4;
@@ -27,17 +27,13 @@ $slider-bar-height: $slider-height / 4;
   height: $slider-bar-height;
   background: $slider-handle;
   margin-top: $slider-bar-height / -2;
+  margin-left:  $slider-height / 2;
+  margin-right:  $slider-height / 2;
   cursor: pointer;
   overflow: hidden;
   position: absolute;
   width: 100%;
   top: 50%;
-}
-
-.slider-bar-stub {
-  @extend .slider-bar;
-  width: $slider-height;
-  left: 100%;
 }
 
 .slider-bar-highlight {

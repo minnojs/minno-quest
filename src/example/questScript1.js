@@ -27,7 +27,10 @@ define(['questAPI'], function(Quest){
 			header: 'Header',
 			//timer: {duration:5, show:true, submitOnEnd:true, message:{heading:'Hi Yoav',body:'Isn\'n this cool? I support templates as well...', button:'Click here to proceed to the next page'}},
 			questions: 		{
-	type: 'grid',
+	type: 'slider',
+	highlight: true,
+	displayValue:true,
+	steps: 11,
 	name:'grid',
 	columns: [
 		'Strongly agree',

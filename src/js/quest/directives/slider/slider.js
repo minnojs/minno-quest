@@ -24,7 +24,6 @@
               '<div class="slider-bar">',
                 '<div class="slider-bar-highlight" ng-style="highlightStyle"></div>',
               '</div>',
-              '<div class="slider-bar-stub"></div>',
               '<div class="slider-handle" ng-mousedown="onHandleMousedown($event)" ng-style="handleStyle"></div>',
             '</div>',
             '<ul class="slider-pips" ng-if="!options.hidePips">',
@@ -83,9 +82,10 @@
         function renderView() {
           var percentage = steppedPercentage(ngModel.$viewValue);
           var showHandle = !isNaN(percentage);
-          var showHighlight = showHandle && options.highlight;
-          scope.highlightStyle = { right: (100 - percentage * 100) + '%', opacity: +showHighlight};
-          scope.handleStyle = { left: (percentage * 100) + '%', opacity: +showHandle};
+          var handleDisplay = showHandle ? 'block' : 'none';
+          var highlightDisplay = showHandle && options.highlight ? 'block' : 'none';
+          scope.highlightStyle = { right: (100 - percentage * 100) + '%', display: highlightDisplay};
+          scope.handleStyle = { left: (percentage * 100) + '%', display: handleDisplay};
         }
 
         // formater model => view
@@ -146,6 +146,10 @@
           var sliderWidth = element.prop('clientWidth');
           var sliderPosition = element[0].getBoundingClientRect().left;
           var percentage = (event.pageX - sliderPosition - sliderHandleWidth/2) / (sliderWidth - sliderHandleWidth);
+          // don't allow extending beyond slider size
+          percentage = Math.min(percentage, 1);
+          percentage = Math.max(percentage, 0);
+
           // auto "$apply" by ng-mousedown
           setValue(percentage);
           scope.$emit(SLIDER_CHANGE_EVENT, ngModel.$viewValue);
