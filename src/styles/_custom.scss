@@ -103,6 +103,12 @@ label {
 		background-color: #f2dede;
 	}
 
+	.text {
+		margin: 1px; // same as the button border
+		padding: $padding-base-vertical $padding-base-horizontal;
+		line-height: $line-height-base;
+	}
+
 	.btn:before {
 		@extend .glyphicon;
 		@extend .glyphicon-ok;

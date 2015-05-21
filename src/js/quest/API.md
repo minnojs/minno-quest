@@ -288,16 +288,19 @@ rows 			| An array of row descriptions. You can use a string here or a row objec
 shuffle 		| Whether to shuffle the order of the questions.
 required 		| Require the user to respond to all rows (true or false).
 columnStemCss	| CSS object for the column stems (Applying `width` here will affect the whole column).
+columnStemHide	| Hide the column stem row.
 rowStemCss		| CSS object for the row stems.
+rowStemHide 	| Hide the row stem column.
 
 ##### grid.columns
 If you set a string instead of a column object it will be treated as if you set only the stem and all other values will be set by default.
 
-Property     | Description
+Property    | Description
 ----------- | -----------
 stem 		| (text) The description of this column.
 value 		| The value to set for this column. Defaults to the number of the column (starting from 1, so that the response for choosing the third column is 3).
 noReverse 	| When reversing row values, ignore this column (it will retain its normal value).
+type		| What type of interface should this column have. The default is "checkbox". You can set it to text instead in order to display text of you choice (use the `textProperty` property to set row property that will be used as text).
 
 ##### grid.rows
 If you set a string instead of a row object it will be treated as if you set only the stem and all other values will be set by default.

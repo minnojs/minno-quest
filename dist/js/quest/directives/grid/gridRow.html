@@ -1,9 +1,26 @@
-<th scope="row" ng-bind-html="row.stem"></th>
-<td ng-repeat="column in $parent.columns">
+<th
+	scope="row"
+	ng-if="!data.rowStemHide"
+	ng-bind-html="row.stem"
+	ng-style="data.rowStemCss"
+></th>
+<td ng-repeat="column in $parent.columns" ng-switch="column.type">
 	<button
+		ng-switch-when="checkbox"
 		btn-radio="row.reverse && !column.noReverse ? column.reverseValue : column.value"
-		ng-model="$parent.response"
+		ng-model="$parent.$parent.response"
 		class="btn btn-default"
 		uncheckable
 	></button>
+	<div
+		class="text"
+		ng-switch-when="text"
+		ng-bind-html="row[column.textProperty]"
+	></div>
+
+	<div
+		class="cell-labels"
+		ng-if="data.cellLabels"
+		ng-bind-html="column.stem"
+	></div>
 </td>

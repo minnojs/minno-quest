@@ -44,6 +44,24 @@ define(function(require){
 				expect($headers.eq(2).text()).toBe('t2');
 			});
 
+			it('should set type=checkbox by default', function(){
+				compile({columns:[{}], rows:[1]});
+				var cell = $table.find('tbody tr [ng-switch-when="checkbox"]');
+				expect(cell.is('button')).toBeTruthy();
+			});
+
+			it('should respect type=checkbox', function(){
+				compile({columns:[{type:'checkbox'}], rows:[1]});
+				var cell = $table.find('tbody tr [ng-switch-when="checkbox"]');
+				expect(cell.is('button')).toBeTruthy();
+			});
+
+			it('should respect type=text', function(){
+				compile({columns:[{type:'text', textProperty:'test1'}], rows:[{test1:1234}]});
+				var cell = $table.find('tbody tr [ng-switch-when="text"]');
+				expect(cell.text()).toBe('1234');
+			});
+
 		});
 
 		describe(': rows', function(){

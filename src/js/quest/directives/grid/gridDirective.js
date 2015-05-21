@@ -43,6 +43,7 @@ define(function (require) {
 				.map(objectify)
 				.each(function setValues(column, index){
 					column.hasOwnProperty('value') || (column.value = index+1);
+					column.hasOwnProperty('type') || (column.type = 'checkbox');
 				})
 				.tap(function setReverseValues(columns){
 					_(columns)
