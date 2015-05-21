@@ -1,3 +1,19 @@
+<a name"0.0.45"></a>
+### 0.0.45 (2015-05-21)
+
+
+#### Bug Fixes
+
+* **questDirectives:** slider edges behave correctly ([5c573916](https://github.com/ProjectImplicit/PIquest/commit/5c573916))
+
+
+#### Features
+
+* **questDirectives:**
+  * several grid features ([52d81fa1](https://github.com/ProjectImplicit/PIquest/commit/52d81fa1))
+  * allow control of grid css. ([06c240a2](https://github.com/ProjectImplicit/PIquest/commit/06c240a2), closes [#106](https://github.com/ProjectImplicit/PIquest/issues/106))
+
+
 <a name="0.0.44"></a>
 ### 0.0.44 (2015-05-15)
 
