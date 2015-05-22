@@ -1,6 +1,7 @@
 define(function (require) {
 	function gridRowDirective(){
 		return {
+			replace: true,
 			template: require('text!./gridRow.html'),
 			require: ['ngModel'],
 			controller: 'questController',
