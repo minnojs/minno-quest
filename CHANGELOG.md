@@ -1,3 +1,26 @@
+<a name="0.0.46"></a>
+### 0.0.46 (2015-05-22)
+
+
+#### Bug Fixes
+
+* **IE:**
+  * fixed IE8 problem with grid template ([97b32eff](https://github.com/ProjectImplicit/PIquest/commit/97b32eff59c1954d187300cf29122c17f518d02c))
+  * make sure console is available ([63b3fdfa](https://github.com/ProjectImplicit/PIquest/commit/63b3fdfa7184dd0e14d5dfadfedfde6dad410461))
+* **bootstrap:** fixed race condition between domready and jqlite.ready that caused problems with ([48816d68](https://github.com/ProjectImplicit/PIquest/commit/48816d681f380b0596372dd1447a253ab47a1591))
+* **questDirectives:**
+  * in grid, when assigning default values ignore type=text columns ([80011ffb](https://github.com/ProjectImplicit/PIquest/commit/80011ffba1e2ae4dfc27fd361a90633f4380efb6))
+  * slider edges behave correctly ([5c573916](https://github.com/ProjectImplicit/PIquest/commit/5c573916037ef4a09c97c76aade478d04fded2d2))
+* **safari:** fixed unexplained problem on IOS8. https://github.com/angular/angular.js/issues/ ([a112a092](https://github.com/ProjectImplicit/PIquest/commit/a112a09236847242d1d163278950a6f452d50e7d))
+
+
+#### Features
+
+* **questDirectives:**
+  * several grid features ([52d81fa1](https://github.com/ProjectImplicit/PIquest/commit/52d81fa15d5537ea2490a2c44c7a38070d228ca4))
+  * allow control of grid css. ([06c240a2](https://github.com/ProjectImplicit/PIquest/commit/06c240a22da8bf3d10eca92d60f00c8135dec31a), closes [#106](https://github.com/ProjectImplicit/PIquest/issues/106))
+
+
 <a name"0.0.45"></a>
 ### 0.0.45 (2015-05-21)
 

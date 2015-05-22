@@ -41,13 +41,21 @@ define(function (require) {
 		function mapColumns(columns){
 			return _(columns || [])
 				.map(objectify)
-				.each(function setValues(column, index){
-					column.hasOwnProperty('value') || (column.value = index+1);
+				.each(function setType(column){
 					column.hasOwnProperty('type') || (column.type = 'checkbox');
+				})
+				.tap(function setValues(columns){
+					_(columns)
+						.filter(function hasValue(column){return column.type != 'text';})
+						.each(function setValue(column, index){
+							column.hasOwnProperty('value') || (column.value = index+1);
+						})
+						.commit();
 				})
 				.tap(function setReverseValues(columns){
 					_(columns)
 						.filter(function(column){return !column.noReverse;}) // ignore columns that shouldn't be reveresed
+						.filter(function hasValue(column){return column.type != 'text';})
 						.each(function(column, index, columns){
 							column.reverseValue = columns[columns.length - index - 1].value; // set the value from the mirroring column
 						})
