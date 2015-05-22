@@ -1,1 +1,56 @@
-define(["require","underscore","./mixer/main","./template/main","./collection/collectionProvider","./randomizer/randomizerProvider","./queryProvider","./inflateProvider","./store/storeProvider","./databaseSequenceProvider","./databaseProvider"],function(e){function c(e){return t.shuffle(t.range(e))}function h(e){return Math.floor(Math.random()*e)}function p(){return console}var t=e("underscore"),n=e("./mixer/main"),r=e("./template/main"),i=e("./collection/collectionProvider")(),s=e("./randomizer/randomizerProvider")(h,c,i),o=e("./queryProvider")(i,p),u=e("./inflateProvider")(o,{global:window.piGlobal},p),a=e("./store/storeProvider")(i),f=e("./databaseSequenceProvider")(n),l=e("./databaseProvider")(a,s,u,r,f);return l});
+define(function(require){
+	var _ = require('underscore');
+
+	var mixerSequence = require('./mixer/main');
+	var templateObj = require('./template/main');
+
+	var collection = require('./collection/collectionProvider')();
+
+	var DatabaseRandomizer = require('./randomizer/randomizerProvider')(
+		randomInt,// randomize int
+		randomArr,// randomize range
+		collection
+	);
+
+	var databaseQuery = require('./queryProvider')(
+		collection,
+		piConsole
+	);
+
+	var databaseInflate = require('./inflateProvider')(
+		databaseQuery,
+		{global:window.piGlobal}, // rootscope
+		piConsole
+	);
+
+	var DatabaseStore = require('./store/storeProvider')(
+		collection
+	);
+
+	var databaseSequence = require('./databaseSequenceProvider')(
+		mixerSequence
+	);
+
+
+	var Database = require('./databaseProvider')(
+		DatabaseStore,
+		DatabaseRandomizer,
+		databaseInflate,
+		templateObj,
+		databaseSequence
+	);
+
+	return Database;
+
+	function randomArr(length){
+		return _.shuffle(_.range(length));
+	}
+
+	function randomInt(length){
+		return Math.floor(Math.random()*length);
+	}
+
+	function piConsole(){
+		return console;
+	}
+});

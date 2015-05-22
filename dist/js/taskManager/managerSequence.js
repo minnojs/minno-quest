@@ -1,1 +1,50 @@
-define(["require","underscore"],function(e){function n(e){function n(t){var r;if(!(this instanceof n))return new n(t);r=this.db=new e,r.createColl("tasks"),r.add("tasks",t.tasksSets||[]),this.sequence=r.sequence("tasks",t.sequence)}return t.extend(n.prototype,{next:function(){return this.sequence.next(),this},prev:function(){return this.sequence.prev(),this},current:function(){return this.sequence.current()}}),n}var t=e("underscore");return n.$inject=["Database"],n});
+define(function(require){
+	var _ = require('underscore');
+
+	sequenceProvider.$inject = ['Database'];
+	function sequenceProvider(Database){
+
+		/**
+		 * The sequence for the manager (essentialy the model).
+		 * @param  {Object} script A manager script.
+		 * @return {Object}
+		 */
+		function sequence(script){
+			var db;
+			// make sure this works without a new statement
+			if (!(this instanceof sequence)){
+				// jshint newcap:false
+				return new sequence(script);
+				// jshint newcap:true
+			}
+
+			// setup database
+			db = this.db = new Database();
+			db.createColl('tasks');
+			db.add('tasks', script.tasksSets || []);
+
+			// setup sequence
+			this.sequence = db.sequence('tasks', script.sequence);
+		}
+
+		_.extend(sequence.prototype, {
+			next: function(){
+				this.sequence.next();
+				return this;
+			},
+
+			prev: function(){
+				this.sequence.prev();
+				return this;
+			},
+
+			current: function(){
+				return this.sequence.current();
+			}
+		});
+
+		return sequence;
+	}
+
+	return sequenceProvider;
+});

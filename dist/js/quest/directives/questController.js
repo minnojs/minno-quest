@@ -1,1 +1,159 @@
-define(["require","underscore"],function(e){function n(e,n,r,i,s,o,u){function h(n,h){function v(e){var r=e.response,i=l.correctValue;return t.isNumber(i)&&(i+=""),t.isNumber(r)&&(r+=""),t.isEqual(i,r)?n.$setValidity("correct",!0):n.$setValidity("correct",!1),e}h=t.defaults(h||{},c),l=h.data;var p=r(i.ngModel),d=l.hasOwnProperty("dflt")?l.dflt:h.dflt;e.model=n,f=p(e.$parent),t.isUndefined(f)?(f={},p.assign(e.$parent,f)):s(["question"]).warn('This question has already been in use: "'+f.name+'"'),a.log=n.$modelValue=f,t.defaults(f,{name:l.name,response:d,serial:t.size(u.current&&u.current.questions)}),e.response=n.$viewValue=f.response,n.$formatters.push(function(e){return e.response}),n.$parsers.push(function(e){if(t.isUndefined(e))return f;var n=a.stopper.now();return f.response=e,f.latency=n,f.pristineLatency||(f.pristineLatency=n),f}),e.$watch("response",function(e,r){t.isEqual(e,r)||(n.$setViewValue(e),o(l.onChange,{log:f}))}),e.$on("$destroy",function(){o(l.onDestroy,{log:f})}),l.correct&&(n.$parsers.push(v),l.response=v(this.log)),o(l.onCreate,{log:f})}var a=this,f,l,c={dflt:NaN,data:e.data};this.scope=e,this.stopper=new n,this.registerModel=h,e.$on("quest:submit",function(e){e.preventDefault(),f.declined=undefined,f.submitLatency=a.stopper.now(),o(l.onSubmit,{log:f})}),e.$on("quest:decline",function(e){e.preventDefault(),f.declined=!0,f.submitLatency=a.stopper.now(),o(l.onDecline,{log:f})}),e.$on("quest:timeout",function(e){e.preventDefault(),f.timeout=!0,o(l.onTimeout,{log:f})})}var t=e("underscore");return n.$inject=["$scope","timerStopper","$parse","$attrs","piConsole","piInvoke","$rootScope"],n});
+/**
+ * This is the default controller for all questions.
+ * It exposes the local scope, and a `value` method that the harvester can use.
+ */
+
+define(function(require){
+	var _ = require('underscore');
+
+	questController.$inject = ['$scope', 'timerStopper', '$parse', '$attrs','piConsole', 'piInvoke', '$rootScope'];
+	function questController($scope, Stopper, $parse, $attr, piConsole, invoke, $rootScope){
+		var self = this;
+		var log;
+		var data;
+		var defaults = {
+			dflt: NaN,
+			data: $scope.data
+		};
+
+		this.scope = $scope;
+		this.stopper = new Stopper();
+
+
+		this.registerModel = registerModel;
+
+		/**
+		 * Listen for quest events
+		 */
+		$scope.$on('quest:submit', function(event){
+			event.preventDefault();
+			log.declined = undefined;
+			log.submitLatency = self.stopper.now();
+			invoke(data.onSubmit, {log:log});
+		});
+
+		$scope.$on('quest:decline', function(event){
+			event.preventDefault();
+			log.declined = true;
+			log.submitLatency = self.stopper.now();
+			invoke(data.onDecline, {log:log});
+		});
+
+		$scope.$on('quest:timeout', function(event){
+			event.preventDefault();
+			log.timeout = true;
+			invoke(data.onTimeout, {log:log});
+		});
+
+
+		/**
+		 * Get the model and options from the directive
+		 * @param  {Object} ngModel
+		 * @param  {Object} options
+		 */
+		function registerModel(ngModel, options){
+			options = _.defaults(options || {}, defaults);
+			data = options.data;
+
+			var ngModelGet = $parse($attr.ngModel);
+			var dfltValue = data.hasOwnProperty('dflt') ? data.dflt : options.dflt;
+
+			// make model accesable from within scope
+			$scope.model = ngModel;
+
+			// has to be evaluated in the context of the parent scope because we're assuming that the quest directives have an isolated scope
+			log = ngModelGet($scope.$parent);
+
+			// init log
+			// ********
+			// create log if it doesn't exist yet
+			if (_.isUndefined(log)){
+				log = {};
+				ngModelGet.assign($scope.$parent, log);
+			} else {
+				piConsole(['question']).warn('This question has already been in use: "' + log.name + '"');
+			}
+
+			// expose all the stuff...
+			self.log = ngModel.$modelValue = log;
+
+			_.defaults(log,{
+				name: data.name,
+				response: dfltValue,
+				// @TODO: this is a bit fragile and primitive.
+				// besides, who says this is where "current" will be...
+				// we should probably create a unique ID service of some sort...
+				// maybe just grab it off of rootscope
+				serial: _.size($rootScope.current && $rootScope.current.questions)
+			});
+
+			$scope.response = ngModel.$viewValue = log.response;
+
+			// model --> view
+			// should probably never be called (since our model is an object and not a primitive)
+			ngModel.$formatters.push(function(modelValue) {
+				return modelValue.response;
+			});
+
+			// view --> model
+			ngModel.$parsers.push(function(viewValue){
+				// don't know exactly why this is needed!
+				// probably has to do with our use of nested ng-module
+				if (_.isUndefined(viewValue)){
+					return log;
+				}
+				var latency = self.stopper.now();
+
+				log.response = viewValue;
+				log.latency = latency;
+
+				// if this is the first change
+				if (!log.pristineLatency){
+					log.pristineLatency = latency;
+				}
+
+				return log;
+			});
+
+			$scope.$watch('response',function(newValue, oldValue /*, scope*/){
+				if (!_.isEqual(newValue, oldValue)){
+				//if (newValue !== oldValue){
+					ngModel.$setViewValue(newValue);
+					invoke(data.onChange, {log:log});
+				}
+			});
+
+			$scope.$on('$destroy', function(){
+				invoke(data.onDestroy, {log:log});
+			});
+
+			if (data.correct) {
+				ngModel.$parsers.push(correctValidator);
+				data.response = correctValidator(this.log);
+			}
+
+			invoke(data.onCreate, {log:log});
+
+			function correctValidator(value) {
+				var response = value.response;
+				var correctValue = data.correctValue;
+
+				// make sure numbers are always treated as strings
+				_.isNumber(correctValue) && (correctValue+="");
+				_.isNumber(response) && (response+="");
+
+				if (_.isEqual(correctValue, response)) {
+					ngModel.$setValidity('correct', true);
+				} else {
+					ngModel.$setValidity('correct', false);
+					//value.response = dfltValue;
+				}
+
+				return value;
+			}
+
+		}
+	}
+
+	return questController;
+});

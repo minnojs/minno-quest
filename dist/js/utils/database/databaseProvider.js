@@ -1,1 +1,56 @@
-define(["require","underscore"],function(e){function n(e,n,r,i,s){function o(){this.store=new e,this.randomizer=new n}return t.extend(o.prototype,{createColl:function(e){this.store.create(e)},getColl:function(e){return this.store.read(e)},add:function(e,t){var n=this.store.read(e);n.add(t)},inflate:function(e,t,n){var s=this.getColl(e);if(!t.$inflated||t.reinflate)t.$inflated=r(t,s,this.randomizer);if(!t.$templated||t.regenerateTemplate)n[e+"Data"]=t.$inflated.data||{},n[e+"Meta"]=t.$meta,t.$templated=i(t.$inflated,n);return t.$templated},sequence:function(e,n){if(!t.isArray(n))throw new Error("Sequence must be an array.");return new s(e,n,this)}}),o}var t=e("underscore");return n.$inject=["DatabaseStore","DatabaseRandomizer","databaseInflate","templateObj","databaseSequence"],n});
+define(function(require){
+	var _ = require('underscore');
+
+	DatabaseProvider.$inject = ['DatabaseStore', 'DatabaseRandomizer', 'databaseInflate', 'templateObj', 'databaseSequence'];
+	function DatabaseProvider(Store, Randomizer, inflate, templateObj, DatabaseSequence){
+
+		function Database(){
+			this.store = new Store();
+			this.randomizer = new Randomizer();
+		}
+
+		_.extend(Database.prototype, {
+			createColl: function(namespace){
+				this.store.create(namespace);
+			},
+
+			getColl: function(namespace){
+				return this.store.read(namespace);
+			},
+
+			add: function(namespace, query){
+				var coll = this.store.read(namespace);
+				coll.add(query);
+			},
+
+			inflate: function(namespace, query, context){
+				var coll = this.getColl(namespace);
+
+				// inflate
+				if (!query.$inflated || query.reinflate) {
+					query.$inflated = inflate(query, coll, this.randomizer);
+				}
+
+				// interpolate
+				if (!query.$templated || query.regenerateTemplate){
+					context[namespace + 'Data'] = query.$inflated.data || {};
+					context[namespace + 'Meta'] = query.$meta;
+					query.$templated = templateObj(query.$inflated, context);
+				}
+
+				return query.$templated;
+			},
+
+			sequence: function(namespace, arr){
+				if (!_.isArray(arr)){
+					throw new Error('Sequence must be an array.');
+				}
+				return new DatabaseSequence(namespace, arr, this);
+			}
+		});
+
+		return Database;
+	}
+
+	return DatabaseProvider;
+});

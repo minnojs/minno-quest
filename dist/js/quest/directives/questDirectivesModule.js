@@ -1,1 +1,63 @@
-define(["require","angular","underscore","utils/timer/timer-module","utils/utils/utilsModule","./buttons/buttons","utils/database/template/templateModule","utils/console/consoleModule","utils/modal/modalModule","./questController","./piQuest/piQuest-directive","./piQuest/piqPage-directive","./wrapper/wrapper-directive","./text/textDirective","./text/textDirective","./text/text-number-directive","./select/selectMixerProvider","./select/dropdownDirective","./select/selectOneDirective","./select/selectMultiDirective","./grid/gridDirective","./grid/gridRowDirective","./slider/sliderDirective","./slider/slider","./toRegexFilter","./dfltUnitsFilter"],function(e){var t=e("angular"),n=e("underscore"),r=t.module("questDirectives",[e("utils/timer/timer-module").name,e("utils/utils/utilsModule").name,e("./buttons/buttons").name,e("utils/database/template/templateModule").name,e("utils/console/consoleModule").name,e("utils/modal/modalModule").name]);return r.controller("questController",e("./questController")),r.directive("piQuest",e("./piQuest/piQuest-directive")),r.directive("piqPage",e("./piQuest/piqPage-directive")),r.directive("questWrapper",e("./wrapper/wrapper-directive")),r.directive("questText",e("./text/textDirective")),r.directive("questTextarea",e("./text/textDirective")),r.directive("questTextNumber",e("./text/text-number-directive")),r.service("questSelectMixer",e("./select/selectMixerProvider")),r.directive("questDropdown",e("./select/dropdownDirective")),r.directive("questSelectOne",e("./select/selectOneDirective")),r.directive("questSelectMulti",e("./select/selectMultiDirective")),r.value("questShuffle",n.shuffle),r.directive("questGrid",e("./grid/gridDirective")),r.directive("questGridRow",e("./grid/gridRowDirective")),r.directive("questSlider",e("./slider/sliderDirective")),r.directive("piSlider",e("./slider/slider")),r.config(["$sceProvider",function(e){e.enabled(!1)}]),r.directive("piQuestValidation",function(){return{replace:!0,transclude:!0,scope:{unvalid:"=piQuestValidation"},template:['<div class="alert alert-danger" role="alert" ng-show="unvalid">','<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>',"<span ng-transclude></span>","</div>"].join("")}}),r.filter("toRegex",e("./toRegexFilter")),r.filter("dfltUnits",e("./dfltUnitsFilter")),r});
+define(function(require){
+	var angular = require('angular');
+	var _ = require('underscore');
+
+	// set modules that are requirements for the quest module
+	var module = angular.module('questDirectives',[
+		require('utils/timer/timer-module').name,
+		require('utils/utils/utilsModule').name,
+		require('./buttons/buttons').name,
+		require('utils/database/template/templateModule').name,
+		require('utils/console/consoleModule').name,
+		require('utils/modal/modalModule').name
+	]);
+
+	module.controller('questController', require('./questController'));
+	module.directive('piQuest', require('./piQuest/piQuest-directive'));
+	module.directive('piqPage', require('./piQuest/piqPage-directive'));
+	module.directive('questWrapper', require('./wrapper/wrapper-directive'));
+
+	module.directive('questText', require('./text/textDirective'));
+	module.directive('questTextarea', require('./text/textDirective')); // uses the same directive as questText
+	module.directive('questTextNumber', require('./text/text-number-directive'));
+
+	module.service('questSelectMixer', require('./select/selectMixerProvider'));
+	module.directive('questDropdown',require('./select/dropdownDirective'));
+	module.directive('questSelectOne',require('./select/selectOneDirective'));
+	module.directive('questSelectMulti',require('./select/selectMultiDirective'));
+
+	module.value('questShuffle', _.shuffle); // we already have this in database but I don't want the directives to be too interdependant
+	module.directive('questGrid', require('./grid/gridDirective'));
+	module.directive('questGridRow', require('./grid/gridRowDirective'));
+
+	module.directive('questSlider',require('./slider/sliderDirective'));
+	module.directive('piSlider',require('./slider/slider'));
+
+	// @TODO: move to utils or something
+	module.config(['$sceProvider', function($sceProvider){
+		$sceProvider.enabled(false);
+	}]);
+
+	module.directive('piQuestValidation', function(){
+		return {
+			replace:true,
+			transclude: true,
+			scope: {unvalid:'=piQuestValidation'},
+			template: [
+				'<div class="alert alert-danger" role="alert" ng-show="unvalid">',
+			  		'<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>',
+			  		'<span ng-transclude></span>',
+				'</div>'
+			].join('')
+		};
+	});
+
+	// filters
+	module.filter('toRegex', require('./toRegexFilter'));
+	module.filter('dfltUnits', require('./dfltUnitsFilter'));
+
+
+	return module;
+
+
+});

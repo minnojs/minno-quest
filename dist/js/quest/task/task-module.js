@@ -1,1 +1,17 @@
-define(["require","angular","utils/logger/logger-module","utils/database/databaseModule","utils/console/consoleModule","./questSequenceProvider","./taskProvider","./parseProvider","./dfltQuestLogger"],function(e){var t=e("angular"),n=t.module("task",[e("utils/logger/logger-module").name,e("utils/database/databaseModule").name,e("utils/console/consoleModule").name]);return n.service("QuestSequence",e("./questSequenceProvider")),n.service("Task",e("./taskProvider")),n.service("taskParse",e("./parseProvider")),n.value("dfltQuestLogger",e("./dfltQuestLogger")),n});
+define(function(require){
+
+	var angular = require('angular');
+	var module = angular.module('task', [
+		require('utils/logger/logger-module').name,
+		require('utils/database/databaseModule').name,
+		require('utils/console/consoleModule').name
+	]);
+
+	module.service('QuestSequence', require('./questSequenceProvider'));
+	module.service('Task', require('./taskProvider'));
+	module.service('taskParse', require('./parseProvider'));
+
+	module.value('dfltQuestLogger', require('./dfltQuestLogger'));
+
+	return module;
+});

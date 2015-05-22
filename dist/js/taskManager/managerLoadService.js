@@ -1,1 +1,21 @@
-define(["require","underscore"],function(e){function n(e,n){function r(r){var i=t.isString(r)?n(r):r;return e.when(i)}return r}var t=e("underscore");return n.$inject=["$q","managerGetScript"],n});
+/**
+ * @name: managerLoadService
+ * @returns {$q} A $q.promise that returns the target script
+ */
+define(function(require){
+
+	var _ = require('underscore');
+
+	managerLoadService.$inject = ['$q', 'managerGetScript'];
+	function managerLoadService($q, getScript){
+
+		function managerLoadScript(source){
+			var promise = _.isString(source) ? getScript(source) : source;
+			return $q.when(promise);
+		}
+
+		return managerLoadScript;
+	}
+
+	return managerLoadService;
+});

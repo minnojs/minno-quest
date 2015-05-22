@@ -1,1 +1,74 @@
-define(["require","underscore"],function(e){function n(e){function n(t,n,r){this.namespace=t,this.mixerSequence=new e(n),this.db=r}return t.extend(n.prototype,{next:function(e){return this.mixerSequence.next(e),this},prev:function(e){return this.mixerSequence.prev(e),this},current:function(e){e||(e={});var t=this.mixerSequence.current(e);return t?this.db.inflate(this.namespace,t,e):t},all:function(e){var t=[],n=this.next().current(e);while(n)t.push(n),n=this.next().current(e);return t}}),n}var t=e("underscore");return n.$inject=["MixerSequence"],n});
+define(function(require){
+	var _ = require('underscore');
+
+	SequenceProvider.$inject = ['MixerSequence'];
+	function SequenceProvider(MixerSequence){
+
+		/**
+		 * Sequence Constructor:
+		 * Manage the progression of a sequence, including parsing (mixing, inheritance and templating).
+		 * @param  {String  } namespace [pages or questions (the type of db.Store)]
+		 * @param  {Array   } arr       [a sequence to manage]
+		 * @param  {Database} db        [the db itself]
+		 */
+
+		function Sequence(namespace, arr,db){
+			this.namespace = namespace;
+			this.mixerSequence = new MixerSequence(arr);
+			this.db = db;
+		}
+
+		_.extend(Sequence.prototype, {
+			// only mix
+			next: function(context){
+				this.mixerSequence.next(context);
+				return this;
+			},
+
+			// anti mix
+			prev: function(context){
+				this.mixerSequence.prev(context);
+				return this;
+			},
+
+			/**
+			 * Return the element currently in focus.
+			 * It always returns either an element or undefined (mixers are abstrcted away)
+			 * @param  {[type]} context [description]
+			 * @return {[type]}         [description]
+			 */
+			current: function(context){
+				context || (context = {});
+				// must returned an element or undefined
+				var obj = this.mixerSequence.current(context);
+
+				// in case this is the end of the sequence
+				if (!obj){
+					return obj;
+				}
+
+				return this.db.inflate(this.namespace, obj, context);
+			},
+
+			/**
+			 * Returns an array of elements, created by proceeding through the whole sequence.
+			 * @return {[type]} [description]
+			 */
+			all: function(context){
+				var sequence = [];
+
+				var el = this.next().current(context);
+				while (el){
+					sequence.push(el);
+					el = this.next().current(context);
+				}
+
+				return sequence;
+			}
+		});
+
+		return Sequence;
+	}
+
+	return SequenceProvider;
+});

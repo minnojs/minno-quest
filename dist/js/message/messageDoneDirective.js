@@ -1,1 +1,18 @@
-define([],function(){function e(){return{link:function(e,t){t.on("click",function(){e.done()})}}}return e.$inject=[],e});
+/*
+ * @name: messageDone Directive
+ */
+define(function () {
+
+	directive.$inject = [];
+	function directive(){
+		return {
+			link: function($scope, $element){
+				$element.on('click', function(){
+					$scope.done();
+				});
+			}
+		};
+	}
+
+	return directive;
+});

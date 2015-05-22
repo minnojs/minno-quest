@@ -1,1 +1,104 @@
-define(["require","underscore","angular"],function(e){function r(){this.script={settings:{},pages:[],questions:[],sequence:[],global:{},current:{}},this.settings=this.script.settings}var t=e("underscore"),n=e("angular");return t.extend(r.prototype,{addSettings:function(e,n){var r;return t.isPlainObject(n)?(r=this.script.settings[e]=this.script.settings[e]||{},t.extend(r,n)):this.script.settings[e]=n,this},addPagesSet:function(e,n){var r=this.script;return t.isArray(n)||(n=[n]),t.each(n,function(t){t.set=e,r.pages.push(t)}),this},addQuestionsSet:function(e,n){var r=this.script;return t.isArray(n)||(n=[n]),t.each(n,function(t){t.set=e,r.questions.push(t)}),this},addSequence:function(e){var n=this.script;return t.isArray(e)||(e=[e]),n.sequence=n.sequence.concat(e),this},getGlobal:function(){return this.script.global},addGlobal:function(e){if(!t.isPlainObject(e))throw new Error("global must be an object");t.merge(this.getGlobal(),e)},getCurrent:function(){return this.script.current},addCurrent:function(e){if(!t.isPlainObject(e))throw new Error("current must be an object");t.merge(this.getCurrent(),e)},post:function(e,t){var r=n.injector(["ng"]);return r.invoke(["$http",function(n){return n.post(e,t)}])}}),r});
+define(function(require){
+
+	var _ = require('underscore');
+	var angular = require('angular');
+
+	/**
+	 * Constructor for PIQuest script creator
+	 * @return {Object}		Script creator
+	 */
+	function API(){
+		this.script = {
+			settings:{},
+			pages: [],
+			questions: [],
+			sequence: [],
+			global: {},
+			current: {}
+		};
+
+		this.settings = this.script.settings;
+	}
+
+	_.extend(API.prototype, {
+
+		// settings
+		addSettings: function(name, settingsObj){
+			var settings;
+
+			if (_.isPlainObject(settingsObj)){
+				settings = this.script.settings[name] = this.script.settings[name] || {};
+				_.extend(settings, settingsObj);
+			} else {
+				this.script.settings[name] = settingsObj;
+			}
+
+			return this;
+		},
+
+		addPagesSet : function(set, list){
+			var script = this.script;
+			_.isArray(list) || (list = [list]);
+
+			_.each(list, function(value){
+				value.set = set;
+				script.pages.push(value);
+			});
+
+			return this;
+		},
+
+		addQuestionsSet : function(set, list){
+			var script = this.script;
+			_.isArray(list) || (list = [list]);
+
+			_.each(list, function(value){
+				value.set = set;
+				script.questions.push(value);
+			});
+
+			return this;
+		},
+
+		addSequence: function(sequence){
+			var script = this.script;
+			_.isArray(sequence) || (sequence = [sequence]);
+
+			script.sequence = script.sequence.concat(sequence);
+
+			return this;
+		},
+
+		getGlobal: function(){
+			return this.script.global;
+		},
+
+		addGlobal: function(global){
+			if (!_.isPlainObject(global)){
+				throw new Error('global must be an object');
+			}
+			_.merge(this.getGlobal(), global);
+		},
+
+		getCurrent: function(){
+			return this.script.current;
+		},
+
+		addCurrent: function(current){
+			if (!_.isPlainObject(current)){
+				throw new Error('current must be an object');
+			}
+			_.merge(this.getCurrent(), current);
+		},
+
+		post: function(url, obj){
+			var $injector = angular.injector(['ng']);
+
+			return $injector.invoke(['$http', function($http){
+				return $http.post(url, obj);
+			}]);
+		}
+	});
+
+	return API;
+});

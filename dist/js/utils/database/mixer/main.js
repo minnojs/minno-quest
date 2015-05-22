@@ -1,1 +1,35 @@
-define(["require","underscore","./mixer","./branching/dotNotation","./branching/mixerDotNotationProvider","./branching/mixerConditionProvider","./branching/mixerEvaluateProvider","./branching/mixerBranchingDecorator","./mixerSequenceProvider"],function(e){function f(){return console}var t=e("underscore"),n=e("./mixer")(t.shuffle,Math.random),r=e("./branching/dotNotation"),i=e("./branching/mixerDotNotationProvider")(r),s=e("./branching/mixerConditionProvider")(i,f),o=e("./branching/mixerEvaluateProvider")(s),u={};e("./branching/mixerBranchingDecorator")(n,o,u);var a=e("./mixerSequenceProvider")(n);return a});
+define(function(require){
+	var _ = require('underscore');
+
+	var mixer = require('./mixer')(
+		_.shuffle, // randomizeShuffle
+		Math.random // randomizeRandom
+	);
+
+	var dotNotation = require('./branching/dotNotation'); // this is a value, doesn't need to be evaluated
+
+	var mixerDotNotation = require('./branching/mixerDotNotationProvider')(dotNotation);
+	var mixerCondition = require('./branching/mixerConditionProvider')(
+		mixerDotNotation,
+		piConsole
+	);
+
+	var mixerEvaluate = require('./branching/mixerEvaluateProvider')(mixerCondition);
+
+	var mixerDefaultContext = {};
+
+	require('./branching/mixerBranchingDecorator')(
+		mixer,
+		mixerEvaluate,
+		mixerDefaultContext
+	);
+
+	var MixerSequence = require('./mixerSequenceProvider')(mixer);
+
+	return MixerSequence;
+
+	function piConsole(){
+		return console;
+	}
+
+});

@@ -1,1 +1,24 @@
-define(["require","text!./spinner.html"],function(e){function n(){return{transclude:!0,replace:!0,template:t,require:[],scope:{spinner:"=piSpinner"}}}var t=e("text!./spinner.html");return n.$inject=[],n});
+/*
+ * @name: spinner Directive
+ */
+define(function (require) {
+	// get template
+	var template = require('text!./spinner.html');
+
+	directive.$inject = [];
+	function directive(){
+		return {
+			transclude: true,
+			replace: true,
+			template:template,
+			require: [],
+			// controller: '',
+			// controllerAs: 'ctrl',
+			scope:{
+				spinner: '=piSpinner'
+			}
+		};
+	}
+
+	return directive;
+});

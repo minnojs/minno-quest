@@ -1,1 +1,46 @@
-define(["require","text!./wrapper.html","underscore"],function(e){function i(e){return e.charAt(0).toUpperCase()+e.slice(1)}function s(e,s){return{replace:!0,template:n,priority:5,scope:{data:"=questData",current:"=questCurrent"},link:function(n,o){var u=n.data.type||"text",a=o.children().eq(2),f=t+i(u);if(!s.has(f+"Directive"))throw new Error('Unknown question type: "'+u+'"');f=r.kebabCase(f),a.attr(f,!0),e(a)(n)}}}var t="quest",n=e("text!./wrapper.html"),r=e("underscore");return s.$inject=["$compile","$injector"],s});
+/*
+ * The directive for creating the generic question layout (stub, surrounding etc.).
+ */
+define(function (require) {
+
+	var PREFIX = 'quest';
+	var template = require('text!./wrapper.html');
+	var _ = require('underscore');
+
+	function capitaliseFirstLetter(string){
+		return string.charAt(0).toUpperCase() + string.slice(1);
+	}
+
+	directive.$inject = ['$compile', '$injector'];
+	function directive($compile, $injector){
+		return {
+			replace: true,
+			template:template,
+			priority: 5, // Allows the wrapper to use the same scope as the questions
+			scope:{
+				data: '=questData',
+				current: '=questCurrent'
+			},
+			link: function(scope,element) {
+				var type = scope.data.type || 'text';
+				var questElement = element.children().eq(2);
+				var attrName = PREFIX + capitaliseFirstLetter(type);
+
+				// Make sure that this directive exists
+				if (!$injector.has(attrName + 'Directive')){
+					throw new Error ('Unknown question type: "' + type + '"');
+				}
+
+				// snake case the attr name
+				attrName = _.kebabCase(attrName);
+
+				// add the appropriate attribute to the directive and compile it
+				questElement.attr(attrName,true);
+				$compile(questElement)(scope);
+			}
+
+		};
+	}
+
+	return directive;
+});

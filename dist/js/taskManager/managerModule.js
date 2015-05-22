@@ -1,1 +1,21 @@
-define(["require","angular","./task/taskModule","./canvas/canvasModule","utils/utils/utilsModule","utils/helperDirectives/helperDirectivesModule","utils/console/consoleModule","./managerService","./managerSequence","./managerLoadService","./managerGetScriptService","./managerTaskLoadService","./managerDirective","./managerTaskDirective"],function(e){var t=e("angular"),n=t.module("taskManager",[e("./task/taskModule").name,e("./canvas/canvasModule").name,e("utils/utils/utilsModule").name,e("utils/helperDirectives/helperDirectivesModule").name,e("utils/console/consoleModule").name]);return n.service("managerService",e("./managerService")),n.service("managerSequence",e("./managerSequence")),n.service("managerLoad",e("./managerLoadService")),n.service("managerGetScript",e("./managerGetScriptService")),n.service("managerTaskLoad",e("./managerTaskLoadService")),n.directive("piManager",e("./managerDirective")),n.directive("piManagerTask",e("./managerTaskDirective")),n});
+define(function(require){
+
+	var angular = require('angular');
+	var module = angular.module('taskManager',[
+		require('./task/taskModule').name,
+		require('./canvas/canvasModule').name,
+		require('utils/utils/utilsModule').name,
+		require('utils/helperDirectives/helperDirectivesModule').name,
+		require('utils/console/consoleModule').name
+	]);
+
+	module.service('managerService', require('./managerService'));
+	module.service('managerSequence', require('./managerSequence'));
+	module.service('managerLoad', require('./managerLoadService'));
+	module.service('managerGetScript', require('./managerGetScriptService'));
+	module.service('managerTaskLoad', require('./managerTaskLoadService'));
+	module.directive('piManager', require('./managerDirective'));
+	module.directive('piManagerTask', require('./managerTaskDirective'));
+
+	return module;
+});

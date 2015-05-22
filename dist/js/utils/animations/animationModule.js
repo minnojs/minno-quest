@@ -1,1 +1,13 @@
-define(["require","angular","animate","./rafPolyfill","./dropInAnimation","./fadeAnimation","./slideAnimation"],function(e){var t=e("angular");e("animate"),e("./rafPolyfill");var n=t.module("pi.animate",["ngAnimate"]);return n.animation(".drop-in",e("./dropInAnimation")),n.animation(".fade",e("./fadeAnimation")),n.animation(".slide",e("./slideAnimation")),n});
+define(function(require){
+	var angular = require('angular');
+	require('animate');
+	require('./rafPolyfill');
+
+	var module = angular.module('pi.animate',['ngAnimate']);
+
+	module.animation('.drop-in', require('./dropInAnimation'));
+	module.animation('.fade', require('./fadeAnimation'));
+	module.animation('.slide', require('./slideAnimation'));
+
+	return module;
+});

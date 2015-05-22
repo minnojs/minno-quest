@@ -1,1 +1,194 @@
-define(["require","underscore"],function(e){function r(r){function s(){var e=this.script={name:"anonymous "+r.type,settings:{},current:{},sequence:[]};this.settings=e.settings,t.forEach(r.sets,function(t){e[t+"Sets"]=[]})}return t.forEach(r.sets,function(e){s.prototype[t.camelCase("add-"+e+"-set")]=i(e)}),t.extend(s.prototype,{setName:function(e){this.script.name=e},addSettings:function(e,n){var r;return t.isPlainObject(n)?(r=this.settings[e]=this.settings[e]||{},t.extend(r,n)):this.settings[e]=n,this},addSequence:function(e){var n=this.script;return t.isArray(e)||(e=[e]),n.sequence=n.sequence.concat(e),this},addGlobal:function(e){if(!t.isPlainObject(e))throw new Error("global must be an object");return t.merge(n,e)},getGlobal:function(){return n},addCurrent:function(e){if(!t.isPlainObject(e))throw new Error("current must be an object");return t.merge(this.script.current,e)},getCurrent:function(){return this.script.current},addScript:function(e){return t.merge(this.script,e)},getScript:function(){return this.script},post:function(t,n){if(e.defined("jquery"))return e("jquery").ajax({type:"POST",url:t,data:JSON.stringify(n),contentType:"application/json; charset=utf-8",dataType:"json"});var r=angular.injector(["ng"]);return r.invoke(["$http",function(e){return e.post(t,n)}])},shuffle:function(e){return t.shuffle(e)}}),s}function i(e){function n(n,r){var i=this.script[e+"Sets"]||(this.script[e+"Sets"]=[]),s;t.isPlainObject(n)&&(s=t(n).map(function(e,n){return t.each(e,function(e){e.set=n}),e}).flatten().value()),t.isArray(n)&&(s=n),t.isString(n)&&(s=t.isArray(r)?r:[r],s=t.map(s,function(e){return e.set=n,e})),i.push.apply(i,s)}return n}window.piGlobal||(window.piGlobal={});var t=e("underscore"),n=window.piGlobal;return r});
+define(function(require){
+
+	window.piGlobal || (window.piGlobal = {});
+
+	var _ = require('underscore');
+	var global = window.piGlobal;
+
+	/**
+	 * Create a new API
+	 * @param {Object} options
+	 * {
+	 * 		type: 'PIP',
+	 * 		sets: ['trial', 'stimulus', 'media']
+	 * }
+	 */
+	function APIconstructor(options){
+
+		function API(){
+			var script = this.script = {
+				name: 'anonymous ' + options.type,
+				settings: {},
+				current: {}, // this is the actual namespace for this PIP
+				sequence: []
+			};
+
+			this.settings = script.settings;
+
+			// create set arrays
+			_.forEach(options.sets, function(set){
+				script[set + 'Sets'] = [];
+			});
+		}
+
+		_.forEach(options.sets, function(set){
+			API.prototype[_.camelCase('add-' + set + '-set')] = add_set(set);
+		});
+
+		_.extend(API.prototype, {
+
+			setName: function(name){
+				this.script.name = name;
+			},
+
+			// settings
+			addSettings: function(name, settingsObj){
+				var settings;
+
+
+
+				if (_.isPlainObject(settingsObj)){
+					settings = this.settings[name] = this.settings[name] || {};
+					_.extend(settings, settingsObj);
+				} else {
+					this.settings[name] = settingsObj;
+				}
+
+				return this;
+			},
+
+			addSequence: function(sequence){
+				var script = this.script;
+				_.isArray(sequence) || (sequence = [sequence]);
+
+				script.sequence = script.sequence.concat(sequence);
+
+				return this;
+			},
+
+			addGlobal: function(obj){
+				if (!_.isPlainObject(obj)){
+					throw new Error('global must be an object');
+				}
+				return _.merge(global, obj);
+			},
+
+			getGlobal: function(){
+				return global;
+			},
+
+			addCurrent: function(obj){
+				if (!_.isPlainObject(obj)){
+					throw new Error('current must be an object');
+				}
+				return _.merge(this.script.current, obj);
+			},
+
+			getCurrent: function(){
+				return this.script.current;
+			},
+
+			// push a whole script
+			addScript: function(obj){
+				return _.merge(this.script,obj);
+			},
+
+			// returns script (for debuging probably)
+			getScript: function(){
+				return this.script;
+			},
+
+			// name, response, taskName, taskNumber
+			post: function(url, obj){
+				// just so we can use this in standalone PIP
+				if (require.defined('jquery')){
+					return require('jquery' + '').ajax({
+						type: "POST",
+						url: url,
+						data: JSON.stringify(obj),
+						contentType: "application/json; charset=utf-8",
+						dataType: "json"
+					});
+
+					//.post(url, JSON.stringify(obj));
+				} else {
+					var $injector = angular.injector(['ng']);
+
+					return $injector.invoke(['$http', function($http){
+						return $http.post(url, obj);
+					}]);
+				}
+			},
+
+			shuffle: function(collection){
+				return _.shuffle(collection);
+			}
+		});
+
+		return API;
+
+	}
+
+
+	 /**
+	  * Create a function that adds sets of a scpecific type
+	  * @param {String} type  	The type of set setter to create
+	  * @returns {Function} 	A setter object
+	  */
+	function add_set(type){
+
+		/**
+		 * Adds a set to the targetSet
+		 * @param {String, Object} set    	Either full set object, or the name of this setArr
+		 * @param {Array} setArr 			An array of objects for this set
+		 * @returns {Object} The API object
+		 *
+		 * use examples:
+		 * fn({
+		 *   intro: [intro1, intro2],
+		 *   Default: [defaultTrial]
+		 * })
+		 * fn('intro',[intro1, intro2])
+		 * fn('Default',defaultTrial)
+		 *
+		 */
+		function setSetter(set, setArr){
+
+			// get the sets we want to extend (or create them)
+			var targetSets = this.script[type + "Sets"] || (this.script[type + "Sets"] = []);
+			var list;
+
+			if (_.isPlainObject(set)) {
+				list = _(set)
+					// for each set of elements
+					.map(function(value, key){
+						// add the set name to each key
+						_.each(value, function(v){v.set = key;});
+						return value; // return the set
+					})
+					.flatten() // flatten all sets to a single array
+					.value();
+			}
+
+			if (_.isArray(set)){
+				list = set;
+			}
+
+			if (_.isString(set)){
+				list = _.isArray(setArr) ? setArr : [setArr];
+				list = _.map(list, function(value){
+					value.set = set;
+					return value;
+				});
+
+			}
+
+			// merge the list into the targetSet
+			targetSets.push.apply(targetSets, list);
+		}
+
+		return setSetter;
+	}
+
+	return APIconstructor;
+});

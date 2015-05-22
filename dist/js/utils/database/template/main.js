@@ -1,1 +1,9 @@
-define(["require","./templateObjProvider","./templateFilter"],function(e){return e("./templateObjProvider")(function(){return e("./templateFilter")(console,{})})});
+define(function(require){
+	return require('./templateObjProvider')(
+		// $filter('template')
+		function(){
+			return require('./templateFilter')(console, {}); // $log, defaultContext
+		}
+	);
+
+});

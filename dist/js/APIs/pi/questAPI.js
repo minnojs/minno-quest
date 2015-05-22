@@ -1,1 +1,27 @@
-define(["require","../questAPI","APIs/pi/APIdecorator","underscore"],function(e){function i(){t.call(this),this.settings.logger={url:"/implicit/PiQuest"}}var t=e("../questAPI"),n=e("APIs/pi/APIdecorator"),r=e("underscore");return n(i),r.extend(i.prototype,t.prototype),i});
+define(function(require){
+
+	var Constructor = require('../questAPI');
+	var decorator = require('APIs/pi/APIdecorator');
+	var _ = require('underscore');
+
+	/**
+	 * Constructor for PIPlayer script creator
+	 * @return {Object}		Script creator
+	 */
+	function API(){
+		Constructor.call(this);
+
+		this.settings.logger = {
+			url: '/implicit/PiQuest'
+		};
+	}
+
+	decorator(API);
+
+	// create API functions
+	_.extend(API.prototype, Constructor.prototype);
+
+	return API;
+
+
+});

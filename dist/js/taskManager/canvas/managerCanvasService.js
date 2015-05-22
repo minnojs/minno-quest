@@ -1,1 +1,23 @@
-define(["require","underscore","angular","./canvasConstructor"],function(e){function i(e,i){var s=n.element(i[0].body),o={background:{element:s,property:"backgroundColor"},canvasBackground:{element:e,property:"backgroundColor"},fontSize:{element:e,property:"fontSize"},fontColor:{element:e,property:"color"}};return t.bind(r,null,o)}var t=e("underscore"),n=e("angular"),r=e("./canvasConstructor");return i.$inject=["$rootElement","$document"],i});
+define(function(require){
+
+	var _ = require('underscore');
+	var angular = require('angular');
+	var canvasConstructor = require('./canvasConstructor');
+
+	managerCanvasService.$inject = ['$rootElement', '$document'];
+	function managerCanvasService($rootElement, $document){
+		var $body = angular.element($document[0].body);
+
+		var map = {
+			background 			: {element: $body, property: 'backgroundColor'},
+			canvasBackground	: {element: $rootElement, property:'backgroundColor'},
+			fontSize 			: {element: $rootElement, property:'fontSize'},
+			fontColor 			: {element: $rootElement, property:'color'}
+		};
+
+		return _.bind(canvasConstructor, null, map);
+	}
+
+	return managerCanvasService;
+
+});

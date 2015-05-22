@@ -1,1 +1,22 @@
-define([],function(){function e(e){function t(){this.startTime=e()}return t.prototype.now=function(){return e()-this.startTime},t}return e.$inject=["timerNow"],e});
+/**
+ * a stopper
+ */
+
+define(function(){
+
+	stopperProvider.$inject = ['timerNow'];
+	function stopperProvider(now){
+		function Stopper(){
+			this.startTime = now();
+		}
+
+		Stopper.prototype.now = function(){
+			return now() - this.startTime;
+		};
+
+		return Stopper;
+	}
+
+	return stopperProvider;
+
+});

@@ -1,1 +1,184 @@
-(function(e,t){if(typeof define=="function"&&define.amd)define([],t);else{var n=angular.module("pi",[]);n.directive("piSlider",t(e.angular))}})(this,function(){function t(t){return{scope:{options:"=piSliderOptions"},replace:!0,require:"ngModel",template:['<div class="slider" ng-mousedown="onSliderMouseDown($event)">','<div class="slider-label-left">{{options.leftLabel}}</div>','<div class="slider-label-right">{{options.rightLabel}}</div>','<div class="slider-container">','<div class="slider-bar">','<div class="slider-bar-highlight" ng-style="highlightStyle"></div>',"</div>",'<div class="slider-handle" ng-mousedown="onHandleMousedown($event)" ng-style="handleStyle"></div>',"</div>",'<ul class="slider-pips" ng-if="!options.hidePips">','<li ng-repeat="i in getNumber(steps) track by $index" ng-style="{width: pipWidth + \'%\'}" ng-class="{last:$last}"></li>',"</ul>",'<ul class="slider-labels">','<li ng-repeat="label in labels track by $index" ng-style="{width: labelsWidth + \'%\'}" ng-class="{first:$first, last:$last}">{{label}}</li>',"</ul>","</div>"].join("\n"),link:function(i,s,o,u){function l(e){u.$setViewValue(e),u.$render()}function c(e){return!i.steps||u.$isEmpty(e)?e:Math.round(e*i.steps)/i.steps}function h(){var e=c(u.$viewValue),t=!isNaN(e),n=t?"block":"none",r=t&&f.highlight?"block":"none";i.highlightStyle={right:100-e*100+"%",display:r},i.handleStyle={left:e*100+"%",display:n}}function p(e){return u.$isEmpty(e)?NaN:(e=Math.min(Math.max(e,i.min),i.max),(e-i.min)/i.range)}function d(e){return+(i.min+c(e)*i.range).toFixed(4)}function v(r){function c(e){n(e),e.preventDefault();var t=o+(e.pageX-f)/(s.prop("clientWidth")-a);t=Math.min(t,1),t=Math.max(t,0),i.$apply(function(){l(t)})}function h(){t.off("mousemove",c),t.off("mouseup",h),i.$emit(e,u.$viewValue)}n(r);var o,f;r.preventDefault(),r.stopPropagation(),f=r.pageX,o=u.$viewValue,t.on("mousemove",c),t.on("mouseup",h)}function m(t){n(t),t.preventDefault();var r=s.prop("clientWidth"),o=s[0].getBoundingClientRect().left,f=(t.pageX-o-a/2)/(r-a);f=Math.min(f,1),f=Math.max(f,0),l(f),i.$emit(e,u.$viewValue)}var a,f=i.options||{};a=s[0].querySelector(".slider-handle").clientWidth,i.ngModel=u,i.min=f.min||0,i.max=f.max||i.min+100,i.range=i.max-i.min,i.steps=f.steps?f.steps-1:0,i.pipWidth=f.steps&&100/i.steps,i.labels=f.labels,i.labelsWidth=f.labels&&100/f.labels.length,u.$isEmpty=r,u.$render=h,u.$formatters.push(p),u.$parsers.push(d),i.onHandleMousedown=v,i.onSliderMouseDown=m,i.getNumber=function(t){return new Array(t)}}}}function n(e){var t,n,r;e.pageX==null&&e.clientX!=null&&(t=e.target.ownerDocument||document,n=t.documentElement,r=t.body,e.pageX=e.clientX+(n&&n.scrollLeft||r&&r.scrollLeft||0)-(n&&n.clientLeft||r&&r.clientLeft||0),e.pageY=e.clientY+(n&&n.scrollTop||r&&r.scrollTop||0)-(n&&n.clientTop||r&&r.clientTop||0))}function r(e){return isNaN(parseFloat(e))||!isFinite(e)}var e="slider:change";return t.$inject=["$document","$sce"],t});
+(function (root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define([], factory);
+    } else {
+        var app = angular.module('pi', []);
+        app.directive('piSlider', factory(root.angular));
+    }
+}(this, function () {
+  var SLIDER_CHANGE_EVENT = 'slider:change';
+
+  sliderDirective.$inject = ["$document", "$sce"];
+  function sliderDirective($document) {
+    return {
+      scope: {
+        options: '=piSliderOptions'
+      },
+      replace: true,
+      require: 'ngModel',
+      template: ['<div class="slider" ng-mousedown="onSliderMouseDown($event)">',
+            '<div class="slider-label-left">{{options.leftLabel}}</div>',
+            '<div class="slider-label-right">{{options.rightLabel}}</div>',
+            '<div class="slider-container">',
+              '<div class="slider-bar">',
+                '<div class="slider-bar-highlight" ng-style="highlightStyle"></div>',
+              '</div>',
+              '<div class="slider-handle" ng-mousedown="onHandleMousedown($event)" ng-style="handleStyle"></div>',
+            '</div>',
+            '<ul class="slider-pips" ng-if="!options.hidePips">',
+                '<li ng-repeat="i in getNumber(steps) track by $index" ng-style="{width: pipWidth + \'%\'}" ng-class="{last:$last}"></li>',
+            '</ul>',
+            '<ul class="slider-labels">',
+                '<li ng-repeat="label in labels track by $index" ng-style="{width: labelsWidth + \'%\'}" ng-class="{first:$first, last:$last}">{{label}}</li>',
+            '</ul>',
+          '</div>'].join('\n'),
+
+      link: function(scope, element, attr, ngModel) {
+        var sliderHandleWidth;
+        var options = scope.options || {};
+
+        sliderHandleWidth = element[0].querySelector('.slider-handle').clientWidth;
+
+        scope.ngModel = ngModel;
+
+        scope.min = options.min || 0;
+        scope.max = options.max || (scope.min + 100);
+        scope.range = scope.max - scope.min;
+
+        scope.steps = options.steps ? options.steps - 1 : 0;
+        scope.pipWidth = options.steps && 100/scope.steps;
+
+        scope.labels = options.labels;
+        scope.labelsWidth = options.labels && 100 / options.labels.length;
+
+        ngModel.$isEmpty = isEmpty;
+        ngModel.$render = renderView;
+        ngModel.$formatters.push(toPercentage);
+        ngModel.$parsers.push(fromPercentage);
+
+        scope.onHandleMousedown = onHandleMousedown;
+        scope.onSliderMouseDown = onSliderMouseDown;
+
+        // helper for ngRepeat
+        // http://stackoverflow.com/questions/16824853/way-to-ng-repeat-defined-number-of-times-instead-of-repeating-over-array
+        scope.getNumber = function getNumber(num){return new Array(num);};
+
+        function setValue(percentage){
+          ngModel.$setViewValue(percentage);
+          ngModel.$render();
+        }
+
+        // limit percenatge by step size
+        function steppedPercentage(percentage){
+          if (!scope.steps || ngModel.$isEmpty(percentage)){
+            return percentage;
+          }
+
+          return Math.round(percentage * scope.steps) / scope.steps;
+        }
+
+        // manage placing the handle as well as the highlight correctly
+        function renderView() {
+          var percentage = steppedPercentage(ngModel.$viewValue);
+          var showHandle = !isNaN(percentage);
+          var handleDisplay = showHandle ? 'block' : 'none';
+          var highlightDisplay = showHandle && options.highlight ? 'block' : 'none';
+          scope.highlightStyle = { right: (100 - percentage * 100) + '%', display: highlightDisplay};
+          scope.handleStyle = { left: (percentage * 100) + '%', display: handleDisplay};
+        }
+
+        // formater model => view
+        function toPercentage(modelValue){
+          // if this isn't a number we can't compute percentage...
+          if (ngModel.$isEmpty(modelValue)){
+            return NaN;
+          }
+
+          // limit model size
+          modelValue = Math.min(Math.max(modelValue, scope.min), scope.max);
+          return (modelValue - scope.min) / scope.range;
+        }
+
+        // parser view => model
+        function fromPercentage(percentage){
+          return +(scope.min + (steppedPercentage(percentage) * scope.range)).toFixed(4);
+        }
+
+        // handle drag
+        function onHandleMousedown(event) {
+          fixEvent(event);
+          var basePercentage, basePosition;
+          event.preventDefault();
+          event.stopPropagation(); // prevent propogation to slider so that change is fired for the beginin of a drag interaction
+          basePosition = event.pageX;
+          basePercentage = ngModel.$viewValue;
+
+          $document.on('mousemove', mouseMove);
+          $document.on('mouseup', mouseUp);
+
+          // drag
+          function mouseMove(event) {
+            fixEvent(event);
+            event.preventDefault();
+            var percentage = basePercentage + (event.pageX - basePosition) / (element.prop('clientWidth') - sliderHandleWidth);
+            // don't allow extending beyond slider size
+            percentage = Math.min(percentage, 1);
+            percentage = Math.max(percentage, 0);
+
+            scope.$apply(function(){
+              setValue(percentage);
+            });
+          }
+
+          // drop
+          function mouseUp() {
+            $document.off('mousemove', mouseMove);
+            $document.off('mouseup', mouseUp);
+            scope.$emit(SLIDER_CHANGE_EVENT, ngModel.$viewValue); // emit only on mouse drop
+          }
+        }
+
+        // slider click
+        function onSliderMouseDown(event){
+          fixEvent(event);
+          event.preventDefault();
+          var sliderWidth = element.prop('clientWidth');
+          var sliderPosition = element[0].getBoundingClientRect().left;
+          var percentage = (event.pageX - sliderPosition - sliderHandleWidth/2) / (sliderWidth - sliderHandleWidth);
+          // don't allow extending beyond slider size
+          percentage = Math.min(percentage, 1);
+          percentage = Math.max(percentage, 0);
+
+          // auto "$apply" by ng-mousedown
+          setValue(percentage);
+          scope.$emit(SLIDER_CHANGE_EVENT, ngModel.$viewValue);
+        }
+
+
+      }
+    };
+  }
+
+  return sliderDirective;
+
+  // fix IE8 events (missing pageX) - from jquery
+  function fixEvent(event){
+    var eventDoc, doc, body;
+    // Calculate pageX/Y if missing and clientX/Y available
+    if ( event.pageX == null && event.clientX != null ) {
+      eventDoc = event.target.ownerDocument || document;
+      doc = eventDoc.documentElement;
+      body = eventDoc.body;
+
+      event.pageX = event.clientX + ( doc && doc.scrollLeft || body && body.scrollLeft || 0 ) - ( doc && doc.clientLeft || body && body.clientLeft || 0 );
+      event.pageY = event.clientY + ( doc && doc.scrollTop  || body && body.scrollTop  || 0 ) - ( doc && doc.clientTop  || body && body.clientTop  || 0 );
+    }
+  }
+
+  function isEmpty(n){
+    return isNaN(parseFloat(n)) || !isFinite(n);
+  }
+}));
+
+

@@ -1,1 +1,11 @@
-define(["require","angular","utils/console/consoleModule","./messageDirective","./messageDoneDirective"],function(e){var t=e("angular"),n=t.module("pi.message",[e("utils/console/consoleModule").name]);return n.directive("piMessage",e("./messageDirective")),n.directive("piMessageDone",e("./messageDoneDirective")),n});
+define(function(require){
+	var angular = require('angular');
+	var module = angular.module('pi.message',[
+		require('utils/console/consoleModule').name
+	]);
+
+	module.directive('piMessage', require('./messageDirective'));
+	module.directive('piMessageDone', require('./messageDoneDirective'));
+
+	return module;
+});

@@ -1,1 +1,9 @@
-define(["require","angular","./managerCanvasService"],function(e){var t=e("angular"),n=t.module("pi.canvas",[]);return n.service("managerCanvas",e("./managerCanvasService")),n});
+define(function(require){
+
+	var angular = require('angular');
+	var module = angular.module('pi.canvas',[]);
+
+	module.service('managerCanvas', require('./managerCanvasService'));
+
+	return module;
+});

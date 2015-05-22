@@ -1,1 +1,65 @@
-define(["require","underscore"],function(e){function n(e,n){function r(r,i){var s,o,u;t.isFunction(r)?u=r:(s=e(r.compare,i),o=e(r.to,i),u=r.operator),n(["conditions"]).info("Condition: ",s,u||"equals",o,r);if(t.isFunction(u))return!!u.apply(i,[s,o,i]);switch(u){case"greaterThan":if(t.isNumber(s)&&t.isNumber(o))return+s>+o;return!1;case"greaterThanOrEqual":if(t.isNumber(s)&&t.isNumber(o))return+s>=+o;return!1;case"in":if(t.isArray(o))return~t.indexOf(o,s);return!1;case"exactly":return s===o;case"equals":default:if(t.isUndefined(o))return!!s;return t.isEqual(s,o)}return u}return r}var t=e("underscore");return n.$inject=["mixerDotNotation","piConsole"],n});
+define(function(require){
+	var _ = require('underscore');
+
+	mixerConditionProvider.$inject = ['mixerDotNotation', 'piConsole'];
+	function mixerConditionProvider(dotNotation, piConsole){
+
+		function mixerCondition(condition, context){
+			var left, right, operator;
+
+			// support a condition that is a plain function
+			if (_.isFunction(condition)){
+				operator = condition;
+			} else {
+				// @TODO angular.$parse may be a better candidate for doing this...
+				left = dotNotation(condition.compare,context);
+				right = dotNotation(condition.to,context);
+				operator = condition.operator;
+			}
+
+			piConsole(['conditions']).info('Condition: ', left, operator || 'equals', right, condition);
+
+			if (_.isFunction(operator)){
+				return !! operator.apply(context,[left, right, context]);
+			}
+
+			switch(operator){
+				case 'greaterThan':
+					if (_.isNumber(left) && _.isNumber(right)){
+						return +left > +right;
+					}
+					return false;
+
+				case 'greaterThanOrEqual':
+					if (_.isNumber(left) && _.isNumber(right)){
+						return +left >= +right;
+					}
+					return false;
+
+				case 'in':
+					if (_.isArray(right)){
+						// binary operator to turn indexOf into binary.
+						return ~_.indexOf(right, left);
+					}
+					return false;
+
+				case 'exactly':
+					return left === right;
+
+				case 'equals':
+					/* falls through */
+				default:
+					if (_.isUndefined(right)){
+						return !!left;
+					}
+					return _.isEqual(left, right);
+			}
+
+			return operator;
+		}
+
+		return mixerCondition;
+	}
+
+	return mixerConditionProvider;
+});

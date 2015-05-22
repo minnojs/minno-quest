@@ -1,1 +1,139 @@
-define(["require","underscore"],function(e){function n(e){this.$scope=e}function r(e,r){return{transclude:!0,controller:n,controllerAs:"ctrl",compile:function(){return{pre:this.pre,post:function(){}}},pre:function(e,n,i,s,o){function c(e){var t=e||{};f&&(f.remove(),f=null),u&&(u.$destroy(),u=null),a&&(r.leave(a,function(){f=null,t.postLeave&&t.postLeave()}),f=a,a=null)}function h(n,i){var s=i||{};s.pre&&s.pre();if(!n)return c(s);var f=t.extend(e.$new(),n);o(f,function(e){d(e,s.animate),c(s),a=e,u=f,r.enter(a,l,null,function(){s.post&&s.post()})})}function p(e){t.extend(u,e)}function d(e,n){if(!n)return;var r=n.split(" ");t.each(r,function(e){$injector.has("."+e+"-animation")||piConsole(["page","animation"]).error('Unknown animation type: "'+e+'"')}),e.addClass(n)}e.enter=h,e.empty=c,e.refresh=p;var u,a,f,l=n}}}var t=e("underscore");return n.$inject=["$scope"],t.extend(n.prototype,{next:function(e,t){this.$scope.enter(e,t)},prev:function(e,t){this.$scope.enter(e,t)},refresh:function(e){this.$scope.refresh(e)},empty:function(e){this.$scope.empty(e)}}),r.$inject=["$compile","$animate"],r});
+/**
+ * Swap directive
+ * Enables a slide-show type interface.
+ * It exposes a controller with the next/prev/refresh/empty methods.
+ * Each time next is called, the content is re-compiled and animated in, and old content is animated out.
+ *
+ * @param  {[type]} require [description]
+ * @return {[type]}         [description]
+ */
+define(function (require) {
+	// get template
+	var _  = require('underscore');
+
+	swapControler.$inject = ['$scope'];
+	function swapControler($scope){
+		this.$scope = $scope;
+	}
+
+	_.extend(swapControler.prototype, {
+		next : function(props, options){
+			this.$scope.enter(props, options);
+		},
+		prev: function(props, options){
+			this.$scope.enter(props, options);
+		},
+		refresh: function(props){
+			this.$scope.refresh(props);
+		},
+		empty: function(options){
+			this.$scope.empty(options);
+		}
+	});
+
+	swapDirective.$inject = ['$compile', '$animate'];
+	function swapDirective($compile, $animate){
+		return {
+			//replace: true,
+			transclude: true,
+			controller: swapControler,
+			controllerAs: 'ctrl',
+			compile: function(){
+				return {
+					pre: this.pre,
+					post: function(){}
+				};
+			},
+			pre: function($scope, $element, $attr, $ctrls, $transclude) {
+				$scope.enter = enter;
+				$scope.empty = cleanupLast;
+				$scope.refresh = refresh;
+
+				var currentScope, // the scope of the current element
+					currentElement, // an entering element (up until it leaves)
+					previousElement, // an element that is currently leaving
+					parentElement = $element;
+
+				function cleanupLast(opts) {
+					var options = opts || {};
+
+					if(previousElement) {
+						previousElement.remove();
+						previousElement = null;
+					}
+					if(currentScope) {
+						currentScope.$destroy();
+						currentScope = null;
+					}
+					if(currentElement) {
+						$animate.leave(currentElement, function() {
+							previousElement = null;
+							options.postLeave && options.postLeave();
+						});
+						previousElement = currentElement;
+						currentElement = null;
+					}
+				}
+
+				function enter(props, opts){
+					var options = opts || {};
+					options.pre && options.pre();
+
+					if (!props){
+						return cleanupLast(options);
+					}
+
+					// create new scope and extend it with props
+					var newScope = _.extend($scope.$new(), props);
+
+					// create new element
+					$transclude(newScope, function(clone){
+
+						// @TODO: add animation info
+						// clone.addClass(direction); // maybe add this to the parent? how do we control both enter and leave with this method?
+						addAnimations(clone, options.animate);
+
+						// First send away the previous element (if it exists)
+						cleanupLast(options);
+
+						// Instantiate new element
+						currentElement = clone;
+
+						currentScope = newScope;
+
+						// Animate it in
+						$animate.enter(currentElement, parentElement, null, function(){
+							options.post && options.post();
+						});
+					});
+				}
+
+				function refresh(props){
+					_.extend(currentScope, props);
+				}
+
+				function addAnimations(element, animationsStr){
+					if (!animationsStr){
+						return;
+					}
+
+					var animations = animationsStr.split(" ");
+
+					_.each(animations, function(animation){
+						// Make sure that this animation exists
+						if (!$injector.has("." + animation + '-animation')){
+							piConsole(['page','animation']).error('Unknown animation type: "' + animation + '"');
+						}
+
+					});
+
+					element.addClass(animationsStr);
+				}
+
+
+			}
+		};
+	};
+
+	return swapDirective;
+});

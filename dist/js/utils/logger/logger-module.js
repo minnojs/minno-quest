@@ -1,1 +1,9 @@
-define(["require","angular","./LoggerProvider","utils/console/consoleModule"],function(e){var t=e("angular"),n=e("./LoggerProvider"),r=t.module("logger",[e("utils/console/consoleModule").name]);return r.provider("Logger",n),r});
+define(function(require){
+	var angular = require('angular');
+	var Logger = require('./LoggerProvider');
+
+	var module = angular.module('logger', [require('utils/console/consoleModule').name]);
+	module.provider('Logger', Logger);
+
+	return module;
+});

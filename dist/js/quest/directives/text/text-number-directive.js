@@ -1,1 +1,74 @@
-define(["require","text!./text-number.html"],function(e){var t=e("text!./text-number.html"),n=function(){return{replace:!0,template:t,require:["form","ngModel","^?piqPage"],controller:"questController",controllerAs:"ctrl",scope:{data:"=questData"},link:function(e,t,n,r){var i=r[0],s=t.find("input"),o=s.eq(0).controller("ngModel");e.form=i,e.ctrl.registerModel(r[1],{dflt:""}),e.data.autoSubmit&&t.bind("keydown keypress",function(t){t.which===13&&(e.$apply(function(){e.$emit("quest:submit:now")}),t.preventDefault())});var u=function(t){var n=parseFloat(e.data.min);return!isNaN(n)&&t<n?(o.$setValidity("qstMin",!1),undefined):(o.$setValidity("qstMin",!0),t)};o.$parsers.push(u),o.$formatters.push(u);var a=function(t){var n=parseFloat(e.data.max);return!isNaN(n)&&t>n?(o.$setValidity("qstMax",!1),undefined):(o.$setValidity("qstMax",!0),t)};o.$parsers.push(a),o.$formatters.push(a)}}};return n});
+
+/*
+ * The directive for creating textNumber inputs.
+ */
+define(function (require) {
+	// This is the only way to get a non js file relatively
+	var template = require('text!./text-number.html');
+
+	var directive = function(){
+		return {
+			replace: true,
+			template:template,
+			require: ['form', 'ngModel', '^?piqPage'],
+			controller: 'questController',
+			controllerAs: 'ctrl',
+			scope:{
+				data: '=questData'
+			},
+			link: function(scope, element, attr, ctrls) {
+
+				var form = ctrls[0];
+				var input = element.find('input');
+				var ngModel = input.eq(0).controller('ngModel');
+
+				scope.form = form;
+
+				scope.ctrl.registerModel(ctrls[1], {
+					dflt: ""
+				});
+
+				scope.data.autoSubmit && element.bind("keydown keypress", function (event) {
+					if(event.which === 13) {
+						scope.$apply(function(){
+							scope.$emit('quest:submit:now');
+						});
+						event.preventDefault();
+					}
+				});
+
+				// we have a specific problem with min max that don't take internal
+				// http://stackoverflow.com/questions/15656617/validation-not-triggered-when-data-binding-a-number-inputs-min-max-attributes
+				var minValidator = function(value) {
+					var min = parseFloat(scope.data.min);
+					if (!isNaN(min) && value < min) {
+						ngModel.$setValidity('qstMin', false);
+						return undefined;
+					} else {
+						ngModel.$setValidity('qstMin', true);
+						return value;
+					}
+				};
+
+				ngModel.$parsers.push(minValidator);
+				ngModel.$formatters.push(minValidator);
+
+				var maxValidator = function(value) {
+					var max = parseFloat(scope.data.max);
+					if (!isNaN(max) && value > max) {
+						ngModel.$setValidity('qstMax', false);
+						return undefined;
+					} else {
+						ngModel.$setValidity('qstMax', true);
+						return value;
+					}
+				};
+
+				ngModel.$parsers.push(maxValidator);
+				ngModel.$formatters.push(maxValidator);
+			}
+		};
+	};
+
+	return directive;
+});

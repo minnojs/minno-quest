@@ -1,1 +1,18 @@
-define(["require","APIs/APIConstructor"],function(e){var t=e("APIs/APIConstructor"),n=t({type:"PIP",sets:["trial","stimulus","media"]});return n.prototype.addTrialSets=n.prototype.addTrialSet,n.prototype.addStimulusSets=n.prototype.addStimulusSet,n.prototype.addMediaSets=n.prototype.addMediaSet,n.prototype.getLogs=function(){return this.script.current.logs},n});
+define(function(require){
+	var factory = require('APIs/APIConstructor');
+
+	var api = factory({
+		type: 'PIP',
+		sets: ['trial', 'stimulus','media']
+	});
+
+	api.prototype.addTrialSets = api.prototype.addTrialSet;
+	api.prototype.addStimulusSets = api.prototype.addStimulusSet;
+	api.prototype.addMediaSets = api.prototype.addMediaSet;
+
+	api.prototype.getLogs = function getLogs(){
+		return this.script.current.logs;
+	};
+
+	return api;
+});
