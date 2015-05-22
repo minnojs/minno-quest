@@ -14,7 +14,7 @@ define(function(require){
 		}
 
 		function choose(row, column){
-			$table.find('tbody tr').eq(row-1).find('td button').eq(column-1).trigger('click');
+			$table.find('tbody tr').eq(row-1).find('td [ng-switch-when]').eq(column-1).trigger('click');
 		}
 
 		beforeEach(module('questDirectives', function($provide){
@@ -78,9 +78,17 @@ define(function(require){
 				expect($rows.eq(1).text()).toBe('t2');
 			});
 
-			it('should bind to model', function(){
-				compile({rows:[{name:'name'}], columns: [111,222,333]});
+			it('should bind to model (and set default values)', function(){
+				compile({rows:[{name:'name'},{name:'name2'}], columns: [111,222,333]});
 				choose(1,2);
+				expect($scope.current.questions.name.response).toBe(2);
+				choose(2,1);
+				expect($scope.current.questions.name2.response).toBe(1);
+			});
+
+			it('should ignore column.type=text when assigning default values', function(){
+				compile({rows:[{name:'name'},{name:'name2'}], columns: [111,{type:'text'},333]});
+				choose(1,3);
 				expect($scope.current.questions.name.response).toBe(2);
 			});
 
@@ -104,7 +112,6 @@ define(function(require){
 				expect($scope.current.questions.name.response).toBe(2);
 				choose(1,3);
 				expect($scope.current.questions.name.response).toBe('abc');
-
 			});
 
 			it('should auto generate row names', function(){
