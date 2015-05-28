@@ -22,6 +22,8 @@ define(function (require) {
 
 				scope.columns = mapColumns(data.columns);
 				scope.rows = mapRows(data.rows, data);
+				scope.allCss = allCss;
+
 
 				scope.$watchCollection(function getResponses(){
 					return _.pluck(scope.rows, '$response');
@@ -37,6 +39,12 @@ define(function (require) {
 			}
 		};
 
+		function allCss(){
+			var objects = _.toArray(arguments);
+			objects.unshift({});
+			console.log(objects)
+			return _.extend.apply(_, objects);
+		}
 
 		function mapColumns(columns){
 			return _(columns || [])
