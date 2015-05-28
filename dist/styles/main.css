@@ -197,7 +197,7 @@ td, th {
   content: "\e012"; }
 .glyphicon-ok:before, [quest-grid] .btn:before, [quest-grid] .slider-pips li.btn.last:after, .slider-pips [quest-grid] li.btn.last:after, .slider-pips li.glyphicon-ok.last:after {
   content: "\e013"; }
-.glyphicon-remove:before, .slider-pips li.glyphicon-remove.last:after {
+.glyphicon-remove:before, [quest-grid] .xMark.btn:before, [quest-grid] .slider-pips li.xMark.btn.last:after, .slider-pips [quest-grid] li.xMark.btn.last:after, .slider-pips li.glyphicon-remove.last:after {
   content: "\e014"; }
 .glyphicon-zoom-in:before, .slider-pips li.glyphicon-zoom-in.last:after {
   content: "\e015"; }
@@ -2936,6 +2936,12 @@ label {
   line-height: 1.428571429; }
 [quest-grid] .btn:before, [quest-grid] .slider-pips li.btn.last:after, .slider-pips [quest-grid] li.btn.last:after {
   visibility: hidden; }
+[quest-grid] .colorMark.btn.active {
+  background-color: #337ab7;
+  border-color: #337ab7;
+  color: #fff; }
+  [quest-grid] .colorMark.btn.active:before, [quest-grid] .slider-pips li.colorMark.btn.active.last:after, .slider-pips [quest-grid] li.colorMark.btn.active.last:after {
+    visibility: hidden; }
 [quest-grid] .btn.active:before, [quest-grid] .slider-pips li.btn.active.last:after, .slider-pips [quest-grid] li.btn.active.last:after {
   visibility: visible; }
 .slider-label-left, .slider-label-right {

@@ -1,3 +1,15 @@
+<a name="0.0.47"></a>
+### 0.0.47 (2015-05-28)
+
+
+#### Features
+
+* **questDirectives:**
+  * grid support for checkboxType. ([50f6bc4a](https://github.com/ProjectImplicit/PIquest/commit/50f6bc4a1fea63bc9b65ea01a69a07f58e7ee486), closes [#112](https://github.com/ProjectImplicit/PIquest/issues/112))
+  * grid support for column.css ([61ae7a30](https://github.com/ProjectImplicit/PIquest/commit/61ae7a3026b4b5bdb603c3d095e0578efad0044a))
+  * slider support for label css ([39e57335](https://github.com/ProjectImplicit/PIquest/commit/39e573350c8945f02f59c792a5234f1b8beb35bb))
+
+
 <a name="0.0.46"></a>
 ### 0.0.46 (2015-05-22)
 
