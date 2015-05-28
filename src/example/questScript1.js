@@ -29,6 +29,10 @@ define(['questAPI'], function(Quest){
 			questions: 		{
 	type: 'slider',
 	highlight: true,
+	leftLabel: 'my text',
+	leftLabelCss: {color: 'red', fontSize: '3em'},
+	rightLabel: 'other',
+	rightLabelCss: {color: 'blue', fontSize: '0.5em'},
 	displayValue:true,
 	steps: 11,
 	name:'grid',
