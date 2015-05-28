@@ -293,6 +293,7 @@ columnStemHide	| Hide the column stem row.
 rowStemCss		| CSS object for the row stems.
 rowStemHide 	| Hide the row stem column.
 checkboxType	| Customize the type of checbox we use. `checkMark`: the default check style. `xMark`: use an X instead of the check. `colorMark`: fill the checkbox with a dark background.
+cellLabels 		| Show the column label with the grid cells.
 
 ##### grid.columns
 If you set a string instead of a column object it will be treated as if you set only the stem and all other values will be set by default.
