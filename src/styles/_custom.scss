@@ -114,6 +114,25 @@ label {
 		@extend .glyphicon-ok;
 		visibility: hidden;
 	}
+
+
+	.colorMark.btn.active{
+
+
+			&:before{
+				visibility: hidden
+			}
+
+			background-color: #337ab7;
+			border-color: #337ab7;
+			color: #fff;
+
+	}
+
+	.xMark.btn:before {
+		@extend .glyphicon-remove;
+	}
+
 	.btn.active:before {
 		visibility: visible;
 	}

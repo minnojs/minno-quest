@@ -44,11 +44,20 @@ define(function(require){
 				expect($headers.eq(2).text()).toBe('t2');
 			});
 
-			it('should set type=checkbox by default', function(){
-				compile({columns:[{}], rows:[1]});
-				var cell = $table.find('tbody tr [ng-switch-when="checkbox"]');
-				expect(cell.is('button')).toBeTruthy();
+			describe(': checkbox', function(){
+				it('should be the default', function(){
+					compile({columns:[{}], rows:[1]});
+					var cell = $table.find('tbody tr [ng-switch-when="checkbox"]');
+					expect(cell.is('button')).toBeTruthy();
+				});
+
+				it('should set checkboxType', function(){
+					compile({columns:[{}], rows:[1], checkboxType:'test'});
+					var cell = $table.find('tbody tr [ng-switch-when="checkbox"]');
+					expect(cell).toHaveClass('test');
+				});
 			});
+
 
 			it('should respect type=checkbox', function(){
 				compile({columns:[{type:'checkbox'}], rows:[1]});
