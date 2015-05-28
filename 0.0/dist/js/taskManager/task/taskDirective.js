@@ -1,1 +1,115 @@
-define(["require","underscore"],function(e){function n(e,n,r,i,s){return{scope:{task:"=piTask"},link:function(o,u){function g(e){var t=e.key||e.which||e.keyCode;t==82&&e.ctrlKey&&b(e,"current"),t==27&&r.one("keydown",y)}function y(e){var t=e.which||e.keyCode;t==37&&b(e,"prev"),t==39&&b(e,"next")}function b(e,t){e.preventDefault(),p={type:t,bustCache:!0},c.resolve()}var a=o.task,f,l,c,h,p,d=o.$parent.settings||{},v=a.$script||{},m=a.name||v.name;if(!a)return;d.skip&&(r.on("keydown",g),o.$on("$destroy",function(){r.off("keydown",g),r.off("keydown",y)})),s.current=i.piGlobal.current=v.current||{},m&&(t.extend(s.current,i.piGlobal[m]||{}),i.piGlobal[m]=v.current),c=e(a,u,o.$new()),h=c.promise,f=n(a.canvas),h["finally"](f),a.title&&(l=r[0].title,r[0].title=a.title,h["finally"](function(){r[0].title=l})),h["finally"](function(){o.$emit("task:done",p)})}}}var t=e("underscore");return n.$inject=["taskActivate","managerCanvas","$document","$window","$rootScope"],n});
+/*
+ * @name: taskDirective
+ */
+define(function(require){
+
+	var _ = require('underscore');
+
+	directive.$inject = ['taskActivate','managerCanvas','$document', '$window', '$rootScope'];
+	function directive(activateTask, canvas, $document, $window, $rootScope){
+		return {
+			scope:{
+				task: '=piTask'
+			},
+			link: function($scope, $element){
+				var task = $scope.task;
+				var canvasOff, oldTitle;
+				var def;
+				var promise;
+				var proceedObject;
+				var settings = $scope.$parent.settings || {};
+				var script = task.$script || {};
+				var taskName = task.name || script.name;
+
+				if (!task){
+					return;
+				}
+
+				/**
+				 * listen for skip events
+				 */
+				if (settings.skip){
+					$document.on('keydown',proceedListener);
+					$scope.$on('$destroy', function(){
+						$document.off('keydown', proceedListener);
+						$document.off('keydown', skipListener);
+					});
+				}
+
+				/**
+				 * Setup current object
+				 */
+				$rootScope.current = $window.piGlobal.current = script.current || {};
+				if (taskName){
+					// extend current script with the piGlobal object
+					_.extend($rootScope.current, $window.piGlobal[taskName] || {});
+					// set the current object back into the global
+					$window.piGlobal[taskName] = script.current;
+				}
+
+				/**
+				 * Activate task
+				 */
+				def = activateTask(task, $element, $scope.$new());
+				promise = def.promise;
+
+				/**
+				 * Add and remove canvas
+				 */
+				canvasOff = canvas(task.canvas); // apply canvas settings
+				promise['finally'](canvasOff); // remove canvas settings
+
+				/**
+				 * Add and remove title
+				 * if task.title is set, set the title and remove at the end...
+				 */
+				if (task.title){
+					oldTitle = $document[0].title;
+					$document[0].title = task.title;
+					promise['finally'](function(){$document[0].title = oldTitle;});
+				}
+
+				promise['finally'](function(){
+					$scope.$emit('task:done', proceedObject);
+				});
+
+				/**
+				 * Listen for skip events
+				 * F5 = refresh
+				 * esc = set up arrows for prev/next
+				 * @param  {Event} e
+				 */
+				function proceedListener(e){
+					var which = e.key || e.which || e.keyCode;
+
+					// ctrl r ==> refresh
+					if (which == 82 && e.ctrlKey) {
+						proceed(e, 'current');
+					}
+
+					// esc ==> listen for skip direction (once)
+					if(which == 27) {
+						$document.one('keydown', skipListener);
+			        }
+				}
+
+				// skip on left/right key codes
+				function skipListener(e){
+					var which = e.which || e.keyCode;
+					if (which == 37) {proceed(e, 'prev');}
+					if (which == 39) {proceed(e, 'next');}
+				}
+
+				// end task and proceed where needed
+				function proceed(e, target){
+					e.preventDefault();
+					proceedObject = {type:target, bustCache:true}; // when the deferred is resolved this object is used to tell piqPage where to proceed.
+					def.resolve();
+				}
+
+			}
+		};
+	}
+
+	return directive;
+});

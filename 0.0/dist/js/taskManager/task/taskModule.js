@@ -1,1 +1,119 @@
-define(["require","angular","underscore","./taskActivateProvider","./taskDirective"],function(e){var t=e("angular"),n=t.module("pi.task",[]),r=e("underscore");return n.provider("taskActivate",e("./taskActivateProvider")),n.directive("piTask",e("./taskDirective")),n.config(["taskActivateProvider",function(e){function t(e,t,n,r,i,s){var o;return s.name&&(i.name=s.name),n.script=i,t.append("<div pi-quest></div>"),o=t.contents(),r(o)(n),o.controller("piQuest").task.promise["finally"](function(){e()}),function(){o.scope().$destroy(),o.remove()}}t.$inject=["done","$element","$scope","$compile","script","task"],e.set("quest",t)}]),n.config(["taskActivateProvider",function(e){function t(e,t,n,r,i){var s;return r.script=n,t.append("<div pi-message></div>"),s=t.contents(),i(s)(r),r.$on("message:done",function(){e()}),function(){r.$destroy(),s.remove()}}t.$inject=["done","$element","task","$scope","$compile"],e.set("message",t)}]),n.config(["taskActivateProvider",function(e){function t(e,t,n,i){var s,o;return o=requirejs.config({context:r.uniqueId(),baseUrl:"../bower_components/PIPlayer/dist/js",paths:{text:["//cdnjs.cloudflare.com/ajax/libs/require-text/2.0.3/text.min","../../bower_components/requirejs-text/text"],jquery:["//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min","../../bower_components/jquery/dist/jquery.min"],underscore:["//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.5.0/lodash.min","../../bower_components/lodash-compat/lodash.min"],backbone:["//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min","../../bower_components/backbone/backbone"]},deps:["jquery","backbone","underscore"]}),n.name&&(i.name=n.name),t.append("<div pi-player></div>"),s=t.contents(),s.addClass("pi-spinner"),o(["activatePIP"],function(t){s.removeClass("pi-spinner"),t(i,e)}),function(){s.remove(),o(["app/task/main_view"],function(e){e.deferred.resolve(),e.destroy()})}}t.$inject=["done","$element","task","script"],e.set("pip",t)}]),n});
+/**
+ * The module responsible for the single task.
+ * It knows how to load a task and activate it.
+ * It also supplies the basic task directive.
+ * @return {module} pi.task module.
+ */
+define(function(require){
+
+	var angular = require('angular');
+	var module = angular.module('pi.task',[]);
+	var _ = require('underscore');
+
+	module.provider('taskActivate', require('./taskActivateProvider'));
+	module.directive('piTask', require('./taskDirective'));
+
+	// the tasks defined here essentialy activate the default players for quest/message/pip.
+
+	module.config(['taskActivateProvider', function(activateProvider){
+
+		activateQuest.$inject = ['done', '$element', '$scope', '$compile', 'script','task'];
+		function activateQuest(done, $canvas, $scope, $compile, script, task){
+			var $el;
+
+			// update script name
+			task.name && (script.name = task.name);
+
+			$scope.script = script;
+
+			$canvas.append('<div pi-quest></div>');
+			$el = $canvas.contents();
+			$compile($el)($scope);
+
+			// clean up piQuest
+			$el.controller('piQuest').task.promise['finally'](function(){
+				done();
+			});
+
+			return function questDestroy(){
+				$el.scope().$destroy();
+				$el.remove();
+			};
+		}
+
+		activateProvider.set('quest', activateQuest);
+	}]);
+
+	module.config(['taskActivateProvider', function(activateProvider){
+		activateMessage.$inject = ['done', '$element', 'task', '$scope','$compile'];
+		function activateMessage(done, $canvas, task, $scope, $compile){
+			var $el;
+
+			$scope.script = task;
+
+			$canvas.append('<div pi-message></div>');
+			$el = $canvas.contents();
+			$compile($el)($scope);
+
+			// clean up
+			$scope.$on('message:done', function(){
+				done();
+			});
+
+			return function destroyMessage(){
+				$scope.$destroy();
+				$el.remove();
+			};
+		}
+
+		activateProvider.set('message', activateMessage);
+	}]);
+
+	module.config(['taskActivateProvider', function(activateProvider){
+		activatePIP.$inject = ['done', '$element', 'task', 'script'];
+		function activatePIP(done, $canvas, task, script){
+			var $el, req;
+
+			// load PIP
+			req = requirejs.config({
+				context: _.uniqueId(),
+				baseUrl:'../bower_components/PIPlayer/dist/js', // can't use packages yet as urls in pip aren't relative...
+				paths: {
+					//plugins
+					text: ['//cdnjs.cloudflare.com/ajax/libs/require-text/2.0.3/text.min', "../../bower_components/requirejs-text/text"],
+
+					// Core Libraries
+					jquery: ["//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min","../../bower_components/jquery/dist/jquery.min"],
+					underscore: ["//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.5.0/lodash.min","../../bower_components/lodash-compat/lodash.min"],
+					backbone: ['//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min', "../../bower_components/backbone/backbone"]
+				},
+
+				deps: ['jquery', 'backbone', 'underscore']
+			});
+
+			// update script name
+			task.name && (script.name = task.name);
+
+			$canvas.append('<div pi-player></div>');
+			$el = $canvas.contents();
+			$el.addClass('pi-spinner');
+
+			req(['activatePIP'], function(activate){
+				$el.removeClass('pi-spinner');
+				activate(script, done);
+			});
+
+			return function destroyPIP(){
+				$el.remove();
+				req(['app/task/main_view'], function(main){
+					main.deferred.resolve();
+					main.destroy();
+				});
+			};
+		}
+
+		activateProvider.set('pip', activatePIP);
+	}]);
+
+	return module;
+});

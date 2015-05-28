@@ -1,1 +1,73 @@
-define(["underscore","angular"],function(e,t){function n(n,r,i,s,o,u,a){function f(f){var l=this,c=f.settings||{};this.script=f,this.db=new r,this.logger=new i(u),this.logger.setSettings(c.logger||{}),this.q=n.defer();if(!e.isArray(f.sequence))throw new Error("Task: no sequence was defined");this.sequence=new s(f.sequence,this.db),this.promise=this.q.promise.then(function(){return l.logger.suppressPulse(),e.each(a.current.questions,function(e){if(e.$logged)return!0;l.log(e,{},a.global),e.$logged=!0}),l.logger.suppressPulse(!1),l.logger.send()})["finally"](c.onEnd||t.noop),o(f,this.db)}return e.extend(f.prototype,{log:function(){this.logger.log.apply(this.logger,arguments)},current:function(){var e=this.sequence.current();return e||this.q.resolve(),e},next:function(){return this.sequence.next()},prev:function(){return this.sequence.prev()}}),f}return n.$inject=["$q","Database","Logger","QuestSequence","taskParse","dfltQuestLogger","$rootScope"],n});
+define(['underscore', 'angular'], function(_, angular){
+
+	TaskProvider.$inject = ['$q','Database','Logger','QuestSequence','taskParse', 'dfltQuestLogger', '$rootScope'];
+	function TaskProvider($q, Database, Logger, QuestSequence, parse, dfltQuestLogger,$rootScope){
+		function Task(script){
+			var self = this;
+			var settings = script.settings || {};
+
+			// save script for later use...
+			this.script = script;
+			this.db = new Database();
+			this.logger = new Logger(dfltQuestLogger);
+			this.logger.setSettings(settings.logger || {});
+			this.q = $q.defer();
+
+			if (!_.isArray(script.sequence)){
+				throw new Error('Task: no sequence was defined');
+			}
+
+			this.sequence = new QuestSequence(script.sequence, this.db);
+
+			this.promise = this.q.promise
+				.then(function(){
+					// check if there are unlogged questions and log them
+					self.logger.suppressPulse(); // this is the end of the task, we want to post all the logs at once.
+					_.each($rootScope.current.questions, function(quest){
+						if(quest.$logged){
+							return true;
+						}
+
+						/**
+						 * logs to server
+						 * @param {Object} log : the actual data regarding this log
+						 * @param {Object} pageData : General inforamtion about this page
+						 * @param {Object} global : The global object
+						 */
+						self.log(quest, {}, $rootScope.global);
+						quest.$logged = true;
+					});
+					self.logger.suppressPulse(false); // turn suppress off
+					return self.logger.send();
+				})
+				['finally'](settings.onEnd || angular.noop); // end only after logging has finished (regardless of success)
+
+			parse(script, this.db);
+		}
+
+		_.extend(Task.prototype, {
+			log: function(){
+				this.logger.log.apply(this.logger, arguments);
+			},
+			current: function(){
+				var nextObj = this.sequence.current();
+
+				if (!nextObj){
+					this.q.resolve();
+				}
+
+				return nextObj;
+			},
+			next: function(){
+				return this.sequence.next();
+			},
+			prev: function(){
+				return this.sequence.prev();
+			}
+		});
+
+		return Task;
+	}
+
+	return TaskProvider;
+});

@@ -1,1 +1,41 @@
-define(["require","angular","underscore","./preloaderService","./preloaderDecorator"],function(e){var t=e("angular"),n=e("underscore"),r=t.module("pi.utils",[]);return r.service("piPreloader",e("./preloaderService")),r.config(["$provide",function(t){t.decorator("piPreloader",e("./preloaderDecorator"))}]),r.service("piInvoke",["$injector",function(e){function r(r,i){var s=t.global||{};if(!r)return;e.invoke(r,null,n.extend(i,{global:s,current:s.current}))}var t=e.get("$rootScope");return r}]),r});
+define(function(require){
+	var angular = require('angular');
+	var _ = require('underscore');
+	var module = angular.module('pi.utils',[]);
+
+	module.service('piPreloader', require('./preloaderService'));
+	module.config(['$provide', function($provide){
+		$provide.decorator('piPreloader', require('./preloaderDecorator'));
+	}]);
+
+
+
+	/**
+	 * Wrapper for angular invoke.
+	 * Injects global and current automatically.
+	 *
+	 * @param {Function} fn The function to invoke
+	 * @param {Object} locals Locals to add to angualr invoke
+	 */
+	module.service('piInvoke', ['$injector',function($injector){
+		var $rootScope = $injector.get('$rootScope');
+
+		function piInvoke(fn, locals){
+			var global = $rootScope.global || {};
+
+			// if fn is undefined don't get all mushy about it
+			if (!fn){
+				return;
+			}
+
+			$injector.invoke(fn, null, _.extend(locals, {
+				global: global,
+				current: global.current
+			}));
+		}
+
+		return piInvoke;
+	}]);
+
+	return module;
+});

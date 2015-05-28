@@ -1,1 +1,9 @@
-define(["require","angular","./piSwap/piSwapDirective","./piSpinner/piSpinnerDirective"],function(e){var t=e("angular"),n=t.module("piHelperDirective",[]);return n.directive("piSwap",e("./piSwap/piSwapDirective")),n.directive("piSpinner",e("./piSpinner/piSpinnerDirective")),n});
+define(function(require){
+	var angular = require('angular');
+	var module = angular.module('piHelperDirective', []);
+
+	module.directive('piSwap', require('./piSwap/piSwapDirective'));
+	module.directive('piSpinner', require('./piSpinner/piSpinnerDirective'));
+
+	return module;
+});

@@ -1,1 +1,26 @@
-define(["require","underscore"],function(e){function n(e){function n(n){var r;if(t.isUndefined(n))return/(?:)/;if(t.isRegExp(n)||t.isString(n))return new RegExp(n);throw r=new Error("Question pattern is not a valid regular expression"),e("text").error(r,n),r}return n}var t=e("underscore");return n.$inject=["piConsole"],n});
+define(function(require){
+	var _ = require('underscore');
+
+	toRegexFilter.$inject = ['piConsole'];
+	function toRegexFilter($console){
+		return toRegex;
+
+		function toRegex(value) {
+			var err;
+
+			if (_.isUndefined(value)){
+				return /(?:)/;
+			}
+
+			if (_.isRegExp(value) || _.isString(value)){
+				return new RegExp(value);
+			} else {
+				err = new Error('Question pattern is not a valid regular expression');
+				$console('text').error(err, value);
+				throw err;
+			}
+		}
+	}
+
+	return toRegexFilter;
+});

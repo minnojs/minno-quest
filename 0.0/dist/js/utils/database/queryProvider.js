@@ -1,1 +1,89 @@
-define(["underscore"],function(e){function t(t,n){function r(r,i,s){var o=new t(i);if(e.isFunction(r))return r(i);if(e.isString(r)||e.isNumber(r))r={set:r,type:"random"};r.set&&(o=o.where({set:r.set})),e.isString(r.data)&&(o=o.filter(function(e){return e.handle===r.data||e.data&&e.data.handle===r.data})),e.isPlainObject(r.data)&&(o=o.where({data:r.data})),e.isFunction(r.data)&&(o=o.filter(r.data));var u=r.seed||"$"+i.namespace+r.set,a=o.length,f=r.repeat,l,c;switch(r.type){case undefined:case"byData":case"random":l=s.random(a,u,f);break;case"exRandom":l=s.exRandom(a,u,f);break;case"sequential":l=s.sequential(a,u,f);break;case"first":l=0;break;case"last":l=a-1;break;default:throw new Error("Unknow query type: "+r.type)}if(e.isUndefined(o.at(l)))throw c=new Error("Query failed, object ("+JSON.stringify(r)+") not found. If you are trying to apply a template, you should know that they are not supported for inheritance."),n("query").error(c),c;return o.at(l)}return r}return t.$inject=["Collection","piConsole"],t});
+define(['underscore'],function(_){
+
+	queryProvider.$inject = ['Collection','piConsole'];
+	function queryProvider(Collection, $console){
+
+		function queryFn(query, collection, randomizer){
+			var coll = new Collection(collection);
+
+			// shortcuts:
+			// ****************************
+
+			// use function instead of query object.
+			if (_.isFunction(query)){
+				return query(collection);
+			}
+
+			// pure string query
+			if (_.isString(query) || _.isNumber(query)){
+				query = {set:query, type:'random'};
+			}
+
+			// narrow down by set
+			// ****************************
+			if (query.set){
+				coll = coll.where({set:query.set});
+			}
+
+			// narrow down by data
+			// ****************************
+			if (_.isString(query.data)){
+				coll = coll.filter(function(q){
+					return q.handle === query.data || (q.data && q.data.handle === query.data);
+				});
+			}
+
+			if (_.isPlainObject(query.data)){
+				coll = coll.where({data:query.data});
+			}
+
+			if (_.isFunction(query.data)){
+				coll = coll.filter(query.data);
+			}
+
+			// pick by type
+			// ****************************
+
+			// the default seed is namespace specific just to minimize the situations where seeds clash across namespaces
+			var seed = query.seed || ('$' + collection.namespace + query.set);
+			var length = coll.length;
+			var repeat = query.repeat;
+			var at;
+			var err;
+
+			switch (query.type){
+				case undefined:
+				case 'byData':
+				case 'random':
+					at = randomizer.random(length,seed,repeat);
+					break;
+				case 'exRandom':
+					at = randomizer.exRandom(length,seed,repeat);
+					break;
+				case 'sequential':
+					at = randomizer.sequential(length,seed,repeat);
+					break;
+				case 'first':
+					at = 0;
+					break;
+				case 'last':
+					at = length-1;
+					break;
+				default:
+					throw new Error('Unknow query type: ' + query.type);
+			}
+
+			if (_.isUndefined(coll.at(at))) {
+				err = new Error('Query failed, object (' + JSON.stringify(query) +	') not found. If you are trying to apply a template, you should know that they are not supported for inheritance.');
+				$console('query').error(err);
+				throw err;
+			}
+
+			return coll.at(at);
+		}
+
+		return queryFn;
+	}
+
+	return queryProvider;
+});

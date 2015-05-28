@@ -1,1 +1,15 @@
-define(["require","underscore"],function(e){function n(e,n,r){r;var i=t.extend({},n,e);return i.declined&&(i.response=e.responseObj=undefined),i}var t=e("underscore");return n});
+define(function(require){
+	var _ = require('underscore');
+
+	function dfltQuestLogger(log, pageData, global){
+		global;
+		var logObj = _.extend({},pageData,log);
+		if (logObj.declined) {
+			logObj.response = log.responseObj = undefined;
+		}
+		return logObj;
+	}
+
+	return dfltQuestLogger;
+
+});

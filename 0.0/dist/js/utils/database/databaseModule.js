@@ -1,1 +1,20 @@
-define(["require","angular","./mixer/mixerModule","./template/templateModule","utils/console/consoleModule","./collection/collectionProvider","./randomizer/randomizerProvider","./queryProvider","./inflateProvider","./store/storeProvider","./databaseProvider","./databaseSequenceProvider"],function(e){var t=e("angular"),n=t.module("database",[e("./mixer/mixerModule").name,e("./template/templateModule").name,e("utils/console/consoleModule").name]).service("Collection",e("./collection/collectionProvider")).service("DatabaseRandomizer",e("./randomizer/randomizerProvider")).service("databaseQuery",e("./queryProvider")).service("databaseInflate",e("./inflateProvider")).service("DatabaseStore",e("./store/storeProvider")).service("Database",e("./databaseProvider")).service("databaseSequence",e("./databaseSequenceProvider"));return n});
+define(function(require){
+
+	var angular = require('angular');
+
+	var module = angular.module('database',[
+			require('./mixer/mixerModule').name,
+			require('./template/templateModule').name,
+			require('utils/console/consoleModule').name
+		])
+		.service('Collection', require('./collection/collectionProvider'))
+		.service('DatabaseRandomizer', require('./randomizer/randomizerProvider'))
+		.service('databaseQuery', require('./queryProvider'))
+		.service('databaseInflate', require('./inflateProvider'))
+		.service('DatabaseStore', require('./store/storeProvider'))
+		.service('Database', require('./databaseProvider'))
+		//.value('Database', require('./main')) // tests the use of the non angular variation
+		.service('databaseSequence', require('./databaseSequenceProvider'));
+
+	return module;
+});

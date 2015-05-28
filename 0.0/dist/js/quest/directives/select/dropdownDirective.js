@@ -1,1 +1,50 @@
-define(["require","text!./dropdown.html"],function(e){function n(e,n){return{replace:!0,template:t,require:["ngModel"],controller:"questController",controllerAs:"ctrl",scope:{data:"=questData"},link:function(t,r,i,s){var o=s[0],u=t.ctrl;u.registerModel(o,{dflt:NaN}),t.quest={answers:e(t.data.answers||[],t.data)},t.chooseText="chooseText"in t.data&&t.data.chooseText,t.autoSubmit=function(){n(function(){t.$emit("quest:submit:now")})}}}}var t=e("text!./dropdown.html");return n.$inject=["questSelectMixer","$timeout"],n});
+/*
+ * The directive for creating dropdown inputs.
+ * scope.response is the value of the chosen response
+ */
+define(function (require) {
+
+	// This is the only way to get a non js file relatively
+	var template = require('text!./dropdown.html');
+
+	directive.$inject = ['questSelectMixer','$timeout'];
+	function directive(mixer,$timeout){
+		return {
+			replace: true,
+			template:template,
+			require: ['ngModel'],
+			controller: 'questController',
+			controllerAs: 'ctrl',
+			scope:{
+				data: '=questData'
+			},
+			link: function(scope, element, attr, ctrls) {
+				var ngModel = ctrls[0];
+				var ctrl = scope.ctrl;
+
+				ctrl.registerModel(ngModel, {
+					dflt: NaN
+				});
+
+				// render quest if needed
+				scope.quest = {
+					answers: mixer(scope.data.answers || [], scope.data)
+				};
+
+				// createChooseText
+				scope.chooseText = "chooseText" in scope.data && scope.data.chooseText;
+
+				/**
+				 * Manage auto submit
+				 */
+				scope.autoSubmit = function(){
+					$timeout(function(){
+						scope.$emit('quest:submit:now');
+					});
+				};
+			}
+		};
+	}
+
+	return directive;
+});

@@ -1,1 +1,32 @@
-define(["require","text!./gridRow.html"],function(e){function t(){return{template:e("text!./gridRow.html"),require:["ngModel"],controller:"questController",controllerAs:"ctrl",scope:{row:"=questGridRow",data:"=questGridData"},link:function(e,t,n,r){var i=r[0],s=e.ctrl;e.model=i,e.$watch("response",function(t){e.row.$response=t}),s.registerModel(i,{data:e.row})}}}return t});
+define(function (require) {
+	function gridRowDirective(){
+		return {
+			replace: true,
+			template: require('text!./gridRow.html'),
+			require: ['ngModel'],
+			controller: 'questController',
+			controllerAs: 'ctrl',
+			scope: {
+				row: '=questGridRow',
+				data: '=questGridData'
+			},
+			link: function(scope, element, attr, ctrls) {
+				var ngModel = ctrls[0];
+				var ctrl = scope.ctrl;
+
+				scope.model = ngModel;
+
+				// keep row updated with response so that we can watch it from the grid directive
+				scope.$watch('response', function(newVal){
+					scope.row.$response = newVal;
+				});
+
+				ctrl.registerModel(ngModel, {
+					data: scope.row
+				});
+			}
+		};
+	}
+
+	return gridRowDirective;
+});

@@ -1,6 +1,6 @@
 {
   "name": "PIQuest",
-  "version": "0.0.45",
+  "version": "0.0.47",
   "repository": {
     "type": "git",
     "url": "https://github.com/ProjectImplicit/PIquest"
@@ -34,7 +34,7 @@
     "karma-sauce-launcher": "^0.2.8",
     "karma-spec-reporter": "0.0.12",
     "load-grunt-tasks": "~0.2.0",
-    "requirejs": "^2.1.11",
+    "requirejs": "^2.1.17",
     "time-grunt": "~0.2.1"
   },
   "engines": {

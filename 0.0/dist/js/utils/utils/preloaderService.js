@@ -1,1 +1,110 @@
-define(["require","underscore"],function(e){function n(e){this.$q=e,this.loaders={},this.loaded=[]}function r(e,n){if(!t.isFunction(n))throw new Error("Fn is not a function");this.loaders[e]=n}function i(e,n){var r=this.loaders[e],i,s;s=this.getObj(e,n);if(!s){s={type:e,description:n},this.loaded.push(s);if(!t.isFunction(r))throw new Error('Loader "'+e+'" was not registered.');i=s.promise=r.call(this,n);if(!a(i))throw new Error('Loader "'+e+'" must return a promise.');return i.then(function(e){return s.promise=null,s.value=e,e}),i}return s.promise}function s(e,n){var r=this.$q,i;if(!t.isArray(n))throw new Error("descriptions must be an array.");return i=t.map(n,function(t){return this.load(e,t)},this),r.all(i)}function o(e,n){var r=t.find(this.loaded,function(t){return t.type===e&&t.description===n},this);return r}function u(e,t){var n=this.getObj(e,t);if("value"in n)return n.value;throw new Error('This object has not been loaded yet: "'+t+'"')}function a(e){return t.isPlainObject(e)&&t.isFunction(e.then)}var t=e("underscore");return n.$inject=["$q"],t.extend(n.prototype,{register:r,load:i,loadArr:s,get:u,getObj:o}),n});
+define(function(require){
+	var _ = require('underscore');
+
+	preloaderService.$inject = ['$q'];
+	function preloaderService($q){
+		this.$q = $q;
+		this.loaders = {};
+		this.loaded = [];
+	}
+
+	_.extend(preloaderService.prototype, {
+		register: preloaderRegister,
+		load: preloaderLoad,
+		loadArr: preloaderLoadArr,
+		get: preloaderGet,
+		getObj: preloaderGetObj
+	});
+
+	return preloaderService;
+
+	/**
+	 * register loader
+	 * loader functions take a single parameter: the description
+	 * and return a promise to be resolved with the result.
+	 *
+	 * @param  {String}   type The loader type
+	 * @param  {Function} fn   The loader function itself (should return a promise to be resolved with the result)
+	 */
+	function preloaderRegister(type, fn){
+		if (!_.isFunction(fn)){
+			throw new Error('Fn is not a function');
+		}
+
+		this.loaders[type] = fn;
+	}
+
+	function preloaderLoad(type, description){
+		var loader = this.loaders[type];
+		var promise, resultObj;
+
+		// check if this description has already been loaded
+		resultObj = this.getObj(type, description);
+		if (!resultObj){
+			resultObj = {type:type, description:description};
+			this.loaded.push(resultObj);
+		} else {
+			return resultObj.promise;
+		}
+
+		// make sure loader was registered
+		if (!_.isFunction(loader)){
+			throw new Error('Loader "' + type + '" was not registered.');
+		}
+
+		// call loader
+		promise = resultObj.promise = loader.call(this, description);
+
+		// make sure loader returns a promise
+		if (!isPromiseLike(promise)){
+			throw new Error('Loader "' + type + '" must return a promise.');
+		}
+
+		// save result into the loaded array (we use an array in order to allow non string descriptions)
+		promise.then(function(result){
+			resultObj.promise = null; // so that the promise can be garbage collected
+			resultObj.value = result;
+			return result;
+		});
+
+		return promise;
+	}
+
+	function preloaderLoadArr(type, descriptions){
+		var $q = this.$q;
+		var defs;
+
+		if (!_.isArray(descriptions)){
+			throw new Error('descriptions must be an array.');
+		}
+
+		defs = _.map(descriptions, function(description){
+			return this.load(type, description);
+		}, this);
+
+		return $q.all(defs);
+	}
+
+	function preloaderGetObj(type, description){
+		// get the
+		var result = _.find(this.loaded, function(loadObj){
+			return loadObj.type === type && loadObj.description === description;
+		}, this);
+
+		return result;
+	}
+
+	function preloaderGet(type, description){
+		var result = this.getObj(type, description);
+
+		if (!('value' in result)){
+			throw new Error('This object has not been loaded yet: "' + description + '"');
+		}
+
+		return result.value;
+	}
+
+	function isPromiseLike(obj){
+		return _.isPlainObject(obj) && _.isFunction(obj.then);
+	}
+});

@@ -1,1 +1,65 @@
-define(["require","underscore"],function(e){function n(e,n,r){function i(e,i){return n(e,i).then(function(n){var i;if(t.isUndefined(n))throw i=new Error("Task "+e+" failed or has not been found. Make sure that you returned the script and that your script does not have any errors"),r("task").error(i),i;return n})}function s(n,s){var o,u,a;n.scriptUrl?u=i(n.scriptUrl,s):u=n.script,n.templateUrl?a=i(n.templateUrl,t.extend({isText:!0},s)):a=n.template;if(!u&&!a)throw new Error('Tasks must have either a "script" property or a "scriptUrl" property (or a "template" property in specific cases).');return o=e.all({script:e.when(u),template:e.when(a)}),o.then(function(e){return n.$script=e.script,n.$template=e.template,n},function(e){r("load").error("Failed to load task script - make sure that your URLs are all correct.",e)}),o}return s}var t=e("underscore");return n.$inject=["$q","managerGetScript","piConsole"],n});
+/**
+ * @name: taskLoadProvider
+ * @returns {$q} A $q.promise that returns the target script
+ */
+define(function(require){
+	var _ = require('underscore');
+
+	taskLoadService.$inject = ['$q', 'managerGetScript', 'piConsole'];
+	function taskLoadService($q, managerGetScript, $console){
+
+		function getScript(url, options){
+			return managerGetScript(url, options)
+				// make sure that the script is defined
+				// and if not throw an appropriate error
+				.then(function(script){
+					var e;
+					if (_.isUndefined(script)){
+						e = new Error('Task ' + url + ' failed or has not been found. Make sure that you returned the script and that your script does not have any errors');
+						$console('task').error(e);
+						throw e;
+					}
+
+					return script;
+				});
+		}
+
+		function taskLoad(task, options){
+			var promise, script, template;
+
+			// script def
+			if (task.scriptUrl){
+				script = getScript(task.scriptUrl, options);
+			} else {
+				script = task.script;
+			}
+
+			// template def
+			if (task.templateUrl){
+				template = getScript(task.templateUrl, _.extend({isText:true},options));
+			} else {
+				template = task.template;
+			}
+
+			if (!script && !template){
+				throw new Error('Tasks must have either a "script" property or a "scriptUrl" property (or a "template" property in specific cases).');
+			}
+
+			promise = $q.all({script: $q.when(script), template: $q.when(template)});
+
+			promise.then(function(promises){
+				task.$script = promises.script;
+				task.$template = promises.template;
+				return task;
+			}, function(e){
+				$console('load').error('Failed to load task script - make sure that your URLs are all correct.',e);
+			});
+
+			return promise;
+		}
+
+		return taskLoad;
+	}
+
+	return taskLoadService;
+});

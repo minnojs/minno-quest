@@ -1,1 +1,34 @@
-define(["require","underscore"],function(e){function r(e){e.prototype.save=i}function i(e){var r=this.script;if(!t.isPlainObject(e))throw new Error("API.save can send only objects.");var i={taskName:r.name,taskNumber:r.serial||0},s=t.map(e,function(e,r){return t.extend({name:r,response:e,serial:++n},i)});return this.post("/implicit/PiQuest",s)}var t=e("underscore"),n=1e3;return r});
+define(function(require){
+
+	var _ = require('underscore');
+	var counter = 1000;
+
+	function APIdecorator(constructor){
+		constructor.prototype.save = save;
+	}
+
+	return APIdecorator;
+
+	function save(obj){
+		var script = this.script;
+		if (!_.isPlainObject(obj)){
+			throw new Error('API.save can send only objects.');
+		}
+
+		var meta = {
+			taskName: script.name,
+			taskNumber: script.serial || 0
+		};
+
+		var arr = _.map(obj, function(value, key){
+			return _.extend({
+				name: key,
+				response: value,
+				serial: ++counter
+			}, meta);
+		});
+
+		return this.post('/implicit/PiQuest', arr);
+	}
+
+});

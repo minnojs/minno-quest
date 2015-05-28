@@ -1,1 +1,32 @@
-define(["require","text!./console.html","underscore"],function(e){function r(e){return{replace:!0,template:t,link:function(t){function i(e){var t=n.indexOf(r,e);t>-1&&r.splice(t,1)}var r=t.logs=[];t.remove=i,t.reverse=!0,e.$on("console:log",function(e,t){r.push(t)})}}}var t=e("text!./console.html"),n=e("underscore");return r.$inject=["$rootScope"],r});
+define(function (require) {
+	// This is the only way to get a non js file relatively
+	var template = require('text!./console.html');
+	var _ = require('underscore');
+
+	directive.$inject = ['$rootScope'];
+	function directive($rootScope){
+		return {
+			replace: true,
+			template:template,
+			link: function(scope) {
+				var logs = scope.logs = [];
+
+				scope.remove = remove;
+				scope.reverse = true;
+
+				$rootScope.$on('console:log', function(scope, log){
+					logs.push(log);
+				});
+
+				function remove(log){
+					var index = _.indexOf(logs, log);
+					if (index > -1) {
+						logs.splice(index, 1);
+					}
+				}
+			}
+		};
+	}
+
+	return directive;
+});

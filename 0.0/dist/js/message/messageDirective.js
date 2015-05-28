@@ -1,1 +1,71 @@
-define(["require","underscore"],function(e){function n(e,n,r,i){return{link:function(s,o){function p(e){var n=t.isArray(a.keys)?a.keys:[a.keys],r=t.map(n,function(e){return t.isString(e)?e.toUpperCase().charCodeAt(0):e});~t.indexOf(r,e.which)&&s.done()}function d(){f.$destroy(),o.empty(),s.$emit("message:done")}var u="keydown",a=s.script,f=s.newScope=s.$new(),l,c={global:n.global,current:n.current,task:a};try{l=t.template(a.$template)(c)}catch(h){l=a.$template,i("message").error("failed to render template",h)}t.extend(s,c),s.done=d,r.on(u,p),s.$on("$destroy",function(){r.off(u,p)}),o.html(l),e(o.contents())(f)}}}var t=e("underscore");return n.$inject=["$compile","$rootScope","$document","piConsole"],n});
+/*
+ * @name: piMessage Directive
+ */
+define(function (require) {
+
+	var _ = require('underscore');
+
+	directive.$inject = ['$compile', '$rootScope', '$document', 'piConsole'];
+	function directive($compile, $rootScope, $document, $console){
+		return {
+			link: function($scope, $element) {
+				var events = 'keydown';
+				var script = $scope.script;
+				var newScope = $scope.newScope = $scope.$new();
+				var template;
+				var context = {
+					global : $rootScope.global,
+					current : $rootScope.current,
+					task: script
+				};
+
+				// try to render template
+				try {
+					template = _.template(script.$template)(context);
+				} catch(e){
+					template = script.$template;
+					$console('message').error('failed to render template', e);
+				}
+
+				_.extend($scope, context);
+				$scope.done = done;
+
+				// listen for events
+				$document.on(events, onKeydown);
+				$scope.$on('$destroy',function(){
+					$document.off(events, onKeydown);
+				});
+
+				$element.html(template);
+				$compile($element.contents())(newScope);
+
+				// check if the we should proceed and if so call done
+				function onKeydown(e){
+					// accept both the keyCode and the key itself
+					var keyArr = _.isArray(script.keys) ? script.keys : [script.keys];
+					var keys = _.map(keyArr,function(value){
+						return _.isString(value) ? value.toUpperCase().charCodeAt(0) : value;
+					});
+
+					// event is in the keys array
+					// ~ return 0 only if target was not found
+					if (~_.indexOf(keys, e.which)){
+						$scope.done();
+					}
+				}
+
+				function done(){
+					newScope.$destroy();
+					$element.empty();
+					$scope.$emit('message:done');
+				}
+			}
+		};
+	}
+
+
+
+
+
+	return directive;
+});

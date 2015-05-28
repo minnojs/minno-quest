@@ -1,1 +1,110 @@
-define(["require","underscore","text!./grid.html"],function(e){function n(n){function r(e){return t(e||[]).map(s).each(function(t,n){t.hasOwnProperty("value")||(t.value=n+1),t.hasOwnProperty("type")||(t.type="checkbox")}).tap(function(n){t(n).filter(function(e){return!e.noReverse}).each(function(e,t,n){e.reverseValue=n[n.length-t-1].value}).commit()}).value()}function i(e,r){return t(e||[]).map(s).each(function(t,n){t.hasOwnProperty("name")||(t.name=r.name+o(n+1,3))}).thru(r.shuffle?n:t.identity).value()}function s(e){return t.isPlainObject(e)?e:{stem:e}}function o(e,t){var n=Math.abs(e),r=1+Math.floor(Math.log(n)/Math.LN10);if(r>=t)return e;var i=Math.pow(10,t-r).toString().substr(1);return e<0?"-"+i+n:i+n}return{replace:!0,template:e("text!./grid.html"),require:["ngModel","form"],controller:"questController",controllerAs:"ctrl",scope:{data:"=questData",current:"=questCurrent"},link:function(e,n,s,o){var u=o[0],a=e.ctrl,f=e.data;e.form=o[1],e.columns=r(f.columns),e.rows=i(f.rows,f),e.$watchCollection(function(){return t.pluck(e.rows,"$response")},function(r){e.response=t.reduce(r,function(e,n){return t.isFinite(n)?e+n:e},0)}),a.registerModel(u,{dflt:0})}}}var t=e("underscore");return n.$inject=["questShuffle"],n});
+define(function (require) {
+	var _ = require('underscore');
+
+	gridDirective.$inject = ['questShuffle'];
+	function gridDirective(shuffle){
+		return {
+			replace: true,
+			template: require('text!./grid.html'),
+			require: ['ngModel','form'],
+			controller: 'questController',
+			controllerAs: 'ctrl',
+			scope:{
+				data: '=questData',
+				current: '=questCurrent'
+			},
+			link: function(scope, element, attr, ctrls) {
+				var ngModel = ctrls[0];
+				var ctrl = scope.ctrl;
+				var data = scope.data;
+
+				scope.form = ctrls[1];
+
+				scope.columns = mapColumns(data.columns);
+				scope.rows = mapRows(data.rows, data);
+				scope.allCss = allCss;
+
+
+				scope.$watchCollection(function getResponses(){
+					return _.pluck(scope.rows, '$response');
+				}, function sumResponses(responses){
+					scope.response = _.reduce(responses, function(total, response) {
+						return _.isFinite(response) ? total + response : total;
+					},0);
+				});
+
+				ctrl.registerModel(ngModel, {
+					dflt: 0
+				});
+			}
+		};
+
+		function allCss(){
+			var objects = _.toArray(arguments);
+			objects.unshift({}); // prepend an empty object so that we don't change the originals
+			return _.extend.apply(_, objects);
+		}
+
+		function mapColumns(columns){
+			return _(columns || [])
+				.map(objectify)
+				.each(function setType(column){
+					column.hasOwnProperty('type') || (column.type = 'checkbox');
+				})
+				.tap(function setValues(columns){
+					_(columns)
+						.filter(function hasValue(column){return column.type != 'text';})
+						.each(function setValue(column, index){
+							column.hasOwnProperty('value') || (column.value = index+1);
+						})
+						.commit();
+				})
+				.tap(function setReverseValues(columns){
+					_(columns)
+						.filter(function(column){return !column.noReverse;}) // ignore columns that shouldn't be reveresed
+						.filter(function hasValue(column){return column.type != 'text';})
+						.each(function(column, index, columns){
+							column.reverseValue = columns[columns.length - index - 1].value; // set the value from the mirroring column
+						})
+						.commit(); // activate chain, since we aren't using _.value here
+				})
+				.value();
+		}
+
+		function mapRows(rows, data){
+			return _(rows || [])
+				.map(objectify)
+				.each(function setRowName(row, index){
+					row.hasOwnProperty('name') || (row.name = data.name + zerofill(index+1,3));
+				})
+				.thru(data.shuffle ? shuffle : _.identity)
+				.value();
+		}
+
+		function objectify(target){
+			return _.isPlainObject(target) ? target : {stem:target};
+		}
+
+		/**
+		 * Zero fills a number
+		 * http://stackoverflow.com/questions/1267283/how-can-i-create-a-zerofilled-value-using-javascript
+		 *
+		 * WARNING!! fails if n===0
+		 *
+		 * @param  {Number} n The number to zerofill
+		 * @param  {Number} w The width of the fill
+		 * @return {String}   Zerofilled number
+		 */
+		function zerofill(n, w) {
+			var an = Math.abs(n);
+			var digitCount = 1 + Math.floor(Math.log(an) / Math.LN10);
+			if (digitCount >= w) {
+				return n;
+			}
+			var zeroString = Math.pow(10, w - digitCount).toString().substr(1);
+			return n < 0 ? '-' + zeroString + an : zeroString + an;
+		}
+	}
+
+	return gridDirective;
+});

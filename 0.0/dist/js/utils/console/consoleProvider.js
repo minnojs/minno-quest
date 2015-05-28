@@ -1,1 +1,37 @@
-define(["require","underscore"],function(e){function n(e){function n(n,r){var i=t.create(e);return t.extend(i,{tags:t.isArray(n)?n:[n],force:!!r}),i}function r(t){e.settings=t}return n.setSettings=r,n}var t=e("underscore");return n.$inject=["piConsolePrototype"],n});
+/**
+ * A factory for $console
+ *
+ * each $console is prototyped on `consolePrototype`
+ */
+define(function(require){
+	var _ = require('underscore');
+
+	consoleProvider.$inject = ['piConsolePrototype'];
+
+	function consoleProvider(consolePrototype){
+
+		// decorate Console with a simple settings manager
+		Console.setSettings = consoleSetSettings;
+
+		return Console;
+
+		function Console(tags, force){
+			var $console = _.create(consolePrototype);
+
+			_.extend($console, {
+				tags: _.isArray(tags) ? tags : [tags], // make sure tags is an array
+				force: !!force
+			});
+
+			return $console;
+		}
+
+		// a mehtod of console
+		function consoleSetSettings (settings) {
+			consolePrototype.settings = settings;
+		}
+
+	}
+
+	return consoleProvider;
+});

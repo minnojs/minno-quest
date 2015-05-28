@@ -1,1 +1,114 @@
-define(["require","underscore"],function(e){function n(e){function n(e){this.sequence=e,this.stack=[],this.add(e),this.pointer=0}return t.extend(n.prototype,{add:function(e,t){this.stack.push({pointer:t?e.length:-1,sequence:e})},proceed:function(n,r){var i=this.stack[this.stack.length-1],s=n==="next";if(!i)throw new Error("mixerSequence: subSequence not found");i.pointer+=s?1:-1;var o=i.sequence[i.pointer];return t.isUndefined(o)&&this.stack.length>1?(this.stack.pop(),this.proceed.call(this,n,r)):o&&o.mixer?(this.add(e(o,r),!s),this.proceed.call(this,n,r)):this},next:function(e){return this.pointer++,this.proceed.call(this,"next",e)},prev:function(e){return this.pointer--,this.proceed.call(this,"prev",e)},current:function(){var e=this.stack[this.stack.length-1];if(!e)throw new Error("mixerSequence: subSequence not found");var t=e.sequence[e.pointer];return t?(t.$meta=this.meta(),t):undefined},meta:function(){return{number:this.pointer,outOf:t.reduce(this.stack,function(e,t){return e+t.sequence.length-1},0)+1}}}),n}var t=e("underscore");return n.$inject=["mixer"],n});
+define(function(require){
+	var _ = require('underscore');
+
+	mixerSequenceProvider.$inject = ['mixer'];
+	function mixerSequenceProvider(mix){
+
+		/**
+		 * MixerSequence takes an mixer array and allows browsing back and forth within it
+		 * @param {Array} arr [a mixer array]
+		 */
+		function MixerSequence(arr){
+			this.sequence = arr;
+			this.stack = [];
+			this.add(arr);
+			this.pointer = 0;
+		}
+
+		_.extend(MixerSequence.prototype, {
+			/**
+			 * Add sequence to mixer
+			 * @param {[type]} arr     Sequence
+			 * @param {[type]} reverse Whether to start from begining or end
+			 */
+			add: function(arr, reverse){
+				this.stack.push({pointer:reverse ? arr.length : -1,sequence:arr});
+			},
+
+			proceed: function(direction, context){
+				// get last subSequence
+				var subSequence = this.stack[this.stack.length-1];
+				var isNext = (direction === 'next');
+
+				// if we ran out of sequence
+				// add the original sequence back in
+				if (!subSequence) {
+					throw new Error ('mixerSequence: subSequence not found');
+				}
+
+				subSequence.pointer += isNext ? 1 : -1;
+
+				var el = subSequence.sequence[subSequence.pointer];
+
+				// if we ran out of elements, go to previous level (unless we are on the root sequence)
+				if (_.isUndefined(el) && this.stack.length > 1){
+					this.stack.pop();
+					return this.proceed.call(this,direction,context);
+				}
+
+				// if element is a mixer, mix it
+				if (el && el.mixer){
+					this.add(mix(el,context), !isNext);
+					return this.proceed.call(this,direction,context);
+				}
+
+				// regular element or undefined (end of sequence)
+				return this;
+			},
+
+			next: function(context){
+				this.pointer++;
+				return this.proceed.call(this, 'next',context);
+			},
+
+			prev: function(context){
+				this.pointer--;
+				return this.proceed.call(this, 'prev',context);
+			},
+
+			/**
+			 * Return current element
+			 * should **never** return a mixer - supposed to abstract them away
+			 * @return {[type]} undefined or element
+			 */
+			current:function(){
+				// get last subSequence
+				var subSequence = this.stack[this.stack.length-1];
+
+				if (!subSequence) {
+					throw new Error ('mixerSequence: subSequence not found');
+				}
+
+				var el = subSequence.sequence[subSequence.pointer];
+
+				if (!el){
+					return undefined;
+				}
+
+				// extend element with meta data
+				el.$meta = this.meta();
+
+				return el;
+			},
+
+			meta: function(){
+				return {
+					number: this.pointer,
+
+					// sum of sequence length, minus one (the mixer) for each level of stack except the last
+					outOf:  _.reduce(this.stack, function(memo,sub){return memo + sub.sequence.length-1;},0)+1
+				};
+			}
+
+		});
+
+		return MixerSequence;
+	}
+
+	return mixerSequenceProvider;
+});
+
+
+
+
+

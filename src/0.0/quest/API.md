@@ -111,6 +111,7 @@ maxWidth 		| Force question inputs to have this maximum width.
 help			| (true or false;  (default: false)) Whether to display the question help text.
 helpText		| (text) The question help text. (Some questions have default help texts, some don't).
 lognow 			| (true or false) Whether to log this questions when the page is submitted. This option is useful when you know that the question will not be accessed any more. It allows you to use the `pulse` option from the [logger](#logger) to send questions as they are being answered instead of sending only at the end of the task. (default: false)
+errorMsg		| (Object: {}) This object has a property for each validation type. Setting the appropriate type changes the validation message. For instance setting the `required` property will change the validation message for instances where no response was given.
 
 You may want to debug questions by [activating the `question` DEBUG setting](#debugging). You will then be warned in the console if a question name is reused (note: sometimes a question is supposed to be reused, if this warning pops up just make sure the use case is correct).
 
@@ -292,10 +293,11 @@ columns 		| An array of column descriptions. You can use a string here or a colu
 rows 			| An array of row descriptions. You can use a string here or a row object as described [below](#gridrows).
 shuffle 		| Whether to shuffle the order of the questions.
 required 		| Require the user to respond to all rows (true or false).
-columnStemCss	| CSS object for the column stems (Applying `width` here will affect the whole column).
+columnStemCss	| CSS object for *all* the column stems.
 columnStemHide	| Hide the column stem row.
 rowStemCss		| CSS object for the row stems.
 rowStemHide 	| Hide the row stem column.
+checkboxType	| Customize the type of checbox we use. `checkMark`: the default check style. `xMark`: use an X instead of the check. `colorMark`: fill the checkbox with a dark background.
 
 ##### grid.columns
 If you set a string instead of a column object it will be treated as if you set only the stem and all other values will be set by default.
@@ -306,6 +308,8 @@ stem 		| (text) The description of this column.
 value 		| The value to set for this column. Defaults to the number of the column (starting from 1, so that the response for choosing the third column is 3).
 noReverse 	| When reversing row values, ignore this column (it will retain its normal value).
 type		| What type of interface should this column have. The default is "checkbox". You can set it to text instead in order to display text of you choice (use the `textProperty` property to set the row property that will be used as text). For example `{type: 'text', textProperty:'rightStem'}` will use the `rightStem` property of each row as the text content.
+css 		| CSS object for the whole column. This is the place that you can control the column width (using the `width` property).
+stemCss		| CSS object for the column stem.
 
 ##### grid.rows
 If you set a string instead of a row object it will be treated as if you set only the stem and all other values will be set by default.
@@ -353,20 +357,22 @@ var grid = 	{
 The slider question presents a slider that allows the user to pick a response along a preassigned range. It allows either the creation a continuous scale or dividing the range into steps. The values of the slider are always numbers.
 These are the supported properties:
 
-Property     | Description
------------ | -----------
-min         | Maximum slider value (default:0).
-max         | Minimum slider value (default:100).
-highlight   | Show highlight to left of handle.
-steps       | How many steps the slider should be divided into. These intervals are marked with pips and the handle snaps to them.
-hidePips 	| When the slider is divided into steps, do not display the step pips.
-leftLabel   | A label to display on the top left of the slider.
-rightLabel  | A label to display on the top right of te slider.
-labels		| An array of labels to display underneath the slider. They will be spread evenly across the slider.
-displayValue| Display the value of the slider, beneath the slider control.
-required	| (true of false; default: false) Validation: require a non-empty string as a response.
-dflt 		| The default value for the slider. If no default value is defined, the handle will not be displayed until the slider is first clicked.
-autosubmit	| Submit automatically on click or when handle is drop.
+Property    	| Description
+----------- 	| -----------
+min         	| Maximum slider value (default:0).
+max         	| Minimum slider value (default:100).
+highlight   	| Show highlight to left of handle.
+steps       	| How many steps the slider should be divided into. These intervals are marked with pips and the handle snaps to them.
+hidePips 		| When the slider is divided into steps, do not display the step pips.
+leftLabel   	| A label to display on the top left of the slider.
+leftLabelCss	| A style object to apply to the left label.
+rightLabel  	| A label to display on the top right of te slider.
+rightLabelCss	| A style object to apply to the right label.
+labels			| An array of labels to display underneath the slider. They will be spread evenly across the slider.
+displayValue	| Display the value of the slider, beneath the slider control.
+required		| (true of false; default: false) Validation: require a non-empty string as a response.
+dflt 			| The default value for the slider. If no default value is defined, the handle will not be displayed until the slider is first clicked.
+autosubmit		| Submit automatically on click or when handle is drop.
 
 The most common use of the slider is the creation of a visual analog scale (VAS). This is an example of using a slider to create a Likert type scale:
 

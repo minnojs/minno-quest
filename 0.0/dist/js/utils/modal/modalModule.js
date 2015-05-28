@@ -1,1 +1,9 @@
-define(["require","angular","./modalService"],function(e){var t=e("angular"),n=t.module("pi.modal",[]);return n.service("piModal",e("./modalService")),n});
+define(function(require){
+
+	var angular = require('angular');
+	var module = angular.module('pi.modal',[]);
+
+	module.service('piModal', require('./modalService'));
+
+	return module;
+});

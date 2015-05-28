@@ -331,6 +331,10 @@
 <td>lognow</td>
 <td>(true or false) Whether to log this questions when the page is submitted. This option is useful when you know that the question will not be accessed any more. It allows you to use the <code>pulse</code> option from the <a href="#logger">logger</a> to send questions as they are being answered instead of sending only at the end of the task. (default: false)</td>
 </tr>
+<tr>
+<td>errorMsg</td>
+<td>(Object: {}) This object has a property for each validation type. Setting the appropriate type changes the validation message. For instance setting the <code>required</code> property will change the validation message for instances where no response was given.</td>
+</tr>
 </tbody>
 </table>
 <p>You may want to debug questions by <a href="#debugging">activating the <code>question</code> DEBUG setting</a>. You will then be warned in the console if a question name is reused (note: sometimes a question is supposed to be reused, if this warning pops up just make sure the use case is correct).</p>
@@ -708,7 +712,7 @@ Both types of questions support the following properties.</p>
 </tr>
 <tr>
 <td>columnStemCss</td>
-<td>CSS object for the column stems (Applying <code>width</code> here will affect the whole column).</td>
+<td>CSS object for <em>all</em> the column stems.</td>
 </tr>
 <tr>
 <td>columnStemHide</td>
@@ -721,6 +725,10 @@ Both types of questions support the following properties.</p>
 <tr>
 <td>rowStemHide</td>
 <td>Hide the row stem column.</td>
+</tr>
+<tr>
+<td>checkboxType</td>
+<td>Customize the type of checbox we use. <code>checkMark</code>: the default check style. <code>xMark</code>: use an X instead of the check. <code>colorMark</code>: fill the checkbox with a dark background.</td>
 </tr>
 </tbody>
 </table>
@@ -749,6 +757,14 @@ Both types of questions support the following properties.</p>
 <tr>
 <td>type</td>
 <td>What type of interface should this column have. The default is “checkbox”. You can set it to text instead in order to display text of you choice (use the <code>textProperty</code> property to set the row property that will be used as text). For example <code>{type: &#39;text&#39;, textProperty:&#39;rightStem&#39;}</code> will use the <code>rightStem</code> property of each row as the text content.</td>
+</tr>
+<tr>
+<td>css</td>
+<td>CSS object for the whole column. This is the place that you can control the column width (using the <code>width</code> property).</td>
+</tr>
+<tr>
+<td>stemCss</td>
+<td>CSS object for the column stem.</td>
 </tr>
 </tbody>
 </table>
@@ -843,8 +859,16 @@ These are the supported properties:</p>
 <td>A label to display on the top left of the slider.</td>
 </tr>
 <tr>
+<td>leftLabelCss</td>
+<td>A style object to apply to the left label.</td>
+</tr>
+<tr>
 <td>rightLabel</td>
 <td>A label to display on the top right of te slider.</td>
+</tr>
+<tr>
+<td>rightLabelCss</td>
+<td>A style object to apply to the right label.</td>
 </tr>
 <tr>
 <td>labels</td>
@@ -1557,7 +1581,7 @@ It accepts two argument: the source object on which it is called (the page or qu
 				<p>Created by Project Implicit for the benefit of all.</p>
 				<!-- <p>Code licensed under <a href="https://github.com/twbs/bootstrap/blob/master/LICENSE" target="_blank">MIT</a>, documentation under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p> -->
 				<ul class="bs-docs-footer-links text-muted">
-					<li>Currently v0.0.44</li>
+					<li>Currently v0.0.45</li>
 					<li>&middot;</li>
 					<li><a href="https://github.com/ProjectImplicit/PIquest">GitHub</a></li>
 					<li>&middot;</li>

@@ -1,1 +1,44 @@
-define(["require","angular","./consoleProvider","./consolePrototypeProvider","./consoleDirective"],function(e){function r(e,n){if(e==null)return'<i class="text-muted">undefined</i>';if(e==="")return'<i class="text-muted">an empty string</i>';switch(typeof e){case"string":break;case"number":e=""+e;break;case"object":if(e instanceof Error){e=e.message;break};default:e='<a href="javascript:void(0)">'+t.toJson(e,!!n)+"</a>"}return e}var t=e("angular"),n=t.module("piConsole",[]);return n.service("piConsole",e("./consoleProvider")),n.service("piConsolePrototype",e("./consolePrototypeProvider")),n.directive("piConsole",e("./consoleDirective")),n.filter("stringify",function(){return r}),n});
+define(function(require){
+	var angular = require('angular');
+	var module = angular.module('piConsole',[]);
+
+	module.service('piConsole', require('./consoleProvider'));
+	module.service('piConsolePrototype', require('./consolePrototypeProvider'));
+	module.directive('piConsole', require('./consoleDirective'));
+
+	module.filter('stringify', function(){
+		return stringify;
+	});
+
+	return module;
+
+	function stringify(value, pretty) {
+		if (value == null) { // null || undefined
+			return '<i class="text-muted">undefined</i>';
+		}
+		if (value === '') {
+			return '<i class="text-muted">an empty string</i>';
+		}
+
+		switch (typeof value) {
+			case 'string':
+				break;
+			case 'number':
+				value = '' + value;
+				break;
+			case 'object':
+				// display the error message not the full thing...
+				if (value instanceof Error){
+					value = value.message;
+					break;
+				}
+			/* fall through */
+			default:
+				value = '<a href="javascript:void(0)">' + angular.toJson(value, !!pretty) + '</a>';
+		}
+
+		return value;
+	}
+});
+
+

@@ -1,1 +1,20 @@
-define(["require","underscore"],function(e){function n(e){return e.register("image",r),e}function r(e){var n=this.$q.defer(),r=new Image;return r.onload=t.bind(n.resolve,n,r),r.onerror=t.bind(n.reject,n,r),r.src=e,n.promise}var t=e("underscore");return n.$inject=["$delegate"],n});
+define(function(require){
+	var _ = require('underscore');
+
+	preloaderDecorator.$inject = ['$delegate'];
+	function preloaderDecorator(preloader){
+		preloader.register('image', imageLoader);
+		return preloader;
+	}
+
+	function imageLoader(url){
+		var def = this.$q.defer();
+		var img = new Image();	// create img object
+		img.onload = _.bind(def.resolve, def, img);
+		img.onerror = _.bind(def.reject, def, img);
+		img.src = url;
+		return def.promise;
+	}
+
+	return preloaderDecorator;
+});

@@ -1,1 +1,82 @@
-define([],function(){function e(e,t){var n=300,r=e.requestAnimationFrame,i=e.cancelAnimationFrame;return{enter:function(e,s){function f(){var e=t()-a,l=e/n;if(e>n){o.style.opacity=1,i(u),s();return}o.style.opacity=l,u=r(f)}var o=e[0],u,a=t();return o.style.opacity=0,u=r(f),function(e){e&&(i(u),o.style.opacity=1)}},leave:function(e,s){function f(){var e=t()-a,l=1-e/n;if(e>n){o.style.opacity=0,i(u),s();return}o.style.opacity=l,u=r(f)}var o=e[0],u,a=t();return u=r(f),function(e){e&&(i(u),o.style.opacity=0)}}}}return["$window","timerNow",e]});
+define(function(){
+
+	function animation($window, now){
+
+		var duration = 300;
+		var raf = $window.requestAnimationFrame;
+		var rafCancel = $window.cancelAnimationFrame;
+
+		return {
+			enter: function(element, done){
+				var el = element[0]; // raw element;
+				var cancelId;
+				var start = now();
+
+				// setup
+				el.style.opacity = 0;
+
+				// activate animation
+				cancelId = raf(enter);
+
+				return function(canceled){
+					if (canceled){
+						rafCancel(cancelId);
+						el.style.opacity = 1;
+					}
+				};
+
+				function enter(){
+					var deltaTime = now() - start;
+					var proportion = deltaTime/duration;
+
+					// if we're out of time, finish the animation
+					if (deltaTime > duration) {
+						el.style.opacity = 1;
+						rafCancel(cancelId);
+						done();
+						return;
+					}
+
+					el.style.opacity = proportion;
+					cancelId = raf(enter);
+				}
+			},
+
+			leave: function(element, done){
+				var el = element[0]; // raw element;
+				var cancelId;
+				var start = now();
+
+				// activate animation
+				cancelId = raf(leave);
+
+				return function(canceled){
+					if (canceled){
+						rafCancel(cancelId);
+						el.style.opacity = 0;
+					}
+				};
+
+				function leave(){
+					var deltaTime = now() - start;
+					var proportion = 1-deltaTime/duration;
+
+					// if we're out of time, finish the animation
+					if (deltaTime > duration) {
+						el.style.opacity = 0;
+						rafCancel(cancelId);
+						done();
+						return;
+					}
+
+					el.style.opacity = proportion;
+					cancelId = raf(leave);
+				}
+			}
+
+		};
+	}
+
+	// $inject doesn't seem to work??
+ 	return ['$window', 'timerNow', animation];
+});

@@ -1,1 +1,29 @@
-define([],function(){function e(){return{priority:1e3,template:'<div pi-manager="script"></div>',compile:function(){return{pre:function(e,t,n){var r,i=n.piManagerTask;try{r=e.$eval(i)}catch(s){}var o=r?r:{scriptUrl:i};e.script={sequence:[o]}}}}}}return e});
+define(function(){
+
+	function directive(){
+		return {
+			priority: 1000,
+			template: '<div pi-manager="script"></div>',
+			compile: function(){
+				return {
+					// this need to be pre so that the wrapping directive gets rendered before the template
+					pre: function($scope, $element, $attr){
+						var taskSource;
+						var source = $attr.piManagerTask;
+						try{
+							taskSource = $scope.$eval(source);
+						} catch(e){}
+
+						var task  = taskSource ? taskSource : {scriptUrl:source};
+
+						$scope.script = {
+							sequence: [task]
+						};
+					}
+				};
+			}
+		};
+	}
+
+	return directive;
+});
