@@ -41,8 +41,7 @@ define(function (require) {
 
 		function allCss(){
 			var objects = _.toArray(arguments);
-			objects.unshift({});
-			console.log(objects)
+			objects.unshift({}); // prepend an empty object so that we don't change the originals
 			return _.extend.apply(_, objects);
 		}
 
