@@ -51,16 +51,7 @@ String getBase = getProtocol+"://"+getDomain;
 			</script>
 		<% } %>
 
-		<!-- build:css styles/vendor.css -->
-		<!-- bower:css -->
-		<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 		<link rel="stylesheet" href="styles/main.css" />
-		<!-- endbower -->
-		<!-- endbuild -->
-
-		<!-- build:css({.tmp,app}) styles/main.css -->
-		<!-- <link rel="stylesheet" href="styles/main.css"> -->
-		<!-- endbuild -->
 
 		<style type="text/css">
 

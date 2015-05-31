@@ -247,7 +247,7 @@ module.exports = function (grunt) {
 					generateSourceMaps: true,
 					preserveLicenseComments: false,
 					optimize: 'uglify2',
-					//optimize:'none', // toggle this for fast optimized debuging
+					// optimize:'none', // toggle this for fast optimized debuging
 					skipDirOptimize: true,
 
 					// Tells Require.js to look at main.js for all shim and path configurations
@@ -256,11 +256,7 @@ module.exports = function (grunt) {
 					fileExclusionRegExp: /(\.scss|\.md|_test\.js)$|^example/,
 					paths: {
 						// Libs
-						jquery: 'empty:',
-						underscore: 'empty:',
-						angular: 'empty:',
-						text: '../../bower_components/requirejs-text/text',
-						animate: '../../bower_components/angular-animate/angular-animate.min'
+						jquery: 'empty:'
 					},
 
 					packages:[
@@ -281,7 +277,6 @@ module.exports = function (grunt) {
 						{
 							name: 'bootstrap',
 							include: ['app','pipScorer', 'pipAPI','questAPI','managerAPI'],
-							exclude: ['angular'],
 							override: {
 								packages: [
 									{name: 'pipAPI', location:'APIs', main:'pipAPI'},
@@ -293,7 +288,6 @@ module.exports = function (grunt) {
 						{
 							name: 'pibootstrap',
 							include: ['app','pipScorer', 'pipAPI','questAPI','managerAPI'],
-							exclude: ['angular'],
 							override: {
 								packages: [
 									{name: 'pipAPI', location:'APIs', main:'pi/pipAPI'},
