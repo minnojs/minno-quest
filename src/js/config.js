@@ -8,7 +8,12 @@ define(function(){
 	window.console.log || (window.console.log = noop);
 	window.console.warn || (window.console.warn = noop);
 
+	//http://code.angularjs.org/1.2.1/docs/guide/bootstrap#overview_deferred-bootstrap
+	window.name = 'NG_DEFER_BOOTSTRAP!';
+
 	require.config({
+		// in order to catch IE errors
+		enforceDefine: true,
 		paths: {
 			// libs
 			underscore: ["//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.5.0/lodash.min","../../bower_components/lodash-compat/lodash.min"],
@@ -37,7 +42,4 @@ define(function(){
 			'angular', 'animate', 'underscore','text'
 		]
 	});
-
-	//http://code.angularjs.org/1.2.1/docs/guide/bootstrap#overview_deferred-bootstrap
-	window.name = 'NG_DEFER_BOOTSTRAP!';
 });

@@ -44,6 +44,10 @@ String getBase = getProtocol+"://"+getDomain;
 					studyId: '<%= studySession.getStudy().getId() %>',
 					app: 'quest'
 				}
+
+				// https://github.com/yeoman/yeoman/issues/1051
+				// prevent load timeouts
+				var require = {waitSeconds:120}
 			</script>
 		<% } %>
 
@@ -96,5 +100,5 @@ String getBase = getProtocol+"://"+getDomain;
 	<![endif]-->
 	<script language="JavaScript" type="text/javascript" src="/implicit/common/en-us/js/task.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.min.js" data-main="js/pibootstrap.js"></script>
-	<script>window.require || document.write('<script src="../bower_components/requirejs/require.js" data-main="js/pibootstrap.js"><\/script>');</script>
+	<script>(typeof require != 'function') || document.write('<script src="../bower_components/requirejs/require.js" data-main="js/pibootstrap.js"><\/script>');</script>
 </html>
