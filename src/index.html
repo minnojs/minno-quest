@@ -10,16 +10,7 @@
 		<meta name="description" content="Project Implicit Questionnaire">
 		<meta name="viewport" content="width=device-width">
 
-		<!-- build:css styles/vendor.css -->
-		<!-- bower:css -->
-		<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 		<link rel="stylesheet" href="styles/main.css" />
-		<!-- endbower -->
-		<!-- endbuild -->
-
-		<!-- build:css({.tmp,app}) styles/main.css -->
-		<!-- <link rel="stylesheet" href="styles/main.css"> -->
-		<!-- endbuild -->
 
 		<style type="text/css">
 
@@ -44,8 +35,8 @@
 
 		<div class="container" ng-app>
 			<img class="pi-spinner" ng-hide="1"/>
-			<div spi-manager="/test/spin.js"></div>
-			<div pi-manager-task="{type:'quest',scriptUrl:'/test/exptmp.js'}"></div>
+			<div pi-manager="https://dw2.psyc.virginia.edu/implicit/user/ezlotnick/manager/managerScript.js"></div>
+			<div spi-manager-task="{type:'quest',scriptUrl:'/test/exptmp.js'}"></div>
 			<div pi-console></div>
 		</div>
 
@@ -61,5 +52,5 @@
 		<script src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/3.4.0/es5-shim.min.js"></script>
 		 <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
 	<![endif]-->
-	<script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.min.js" data-main="js/pibootstrap.js"></script>
+	<script defer async src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.min.js" data-main="js/pibootstrap.js"></script>
 </html>

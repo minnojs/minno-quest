@@ -77,6 +77,12 @@ define(function(require){
 			data.sessionStatus = "C";
 		}
 
+		if (window._err && window._err.meta){
+			var meta = window._err.meta;
+			meta.subtaskName = currentTask.name;
+			meta.subtaskURL = currentTask.scriptUrl || currentTask.templateUrl;
+		}
+
 		return isDev ? true : $http.post('/implicit/PiManager', data);
 	}
 

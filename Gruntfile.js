@@ -247,8 +247,9 @@ module.exports = function (grunt) {
 					generateSourceMaps: true,
 					preserveLicenseComments: false,
 					optimize: 'uglify2',
-					skipDirOptimize: true,
 					//optimize:'none', // toggle this for fast optimized debuging
+					skipDirOptimize: true,
+
 					// Tells Require.js to look at main.js for all shim and path configurations
 					mainConfigFile: ['<%= settings.app %>/js/config.js'],
 
@@ -310,10 +311,12 @@ module.exports = function (grunt) {
 			options: {
 				includePaths: ['bower_components/bootstrap-sass-official/assets/stylesheets/', 'bower_components/'],
 				sourceMap: true,
-				style: 'compressed'
+				outputStyle: 'compressed'
+
 			},
 			dist: {
 				files: {'src/styles/main.css':'src/styles/main.scss'}
+
 			}
 		}
 	});
