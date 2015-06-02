@@ -244,6 +244,7 @@ module.exports = function (grunt) {
 					dir: "dist",
 					appDir: '<%= settings.app %>',
 					baseUrl: 'js',
+					removeCombined: true,
 					generateSourceMaps: true,
 					preserveLicenseComments: false,
 					optimize: 'uglify2',
@@ -269,7 +270,7 @@ module.exports = function (grunt) {
 
 					// Add banner
 					wrap: {
-						start: '<%= settings.banner.full %>',
+						start: '<%= settings.banner.full %> ;window.name = \'NG_DEFER_BOOTSTRAP!\';', // defer bootstrap, so that when angular is loaded it's already there
 						end: ''
 					},
 
