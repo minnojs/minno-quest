@@ -84,7 +84,22 @@
           var showHandle = !isNaN(percentage);
           var handleDisplay = showHandle ? 'block' : 'none';
           var highlightDisplay = showHandle && options.highlight ? 'block' : 'none';
-          scope.highlightStyle = { right: (100 - percentage * 100) + '%', display: highlightDisplay};
+
+          switch (options.highlightDirection) {
+            case 'rtl':
+              scope.highlightStyle = { left: percentage * 100 + '%', display: highlightDisplay};
+              break;
+            case 'center':
+              if (percentage > 0.5) {
+                scope.highlightStyle = { left: '50%', width:100 * (percentage -0.5) + '%', display: highlightDisplay};
+              } else {
+                scope.highlightStyle = { right: '50%', width:100 * (0.5 - percentage) + '%', display: highlightDisplay};
+              }
+              break;
+            default:
+              scope.highlightStyle = { right: (100 - percentage * 100) + '%', display: highlightDisplay};
+          }
+
           scope.handleStyle = { left: (percentage * 100) + '%', display: handleDisplay};
         }
 
