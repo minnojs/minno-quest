@@ -17,7 +17,7 @@
       },
       replace: true,
       require: 'ngModel',
-      template: ['<div class="slider" ng-mousedown="onSliderMouseDown($event)">',
+      template: ['<div class="slider" ng-class="{\'slider-ticks\':options.showTicks}" ng-mousedown="onSliderMouseDown($event)">',
             '<div class="slider-label-left" ng-style="options.leftLabelCss">{{options.leftLabel}}</div>',
             '<div class="slider-label-right" ng-style="options.rightLabelCss">{{options.rightLabel}}</div>',
             '<div class="slider-container">',
@@ -195,5 +195,3 @@
     return isNaN(parseFloat(n)) || !isFinite(n);
   }
 }));
-
-

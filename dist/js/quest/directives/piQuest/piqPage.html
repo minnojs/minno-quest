@@ -27,8 +27,8 @@
 		<button
 			ng-click="decline($event)"
 			data-role="submit"
-			class="btn btn-warning"
-			ng-class="{'btn-active-accented':page.v1style}"
+			class="btn"
+			ng-class="{'btn-active-accented':page.v1style, 'btn-warning': page.v1style != 2, 'btn-default': page.v1style == 2}"
 			ng-if="page.decline"
 		>{{page.declineText || "Decline to Answer"}}</button>
 	</div>
