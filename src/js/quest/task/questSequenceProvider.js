@@ -25,7 +25,7 @@ define(function(require){
 
 			current: function(context){
 				var questionsArr,
-					page = this.sequence.current(context);
+					page = this.sequence.current(context, {skip:['questions']}); // don't template the questions array
 
 				if (!page){
 					return page;
