@@ -89,4 +89,4 @@ read -r -d '' APItext <<- EOM
 EOM
 
 # create API.md
-echo "$APItext" > "$DIR/src/0.0/manager/sequencer.md"
+echo "$APItext" > "$DIR/src/0.0/basics/sequencer.md"

@@ -11,7 +11,13 @@
 		<meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
 
 		<title>
-			{% if data.typeName == 'quest' %} piQuest {% elseif data.typeName == 'manager' %} piManager {% endif %}
+			{% if data.typeName == 'quest' %}
+				piQuest
+			{% elseif data.typeName == 'manager' %}
+				piManager
+			{% elseif data.typeName == 'basics' %}
+				Basics
+			{% endif %}
 			&middot; V0.0
 		</title>
 
@@ -61,6 +67,9 @@
 				</div>
 				<nav class="collapse navbar-collapse bs-navbar-collapse">
 					<ul class="nav navbar-nav">
+						<li class="{% if data.typeName == 'basics' %} active {% endif %}">
+							<a href="../basics/overview.html">Basics</a>
+						</li>
 						<li class="{% if data.typeName == 'quest' %} active {% endif %}">
 							<a href="../quest/overview.html">piQuest</a>
 						</li>
@@ -95,6 +104,8 @@
 
 						{% macro navitem(name, filename, current) %}
 							<li class="{%if filename == current %} active {% endif %}">
+							<li class="{%if filename.indexOf('/' + current, filename.length - current.length - 1) !== -1 %} active {% endif %}">
+
 								<a href="{{ filename }}.html">{{ name }}</a>
 							</li>
 						{% endmacro listitem %}
@@ -110,7 +121,16 @@
 						{% endmacro example %}
 
 						<ul class="nav bs-docs-sidenav">
-						{% if data.typeName == 'quest' %}
+						{% if data.typeName == 'basics' %}
+
+							{{ navitem("Overview", "../basics/overview", data.basename) }}
+							{{ navitem("Javascript", "../basics/javascript", data.basename) }}
+							{{ navitem("Creating a task", "../basics/create", data.basename) }}
+
+							{{ navitem("Sequencer", "../basics/sequencer", data.basename) }}
+							{{ navitem("API", "../basics/API", data.basename) }}
+
+						{% elseif data.typeName == 'quest' %}
 
 							{{ navitem("Overview", "../quest/overview", data.basename) }}
 							{{ navitem("Introduction", "../quest/introduction", data.basename) }}
@@ -141,7 +161,6 @@
 
 							{{ navitem("Overview", "overview", data.basename) }}
 							{{ navitem("Messages", "messages", data.basename) }}
-							{{ navitem("Sequencer", "sequencer", data.basename) }}
 							<li>
 								<a href="javascript:void(0)">Examples</a>
 								<ul class="nav">
