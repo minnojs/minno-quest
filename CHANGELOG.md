@@ -1,3 +1,22 @@
+<a name="0.0.48"></a>
+### 0.0.48 (2015-06-09)
+
+
+#### Bug Fixes
+
+* **angular:** push NG_DEFER_BOOTSTRAP to be before angular loading ([7faf7868](https://github.com/ProjectImplicit/PIquest/commit/7faf7868711294d3c50558b2cd75fb137cd8d50e))
+* **manager:** manager directive on load spinner now works ([5d0284a6](https://github.com/ProjectImplicit/PIquest/commit/5d0284a63b1182830237da5902101df597da62e8))
+* **requirejs:** set waitSeconds to 120 in production to prevent load timeouts ([8923ab5e](https://github.com/ProjectImplicit/PIquest/commit/8923ab5e4454cb2493a837219d6a3b2a30c48761))
+
+
+#### Features
+
+* **database:** deep template by default, we manually exclude un-templatable properties ([9e275b80](https://github.com/ProjectImplicit/PIquest/commit/9e275b80e8242672d9a671aa8a2aec01c06f8efa))
+* **questDirectives:**
+  * slider support for showTicks. ([54ff48d7](https://github.com/ProjectImplicit/PIquest/commit/54ff48d7c50df0508d71a0a80464a282c72f9f4e), closes [#110](https://github.com/ProjectImplicit/PIquest/issues/110))
+  * slider highlightDirection ([9e792b20](https://github.com/ProjectImplicit/PIquest/commit/9e792b209099cf34395a31eaa4959babc6d78629), closes [#113](https://github.com/ProjectImplicit/PIquest/issues/113))
+
+
 <a name="0.0.47"></a>
 ### 0.0.47 (2015-05-28)
 
