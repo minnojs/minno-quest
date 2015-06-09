@@ -27,7 +27,7 @@ Argument    | Type  | Description
 ----------- | ----  | -----------
 name        | String| The name of this task. If used as part of piManager, this setting may be overided by the manager task object.
 
-##### returns::
+##### returns:
 (*Object*) this `API`
 
 ##### example:
