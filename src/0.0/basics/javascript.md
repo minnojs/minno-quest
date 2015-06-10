@@ -5,6 +5,8 @@ description: Getting to know the environment we work with.
 
 Task scripts are written using JavaScript; [JavaScript](http://en.wikipedia.org/wiki/JavaScript) is a programming language used by browsers (like Internet Explorer, Chrome or Safari). Our scripts do not require you to program any JavaScript but you should have a basic grasp of the basic syntax before we go on. If you know some basic JavaScript you can skip this section and go directly to the Hello world tutorial.
 
+If you want to get a deeper understanding of Javascript, or if you would like a more methodical introduction you might want to try out one of the many Javascript introduction courses on the net (we recommend [Codecademy](http://www.codecademy.com/en/tracks/javascript-combined) or [Khan Academy](https://www.khanacademy.org/computing/computer-programming/programming)).
+
 The fundamental building blocks of javascript expressions are variables and literals (more details [here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Values,_variables,_and_literals)).
 
 Variables store information. Each variable stores one or a few different values.
