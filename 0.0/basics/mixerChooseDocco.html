@@ -86,9 +86,9 @@
 		<div id="content" class="bs-docs-header">
 			<div class="container">
 				
-	<h1>Mixer branch</h1>
+	<h1>Mixer choose</h1>
 
-	<p>Documentation for mixerBranch.js </p>
+	<p>Documentation for mixerChoose.js </p>
 
 			</div>
 		</div>
@@ -98,39 +98,34 @@
 				<div class="col-md-9" role="main">
 					
 	
-		<p>Conditionally activate specific sub sequences.</p>
+		<p>Choose a random subgroup of elements from the sub-sequence.
+By default chooses one. The <code>n</code> property allows to set how many to choose.</p>
 
 
 		
 		  <div class='highlight'><pre>define([<span class="hljs-string">'managerAPI'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(Manager)</span></span>{
 
-  <span class="hljs-keyword">var</span> API = <span class="hljs-keyword">new</span> Manager();</pre></div>
-		
-	
-		<p>Set a global flag that we can test against</p>
-
-
-		
-		  <div class='highlight'><pre>  API.addGlobal({condition:<span class="hljs-string">'cond1'</span>});
+  <span class="hljs-keyword">var</span> API = <span class="hljs-keyword">new</span> Manager();
 
   API.addSequence([
     {
-      mixer: <span class="hljs-string">'branch'</span>,
-      conditions: [
-        {compare: <span class="hljs-string">'global.condition'</span>, to: <span class="hljs-string">'cond1'</span>}
-      ],
-      data: [
+      mixer:<span class="hljs-string">'choose'</span>, <span class="hljs-comment">// declare the mixer</span>
+      n:<span class="hljs-number">2</span>, <span class="hljs-comment">// choose two of the follwoing elements</span>
+      data:[ <span class="hljs-comment">// a list of tasks to bhoose from</span>
         {
           type:<span class="hljs-string">'message'</span>,
           keys: <span class="hljs-string">' '</span>,
-          template: <span class="hljs-string">'Task 1: will be displayed'</span>
-        }
-      ],
-      elseData: [
+          template: <span class="hljs-string">'Task 1'</span>
+        },
         {
           type:<span class="hljs-string">'message'</span>,
           keys: <span class="hljs-string">' '</span>,
-          template: <span class="hljs-string">'Task 2: will not be displayed'</span>
+          template: <span class="hljs-string">'Task 2'</span>
+        },
+        {
+          type:<span class="hljs-string">'message'</span>,
+          keys: <span class="hljs-string">' '</span>,
+          template: <span class="hljs-string">'Task 3'</span>
         }
       ]
     }
