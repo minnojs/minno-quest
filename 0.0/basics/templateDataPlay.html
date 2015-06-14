@@ -124,9 +124,9 @@
 		<div id="content" class="bs-docs-header">
 			<div class="container">
 				
-	<h1>Mixer multi branch</h1>
+	<h1>Template data</h1>
 	
-		<p>You can play around with mixerMultiBranch.js right here. All you need to do is change the script and then click the activate button.</p>
+		<p>You can play around with templateData.js right here. All you need to do is change the script and then click the activate button.</p>
 	
 
 			</div>
@@ -148,37 +148,23 @@
 		</div>
 
    		<div id="editor">
-// Conditionally activate specific sub sequences.
+// You can use data set within the objects you are using from within templates.
+// Check the documentation for the task you are using to know how the data object is called from within the template
+// (the standard structure for the name is &lt;object type&gt;Data, so that tasks become tasksData).
 define([&#39;managerAPI&#39;], function(Manager){
 
   var API = new Manager();
 
-  // Set a global flag that we can test against
-  API.addGlobal({condition:&#39;cond1&#39;});
+  API.addTasksSet(&#39;default&#39;, [
+  	{
+  		type:&#39;message&#39;,
+  		keys: &#39; &#39;,
+      data: {condition:&#39;using data in templates&#39;}
+  	}
+  ]);
 
   API.addSequence([
-    {
-      mixer: &#39;multiBranch&#39;,
-      branches: [
-          {
-            conditions: [
-              {compare: &#39;global.condition&#39;, to: &#39;cond0&#39;}
-            ],
-            data: [
-              {type:&#39;message&#39;,keys: &#39; &#39;,template: &#39;Task 0: will not be displayed&#39;}
-            ]
-          },
-          {
-            conditions: [
-              {compare: &#39;global.condition&#39;, to: &#39;cond1&#39;}
-            ],
-            data: [
-              {type:&#39;message&#39;,keys: &#39; &#39;,template: &#39;Task 1: will be displayed&#39;},
-              {type:&#39;message&#39;,keys: &#39; &#39;,template: &#39;Task 2: will be displayed&#39;}
-            ]
-          }
-      ]
-    }
+    {inherit:&#39;default&#39;,template:&#39;We are in the &quot;&lt;%= tasksData.condition %&gt;&quot; condition.&#39;}
   ]);
 
   return API.script;

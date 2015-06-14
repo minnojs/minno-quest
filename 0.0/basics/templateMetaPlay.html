@@ -124,9 +124,9 @@
 		<div id="content" class="bs-docs-header">
 			<div class="container">
 				
-	<h1>Mixer multi branch</h1>
+	<h1>Template meta</h1>
 	
-		<p>You can play around with mixerMultiBranch.js right here. All you need to do is change the script and then click the activate button.</p>
+		<p>You can play around with templateMeta.js right here. All you need to do is change the script and then click the activate button.</p>
 	
 
 			</div>
@@ -148,37 +148,29 @@
 		</div>
 
    		<div id="editor">
-// Conditionally activate specific sub sequences.
+// Each object has a special object called &quot;meta&quot; that has information regarding the relative location of the object within the sequence.
+// Check the documentation for the task you are using to know how the meta object is called from within the template.
+// (the standard structure for the name is &lt;object type&gt;Meta, so that tasks meta become tasksMeta).
+//
+// The meta objects has two properties `number` and `outOf`.
+
 define([&#39;managerAPI&#39;], function(Manager){
 
   var API = new Manager();
 
-  // Set a global flag that we can test against
-  API.addGlobal({condition:&#39;cond1&#39;});
+  API.addTasksSet(&#39;default&#39;, [
+  	{
+  		type:&#39;message&#39;,
+  		keys: &#39; &#39;,
+      template: &#39;Task number &lt;%= tasksMeta.number %&gt; out of &lt;%= tasksMeta.outOf %&gt;.&#39;
+  	}
+  ]);
 
   API.addSequence([
-    {
-      mixer: &#39;multiBranch&#39;,
-      branches: [
-          {
-            conditions: [
-              {compare: &#39;global.condition&#39;, to: &#39;cond0&#39;}
-            ],
-            data: [
-              {type:&#39;message&#39;,keys: &#39; &#39;,template: &#39;Task 0: will not be displayed&#39;}
-            ]
-          },
-          {
-            conditions: [
-              {compare: &#39;global.condition&#39;, to: &#39;cond1&#39;}
-            ],
-            data: [
-              {type:&#39;message&#39;,keys: &#39; &#39;,template: &#39;Task 1: will be displayed&#39;},
-              {type:&#39;message&#39;,keys: &#39; &#39;,template: &#39;Task 2: will be displayed&#39;}
-            ]
-          }
-      ]
-    }
+    {inherit:&#39;default&#39;},
+    {inherit:&#39;default&#39;},
+    {inherit:&#39;default&#39;},
+    {inherit:&#39;default&#39;}
   ]);
 
   return API.script;

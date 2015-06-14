@@ -18,7 +18,6 @@
 		</title>
 
 		
-	
 		<!-- Bootstrap core CSS -->
 		<link href="../../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 		<slink href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/sunburst.min.css" rel="stylesheet">
@@ -34,43 +33,6 @@
 			table tr th :last-child, table tr td :last-child {margin-bottom: 0;}
 		</style>
 		
-	<script src="../../bower_components/ace-builds/src-min/ace.js" type="text/javascript" charset="utf-8"></script>
-	<style type="text/css" media="screen">
-	    #editor {
-	    	margin-top: 1em;
-	        border-radius: 4px 4px 0;
-	        border: 1px solid #ddd;
-	        height: 80vh;
-	        font-size: 14px;
-	    }
-
-		/* IE8 only */
-		@media \0screen {
-		    #editor {height:80px;}
-		}
-
-		@-webkit-keyframes fadeIn {
-		  0% {opacity: 0;}
-		  20% {opacity: 1;}
-		  80% {opacity: 1;}
-		  100% {opacity: 0;}
-		}
-
-		@keyframes fadeIn {
-		  0% {opacity: 0;}
-		  20% {opacity: 1;}
-		  80% {opacity: 1;}
-		  100% {opacity: 0;}
-		}
-
-		.fadeIn {
-		  	-webkit-animation-name: fadeIn;
-		    animation-name: fadeIn;
-		    animation-duration: 6s;
-			opacity:0;
-		}
-	</style>
-
 
 		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 		<!--[if lt IE 9]>
@@ -124,10 +86,9 @@
 		<div id="content" class="bs-docs-header">
 			<div class="container">
 				
-	<h1>Mixer multi branch</h1>
-	
-		<p>You can play around with mixerMultiBranch.js right here. All you need to do is change the script and then click the activate button.</p>
-	
+	<h1>Template data</h1>
+
+	<p>Documentation for templateData.js </p>
 
 			</div>
 		</div>
@@ -136,106 +97,33 @@
 			<div class="row">
 				<div class="col-md-9" role="main">
 					
-		<p>
-			<button class="btn btn-default btn-lg btn-block" onclick="window.click(event)" type="button">Activate</button>
-		</p>
+	
+		<p>You can use data set within the objects you are using from within templates.
+Check the documentation for the task you are using to know how the data object is called from within the template
+(the standard structure for the name is <object type>Data, so that tasks become tasksData).</p>
 
-		<div id="success" role="alert" class="alert alert-success" style="display:none">
-			<strong>Well Done!</strong> The task has been successfully completed.
-		</div>
-		<div id="error" role="alert" class="alert alert-danger" style="display:none">
-			<strong>Oh Snap!</strong> Something went wrong with the task. Why don't you fix it and try again?
-		</div>
 
-   		<div id="editor">
-// Conditionally activate specific sub sequences.
-define([&#39;managerAPI&#39;], function(Manager){
+		
+		  <div class='highlight'><pre>define([<span class="hljs-string">'managerAPI'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(Manager)</span></span>{
 
-  var API = new Manager();
+  <span class="hljs-keyword">var</span> API = <span class="hljs-keyword">new</span> Manager();
 
-  // Set a global flag that we can test against
-  API.addGlobal({condition:&#39;cond1&#39;});
-
-  API.addSequence([
-    {
-      mixer: &#39;multiBranch&#39;,
-      branches: [
-          {
-            conditions: [
-              {compare: &#39;global.condition&#39;, to: &#39;cond0&#39;}
-            ],
-            data: [
-              {type:&#39;message&#39;,keys: &#39; &#39;,template: &#39;Task 0: will not be displayed&#39;}
-            ]
-          },
-          {
-            conditions: [
-              {compare: &#39;global.condition&#39;, to: &#39;cond1&#39;}
-            ],
-            data: [
-              {type:&#39;message&#39;,keys: &#39; &#39;,template: &#39;Task 1: will be displayed&#39;},
-              {type:&#39;message&#39;,keys: &#39; &#39;,template: &#39;Task 2: will be displayed&#39;}
-            ]
-          }
-      ]
-    }
+  API.addTasksSet(<span class="hljs-string">'default'</span>, [
+  	{
+  		type:<span class="hljs-string">'message'</span>,
+  		keys: <span class="hljs-string">' '</span>,
+      data: {condition:<span class="hljs-string">'using data in templates'</span>}
+  	}
   ]);
 
-  return API.script;
-});
-		</div>
+  API.addSequence([
+    {inherit:<span class="hljs-string">'default'</span>,template:<span class="hljs-string">'We are in the "&lt;%= tasksData.condition %&gt;" condition.'</span>}
+  ]);
 
-		<script>
-		    var editor = ace.edit("editor");
-		    editor.setTheme("ace/theme/monokai");
-		    editor.getSession().setMode("ace/mode/javascript");
-		    editor.setOption("showPrintMargin", false);
-		    var win;
-		    var feedbackId = 'success';
-
-		    function click(event){
-		    	event.target.blur();
-
-		    	// assume the feedback is success
-				feedbackId = 'success';
-
-				// clean out open window
-		    	if (win){
-		    		win.close();
-		    		win = null;
-		    	}
-
-		    	win = window.open('../basics/basicsactivate.html', 'pip');
-		    	win.focus();
-
-		    	win.onload = function(){
-		    		// first set the unload listener
-					win.addEventListener('unload', function(event) {
-						var el = document.getElementById(feedbackId);
-						window.focus();
-						fade(el);
-					});
-
-					// then activate the player (this ensures that when )
-					win.piActivate(editor.getValue());
-		    	};
-		    }
-
-	    	window.addEventListener('error', function(e){
-	    		console.error(e);
-	    		feedbackId = 'error';
-	    	});
-
-	    	function fade(el){
-				el.style.display = 'block';
-				el.classList.add('fadeIn');
-				setTimeout(function(){
-					el.style.display = 'none';
-					el.classList.remove('fadeIn');
-				}, 6000);
-	    	}
-
-		</script>
+  <span class="hljs-keyword">return</span> API.script;
+});</pre></div>
+		
+	
 
 				</div>
 
