@@ -16,6 +16,7 @@
   ],
   "dependencies": {
     "bootstrap": "~3.3.2",
-    "ace-builds": "~1.1.8"
+    "ace-builds": "~1.1.8",
+    "requirejs": "2.1.10"
   }
 }

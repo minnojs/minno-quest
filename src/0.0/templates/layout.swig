@@ -24,7 +24,7 @@
 		{% block head %}
 		<!-- Bootstrap core CSS -->
 		<link href="../../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-		<link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/sunburst.min.css" rel="stylesheet">
+		<slink href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/sunburst.min.css" rel="stylesheet">
 		<link href="../css/style.css" rel="stylesheet">
 		<style type="text/css">
 			pre {display:block;overflow-x:auto;padding:0.5em;background:#000;color:#f8f8f8;-webkit-text-size-adjust:none}
@@ -129,6 +129,16 @@
 
 							{{ navitem("Sequencer", "../basics/sequencer", data.basename) }}
 							{{ navitem("API", "../basics/API", data.basename) }}
+
+							<li>
+								<a href="javascript:void(0)">Mixers</a>
+								<ul class="nav">
+									{{ example("Random", "../basics/mixerRandom", data.basename) }}
+									{{ example("Repeat", "../basics/mixerRepeat", data.basename) }}
+									{{ example("Weighted Random", "../basics/mixerWeightedRandom", data.basename) }}
+								</ul>
+							</li>
+
 
 						{% elseif data.typeName == 'quest' %}
 

@@ -20,7 +20,7 @@
 		
 		<!-- Bootstrap core CSS -->
 		<link href="../../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-		<link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/sunburst.min.css" rel="stylesheet">
+		<slink href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/sunburst.min.css" rel="stylesheet">
 		<link href="../css/style.css" rel="stylesheet">
 		<style type="text/css">
 			pre {display:block;overflow-x:auto;padding:0.5em;background:#000;color:#f8f8f8;-webkit-text-size-adjust:none}
@@ -105,7 +105,7 @@
 <h3 id="structure">Structure</h3>
 <p>The first step learning to use piQuest is getting to know the structure of a piQuest script. The scripts are written in javascript, although all you really need to know is how to use our very specific API (this means that if you’re in to that sort of thing, you can write any javascript that you like…).</p>
 <p>Each script is wrapped within a <a href="http://requirejs.org/docs/whyamd.html#amd"><code>define</code></a> statement. At the beginning you create the API object, and at the end you return the script that you have created. This basic structure stays more or less constant across any script that you create. In other words: you can always just copy paste this portion of the script and get on with building your questionnaire:</p>
-<pre><code class="lang-js">define([<span class="hljs-string">'questAPI'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(Quest)</span></span>{
+<pre><code class="lang-js">define([<span class="hljs-string">'questAPI'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">Quest</span>)</span>{
     <span class="hljs-comment">// create new quest API</span>
     <span class="hljs-keyword">var</span> API = <span class="hljs-keyword">new</span> Quest();
 
@@ -119,7 +119,7 @@
 </code></pre>
 <p>Between the declaration of the API and returning the script, we use the API to put the task together. The full functionality of the API is described in the <a href="API.html">documentation </a>. This tutorial will walk you through using it to create a very basic questionnaire. You can use it as a template for creating your own questionnaires in the future.</p>
 <p>We will use the API to setup the questionnaire environment (using <code>addSettings</code>), then we will create prototypes for pages and questions within the questionnaire (using <code>addPagesSet</code> and <code>addQuestionsSet</code>), and finally we will setup the sequence of questions that will be presented to the subjects (using <code>addSequence</code>).</p>
-<pre><code class="lang-js">define([<span class="hljs-string">'questAPI'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(Quest)</span></span>{
+<pre><code class="lang-js">define([<span class="hljs-string">'questAPI'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">Quest</span>)</span>{
     <span class="hljs-comment">// create new quest API</span>
     <span class="hljs-keyword">var</span> API = <span class="hljs-keyword">new</span> Quest();
 
@@ -167,7 +167,7 @@
 <p>We will put the page and question together in a moment, but first let us get back to the API object and how we actually use these questions and objects.</p>
 <h3 id="thats-it">Thats it</h3>
 <p>The most important part of every questionnaire is the sequence. This is where you tell piQuest how to interact with the participants. In our case we want to simply present a single page with a single question so we get something like this:</p>
-<pre><code class="lang-js">define([<span class="hljs-string">'questAPI'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(Quest)</span></span>{
+<pre><code class="lang-js">define([<span class="hljs-string">'questAPI'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">Quest</span>)</span>{
     <span class="hljs-comment">// create new quest API</span>
     <span class="hljs-keyword">var</span> API = <span class="hljs-keyword">new</span> Quest();
 

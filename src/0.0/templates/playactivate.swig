@@ -43,7 +43,7 @@
 			<img class="pi-spinner" ng-hide="1"/>
 				{% if data.typeName == 'quest' %}
 					<div pi-manager-task="{type:'quest',scriptUrl:'myTask'}"></div>
-				{% elseif data.typeName == 'manager' %}
+				{% else %}
 					<div pi-manager="'myTask'"></div>
 				{% endif %}
 			<div pi-console></div>
@@ -61,7 +61,7 @@
 		<script src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/3.4.0/es5-shim.min.js"></script>
 		 <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
 	<![endif]-->
-	<script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.min.js"></script>
+	<script src="../../bower_components/requirejs/require.js"></script>
 	<script type="text/javascript">
 		require.config({
 			baseUrl: 'js'

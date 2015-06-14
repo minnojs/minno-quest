@@ -20,7 +20,7 @@
 		
 		<!-- Bootstrap core CSS -->
 		<link href="../../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-		<link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/sunburst.min.css" rel="stylesheet">
+		<slink href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/sunburst.min.css" rel="stylesheet">
 		<link href="../css/style.css" rel="stylesheet">
 		<style type="text/css">
 			pre {display:block;overflow-x:auto;padding:0.5em;background:#000;color:#f8f8f8;-webkit-text-size-adjust:none}
@@ -100,7 +100,7 @@
 <h3 id="the-wrapper">The Wrapper</h3>
 <p>Each task consists of a single javascript file, which is a simple text file with a <code>js</code> extenssion. The file should be setup with some code at the begining and the end, this code is used by the player to register the task. </p>
 <p>First, all your code should be wrapped by a define statement (if you want to understand more about how this work you can read up on <a href="http://requirejs.org/docs/whyamd.html">AMD modules</a>):</p>
-<pre><code class="lang-js">define([<span class="hljs-string">'taskAPI'</span>],<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(taskAPI)</span></span>{
+<pre><code class="lang-js">define([<span class="hljs-string">'taskAPI'</span>],<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">taskAPI</span>)</span>{
     <span class="hljs-comment">// all sorts of code...</span>
 });
 </code></pre>
@@ -112,7 +112,7 @@
 <pre><code class="lang-js"><span class="hljs-keyword">return</span> API.script;
 </code></pre>
 <p>All taken into account this is the structure of any script you create:</p>
-<pre><code class="lang-js">define([<span class="hljs-string">'taskAPI'</span>],<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(taskAPI)</span></span>{
+<pre><code class="lang-js">define([<span class="hljs-string">'taskAPI'</span>],<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">taskAPI</span>)</span>{
     <span class="hljs-keyword">var</span> API = <span class="hljs-keyword">new</span> taskAPI();
     <span class="hljs-comment">// Use the API to create your task here...</span>
     <span class="hljs-keyword">return</span> API.script;
@@ -246,6 +246,40 @@
 								<a href="../basics/API.html">API</a>
 							</li>
 						
+
+							<li>
+								<a href="javascript:void(0)">Mixers</a>
+								<ul class="nav">
+									
+							<li class="">
+								<div>
+									<a href="../basics/mixerRandomDocco.html">Random</a>
+									<a href="../basics/mixerRandom.js" download="../basics/mixerRandom.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../basics/mixerRandomPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../basics/mixerRepeatDocco.html">Repeat</a>
+									<a href="../basics/mixerRepeat.js" download="../basics/mixerRepeat.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../basics/mixerRepeatPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../basics/mixerWeightedRandomDocco.html">Weighted Random</a>
+									<a href="../basics/mixerWeightedRandom.js" download="../basics/mixerWeightedRandom.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../basics/mixerWeightedRandomPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+								</ul>
+							</li>
+
 
 						
 						</ul>

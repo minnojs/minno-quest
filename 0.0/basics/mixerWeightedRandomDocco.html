@@ -12,13 +12,12 @@
 
 		<title>
 			
-				piManager
+				Basics
 			
 			&middot; V0.0
 		</title>
 
 		
-	
 		<!-- Bootstrap core CSS -->
 		<link href="../../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 		<slink href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/sunburst.min.css" rel="stylesheet">
@@ -34,38 +33,6 @@
 			table tr th :last-child, table tr td :last-child {margin-bottom: 0;}
 		</style>
 		
-	<script src="../../bower_components/ace-builds/src-min/ace.js" type="text/javascript" charset="utf-8"></script>
-	<style type="text/css" media="screen">
-	    #editor {
-	    	margin-top: 1em;
-	        border-radius: 4px 4px 0;
-	        border: 1px solid #ddd;
-	        height: 30em;
-	        font-size: 14px;
-	    }
-
-		@-webkit-keyframes fadeIn {
-		  0% {opacity: 0;}
-		  20% {opacity: 1;}
-		  80% {opacity: 1;}
-		  100% {opacity: 0;}
-		}
-
-		@keyframes fadeIn {
-		  0% {opacity: 0;}
-		  20% {opacity: 1;}
-		  80% {opacity: 1;}
-		  100% {opacity: 0;}
-		}
-
-		.fadeIn {
-		  	-webkit-animation-name: fadeIn;
-		    animation-name: fadeIn;
-		    animation-duration: 6s;
-			opacity:0;
-		}
-	</style>
-
 
 		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 		<!--[if lt IE 9]>
@@ -96,13 +63,13 @@
 				</div>
 				<nav class="collapse navbar-collapse bs-navbar-collapse">
 					<ul class="nav navbar-nav">
-						<li class="">
+						<li class=" active ">
 							<a href="../basics/overview.html">Basics</a>
 						</li>
 						<li class="">
 							<a href="../quest/overview.html">piQuest</a>
 						</li>
-						<li class=" active ">
+						<li class="">
 							<a href="../manager/overview.html">piManager</a>
 						</li>
 						<li>
@@ -119,8 +86,9 @@
 		<div id="content" class="bs-docs-header">
 			<div class="container">
 				
-	<h1>Playground</h1>
-	<p>You can play around with the player right here. All you need to do is write your script and then click the activate button.</p>
+	<h1>Mixer weighted random</h1>
+
+	<p>Documentation for mixerWeightedRandom.js </p>
 
 			</div>
 		</div>
@@ -129,79 +97,42 @@
 			<div class="row">
 				<div class="col-md-9" role="main">
 					
-		<p>
-			<button class="btn btn-default btn-lg btn-block" onclick="window.click()" type="button">Activate</button>
-		</p>
+	
+		<p>Randomizes the order of elements in <code>data</code>.</p>
+<p>Please note that the randomizer pre-mixes all the content in data,
+so that any branching mixers will be branched according to the environment as it is when the random mixer is reached.
+If you want to delay the branching until it is reached, simply wrap it within a <code>wrapper</code> mixer.</p>
 
-		<div id="success" role="alert" class="alert alert-success" style="display:none">
-			<strong>Well Done!</strong> The questionnaire has been successfully completed.
-		</div>
-		<div id="error" role="alert" class="alert alert-danger" style="display:none">
-			<strong>Oh Snap!</strong> Something went wrong with the questionnaire. Why don't you fix it and try again?
-		</div>
 
-   		<div id="editor">
+		
+		  <div class='highlight'><pre>
+define([<span class="hljs-string">'managerAPI'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">Manager</span>)</span>{
 
-define(['managerAPI'], function(Manager){
+  <span class="hljs-keyword">var</span> API = <span class="hljs-keyword">new</span> Manager();
 
-    var API = new Manager();
+  API.addSequence([
+    {
+      mixer:<span class="hljs-string">'weightedRandom'</span>, <span class="hljs-comment">// declare the mixer</span>
+      weights: [<span class="hljs-number">0.2</span>, <span class="hljs-number">0.8</span>], <span class="hljs-comment">// weights by whitch to randomize</span>
+      data:[ <span class="hljs-comment">// a list of tasks to randomize</span>
+        {
+          type:<span class="hljs-string">'message'</span>,
+          keys: <span class="hljs-string">' '</span>,
+          template: <span class="hljs-string">'Task 1 (20% of the time)'</span>
+        },
+        {
+          type:<span class="hljs-string">'message'</span>,
+          keys: <span class="hljs-string">' '</span>,
+          template: <span class="hljs-string">'Task 2 (80% of the time)'</span>
+        }
+      ]
+    }
+  ]);
 
-    API.addSequence([
-        {type:'message', template:'&lt;h1&gt;Hellow world&lt;/h1&gt;', keys: ' '}
-    ]);
-
-    return API.script;
-});
-
-		</div>
-
-		<script>
-		    var editor = ace.edit("editor");
-		    editor.setTheme("ace/theme/monokai");
-		    editor.getSession().setMode("ace/mode/javascript");
-		    var win;
-		    var feedbackId = 'success';
-
-		    function click(){
-		    	// assume the feedback is success
-				feedbackId = 'success';
-
-				// clean out open window
-		    	if (win){
-		    		win.close();
-		    		win = null;
-		    	}
-
-		    	win = window.open('manageractivate.html', 'Manager');
-
-		    	win.onload = function(){
-		    		// first set the unload listener
-					win.addEventListener('unload', function(event) {
-						var el = document.getElementById(feedbackId);
-						window.focus();
-						fade(el);
-					});
-
-					// then activate the player (this ensures that when )
-					win.piActivate(editor.getValue());
-		    	};
-		    }
-
-	    	window.addEventListener('error', function(e){
-	    		console.error(e);
-	    		feedbackId = 'error';
-	    	});
-
-	    	function fade(el){
-				el.style.display = 'block';
-				el.classList.add('fadeIn');
-				setTimeout(function(){
-					el.style.display = 'none';
-					el.classList.remove('fadeIn');
-				}, 6000);
-	    	}
-
-		</script>
+  <span class="hljs-keyword">return</span> API.script;
+});</pre></div>
+		
+	
 
 				</div>
 
@@ -219,44 +150,73 @@ define(['managerAPI'], function(Manager){
 							<li class="">
 							<li class="">
 
-								<a href="overview.html">Overview</a>
+								<a href="../basics/overview.html">Overview</a>
 							</li>
 						
 							
 							<li class="">
 							<li class="">
 
-								<a href="messages.html">Messages</a>
+								<a href="../basics/javascript.html">Javascript</a>
 							</li>
 						
+							
+							<li class="">
+							<li class="">
+
+								<a href="../basics/create.html">Creating a task</a>
+							</li>
+						
+
+							
+							<li class="">
+							<li class="">
+
+								<a href="../basics/sequencer.html">Sequencer</a>
+							</li>
+						
+							
+							<li class="">
+							<li class="">
+
+								<a href="../basics/API.html">API</a>
+							</li>
+						
+
 							<li>
-								<a href="javascript:void(0)">Examples</a>
+								<a href="javascript:void(0)">Mixers</a>
 								<ul class="nav">
 									
 							<li class="">
 								<div>
-									<a href="weightManagerDocco.html">Weight experiment</a>
-									<a href="weightManager.js" download="weightManager.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="weightManagerPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+									<a href="../basics/mixerRandomDocco.html">Random</a>
+									<a href="../basics/mixerRandom.js" download="../basics/mixerRandom.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../basics/mixerRandomPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../basics/mixerRepeatDocco.html">Repeat</a>
+									<a href="../basics/mixerRepeat.js" download="../basics/mixerRepeat.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../basics/mixerRepeatPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../basics/mixerWeightedRandomDocco.html">Weighted Random</a>
+									<a href="../basics/mixerWeightedRandom.js" download="../basics/mixerWeightedRandom.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../basics/mixerWeightedRandomPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
 								</div>
 							</li>
 						
 								</ul>
 							</li>
-							
-							<li class="">
-							<li class="">
 
-								<a href="../manager/API.html">API</a>
-							</li>
-						
-							
-							<li class="">
-							<li class="">
 
-								<a href="../manager/managerplayground.html">Playground</a>
-							</li>
-						
 						
 						</ul>
 						<!-- <a class="back-to-top" href="#top">
