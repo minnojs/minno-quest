@@ -140,8 +140,8 @@
 									{{ example("By Data", "../basics/inheritanceByData", data.basename) }}
 									{{ example("Custom", "../basics/inheritanceCustom", data.basename) }}
 
-									{{ example("Repeat", "../basics/inheritanceRepeat", data.basename) }}
 									{{ example("Seed", "../basics/inheritanceSeed", data.basename) }}
+									{{ example("Repeat", "../basics/inheritanceRepeat", data.basename) }}
 								</ul>
 							</li>
 
