@@ -1,3 +1,13 @@
+<a name="0.0.49"></a>
+### 0.0.49 (2015-06-14)
+
+
+#### Bug Fixes
+
+* **manager:** register context for mixer and templates ([859199ac](https://github.com/ProjectImplicit/PIquest/commit/859199acd6096abf55598370fb4f99bcf116f0a9))
+* **questDirectives:** remove exclamation mark from from required error message ([d86e9cf2](https://github.com/ProjectImplicit/PIquest/commit/d86e9cf248658d22b43d1321f5657b9aeffcec1d))
+
+
 <a name="0.0.48"></a>
 ### 0.0.48 (2015-06-09)
 
