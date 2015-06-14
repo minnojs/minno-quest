@@ -268,7 +268,7 @@ Select the elements in <code>data</code> if all the conditions in the <code>cond
 </table>
 <p>In piQuest and piManager, you may want to debug conditions by <a href="#debugging">activating the DEBUG <code>conditions</code> setting</a>. When activated, then any condition that is evaluated will be logged to the console.</p>
 <p>Advanced users may want to replace the whole condition object with a custom function that returns true or false. The context for the function is an object holding the <em>global</em>, <em>current</em> and <em>questions</em> objects.</p>
-<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">cond</span>(<span class="hljs-params"></span>)</span>{
+<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">cond</span><span class="hljs-params">()</span></span>{
     <span class="hljs-keyword">var</span> global = <span class="hljs-keyword">this</span>.global; <span class="hljs-comment">// get the global from the context</span>
     <span class="hljs-keyword">return</span> global.skip;
 }
@@ -521,7 +521,7 @@ If the data property is set as a string, we assume it refers to the element hand
 </ul>
 <h5 id="function-">function:</h5>
 <p>You may also use a custom function to select your element (the function here, fully replaces the inherit object).</p>
-<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">collection</span>)</span>{
+<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(collection)</span></span>{
     <span class="hljs-comment">// The collection holds all the elements within the namespace you are querying.</span>
     <span class="hljs-comment">// Simply return the element you want to inherit.</span>
 }
@@ -570,7 +570,7 @@ In order to create a new seed all you have to do is set the <code>seed</code> pr
 It accepts two argument: the source object on which it is called (the page or question object), and the global object (in which you can find the current object etc.). The source object is also the context for the function.</p>
 <pre><code class="lang-js">{    
     inherit: <span class="hljs-string">'mySet'</span>,
-    customize : <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">source</span>)</span>{
+    customize : <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(source)</span></span>{
         source.questions.push(quest);
     }
 }
