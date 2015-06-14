@@ -160,18 +160,22 @@ define([&#39;managerAPI&#39;], function(Manager){
 
   API.addSequence([
     {
-      mixer:&#39;weightedRandom&#39;, // declare the mixer
-      weights, [0.2, 0.8], // weights by whitch to randomize
+      mixer:&#39;random&#39;, // declare the mixer
       data:[ // a list of tasks to randomize
         {
           type:&#39;message&#39;,
           keys: &#39; &#39;,
-          template: &#39;Task 1 (20% of the time)&#39;
+          template: &#39;Task 1&#39;
         },
         {
           type:&#39;message&#39;,
           keys: &#39; &#39;,
-          template: &#39;Task 2 (80% of the time)&#39;
+          template: &#39;Task 2&#39;
+        },
+        {
+          type:&#39;message&#39;,
+          keys: &#39; &#39;,
+          template: &#39;Task 3&#39;
         }
       ]
     }
@@ -309,6 +313,33 @@ define([&#39;managerAPI&#39;], function(Manager){
 									<a href="../basics/mixerWeightedRandomDocco.html">Weighted Random</a>
 									<a href="../basics/mixerWeightedRandom.js" download="../basics/mixerWeightedRandom.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
 									<a href="../basics/mixerWeightedRandomPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../basics/mixerWrapperDocco.html">Wrapper</a>
+									<a href="../basics/mixerWrapper.js" download="../basics/mixerWrapper.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../basics/mixerWrapperPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../basics/mixerBranchDocco.html">Branch</a>
+									<a href="../basics/mixerBranch.js" download="../basics/mixerBranch.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../basics/mixerBranchPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../basics/mixerMultiBranchDocco.html">Multi Branch</a>
+									<a href="../basics/mixerMultiBranch.js" download="../basics/mixerMultiBranch.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../basics/mixerMultiBranchPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
 								</div>
 							</li>
 						

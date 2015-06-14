@@ -10,18 +10,22 @@ define(['managerAPI'], function(Manager){
 
   API.addSequence([
     {
-      mixer:'weightedRandom', // declare the mixer
-      weights, [0.2, 0.8], // weights by whitch to randomize
+      mixer:'random', // declare the mixer
       data:[ // a list of tasks to randomize
         {
           type:'message',
           keys: ' ',
-          template: 'Task 1 (20% of the time)'
+          template: 'Task 1'
         },
         {
           type:'message',
           keys: ' ',
-          template: 'Task 2 (80% of the time)'
+          template: 'Task 2'
+        },
+        {
+          type:'message',
+          keys: ' ',
+          template: 'Task 3'
         }
       ]
     }

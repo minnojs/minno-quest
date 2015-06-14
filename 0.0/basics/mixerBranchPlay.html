@@ -124,9 +124,9 @@
 		<div id="content" class="bs-docs-header">
 			<div class="container">
 				
-	<h1>Mixer repeat</h1>
+	<h1>Mixer branch</h1>
 	
-		<p>You can play around with mixerRepeat.js right here. All you need to do is change the script and then click the activate button.</p>
+		<p>You can play around with mixerBranch.js right here. All you need to do is change the script and then click the activate button.</p>
 	
 
 			</div>
@@ -148,30 +148,32 @@
 		</div>
 
    		<div id="editor">
-// Repeats the element in `data` `times` times.
-//
-// Please note that the randomizer pre-mixes all the content in data,
-// so that any branching mixers will be branched according to the environment as it is when the mixer is reached.
-// If you want to delay the branching until it is reached, simply wrap it within a `wrapper` mixer.
-
+// Conditionally activate specific sub sequences.
 define([&#39;managerAPI&#39;], function(Manager){
 
   var API = new Manager();
 
+  // Set a global flag that we can test against
+  API.addGlobal({condition:&#39;cond1&#39;});
+
   API.addSequence([
     {
-      mixer:&#39;repeat&#39;, // declare the mixer
-      times: 3, // how many times to repeat these tasks
-      data:[ // a list of tasks to repeat
+      mixer: &#39;branch&#39;,
+      conditions: [
+        {compare: &#39;global.condition&#39;, to: &#39;cond1&#39;}
+      ],
+      data: [
         {
           type:&#39;message&#39;,
           keys: &#39; &#39;,
-          template: &#39;Task 1&#39;
-        },
+          template: &#39;Task 1: will be displayed&#39;
+        }
+      ],
+      elseData: [
         {
           type:&#39;message&#39;,
           keys: &#39; &#39;,
-          template: &#39;Task 2&#39;
+          template: &#39;Task 2: will not be displayed&#39;
         }
       ]
     }

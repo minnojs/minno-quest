@@ -136,6 +136,9 @@
 									{{ example("Random", "../basics/mixerRandom", data.basename) }}
 									{{ example("Repeat", "../basics/mixerRepeat", data.basename) }}
 									{{ example("Weighted Random", "../basics/mixerWeightedRandom", data.basename) }}
+									{{ example("Wrapper", "../basics/mixerWrapper", data.basename) }}
+									{{ example("Branch", "../basics/mixerBranch", data.basename) }}
+									{{ example("Multi Branch", "../basics/mixerMultiBranch", data.basename) }}
 								</ul>
 							</li>
 
