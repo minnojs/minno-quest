@@ -131,6 +131,21 @@
 							{{ navitem("API", "../basics/API", data.basename) }}
 
 							<li>
+								<a href="javascript:void(0)">Inheritance</a>
+								<ul class="nav">
+									{{ example("Abstraction", "../basics/inheritanceAbstraction", data.basename) }}
+									{{ example("Random", "../basics/inheritanceRandom", data.basename) }}
+									{{ example("Exclusive Random", "../basics/inheritanceExRandom", data.basename) }}
+									{{ example("Sequential", "../basics/inheritanceSequential", data.basename) }}
+									{{ example("By Data", "../basics/inheritanceByData", data.basename) }}
+									{{ example("Custom", "../basics/inheritanceCustom", data.basename) }}
+
+									{{ example("Repeat", "../basics/inheritanceRepeat", data.basename) }}
+									{{ example("Seed", "../basics/inheritanceSeed", data.basename) }}
+								</ul>
+							</li>
+
+							<li>
 								<a href="javascript:void(0)">Mixers</a>
 								<ul class="nav">
 									{{ example("Random", "../basics/mixerRandom", data.basename) }}
@@ -141,6 +156,8 @@
 									{{ example("Multi Branch", "../basics/mixerMultiBranch", data.basename) }}
 								</ul>
 							</li>
+
+
 
 
 						{% elseif data.typeName == 'quest' %}
