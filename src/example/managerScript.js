@@ -1,6 +1,7 @@
 define(['managerAPI'], function(Manager){
 
 	var API = new Manager();
+	API.addGlobal({cond:'myCond'})
 
 	API.addTasksSet('instructions', {type:'message', keys:' '});
 
@@ -21,6 +22,14 @@ define(['managerAPI'], function(Manager){
 	API.addSettings('skip', true);
 
 	API.addSequence([
+		{
+			mixer:'branch',
+			conditions: [{compare:'global.cond', to: 'myConds'}],
+			data: [
+				{inherit:'instructions', template: 'iat.html <%= global.cond %>'}
+			]
+		},
+
 		{inherit:'instructions', templateUrl: 'iat.html'},
 		// {
 		// 	type: 'pip',

@@ -143,6 +143,9 @@ define(['require','./managerModule'], function(require){
 						return jasmine.createSpyObj('sequence',['next','prev','current']);
 					});
 				});
+
+				$provide.constant('mixerDefaultContext', {});
+				$provide.constant('templateDefaultContext', {});
 			}));
 
 			beforeEach(inject(function(managerSequence){

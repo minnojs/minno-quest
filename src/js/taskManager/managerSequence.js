@@ -1,8 +1,8 @@
 define(function(require){
 	var _ = require('underscore');
 
-	sequenceProvider.$inject = ['Database'];
-	function sequenceProvider(Database){
+	sequenceProvider.$inject = ['Database','$rootScope','mixerDefaultContext','templateDefaultContext'];
+	function sequenceProvider(Database, $rootScope, mixerDefaultContext, templateDefaultContext){
 
 		/**
 		 * The sequence for the manager (essentialy the model).
@@ -10,7 +10,7 @@ define(function(require){
 		 * @return {Object}
 		 */
 		function sequence(script){
-			var db;
+			var db, context;
 			// make sure this works without a new statement
 			if (!(this instanceof sequence)){
 				// jshint newcap:false
@@ -22,6 +22,11 @@ define(function(require){
 			db = this.db = new Database();
 			db.createColl('tasks');
 			db.add('tasks', script.tasksSets || []);
+
+			// setup default contexts
+			context = {global: $rootScope.global};
+			_.extend(mixerDefaultContext, context);
+			_.extend(templateDefaultContext, context);
 
 			// setup sequence
 			this.sequence = db.sequence('tasks', script.sequence);
