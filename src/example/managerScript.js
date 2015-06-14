@@ -1,7 +1,7 @@
 define(['managerAPI'], function(Manager){
 
 	var API = new Manager();
-	API.addGlobal({cond:'myCond'})
+	API.addGlobal({cond:'myCond'});
 
 	API.addTasksSet('instructions', {type:'message', keys:' '});
 

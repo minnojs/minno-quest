@@ -75,7 +75,7 @@ header 			| The header text for the message (defaults to "Timer Done").
 body 			| The body of the message.
 button 			| The close button (defaults to "close").
 
-All these strings may use templates, and have access to the following objects: `global`, `current`, `pageData`, `pageMeta`.
+All these strings may use templates, and have access to the following objects: `global`, `current`, `pagesData`, `pagesMeta`.
 
 ### Questions
 
