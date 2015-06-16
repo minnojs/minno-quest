@@ -159,7 +159,7 @@
 							</li>
 
 							<li>
-								<a href="javascript:void(0)">Templates</a>
+								<a href="javascript:void(0)">Variables & Templates</a>
 								<ul class="nav">
 									{{ example("Global", "../basics/templateGlobal", data.basename) }}
 									{{ example("Data", "../basics/templateData", data.basename) }}

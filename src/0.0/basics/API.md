@@ -15,7 +15,7 @@ description: Detailed documentation for the common API methods.
     - [getGlobal()](#getglobal-)
     - [addCurrent(obj)](#addcurrent-obj-)
     - [getCurrent()](#getcurrent-)
-- [Convinience methods](#convinience-methods)
+- [Convenience methods](#convenience-methods)
     - [post(url, object)](#post-url-object-)
     - [shuffle(collection)](#shuffle-collection-)
 
@@ -85,6 +85,16 @@ Argument    | Type              | Description
 ----------- | ----              | -----------
 setsObject  | String            | An object where each property name is a setName and the content is the set content.
 
+Task        | setName     | Function Name
+----------- | ----------- | ------------
+piManager   | tasks       | addTasksSet
+piQuest     | pages       | addPagesSet
+            | questions   | addQuestionsSet
+piPlayer    | trial       | addTrialSet
+            | stimulus    | addStimulusSet
+            | media       | addMediaSet
+
+
 ##### returns:
 'undefined'
 
@@ -95,7 +105,7 @@ API.addTrialSet('set1', trial1);
 API.addTrialSet('set2', [trial2, trial3]);
 ```
 
-Second notation. Does the same thing as the first:
+Second notation. Does the same thing as the first pair:
 ```js
 API.addTrialSet({
     set1: [trial1],
@@ -155,7 +165,7 @@ var current = API.getCurrent();
 current.myFlag = true;
 ```
 
-### Convinience methods
+### Convenience methods
 
 #### post(url, object)
 Posts JSONified data to the server. 

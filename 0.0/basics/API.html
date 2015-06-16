@@ -112,7 +112,7 @@
 <li><a href="#getcurrent-">getCurrent()</a></li>
 </ul>
 </li>
-<li><a href="#convinience-methods">Convinience methods</a><ul>
+<li><a href="#convenience-methods">Convenience methods</a><ul>
 <li><a href="#post-url-object-">post(url, object)</a></li>
 <li><a href="#shuffle-collection-">shuffle(collection)</a></li>
 </ul>
@@ -235,6 +235,47 @@
 </tr>
 </tbody>
 </table>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>setName</th>
+<th>Function Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>piManager</td>
+<td>tasks</td>
+<td>addTasksSet</td>
+</tr>
+<tr>
+<td>piQuest</td>
+<td>pages</td>
+<td>addPagesSet</td>
+</tr>
+<tr>
+<td></td>
+<td>questions</td>
+<td>addQuestionsSet</td>
+</tr>
+<tr>
+<td>piPlayer</td>
+<td>trial</td>
+<td>addTrialSet</td>
+</tr>
+<tr>
+<td></td>
+<td>stimulus</td>
+<td>addStimulusSet</td>
+</tr>
+<tr>
+<td></td>
+<td>media</td>
+<td>addMediaSet</td>
+</tr>
+</tbody>
+</table>
 <h5 id="returns-">returns:</h5>
 <p>‘undefined’</p>
 <h5 id="examples-">examples:</h5>
@@ -242,7 +283,7 @@
 <pre><code class="lang-js">API.addTrialSet(<span class="hljs-string">'set1'</span>, trial1);
 API.addTrialSet(<span class="hljs-string">'set2'</span>, [trial2, trial3]);
 </code></pre>
-<p>Second notation. Does the same thing as the first:</p>
+<p>Second notation. Does the same thing as the first pair:</p>
 <pre><code class="lang-js">API.addTrialSet({
     set1: [trial1],
     set2: [trial2,trial3]
@@ -307,7 +348,7 @@ global.myFlag = <span class="hljs-literal">true</span>;
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> current = API.getCurrent();
 current.myFlag = <span class="hljs-literal">true</span>;
 </code></pre>
-<h3 id="convinience-methods">Convinience methods</h3>
+<h3 id="convenience-methods">Convenience methods</h3>
 <h4 id="post-url-object-">post(url, object)</h4>
 <p>Posts JSONified data to the server. </p>
 <table>
@@ -563,7 +604,7 @@ current.myFlag = <span class="hljs-literal">true</span>;
 							</li>
 
 							<li>
-								<a href="javascript:void(0)">Templates</a>
+								<a href="javascript:void(0)">Variables & Templates</a>
 								<ul class="nav">
 									
 							<li class="">

@@ -106,8 +106,8 @@
 <li><a href="#aggregation">Aggregation</a></li>
 </ul>
 </li>
-<li><a href="#variables">Variables</a></li>
 <li><a href="#templates">Templates</a></li>
+<li><a href="#variables">Variables</a></li>
 <li><a href="#inheritance">Inheritance</a><ul>
 <li><a href="#sets">Sets</a></li>
 <li><a href="#inheriting">Inheriting</a></li>
@@ -121,20 +121,20 @@
 </ul>
 <h3 id="overview">Overview</h3>
 <p>All PI tasks use the same framework to manage their elements. Its purpose is to allow dynamic creation and management of your elements. It has three critical components: The sequence mixer, inheritance and templating.</p>
-<p>Each pi task is composed of a series of elements sequentially activated and presented to the users (these are trials for piPlayer, pages for piQuest and tasks for piManager). The sequence mixer is responsible for the order of the elements presented to the users, it is capable of randomization as well as various other manipulations on the structure of the sequence.</p>
-<p>Each element may be based upon other elements. This allows us to create simpler scripts as well as add a level of randomization to our tasks. In order to base an element on other elements we use the inheritance system.</p>
-<p>All tasks use a system of global as well as local variables that can be used to customize elements (as well as some other things). You can put the variables at your service using templates that allow you to have your settings dynamically depend on the environmental variables.</p>
+<p>Each PI task is composed of a series of elements sequentially activated and presented to the users (these are trials for piPlayer, pages for piQuest and tasks for piManager). The sequence <a href="#mixer"><strong>mixer</strong></a> is responsible for the order of the elements presented to the users, it is capable of randomization as well as various other manipulations on the structure of the sequence.</p>
+<p>Each element may be based upon other elements. This allows us to create simpler scripts as well as add a level of randomization to our tasks. In order to base an element on other elements we use the <a href="#inheritance">inheritance</a> system.</p>
+<p>All tasks use a system of global as well as local variables that can be used to customize elements (as well as some other things). You can put the <a href="#variables">variables</a> at your service using <a href="#templates">templates</a> that allow you to have your settings dynamically depend on the environmental variables.</p>
 <p>We will start by reviewing the sequence and mixers. And then get into inheritance, variables and templates.</p>
 <h3 id="mixer">Mixer</h3>
-<p>The mixer is responsible for managing lists/sequences (arrays) within the pi tasks, it is capable of repeating, randomizing and even changing the list according to <a href="#variables">environmental variables</a>. You may use it within the sequence or within many of the lists within pi tasks (such as piQuest questions arrays).</p>
-<p>The mixer allows wrapping a sub list in an object that allows you to manipulate the way in which it appears. You may insert such an object at any place within a list and it will be replaced by the appropriate objects.</p>
+<p>The mixer is responsible for managing sequences of elements within the PI tasks, it is capable of repeating, randomizing and even changing the list according to <a href="#variables">environmental variables</a>. You may use it within the sequence or within some of the lists within pi tasks (such as piQuest questions arrays).</p>
+<p>The mixer allows wrapping a sub sequence in an object that allows you to manipulate the way in which it appears. You may insert such an object at any place within a sequence and it will be replaced by the appropriate objects.</p>
 <p>The basic structure of a mixer object is:</p>
 <pre><code class="lang-js">{
-    mixer: <span class="hljs-string">'functionType'</span>,
-    data: [obj1, obj2]
+    mixer: <span class="hljs-string">'mixerType'</span>, <span class="hljs-comment">// let the sequencer know that this is a mixer</span>
+    data: [obj1, obj2] <span class="hljs-comment">// define the sub-sequence to be mixed</span>
 }
 </code></pre>
-<p>The <code>mixer</code> property defines the mixer type. It tells the mixer what to do with the list. The <code>data</code> property defines the list; an array of elements (either plain objects or mixer objects).</p>
+<p>The <code>mixer</code> property defines the mixer type. It tells the mixer what to do with the sub-sequence. The <code>data</code> property defines the sub-sequence; an array of elements (either plain objects or mixer objects themselves).</p>
 <p>A sequence can look something like this:</p>
 <pre><code class="lang-js">[
     <span class="hljs-comment">// The first obj to present.</span>
@@ -358,8 +358,14 @@ Select the elements in <code>data</code> if all the conditions in the <code>cond
 <span class="hljs-comment">// (cond1 &amp;&amp; cond2) || cond2</span>
 <span class="hljs-keyword">var</span> conds = [{or:[{and:[cond1,cond2]},cond3]}]
 </code></pre>
+<h3 id="templates">Templates</h3>
+<p>One of the ways to create dynamic questionnaires is using templates. Templates are a format that allows you to dynamically generate settings for your questions. You can replace any non-object setting from within your elements with a template, and it will be rendered according to the <a href="#variables">environmental variables</a> (The exception to this rule is the <code>inherit</code> setting that cannot use templates).</p>
+<p>A template is a string that has a section of the form <code>&lt;%= %&gt;</code> in it. Within these brackets you can write any Javascript that you like and it will be evaluated and printed out. The player uses <a href="http://lodash.com/docs#template">lodash templates</a> internally, you can look them up to see all the possible uses.</p>
+<p>The main use of templates is probably accessing local and global variables. For instance, in order to print the global variable “name”, you could create a template that looks like this: <code>My name is &lt;%= global.name%&gt;</code>.</p>
+<p>Templates allow access only to a confined number of variables; These vary a bit between different tasks, but you can expect the templates to have access to the <code>global</code> and <code>current</code> objects. Element templates also have access to their own data property as {namespace}Data (so that trials will have a <code>trialData</code> object, and stimuli a <code>mediaData</code> property). Some objects have access to additional properties, you can find them in their respective documentation.</p>
 <h3 id="variables">Variables</h3>
 <p>Sometimes it is not enough to hard code behaviors into your tasks, sometimes you want behavior to depend on a previous response, or change your texts according to randomization. In order to support these behaviors you can use variables.</p>
+<h4 id="environmental-variables">Environmental Variables</h4>
 <p>The <code>global</code> variable is the context of everything that happens within the task manager. It is an object that holds a property for each task that is run. 
 In addition, you as a user may extend it manually using the <code>API.addGlobal</code> or <code>API.addCurrent</code> functions. For advanced uses you can also access the global object by changing the <code>window.piGlobal</code> object.</p>
 <pre><code class="lang-js">API.addGlobal({
@@ -375,16 +381,78 @@ The task object is there for you to change. You can extend it to your hearts con
 })
 </code></pre>
 <p>Tasks add any data that they log into their task object. For instance, piQuest maintains a <code>current.questions</code> object that holds the responses for all questions.</p>
-<h3 id="templates">Templates</h3>
-<p>One of the ways to create dynamic questionnaires is using templates. Templates are a format that allows you to dynamically generate settings for your questions. You can replace any non-object setting from within your elements with a template, and it will be rendered according to the <a href="#variables">environmental variables</a> (The exception to this rule is the <code>inherit</code> setting that cannot use templates).</p>
-<p>A template is a string that has a section of the form <code>&lt;%= %&gt;</code> in it. Within these brackets you can write any Javascript that you like and it will be evaluated and printed out. The player uses <a href="http://lodash.com/docs#template">lodash templates</a> internally, you can look them up to see all the possible uses.</p>
-<p>The main use of templates is probably accessing local and global variables. For instance, in order to print the global variable “name”, you could create a template that looks like this: <code>My name is &lt;%= global.name%&gt;</code>.</p>
-<p>Templates allow access only to a confined number of variables; These vary a bit between different tasks, but you can expect the templates to have access to the <code>global</code> and <code>current</code> objects. Element templates also have access to their own data property as {namespace}Data (so that trials will have a <code>trialData</code> object, and stimuli a <code>mediaData</code> property). Some objects have access to additional properties, you can find them in their respective documentation.</p>
+<h4 id="local-variables">Local Variables</h4>
+<p>In addition to these environmental variables, you have access to two types of local variables; <em>Data</em> and <em>Meta</em> . They are each available within the mixer/templates with specific names tied to their type. The naming convention for these variables is <code>&lt;elementName&gt;Data</code> and <code>&lt;elementName&gt;Meta</code>. For example, for tasks they appear as <code>tasksData</code> and <code>tasksMeta</code>. </p>
+<p>The elementNames for the various tasks are as follows:</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>elementName</th>
+<th>Object names</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>piManager</td>
+<td>tasks</td>
+<td>tasksData, tasksMeta</td>
+</tr>
+<tr>
+<td>piQuest</td>
+<td>pages</td>
+<td>pagesData, pagesMeta</td>
+</tr>
+<tr>
+<td></td>
+<td>questions</td>
+<td>questionsData, questionsMeta</td>
+</tr>
+<tr>
+<td>piPlayer</td>
+<td>trial</td>
+<td>trialData, trialMeta</td>
+</tr>
+<tr>
+<td></td>
+<td>stimulus</td>
+<td>stimulusData, stimulusMeta</td>
+</tr>
+<tr>
+<td></td>
+<td>media</td>
+<td>mediaData, mediaMeta</td>
+</tr>
+</tbody>
+</table>
+<p>If you set the data property of your elements, then they become available as the <code>&lt;elementName&gt;Data</code> objects.</p>
+<p>Each element within the sequence gets a Meta object that holds automatically generated information regarding the location of the element within the sequence. It has two properties:</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description  </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>number</td>
+<td>The serial number for this element within the sequence (i.e. 3 if this is the third element to be presented).</td>
+</tr>
+<tr>
+<td>outOf</td>
+<td>An attempt to estimate how many elements are in the sequence overall. This number cannot be fully trusted as the number of elements may be dynamically generated and depend on various variables not yet determined.</td>
+</tr>
+</tbody>
+</table>
 <h3 id="inheritance">Inheritance</h3>
+<p>The inheritance system allows you to compose task elements based on previously defined prototypes.</p>
+<p>This behavior is often used for the abstraction of tasks; having the behavior of multiple elements defined at a single location. The other typical use, is for different types of randomizations.</p>
+<p>We will first cover the creation of prototype sets from which we can inherit. Then we will go over the actual inheritance behavior.</p>
 <h4 id="sets">Sets</h4>
 <p>Each element in the PI tasks can inherit its attributes from an element set.</p>
-<p>The element sets are defined using the <code>add{namespace}Set</code> functions in the API (for instance <code>addTrialSets</code> in piPlayer, <code>addQuestionsSets</code> in piQuest).</p>
-<p>Each set holds an array of elements that can later be referred to as a base for new elements. </p>
+<p>The element sets are defined using the <code>addSet</code> functions defined in the <a href="API.html">API</a>. Each element type has its own function (for example, <code>addQuestionsSets</code> for piQuest).</p>
+<p>Each set holds an array of elements that can later be referred to as prototypes for new elements.</p>
 <pre><code class="lang-js">API.addQuestionsSet(<span class="hljs-string">'likert'</span>, [
     {type: <span class="hljs-string">'selectOne'</span>, numericValues: <span class="hljs-literal">true</span>}
 ]);
@@ -393,9 +461,9 @@ API.addQuestionsSet(<span class="hljs-string">'sizeLikert'</span>, [
     {inherit: <span class="hljs-string">'likert'</span>, answers: [<span class="hljs-string">'Big'</span>, <span class="hljs-string">'Medium'</span>, <span class="hljs-string">'Small'</span>]}
 ]);
 </code></pre>
-<p>Note that the name that you give the set (in the example: likert or sizeLikert) is the handle that you later use to refer to it.</p>
+<p>Note that the name that you give the set (in the example: <em>likert</em> or <em>sizeLikert</em>) is the handle that you will later use to refer to it.</p>
 <h4 id="inheriting">Inheriting</h4>
-<p>Inheritance means that we use one element as the prototype for another.</p>
+<p>Inheritance means that we use one element as the prototype, or parent, for another element.</p>
 <p>When inheriting an element, the child element starts out with all of the parent’s attributes and extends them with its own. This means that we use the parent element as a base and then copy in any properties that the child has, overwriting any existing properties.
 One exception to this rule is the <code>data</code> objects which we attempt to merge (giving precedence to the child).</p>
 <p>Follow this pseudo code:</p>
@@ -422,12 +490,12 @@ One exception to this rule is the <code>data</code> objects which we attempt to 
     <span class="hljs-comment">// the child kept its own name but inherited the family name</span>
     data: {name: <span class="hljs-string">'jack'</span>, family:<span class="hljs-string">'doe'</span>}
     <span class="hljs-comment">// the questions array was completely overwritten</span>
-    stimuli: [                          
+    questions: [                          
         quest3
     ]
 }
 </code></pre>
-<p>In order for an element to inherit another element it must use the <code>inherit</code> property. <code>inherit</code> takes an object or a string, with instructions for which element to inherit.</p>
+<p>In order for an element to inherit another element it must use the <code>inherit</code> property. <code>inherit</code> takes an object or a string, with instructions for which element to inherit. If a string is used, the sequencer treats it as if it was a set name, and picks a random element from within that set.</p>
 <pre><code class="lang-js">{
     inherit: {set:<span class="hljs-string">'mySetName'</span>, type:<span class="hljs-string">'random'</span>}
 }
@@ -442,15 +510,15 @@ One exception to this rule is the <code>data</code> objects which we attempt to 
 <tbody>
 <tr>
 <td>set</td>
-<td>The set from which we want to inherit.</td>
+<td>The name of the set from which we want to inherit.</td>
 </tr>
 <tr>
 <td>type</td>
-<td>The inheritance type - essentially how to pick from within the set (random by default).</td>
+<td>The inheritance type - essentially how to pick from within the set (random by default, see <a href="#type">docs</a>).</td>
 </tr>
 <tr>
 <td>merge</td>
-<td>An array of property names that we want to merge instead of overwrite.</td>
+<td>An array of property names that we want to merge instead of overwrite (see <a href="#merge">docs</a>).</td>
 </tr>
 <tr>
 <td>seed</td>
@@ -459,6 +527,10 @@ One exception to this rule is the <code>data</code> objects which we attempt to 
 <tr>
 <td>repeat</td>
 <td>Repeat the result of the last randomization (see <a href="#repeat">docs</a>).</td>
+</tr>
+<tr>
+<td>customize</td>
+<td>A function that can customize the element before it is used. This is an option only for advanced users, use this only if you really know what you are doing (seed <a href="#customization">docs</a>)</td>
 </tr>
 </tbody>
 </table>
@@ -526,6 +598,23 @@ If the data property is set as a string, we assume it refers to the element hand
     <span class="hljs-comment">// Simply return the element you want to inherit.</span>
 }
 </code></pre>
+<h4 id="seed">Seed</h4>
+<p>The inheritance systems uses seeds to keep track of consecutive calls to the different types of inheritance. If you want to have parallel groups of inheritance to the same set, you can use seeds.
+Each inheritance query automatically gets assigned to a “seed” that is used to track its progress. For example, the seed is used to keep track of the current element in the <code>sequential</code> type inheritance.
+Most of the time, the seed is transparent to the user, but sometimes it becomes useful to have manual control over the inheritance seed. For instance, if you want to reset an <code>exRandom</code> inheritance - simply use <code>exRandom</code> with a new seed. Same goes if you want to keep two instances of a <code>sequential</code> inheritance.</p>
+<p>In the following example, both elements inherit exRandomly from the trials set. But the second element restarts the randomization.</p>
+<pre><code class="lang-js">[
+    {
+        inherit: {set:<span class="hljs-string">'trials'</span>, type:<span class="hljs-string">'exRandom'</span>,seed:<span class="hljs-string">'block1'</span>}
+    },
+    {
+        inherit: {set:<span class="hljs-string">'trials'</span>, type:<span class="hljs-string">'exRandom'</span>,seed:<span class="hljs-string">'block2'</span>}
+    }
+]
+</code></pre>
+<p>Seeds are not confined to a specific set, and not even to a specific element type. Maybe a more interesting use, is to use the same seed across two different sets (you can see a real world application for this under the <a href="#repeat">repeat</a> option).
+It is important to take note that if you create custom seeds, it is your responsibility that they query sets of the same length. If you try to inherit two sets with different lengths the sequencer will throw an error.
+In order to create a new seed all you have to do is set the <code>seed</code> property with the new seeds name (String).</p>
 <h4 id="repeat">Repeat</h4>
 <p>Sometimes we have need to repeat a previous choice done by the inheritance picker (especially in cases of randomization). In order to do this, all you have to do is set the <code>repeat</code> property to true.</p>
 <p>For instance, the following sequence will display a random element from the trials set twice.</p>
@@ -539,22 +628,7 @@ If the data property is set as a string, we assume it refers to the element hand
 ]
 </code></pre>
 <p>The <code>repeat</code> property can used within any type of randomization. We’ve seen a simple use, but its true power comes when combined with <a href="#seeds">seeds</a>.</p>
-<h4 id="seed">Seed</h4>
-<p>Each inheritance query automatically gets assigned to a “seed”. That is used to track its progress. For instance, it is used to keep track of the current element in the <code>sequential</code> type inheritance.
-Most of the time, the seed is transparent to the user, but sometimes it becomes useful to manually control the inheritance seed. For instance, if you want to reset an <code>exRandom</code> inheritance. Or if you want to keep two instances of a <code>sequential</code> inheritance.
-It is important to take note that if you create custom seeds, it is your responsibility that they query sets of the same length. If you try to inherit two sets with different lengths the sequencer will throw an error.
-In order to create a new seed all you have to do is set the <code>seed</code> property.</p>
-<p>In the following example, both elements inherit exRandomly from the trials set. But the second element restarts the randomization.</p>
-<pre><code class="lang-js">[
-    {
-        inherit: {set:<span class="hljs-string">'trials'</span>, type:<span class="hljs-string">'exRandom'</span>,seed:<span class="hljs-string">'block1'</span>}
-    },
-    {
-        inherit: {set:<span class="hljs-string">'trials'</span>, type:<span class="hljs-string">'exRandom'</span>,seed:<span class="hljs-string">'block2'</span>}
-    }
-]
-</code></pre>
-<p>Seeds are not confined to a specific set, and not even to a specific element type. The following example uses the same exRandom seed to pick a both a trial and the two stimuli associated with it (the n<sup>th</sup> element in trials is always associated with the n<sup>th</sup> elements of stimuli-1 and stimuli-2).</p>
+<p>The following example uses the same exRandom seed to pick a both a trial and the two stimuli associated with it (the n<sup>th</sup> element in trials is always associated with the n<sup>th</sup> elements of stimuli-1 and stimuli-2).</p>
 <pre><code class="lang-js">[
     {
         inherit: {set:<span class="hljs-string">'trials'</span>, type:<span class="hljs-string">'exRandom'</span>, seed:<span class="hljs-string">'mySeed'</span>}
@@ -567,11 +641,12 @@ In order to create a new seed all you have to do is set the <code>seed</code> pr
 </code></pre>
 <h4 id="customization">Customization</h4>
 <p>Each element can also define a <code>customize</code> method, this method is called once the element is inherited but before it is activated.
-It accepts two argument: the source object on which it is called (the page or question object), and the global object (in which you can find the current object etc.). The source object is also the context for the function.</p>
+It accepts two argument: the source element on which it is called, and the global object (in which you can find the current object etc.). The source element is also the context for the function.
+You should make any changes that you want on the source element itself.</p>
 <pre><code class="lang-js">{    
     inherit: <span class="hljs-string">'mySet'</span>,
-    customize : <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(source)</span></span>{
-        source.questions.push(quest);
+    customize : <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(element, global)</span></span>{
+        element.questions.push(quest);
     }
 }
 </code></pre>
@@ -775,7 +850,7 @@ It accepts two argument: the source object on which it is called (the page or qu
 							</li>
 
 							<li>
-								<a href="javascript:void(0)">Templates</a>
+								<a href="javascript:void(0)">Variables & Templates</a>
 								<ul class="nav">
 									
 							<li class="">

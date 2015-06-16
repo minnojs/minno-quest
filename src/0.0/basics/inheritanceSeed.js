@@ -1,5 +1,5 @@
 // The inheritance systems uses seeds to keep track of consecutive calls to the different types of inheritance.
-// If you want to have paralel groups of inhertiance to the same set, you can use seeds.
+// If you want to have parallel groups of inheritance to the same set, you can use seeds.
 // This examples shows how to reset the `sequential` type, it works for `exRandom` as well...
 // The options here are pretty endless, you should look into the documentation in order to get a better understanding of how this feature works.
 define(['managerAPI'], function(Manager){
