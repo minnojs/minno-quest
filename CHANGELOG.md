@@ -1,3 +1,17 @@
+<a name="0.0.50"></a>
+### 0.0.50 (2015-07-05)
+
+
+#### Bug Fixes
+
+* **sequencer:** support nested templating. ([c985e9e9](https://github.com/ProjectImplicit/PIquest/commit/c985e9e9dbf3971f1e080fba38632255e891164d), closes [#116](https://github.com/ProjectImplicit/PIquest/issues/116))
+
+
+#### Features
+
+* **database:** support local addGlobal && addCurrent ([05324dc4](https://github.com/ProjectImplicit/PIquest/commit/05324dc4256766fe37e1092d132058733fb1203c))
+
+
 <a name="0.0.49"></a>
 ### 0.0.49 (2015-06-14)
 
