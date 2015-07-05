@@ -255,7 +255,7 @@ Sometimes it is not enough to hard code behaviors into your tasks, sometimes you
 
 #### Environmental Variables
 The `global` variable is the context of everything that happens within the task manager. It is an object that holds a property for each task that is run. 
-In addition, you as a user may extend it manually using the `API.addGlobal` or `API.addCurrent` functions. For advanced uses you can also access the global object by changing the `window.piGlobal` object.
+In addition, you as a user may extend it manually using the `API.addGlobal` or `API.addCurrent` functions. Any Task element can have the additional property `addGlobal` or `addCurrent` that get added to the global/current whenever that element is activated. This options is useful in various cases of branching.For advanced uses you can also access the global object directly by changing the `window.piGlobal` object.
 
 ```js
 API.addGlobal({

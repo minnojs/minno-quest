@@ -367,7 +367,7 @@ Select the elements in <code>data</code> if all the conditions in the <code>cond
 <p>Sometimes it is not enough to hard code behaviors into your tasks, sometimes you want behavior to depend on a previous response, or change your texts according to randomization. In order to support these behaviors you can use variables.</p>
 <h4 id="environmental-variables">Environmental Variables</h4>
 <p>The <code>global</code> variable is the context of everything that happens within the task manager. It is an object that holds a property for each task that is run. 
-In addition, you as a user may extend it manually using the <code>API.addGlobal</code> or <code>API.addCurrent</code> functions. For advanced uses you can also access the global object by changing the <code>window.piGlobal</code> object.</p>
+In addition, you as a user may extend it manually using the <code>API.addGlobal</code> or <code>API.addCurrent</code> functions. Any Task element can have the additional property <code>addGlobal</code> or <code>addCurrent</code> that get added to the global/current whenever that element is activated. This options is useful in various cases of branching.For advanced uses you can also access the global object directly by changing the <code>window.piGlobal</code> object.</p>
 <pre><code class="lang-js">API.addGlobal({
     value: <span class="hljs-number">123</span>,
     variable: [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>]
