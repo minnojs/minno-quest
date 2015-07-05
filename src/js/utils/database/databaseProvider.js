@@ -42,10 +42,13 @@ define(function(require){
 				result = query.$templated;
 
 				// set flags
-				if (result && result.addCurrent){
-
+				if (context.global && result.addGlobal){
+					_.extend(context.global, result.addGlobal);
 				}
 
+				if (context.current && result.addCurrent){
+					_.extend(context.current, result.addCurrent);
+				}
 
 				return query.$templated;
 			},

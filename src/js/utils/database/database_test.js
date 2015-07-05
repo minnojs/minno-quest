@@ -82,6 +82,19 @@ define(['underscore', './databaseModule'],function(_){
 				expect(context.testMeta).toBe(456);
 				expect(context.testData).toBe(123);
 			});
+
+			// ************** addGlobal, addCurrent **************
+			it('should add to global (addGlobal)', function(){
+				var context = {global:{}};
+				db.inflate('test', {$inflated:{addGlobal:{test:123}}}, context);
+				expect(context.global.test).toBe(123);
+			});
+
+			it('should add to current (addCurrent)', function(){
+				var context = {current:{}};
+				db.inflate('test', {$inflated:{addCurrent:{test:123}}}, context);
+				expect(context.current.test).toBe(123);
+			});
 		});
 
 		describe(': sequence', function(){
