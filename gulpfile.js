@@ -124,9 +124,13 @@ gulp.task('build:js', function(){
 
 gulp.task('build:css', function(){
 	var sass = require('gulp-sass');
-	return gulp.src('src/**/*.scss')
-		.pipe(sass({errLogToConsole: true}))
-		.pipe(gulp.dest('.'));
+	var es = require('event-stream');
+	var sassStream = gulp.src('src/**/*.scss')
+		.pipe(sass({errLogToConsole: true}));
+
+	var cssStream = gulp.src('src/**/*.css');
+
+	return es.merge(sassStream, cssStream).pipe(gulp.dest('.'));
 });
 
 gulp.task('build',  ['build:js', 'build:md', 'build:css', 'build:swig','build:html']);
