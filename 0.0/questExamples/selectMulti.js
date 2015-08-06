@@ -1,4 +1,4 @@
-// ### Select One question
+// ### Select Multi question
 // An example for a multi select question.
 // It allows you to pick one or more answers to the question.
 // In this case we use the multiButtons style in order to have the buttons line up horizontally.
