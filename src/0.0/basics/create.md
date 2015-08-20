@@ -53,22 +53,22 @@ API.addSequence([
     // page 1
     {
         header: 'header 1',
-        questions: [{stem:'What is you\'r first name?'}]
+        questions: [{stem:'What is your first name?'}]
     },
     // page 2
     {
         header: 'header 2',
-        questions: [{stem:'What is you\'r last name?'}]
+        questions: [{stem:'What is your last name?'}]
     }
 ]);
 ```
 
 This will tell piQuest to first activate page 1 and then activate page 2. The sequence works in a similar way for all of our tasks, just add in objects and they'll be activated one after another.
 
-Of course a simple sequential sequence is rarely what you'll need. All sequences support some powerful tools for enriching the way your sequence works. These are described in detail in the [sequencer section](sequencer.html), here we'll only touch on some basic randomization (using the mixer) and abstraction (using inheritance). After you get the basic idea you should really go there and get to know the sequencer better.
+Of course a simple sequential sequence is rarely what you'll need. All sequences support some powerful tools for enriching the way your sequence works. These are described in detail in the [sequencer section](sequencer.html), here we'll only touch on some basic randomization (using the mixer) and abstraction (using inheritance). 
 
 ### Basic Randomization
-All sequences support a special type of object called a mixer which holds several regular objects and affect the way they are activated. It can reorder them, chose among them and even skip them. Here and now, we'll only see the mixer used for randomization.
+All sequences support a special type of object called a mixer. A mixer holds several regular objects and control the way they are activated. A mixer can reorder the objects, chose among them and even skip them. To illustrate how a mixer works, let's learn more about the mixer used for randomization.
 
 The randomization mixer has the following structure:
 ```js
@@ -78,7 +78,7 @@ The randomization mixer has the following structure:
 }
 ```
 
-So if we want to take randomize the order in which our pages got activated we'd write something like this:
+To randomize the order of the presentation of the pages from our previous example, we'd write something like this:
 
 ```js
 API.addSequence([
@@ -100,14 +100,14 @@ API.addSequence([
 ]); 
 ```
 
-Instead of always presenting page 2 after page 1, the sequencer will now randomize the order in which they are presented and present page 2 first half of the time. The full documentation for the mixer is [right here](sequencer.html#mixer).
+Instead of always presenting page 2 after page 1, the sequencer will now randomize their order. Page 2 will appear first half of the time. The full documentation for the mixer is [right here](sequencer.html#mixer).
 
 ### Basic abstraction
-Many times we want to create several objects with mostly similar properties. For instance we may want to create a set of questions that have many common properties but differ only in some minor way. In this case we will see how to create a template for likert type questions that can be used across pages.
+Many times we want to create several objects with mostly similar properties. For instance we may want to create a set of questions that have the same response options, and only change the text used for each question. 
 
-The tool we offer to deal with that is inheritance. Each object that we use can inherit some of its properties from some pre-registered objects. We will first see how to register objects, then how to inherit from him.
+In order to share properties among several objects, we use the concept of inheritance. Each object that we use can inherit some of its properties from an object we created previously. 
 
-Each API has a function that allows registering sets of objects that can later be inherited. There is a separate function for each type of object. We will first register a likert type question set:
+Each API has a function that allows defining sets of objects that can later be inherited. There is a separate function for each type of object. Let's define a question set with specific response options:
 
 ```js
 API.addQuestionsSet('likert', [
@@ -124,9 +124,9 @@ API.addQuestionsSet('likert', [
 ]);
 ```
 
-The first argument for the function is the name of the set to register, in this case `'likert'`. The second argument is an array of elements to register into the set.
+The first argument for the function is the name of the set we define, in this case `'likert'`. The second argument is an object with all the elements (properties) we want to define for this set.
 
-Next, lets see how we can use the registered objects from within the sequence. Each objects has a special property `inherit` that activates the inheritance system. In our case setting `inherit` to 'likert' will tell the object to inherit from the likert set. Inheritance means that that the child object inherits all the properties of the parent object.
+Next, let's see how we can use the pre-defined set from within the sequence. Each object has a special property `inherit` that indicates that the object inherits properties from a set. In our case setting `inherit` to `'likert'` indicate that the object inherits from the likert set, defined above. Inheritance means that that the child object inherits all the properties of the parent object.
 
 ```js
 API.addSequence([
@@ -141,4 +141,4 @@ API.addSequence([
 ]);
 ```
 
-Each of the questions in this questionnaire inherit the likert set and with it all of the properties already defined into the likert object. This is useful in order to have shorter and more readable scripts as well as to allow changing scripts from one central place.
+Each of the questions in this questionnaire inherits the likert set, and therefore has all the properties already defined into the likert object. This is useful because it saves time and space. In this example, you define the basic properties of all the questions you want to use in one place, and then you don't need to repeat it. It is also very easy to modify the questionnaire. For instance, if you want to use a 7-point agreement scale, you only need to change it in the `'likert'` set, and it will apply to all the questions that inherit `'likert'`.
