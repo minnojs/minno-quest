@@ -129,6 +129,7 @@
 
 							{{ navitem("Sequencer", "../basics/sequencer", data.basename) }}
 							{{ navitem("API", "../basics/API", data.basename) }}
+							{{ navitem("Resources", "../basics/resources", data.basename) }}
 
 							<li>
 								<a href="javascript:void(0)">Inheritance</a>
@@ -166,6 +167,8 @@
 									{{ example("Meta", "../basics/templateMeta", data.basename) }}
 								</ul>
 							</li>
+
+
 
 
 

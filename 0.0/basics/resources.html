@@ -18,7 +18,6 @@
 		</title>
 
 		
-	
 		<!-- Bootstrap core CSS -->
 		<link href="../../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 		<link href="../css/highlight.css" rel="stylesheet">
@@ -34,43 +33,6 @@
 			table tr th :last-child, table tr td :last-child {margin-bottom: 0;}
 		</style>
 		
-	<script src="../../bower_components/ace-builds/src-min/ace.js" type="text/javascript" charset="utf-8"></script>
-	<style type="text/css" media="screen">
-	    #editor {
-	    	margin-top: 1em;
-	        border-radius: 4px 4px 0;
-	        border: 1px solid #ddd;
-	        height: 80vh;
-	        font-size: 14px;
-	    }
-
-		/* IE8 only */
-		@media \0screen {
-		    #editor {height:80px;}
-		}
-
-		@-webkit-keyframes fadeIn {
-		  0% {opacity: 0;}
-		  20% {opacity: 1;}
-		  80% {opacity: 1;}
-		  100% {opacity: 0;}
-		}
-
-		@keyframes fadeIn {
-		  0% {opacity: 0;}
-		  20% {opacity: 1;}
-		  80% {opacity: 1;}
-		  100% {opacity: 0;}
-		}
-
-		.fadeIn {
-		  	-webkit-animation-name: fadeIn;
-		    animation-name: fadeIn;
-		    animation-duration: 6s;
-			opacity:0;
-		}
-	</style>
-
 
 		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 		<!--[if lt IE 9]>
@@ -124,10 +86,8 @@
 		<div id="content" class="bs-docs-header">
 			<div class="container">
 				
-	<h1>Inheritance abstraction</h1>
-	
-		<p>You can play around with inheritanceAbstraction.js right here. All you need to do is change the script and then click the activate button.</p>
-	
+	<h1>Resources</h1>
+	<p>Various resources to make your life easier.</p>
 
 			</div>
 		</div>
@@ -136,97 +96,16 @@
 			<div class="row">
 				<div class="col-md-9" role="main">
 					
-		<p>
-			<button class="btn btn-default btn-lg btn-block" onclick="window.click(event)" type="button">Activate</button>
-		</p>
+	<h3 id="education">Education</h3>
+<p>Here are some presentations good for introducing the essentials of the PI system:</p>
+<ul>
+<li>A lab presentation about integrating piManager with Project implicit, including comparison to <code>expt</code> files: <a href="http://slides.com/andydzik/deck">presentation</a>, <a href="https://dw2.psyc.virginia.edu/implicit/showfiles.jsp?user=andy&amp;study=sample/pimanager">sample study</a>.</li>
+<li>A <a href="http://eladzlot.github.io/pi-presentations/basics.html">presentation</a> focused on various features of the sequencer.</li>
+</ul>
+<h3 id="extensions">Extensions</h3>
+<p>The PI tasks are easily extensible.</p>
+<p><a href="http://www.bgu.ac.il/~baranany/">Yoav Bar-Anan</a> from <a href="https://implicit.harvard.edu/implicit/aboutus.html">Project Implicit</a> has created several extensions for the easy creation of a few common reaction-time tasks. You can find the instructions for using them right <a href="https://app-dev-01.implicit.harvard.edu/implicit/common/all/js/pip/piscripts/ydocs/dist/index.html">here</a>.</p>
 
-		<div id="success" role="alert" class="alert alert-success" style="display:none">
-			<strong>Well Done!</strong> The task has been successfully completed.
-		</div>
-		<div id="error" role="alert" class="alert alert-danger" style="display:none">
-			<strong>Oh Snap!</strong> Something went wrong with the task. Why don't you fix it and try again?
-		</div>
-
-   		<div id="editor">
-// One of the main uses for inheritance is simplifying your scripts.
-// Instead of repeating the settings for your tasks, you can abstract them into a set and inherit them each time.
-//
-// Note that you can inherit from within sets as well, so that you can several levels of abstraction.
-
-define([&#39;managerAPI&#39;], function(Manager){
-
-  var API = new Manager();
-
-  API.addTasksSet(&#39;default&#39;, [
-  	{
-  		type:&#39;message&#39;,
-  		keys: &#39; &#39;
-  	}
-  ]);
-
-  // Instead of setting the task type and keys properties, we simply inherit the &#39;default&#39; task set.
-  // (Setting inherit to a String is equivalent to using random. This works for us because there is only one object within the &#39;default&#39; set.)
-  API.addSequence([
-  	{inherit:&#39;default&#39;, template:&#39;Task 1&#39;},
-  	{inherit:&#39;default&#39;, template:&#39;Task 2&#39;},
-  	{inherit:&#39;default&#39;, template:&#39;Task 3&#39;}
-  ]);
-
-  return API.script;
-});
-		</div>
-
-		<script>
-		    var editor = ace.edit("editor");
-		    editor.setTheme("ace/theme/monokai");
-		    editor.getSession().setMode("ace/mode/javascript");
-		    editor.setOption("showPrintMargin", false);
-		    var win;
-		    var feedbackId = 'success';
-
-		    function click(event){
-		    	event.target.blur();
-
-		    	// assume the feedback is success
-				feedbackId = 'success';
-
-				// clean out open window
-		    	if (win){
-		    		win.close();
-		    		win = null;
-		    	}
-
-		    	win = window.open('../basics/basicsactivate.html', 'pip');
-		    	win.focus();
-
-		    	win.onload = function(){
-		    		// first set the unload listener
-					win.addEventListener('unload', function(event) {
-						var el = document.getElementById(feedbackId);
-						window.focus();
-						fade(el);
-					});
-
-					// then activate the player (this ensures that when )
-					win.piActivate(editor.getValue());
-		    	};
-		    }
-
-	    	window.addEventListener('error', function(e){
-	    		console.error(e);
-	    		feedbackId = 'error';
-	    	});
-
-	    	function fade(el){
-				el.style.display = 'block';
-				el.classList.add('fadeIn');
-				setTimeout(function(){
-					el.style.display = 'none';
-					el.classList.remove('fadeIn');
-				}, 6000);
-	    	}
-
-		</script>
 
 				</div>
 
@@ -278,7 +157,7 @@ define([&#39;managerAPI&#39;], function(Manager){
 						
 							
 							<li class="">
-							<li class="">
+							<li class=" active ">
 
 								<a href="../basics/resources.html">Resources</a>
 							</li>
