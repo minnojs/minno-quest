@@ -16,10 +16,13 @@ description: All the little details...
 	- [selectOne & selectMulti](#selectone-selectmulti)
 	- [grid](#grid)
 	- [slider](#slider)
-- [settings](#settings)
+- [Settings](#settings)
 	- [onEnd](#onend)
 	- [logger](#logger)
 	- [Debugging](#debugging)
+- [Data](#data)
+	- [Logs](#logs)
+	- [Variables](#variables)
 
 ### Pages
 The basic unit in PIquest is the **page**. A page is usually one screen in your questionnaire. If your questionnaire presents all its questions in one screen, it will probably have only one page. The properties within a page manage how the question(s) is(are) displayed and how the participants interact with it (e.g., select an answer and then click a submit button).
@@ -452,3 +455,30 @@ debug 	| Just spill everything out.
 
 **hideConsole**:
 This property allows you to control the display of logs inside the browser, if it is set to `true` then the logs will only be printed into your console.
+
+## Data
+### Logs
+piQuest keeps record of user responses using plain js objects. These objects are kept locally (see #variables) and sent to the server (see [logger](#logger) setting).
+
+Following are the properties of the logged object:
+
+Property 		| Description
+----------- 	| -----------
+name 			| The `name` of the question.
+response 		| The actual response for this question. This may be a string, a number or even an array.
+declined 		| Whether or not the question was declined (if a question was declined, the response field will be undefined).
+latency 		| The time (from question presentation) to the last change of this response.
+submitLatency	| The time (from question presentation) to the time this page was submitted.
+
+### Variables
+
+The data logs are available as variables under the current object like so:
+
+```js
+current.questions = {
+	questionName1 : {...}, // log object
+	questionName2 : {...} // log object
+}
+```
+
+So that the response for questionName1 can be accessed using `current.questionName1.response`. You can use this data within [templates](../basics/sequencer.html#templates) or from within [branches](../basics/sequencer.html#conditions).
