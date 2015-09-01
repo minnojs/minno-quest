@@ -1,3 +1,13 @@
+<a name"0.0.51"></a>
+### 0.0.51 (2015-09-01)
+
+
+#### Bug Fixes
+
+* **sequencer:** random now recursively mixes sub mixer ([08cd0cc6](https://github.com/ProjectImplicit/PIquest/commit/08cd0cc6))
+* **slider:** showTicks no longer prebents dragging the handle ([f3594480](https://github.com/ProjectImplicit/PIquest/commit/f3594480))
+
+
 <a name="0.0.50"></a>
 ### 0.0.50 (2015-07-05)
 
