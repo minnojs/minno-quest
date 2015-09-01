@@ -16,7 +16,7 @@ description: All the little details...
 	- [selectOne & selectMulti](#selectone-selectmulti)
 	- [grid](#grid)
 	- [slider](#slider)
-- [Settings](#settings)
+- [settings](#settings)
 	- [onEnd](#onend)
 	- [logger](#logger)
 	- [Debugging](#debugging)
