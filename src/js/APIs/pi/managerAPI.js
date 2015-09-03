@@ -77,6 +77,17 @@ define(function(require){
 			data.sessionStatus = "C";
 		}
 
+		if (currentTask.last && global.$mTurk){
+			var $mTurk = global.$mTurk;
+			var url = $mTurk.isProduction ?  'http://www.mturk.com/mturk/externalSubmit' : 'https://workersandbox.mturk.com/mturk/externalSubmit';
+
+			if (!_.has($mTurk,['assignmentId','hitId','workerId'])){
+				throw new Error ('$mTurk is missing a crucial property (assignmentId,hitId,workerId)');
+			}
+
+			$http.get(url,_.omit($mTurk,'isProduction'));
+		}
+
 		if (window._err && window._err.meta){
 			var meta = window._err.meta;
 			meta.subtaskName = currentTask.name;

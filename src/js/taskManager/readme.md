@@ -1,5 +1,3 @@
-## piManager
-
 The piManager is responsible for managing several piTasks sequentially. It uses the same API used throught the project implicit tasks.
 
 ### Settings
@@ -90,3 +88,19 @@ keys        | Controls the proceed key: either a key (i.e. `'a'`) a keyCode (i.e
 
 ### Inheritance
 piManager uses the same inheritance system used by piQuest. It has one type of set: the task set. In order to create task sets use `addTasksSet(set, list)`.
+
+### Project Implicit Build
+The project implicit build has a feature for integration with mTurk.
+All you have to do is add The following code to your project, replacing the `<id#>` tags with the appropriate data of course.
+The player will affirm the mTurk questionare imidiately before the final task in the manager (as defined by the `last` property).
+Setting the isProduction property allows you to switch between the development and production urls for mTurk.
+
+```js
+API.addGlobal({
+    $mTurk: {
+        assignmentId:'<id#>',
+        hitId:'<id#>',
+        workerId:'<id#>',
+        isProduction: true
+    }
+});
