@@ -75,12 +75,12 @@ var person = {name: 'John Ridley', family:'Stroop', age:33, weight:{lbs:150, kg:
 //This object has four variables in it. The weight variable is an object inside an object.
 
 // Here are the two main methods to refer to the object's properties
-console.log(person.name)		// prints 'John Ridley'
+console.log(person.name)		    // prints 'John Ridley'
 console.log(person['family'])		// prints 'Stroop'
 console.log(person.weight.kg)		// prints '68'
 ```
 
-The property name and values are separated using a colon `:`, pairs are separated using a semicolon `;`. Object property names can be any string (=text), number, array, or object. The properties are accessed either using brackets `obj['propertyName']` or using dot(.) notation `obj.propertyName`.
+The property name (sometimes called key) and values are separated using a colon `:`, propertyName:value pairs are separated using a comma `,`. Property names can be any string (=text). The properties are accessed either using brackets `obj['propertyName']` or using dot(.) notation `obj.propertyName`.
 
 ### Functions
 Functions are one of the fundamental building blocks in JavaScript. A function is a JavaScript procedure—a set of statements that perform a task or calculate a value.
@@ -96,7 +96,7 @@ This function accepts a number as an argument and then returns its square.
 
 A function definition consists of the `function` keyword followed by:
 
-* The name of the function (optional).
+* The name of the function.
 * A list of arguments to the function, enclosed in parentheses and separated by commas.
 * The JavaScript statements that define the function, enclosed in curly braces, `{}`.
 
