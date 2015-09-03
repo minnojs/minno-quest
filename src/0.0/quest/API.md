@@ -437,6 +437,10 @@ API.addSettings('DEBUG', {
 });
 ```
 
+The possible DEBUG `levels` are: error < warn < info < debug. Where `error` level logs show only explicit errors, `warn` adds behaviours that we think may be mistakes, `info` adds information that may be relevant to debugging and `debug` shows extra information. The default debug level is `error`, when debugging, it is recomended to use at least `warn` if not the `info` level.
+
+setting `hideConsole` allows to hide the error console element on the web page (logs will still the browsers debugging console).
+
 **tags**:
 Logs are broken down into subjects by tags. The tags property allows you to insert an array of tags that you want to be logged. If you want all tags to printed you may use the string `'all'` instead of an array (this is also the default).
 
