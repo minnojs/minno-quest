@@ -11,8 +11,8 @@ It is written in JavaScript and is built to be extremely versatile and customiza
 
 The basic unit it PImanager scripts is the task. A task is represented by a single object, the properties of the object define the task to be activated and some settings relevant to it. Tasks are organized and presented using the task sequence. The sequence is an ordered list of tasks.
 
-Within the sequence you can use several tools in order to control the flow of your tasks. **mixers** control the order in which your tasks are presented (and allow you to change the sequence conditionally). **inheritance** allows abstracting tasks and makes them shorter, simpler, more dynamic, and most important, reusable. And finally **templates** allow you to micro manage the style of your tasks.
+Within the sequence you can use several tools in order to control the flow of your tasks. [mixers](../basics/sequencer.html#mixer) control the order in which your tasks are presented (and allow you to change the sequence conditionally). [inheritance](../basics/sequencer.html#inheritance) allows abstracting tasks and makes them shorter, simpler, more dynamic, and most important, reusable. And finally [templates](../basics/sequencer.html#templates) allow you to micro manage the style of your tasks.
 
 ### Tasks
 
-There are two types of tasks built into piManager [piQuest](../quest/overview.html) and [messages](messages.html). You can run new tasks in several ways (see the [API](API.html#tasks)).
+There are three types of tasks built into piManager [piQuest](../quest/overview.html), [piPlayer](/PIPlayer/0.3/tutorials/overview.html) and [messages](messages.html). You can run new tasks in several ways (see the [API](API.html#tasks)).
