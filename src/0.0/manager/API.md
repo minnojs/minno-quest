@@ -18,7 +18,6 @@ description: All the little details...
     - [Plugging in](#plugging-in)
     - [Activator function](#activator-function)
     - [Custom Task Example](#custom-task-example)
-- [Project Implicit Build](#project-implicit-build)
 
 The piManager is responsible for managing several piTasks sequentially. It uses the same API used throught the project implicit tasks.
 
@@ -132,6 +131,7 @@ It should:
 The activator function is invoked using [angular dependency injection](https://docs.angularjs.org/guide/di), so you can use any of the angular [annotation](https://docs.angularjs.org/guide/di#dependency-annotation) methods to get dependencies.
 
 The following dependencies are supported (as well as all standard angular services):
+
 Service         | Description
 --------------- | -----------
 done            | A function that lets the manager know that the task has finished.

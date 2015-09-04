@@ -118,7 +118,6 @@
 <li><a href="#custom-task-example">Custom Task Example</a></li>
 </ul>
 </li>
-<li><a href="#project-implicit-build">Project Implicit Build</a></li>
 </ul>
 <p>The piManager is responsible for managing several piTasks sequentially. It uses the same API used throught the project implicit tasks.</p>
 <h3 id="settings">Settings</h3>
@@ -306,17 +305,49 @@ All the functions within settings are invoked using angular. This means that you
 <li>Call the <code>done</code> function whenever it is done.</li>
 </ul>
 <p>The activator function is invoked using <a href="https://docs.angularjs.org/guide/di">angular dependency injection</a>, so you can use any of the angular <a href="https://docs.angularjs.org/guide/di#dependency-annotation">annotation</a> methods to get dependencies.</p>
-<p>The following dependencies are supported (as well as all standard angular services):
-Service         | Description
-———————- | —————-
-done            | A function that lets the manager know that the task has finished.
-props           | An object with all sorts of useful tools.
-$scope          | The task scope.
-task            | The piManager element that defined this task.
-script          | The task script (as defined in task.script or loaded from task.scriptUrl).
-$element        | The tasks DOM Node wrapped in jqLite or jQuery.
-global          | The global object
-$injector       | an angularjs injector (it can allow you to $compile or accesses $rootScope)</p>
+<p>The following dependencies are supported (as well as all standard angular services):</p>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>done</td>
+<td>A function that lets the manager know that the task has finished.</td>
+</tr>
+<tr>
+<td>props</td>
+<td>An object with all sorts of useful tools.</td>
+</tr>
+<tr>
+<td>$scope</td>
+<td>The task scope.</td>
+</tr>
+<tr>
+<td>task</td>
+<td>The piManager element that defined this task.</td>
+</tr>
+<tr>
+<td>script</td>
+<td>The task script (as defined in task.script or loaded from task.scriptUrl).</td>
+</tr>
+<tr>
+<td>$element</td>
+<td>The tasks DOM Node wrapped in jqLite or jQuery.</td>
+</tr>
+<tr>
+<td>global</td>
+<td>The global object</td>
+</tr>
+<tr>
+<td>$injector</td>
+<td>an angularjs injector (it can allow you to $compile or accesses $rootScope)</td>
+</tr>
+</tbody>
+</table>
 <h4 id="custom-task-example">Custom Task Example</h4>
 <p>The following script will display a messages to the user and proceed to the next task after 5 seconds:</p>
 <pre><code class="lang-js"><span class="hljs-comment">// the define wrapper</span>
