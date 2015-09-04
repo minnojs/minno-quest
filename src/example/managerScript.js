@@ -23,6 +23,25 @@ define(['managerAPI'], function(Manager){
 
 	API.addSequence([
 		{
+			script: {
+				// custom script content
+				content: 'Hi there, I\'m your custom message',
+
+				// the activator function uses three dependencie
+		 		play: function activator(done, script, $element){
+					var timeoutId = setTimeout(done, 5000);
+					$element.html(script.content);
+
+					// will be called at the end of the task to clean things up
+					// (whether the end is forced or triggered by 'done')
+					return function clear(){
+						clearTimeout(timeoutId);
+						$element.empty();
+					};
+				}
+			}
+		},
+		{
 			mixer:'branch',
 			conditions: [{compare:'global.cond', to: 'myConds'}],
 			data: [
