@@ -96,7 +96,30 @@
 			<div class="row">
 				<div class="col-md-9" role="main">
 					
-	<h2 id="pimanager">piManager</h2>
+	<ul>
+<li><a href="#settings">Settings</a><ul>
+<li><a href="#canvas">canvas</a></li>
+<li><a href="#onpretask">onPreTask</a></li>
+<li><a href="#onend">onEnd</a></li>
+<li><a href="#title">title</a></li>
+<li><a href="#preloadimages">preloadImages</a></li>
+<li><a href="#skip">skip</a></li>
+</ul>
+</li>
+<li><a href="#tasks">Tasks</a><ul>
+<li><a href="#quest">Quest</a></li>
+<li><a href="#message">Message</a></li>
+</ul>
+</li>
+<li><a href="#inheritance">Inheritance</a></li>
+<li><a href="#custom-tasks">Custom tasks</a><ul>
+<li><a href="#plugging-in">Plugging in</a></li>
+<li><a href="#activator-function">Activator function</a></li>
+<li><a href="#custom-task-example">Custom Task Example</a></li>
+</ul>
+</li>
+<li><a href="#project-implicit-build">Project Implicit Build</a></li>
+</ul>
 <p>The piManager is responsible for managing several piTasks sequentially. It uses the same API used throught the project implicit tasks.</p>
 <h3 id="settings">Settings</h3>
 <p>Settings allow you to control the generic way that the player works. Change the settings using the <code>addSettings</code> function. The first argument to the function is always the name of the setting, the second argument is the setting values. In case the setting is an object, subsequent objects will extend each other so that settings may be progressively added.
@@ -265,6 +288,62 @@ All the functions within settings are invoked using angular. This means that you
 </table>
 <h3 id="inheritance">Inheritance</h3>
 <p>piManager uses the same inheritance system used by piQuest. It has one type of set: the task set. In order to create task sets use <code>addTasksSet(set, list)</code>.</p>
+<h3 id="custom-tasks">Custom tasks</h3>
+<p>The piManager allows the creation of custom tasks. The format is fairly simple though you probably need at least some experience with programing for it. </p>
+<h4 id="plugging-in">Plugging in</h4>
+<p>piManager manages the task sequence for you as well as loading the task script (if needed). There are several ways to plug a new task into piManager, the all involve passing the activator function to the manager in various ways.</p>
+<ol>
+<li>You can pass the activator function as a script.</li>
+<li>You can pass it as the play property of the script object ().</li>
+<li>You can set it into the <code>taskActivateProvider</code> using <code>taskActivateProvider.set(taskName, activatorFunction)</code> during the configuration stage of the angular flow (This is worth the trouble mainly if you intend to use this task many times).</li>
+</ol>
+<h4 id="activator-function">Activator function</h4>
+<p>The activator function is the function that is responsible for the activation of your task as well as for the communication with piManager.</p>
+<p>It should:</p>
+<ul>
+<li>Run your task (just do whatever you like).</li>
+<li>Return a function that may be used to force the end of the task.</li>
+<li>Call the <code>done</code> function whenever it is done.</li>
+</ul>
+<p>The activator function is invoked using <a href="https://docs.angularjs.org/guide/di">angular dependency injection</a>, so you can use any of the angular <a href="https://docs.angularjs.org/guide/di#dependency-annotation">annotation</a> methods to get dependencies.</p>
+<p>The following dependencies are supported (as well as all standard angular services):
+Service         | Description
+———————- | —————-
+done            | A function that lets the manager know that the task has finished.
+props           | An object with all sorts of useful tools.
+$scope          | The task scope.
+task            | The piManager element that defined this task.
+script          | The task script (as defined in task.script or loaded from task.scriptUrl).
+$element        | The tasks DOM Node wrapped in jqLite or jQuery.
+global          | The global object
+$injector       | an angularjs injector (it can allow you to $compile or accesses $rootScope)</p>
+<h4 id="custom-task-example">Custom Task Example</h4>
+<p>The following script will display a messages to the user and proceed to the next task after 5 seconds:</p>
+<pre><code class="lang-js"><span class="hljs-comment">// the define wrapper</span>
+define(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{
+    <span class="hljs-comment">// the script object being returned</span>
+    <span class="hljs-keyword">return</span> {
+        <span class="hljs-comment">// custom script content</span>
+        content: <span class="hljs-string">'Hi there, I\'m your custom message'</span>,
+
+        <span class="hljs-comment">// the activator function uses three dependencie</span>
+        play: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">activator</span><span class="hljs-params">(done, script, $element)</span></span>{
+            <span class="hljs-keyword">var</span> timeoutId = setTimeout(done, <span class="hljs-number">5000</span>);
+            $element.html(script.content);
+
+            <span class="hljs-comment">// will be called at the end of the task to clean things up</span>
+            <span class="hljs-comment">// (whether the end is forced or triggered by 'done')</span>
+            <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">clear</span><span class="hljs-params">()</span></span>{
+                clearTimeout(timeoutId);
+                $element.empty();           
+            };
+        }
+    };
+});
+</code></pre>
+<p>In order to use it all you have to do is point the task to the correct url:</p>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> taskElement = {scriptUrl:<span class="hljs-string">'path/to/script'</span>};
+</code></pre>
 
 
 				</div>
