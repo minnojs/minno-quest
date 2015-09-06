@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+
+		<!-- Meta, title, CSS, favicons, etc. -->
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="Bootstrap, a sleek, intuitive, and powerful mobile first front-end framework for faster and easier web development.">
+		<meta name="keywords" content="HTML, CSS, JS, JavaScript, framework, bootstrap, front-end, frontend, web development">
+		<meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+
+		<title>
+			
+				piQuest
+			
+			&middot; V0.0
+		</title>
+
+		
+	
+		<!-- Bootstrap core CSS -->
+		<link href="../../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/highlight.css" rel="stylesheet">
+		<link href="../css/style.css" rel="stylesheet">
+		<style type="text/css">
+			pre {display:block;overflow-x:auto;padding:0.5em;background:#000;color:#f8f8f8;-webkit-text-size-adjust:none}
+			table {padding: 0;}
+			table tr {border-top: 1px solid #cccccc;background-color: white;margin: 0;padding: 0;}
+			table tr:nth-child(2n) {background-color: #f8f8f8;}
+			table tr th {font-weight: bold;border: 1px solid #cccccc;text-align: left;margin: 0;padding: 6px 13px;}
+			table tr td {border: 1px solid #cccccc;text-align: left;margin: 0;padding: 6px 13px;}
+			table tr th :first-child, table tr td :first-child {margin-top: 0;}
+			table tr th :last-child, table tr td :last-child {margin-bottom: 0;}
+		</style>
+		
+	<script src="../../bower_components/ace-builds/src-min/ace.js" type="text/javascript" charset="utf-8"></script>
+	<style type="text/css" media="screen">
+	    #editor {
+	    	margin-top: 1em;
+	        border-radius: 4px 4px 0;
+	        border: 1px solid #ddd;
+	        height: 80vh;
+	        font-size: 14px;
+	    }
+
+		/* IE8 only */
+		@media \0screen {
+		    #editor {height:80px;}
+		}
+
+		@-webkit-keyframes fadeIn {
+		  0% {opacity: 0;}
+		  20% {opacity: 1;}
+		  80% {opacity: 1;}
+		  100% {opacity: 0;}
+		}
+
+		@keyframes fadeIn {
+		  0% {opacity: 0;}
+		  20% {opacity: 1;}
+		  80% {opacity: 1;}
+		  100% {opacity: 0;}
+		}
+
+		.fadeIn {
+		  	-webkit-animation-name: fadeIn;
+		    animation-name: fadeIn;
+		    animation-duration: 6s;
+			opacity:0;
+		}
+	</style>
+
+
+		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+		<!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+			<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+		<![endif]-->
+
+		<!-- Favicons -->
+		<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+		<link rel="icon" href="../favicon.ico">
+
+	</head>
+
+	<body>
+		<a id="skippy" class="sr-only sr-only-focusable" href="#content"><div class="container"><span class="skiplink-text">Skip to main content</span></div></a>
+
+		<!-- Docs master nav -->
+		<header class="navbar navbar-static-top bs-docs-nav" id="top" role="banner">
+			<div class="container">
+				<div class="navbar-header">
+					<button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a href="../../" class="navbar-brand">Project Implicit</a>
+				</div>
+				<nav class="collapse navbar-collapse bs-navbar-collapse">
+					<ul class="nav navbar-nav">
+						<li class="">
+							<a href="../basics/overview.html">Basics</a>
+						</li>
+						<li class=" active ">
+							<a href="../quest/overview.html">piQuest</a>
+						</li>
+						<li class="">
+							<a href="../manager/overview.html">piManager</a>
+						</li>
+						<li>
+							<a href="/PIPlayer">piPlayer</a>
+						</li>
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="https://github.com/ProjectImplicit/PIquest">Github</a></li>
+					</ul>
+				</nav>
+			</div>
+		</header>
+
+		<div id="content" class="bs-docs-header">
+			<div class="container">
+				
+	<h1>Scale with feedback</h1>
+	
+		<p>You can play around with scaleWithFeedback.js right here. All you need to do is change the script and then click the activate button.</p>
+	
+
+			</div>
+		</div>
+
+		<div class="container bs-docs-container">
+			<div class="row">
+				<div class="col-md-9" role="main">
+					
+		<p>
+			<button class="btn btn-default btn-lg btn-block" onclick="window.click(event)" type="button">Activate</button>
+		</p>
+
+		<div id="success" role="alert" class="alert alert-success" style="display:none">
+			<strong>Well Done!</strong> The task has been successfully completed.
+		</div>
+		<div id="error" role="alert" class="alert alert-danger" style="display:none">
+			<strong>Oh Snap!</strong> Something went wrong with the task. Why don't you fix it and try again?
+		</div>
+
+   		<div id="editor">
+/**
+ * @author Yoav Bar-Anan &lt;baranany@bgu.ac.il&gt;
+ */
+define([&#39;questAPI&#39;], function(Quest){
+	var API = new Quest();
+
+	// ### Questions
+	API.addQuestionsSet(&#39;basicSelect&#39;,
+	{
+		type: &#39;selectOne&#39;,
+		autoSubmit:true,
+		numericValues:true,
+		required:true,
+		errorMsg: {
+			required: &quot;Please select an answer, or click &#39;decline to answer&#39;&quot;
+		},
+		answers : [&#39;Strongly disagree&#39;, &#39;Moderately disagree&#39;, &#39;Slightly disagree&#39;, &#39;Slightly agree&#39;, &#39;Moderately agree&#39;, &#39;Strongly agree&#39;],
+		help: &#39;&lt;%= pagesMeta.number &lt; 3 %&gt;&#39;,
+		helpText: &#39;Selecting an answer once colors it blue.&lt;br/&gt;You can change your answer by selecting another option.&lt;br/&gt;To confirm, click the selected (blue) button a second time.&#39;
+	});
+
+
+	API.addQuestionsSet(&#39;rosenberg&#39;,
+	[
+		{
+			inherit : &#39;basicSelect&#39;,
+			name : &#39;ros1&#39;,
+			stem : &quot;On the whole, I am satisfied with myself.&quot;
+		},
+		{
+			inherit : &#39;basicSelect&#39;,
+			name : &#39;ros2&#39;,
+			reverse:true,
+			stem : &quot;At times, I think I am no good at all.&quot;
+		},
+		{
+			inherit : &#39;basicSelect&#39;,
+			name : &#39;ros3&#39;,
+			stem : &quot;I feel that I have a number of good qualities.&quot;
+		},
+		{
+			inherit : &#39;basicSelect&#39;,
+			name : &#39;ros4&#39;,
+			stem : &quot;I am able to do things as well as most other people.&quot;
+		},
+		{
+			inherit : &#39;basicSelect&#39;,
+			name : &#39;ros5&#39;,
+			reverse:true,
+			stem : &quot;I feel I do not have much to be proud of.&quot;
+		},
+		{
+			inherit : &#39;basicSelect&#39;,
+			name : &#39;ros6&#39;,
+			reverse:true,
+			stem : &quot;I certainly feel useless at times.&quot;
+		},
+		{
+			inherit : &#39;basicSelect&#39;,
+			name : &#39;ros7&#39;,
+			stem : &quot;I feel that I&#39;m a person of worth, at least on an equal plane with others.&quot;
+		},
+		{
+			inherit : &#39;basicSelect&#39;,
+			name : &#39;ros8&#39;,
+			reverse:true,
+			stem : &quot;I wish I could have more respect for myself.&quot;
+		},
+		{
+			inherit : &#39;basicSelect&#39;,
+			name : &#39;ros9&#39;,
+			reverse:true,
+			stem : &quot;All in all, I am inclined to feel that I am a failure.&quot;
+		},
+		{
+			inherit : &#39;basicSelect&#39;,
+			name : &#39;ros10&#39;,
+			stem : &quot;I take a positive attitude toward myself.&quot;
+		}
+	]);
+
+	API.addQuestionsSet(&#39;showme&#39;, {
+		type: &#39;selectOne&#39;,
+		autoSubmit:true,
+		stem:&#39;Click next to see your self-esteem score&#39;,
+		name:&#39;next&#39;,
+		answers : [&#39;ok&#39;],
+		onSubmit : function(log, current){
+			var sum=0, count=0, prop, response;
+
+			// for each question (that has a response and begings with &quot;ros&quot;) add to sum
+			for (prop in current.questions){
+				response = current.questions[prop].response;
+				if (response &amp;&amp; /^ros/.test(prop)) {
+					sum += response;
+					count+=1;
+				}
+			}
+
+			if (count === 10){
+				current.selfEsteemScore = sum/10;
+			} else {
+				current.selfEsteemScore = &#39;No score; You did not answer all the questions&#39;;
+			}
+		}
+	});
+
+	API.addQuestionsSet(&#39;score&#39;, {
+		type: &#39;selectOne&#39;,
+		autoSubmit:true,
+		stem: &quot;Your self-esteem score: &lt;%=current.selfEsteemScore%&gt;.&lt;br/&gt;&lt;br/&gt;&quot;+
+		&quot;A score above 5 means you&#39;re a douche; A score below 2 means you probably deserve more love than you give yourself.&quot;,
+		name:&#39;end&#39;
+	});
+
+
+	// ### Pages
+	API.addPagesSet(&#39;scalePage&#39;,
+	{
+		progressBar: &#39;&lt;%= pagesMeta.number %&gt; out of 10&#39;,
+		header: &#39;Please rate your agreement with the following statement&#39;,
+		headerStyle : {&#39;font-size&#39;:&#39;1em&#39;},
+		questions : {inherit:{set:&#39;rosenberg&#39;, type:&#39;exRandom&#39;}},
+		v1style:2,
+		decline:true,
+		numbered: false
+	});
+
+	API.addPagesSet(&#39;endPage&#39;,
+	{
+		v1style:2,
+		decline:false,
+		numbered: false
+	});
+
+
+	// ### Sequence
+	API.addSequence(
+	[
+		{
+			mixer : &#39;repeat&#39;,
+			times : 10,
+			data :
+			[
+				{inherit : &#39;scalePage&#39;}
+			]
+		},
+		{
+			inherit:&#39;endPage&#39;,
+			questions:[{inherit:&#39;showme&#39;}]
+		},
+		{
+			inherit:&#39;endPage&#39;,
+			questions:[{inherit:&#39;score&#39;}]
+		}
+	]);
+
+	/**
+	Return the script to piquest&#39;s god, or something of that sort.
+	**/
+	return API.script;
+});
+		</div>
+
+		<script>
+		    var editor = ace.edit("editor");
+		    editor.setTheme("ace/theme/monokai");
+		    editor.getSession().setMode("ace/mode/javascript");
+		    editor.setOption("showPrintMargin", false);
+		    var win;
+		    var feedbackId = 'success';
+
+		    function click(event){
+		    	event.target.blur();
+
+		    	// assume the feedback is success
+				feedbackId = 'success';
+
+				// clean out open window
+		    	if (win){
+		    		win.close();
+		    		win = null;
+		    	}
+
+		    	win = window.open('../quest/questactivate.html', 'pip');
+		    	win.focus();
+
+		    	win.onload = function(){
+		    		// first set the unload listener
+					win.addEventListener('unload', function(event) {
+						var el = document.getElementById(feedbackId);
+						window.focus();
+						fade(el);
+					});
+
+					// then activate the player (this ensures that when )
+					win.piActivate(editor.getValue());
+		    	};
+		    }
+
+	    	window.addEventListener('error', function(e){
+	    		console.error(e);
+	    		feedbackId = 'error';
+	    	});
+
+	    	function fade(el){
+				el.style.display = 'block';
+				el.classList.add('fadeIn');
+				setTimeout(function(){
+					el.style.display = 'none';
+					el.classList.remove('fadeIn');
+				}, 6000);
+	    	}
+
+		</script>
+
+				</div>
+
+				<div class="col-md-3" role="complementary">
+					<nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm">
+
+						
+
+						
+
+						<ul class="nav bs-docs-sidenav">
+						
+
+							
+							<li class="">
+							<li class="">
+
+								<a href="../quest/overview.html">Overview</a>
+							</li>
+						
+							
+							<li class="">
+							<li class="">
+
+								<a href="../quest/introduction.html">Introduction</a>
+							</li>
+						
+							<li>
+								<a href="helloworldDocco.html">Examples</a>
+								<ul class="nav">
+									
+							<li class="">
+								<div>
+									<a href="../quest/helloworldDocco.html">Hello world</a>
+									<a href="../quest/helloworld.js" download="../quest/helloworld.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../quest/helloworldPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../quest/bodyAwarenessDocco.html">Body Awareness</a>
+									<a href="../quest/bodyAwareness.js" download="../quest/bodyAwareness.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../quest/bodyAwarenessPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../quest/weightDocco.html">Weight demo</a>
+									<a href="../quest/weight.js" download="../quest/weight.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../quest/weightPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../quest/usingImagesDocco.html">Using Images</a>
+									<a href="../quest/usingImages.js" download="../quest/usingImages.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../quest/usingImagesPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../qsts/buttonsDocco.html">Buttons</a>
+									<a href="../qsts/buttons.js" download="../qsts/buttons.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../qsts/buttonsPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../qsts/buttonsAdvancedDocco.html">Buttons Advanced</a>
+									<a href="../qsts/buttonsAdvanced.js" download="../qsts/buttonsAdvanced.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../qsts/buttonsAdvancedPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../qsts/buttonsOnePageDocco.html">Buttons One Page</a>
+									<a href="../qsts/buttonsOnePage.js" download="../qsts/buttonsOnePage.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../qsts/buttonsOnePagePlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../qsts/dependencyDocco.html">Dependency</a>
+									<a href="../qsts/dependency.js" download="../qsts/dependency.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../qsts/dependencyPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../qsts/gridDocco.html">Grid</a>
+									<a href="../qsts/grid.js" download="../qsts/grid.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../qsts/gridPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../qsts/nfcDocco.html">NFC</a>
+									<a href="../qsts/nfc.js" download="../qsts/nfc.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../qsts/nfcPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../qsts/openEndedDocco.html">Open Ended</a>
+									<a href="../qsts/openEnded.js" download="../qsts/openEnded.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../qsts/openEndedPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../qsts/openEndedLongDocco.html">Open Ended Long</a>
+									<a href="../qsts/openEndedLong.js" download="../qsts/openEndedLong.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../qsts/openEndedLongPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../qsts/rateImagesDocco.html">Rate Images</a>
+									<a href="../qsts/rateImages.js" download="../qsts/rateImages.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../qsts/rateImagesPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../qsts/rateImagesSizesDocco.html">Rate Images Sizes</a>
+									<a href="../qsts/rateImagesSizes.js" download="../qsts/rateImagesSizes.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../qsts/rateImagesSizesPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../qsts/scaleWithFeedbackDocco.html">Scale With Feedback</a>
+									<a href="../qsts/scaleWithFeedback.js" download="../qsts/scaleWithFeedback.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../qsts/scaleWithFeedbackPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../qsts/sliderDocco.html">Slider</a>
+									<a href="../qsts/slider.js" download="../qsts/slider.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../qsts/sliderPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../qsts/userPrevRespDocco.html">User Prev Resp</a>
+									<a href="../qsts/userPrevResp.js" download="../qsts/userPrevResp.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../qsts/userPrevRespPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+								</ul>
+							</li>
+							<li>
+								<a href="javascript:void(0)">Questions</a>
+								<ul class="nav">
+									
+							<li class="">
+								<div>
+									<a href="../questExamples/textDocco.html">Text</a>
+									<a href="../questExamples/text.js" download="../questExamples/text.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../questExamples/textPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../questExamples/textareaDocco.html">Textarea</a>
+									<a href="../questExamples/textarea.js" download="../questExamples/textarea.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../questExamples/textareaPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../questExamples/textNumberDocco.html">Text Number</a>
+									<a href="../questExamples/textNumber.js" download="../questExamples/textNumber.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../questExamples/textNumberPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../questExamples/selectOneDocco.html">Select One</a>
+									<a href="../questExamples/selectOne.js" download="../questExamples/selectOne.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../questExamples/selectOnePlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../questExamples/selectMultiDocco.html">Select Multi</a>
+									<a href="../questExamples/selectMulti.js" download="../questExamples/selectMulti.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../questExamples/selectMultiPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../questExamples/gridDocco.html">Grid</a>
+									<a href="../questExamples/grid.js" download="../questExamples/grid.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../questExamples/gridPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../questExamples/sliderDocco.html">Slider</a>
+									<a href="../questExamples/slider.js" download="../questExamples/slider.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../questExamples/sliderPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+								</ul>
+							</li>
+							
+							<li class="">
+							<li class="">
+
+								<a href="../quest/API.html">API</a>
+							</li>
+						
+							
+							<li class="">
+							<li class="">
+
+								<a href="../quest/questplayground.html">Playground</a>
+							</li>
+						
+						
+						</ul>
+						<!-- <a class="back-to-top" href="#top">
+							Back to top
+						</a> -->
+					</nav>
+				</div>
+			</div>
+		</div>
+
+		<!-- Footer
+		================================================== -->
+		<footer class="bs-docs-footer" role="contentinfo">
+			<div class="container">
+				<p>Created by Project Implicit for the benefit of all.</p>
+				<!-- <p>Code licensed under <a href="https://github.com/twbs/bootstrap/blob/master/LICENSE" target="_blank">MIT</a>, documentation under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p> -->
+				<ul class="bs-docs-footer-links text-muted">
+					<li>Currently v0.0.45</li>
+					<li>&middot;</li>
+					<li><a href="https://github.com/ProjectImplicit/PIquest">GitHub</a></li>
+					<li>&middot;</li>
+					<li><a href="https://github.com/ProjectImplicit/PIquest/releases">Releases</a></li>
+				</ul>
+			</div>
+		</footer>
+
+	</body>
+</html>

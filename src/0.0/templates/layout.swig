@@ -168,11 +168,6 @@
 								</ul>
 							</li>
 
-
-
-
-
-
 						{% elseif data.typeName == 'quest' %}
 
 							{{ navitem("Overview", "../quest/overview", data.basename) }}
@@ -184,6 +179,19 @@
 									{{ example("Body Awareness", "../quest/bodyAwareness", data.basename) }}
 									{{ example("Weight demo", "../quest/weight", data.basename) }}
 									{{ example("Using Images", "../quest/usingImages", data.basename) }}
+									{{ example("Buttons", "../qsts/buttons", data.basename) }}
+									{{ example("Buttons Advanced", "../qsts/buttonsAdvanced", data.basename) }}
+									{{ example("Buttons One Page", "../qsts/buttonsOnePage", data.basename) }}
+									{{ example("Dependency", "../qsts/dependency", data.basename) }}
+									{{ example("Grid","../qsts/grid", data.basename) }}
+									{{ example("NFC", "../qsts/nfc", data.basename) }}
+									{{ example("Open Ended", "../qsts/openEnded", data.basename) }}
+									{{ example("Open Ended Long", "../qsts/openEndedLong", data.basename) }}
+									{{ example("Rate Images", "../qsts/rateImages", data.basename) }}
+									{{ example("Rate Images Sizes", "../qsts/rateImagesSizes", data.basename) }}
+									{{ example("Scale With Feedback", "../qsts/scaleWithFeedback", data.basename) }}
+									{{ example("Slider", "../qsts/slider", data.basename) }}
+									{{ example("User Prev Resp", "../qsts/userPrevResp", data.basename) }}
 								</ul>
 							</li>
 							<li>
