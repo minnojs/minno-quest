@@ -80,11 +80,13 @@ define(function(require){
 				 * @param  {Event} e
 				 */
 				function proceedListener(e){
-					var which = e.key || e.which || e.keyCode;
+					var which = e.which || e.keyCode;
+					var key = (e.key || '').toUpperCase();
 
 					// ctrl r ==> refresh
-					if (which == 82 && e.ctrlKey) {
+					if ((which == 82 || key == 'R') && e.ctrlKey) {
 						proceed(e, 'current');
+						e.preventDefault();
 					}
 
 					// esc ==> listen for skip direction (once)
