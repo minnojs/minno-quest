@@ -185,6 +185,7 @@
 									{{ example("Dependency", "../qsts/dependency", data.basename) }}
 									{{ example("Live Dependency", "../qsts/liveDependency", data.basename) }}
 									{{ example("Grid","../qsts/grid", data.basename) }}
+									{{ example("Timer","../qsts/timer", data.basename) }}
 									{{ example("Open Ended", "../qsts/openEnded", data.basename) }}
 									{{ example("Open Ended Long", "../qsts/openEndedLong", data.basename) }}
 									{{ example("Rate Images", "../qsts/rateImages", data.basename) }}
