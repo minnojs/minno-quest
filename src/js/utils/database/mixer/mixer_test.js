@@ -81,7 +81,7 @@ define(['underscore','./mixerModule', '../randomize/randomizeModuleMock'],functi
 					})).toEqual([wrapper,2,1]);
 				});
 
-				iit('should recursively mix (real use case)', function(){
+				it('should recursively mix (real use case)', function(){
 					expect(mixer({
 						mixer:'random',
 						data: [

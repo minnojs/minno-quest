@@ -362,6 +362,8 @@ define(['../questDirectivesModule', 'utils/database/randomize/randomizeModuleMoc
 				expect(log.response).toEqual([1,3]);
 				choose(1);
 				expect(log.response).toEqual([3]);
+				choose(3);
+				expect(log.response).toEqual([]);
 			});
 
 			it('should support multiple answers', function(){

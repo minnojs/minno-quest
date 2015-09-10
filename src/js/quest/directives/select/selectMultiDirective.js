@@ -79,6 +79,12 @@ define(function (require) {
 
 				data.minWidth && (scope.listItemCss.minWidth = data.minWidth);
 
+				// we need to implement this manually as ngRequired returns undefined instead of an array
+				if (data.required){
+					ngModel.$parsers.unshift(requiredValidator);
+					requiredValidator(ngModel.$viewValue);
+				}
+
 
 				// update controller with the response
 				scope.$watch('quest.answers',function(newValue, oldValue){
@@ -92,6 +98,11 @@ define(function (require) {
 						.pluck('value')
 						.value();
 				},true); // deep watch
+
+				function requiredValidator(value){
+					ngModel.$setValidity('required', !ngModel.$isEmpty(value));
+					return value;
+				}
 			}
 		};
 	}
