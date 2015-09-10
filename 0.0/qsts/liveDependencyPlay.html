@@ -18,6 +18,7 @@
 		</title>
 
 		
+	
 		<!-- Bootstrap core CSS -->
 		<link href="../../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 		<link href="../css/highlight.css" rel="stylesheet">
@@ -33,6 +34,43 @@
 			table tr th :last-child, table tr td :last-child {margin-bottom: 0;}
 		</style>
 		
+	<script src="../../bower_components/ace-builds/src-min/ace.js" type="text/javascript" charset="utf-8"></script>
+	<style type="text/css" media="screen">
+	    #editor {
+	    	margin-top: 1em;
+	        border-radius: 4px 4px 0;
+	        border: 1px solid #ddd;
+	        height: 80vh;
+	        font-size: 14px;
+	    }
+
+		/* IE8 only */
+		@media \0screen {
+		    #editor {height:80px;}
+		}
+
+		@-webkit-keyframes fadeIn {
+		  0% {opacity: 0;}
+		  20% {opacity: 1;}
+		  80% {opacity: 1;}
+		  100% {opacity: 0;}
+		}
+
+		@keyframes fadeIn {
+		  0% {opacity: 0;}
+		  20% {opacity: 1;}
+		  80% {opacity: 1;}
+		  100% {opacity: 0;}
+		}
+
+		.fadeIn {
+		  	-webkit-animation-name: fadeIn;
+		    animation-name: fadeIn;
+		    animation-duration: 6s;
+			opacity:0;
+		}
+	</style>
+
 
 		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 		<!--[if lt IE 9]>
@@ -86,9 +124,10 @@
 		<div id="content" class="bs-docs-header">
 			<div class="container">
 				
-	<h1>Body awareness</h1>
-
-	<p>Documentation for bodyAwareness.js </p>
+	<h1>Live dependency</h1>
+	
+		<p>You can play around with liveDependency.js right here. All you need to do is change the script and then click the activate button.</p>
+	
 
 			</div>
 		</div>
@@ -97,192 +136,137 @@
 			<div class="row">
 				<div class="col-md-9" role="main">
 					
-	
-		
+		<p>
+			<button class="btn btn-default btn-lg btn-block" onclick="window.click(event)" type="button">Activate</button>
+		</p>
 
-		
-		  <div class='highlight'><pre>define([<span class="hljs-string">'questAPI'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(Quest)</span></span>{
-	<span class="hljs-keyword">var</span> API = <span class="hljs-keyword">new</span> Quest();</pre></div>
-		
-	
-		<h3 id="questions">Questions</h3>
+		<div id="success" role="alert" class="alert alert-success" style="display:none">
+			<strong>Well Done!</strong> The task has been successfully completed.
+		</div>
+		<div id="error" role="alert" class="alert alert-danger" style="display:none">
+			<strong>Oh Snap!</strong> Something went wrong with the task. Why don't you fix it and try again?
+		</div>
 
+   		<div id="editor">
+define([&#39;questAPI&#39;], function(Quest){
+	var API = new Quest();
 
-		
-	
-		<p>Create the generic question template:</p>
-<ul>
-<li><code>autoSubmit</code>: submit when an answer is clicked twice.</li>
-<li><code>answers</code>: the text for all answers (in our case only the questions change…)</li>
-<li><code>help</code>: add help text (only for the first three questions presented).</li>
-</ul>
-
-
-		
-		  <div class='highlight'><pre>	API.addQuestionsSet(<span class="hljs-string">'basicSelect'</span>, {
-		type: <span class="hljs-string">'selectOne'</span>,
-		autoSubmit:<span class="hljs-literal">true</span>,
-		numericValues:<span class="hljs-literal">true</span>,
-		answers: [
-			<span class="hljs-string">"1- Not at all true about me"</span>,
-			<span class="hljs-string">"2"</span>,
-			<span class="hljs-string">"3"</span>,
-			<span class="hljs-string">"4"</span>,
-			<span class="hljs-string">"5"</span>,
-			<span class="hljs-string">"6"</span>,
-			<span class="hljs-string">"7 - Very true about me"</span>
-		],
-		help: <span class="hljs-string">'&lt;%= pagesMeta.number &lt; 3 %&gt;'</span>,
-		helpText: <span class="hljs-string">'Selecting an answer once colors it blue.&lt;br/&gt;'</span> +
-			<span class="hljs-string">'You can change your answer by selecting another option.&lt;br/&gt;'</span> +
-			<span class="hljs-string">'To confirm, click the selected (blue) button a second time.'</span>
-	});</pre></div>
-		
-	
-		<p>Create a set with all the questions that we are going to use.
-Each questions <code>inherit</code>s our <em>basicSelect</em>, sets a <code>name</code> and sets the questions text (<code>stem</code>).</p>
-
-
-		
-		  <div class='highlight'><pre>	API.addQuestionsSet(<span class="hljs-string">'baQuestions'</span>, [
-		{
-			inherit : <span class="hljs-string">'basicSelect'</span>,
-			name : <span class="hljs-string">'ba1'</span>,
-			stem : <span class="hljs-string">"I notice differences in the way my body reacts to various foods."</span>
-		},
-		{
-			inherit : <span class="hljs-string">'basicSelect'</span>,
-			name : <span class="hljs-string">'ba2'</span>,
-			stem : <span class="hljs-string">"I can always tell when I bump myself whether or not it will become a bruise."</span>
-		},
-		{
-			inherit : <span class="hljs-string">'basicSelect'</span>,
-			name : <span class="hljs-string">'ba3'</span>,
-			stem : <span class="hljs-string">"I always know when I've exerted myself to the point where I'll be sore the next day."</span>
-		},
-		{
-			inherit : <span class="hljs-string">'basicSelect'</span>,
-			name : <span class="hljs-string">'ba4'</span>,
-			stem : <span class="hljs-string">"I'm always aware of changes in my energy level when I eat certain foods."</span>
-		},
-		{
-			inherit : <span class="hljs-string">'basicSelect'</span>,
-			name : <span class="hljs-string">'ba5'</span>,
-			stem : <span class="hljs-string">"I know in advance when I'm getting the flu."</span>
-		},
-		{
-			inherit : <span class="hljs-string">'basicSelect'</span>,
-			name : <span class="hljs-string">'ba6'</span>,
-			stem : <span class="hljs-string">"I know I'm running a fever without taking my temperature."</span>
-		},
-		{
-			inherit : <span class="hljs-string">'basicSelect'</span>,
-			name : <span class="hljs-string">'ba7'</span>,
-			stem : <span class="hljs-string">"I can distinguish between tiredness because of hunger and tiredness because of lack of sleep."</span>
-		},
-		{
-			inherit : <span class="hljs-string">'basicSelect'</span>,
-			name : <span class="hljs-string">'ba8'</span>,
-			stem : <span class="hljs-string">"I can accurately predict what time of day lack of sleep will catch up with me."</span>
-		},
-		{
-			inherit : <span class="hljs-string">'basicSelect'</span>,
-			name : <span class="hljs-string">'ba9'</span>,
-			stem : <span class="hljs-string">"I am aware of a cycle in my activity level throughout the day."</span>
-		},
-		{
-			inherit : <span class="hljs-string">'basicSelect'</span>,
-			name : <span class="hljs-string">'ba10'</span>,
-			stem : <span class="hljs-string">"I &lt;b&gt;don't&lt;/b&gt; notice seasonal rhythms and cycles in the way my body functions."</span>
-		},
-		{
-			inherit : <span class="hljs-string">'basicSelect'</span>,
-			name : <span class="hljs-string">'ba11'</span>,
-			stem : <span class="hljs-string">"As soon as I wake up in the morning I know how much energy I'll have during the day."</span>
-		},
-		{
-			inherit : <span class="hljs-string">'basicSelect'</span>,
-			name : <span class="hljs-string">'ba12'</span>,
-			stem : <span class="hljs-string">"I can tell when I go to bed how well I will sleep that night."</span>
-		},
-		{
-			inherit : <span class="hljs-string">'basicSelect'</span>,
-			name : <span class="hljs-string">'ba13'</span>,
-			stem : <span class="hljs-string">"I notice distinct body reactions when I am fatigued."</span>
-		},
-		{
-			inherit : <span class="hljs-string">'basicSelect'</span>,
-			name : <span class="hljs-string">'ba14'</span>,
-			stem : <span class="hljs-string">"I notice specific body responses to changes in the weather."</span>
-		},
-		{
-			inherit : <span class="hljs-string">'basicSelect'</span>,
-			name : <span class="hljs-string">'ba15'</span>,
-			stem : <span class="hljs-string">"I can predict how much sleep I will need at night in order to wake up refreshed."</span>
-		},
-		{
-			inherit : <span class="hljs-string">'basicSelect'</span>,
-			name : <span class="hljs-string">'ba16'</span>,
-			stem : <span class="hljs-string">"When my exercise habits change, I can predict very accurately how that will affect my energy level."</span>
-		},
-		{
-			inherit : <span class="hljs-string">'basicSelect'</span>,
-			name : <span class="hljs-string">'ba17'</span>,
-			stem : <span class="hljs-string">"There seems to be a best time for me to go to sleep at night."</span>
-		},
-		{
-			inherit : <span class="hljs-string">'basicSelect'</span>,
-			name : <span class="hljs-string">'ba18'</span>,
-			stem : <span class="hljs-string">"I notice specific bodily reactions to being overhungry."</span>
+	// ### Questions
+	API.addQuestionsSet(&#39;basicSelect&#39;,
+	{
+		type: &#39;selectMulti&#39;,
+		autoSubmit:true,
+		numericValues:true,
+		required:true,
+		errorMsg: {
+			required: &quot;Please select an answer, or click &#39;decline to answer&#39;&quot;
 		}
-	]);</pre></div>
-		
-	
-		<h3 id="pages">Pages</h3>
-<p>Create the generic pages template:</p>
-<ul>
-<li><code>decline</code>: allow participants to decline answering</li>
-<li><code>noSubmit</code>: do not display the submit button (we rely on <code>autoSubmit</code> for submitting)</li>
-</ul>
+	});
 
+	API.addQuestionsSet({
+		multi: [{
+			inherit: &#39;basicSelect&#39;,
+			name:&#39;multi&#39;,
+			stem:&#39;Please select&#39;,
+			answers : [&#39;Men&#39;, &#39;Women&#39;, &#39;Other&#39;]
+		}],
+		open: [{
+			type: &#39;text&#39;,
+			name:&#39;other&#39;,
+			stem:&#39;How do you mean other?&#39;
+		}]
+	});
 
-		
-		  <div class='highlight'><pre>	API.addPagesSet(<span class="hljs-string">'basicPage'</span>, {
-		progressBar: <span class="hljs-string">'&lt;%= pagesMeta.number %&gt; out of 18'</span>,
-		header: <span class="hljs-string">'Please rate your agreement with the following statement'</span>,
-		headerStyle : {<span class="hljs-string">'font-size'</span>:<span class="hljs-string">'1em'</span>},
-		questions : {inherit:{set:<span class="hljs-string">'baQuestions'</span>, type:<span class="hljs-string">'exRandom'</span>}},
-		decline:<span class="hljs-literal">true</span>,
-		noSubmit:<span class="hljs-literal">true</span>
-	});</pre></div>
-		
-	
-		<h3 id="sequence">Sequence</h3>
-<p>We use a simple mixer here to repeat a simple page that inherits from the basicPage.
-The basic page randomly inherits a question, therfore we get a different question for every page.
-We use exRandom in the basicPage page so that questions don’t randomly appear more than once.</p>
+	// ### Pages
+	API.addPagesSet(&#39;basicPage&#39;,
+	{
+		progressBar: &#39;&lt;%= pagesMeta.number %&gt; out of 3&#39;,
+		headerStyle : {&#39;font-size&#39;:&#39;1em&#39;},
+		v1style:2,
+		decline:true,
+		numbered: false
+	});
 
-
-		
-		  <div class='highlight'><pre>	API.addSequence([
+	// ### Sequence
+	API.addSequence(
+	[
 		{
-			mixer : <span class="hljs-string">'repeat'</span>,
-			times : <span class="hljs-number">18</span>,
-			data : [
-				{inherit : <span class="hljs-string">'basicPage'</span>}
-			]
-		}
-	]);</pre></div>
-		
-	
-		<p>Return the script to piquest’s god, or something of that sort.</p>
+			inherit :&#39;basicPage&#39;,
+			questions:[
+				// always show this question
+				{inherit:&#39;multi&#39;},
+				// this question should be shown only if &quot;other was selected&quot;
+				{
+					remix: true, // remix:true is neccessary so that the mixer is re-evaluated each time that the responses change
+					mixer:&#39;branch&#39;,
+		            conditions: [
+						{compare: 3, operator:&#39;in&#39;, to: &#39;current.questions.multi.response&#39;}
+					],
+					data: [
+						{inherit:&#39;open&#39;}
+					]
+				}
+			]}
+	]);
 
+	/**
+	Return the script to piquest&#39;s god, or something of that sort.
+	**/
+	return API.script;
+});
+		</div>
 
-		
-		  <div class='highlight'><pre>	<span class="hljs-keyword">return</span> API.script;
-});</pre></div>
-		
-	
+		<script>
+		    var editor = ace.edit("editor");
+		    editor.setTheme("ace/theme/monokai");
+		    editor.getSession().setMode("ace/mode/javascript");
+		    editor.setOption("showPrintMargin", false);
+		    var win;
+		    var feedbackId = 'success';
+
+		    function click(event){
+		    	event.target.blur();
+
+		    	// assume the feedback is success
+				feedbackId = 'success';
+
+				// clean out open window
+		    	if (win){
+		    		win.close();
+		    		win = null;
+		    	}
+
+		    	win = window.open('../quest/questactivate.html', 'pip');
+		    	win.focus();
+
+		    	win.onload = function(){
+		    		// first set the unload listener
+					win.addEventListener('unload', function(event) {
+						var el = document.getElementById(feedbackId);
+						window.focus();
+						fade(el);
+					});
+
+					// then activate the player (this ensures that when )
+					win.piActivate(editor.getValue());
+		    	};
+		    }
+
+	    	window.addEventListener('error', function(e){
+	    		console.error(e);
+	    		feedbackId = 'error';
+	    	});
+
+	    	function fade(el){
+				el.style.display = 'block';
+				el.classList.add('fadeIn');
+				setTimeout(function(){
+					el.style.display = 'none';
+					el.classList.remove('fadeIn');
+				}, 6000);
+	    	}
+
+		</script>
 
 				</div>
 
