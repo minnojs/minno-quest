@@ -481,4 +481,4 @@ current.questions = {
 }
 ```
 
-So that the response for questionName1 can be accessed using `current.questionName1.response`. You can use this data within [templates](../basics/sequencer.html#templates) or from within [branches](../basics/sequencer.html#conditions).
+The response for questionName1 can be accessed using `current.questions.questionName1.response`. You can use this data within [templates](../basics/sequencer.html#templates) or from within [branches](../basics/sequencer.html#conditions).

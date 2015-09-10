@@ -18,12 +18,13 @@ description: All the little details...
     - [Plugging in](#plugging-in)
     - [Activator function](#activator-function)
     - [Custom Task Example](#custom-task-example)
+- [Project Implicit Build](#project-implicit-build)
 
-The piManager is responsible for managing several piTasks sequentially. It uses the same API used throught the project implicit tasks.
+The piManager is responsible for managing several piTasks sequentially. It uses the same API used throughout the project implicit tasks.
 
 ### Settings
 Settings allow you to control the generic way that the player works. Change the settings using the `addSettings` function. The first argument to the function is always the name of the setting, the second argument is the setting values. In case the setting is an object, subsequent objects will extend each other so that settings may be progressively added.
-All the functions within settings are invoked using angular. This means that you have access to any service you like, as well as some specific asssets. [In order to access the services](https://docs.angularjs.org/api/auto/service/$injector) simply use arguments with the appropriate name. For instance, this is how you would access `$rootScope`:
+All the functions within settings are invoked using angular. This means that you have access to any service you like, as well as some specific assets. [In order to access the services](https://docs.angularjs.org/api/auto/service/$injector) simply use arguments with the appropriate name. For instance, this is how you would access `$rootScope`:
 
 ```js
 function onEnd($rootScope){
@@ -81,7 +82,7 @@ Accepts an array of image urls to preload. The manager will **not** wait until a
 Whether to activate the skip and refresh option. If activated, clicking `ctrl r` reloads the current task (this feature may not be supported on older browsers), clicking `escape` and then the right or left arrows skips to the next or previous tasks.
 
 ### Tasks
-The basic unit in piManager is the **task**. The manager currently suports two types of tasks `quest` and `message`. You should just cue them into the sequence (you can use mixers to your hearts content as well).
+The basic unit in piManager is the **task**. The manager currently supports two types of tasks `quest` and `message`. You should just cue them into the sequence (you can use mixers to your hearts content as well).
 
 Property    | Description
 ----------- | -------------
@@ -89,7 +90,7 @@ name        | Task name.
 type        | Type of task (quest/message).
 pre         | A function to invoke before the task (may return a promise).
 post        | A function to invoke after the task (may return a promise).
-canvas      | A canvas object (as defined under [settings](#canvas)) to invoke at the begining of the task and remove 
+canvas      | A canvas object (as defined under [settings](#canvas)) to invoke at the beginning of the task and remove 
 title       | A string to be used as the page title (the name displayed on the tag). It is reset at the end of the task.
 
 #### Quest
@@ -174,4 +175,21 @@ In order to use it all you have to do is point the task to the correct url:
 
 ```js
 var taskElement = {scriptUrl:'path/to/script'};
+```
+
+### Project Implicit Build
+The project implicit build has a feature for integration with mTurk.
+All you have to do is add The following code to your project, replacing the `<id#>` tags with the appropriate data of course.
+The player will affirm the mTurk question are immediately before the final task in the manager (as defined by the `last` property).
+Setting the isProduction property allows you to switch between the development and production urls for mTurk.
+
+```js
+API.addGlobal({
+    $mTurk: {
+        assignmentId:'<id#>',
+        hitId:'<id#>',
+        workerId:'<id#>',
+        isProduction: true
+    }
+});
 ```

@@ -118,11 +118,12 @@
 <li><a href="#custom-task-example">Custom Task Example</a></li>
 </ul>
 </li>
+<li><a href="#project-implicit-build">Project Implicit Build</a></li>
 </ul>
-<p>The piManager is responsible for managing several piTasks sequentially. It uses the same API used throught the project implicit tasks.</p>
+<p>The piManager is responsible for managing several piTasks sequentially. It uses the same API used throughout the project implicit tasks.</p>
 <h3 id="settings">Settings</h3>
 <p>Settings allow you to control the generic way that the player works. Change the settings using the <code>addSettings</code> function. The first argument to the function is always the name of the setting, the second argument is the setting values. In case the setting is an object, subsequent objects will extend each other so that settings may be progressively added.
-All the functions within settings are invoked using angular. This means that you have access to any service you like, as well as some specific asssets. <a href="https://docs.angularjs.org/api/auto/service/$injector">In order to access the services</a> simply use arguments with the appropriate name. For instance, this is how you would access <code>$rootScope</code>:</p>
+All the functions within settings are invoked using angular. This means that you have access to any service you like, as well as some specific assets. <a href="https://docs.angularjs.org/api/auto/service/$injector">In order to access the services</a> simply use arguments with the appropriate name. For instance, this is how you would access <code>$rootScope</code>:</p>
 <pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">onEnd</span><span class="hljs-params">($rootScope)</span></span>{
     $rootScope.$emit(<span class="hljs-string">'end!!'</span>);
 }
@@ -208,7 +209,7 @@ All the functions within settings are invoked using angular. This means that you
 <h4 id="skip">skip</h4>
 <p>Whether to activate the skip and refresh option. If activated, clicking <code>ctrl r</code> reloads the current task (this feature may not be supported on older browsers), clicking <code>escape</code> and then the right or left arrows skips to the next or previous tasks.</p>
 <h3 id="tasks">Tasks</h3>
-<p>The basic unit in piManager is the <strong>task</strong>. The manager currently suports two types of tasks <code>quest</code> and <code>message</code>. You should just cue them into the sequence (you can use mixers to your hearts content as well).</p>
+<p>The basic unit in piManager is the <strong>task</strong>. The manager currently supports two types of tasks <code>quest</code> and <code>message</code>. You should just cue them into the sequence (you can use mixers to your hearts content as well).</p>
 <table>
 <thead>
 <tr>
@@ -235,7 +236,7 @@ All the functions within settings are invoked using angular. This means that you
 </tr>
 <tr>
 <td>canvas</td>
-<td>A canvas object (as defined under <a href="#canvas">settings</a>) to invoke at the begining of the task and remove </td>
+<td>A canvas object (as defined under <a href="#canvas">settings</a>) to invoke at the beginning of the task and remove </td>
 </tr>
 <tr>
 <td>title</td>
@@ -374,6 +375,20 @@ define(<span class="hljs-function"><span class="hljs-keyword">function</span><sp
 </code></pre>
 <p>In order to use it all you have to do is point the task to the correct url:</p>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> taskElement = {scriptUrl:<span class="hljs-string">'path/to/script'</span>};
+</code></pre>
+<h3 id="project-implicit-build">Project Implicit Build</h3>
+<p>The project implicit build has a feature for integration with mTurk.
+All you have to do is add The following code to your project, replacing the <code>&lt;id#&gt;</code> tags with the appropriate data of course.
+The player will affirm the mTurk question are immediately before the final task in the manager (as defined by the <code>last</code> property).
+Setting the isProduction property allows you to switch between the development and production urls for mTurk.</p>
+<pre><code class="lang-js">API.addGlobal({
+    $mTurk: {
+        assignmentId:<span class="hljs-string">'&lt;id#&gt;'</span>,
+        hitId:<span class="hljs-string">'&lt;id#&gt;'</span>,
+        workerId:<span class="hljs-string">'&lt;id#&gt;'</span>,
+        isProduction: <span class="hljs-literal">true</span>
+    }
+});
 </code></pre>
 
 
