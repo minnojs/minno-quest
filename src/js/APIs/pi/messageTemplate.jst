@@ -7,15 +7,18 @@
 
 	<div class="panel-body">
 		<%= content %>
-		<div class="text-center" style="margin: 30px auto 10px;">
-			<button pi-message-done type="button" class="btn btn-primary">
-				<% if (task.buttonText){ %>
-					<%= task.buttonText %>
-				<% } else { %>
-					Click Here or press the space button to Proceed
-				<% } %>
-			</button>
-		</div>
+
+		<% if (!task.buttonHide){ %>
+			<div class="text-center" style="margin: 30px auto 10px;">
+				<button pi-message-done type="button" class="btn btn-primary">
+					<% if (task.buttonText){ %>
+						<%= task.buttonText %>
+					<% } else { %>
+						Click Here or press the space button to Proceed
+					<% } %>
+				</button>
+			</div>
+		<% } %>
 	</div>
 
 	<% if (task.footer){ %>
