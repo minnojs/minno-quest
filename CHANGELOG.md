@@ -1,3 +1,21 @@
+<a name"0.0.52"></a>
+### 0.0.52 (2015-09-10)
+
+
+#### Bug Fixes
+
+* **piModal:** style show ([86c2af42](https://github.com/ProjectImplicit/PIquest/commit/86c2af42))
+* **select:** mixer required does not screw up the response anymore ([31794373](https://github.com/ProjectImplicit/PIquest/commit/31794373))
+* **skip:** skip refresh now works correctly ([3437cfe0](https://github.com/ProjectImplicit/PIquest/commit/3437cfe0))
+
+
+#### Features
+
+* **PI:**
+  * allow hiding button in templates ([bb9d5ac3](https://github.com/ProjectImplicit/PIquest/commit/bb9d5ac3))
+  * support mTurk ([bcbb6a34](https://github.com/ProjectImplicit/PIquest/commit/bcbb6a34))
+
+
 <a name"0.0.51"></a>
 ### 0.0.51 (2015-09-01)
 
