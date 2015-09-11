@@ -154,7 +154,7 @@ define([&#39;questAPI&#39;], function(Quest){
 	// ### Questions
 	API.addQuestionsSet(&#39;basicSelect&#39;,
 	{
-		type: &#39;selectMulti&#39;,
+		type: &#39;selectOne&#39;,
 		autoSubmit:true,
 		numericValues:true,
 		required:true,
@@ -164,9 +164,9 @@ define([&#39;questAPI&#39;], function(Quest){
 	});
 
 	API.addQuestionsSet({
-		multi: [{
+		base: [{
 			inherit: &#39;basicSelect&#39;,
-			name:&#39;multi&#39;,
+			name:&#39;base&#39;,
 			stem:&#39;Please select&#39;,
 			answers : [&#39;Men&#39;, &#39;Women&#39;, &#39;Other&#39;]
 		}],
@@ -194,13 +194,13 @@ define([&#39;questAPI&#39;], function(Quest){
 			inherit :&#39;basicPage&#39;,
 			questions:[
 				// always show this question
-				{inherit:&#39;multi&#39;},
+				{inherit:&#39;base&#39;},
 				// this question should be shown only if &quot;other was selected&quot;
 				{
 					remix: true, // remix:true is neccessary so that the mixer is re-evaluated each time that the responses change
 					mixer:&#39;branch&#39;,
 		            conditions: [
-						{compare: 3, operator:&#39;in&#39;, to: &#39;current.questions.multi.response&#39;}
+						{compare: 3, to: &#39;current.questions.base.response&#39;}
 					],
 					data: [
 						{inherit:&#39;open&#39;}

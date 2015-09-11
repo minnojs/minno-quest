@@ -111,7 +111,7 @@
 		
 		  <div class='highlight'><pre>	API.addQuestionsSet(<span class="hljs-string">'basicSelect'</span>,
 	{
-		type: <span class="hljs-string">'selectMulti'</span>,
+		type: <span class="hljs-string">'selectOne'</span>,
 		autoSubmit:<span class="hljs-literal">true</span>,
 		numericValues:<span class="hljs-literal">true</span>,
 		required:<span class="hljs-literal">true</span>,
@@ -121,9 +121,9 @@
 	});
 
 	API.addQuestionsSet({
-		multi: [{
+		base: [{
 			inherit: <span class="hljs-string">'basicSelect'</span>,
-			name:<span class="hljs-string">'multi'</span>,
+			name:<span class="hljs-string">'base'</span>,
 			stem:<span class="hljs-string">'Please select'</span>,
 			answers : [<span class="hljs-string">'Men'</span>, <span class="hljs-string">'Women'</span>, <span class="hljs-string">'Other'</span>]
 		}],
@@ -164,7 +164,7 @@
 
 
 		
-		  <div class='highlight'><pre>				{inherit:<span class="hljs-string">'multi'</span>},</pre></div>
+		  <div class='highlight'><pre>				{inherit:<span class="hljs-string">'base'</span>},</pre></div>
 		
 	
 		<p>this question should be shown only if “other was selected”</p>
@@ -175,7 +175,7 @@
 					remix: <span class="hljs-literal">true</span>, <span class="hljs-comment">// remix:true is neccessary so that the mixer is re-evaluated each time that the responses change</span>
 					mixer:<span class="hljs-string">'branch'</span>,
 		            conditions: [
-						{compare: <span class="hljs-number">3</span>, operator:<span class="hljs-string">'in'</span>, to: <span class="hljs-string">'current.questions.multi.response'</span>}
+						{compare: <span class="hljs-number">3</span>, to: <span class="hljs-string">'current.questions.base.response'</span>}
 					],
 					data: [
 						{inherit:<span class="hljs-string">'open'</span>}
