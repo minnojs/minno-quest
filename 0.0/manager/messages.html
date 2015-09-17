@@ -203,9 +203,10 @@
 </tbody>
 </table>
 <p>The project implicit template supports a debrief template activated by setting <code>piTemplate</code> to ‘debrief’. If it is activated, there are two additional functions exposed from within the template.
-They can be used like so: <code>&lt;%= showPanel(&#39;body&#39;,&#39;header&#39;,&#39;footer&#39;) %&gt;</code></p>
-<h5 id="showpanel-body-header-footer-">showPanel(body, header, footer)</h5>
-<p><code>showPanel</code> displays content within a stylized panel.</p>
+They can be used like so: <code>&lt;%= showPanel(&#39;body&#39;,&#39;header&#39;,&#39;footer&#39;) %&gt;</code> or <code>&lt;%= showFeedback({wrap:false}) %&gt;</code>.</p>
+<h4 id="showpanel-body-header-footer-">showPanel(body, header, footer)</h4>
+<pre><code>&lt;%= showPanel(<span class="hljs-string">'body'</span>,<span class="hljs-string">'header'</span>,<span class="hljs-string">'footer'</span>) %&gt;
+</code></pre><p><code>showPanel</code> displays content within a stylized panel.</p>
 <table>
 <thead>
 <tr>
@@ -228,8 +229,10 @@ They can be used like so: <code>&lt;%= showPanel(&#39;body&#39;,&#39;header&#39;
 </tr>
 </tbody>
 </table>
-<h5 id="showfeedback-options-">showFeedback(options)</h5>
-<p><code>showFeedback</code> automatically gathers feedback from the global object and displays it within your page. It takes an options object as its single argument.</p>
+<h4 id="showfeedback-options-">showFeedback(options)</h4>
+<pre><code>&lt;%= showFeedback({wrap:<span class="hljs-literal">false</span>}) %&gt;
+</code></pre><p><code>showFeedback</code> automatically gathers feedback from the global object and displays it within your page. It takes an options object as its single argument. The feedback is gathered from the global object by going through each task object (current) and searching for the <code>feedback</code> property. It depends on the individual tasks respecting this convention.
+You can fine tune the way feedback is collected and desplayed using the following options:</p>
 <table>
 <thead>
 <tr>
@@ -240,11 +243,11 @@ They can be used like so: <code>&lt;%= showPanel(&#39;body&#39;,&#39;header&#39;
 <tbody>
 <tr>
 <td>pre</td>
-<td>A string to be injected before each feedback (default :’<p>‘).</td>
+<td>A string to be injected before each feedback (default :’&lt;p&gt;’).</td>
 </tr>
 <tr>
 <td>post</td>
-<td>A string to be injected after each feedback (default :’</p>‘).</td>
+<td>A string to be injected after each feedback (default :’&lt;/p&gt;’).</td>
 </tr>
 <tr>
 <td>wrap</td>
@@ -256,7 +259,7 @@ They can be used like so: <code>&lt;%= showPanel(&#39;body&#39;,&#39;header&#39;
 </tr>
 <tr>
 <td>noFeedback</td>
-<td>The text to show if no feedback is found (default: ‘<p>No feedback was found</p>‘).</td>
+<td>The text to show if no feedback is found (default: ‘&lt;p&gt;No feedback was found&lt;/p&gt;’).</td>
 </tr>
 <tr>
 <td>property</td>
@@ -268,7 +271,6 @@ They can be used like so: <code>&lt;%= showPanel(&#39;body&#39;,&#39;header&#39;
 </tr>
 </tbody>
 </table>
-<p>The feedback is gathered from the global object by going through each tasks object and searching for the feedback property. It depends on the individual tasks respecting this convention.</p>
 
 
 				</div>
