@@ -70,6 +70,24 @@ define(function(require){
 	}]);
 
 	module.config(['taskActivateProvider', function(activateProvider){
+		activatePost.$inject = ['done', 'task', '$http','$q', '$rootScope'];
+		function activatePost(done, task, $http, $q, $rootScope){
+			var canceler = $q.defer(); // http://stackoverflow.com/questions/13928057/how-to-cancel-an-http-request-in-angularjs
+			var global = $rootScope.global;
+			var data = task.path ? _.get(global, task.path) : task.data;
+
+			$http
+				.post(task.url, data, {timeout: canceler.promise})
+				.then(done,done);
+
+			return canceler.resolve;
+		}
+
+		activateProvider.set('post', activatePost);
+	}]);
+
+
+	module.config(['taskActivateProvider', function(activateProvider){
 		activatePIP.$inject = ['done', '$element', 'task', 'script'];
 		function activatePIP(done, $canvas, task, script){
 			var $el, req;

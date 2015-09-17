@@ -22,6 +22,7 @@ define(['managerAPI'], function(Manager){
 	API.addSettings('skip', true);
 
 	API.addSequence([
+		{type:'post', data:{1:2}, url:'my/post/url'},
 		{
 			script: {
 				// custom script content

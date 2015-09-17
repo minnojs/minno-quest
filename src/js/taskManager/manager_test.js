@@ -551,12 +551,6 @@ define(['require','./managerModule'], function(require){
 				}).toThrow();
 			});
 
-			it('should throw if both script and scriptUrl are not set', function(){
-				expect(function(){
-					taskLoad({});
-				}).toThrow();
-			});
-
 			it('should extend the task with $script and $template', function(){
 				var task = {script:123, template: 345};
 				taskLoad(task);

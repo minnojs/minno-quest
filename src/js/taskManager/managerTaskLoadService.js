@@ -41,10 +41,6 @@ define(function(require){
 				template = task.template;
 			}
 
-			if (!script && !template){
-				throw new Error('Tasks must have either a "script" property or a "scriptUrl" property (or a "template" property in specific cases).');
-			}
-
 			promise = $q.all({script: $q.when(script), template: $q.when(template)});
 
 			promise.then(function(promises){
