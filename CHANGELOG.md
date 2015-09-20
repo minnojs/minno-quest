@@ -1,3 +1,17 @@
+<a name"0.0.53"></a>
+### 0.0.53 (2015-09-20)
+
+
+#### Bug Fixes
+
+* **PI:** mturk post changed into redirect post last task ([ca291754](https://github.com/ProjectImplicit/PIquest/commit/ca291754))
+
+
+#### Features
+
+* **tasks:** created post task ([68cae356](https://github.com/ProjectImplicit/PIquest/commit/68cae356))
+
+
 <a name"0.0.52"></a>
 ### 0.0.52 (2015-09-10)
 
