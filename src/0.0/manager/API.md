@@ -13,6 +13,7 @@ description: All the little details...
 - [Tasks](#tasks)
     - [Quest](#quest)
     - [Message](#message)
+    - [Post](#post)
 - [Inheritance](#inheritance)
 - [Custom tasks](#custom-tasks)
     - [Plugging in](#plugging-in)
@@ -82,7 +83,7 @@ Accepts an array of image urls to preload. The manager will **not** wait until a
 Whether to activate the skip and refresh option. If activated, clicking `ctrl r` reloads the current task (this feature may not be supported on older browsers), clicking `escape` and then the right or left arrows skips to the next or previous tasks.
 
 ### Tasks
-The basic unit in piManager is the **task**. The manager currently supports two types of tasks `quest` and `message`. You should just cue them into the sequence (you can use mixers to your hearts content as well).
+The basic unit in piManager is the **task**. The manager currently supports several types of tasks; `quest`, `message` and `post`. You should just cue them into the sequence (you can use mixers to your hearts content as well).
 
 Property    | Description
 ----------- | -------------
@@ -107,6 +108,12 @@ template    | the actual html to display as a string.
 templateUrl | The url for the message html file.
 keys        | Controls the proceed key: either a key (i.e. `'a'`) a keyCode (i.e. `65`) or an array of such (i.e. `['a','b']`).
 
+#### Post
+property        | description
+--------------- | ------------
+url             | The url we intend to post to.
+path            | A path within the global to the object that you want to send. For example: `"iat.feedback"` will post the object `feedback` from `global.iat`.
+data            | A raw object to be posted to the server. You may use templates in order to construct it.
 
 ### Inheritance
 piManager uses the same inheritance system used by piQuest. It has one type of set: the task set. In order to create task sets use `addTasksSet(set, list)`.
@@ -180,8 +187,8 @@ var taskElement = {scriptUrl:'path/to/script'};
 ### Project Implicit Build
 The project implicit build has a feature for integration with mTurk.
 All you have to do is add The following code to your project, replacing the `<id#>` tags with the appropriate data of course.
-The player will affirm the mTurk question are immediately before the final task in the manager (as defined by the `last` property).
-Setting the isProduction property allows you to switch between the development and production urls for mTurk.
+The player will redirect the users back to mTurk immediately after the final task in the manager (as defined by the `last` property).
+Setting the `isProduction` property allows you to switch between the development and production urls for mTurk.
 
 ```js
 API.addGlobal({
