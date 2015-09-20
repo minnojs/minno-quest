@@ -86,9 +86,8 @@
 		<div id="content" class="bs-docs-header">
 			<div class="container">
 				
-	<h1>Weight manager</h1>
-
-	<p>Documentation for weightManager.js </p>
+	<h1>Post</h1>
+	<p>A simple task that posts data to the server.</p>
 
 			</div>
 		</div>
@@ -97,94 +96,38 @@
 			<div class="row">
 				<div class="col-md-9" role="main">
 					
-	
-		<p>The weight manager is a basic example of how we user piManager.
-It is heavily commented so that you can follow everything that goes on.
-After reading the documentation feel free to download the file and modify it according to your needs.</p>
-<h3 id="opening-section">Opening section</h3>
-<p>The opening section of each script is always more or less the same.
-We create the wrapper for the script (<code>define</code>), and create a new instance of a manager.</p>
+	<p>The post task is responsible for posting plain data to the server. You can either send data directly from the global object or create it yourself. This is a good way to keep track of complex conditions within your tasks or of manual manipulation of all sorts.</p>
+<p>A typical post task may look like this:</p>
+<pre><code class="lang-js">{
+    type:<span class="hljs-string">'post'</span>,
+    url: <span class="hljs-string">'my/post/url'</span>,
+    data: {something:<span class="hljs-string">'I'</span>,want:<span class="hljs-string">'to save.'</span>}
+}
+</code></pre>
+<p>The API is as follows:</p>
+<table>
+<thead>
+<tr>
+<th>property</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>url</td>
+<td>The url we intend to post to.</td>
+</tr>
+<tr>
+<td>path</td>
+<td>A path within the global to the object that you want to send. For example: <code>&quot;iat.feedback&quot;</code> will post the object <code>feedback</code> from <code>global.iat</code>.</td>
+</tr>
+<tr>
+<td>data</td>
+<td>A raw object to be posted to the server. You may use templates in order to construct it.</td>
+</tr>
+</tbody>
+</table>
 
-
-		
-		  <div class='highlight'><pre>define([<span class="hljs-string">'managerAPI'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(Manager)</span></span>{
-
-  <span class="hljs-keyword">var</span> API = <span class="hljs-keyword">new</span> Manager();</pre></div>
-		
-	
-		<h3 id="the-sequence">The sequence</h3>
-<p>The most important part of every manager script is the sequence.
-This is where you tell it how to interact with the participants.
-In our case we want to simply present a single instruction page, and then activate a piQuest questionnaire.</p>
-
-
-		
-		  <div class='highlight'><pre>  API.addSequence([</pre></div>
-		
-	
-		<h4 id="instructions">Instructions</h4>
-<p>This is a message task. It is used to give instructions to the user.</p>
-<p>The task type is defined using the <code>type</code> property.
-Setting <code>keys</code> to ‘&nbsp;&nbsp;’ allows using the space button in order to proceed.
-We use <code>template</code> to insert a plain html template to the task.
-Usually it is more convenient to use <code>templateUrl</code> and get the html out of a separate file, we chose this method here in order to keep the script concise.</p>
-
-
-		
-		  <div class='highlight'><pre>    {
-      type: <span class="hljs-string">'message'</span>,
-      keys: <span class="hljs-string">' '</span>,
-      template:
-        <span class="hljs-string">'&lt;div class="panel panel-info" style="margin-top:1em"&gt;'</span> +
-
-          <span class="hljs-string">'&lt;div class="panel-heading"&gt;'</span> +
-            <span class="hljs-string">'&lt;h1 class="panel-title" style="font-size:2em"&gt;Welcome&lt;/h1&gt;'</span> +
-          <span class="hljs-string">'&lt;/div&gt;'</span> +
-
-          <span class="hljs-string">'&lt;div class="panel-body"&gt;'</span> +
-            <span class="hljs-string">'&lt;p&gt;You are about to take a questionnaire that has to do with your perception of personal weight.&lt;/p&gt;'</span> +
-            <span class="hljs-string">'&lt;p&gt;Please take your time and answer to the best of your ability. In case there is no answer that fits you exactly, pick the closest answer possible.&lt;/p&gt;'</span> +
-            <span class="hljs-string">'&lt;div style="max-width: 50%; margin: 30px auto 10px;" class="well"&gt;'</span> +
-              <span class="hljs-string">'&lt;button pi-message-done type="button" class="btn btn-primary btn-block"&gt;Click Here or press the space button to Proceed&lt;/button&gt;'</span> +
-            <span class="hljs-string">'&lt;/div&gt;'</span> +
-          <span class="hljs-string">'&lt;/div&gt;'</span> +
-
-        <span class="hljs-string">'&lt;/div&gt;'</span> +
-        <span class="hljs-string">'&lt;div style="text-align:center; padding: 1em"&gt;&amp;middot; Project Implicit &amp;middot;&lt;/div&gt;'</span>
-    },</pre></div>
-		
-	
-		<h4 id="weight-questionnaire">Weight Questionnaire</h4>
-<p>This is a piQuest task. In this case it is the central task of this experiment.
-The questionnaire is loaded from a file (you can see it right <a href="../quest/weightDocco.html">here</a>).</p>
-
-
-		
-		  <div class='highlight'><pre>    {
-      type: <span class="hljs-string">'quest'</span>,
-      name: <span class="hljs-string">'weightQuest'</span>,
-      scriptUrl: <span class="hljs-string">'../../quest/weight.js'</span>
-    }</pre></div>
-		
-	
-		<p>Now, we just close the sequence.</p>
-
-
-		
-		  <div class='highlight'><pre>  ]);</pre></div>
-		
-	
-		<h3 id="closing-section">Closing section</h3>
-<p>And finally, we close the script.
-Here again, all scripts look more or less the same.
-We return the <code>script</code> and close the <code>define</code> wrapper.</p>
-
-
-		
-		  <div class='highlight'><pre>  <span class="hljs-keyword">return</span> API.script;
-});</pre></div>
-		
-	
 
 				</div>
 
@@ -213,7 +156,7 @@ We return the <code>script</code> and close the <code>define</code> wrapper.</p>
 							</li>
 						
 							
-							<li class="">
+							<li class=" active ">
 							<li class="">
 
 								<a href="post.html">Post</a>
@@ -223,7 +166,7 @@ We return the <code>script</code> and close the <code>define</code> wrapper.</p>
 								<a href="javascript:void(0)">Examples</a>
 								<ul class="nav">
 									
-							<li class=" active ">
+							<li class="">
 								<div>
 									<a href="weightManagerDocco.html">Weight experiment</a>
 									<a href="weightManager.js" download="weightManager.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>

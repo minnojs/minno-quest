@@ -15,4 +15,4 @@ Within the sequence you can use several tools in order to control the flow of yo
 
 ### Tasks
 
-There are three types of tasks built into piManager [piQuest](../quest/overview.html), [piPlayer](/PIPlayer/0.3/tutorials/overview.html) and [messages](messages.html). You can run new tasks in several ways (see the [API](API.html#tasks)).
+There are four types of tasks built into piManager [piQuest](../quest/overview.html), [piPlayer](/PIPlayer/0.3/tutorials/overview.html), [messages](messages.html) and [post](post.html). You can run new tasks in several ways (see the [API](API.html#tasks)).
