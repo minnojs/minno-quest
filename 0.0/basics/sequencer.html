@@ -349,13 +349,14 @@ Select the elements in <code>data</code> if all the conditions in the <code>cond
 </table>
 <p>By default, if the mixer runs into an array instead of an object, it will treat it as an <code>and</code> aggregator and be true only if all conditions within the array are true.</p>
 <p>Following are several examples for how to create different aggregations:</p>
-<pre><code class="lang-js"><span class="hljs-comment">// cond1 &amp;&amp; cond2</span>
+<pre><code class="lang-js"><span class="hljs-comment">// cond1 AND cond2</span>
+<span class="hljs-keyword">var</span> cond = {and:[cond1, cond2]};
 <span class="hljs-keyword">var</span> conds = [cond1, cond2];
 
-<span class="hljs-comment">// cond1 &amp;&amp; (cond2 || cond3)</span>
+<span class="hljs-comment">// cond1 AND (cond2 OR cond3)</span>
 <span class="hljs-keyword">var</span> conds = [cond1, {or:[cond2,cond3]}];
 
-<span class="hljs-comment">// (cond1 &amp;&amp; cond2) || cond2</span>
+<span class="hljs-comment">// (cond1 AND cond2) OR cond2</span>
 <span class="hljs-keyword">var</span> conds = [{or:[{and:[cond1,cond2]},cond3]}]
 </code></pre>
 <h3 id="templates">Templates</h3>

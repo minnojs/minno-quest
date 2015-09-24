@@ -231,13 +231,14 @@ By default, if the mixer runs into an array instead of an object, it will treat 
 Following are several examples for how to create different aggregations:
 
 ```js
-// cond1 && cond2
+// cond1 AND cond2
+var cond = {and:[cond1, cond2]};
 var conds = [cond1, cond2];
 
-// cond1 && (cond2 || cond3)
+// cond1 AND (cond2 OR cond3)
 var conds = [cond1, {or:[cond2,cond3]}];
 
-// (cond1 && cond2) || cond2
+// (cond1 AND cond2) OR cond2
 var conds = [{or:[{and:[cond1,cond2]},cond3]}]
 ```
 
