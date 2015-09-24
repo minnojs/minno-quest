@@ -191,13 +191,15 @@ define(function (require) {
 		}
 	}
 
-	function directive(){
+	directive.$inject = ['$window'];
+	function directive($window){
 		return {
 			replace: true,
 			controller: piqPageCtrl,
 			template:template,
 			require: ['piqPage','piTimer'],
 			link: function($scope, $el, $attr, $ctrl){
+				$window.scrollTo(0,0);
 				$ctrl[0].setup($ctrl[1]);
 			}
 		};

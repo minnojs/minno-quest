@@ -1,4 +1,4 @@
-define(['../questDirectivesModule'],function(){
+define(['underscore', '../questDirectivesModule'],function(_){
 	var jqLite = angular.element;
 	var controller, element, scope, $compile;
 
@@ -123,11 +123,11 @@ define(['../questDirectivesModule'],function(){
 		beforeEach(module('task', 'questDirectives', function($provide, $sceProvider){
 			// don't load Task currently
 			$provide.value('Task', function(){});
+			$provide.value('$window', _.create(window, {scrollTo:_.noop}));
 
 			// for the timer directive
 			now = 0;
 			$provide.value('timerNow', function(){return now;});
-
 			$sceProvider.enabled(false);
 		}));
 
@@ -382,6 +382,7 @@ define(['../questDirectivesModule'],function(){
 
 
 			describe('directive',function(){
+
 				it('should compile the correct number of questions', function(){
 					compile({
 						questions: [{},{},{}]
@@ -406,7 +407,6 @@ define(['../questDirectivesModule'],function(){
 					expect(element.find('h3').css('z-index')).toEqual('123');
 				});
 
-
 				it('should be valid only if the question are valid', function(){
 					compile({
 						questions: [{required:true}]
@@ -425,6 +425,12 @@ define(['../questDirectivesModule'],function(){
 					compile({numbered:true});
 					expect(element.find('ol')).not.toHaveClass('list-unstyled');
 				});
+
+				it('should scroll to top', inject(function($window){
+					spyOn($window, 'scrollTo');
+					compile({});
+					expect($window.scrollTo).toHaveBeenCalledWith(0,0);
+				}));
 
 				describe(': prev', function () {
 					it('should not display the prev button by default', function() {
