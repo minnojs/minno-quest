@@ -1,3 +1,14 @@
+<a name"0.0.54"></a>
+### 0.0.54 (2015-09-24)
+
+
+#### Bug Fixes
+
+* **piqPage:**
+  * fixed window mocking for scrollTo ([5c3221d5](https://github.com/ProjectImplicit/PIquest/commit/5c3221d5))
+  * scroll to top on new page ([167170ad](https://github.com/ProjectImplicit/PIquest/commit/167170ad))
+
+
 <a name"0.0.53"></a>
 ### 0.0.53 (2015-09-20)
 
