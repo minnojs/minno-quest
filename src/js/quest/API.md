@@ -99,7 +99,7 @@ name 			| (text) The name that this question is marked with when it is logged. A
 stem 			| (text; default: '') The text for the question itself..
 stemCss			| A [css object](#http://api.jquery.com/css/#css-properties) to be applied to the stem.
 description 	| (text; default: '') Any additional text you want in order to extend the question description.
-maxWidth 		| Force question inputs to have this maximum width.
+maxWidth 		| Force question inputs to have this maximum width. The `maxWidth` must include an explicit measuring unit (for example '800px' or '50%').
 help			| (true or false;  (default: false)) Whether to display the question help text.
 helpText		| (text) The question help text. (Some questions have default help texts, some don't).
 lognow 			| (true or false) Whether to log this questions when the page is submitted. This option is useful when you know that the question will not be accessed any more. It allows you to use the `pulse` option from the [logger](#logger) to send questions as they are being answered instead of sending only at the end of the task. (default: false)
@@ -283,7 +283,7 @@ Property    	| Description
 ----------- 	| -----------
 columns 		| An array of column descriptions. You can use a string here or a column object as described [below](#gridcolumns).
 rows 			| An array of row descriptions. You can use a string here or a row object as described [below](#gridrows).
-shuffle 		| Whether to shuffle the order of the questions.
+shuffle 		| Whether to shuffle the order of the rows.
 required 		| Require the user to respond to all rows (true or false).
 columnStemCss	| CSS object for *all* the column stems.
 columnStemHide	| Hide the column stem row.
