@@ -123,8 +123,7 @@ define(['underscore', '../questDirectivesModule'],function(_){
 		beforeEach(module('task', 'questDirectives', function($provide, $sceProvider){
 			// don't load Task currently
 			$provide.value('Task', function(){});
-			$provide.value('$window', _.create(window, {scrollTo:_.noop}));
-
+			$provide.value('$window', {scrollTo:_.noop, document: document});
 			// for the timer directive
 			now = 0;
 			$provide.value('timerNow', function(){return now;});
