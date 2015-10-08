@@ -16,6 +16,7 @@ define(function(require){
 	module.directive('piQuest', require('./piQuest/piQuest-directive'));
 	module.directive('piqPage', require('./piQuest/piqPage-directive'));
 	module.directive('questWrapper', require('./wrapper/wrapper-directive'));
+	module.directive('questInfo', function(){return {};});
 
 	module.directive('questText', require('./text/textDirective'));
 	module.directive('questTextarea', require('./text/textDirective')); // uses the same directive as questText
