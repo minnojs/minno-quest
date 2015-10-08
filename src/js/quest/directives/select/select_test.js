@@ -164,6 +164,8 @@ define(['../questDirectivesModule', 'utils/database/randomize/randomizeModuleMoc
 				var errorElm = element.find('[pi-quest-validation="model.$error.correct"]');
 				expect(errorElm.text()).toBe('correct msg');
 
+				expect(errorElm).toBeHidden();
+
 				choose(0);
 				expect(element).toBeValid();
 				expect(errorElm).toBeHidden();
@@ -303,6 +305,8 @@ define(['../questDirectivesModule', 'utils/database/randomize/randomizeModuleMoc
 				var errorElm = element.find('[pi-quest-validation="model.$error.correct"]');
 				expect(errorElm.text()).toBe('correct msg');
 
+				expect(errorElm).toBeHidden();
+
 				choose(0);
 				expect(element).toBeValid();
 				expect(errorElm).toBeHidden();
@@ -425,13 +429,18 @@ define(['../questDirectivesModule', 'utils/database/randomize/randomizeModuleMoc
 				var errorElm = element.find('[pi-quest-validation="model.$error.correct"]');
 				expect(errorElm.text()).toBe('correct msg');
 
+				expect(errorElm).toBeHidden();
+
 				choose(0);
 				expect(element).toBeInvalid();
+				expect(errorElm).toBeHidden();
 
 				choose(1);
 				expect(element).toBeValid();
 				expect(errorElm).toBeHidden();
 
+				choose(2);
+				expect(element).toBeInvalid();
 			});
 
 			it('should support "required" validation',function(){

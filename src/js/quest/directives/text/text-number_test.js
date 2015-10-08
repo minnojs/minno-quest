@@ -18,6 +18,7 @@ define(['../questDirectivesModule'],function(){
 		beforeEach(module('questDirectives', function($sceProvider){
 			$sceProvider.enabled(false);
 		}));
+
 		beforeEach(inject(function($injector, _$sniffer_) {
 			$sniffer = _$sniffer_;
 			$compile = $injector.get('$compile');
@@ -158,6 +159,8 @@ define(['../questDirectivesModule'],function(){
 			compile({correct:true, correctValue: 123, errorMsg:{correct: 'correct msg'}});
 			var errorElm = formElm.find('[pi-quest-validation="model.$error.correct"]');
 			expect(errorElm.text()).toBe('correct msg');
+
+			expect(errorElm).toBeHidden();
 
 			changeInputValueTo('123');
 			expect(formElm).toBeValid();

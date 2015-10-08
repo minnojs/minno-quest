@@ -146,7 +146,6 @@ define(function(require){
 					ngModel.$setValidity('correct', true);
 				} else {
 					ngModel.$setValidity('correct', false);
-					//value.response = dfltValue;
 				}
 
 				return value;

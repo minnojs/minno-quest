@@ -177,6 +177,8 @@ define(['underscore','../questDirectivesModule'], function(_){
 				var errorElm = formElm.find('[pi-quest-validation="model.$error.correct"]');
 				expect(errorElm.text()).toBe('correct msg');
 
+				expect(errorElm).toBeHidden();
+
 				changeInputValueTo('123');
 				expect(formElm).toBeValid();
 				expect(errorElm).toBeHidden();

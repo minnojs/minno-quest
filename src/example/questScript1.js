@@ -27,30 +27,12 @@ define(['questAPI'], function(Quest){
 			header: 'Header',
 			//timer: {duration:5, show:true, submitOnEnd:true, message:{heading:'Hi Yoav',body:'Isn\'n this cool? I support templates as well...', button:'Click here to proceed to the next page'}},
 			questions: 		{
-	type: 'slider',
-	highlight: true,
-	leftLabel: 'my text',
-	leftLabelCss: {color: 'red', fontSize: '3em'},
-	rightLabel: 'other',
-	rightLabelCss: {color: 'blue', fontSize: '0.5em'},
-	displayValue:true,
-	steps: 11,
-	name:'grid',
-	columns: [
-		'Strongly agree',
-		'agree',
-		'don\'t know',
-		'disagree',
-		'Strongly disagree',
-		{stem:'Decline to answer', value:'n/a', noReverse:true}
-	],
-	rows: [
-		{stem:'I like grids',name:'likeGrids'},
-		// This questions scores will be reversed so that the sum of scores is meaningful
-		{stem:'I hate bananas', name:'likeBananas', reverse:true}
-	]
-}
-		},
+				type:'text',
+				label:'label',
+				correct:true,
+				correctValue:'123'
+			}
+		}
 		// {
 		// 	//animate:"fade drop-in fakeAnimation",
 		// 	prevText: '123',

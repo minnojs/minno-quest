@@ -43,9 +43,9 @@ define(function(require){
 		return {
 			replace:true,
 			transclude: true,
-			scope: {unvalid:'=piQuestValidation'},
+			scope: {unvalid:'=piQuestValidation',postSubmit:'=piPostSubmit'},
 			template: [
-				'<div class="alert alert-danger" role="alert" ng-show="unvalid">',
+				'<div class="alert alert-danger" role="alert" ng-show="unvalid && ($parent.$parent.$parent.submitAttempt || !postSubmit)">',
 			  		'<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>',
 			  		'<span ng-transclude></span>',
 				'</div>'
