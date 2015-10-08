@@ -1,3 +1,18 @@
+<a name"0.0.55"></a>
+### 0.0.55 (2015-10-08)
+
+
+#### Bug Fixes
+
+* **questDirectives:** correct validation does not show unless page is submitted. ([77eca974](https://github.com/ProjectImplicit/PIquest/commit/77eca974), closes [#121](https://github.com/ProjectImplicit/PIquest/issues/121))
+
+
+#### Features
+
+* **mixer:** support mixer.wrapper. ([febf7fcc](https://github.com/ProjectImplicit/PIquest/commit/febf7fcc), closes [#120](https://github.com/ProjectImplicit/PIquest/issues/120))
+* **questDirectives:** added info question. ([f1bc1c67](https://github.com/ProjectImplicit/PIquest/commit/f1bc1c67), closes [#122](https://github.com/ProjectImplicit/PIquest/issues/122))
+
+
 <a name"0.0.54"></a>
 ### 0.0.54 (2015-09-24)
 
