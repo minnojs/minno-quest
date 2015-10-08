@@ -10,6 +10,7 @@ description: All the little details...
 	- [Page Messages](#page-messages)
 - [Questions](#questions)
 	- [Hooks](#hooks)
+	- [Info](#info)
 	- [Text & Textarea](#text-textarea)
 	- [textNumber](#textnumber)
 	- [dropdown](#dropdown)
@@ -88,6 +89,7 @@ All these strings may use templates, and have access to the following objects: `
 ### Questions
 
 Here are the types of questions PIQuest currently supports:
+* [info](#info)
 * [text & textarea](#text-textarea)
 * [textNumber](#textnumber)
 * [dropdown](#dropdown)
@@ -139,6 +141,19 @@ var questions = {
 	}
 }
 ```
+
+#### Info
+The info question isn't strictly a question. It allows you to use the common question properties in order to display information to the users. For example you can use it as follows:
+
+```js
+{
+	type: 'info',
+	description: '<p>The following questions deal with emotions</p>' +
+		'<p>Please answer them as honestly as possible</p>'
+}
+```
+
+This question will simply display the description without offering any additional user interface (explicit question).
 
 #### Text & Textarea
 The `text` and `textarea` questions consist of a simple text input in which the users can type in text. The difference between them is that text questions consist of a single line, whereas textareas are multiline. There are also several properties that are unique to textareas.
@@ -288,7 +303,7 @@ Property    	| Description
 ----------- 	| -----------
 columns 		| An array of column descriptions. You can use a string here or a column object as described [below](#gridcolumns).
 rows 			| An array of row descriptions. You can use a string here or a row object as described [below](#gridrows).
-shuffle 		| Whether to shuffle the order of the rows.
+shuffle 		| Whether to randomize the order of the rows.
 required 		| Require the user to respond to all rows (true or false).
 columnStemCss	| CSS object for *all* the column stems.
 columnStemHide	| Hide the column stem row.

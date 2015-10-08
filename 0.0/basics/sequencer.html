@@ -184,9 +184,11 @@ Repeats the element in <code>data</code> <code>times</code> times.</p>
 <li><code>{mixer:&#39;repeat&#39;, times:10, data: [obj1,obj2]}</code></li>
 </ul>
 <p><strong>random</strong>:
-Randomizes the order of elements in <code>data</code>. Please note that the randomizer pre-mixes all the content in data, so that any branching mixers will be branched according to the environment as it is when the random mixer is reached. If you want to delay the branching until it is reached, simply wrap it within a <code>wrapper</code> mixer.</p>
+Randomizes the order of elements in <code>data</code>. Random pre-computes all of the elements in data, if you want to keep some of the elements together, use the <code>wrapper</code> mixer. If you want to mark a specific mixer within random not to be pre-computed, simply add <code>wrapper:true</code>.
+Please note that the randomizer pre-computes all the content in data, so that any branching mixers will be branched according to the environment as it is when the random mixer is reached. If you want to delay the branching until it is reached, simply wrap it within a <code>wrapper</code> mixer or add <code>wrapper:true</code>.</p>
 <ul>
 <li><code>{mixer:&#39;random&#39;, data: [obj1,obj2]}</code></li>
+<li><code>{mixer:&#39;random&#39;, data: [obj1,{mixer:&#39;repeat&#39;, wrapper:true,data:[1,2,3]}]}</code></li>
 </ul>
 <p><strong>weightedRandom</strong>:
 Selects a single element using a weighted random algorithm. Each element in <code>data</code> is given the appropriate weight from <code>weights</code>. In the following example obj2 has four times the probability of being selected as obj1.</p>
@@ -349,14 +351,13 @@ Select the elements in <code>data</code> if all the conditions in the <code>cond
 </table>
 <p>By default, if the mixer runs into an array instead of an object, it will treat it as an <code>and</code> aggregator and be true only if all conditions within the array are true.</p>
 <p>Following are several examples for how to create different aggregations:</p>
-<pre><code class="lang-js"><span class="hljs-comment">// cond1 AND cond2</span>
-<span class="hljs-keyword">var</span> cond = {and:[cond1, cond2]};
+<pre><code class="lang-js"><span class="hljs-comment">// cond1 &amp;&amp; cond2</span>
 <span class="hljs-keyword">var</span> conds = [cond1, cond2];
 
-<span class="hljs-comment">// cond1 AND (cond2 OR cond3)</span>
+<span class="hljs-comment">// cond1 &amp;&amp; (cond2 || cond3)</span>
 <span class="hljs-keyword">var</span> conds = [cond1, {or:[cond2,cond3]}];
 
-<span class="hljs-comment">// (cond1 AND cond2) OR cond2</span>
+<span class="hljs-comment">// (cond1 &amp;&amp; cond2) || cond2</span>
 <span class="hljs-keyword">var</span> conds = [{or:[{and:[cond1,cond2]},cond3]}]
 </code></pre>
 <h3 id="templates">Templates</h3>
