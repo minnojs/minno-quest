@@ -33,6 +33,8 @@ define(function(require){
 
 	module.directive('questSlider',require('./slider/sliderDirective'));
 	module.directive('piSlider',require('./slider/slider'));
+	module.directive('piPointerdown',require('./slider/piPointerdown'));
+
 
 	// @TODO: move to utils or something
 	module.config(['$sceProvider', function($sceProvider){

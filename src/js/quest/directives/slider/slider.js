@@ -17,14 +17,14 @@
       },
       replace: true,
       require: 'ngModel',
-      template: ['<div class="slider" ng-class="{\'slider-ticks\':options.showTicks}" ng-mousedown="onSliderMouseDown($event)">',
+      template: ['<div class="slider" ng-class="{\'slider-ticks\':options.showTicks}" pi-pointerdown="onSliderMouseDown($event)">',
             '<div class="slider-label-left" ng-style="options.leftLabelCss">{{options.leftLabel}}</div>',
             '<div class="slider-label-right" ng-style="options.rightLabelCss">{{options.rightLabel}}</div>',
             '<div class="slider-container">',
               '<div class="slider-bar">',
                 '<div class="slider-bar-highlight" ng-style="highlightStyle"></div>',
               '</div>',
-              '<div class="slider-handle" ng-mousedown="onHandleMousedown($event)" ng-style="handleStyle"></div>',
+              '<div class="slider-handle" pi-pointerdown="onHandleMousedown($event)" ng-style="handleStyle"></div>',
             '</div>',
             '<ul class="slider-pips" ng-if="!options.hidePips">',
                 '<li ng-repeat="i in getNumber(steps) track by $index" ng-style="{width: pipWidth + \'%\'}" ng-class="{last:$last}"></li>',
@@ -129,8 +129,8 @@
           basePosition = event.pageX;
           basePercentage = ngModel.$viewValue;
 
-          $document.on('mousemove', mouseMove);
-          $document.on('mouseup', mouseUp);
+          $document.on('mousemove touchmove', mouseMove);
+          $document.on('mouseup touchend', mouseUp);
 
           // drag
           function mouseMove(event) {
@@ -147,9 +147,10 @@
           }
 
           // drop
-          function mouseUp() {
-            $document.off('mousemove', mouseMove);
-            $document.off('mouseup', mouseUp);
+          function mouseUp(event) {
+            event.preventDefault();
+            $document.off('mousemove touchmove', mouseMove);
+            $document.off('mouseup touchend', mouseUp);
             scope.$emit(SLIDER_CHANGE_EVENT, ngModel.$viewValue); // emit only on mouse drop
           }
         }
@@ -177,9 +178,11 @@
 
   return sliderDirective;
 
-  // fix IE8 events (missing pageX) - from jquery
+
   function fixEvent(event){
     var eventDoc, doc, body;
+
+    // fix IE8 events (missing pageX) - from jquery
     // Calculate pageX/Y if missing and clientX/Y available
     if ( event.pageX == null && event.clientX != null ) {
       eventDoc = event.target.ownerDocument || document;
@@ -188,6 +191,13 @@
 
       event.pageX = event.clientX + ( doc && doc.scrollLeft || body && body.scrollLeft || 0 ) - ( doc && doc.clientLeft || body && body.clientLeft || 0 );
       event.pageY = event.clientY + ( doc && doc.scrollTop  || body && body.scrollTop  || 0 ) - ( doc && doc.clientTop  || body && body.clientTop  || 0 );
+    }
+
+    // pageX for android multi touch screens
+    // http://stackoverflow.com/questions/9585487/cant-get-coordinates-of-touchevents-in-javascript-on-android-devices
+    if (event.pageX == null && event.touches){
+      event.pageX = event.touches[0].pageX;
+      event.pageY = event.touches[0].pageY;
     }
   }
 
