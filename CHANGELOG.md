@@ -1,3 +1,12 @@
+<a name"0.0.56"></a>
+### 0.0.56 (2015-10-15)
+
+
+#### Bug Fixes
+
+* **questDirectives:** slider support for android. ([a1b7f458](https://github.com/ProjectImplicit/PIquest/commit/a1b7f458), closes [#126](https://github.com/ProjectImplicit/PIquest/issues/126))
+
+
 <a name"0.0.55"></a>
 ### 0.0.55 (2015-10-08)
 
