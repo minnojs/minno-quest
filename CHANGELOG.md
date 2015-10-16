@@ -1,3 +1,13 @@
+<a name"0.0.57"></a>
+### 0.0.57 (2015-10-16)
+
+
+#### Bug Fixes
+
+* **console:** default warning level should be 'warn' ([8691eae1](https://github.com/ProjectImplicit/PIquest/commit/8691eae1))
+* **manager:** make sure the manager directive closes everything that it began ([1e3a7e03](https://github.com/ProjectImplicit/PIquest/commit/1e3a7e03))
+
+
 <a name"0.0.56"></a>
 ### 0.0.56 (2015-10-15)
 

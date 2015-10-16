@@ -105,6 +105,7 @@ js/taskManager/managerSequence.js
 js/taskManager/managerLoadService.js
 js/taskManager/managerGetScriptService.js
 js/taskManager/managerTaskLoadService.js
+js/taskManager/beforeUnloadFactory.js
 js/taskManager/managerDirective.js
 js/taskManager/managerTaskDirective.js
 js/taskManager/managerModule.js
@@ -222,6 +223,7 @@ js/taskManager/managerSequence.js
 js/taskManager/managerLoadService.js
 js/taskManager/managerGetScriptService.js
 js/taskManager/managerTaskLoadService.js
+js/taskManager/beforeUnloadFactory.js
 js/taskManager/managerDirective.js
 js/taskManager/managerTaskDirective.js
 js/taskManager/managerModule.js
