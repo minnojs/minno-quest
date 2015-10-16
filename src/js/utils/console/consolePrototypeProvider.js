@@ -50,7 +50,7 @@ define(function(require){
 		 * @return {Boolean}		Whether to log this or not
 		 */
 		function shouldLog(level){
-			var targetLevel = this.settings.level || 'error'; // levels set to show
+			var targetLevel = this.settings.level || 'warn'; // levels set to show
 			var targetTags = this.settings.tags || 'all'; // tags set to show
 			var tags = this.tags;
 			var force = this.force;

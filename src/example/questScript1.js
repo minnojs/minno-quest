@@ -25,12 +25,9 @@ define(['questAPI'], function(Quest){
 	API.addSequence([
 		{
 			header: 'Header',
-			//timer: {duration:5, show:true, submitOnEnd:true, message:{heading:'Hi Yoav',body:'Isn\'n this cool? I support templates as well...', button:'Click here to proceed to the next page'}},
 			questions: 		{
 				type:'text',
-				label:'label',
-				correct:true,
-				correctValue:'123'
+				label:'label'
 			}
 		}
 		// {
