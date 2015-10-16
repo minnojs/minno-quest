@@ -1,5 +1,6 @@
 define(function(require){
 	var _ = require('underscore');
+	var angular = require('angular');
 
 	managerService.$inject = ['$rootScope', '$q', 'managerSequence', 'managerTaskLoad', '$injector'];
 	function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector){
@@ -104,7 +105,12 @@ define(function(require){
 			var canvas = $injector.get('managerCanvas');
 			var $document = $injector.get('$document');
 			var preloader = $injector.get('piPreloader');
+			var beforeUnload = $injector.get('managerBeforeUnload');
 			var canvasOff;
+
+			// prevent accidental browsing away
+			beforeUnload.activate();
+			$scope.$on('$destroy', beforeUnload.deactivate);
 
 			// activate canvas
 			canvasOff = canvas(settings.canvas);

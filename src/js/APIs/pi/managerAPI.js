@@ -24,7 +24,7 @@ define(function(require){
 	_.extend(API.prototype, Constructor.prototype);
 
 	// annotate onPreTask
-	onPreTask.$inject = ['currentTask', '$http','$rootScope'];
+	onPreTask.$inject = ['currentTask', '$http','$rootScope','managerBeforeUnload'];
 
 	return API;
 
@@ -37,7 +37,7 @@ define(function(require){
 	 * @param  {Object} $http       The $http service
 	 * @return {Promise}            Resolved when server responds
 	 */
-	function onPreTask(currentTask, $http, $rootScope){
+	function onPreTask(currentTask, $http, $rootScope, beforeUnload){
 
 		var global = $rootScope.global;
 		var settings, context;
@@ -75,6 +75,7 @@ define(function(require){
 		// set last task flag
 		if (currentTask.last){
 			data.sessionStatus = "C";
+			beforeUnload.deactivate();
 		}
 
 		if (currentTask.last && global.$mTurk){

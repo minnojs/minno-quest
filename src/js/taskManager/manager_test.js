@@ -34,6 +34,10 @@ define(['require','./managerModule'], function(require){
 				manager = managerService($scope, {});
 			}));
 
+			afterEach(function(){
+				$scope.$destroy();
+			});
+
 			it('should return an object (no need for new)', function(){
 				expect(manager).toEqual(jasmine.any(Object));
 			});
