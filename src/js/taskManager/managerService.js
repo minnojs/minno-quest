@@ -1,6 +1,5 @@
 define(function(require){
 	var _ = require('underscore');
-	var angular = require('angular');
 
 	managerService.$inject = ['$rootScope', '$q', 'managerSequence', 'managerTaskLoad', '$injector'];
 	function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector){

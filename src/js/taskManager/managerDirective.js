@@ -111,6 +111,7 @@ define(function(require){
 						function(){
 							$scope.loading = false;
 							$scope.$emit('manager:done');
+							$scope.$destroy();
 						}
 					], locals);
 				}
