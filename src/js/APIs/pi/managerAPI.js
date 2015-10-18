@@ -24,7 +24,7 @@ define(function(require){
 	_.extend(API.prototype, Constructor.prototype);
 
 	// annotate onPreTask
-	onPreTask.$inject = ['currentTask', '$http','$rootScope','managerBeforeUnload'];
+	onPreTask.$inject = ['currentTask', '$http','$rootScope','managerBeforeUnload','templateDefaultContext'];
 
 	return API;
 
@@ -37,7 +37,7 @@ define(function(require){
 	 * @param  {Object} $http       The $http service
 	 * @return {Promise}            Resolved when server responds
 	 */
-	function onPreTask(currentTask, $http, $rootScope, beforeUnload){
+	function onPreTask(currentTask, $http, $rootScope, beforeUnload, templateDefaultContext){
 
 		var global = $rootScope.global;
 		var settings, context;
@@ -51,6 +51,13 @@ define(function(require){
 			settings.logger.meta = angular.extend(settings.logger.meta || {}, data);
 		}
 
+		// add feedback
+
+		_.extend(templateDefaultContext,{
+			showFeedback: _.bind(showFeedback,null,global),
+			showPanel: showPanel
+		});
+
 		if (currentTask.type == 'message' && currentTask.piTemplate){
 			context = {
 				content: currentTask.$template,
@@ -60,11 +67,6 @@ define(function(require){
 			};
 
 			if (currentTask.piTemplate == 'debrief'){
-				_.extend(context,{
-					showFeedback: _.bind(showFeedback,null,global),
-					showPanel: showPanel
-				});
-
 				currentTask.$template = _.template(messageTemplateDebrief)(context); // insert into meta template
 				currentTask.$template = _.template(currentTask.$template)(context); // render secondary template with extended context
 			} else {

@@ -1,13 +1,12 @@
 {
   "name": "PIQuest",
-  "version": "0.0.57",
+  "version": "0.0.58",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/ProjectImplicit/PIquest"
   },
   "description": "Project implicit Questionnaires",
-  "dependencies": {},
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-bump": "0.0.14",
