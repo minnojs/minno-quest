@@ -19,6 +19,10 @@ define(function (require) {
 					task: script
 				};
 
+				if (script.$template == null){
+					$console('message').error('missing template for message', script.name || script.inherit);
+				}
+
 				// try to render template
 				try {
 					template = _.template(script.$template)(context);
