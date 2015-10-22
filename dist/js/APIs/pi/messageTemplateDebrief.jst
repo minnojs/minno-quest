@@ -41,7 +41,11 @@
 
 	<div class="row">
 		<div class="col-md-12 text-center" style="margin: 30px auto 10px;">
-			<a href="/implicit/Assign" class="btn btn-primary">Start next study</a>
+			<% if (task.demo) { %>
+				<a href="/implicit/selectatest.html " class="btn btn-primary">Take another test</a>
+			<% } else { %>
+				<a href="/implicit/Assign" class="btn btn-primary">Start next study</a>
+			<% } %>
 		</div>
 	</div>
 

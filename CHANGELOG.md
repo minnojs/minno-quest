@@ -1,3 +1,12 @@
+<a name"0.0.59"></a>
+### 0.0.59 (2015-10-22)
+
+
+#### Features
+
+* **PI:** support showFeedback in piQuest, add demo option to debriefing ([666f63c0](https://github.com/ProjectImplicit/PIquest/commit/666f63c0))
+
+
 <a name"0.0.57"></a>
 ### 0.0.57 (2015-10-16)
 
