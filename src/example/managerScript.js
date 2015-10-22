@@ -22,6 +22,13 @@ define(['managerAPI'], function(Manager){
 	API.addSettings('skip', true);
 
 	API.addSequence([
+		// {
+		// 	type: 'pip',
+		// 	name: 'iat',
+		// 	version: '123',
+		// 	scriptUrl: '/test/example.js'
+		// },
+
 		{
 			type:'quest',
 			name: 'first',
@@ -56,11 +63,6 @@ define(['managerAPI'], function(Manager){
 		},
 
 		{inherit:'instructions', templateUrl: 'iat.html'},
-		// {
-		// 	type: 'pip',
-		// 	name: 'biat',
-		// 	scriptUrl: '/test/distance.js'
-		// },
 
 		{inherit:{type:'exRandom', set:'quests'}},
 		//{inherit:'instructions', templateUrl: '../example/biat.html'},

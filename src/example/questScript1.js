@@ -2,12 +2,7 @@ define(['questAPI'], function(Quest){
 
 	var API = new Quest();
 
-	API.addSettings('DEBUG', {
-		tags: 'all',
-		//hideConsole: true, // default false : whether to display console
-		level: 'warn' // ERROR > WARN > INFO > DEBUG || [E, W...] || warningsOnly: Error && WARNING
-
-	});
+	API.addSettings('DEBUG', {level: 'error'});
 
 	API.addSettings('onEnd', function(){
 		console.log('onEnd script1');
