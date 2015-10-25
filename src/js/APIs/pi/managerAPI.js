@@ -40,7 +40,7 @@ define(function(require){
 	function onPreTask(currentTask, $http, $rootScope, beforeUnload, templateDefaultContext){
 
 		var global = $rootScope.global;
-		var settings, context;
+		var settings, context = {};
 		var data = {taskName: currentTask.name || 'namelessTask', taskNumber: currentTask.$meta.number};
 
 		// add logging meta
@@ -59,12 +59,14 @@ define(function(require){
 		});
 
 		if (currentTask.type == 'message' && currentTask.piTemplate){
-			context = {
+			_.extend(context, templateDefaultContext, {
 				content: currentTask.$template,
 				global: global,
 				current: global.current,
 				task: currentTask
-			};
+			});
+
+
 
 			if (currentTask.piTemplate == 'debrief'){
 				currentTask.$template = _.template(messageTemplateDebrief)(context); // insert into meta template
@@ -130,7 +132,7 @@ define(function(require){
 	}
 
 	function showPanel(content, header, footer){
-		return _.template(messageTemplatePanel, {
+		return _.template(messageTemplatePanel)({
 			content: content,
 			header: header,
 			footer: footer
@@ -165,7 +167,7 @@ define(function(require){
 				return result + feedback;
 			},'') || options.noFeedback;
 
-		return options.wrap ? showPanel(feedback, options.header) : feedback;
+		return options.wrap ? showPanel(feedback,options.header,options.footer) : feedback;
 	}
 });
 
