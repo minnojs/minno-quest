@@ -51,8 +51,7 @@ define(function(require){
 			settings.logger.meta = angular.extend(settings.logger.meta || {}, data);
 		}
 
-		// add feedback
-
+		// add feedback functions to the default template context
 		_.extend(templateDefaultContext,{
 			showFeedback: _.bind(showFeedback,null,global),
 			showPanel: showPanel
@@ -60,13 +59,14 @@ define(function(require){
 
 		if (currentTask.type == 'message' && currentTask.piTemplate){
 			_.extend(context, templateDefaultContext, {
-				content: currentTask.$template,
 				global: global,
 				current: global.current,
 				task: currentTask
 			});
 
-
+			// compile template here so that we have all the addtional functions available
+			// event when the template is loaded from a file.
+			context.content = currentTask.$template = _.template(currentTask.$template)(context);
 
 			if (currentTask.piTemplate == 'debrief'){
 				currentTask.$template = _.template(messageTemplateDebrief)(context); // insert into meta template
@@ -169,5 +169,5 @@ define(function(require){
 
 		return options.wrap ? showPanel(feedback,options.header,options.footer) : feedback;
 	}
-});
-
+})
+;
