@@ -1,3 +1,13 @@
+<a name"0.0.60"></a>
+### 0.0.60 (2015-10-25)
+
+
+#### Bug Fixes
+
+* **PI:** fixed templating for showFeedback ([70e398df](https://github.com/ProjectImplicit/PIquest/commit/70e398df))
+* **message:** throw an error if missing a template ([1c39d8b1](https://github.com/ProjectImplicit/PIquest/commit/1c39d8b1))
+
+
 <a name"0.0.59"></a>
 ### 0.0.59 (2015-10-22)
 
