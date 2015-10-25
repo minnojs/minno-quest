@@ -125,7 +125,7 @@
 <h3 id="settings">Settings</h3>
 <p>Settings allow you to control the generic way that the player works. Change the settings using the <code>addSettings</code> function. The first argument to the function is always the name of the setting, the second argument is the setting values. In case the setting is an object, subsequent objects will extend each other so that settings may be progressively added.
 All the functions within settings are invoked using angular. This means that you have access to any service you like, as well as some specific assets. <a href="https://docs.angularjs.org/api/auto/service/$injector">In order to access the services</a> simply use arguments with the appropriate name. For instance, this is how you would access <code>$rootScope</code>:</p>
-<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">onEnd</span><span class="hljs-params">($rootScope)</span></span>{
+<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">onEnd</span>(<span class="hljs-params">$rootScope</span>)</span>{
     $rootScope.$emit(<span class="hljs-string">'end!!'</span>);
 }
 </code></pre>
@@ -160,7 +160,7 @@ All the functions within settings are invoked using angular. This means that you
 <p>In case you need to fine tune the styles even further you can add css rules into the raw HTML. Support for dynamically adding CSS is planned but not yet supported.</p>
 <h4 id="onpretask">onPreTask</h4>
 <p><code>onPreTask</code> is a function to be called before each task is called.</p>
-<pre><code class="lang-js">API.addSettings(<span class="hljs-string">'onPreTask'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(currentTask)</span></span>{
+<pre><code class="lang-js">API.addSettings(<span class="hljs-string">'onPreTask'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">currentTask</span>)</span>{
     doSomethingWith(currentTask);
 });
 </code></pre>
@@ -184,7 +184,7 @@ All the functions within settings are invoked using angular. This means that you
 </table>
 <h4 id="onend">onEnd</h4>
 <p><code>onEnd</code> is a function to be called as soon as the task sequence ends.</p>
-<pre><code class="lang-js">API.addSettings(<span class="hljs-string">'onEnd'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{
+<pre><code class="lang-js">API.addSettings(<span class="hljs-string">'onEnd'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
     <span class="hljs-comment">// Do something: for instance, redirect to 'my/url.js'</span>
     location.href = <span class="hljs-string">'my/url.js'</span>;
 });
@@ -376,20 +376,20 @@ All the functions within settings are invoked using angular. This means that you
 <h4 id="custom-task-example">Custom Task Example</h4>
 <p>The following script will display a messages to the user and proceed to the next task after 5 seconds:</p>
 <pre><code class="lang-js"><span class="hljs-comment">// the define wrapper</span>
-define(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{
+define(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
     <span class="hljs-comment">// the script object being returned</span>
     <span class="hljs-keyword">return</span> {
         <span class="hljs-comment">// custom script content</span>
         content: <span class="hljs-string">'Hi there, I\'m your custom message'</span>,
 
         <span class="hljs-comment">// the activator function uses three dependencie</span>
-        play: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">activator</span><span class="hljs-params">(done, script, $element)</span></span>{
+        play: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">activator</span>(<span class="hljs-params">done, script, $element</span>)</span>{
             <span class="hljs-keyword">var</span> timeoutId = setTimeout(done, <span class="hljs-number">5000</span>);
             $element.html(script.content);
 
             <span class="hljs-comment">// will be called at the end of the task to clean things up</span>
             <span class="hljs-comment">// (whether the end is forced or triggered by 'done')</span>
-            <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">clear</span><span class="hljs-params">()</span></span>{
+            <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">clear</span>(<span class="hljs-params"></span>)</span>{
                 clearTimeout(timeoutId);
                 $element.empty();           
             };

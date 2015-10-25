@@ -169,7 +169,7 @@
 </code></pre>
 <p>The sequence also supports randomization and branching. Read about it <a href="API.html#mixer">here</a>.</p>
 <p>Now that we’ve created the sequence, let’s put it into the player. The first and last two lines are the same for all scripts (they have to do with the way Javascript works), you can simply ignore them. The <code>API</code> object assists you in putting your script together, you will <a href="API.html#API">eventually</a> learn more about its functionality, but for now we only need to know that the <code>addSequence</code> function is responsible for adding pages into the sequence. You may call it as many times as you like.</p>
-<pre><code class="lang-js">define([<span class="hljs-string">'questAPI'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(quest)</span></span>{
+<pre><code class="lang-js">define([<span class="hljs-string">'questAPI'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">quest</span>)</span>{
     <span class="hljs-keyword">var</span> API = <span class="hljs-keyword">new</span> quest();
 
     API.addSequence([

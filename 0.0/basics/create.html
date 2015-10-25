@@ -100,7 +100,7 @@
 <h3 id="the-wrapper">The Wrapper</h3>
 <p>Each task consists of a single javascript file, which is a simple text file with a <code>js</code> extenssion. The file should be setup with some code at the begining and the end, this code is used by the player to register the task. </p>
 <p>First, all your code should be wrapped by a define statement (if you want to understand more about how this work you can read up on <a href="http://requirejs.org/docs/whyamd.html">AMD modules</a>):</p>
-<pre><code class="lang-js">define([<span class="hljs-string">'taskAPI'</span>],<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(taskAPI)</span></span>{
+<pre><code class="lang-js">define([<span class="hljs-string">'taskAPI'</span>],<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">taskAPI</span>)</span>{
     <span class="hljs-comment">// all sorts of code...</span>
 });
 </code></pre>
@@ -112,7 +112,7 @@
 <pre><code class="lang-js"><span class="hljs-keyword">return</span> API.script;
 </code></pre>
 <p>All taken into account this is the structure of any script you create:</p>
-<pre><code class="lang-js">define([<span class="hljs-string">'taskAPI'</span>],<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(taskAPI)</span></span>{
+<pre><code class="lang-js">define([<span class="hljs-string">'taskAPI'</span>],<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">taskAPI</span>)</span>{
     <span class="hljs-keyword">var</span> API = <span class="hljs-keyword">new</span> taskAPI();
     <span class="hljs-comment">// Use the API to create your task here...</span>
     <span class="hljs-keyword">return</span> API.script;

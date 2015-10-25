@@ -56,6 +56,7 @@ js/quest/directives/grid/gridRowDirective.js
 text!quest/directives/slider/slider.html
 js/quest/directives/slider/sliderDirective.js
 js/quest/directives/slider/slider.js
+js/quest/directives/slider/piPointerdown.js
 js/quest/directives/toRegexFilter.js
 js/quest/directives/dfltUnitsFilter.js
 js/quest/directives/questDirectivesModule.js
@@ -104,6 +105,7 @@ js/taskManager/managerSequence.js
 js/taskManager/managerLoadService.js
 js/taskManager/managerGetScriptService.js
 js/taskManager/managerTaskLoadService.js
+js/taskManager/beforeUnloadFactory.js
 js/taskManager/managerDirective.js
 js/taskManager/managerTaskDirective.js
 js/taskManager/managerModule.js
@@ -172,6 +174,7 @@ js/quest/directives/grid/gridRowDirective.js
 text!quest/directives/slider/slider.html
 js/quest/directives/slider/sliderDirective.js
 js/quest/directives/slider/slider.js
+js/quest/directives/slider/piPointerdown.js
 js/quest/directives/toRegexFilter.js
 js/quest/directives/dfltUnitsFilter.js
 js/quest/directives/questDirectivesModule.js
@@ -220,6 +223,7 @@ js/taskManager/managerSequence.js
 js/taskManager/managerLoadService.js
 js/taskManager/managerGetScriptService.js
 js/taskManager/managerTaskLoadService.js
+js/taskManager/beforeUnloadFactory.js
 js/taskManager/managerDirective.js
 js/taskManager/managerTaskDirective.js
 js/taskManager/managerModule.js

@@ -102,7 +102,7 @@
 
 
 		
-		  <div class='highlight'><pre>define([<span class="hljs-string">'managerAPI'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(Manager)</span></span>{
+		  <div class='highlight'><pre>define([<span class="hljs-string">'managerAPI'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">Manager</span>)</span>{
 
   <span class="hljs-keyword">var</span> API = <span class="hljs-keyword">new</span> Manager();
 
@@ -120,7 +120,7 @@
   ]);
 
   API.addSequence([
-    {inherit:<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(collection)</span></span>{
+    {inherit:<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">collection</span>)</span>{
         <span class="hljs-keyword">return</span> collection.at(<span class="hljs-number">2</span>);
     }}
   ]);
