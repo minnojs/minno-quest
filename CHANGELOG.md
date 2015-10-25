@@ -1,3 +1,12 @@
+<a name"0.0.61"></a>
+### 0.0.61 (2015-10-25)
+
+
+#### Bug Fixes
+
+* **PI:** more tweaking of the message templating system ([dc717723](https://github.com/ProjectImplicit/PIquest/commit/dc717723))
+
+
 <a name"0.0.60"></a>
 ### 0.0.60 (2015-10-25)
 
