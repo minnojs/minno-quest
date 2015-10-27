@@ -7,6 +7,16 @@ The message tasks are built to be as simple as possible, all they do is present 
 
 The context for the template has the following variables available: {global, current, task}.
 
+property        | description
+--------------- | ---------------------
+template        | (text) A string of html to display (The template uses [lodash templates](https://lodash.com/docs#template)).
+templateUrl     | (text) A url to a html template (The template uses [lodash templates](https://lodash.com/docs#template)).
+keys            | Sets a key (or keys) that allow users to proceed. The keys property takes either a key (i.e. `'a'`) a keyCode (i.e. `65`) or an array of such (i.e. `['a','b']`).
+
+&nbsp;
+
+The following example will display the message "Hello World. I am a template.", and procede when the **keys** space is pressed.
+
 ```js
 var task = {
     template: '<div>Hello World. I am a template.</div>',
@@ -14,12 +24,20 @@ var task = {
 }
 ```
 
-property        | description
---------------- | ---------------------
-template        | (text) A string of html to display (The template uses [lodash templates](https://lodash.com/docs#template)).
-templateUrl     | (text) A url to a html template (The template uses [lodash templates](https://lodash.com/docs#template)).
-keys            | Sets a key (or keys) that allow users to proceed. The keys property takes either a key (i.e. `'a'`) a keyCode (i.e. `65`) or an array of such (i.e. `['a','b']`).
+The following task will do the exact same thing using two separate files:
 
+*manager.js*
+```js
+var task = {
+    templateUrl: 'hello.jst',
+    keys: ' '
+}
+```
+
+*hello.jst*
+```html
+<div>Hello World. I am a template.</div>
+```
 
 #### Proceeding
 

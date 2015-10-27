@@ -98,11 +98,6 @@
 					
 	<p>The message tasks are built to be as simple as possible, all they do is present simple html templates. In order to load a template simply set it into the <code>template</code> property as a string, or set the appropriate URL into <code>templateUrl</code>. Thats it. (This is not relevant for most users, but the templates are rendered using angularjs $compile and therefore all the relevant directives are available).</p>
 <p>The context for the template has the following variables available: {global, current, task}.</p>
-<pre><code class="lang-js"><span class="hljs-keyword">var</span> task = {
-    template: <span class="hljs-string">'&lt;div&gt;Hello World. I am a template.&lt;/div&gt;'</span>,
-    keys: <span class="hljs-string">' '</span>
-}
-</code></pre>
 <table>
 <thead>
 <tr>
@@ -125,6 +120,23 @@
 </tr>
 </tbody>
 </table>
+<p>&nbsp;</p>
+<p>The following example will display the message “Hello World. I am a template.”, and procede when the <strong>keys</strong> space is pressed.</p>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> task = {
+    template: <span class="hljs-string">'&lt;div&gt;Hello World. I am a template.&lt;/div&gt;'</span>,
+    keys: <span class="hljs-string">' '</span>
+}
+</code></pre>
+<p>The following task will do the exact same thing using two separate files:</p>
+<p><em>manager.js</em></p>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> task = {
+    templateUrl: <span class="hljs-string">'hello.jst'</span>,
+    keys: <span class="hljs-string">' '</span>
+}
+</code></pre>
+<p><em>hello.jst</em></p>
+<pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>Hello World. I am a template.<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+</code></pre>
 <h4 id="proceeding">Proceeding</h4>
 <p>There are two types of controls that allow users to proceed to the next task.</p>
 <p>First, you can use any element in your template as a proceed button, all you have to do is add the <code>pi-message-done</code> attribute to the appropriate element.</p>
