@@ -62,7 +62,7 @@ define(function(require){
 		return {
 			priority: 1000,
 			replace:true,
-			template: '<div pi-swap ng-class="{\'pi-spinner\':loading}"><div pi-task="task"></div></div>',
+			template: '<div pi-swap ng-cloak ng-class="{\'pi-spinner\':loading}"><div pi-task="task"></div></div>',
 			controller: managerControler,
 			require: ['piManager', 'piSwap'],
 			link:  function($scope, $element, attr, ctrl){
