@@ -48,7 +48,7 @@ define(function(require){
 				task.$template = promises.template;
 				return task;
 			}, function(e){
-				$console('load').error('Failed to load task script - make sure that your URLs are all correct.',e);
+				$console('load').error('Failed to load task script - make sure that your URLs are all correct and that your script does not have any errors.', e);
 			});
 
 			return promise;

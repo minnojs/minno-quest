@@ -22,6 +22,7 @@ define(['managerAPI'], function(Manager){
 	API.addSettings('skip', true);
 
 	API.addSequence([
+		{script:function(done){done();}},
 		// {
 		// 	type: 'pip',
 		// 	name: 'iat',
