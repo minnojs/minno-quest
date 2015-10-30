@@ -22,6 +22,11 @@ define(['managerAPI'], function(Manager){
 	API.addSettings('skip', true);
 
 	API.addSequence([
+		{
+			type:'quest',
+			name: 'first',
+			scriptUrl: 'questScript1.js'
+		},
 		{script:function(done){done();}},
 		// {
 		// 	type: 'pip',
