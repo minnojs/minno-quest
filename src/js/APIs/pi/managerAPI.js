@@ -41,7 +41,7 @@ define(function(require){
 
 		var global = $rootScope.global;
 		var settings, context = {};
-		var data = {taskName: currentTask.name || 'namelessTask', taskNumber: currentTask.$meta.number};
+		var data = {taskName: currentTask.name || 'namelessTask', taskNumber: currentTask.$meta.number, taskURL:currentTask.scriptUrl || currentTask.templateUrl};
 
 		// add logging meta
 		if (currentTask.type == 'quest' || currentTask.type == 'pip'){
