@@ -1,3 +1,15 @@
+<a name"0.0.62"></a>
+### 0.0.62 (2015-10-30)
+
+
+#### Bug Fixes
+
+* **PI:** post taskURL as part of the pre task update ([8ca521f1](https://github.com/ProjectImplicit/PIquest/commit/8ca521f1))
+* **manager:**
+  * clarify error message for bad syntax in task script ([8b02cf85](https://github.com/ProjectImplicit/PIquest/commit/8b02cf85))
+  * do not flash elements pre-rendering ([f384895a](https://github.com/ProjectImplicit/PIquest/commit/f384895a))
+
+
 <a name"0.0.61"></a>
 ### 0.0.61 (2015-10-25)
 
