@@ -86,6 +86,21 @@ define(function(require){
 		activateProvider.set('post', activatePost);
 	}]);
 
+	module.config(['taskActivateProvider', function(activateProvider){
+		activateRedirect.$inject = ['done', 'task', 'managerBeforeUnload'];
+		function activateRedirect(done, task, beforeUnload){
+			if (_.result(task,'condition',true)){
+				beforeUnload.deactivate();
+				location.href = task.url;
+			} else {
+				done();
+			}
+		}
+
+		activateProvider.set('redirect', activateRedirect);
+	}]);
+
+
 
 	module.config(['taskActivateProvider', function(activateProvider){
 		activatePIP.$inject = ['done', '$element', 'task', 'script'];
