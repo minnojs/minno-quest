@@ -43,6 +43,12 @@ canvasBackground    | Default canvas background color.
 fontColor           | Default font color.
 fontSize            | Default font size.
 
+```js
+API.addSettings('canvas', {
+    fontSize: '2em'
+});
+```
+
 In case you need to fine tune the styles even further you can add css rules into the raw HTML. Support for dynamically adding CSS is planned but not yet supported.
 
 #### onPreTask
