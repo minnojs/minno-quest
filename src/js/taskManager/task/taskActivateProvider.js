@@ -33,7 +33,7 @@ define(function(require){
 			var destroy;
 
 			// get activation function
-			if (_.isFunction(script)){
+			if (_.isFunction(script) || _.isArray(script)){
 				activator = script;
 			}
 
@@ -52,7 +52,8 @@ define(function(require){
 				activator = self.get(task.type);
 			}
 
-			if (!_.isFunction(activator)){
+
+			if (!activator){
 				throw new Error('Activator function not found for the "' + task.type + '" task');
 			}
 

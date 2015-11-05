@@ -17,7 +17,10 @@ define(function(){
 						var task  = taskSource ? taskSource : {scriptUrl:source};
 
 						$scope.script = {
-							sequence: [task]
+							sequence: [
+								{script:['done', 'managerBeforeUnload', function(done, beforeUnload){beforeUnload.deactivate(); done();}]},
+								task
+							]
 						};
 					}
 				};
