@@ -1,3 +1,12 @@
+<a name"0.0.63"></a>
+### 0.0.63 (2015-11-05)
+
+
+#### Bug Fixes
+
+* **taskDirective:** cancel beforeUnload function ([790eab1a](https://github.com/ProjectImplicit/PIquest/commit/790eab1a))
+
+
 <a name"0.0.62"></a>
 ### 0.0.62 (2015-10-30)
 
