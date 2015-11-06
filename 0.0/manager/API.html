@@ -111,6 +111,7 @@
 	<ul>
 <li><a href="#settings">Settings</a><ul>
 <li><a href="#canvas">canvas</a></li>
+<li><a href="#injectstyle">injectStyle</a></li>
 <li><a href="#onpretask">onPreTask</a></li>
 <li><a href="#onend">onEnd</a></li>
 <li><a href="#title">title</a></li>
@@ -174,6 +175,10 @@ All the functions within settings are invoked using angular. This means that you
 });
 </code></pre>
 <p>In case you need to fine tune the styles even further you can add css rules into the raw HTML. Support for dynamically adding CSS is planned but not yet supported.</p>
+<h4 id="injectstyle">injectStyle</h4>
+<p>Injects a string of css into the page.</p>
+<pre><code class="lang-js">API.addSettings(<span class="hljs-string">'injectStyle'</span>, <span class="hljs-string">'[pi-quest] label {font-size:1.2em; font-weight:normal;}'</span>);
+</code></pre>
 <h4 id="onpretask">onPreTask</h4>
 <p><code>onPreTask</code> is a function to be called before each task is called.</p>
 <pre><code class="lang-js">API.addSettings(<span class="hljs-string">'onPreTask'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">currentTask</span>)</span>{
