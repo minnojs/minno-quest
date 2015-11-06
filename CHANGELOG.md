@@ -1,3 +1,14 @@
+<a name"0.0.64"></a>
+### 0.0.64 (2015-11-06)
+
+
+#### Features
+
+* **manager:**
+  * support injectStyle ([fc45b44f](https://github.com/ProjectImplicit/PIquest/commit/fc45b44f))
+  * redirect task ([e4262554](https://github.com/ProjectImplicit/PIquest/commit/e4262554))
+
+
 <a name"0.0.63"></a>
 ### 0.0.63 (2015-11-05)
 

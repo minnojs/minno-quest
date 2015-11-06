@@ -1,7 +1,8 @@
 <div ng-form name="pageForm" pi-timer>
+	<h3 ng-if="page.header" ng-bind-html="page.header" ng-style="page.headerStyle"></h3>
 	<div pi-timer="page.timer"></div>
 	<div ng-if="page.progressBar" class="text-center" ng-bind-html="page.progressBar"></div>
-	<h3 ng-if="page.header" ng-bind-html="page.header" ng-style="page.headerStyle"></h3>
+
 	<div ng-bind-html="page.text"></div>
 	<ol ng-class="{'list-unstyled':!page.numbered}" start="{{page.numberStart}}">
 		<li ng-repeat="quest in page.questions">
