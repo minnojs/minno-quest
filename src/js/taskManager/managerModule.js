@@ -15,6 +15,7 @@ define(function(require){
 	module.service('managerGetScript', require('./managerGetScriptService'));
 	module.service('managerTaskLoad', require('./managerTaskLoadService'));
 	module.factory('managerBeforeUnload', require('./beforeUnloadFactory'));
+	module.constant('managerInjectStyle', require('./injectStyle'));
 	module.directive('piManager', require('./managerDirective'));
 	module.directive('piManagerTask', require('./managerTaskDirective'));
 

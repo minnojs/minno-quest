@@ -1,5 +1,6 @@
 - [Settings](#settings)
     - [canvas](#canvas)
+    - [injectStyle](#injectstyle)
     - [onPreTask](#onpretask)
     - [onEnd](#onend)
     - [title](#title)
@@ -45,6 +46,13 @@ API.addSettings('canvas', {
 ```
 
 In case you need to fine tune the styles even further you can add css rules into the raw HTML. Support for dynamically adding CSS is planned but not yet supported.
+
+#### injectStyle
+Injects a string of css into the page.
+
+```js
+API.addSettings('injectStyle', '[pi-quest] label {font-size:1.2em; font-weight:normal;}');
+```
 
 #### onPreTask
 `onPreTask` is a function to be called before each task is called.

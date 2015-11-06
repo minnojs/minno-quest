@@ -1,6 +1,17 @@
 define(['managerAPI'], function(Manager){
 
 	var API = new Manager();
+
+	API.addSettings('injectStyle', [
+		'[pi-quest] {background-color: #fff; border: 1px solid transparent; border-radius: 4px; box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05); margin-bottom: 20px; border-color: #bce8f1;}',
+		'[piq-page] > ol {margin: 15px;}',
+		'[piq-page] > .btn-group {margin: 0px 15px 15px 15px;}',
+		'[pi-quest]::before, [pi-quest]::after {content: " ";display: table;}',
+		'[pi-quest]::after {clear: both;}',
+		'[pi-quest] h3 { border-bottom: 1px solid transparent; border-top-left-radius: 3px; border-top-right-radius: 3px; padding: 10px 15px; color: inherit; font-size: 2em; margin-bottom: 0; margin-top: 0;background-color: #d9edf7;border-color: #bce8f1;color: #31708f;}',
+		'[pi-quest] .form-group > label {font-size:1.2em; font-weight:normal;}'
+	].join(''));
+
 	API.addGlobal({$mTurk:{assignmentId:0,hitId:0,workerId:0}});
 
 	API.addTasksSet('instructions', {type:'message', keys:' '});

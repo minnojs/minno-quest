@@ -105,7 +105,8 @@ define(function(require){
 			var $document = $injector.get('$document');
 			var preloader = $injector.get('piPreloader');
 			var beforeUnload = $injector.get('managerBeforeUnload');
-			var canvasOff;
+			var injectStyle = $injector.get('managerInjectStyle');
+			var canvasOff, stylesOff;
 
 			// prevent accidental browsing away
 			beforeUnload.activate();
@@ -114,6 +115,10 @@ define(function(require){
 			// activate canvas
 			canvasOff = canvas(settings.canvas);
 			$scope.$on('$destroy', canvasOff);
+
+			// inject styles
+			stylesOff = injectStyle(settings.injectStyle);
+			$scope.$on('$destroy', stylesOff);
 
 			// preload images
 			preloader.loadArr('image',settings.preloadImages || []);
