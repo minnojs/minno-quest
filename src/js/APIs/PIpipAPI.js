@@ -1,9 +1,9 @@
 define(function(require){
 
-	var Constructor = require('../pipAPI');
+	var Constructor = require('./pipAPI');
 	var _ = require('underscore');
 	var isDev = /^(localhost|127.0.0.1)/.test(location.host) || window.DEBUG;
-	var decorator = require('APIs/pi/APIdecorator');
+	var decorator = require('./PIAPIdecorator');
 
 	/**
 	 * Constructor for PIPlayer script creator

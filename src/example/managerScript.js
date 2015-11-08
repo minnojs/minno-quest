@@ -33,6 +33,8 @@ define(['managerAPI'], function(Manager){
 	API.addSettings('skip', true);
 
 	API.addSequence([
+		{inherit:'instructions', template:'test'},
+		{script:function(done){done();}},
 		{
 			type:'quest',
 			name: 'first',

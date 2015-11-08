@@ -2,11 +2,13 @@
 define(['./config'], function(){
 
 	require.config({
-		packages: [
-			{name: 'pipAPI', location:'APIs', main:'pi/pipAPI'},
-			{name: 'questAPI', location:'APIs', main:'pi/questAPI'},
-			{name: 'managerAPI', location:'APIs', main:'pi/managerAPI'}
-		]
+		map: {
+			'*': {
+				pipAPI: 'APIs/PIpipAPI',
+				questAPI: 'APIs/PIquestAPI',
+				managerAPI: 'APIs/PImanagerAPI'
+			}
+		}
 	});
 
 	require(['angular','app'], function(angular, app) {

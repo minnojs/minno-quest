@@ -2,11 +2,13 @@
 define(['./config'], function(){
 
 	require.config({
-		packages: [
-			{name: 'pipAPI', location:'APIs', main:'pipAPI'},
-			{name: 'questAPI', location:'APIs', main:'questAPI'},
-			{name: 'managerAPI', location:'APIs', main:'managerAPI'}
-		]
+		map: {
+			'*': {
+				pipAPI: 'APIs/pipAPI',
+				questAPI: 'APIs/questAPI',
+				managerAPI: 'APIs/managerAPI'
+			}
+		}
 	});
 
 	// resume boot strap

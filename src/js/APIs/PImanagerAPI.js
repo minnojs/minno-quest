@@ -1,13 +1,13 @@
 define(function(require){
 
-	var Constructor = require('../managerAPI');
+	var Constructor = require('./managerAPI');
 	var _ = require('underscore');
 	var isDev = /^(localhost|127.0.0.1)/.test(location.host) || window.DEBUG;
-	var decorator = require('APIs/pi/APIdecorator');
+	var decorator = require('./PIAPIdecorator');
 
-	var messageTemplate = require('text!./messageTemplate.jst');
-	var messageTemplateDebrief = require('text!./messageTemplateDebrief.jst');
-	var messageTemplatePanel = require('text!./messageTemplatePanel.jst');
+	var messageTemplate = require('text!./pi/messageTemplate.jst');
+	var messageTemplateDebrief = require('text!./pi/messageTemplateDebrief.jst');
+	var messageTemplatePanel = require('text!./pi/messageTemplatePanel.jst');
 
 	/**
 	 * Constructor for PIPlayer script creator

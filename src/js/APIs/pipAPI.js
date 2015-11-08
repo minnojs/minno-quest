@@ -1,5 +1,5 @@
 define(function(require){
-	var factory = require('APIs/APIConstructor');
+	var factory = require('./APIConstructor');
 
 	var api = factory({
 		type: 'PIP',

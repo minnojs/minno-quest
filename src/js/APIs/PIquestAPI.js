@@ -22,4 +22,6 @@ define(function(require){
 	_.extend(API.prototype, Constructor.prototype);
 
 	return API;
+
+
 });

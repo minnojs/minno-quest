@@ -1,5 +1,5 @@
 define(function(require){
-	var api = require('APIs/APIConstructor');
+	var api = require('./APIConstructor');
 
 	return api({
 		type: 'manager',
