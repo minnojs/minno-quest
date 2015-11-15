@@ -1,6 +1,6 @@
-define(['underscore','./task-module'],function(){
+define(['underscore','./questTaskModule'],function(){
 
-	describe('Task',function(){
+	describe('QuestTask',function(){
 		var task;
 		var sendSpy = jasmine.createSpy("send");
 		var logSpy = jasmine.createSpy("log");
@@ -28,9 +28,9 @@ define(['underscore','./task-module'],function(){
 			});
 		}));
 
-		beforeEach(inject(function(Task, $rootScope){
+		beforeEach(inject(function(QuestTask, $rootScope){
 			$rootScope.current = {questions:{}};
-			task = new Task(script);
+			task = new QuestTask(script);
 		}));
 
 		it('should setup the db', inject(function(Database){
@@ -43,25 +43,25 @@ define(['underscore','./task-module'],function(){
 			expect(task.sequence).toEqual(jasmine.any(QuestSequence));
 		}));
 
-		it('should setup the logger', inject(function(Task){
+		it('should setup the logger', inject(function(QuestTask){
 			var script = {
 				sequence:[],
 				settings: {
 					logger:{a:1}
 				}
 			};
-			task = new Task(script);
+			task = new QuestTask(script);
 			expect(task.logger.setSettings).toHaveBeenCalledWith(script.settings.logger);
 		}));
 
-		it('should call settings.onEnd at the end of the task (if there is no endObject)', inject(function(Task, $rootScope){
+		it('should call settings.onEnd at the end of the task (if there is no endObject)', inject(function(QuestTask, $rootScope){
 			var script = {
 				sequence:[],
 				settings: {
 					onEnd:jasmine.createSpy('onEnd')
 				}
 			};
-			task = new Task(script);
+			task = new QuestTask(script);
 			nextSpy.andReturn(undefined);
 			task.current();
 			$rootScope.$apply();
@@ -89,7 +89,7 @@ define(['underscore','./task-module'],function(){
 			nextSpy.andReturn('nextObj');
 		}));
 
-		it('should call `onEnd` only after `send` is called', inject(function(Task, $rootScope, $q){
+		it('should call `onEnd` only after `send` is called', inject(function(QuestTask, $rootScope, $q){
 			var def = $q.defer();
 			var script = {
 				sequence:[],
@@ -99,7 +99,7 @@ define(['underscore','./task-module'],function(){
 					})
 				}
 			};
-			task = new Task(script);
+			task = new QuestTask(script);
 			nextSpy.andReturn(undefined);
 			sendSpy.andReturn(def.promise);
 			task.current();

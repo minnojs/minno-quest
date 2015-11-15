@@ -8,8 +8,8 @@ define(['underscore', '../questDirectivesModule'],function(_){
 	describe('piQuest', function(){
 		var script = {name:"myName", global: {extendGlobal:true}, current: {extendCurrent:true}};
 		var taskSpyObj;
-		var TaskSpy = jasmine.createSpy('Task').andCallFake(function(){
-			return (taskSpyObj = jasmine.createSpyObj('Task', ['log','next','prev','current']));
+		var TaskSpy = jasmine.createSpy('QuestTask').andCallFake(function(){
+			return (taskSpyObj = jasmine.createSpyObj('QuestTask', ['log','next','prev','current']));
 		});
 
 		function compile(){
@@ -21,7 +21,7 @@ define(['underscore', '../questDirectivesModule'],function(_){
 		}
 
 		beforeEach(module('questDirectives','task', function($provide, $compileProvider){
-			$provide.value('Task', TaskSpy);
+			$provide.value('QuestTask', TaskSpy);
 
 			// make sure piqPage is not activated
 			$compileProvider.directive('piqPage', function(){
@@ -122,7 +122,7 @@ define(['underscore', '../questDirectivesModule'],function(_){
 
 		beforeEach(module('task', 'questDirectives', function($provide, $sceProvider){
 			// don't load Task currently
-			$provide.value('Task', function(){});
+			$provide.value('QuestTask', function(){});
 			$provide.value('$window', {scrollTo:_.noop, document: document});
 			// for the timer directive
 			now = 0;

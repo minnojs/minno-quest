@@ -8,7 +8,7 @@ define(function(require){
 	]);
 
 	module.service('QuestSequence', require('./questSequenceProvider'));
-	module.service('Task', require('./taskProvider'));
+	module.service('QuestTask', require('./questTaskProvider'));
 	module.service('taskParse', require('./parseProvider'));
 
 	module.value('dfltQuestLogger', require('./dfltQuestLogger'));

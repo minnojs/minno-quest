@@ -14,10 +14,10 @@ define(function (require) {
 	var template = require('text!./piQuest.html');
 	var jqLite = require('angular').element;
 
-	piQuestCtrl.$inject = ['$scope','$rootScope','Task','templateDefaultContext', 'mixerDefaultContext'];
-	function piQuestCtrl($scope, $rootScope, Task, templateDefaultContext, mixerDefaultContext){
+	piQuestCtrl.$inject = ['$scope','$rootScope','QuestTask','templateDefaultContext', 'mixerDefaultContext'];
+	function piQuestCtrl($scope, $rootScope, QuestTask, templateDefaultContext, mixerDefaultContext){
 		var self = this;
-		var task = self.task = new Task($scope.script);
+		var task = self.task = new QuestTask($scope.script);
 		var defaultContext; // for templates and the mixer
 		var global = $rootScope.global; // setup in app.run
 		var current = $rootScope.current || {}; // setup in taskDirective
