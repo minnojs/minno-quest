@@ -169,6 +169,7 @@
           // auto "$apply" by ng-mousedown
           setValue(percentage);
           scope.$emit(SLIDER_CHANGE_EVENT, ngModel.$viewValue);
+          onHandleMousedown(event); // allow dragging after a slider click.
         }
 
 

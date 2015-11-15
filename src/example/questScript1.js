@@ -22,7 +22,7 @@ define(['questAPI'], function(Quest){
 			header: 'Header',
 			questions: 		{
 				stem: 'myStem',
-				type:'text',
+				type:'slider',
 				label:'label'
 			}
 		}
