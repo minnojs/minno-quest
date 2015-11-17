@@ -14,13 +14,16 @@ define(function (require) {
 	var template = require('text!./piQuest.html');
 	var jqLite = require('angular').element;
 
-	piQuestCtrl.$inject = ['$scope','$rootScope','QuestTask','templateDefaultContext', 'mixerDefaultContext'];
-	function piQuestCtrl($scope, $rootScope, QuestTask, templateDefaultContext, mixerDefaultContext){
-		var self = this;
-		var task = self.task = new QuestTask($scope.script);
+	piQuestCtrl.$inject = ['$scope','$rootScope','QuestTask','templateDefaultContext', 'mixerDefaultContext', 'piModal'];
+	function piQuestCtrl($scope, $rootScope, QuestTask, templateDefaultContext, mixerDefaultContext, piModal){
+		window.pi = piModal;
+		var task = new QuestTask($scope.script);
 		var defaultContext; // for templates and the mixer
 		var global = $rootScope.global; // setup in app.run
 		var current = $rootScope.current || {}; // setup in taskDirective
+
+		this.task = task;
+		this.timerSetup = timerSetup;
 
 		current.questions = {};
 
@@ -55,6 +58,43 @@ define(function (require) {
 			$scope.$emit('quest:newPage');
 		}
 
+		function timerSetup (timerCtrl) {
+			var settings = _.get($scope, 'script.settings.timer');
+			if (!settings){
+				return;
+			}
+
+			timerCtrl.start(settings);
+			timerCtrl.getScope().$on('timer-end', function(){
+				var message = settings.message;
+
+				// proceed
+				if (message){
+					// create message object out of string
+					_.isString(message) && (message = {body: message});
+
+					// extend message object with scope and context
+					_.defaults(message, {
+						header: 'Timer Done',
+						$context: defaultContext
+					});
+
+					// activate message and only then proceed
+					piModal.open(message).then(timerProceed);
+				} else {
+					// if there is no messgae proceed imidiately
+					timerProceed();
+				}
+
+				function timerProceed() {
+					task.end();
+				}
+
+			});
+
+			$scope.$on('$destroy', _.bind(timerCtrl.stop, timerCtrl));
+		}
+
 	}
 
 	directive.$inject = ['$compile', '$animate','$injector','piConsole'];
@@ -62,12 +102,18 @@ define(function (require) {
 		return {
 			controller: piQuestCtrl,
 			terminal:true,
-			priority: 500,
-			link: function(scope, parentElement, attr, ctrl) {
-				var task = ctrl.task,
+			replace:true,
+			template: '<div pi-timer></div>',
+			require: ['piQuest','piTimer'],
+			link: function(scope, parentElement, attr, ctrls) {
+				var ctrl = ctrls[0],
+					task = ctrl.task,
+					piTimer = ctrls[1],
 					currentScope,
 					currentElement,
 					previousElement;
+
+				ctrl.timerSetup(piTimer);
 
 				scope.$on('quest:refresh', refresh); // just refresh the object
 				scope.$on('quest:newPage', newPage); // new element, new object and animation

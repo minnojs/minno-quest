@@ -53,7 +53,7 @@ define(['underscore', 'angular'], function(_, angular){
 				var nextObj = this.sequence.current();
 
 				if (!nextObj){
-					this.q.resolve();
+					this.end();
 				}
 
 				return nextObj;
@@ -63,6 +63,10 @@ define(['underscore', 'angular'], function(_, angular){
 			},
 			prev: function(){
 				return this.sequence.prev();
+			},
+
+			end: function(){
+				this.q.resolve();
 			}
 		});
 

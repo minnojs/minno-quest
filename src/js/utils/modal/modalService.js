@@ -42,6 +42,7 @@ define(function(require){
 
 			// create new scope
 			$scope = (options.$scope || $rootScope).$new();
+
 			// set up scope methods
 			$scope.close = modalCleanup;
 			$document.on('keydown', modalCleanup);
@@ -63,15 +64,6 @@ define(function(require){
 			$scope.$digest();
 
 			return deferred.promise;
-		}
-
-		function onEsc(e){
-			var which = e.which || e.keyCode;
-
-			if(which == 27) {
-				$document.one('keydown', skipListener);
-	        }
-
 		}
 	}
 

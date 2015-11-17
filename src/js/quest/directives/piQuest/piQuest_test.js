@@ -6,11 +6,7 @@ define(['underscore', '../questDirectivesModule'],function(_){
 	angular.module('questDirectives').animation('.test', function(){});
 
 	describe('piQuest', function(){
-		var script = {name:"myName", global: {extendGlobal:true}, current: {extendCurrent:true}};
-		var taskSpyObj;
-		var TaskSpy = jasmine.createSpy('QuestTask').andCallFake(function(){
-			return (taskSpyObj = jasmine.createSpyObj('QuestTask', ['log','next','prev','current']));
-		});
+		var taskSpyObj, timerController, script, TaskSpy;
 
 		function compile(){
 			element = jqLite('<div pi-quest></div>');
@@ -18,9 +14,16 @@ define(['underscore', '../questDirectivesModule'],function(_){
 			$compile(element)(scope);
 			scope.$digest();
 			controller = element.controller('piQuest');
+			timerController = element.controller('piTimer');
 		}
 
 		beforeEach(module('questDirectives','task', function($provide, $compileProvider){
+			script = {name:"myName", global: {extendGlobal:true}, current: {extendCurrent:true}};
+
+			TaskSpy = jasmine.createSpy('QuestTask').andCallFake(function(){
+				return (taskSpyObj = jasmine.createSpyObj('QuestTask', ['log','next','prev','current','end']));
+			});
+
 			$provide.value('QuestTask', TaskSpy);
 
 			// make sure piqPage is not activated
@@ -86,6 +89,12 @@ define(['underscore', '../questDirectivesModule'],function(_){
 				expect(mixerDefaultContext.current).toBe(scope.current);
 				expect(mixerDefaultContext.questions).toBe(scope.current.questions);
 			}));
+
+			describe(': timer', function(){
+
+
+
+			});
 		});
 
 		describe('directive', function(){

@@ -9,6 +9,14 @@ define(['questAPI'], function(Quest){
 		//location.href = location.href;
 	});
 
+	API.addSettings('timer', {
+		duration: 1,
+		message: {
+			header: 'Time out!',
+			body: 'You will now be redirected to the next task.'
+		}
+	});
+
 	API.addQuestionsSet('basicSelect',{
 		type: 'selectOne',
 		autoSubmit:true,
@@ -18,14 +26,15 @@ define(['questAPI'], function(Quest){
 	});
 
 	API.addSequence([
-		{
-			header: 'Header',
-			questions: 		{
-				stem: 'myStem',
-				type:'slider',
-				label:'label'
+			{
+				header: 'Header',
+				questions: 		{
+					stem: 'myStem <%= pagesMeta.number %>',
+					type:'text',
+					label:'label'
+				}
 			}
-		}
+
 		// {
 		// 	//animate:"fade drop-in fakeAnimation",
 		// 	prevText: '123',
