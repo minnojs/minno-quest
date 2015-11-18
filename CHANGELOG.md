@@ -1,3 +1,18 @@
+<a name"0.0.65"></a>
+### 0.0.65 (2015-11-18)
+
+
+#### Bug Fixes
+
+* **PI:** jsp files prevent zoom on mobile ([6913f770](https://github.com/ProjectImplicit/PIquest/commit/6913f770))
+* **questDirectives:** slider can now be dragged after a click on the slider bar ([203bea2a](https://github.com/ProjectImplicit/PIquest/commit/203bea2a))
+
+
+#### Features
+
+* **quest:** global timer ([2e4f764f](https://github.com/ProjectImplicit/PIquest/commit/2e4f764f))
+
+
 <a name"0.0.64"></a>
 ### 0.0.64 (2015-11-06)
 
