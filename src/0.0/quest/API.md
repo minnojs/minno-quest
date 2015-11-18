@@ -20,6 +20,7 @@ description: All the little details...
 - [settings](#settings)
 	- [onEnd](#onend)
 	- [logger](#logger)
+	- [timer](#timer)
 	- [Debugging](#debugging)
 - [Data](#data)
 	- [Logs](#logs)
@@ -439,6 +440,32 @@ Within the player, each question (as defined by unique question name) may be log
 If you want a question not to be logged at all, simply do not give it a name.
 
 You may want to debug the logger by [activating the DEBUG `logger` setting](#debugging). When activated, it prints each logged object into the console.
+
+#### Timer
+The questionnaire timer allows you to constrain the time that users have to answer the whole questionnaire.
+
+```js
+API.addSettings('timer', {
+	duration: 10,
+	message: {
+		header: 'Time out!',
+		body: 'You will now be redirected to the next task.'
+	}
+});
+```
+
+In order to control it, you may use the following properties.
+
+property		| description
+--------------- | ---------------------
+duration 		| (number) How long (in seconds) before the timer ends.
+show 			| (true or false) Whether to display a visual countdown (true by default).
+direction 		| ("up" or "down") Whether to use a countdown or to count up ("down" by default).
+removeOnEnd 	| (true or false) Whether to remove the visual timer when the countdown ends (if you don't auto proceed when the timer ends. ).		
+message 		| (String or Object) Display a message at the end the timer duration. You can imput a simple string here. If you want finer control over the content of the message you can use the an object with the following properties: `header`: the header text for the message (defaults to "Timer Done"). `body`: the body of the message. `button`: the close button (defaults to "close").
+
+
+
 
 #### Debugging
 PIQuest can supply some extra information regarding its inner workings, all you have to do is set the DEBUG setting property like so:

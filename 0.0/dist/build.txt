@@ -5,7 +5,7 @@ styles/main.css
 
 js/bootstrap.js
 ----------------
-/home/eladzlot/public_html/quest/bower_components/angular/angular.min.js
+/home/eladzlot/public_html/quest/bower_components/angular/angular.js
 /home/eladzlot/public_html/quest/bower_components/angular-animate/angular-animate.min.js
 /home/eladzlot/public_html/quest/bower_components/lodash-compat/lodash.min.js
 /home/eladzlot/public_html/quest/bower_components/requirejs-text/text.js
@@ -82,10 +82,10 @@ js/utils/database/databaseProvider.js
 js/utils/database/databaseSequenceProvider.js
 js/utils/database/databaseModule.js
 js/quest/task/questSequenceProvider.js
-js/quest/task/taskProvider.js
+js/quest/task/questTaskProvider.js
 js/quest/task/parseProvider.js
 js/quest/task/dfltQuestLogger.js
-js/quest/task/task-module.js
+js/quest/task/questTaskModule.js
 js/quest/questModule.js
 js/message/messageDirective.js
 js/message/messageDoneDirective.js
@@ -124,7 +124,7 @@ js/APIs/managerAPI.js
 
 js/pibootstrap.js
 ----------------
-/home/eladzlot/public_html/quest/bower_components/angular/angular.min.js
+/home/eladzlot/public_html/quest/bower_components/angular/angular.js
 /home/eladzlot/public_html/quest/bower_components/angular-animate/angular-animate.min.js
 /home/eladzlot/public_html/quest/bower_components/lodash-compat/lodash.min.js
 /home/eladzlot/public_html/quest/bower_components/requirejs-text/text.js
@@ -201,10 +201,10 @@ js/utils/database/databaseProvider.js
 js/utils/database/databaseSequenceProvider.js
 js/utils/database/databaseModule.js
 js/quest/task/questSequenceProvider.js
-js/quest/task/taskProvider.js
+js/quest/task/questTaskProvider.js
 js/quest/task/parseProvider.js
 js/quest/task/dfltQuestLogger.js
-js/quest/task/task-module.js
+js/quest/task/questTaskModule.js
 js/quest/questModule.js
 js/message/messageDirective.js
 js/message/messageDoneDirective.js
@@ -238,12 +238,12 @@ js/app.js
 js/../../bower_components/PIPlayer/dist/js/extensions/dscore/Scorer.js
 js/APIs/APIConstructor.js
 js/APIs/pipAPI.js
-js/APIs/pi/APIdecorator.js
-js/APIs/pi/pipAPI.js
+js/APIs/PIAPIdecorator.js
+js/APIs/PIpipAPI.js
 js/APIs/questAPI.js
-js/APIs/pi/questAPI.js
+js/APIs/PIquestAPI.js
 js/APIs/managerAPI.js
-text!managerAPI/pi/messageTemplate.jst
-text!managerAPI/pi/messageTemplateDebrief.jst
-text!managerAPI/pi/messageTemplatePanel.jst
-js/APIs/pi/managerAPI.js
+text!APIs/pi/messageTemplate.jst
+text!APIs/pi/messageTemplateDebrief.jst
+text!APIs/pi/messageTemplatePanel.jst
+js/APIs/PImanagerAPI.js
