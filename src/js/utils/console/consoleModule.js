@@ -34,6 +34,7 @@ define(function(require){
 				}
 			/* fall through */
 			default:
+				// @TODO: implement this: http://stackoverflow.com/questions/4810841/how-can-i-pretty-print-json-using-javascript
 				value = '<a href="javascript:void(0)">' + angular.toJson(value, !!pretty) + '</a>';
 		}
 

@@ -17,6 +17,7 @@ define(function(require){
 
 		function API(){
 			var script = this.script = {
+				type: options.type,
 				name: 'anonymous ' + options.type,
 				settings: {},
 				current: {}, // this is the actual namespace for this PIP

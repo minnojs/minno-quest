@@ -9,7 +9,7 @@ define(['questAPI'], function(Quest){
 		//location.href = location.href;
 	});
 
-	API.addSettings('timer', {
+	API.addSettings('timers', {
 		duration: 1,
 		message: {
 			header: 'Time out!',
@@ -30,7 +30,7 @@ define(['questAPI'], function(Quest){
 				header: 'Header',
 				questions: 		{
 					stem: 'myStem <%= pagesMeta.number %>',
-					type:'text',
+					type:'slider',
 					label:'label'
 				}
 			}
