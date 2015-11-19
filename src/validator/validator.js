@@ -2,15 +2,15 @@
 define(function (require){
 
 	var pipValidate = require('./pipValidator');
-	// var questValidate = require('./questValidator');
-	// var managerValidate = require('./managerValidator');
+	var questValidate = require('./questValidator');
+	var managerValidate = require('./managerValidator');
 
 	return function validate(script){
 		var type = script.type && script.type.toLowerCase();
 		switch (type){
 			case 'pip' : return pipValidate.apply(null, arguments);
-			// case 'quest' : return questValidate.apply(null, arguments);
-			// case 'manager' : return managerValidate.apply(null, arguments);
+			case 'quest' : return questValidate.apply(null, arguments);
+			case 'manager' : return managerValidate.apply(null, arguments);
 			default:
 				throw new Error('Unknown script.type: ' + type);
 		}

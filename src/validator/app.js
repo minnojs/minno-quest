@@ -22,7 +22,8 @@ define(function (require) {
 				return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 			}
 
-			var url = getParameterByName('url');
+			var url = $rootScope.url = getParameterByName('url');
+
 
 			require(['text!' + url], function(script){
 				$rootScope.$broadcast('script:load', script, url);
@@ -59,19 +60,23 @@ define(function (require) {
 			var jshint = window.JSHINT;
 			$scope.loading = true;
 			$scope.$on('script:load', function(e, textScript, url){
-				$scope.loading = false;
 				$scope.syntaxError = !jshint(textScript) && jshint.data().errors.some(function(err){return err.code && err.code[0] === 'E';});
 				$scope.validations = [];
 				if (!$scope.syntaxError){
 					try {
 						eval(textScript.replace('define(', 'define("myTask",'));
 						require(['myTask'], function(script){
+
 							$scope.validations = validate(script, url);
+							$scope.loading = false;
 							$scope.$digest();
 						});
 					} catch(e) {
-
+						$scope.loading = false;
+						throw e;
 					}
+				} else {
+					$scope.loading = false;
 				}
 				$scope.$digest();
 			});

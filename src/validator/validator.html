@@ -80,13 +80,14 @@
 
 	<body ng-app>
 		<div class="container">
-			<h1>Task Validator</h1>
+			<h1>Task Validator <small ng-cloak>{{url}}</small></h1>
+			<div class="loader" ng-if="!url"></div>
 
 			<div ng-controller="syntax" ng-cloak>
 				<h3>Syntax</h3>
-				<div class="loader" ng-if="loading"></div>
+
 				<div ng-if="!loading && valid" class="alert alert-success">
-			    	<strong>Well done!</strong> Your script is shining clean.
+			    	<strong>Well done!</strong> Your script is squeaky clean.
 			    </div>
 			    <div ng-if="!loading && !valid">
 				    <table class="table">
@@ -120,7 +121,7 @@
 			    		<h4>{{validationReport.type}}</h4>
 
 						<div ng-if="!validationReport.errors.length" class="alert alert-success">
-					    	<strong>Well done!</strong> Your script is shining clean.
+					    	<strong>Well done!</strong> Your script is squeaky clean.
 					    </div>
 
 					    <div class="container">

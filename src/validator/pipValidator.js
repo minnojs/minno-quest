@@ -3,15 +3,30 @@ define(function(require){
 
 	var messages = require('./messages');
 	var pipParser = require('./parser').pipElements;
+	var row = messages.row;
+	var warn = messages.warn;
+	var error = messages.error;
+
+	return pipValidator;
 
 	function pipValidator(script, url){
 		var errors = [];
 		var elements = pipParser(script);
 
-		errors.push({type:'Settings', errors: checkSettings(script, url)});
-		errors.push({type:'Trials', errors: elements.trials.map(trialTest)});
+		errors.push({type:'Settings',errors: checkSettings(script, url)});
+		errors.push({type:'Trials',errors: filterMap(elements.trials, trialTest)});
+		// errors.push({type:'Stimuli',errors: filterMap(elements.stimuli, stimuliTest)});
+		// errors.push({type:'Media',errors: filterMap(elements.media, mediaTest)});
 
 		return errors;
+	}
+
+	function filterMap(arr, fn){
+		return arr.map(fn).filter(e=>e);
+	}
+
+	function toArray(obj){
+		return Array.isArray(obj) ? obj : [obj];
 	}
 
 	/**
@@ -56,11 +71,9 @@ define(function(require){
 	}
 
 	function trialTest(trial) {
-		var row = messages.row;
-		var warn = messages.warn;
-		var error = messages.error;
 		var tests = [
-			testInteractions(trial.interactions)
+			testInteractions(trial.interactions),
+			testInput(trial.input)
 		];
 
 		return row(trial, tests);
@@ -69,19 +82,45 @@ define(function(require){
 			if (!interactions) {return;}
 
 			if (!Array.isArray(interactions)){
-				return [error('Interactions must be an array.', e=>e)];
+				return [error('Interactions must be an array.', true)];
 			}
 
 			return [
-				error('All interactions must have conditions', interactions.some(i=>!i.conditions)),
-				error('All interactions must have actions', interactions.some(i=>!i.actions))
+				interactions.some(i=>!i.conditions) ? error('All interactions must have conditions', true) : [
+					error('All conditions must have a type', interactions.some(i=>!!i.conditions.type))
+				],
+				interactions.some(i=>!i.actions) ? error('All interactions must have actions', true) : [
+					error('All actions must have a type', interactions.some(i=>!!i.actions.type))
+				],
 			];
+		}
 
+		function testInput(input){
+			if (!input) {return;}
 
+			if (!Array.isArray(trial.input)){
+				return [error('Input must be an Array', true)];
+			}
 
+			return [
+				error('Input must always have a handle', input.some(i=>!i.handle)),
+				error('Input must always have an on attribute', input.some(i=>!i.on)),
+			];
 		}
 	}
 
-	return pipValidator;
+	function stimuliTest(stim){
+		var tests = [];
+		return row(stim, tests);
+	}
+
+	function mediaTest(media){
+		var tests = [
+
+		];
+		return row(media, tests);
+	}
+
+
 
 });
