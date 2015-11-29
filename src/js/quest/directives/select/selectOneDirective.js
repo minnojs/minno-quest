@@ -7,7 +7,6 @@
 define(function (require) {
 
 	var angular = require('angular');
-	var _ = require('underscore');
 	var template = require('text!./selectOne.html');
 
 	directive.$inject = ['questSelectMixer', 'buttonConfig', '$compile'];

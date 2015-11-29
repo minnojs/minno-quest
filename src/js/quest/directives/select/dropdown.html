@@ -8,6 +8,6 @@
 		>
 		<option value="">{{chooseText || "-- Choose an option --"}}</option>
 	</select>
-	<div pi-quest-validation="model.$error.required && $parent.$parent.submitAttempt">{{data.errorMsg.required || "Please respond to this question"}}</div>
+	<div pi-quest-validation="form.$error.required" pi-post-submit="true">{{data.errorMsg.required || "Please respond to this question"}}</div>
 	<div pi-quest-validation="model.$error.correct" pi-post-submit="true">{{data.errorMsg.correct || "You must answer the correct answer!"}}</div>
 </div>

@@ -12,7 +12,7 @@ define(function (require) {
 		return {
 			replace: true,
 			template:template,
-			require: ['ngModel'],
+			require: ['ngModel','form'],
 			controller: 'questController',
 			controllerAs: 'ctrl',
 			scope:{
@@ -21,6 +21,8 @@ define(function (require) {
 			link: function(scope, element, attr, ctrls) {
 				var ngModel = ctrls[0];
 				var ctrl = scope.ctrl;
+
+				scope.form = ctrls[1];
 
 				ctrl.registerModel(ngModel, {
 					dflt: NaN
