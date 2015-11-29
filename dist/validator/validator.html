@@ -16,6 +16,11 @@
 		<style type="text/css">
 			[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {display: none !important;}
 
+			.pre a {
+			    text-decoration: none;
+			    white-space: pre;
+			}
+
 			/**
 			 * The spinner
 			 * http://www.css-spinners.com/spinner/throbber
@@ -75,13 +80,14 @@
 
 	<body ng-app>
 		<div class="container">
-			<h1>Task Validator</h1>
+			<h1>Task Validator <small ng-cloak>{{url}}</small></h1>
+			<div class="loader" ng-if="!url"></div>
 
 			<div ng-controller="syntax" ng-cloak>
 				<h3>Syntax</h3>
-				<div class="loader" ng-if="loading"></div>
+
 				<div ng-if="!loading && valid" class="alert alert-success">
-			    	<strong>Well done!</strong> Your script is shining clean.
+			    	<strong>Well done!</strong> Your script is squeaky clean.
 			    </div>
 			    <div ng-if="!loading && !valid">
 				    <table class="table">
@@ -95,16 +101,58 @@
 				    	</tbody>
 				    </table>
 
-					<div class="alert alert-danger">
+					<div class="alert alert-danger" ng-if="errorCount">
 				    	<strong><span class="glyphicon glyphicon-exclamation-sign"></span></strong> You have {{errorCount}} critical errors.
 				    </div>
-					<div class="alert alert-info">
+					<div class="alert alert-info" ng-if="warningCount">
 				    	<strong><span class="glyphicon glyphicon-warning-sign"></span></strong> You have {{warningCount}} non standard syntax errors.
 				    </div>
 			    </div>
 			</div>
 
-			<div ng-controller="validator"></div>
+			<div ng-controller="validator" ng-cloak>
+				<h3>Validation</h3>
+				<div ng-if="loading" class="loader"></div>
+				<div ng-if="!loading && syntaxError" class="alert alert-danger">
+			    	<strong><span class="glyphicon glyphicon-exclamation-sign"></span></strong> You have some syntax errors, we can't validate like this...
+			    </div>
+			    <div ng-if="!loading && !syntaxError">
+			    	<div ng-repeat="validationReport in validations">
+			    		<h4>{{validationReport.type}}</h4>
+
+						<div ng-if="!validationReport.errors.length" class="alert alert-success">
+					    	<strong>Well done!</strong> Your script is squeaky clean.
+					    </div>
+
+					    <div class="container">
+					    	<div ng-repeat="err in validationReport.errors" class="row">
+					    		<div class="col-md-4">
+					    			<span
+										ng-click="pre = !pre"
+										ng-class="{pre:pre}"
+										ng-bind-html="err.element | stringify:pre"
+									></span>
+					    		</div>
+					    		<div class="col-md-8">
+					    			<ul>
+					    				<li
+					    					ng-repeat="msg in err.messages"
+					    					class="list-unstyled"
+					    					ng-class="{
+					    						'text-danger':msg.level == 'error',
+					    						'text-info':msg.level == 'warn'
+					    					}"
+					    				>
+					    					<strong>{{msg.level === 'error' ? 'Error' : 'Warn'}}:</strong>
+					    					{{msg.message}}
+					    				</li>
+					    			</ul>
+					    		</div>
+					    	</div>
+					    </div>
+			    	</div>
+			    </div>
+			</div>
 		</div>
 	</body>
 

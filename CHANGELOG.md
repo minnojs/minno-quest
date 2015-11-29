@@ -1,3 +1,12 @@
+<a name"0.0.66"></a>
+### 0.0.66 (2015-11-29)
+
+
+#### Bug Fixes
+
+* **questDirectives:** dropdown required error message now works ([8870fca4](https://github.com/ProjectImplicit/PIquest/commit/8870fca4))
+
+
 <a name"0.0.65"></a>
 ### 0.0.65 (2015-11-18)
 

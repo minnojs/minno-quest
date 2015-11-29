@@ -1,68 +1,46 @@
 /* jshint esnext:true */
-define(function (){
+define(function (require){
 
-	function multiPick(arr, propArr){
-		return arr
-			.map(e=> e && [].concat(e[propArr[0]], e[propArr[1]], e[propArr[2]])) // gather all stim arrays
-			.reduce((previous, current)=>previous.concat(current),[]) // flatten arrays
-			.filter(t=>t); // remove all undefined stim
-	}
+	var pipValidate = require('./pipValidator');
+	var questValidate = require('./questValidator');
+	var managerValidate = require('./managerValidator');
 
-	function flattenSequence(sequence){
-		function unMix(e){
-			return flattenSequence([].concat(e.data, e.elseData, (e.branches || []).map(e=>e.data)));
+	return function validate(script){
+		var type = script.type && script.type.toLowerCase();
+		switch (type){
+			case 'pip' : return pipValidate.apply(null, arguments);
+			case 'quest' : return questValidate.apply(null, arguments);
+			case 'manager' : return managerValidate.apply(null, arguments);
+			default:
+				throw new Error('Unknown script.type: ' + type);
 		}
+	};
 
-		return sequence
-			.reduce((previous, current) => {return previous.concat(current && current.mixer ? unMix(current) : current);},[])
-			.filter(t=>t); // remove all undefined stim;
-	}
+	return function(){
+		return [
+			{
+				type: 'task',
+				errosrs:[],
+				errors: [
+					{
+						element: {name:'myName', content: [1,2,3]},
+						messages: [
+							{level:'error', message: 'error message1'},
+							{level:'warn', message: 'warn message2'},
+							{level:'warn', message: 'warn message3'},
+							{level:'error', message: 'error message4'}
+						]
+					},
+					{
+						element: {name:'otherName', content: [1,2,3]},
+						messages: [
+							{level:'warn', message: 'warn message1'},
+							{level:'error', message: 'error message2'}
+						]
+					}
+				]
+			}
 
-
-	function pipElements(script){
-		var trials, stimuli, media;
-
-		trials = [].concat(flattenSequence(script.sequence), script.trialSets).filter(t=>t);
-		stimuli = [].concat(
-			script.stimulusSets,
-			multiPick(trials,['stimuli', 'layout'])
-		).filter(t=>t);
-		media = [].concat(
-			script.mediaSets,
-			multiPick(stimuli,['media','touchMedia'])
-		).filter(t=>t);
-
-		return {trials:trials, stimuli:stimuli, media:media};
-	}
-
-	function questElements(script){
-		var pages, questions;
-
-		pages = [].concat(
-			flattenSequence(script.sequence),
-			script.pagesSets
-		).filter(t=>t);
-
-		questions = [].concat(
-			script.questionsSets,
-			flattenSequence(multiPick(pages,['questions']))
-		).filter(t=>t);
-
-		return {pages:pages, questions:questions};
-	}
-
-	function managerElements(script){
-		var tasks;
-
-		tasks = [].concat(
-			flattenSequence(script.sequence),
-			script.pagesSets
-		).filter(t=>t);
-
-		return {tasks:tasks};
-	}
-
-	return {
-		flattenSequence: flattenSequence
+		];
 	};
 });

@@ -11,17 +11,25 @@ define(function(){
 			// libs
 			underscore: "../../bower_components/lodash-compat/lodash.min",
 			angular: '../../bower_components/angular/angular',
-			text: '../../bower_components/requirejs-text/text'
+			text: '../../bower_components/requirejs-text/text',
+			jquery: '../../bower_components/jquery/dist/jquery.min'
 		},
 		packages: [
 			{name: 'pipAPI', location:'../js/APIs', main:'PIpipAPI'},
 			{name: 'questAPI', location:'../js/APIs', main:'PIquestAPI'},
-			{name: 'managerAPI', location:'../js/APIs', main:'PImanagerAPI'}
+			{name: 'managerAPI', location:'../js/APIs', main:'PImanagerAPI'},
+			{
+				name: 'pipScorer',
+				location: '../../bower_components/PIPlayer/dist/js/extensions/dscore',
+				main: 'Scorer'
+			}
+
 		],
 
 		shim: {
 			angular : {exports : 'angular'}
 		},
+
 		deps: [
 			// The APIs are preloaded into the app so we don't have to set them as dependencies here
 			'angular', 'underscore','text'
