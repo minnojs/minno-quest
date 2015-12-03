@@ -24,7 +24,7 @@ define(function (require) {
 		var globalAttr = $rootElement.attr('pi-global');
 		var piGlobal = $parse(globalAttr)($window);
 
-    	fastClick.attach(document.body);
+    	fastClick.attach(document.body, {tapDelay:100});
 		// create the global object
 		window.piGlobal || (window.piGlobal = {});
 		$rootScope.global = window.piGlobal;
