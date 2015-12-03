@@ -1,3 +1,12 @@
+<a name"0.0.68"></a>
+### 0.0.68 (2015-12-03)
+
+
+#### Bug Fixes
+
+* **mobile:** allow quick doublclicks with fastClick ([2d39c955](https://github.com/ProjectImplicit/PIquest/commit/2d39c955))
+
+
 <a name"0.0.67"></a>
 ### 0.0.67 (2015-12-03)
 
