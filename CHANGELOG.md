@@ -1,3 +1,12 @@
+<a name"0.0.69"></a>
+### 0.0.69 (2015-12-03)
+
+
+#### Features
+
+* **questDirectives:** warn for nameless questions ([f34d390d](https://github.com/ProjectImplicit/PIquest/commit/f34d390d))
+
+
 <a name"0.0.68"></a>
 ### 0.0.68 (2015-12-03)
 
