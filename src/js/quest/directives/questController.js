@@ -74,6 +74,10 @@ define(function(require){
 				piConsole(['question']).warn('This question has already been in use: "' + log.name + '"');
 			}
 
+			if (!data.name){
+				piConsole(['question']).warn('There is a question without a name! I\'d tell you what it is, but it has no name!');
+			}
+
 			// expose all the stuff...
 			self.log = ngModel.$modelValue = log;
 

@@ -2,7 +2,7 @@ define(['questAPI'], function(Quest){
 
 	var API = new Quest();
 
-	API.addSettings('DEBUG', {level: 'error'});
+	//API.addSettings('DEBUG', {level: 'error'});
 
 	API.addSettings('onEnd', function(){
 		console.log('onEnd script1');
