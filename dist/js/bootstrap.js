@@ -1,5 +1,5 @@
 /*!
- * @license PIQuest v0.0.66
+ * @license PIQuest v0.0.67
  * Copyright 2013-2015 Project Implicit
  *
  * Licensed under the Apache License, Version 2.0 (the "License");

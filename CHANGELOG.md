@@ -1,3 +1,12 @@
+<a name"0.0.67"></a>
+### 0.0.67 (2015-12-03)
+
+
+#### Bug Fixes
+
+* **mobile:** add fastclick to prevent 300ms delay on click ([92e865b8](https://github.com/ProjectImplicit/PIquest/commit/92e865b8))
+
+
 <a name"0.0.66"></a>
 ### 0.0.66 (2015-11-29)
 
