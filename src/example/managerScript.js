@@ -36,11 +36,17 @@ define(['managerAPI'], function(Manager){
 		// {inherit:'instructions', template:'test'},
 		// {script:function(done){done();}},
 		{
+			script:function(done, managerBeforeUnload){
+				managerBeforeUnload.deactivate();
+				done();}
+		},
+
+		{
 			type:'quest',
 			name: 'first',
 			scriptUrl: 'questScript1.js'
 		},
-		{script:function(done){done();}},
+
 		// {
 		// 	type: 'pip',
 		// 	name: 'iat',

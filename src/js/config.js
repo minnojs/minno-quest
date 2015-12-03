@@ -20,6 +20,7 @@ define(function(){
 			angular: '../../bower_components/angular/angular',
 			animate: '../../bower_components/angular-animate/angular-animate.min',
 			text: '../../bower_components/requirejs-text/text',
+			fastclick: '../../bower_components/fastclick/lib/fastclick',
 
 			// this lib is needed for pipScorer
 			jquery: ["//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min","../../bower_components/jquery/dist/jquery.min"]

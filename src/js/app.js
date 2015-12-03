@@ -6,6 +6,7 @@ define(function (require) {
 
 	var angular = require('angular');
 	var _ = require('underscore');
+	var fastClick = require('fastclick');
 
 	var submodules = [
 		require('quest/questModule').name,
@@ -23,6 +24,7 @@ define(function (require) {
 		var globalAttr = $rootElement.attr('pi-global');
 		var piGlobal = $parse(globalAttr)($window);
 
+    	fastClick.attach(document.body);
 		// create the global object
 		window.piGlobal || (window.piGlobal = {});
 		$rootScope.global = window.piGlobal;

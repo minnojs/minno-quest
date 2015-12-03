@@ -11,6 +11,7 @@ js/bootstrap.js
 /home/eladzlot/public_html/quest/bower_components/requirejs-text/text.js
 js/config.js
 js/bootstrap.js
+/home/eladzlot/public_html/quest/bower_components/fastclick/lib/fastclick.js
 js/utils/timer/timerStopper.js
 js/utils/timer/timerDirective.js
 js/utils/timer/timerNow.js
@@ -130,6 +131,7 @@ js/pibootstrap.js
 /home/eladzlot/public_html/quest/bower_components/requirejs-text/text.js
 js/config.js
 js/pibootstrap.js
+/home/eladzlot/public_html/quest/bower_components/fastclick/lib/fastclick.js
 js/utils/timer/timerStopper.js
 js/utils/timer/timerDirective.js
 js/utils/timer/timerNow.js

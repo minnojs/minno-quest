@@ -30,8 +30,10 @@ define(['questAPI'], function(Quest){
 				header: 'Header',
 				questions: 		{
 					stem: 'myStem <%= pagesMeta.number %>',
-					type:'slider',
-					label:'label'
+					type:'selectOne',
+					label:'label',
+					autoSubmit: true,
+					answers : [1,2,3,4,5]
 				}
 			}
 
