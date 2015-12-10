@@ -42,6 +42,19 @@ define(['underscore'],function(_){
 			return obj.$parsed;
 		}
 
+		function deepMixer(sequence, context){
+			return _.reduce(sequence, function(arr,value){
+
+				if (_.isPlainObject(value) && 'mixer' in value && value.mixer != 'wrapper' && !value.wrapper){
+					var seq = deepMixer(mix(value, context), context);
+					return arr.concat(seq);
+				} else {
+					return arr.concat([value]);
+				}
+			}, []);
+		}
+
+
 		mix.mixers = {
 			wrapper : function(obj){
 				return obj.data;
@@ -58,30 +71,17 @@ define(['underscore'],function(_){
 
 			// randomize any elements
 			random: function(obj, context){
-
-				function randomDeepMixer(sequence){
-					return _.reduce(sequence, function(arr,value){
-
-						if (_.isPlainObject(value) && 'mixer' in value && value.mixer != 'wrapper' && !value.wrapper){
-							var seq = randomDeepMixer(mix(value, context));
-							return arr.concat(seq);
-						} else {
-							return arr.concat([value]);
-						}
-					}, []);
-				}
-
-				var sequence = obj.data || [];
-				return shuffle(randomDeepMixer(sequence));
+				var sequence = obj.data ? deepMixer(obj.data, context) : [];
+				return shuffle(sequence);
 			},
 
-			choose: function(obj){
-				var sequence = obj.data || [];
+			choose: function(obj, context){
+				var sequence = obj.data ? deepMixer(obj.data, context) : [];
 				return _.take(shuffle(sequence), obj.n ? obj.n : 1);
 			},
 
-			weightedRandom: function(obj){
-				var sequence = obj.data || [];
+			weightedRandom: function(obj, context){
+				var sequence = obj.data ? deepMixer(obj.data, context) : [];
 				var i;
 				var total_weight = _.reduce(obj.weights,function (prev, cur) {
 					return prev + cur;
