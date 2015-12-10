@@ -9,7 +9,8 @@ define(['managerAPI'], function(Manager){
 		'[pi-quest]::before, [pi-quest]::after {content: " ";display: table;}',
 		'[pi-quest]::after {clear: both;}',
 		'[pi-quest] h3 { border-bottom: 1px solid transparent; border-top-left-radius: 3px; border-top-right-radius: 3px; padding: 10px 15px; color: inherit; font-size: 2em; margin-bottom: 0; margin-top: 0;background-color: #d9edf7;border-color: #bce8f1;color: #31708f;}',
-		'[pi-quest] .form-group > label {font-size:1.2em; font-weight:normal;}'
+		'[pi-quest] .form-group > label {font-size:1.2em; font-weight:normal;}',
+		'[pi-quest] .btn-toolbar {margin-bottom:1px;}'
 	].join(''));
 
 	API.addGlobal({$mTurk:{assignmentId:0,hitId:0,workerId:0}});

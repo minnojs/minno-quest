@@ -32,6 +32,11 @@ label {
 	@media (min-width: $screen-lg-min) {
 		width: $container-lg;
 	}
+
+	// prevent rendering bug when chrome zooms around...
+	.btn-toolbar {
+		margin-bottom: 1px;
+	}
 }
 
 [piq-page]{
