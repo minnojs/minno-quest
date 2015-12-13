@@ -5,8 +5,8 @@ define(function(require){
 
 	var _ = require('underscore');
 
-	directive.$inject = ['taskActivate','managerCanvas','$document', '$window', '$rootScope'];
-	function directive(activateTask, canvas, $document, $window, $rootScope){
+	directive.$inject = ['taskActivate','managerCanvas','$document', '$window', '$rootScope', 'piConsole'];
+	function directive(activateTask, canvas, $document, $window, $rootScope, piConsole){
 		return {
 			scope:{
 				task: '=piTask'
@@ -20,6 +20,7 @@ define(function(require){
 				var settings = $scope.$parent.settings || {};
 				var script = task.$script || {};
 				var taskName = task.name || script.name;
+				var piGlobal = window.piGlobal;
 
 				if (!task){
 					return;
@@ -39,10 +40,13 @@ define(function(require){
 				/**
 				 * Setup current object
 				 */
-				$rootScope.current = $window.piGlobal.current = script.current || {};
+				$rootScope.current = piGlobal.current = script.current || {};
 				if (taskName){
+					if (piGlobal[taskName]){
+						piConsole(['task']).warn('This taskName has already been in use: "' + taskName + '"');
+					}
 					// extend current script with the piGlobal object
-					_.extend($rootScope.current, $window.piGlobal[taskName] || {});
+					_.extend($rootScope.current, piGlobal[taskName] || {});
 					// set the current object back into the global
 					$window.piGlobal[taskName] = script.current;
 				}
