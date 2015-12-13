@@ -198,14 +198,32 @@ This code will create one of the following sequences:
 
 Please note that the `random` mixer pre-computes all the content in `data`, so that any branching mixers will be branched according to the state of the study at the time of the randomization. So, if you have a branch that depends on a previous object, make sure that the branch always comes after that object. Again, you can use wrapper:true in a branch (or multiBranch) mixer, if you need to keep the order of some objects fixed for the branching to make sense. 
 
-**weightedRandom**:
-Selects a single element using a weighted random algorithm. Each element in `data` is given the appropriate weight from `weights`. In the following example obj2 has four times the probability of being selected as obj1.
-* `{mixer:'weightedRandom', weights: [0.2,0.8], data: [obj1,obj2]}`
-
 **choose**:
 Selects `n` random elements from `data` (by default the chooser picks one element).
 * `{mixer:'choose', data: [obj1,obj2]}` pick one of these two objs
 * `{mixer:'choose', n:2, data: [obj1,obj2,obj3]}` pick two of these three objs
+
+**weightedChoose**:
+Chooses `n` random elements from data using a weighted randomize algorithm. Each element in `data` is given the appropriate weight from `weights`. And may be picked once or more. In the following example obj2 has four times the probability of being selected as obj1.
+
+```js
+{
+    mixer:'weightedRandom',
+    n: 2,
+    weights: [0.2,0.8],
+    data: [obj1,obj2]}
+}
+```
+
+This code will create one of the following sequences: 
+
+* [obj1,obj1] - 4% of cases
+* [obj1,obj2] - 16% of cases
+* [obj2,obj1] - 16% of cases
+* [obj2,obj2] - 64% of cases
+
+**weightedRandom**:
+Alias for `weightedChoose`.
 
 **wrapper**:
 The wrapper mixer serves a sort of parenthesis for the mixer. In case you want to keep a set of elements as a block (when randomizing) simply wrap them and they'll stay together.

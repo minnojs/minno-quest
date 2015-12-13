@@ -155,6 +155,14 @@ define(['underscore','./mixerModule', '../randomize/randomizeModuleMock'],functi
 					weights: [0.2, 0.6, 0.2],
 					data: [1,2, 3]
 				})).toEqual([3]);
+
+				randomizeSettings.random = 0.9;
+				expect(mixer({
+					mixer:'weightedRandom',
+					n: 2,
+					weights: [0.2, 0.6, 0.2],
+					data: [1,2, 3]
+				})).toEqual([3, 3]);
 			}));
 		});
 

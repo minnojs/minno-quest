@@ -80,13 +80,30 @@ define(['underscore'],function(_){
 				return _.take(shuffle(sequence), obj.n ? obj.n : 1);
 			},
 
-			weightedRandom: function(obj, context){
-				var sequence = obj.data ? deepMixer(obj.data, context) : [];
-				var i;
-				var total_weight = _.reduce(obj.weights,function (prev, cur) {
-					return prev + cur;
-				});
+			weightedRandom: weightedChoose,
+			weightedChoose: weightedChoose
+		};
 
+
+		return mix;
+
+		function weightedChoose(obj, context){
+			var sequence = obj.data ? deepMixer(obj.data, context) : [];
+			var i;
+			var n = obj.n || 1;
+			var result = [];
+			var total_weight = _.reduce(obj.weights,function (prev, cur) {
+				return prev + cur;
+			});
+
+			for (i = 0; i < n; i++){
+				result.push(generate());
+			}
+
+			return result;
+
+			function generate(){
+				var i;
 				var random_num = random() * total_weight; // cutoff - when we reach this sum - we've reached the desired weight
 				var weight_sum = 0;
 
@@ -95,15 +112,16 @@ define(['underscore'],function(_){
 					weight_sum = +weight_sum.toFixed(3);
 
 					if (random_num <= weight_sum) {
-						return [obj.data[i]];
+						return obj.data[i];
 					}
 				}
+
 				throw new Error('Mixer: something went wrong with weightedRandom');
 			}
-		};
+		}
 
-		return mix;
 	}
 
 	return mixProvider;
+
 });
