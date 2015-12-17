@@ -280,12 +280,6 @@ module.exports = function (grunt) {
 						}
 					],
 
-					// Add banner
-					wrap: {
-						start: '<%= settings.banner.full %> ;window.name = \'NG_DEFER_BOOTSTRAP!\';', // defer bootstrap, so that when angular is loaded it's already there
-						end: ''
-					},
-
 					modules: [
 						{
 							name: 'bootstrap',

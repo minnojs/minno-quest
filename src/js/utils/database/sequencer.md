@@ -208,7 +208,7 @@ Chooses `n` random elements from data using a weighted randomize algorithm. Each
 
 ```js
 {
-    mixer:'weightedRandom',
+    mixer:'weightedChoose',
     n: 2,
     weights: [0.2,0.8],
     data: [obj1,obj2]}
