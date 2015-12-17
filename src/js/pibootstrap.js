@@ -23,7 +23,7 @@ define(['./config'], function(){
 			}]);
 		}]);
 
-		angular.element().ready(function() {
+		angular.element(document).ready(function() {
 			var el = document.getElementById('pi-app');
 			if (el) {
 				angular.bootstrap(el, [app.name]);

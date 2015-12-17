@@ -11,7 +11,7 @@ define(['./config'], function(){
 	});
 
 	require(['angular','app'], function(angular, app) {
-		angular.element().ready(function() {
+		angular.element(document).ready(function() {
 			var el = document.getElementById('pi-app');
 			if (el) {
 				angular.bootstrap(el, [app.name]);
