@@ -196,23 +196,119 @@ Repeats the element in <code>data</code> <code>times</code> times.</p>
 <li><code>{mixer:&#39;repeat&#39;, times:10, data: [obj1,obj2]}</code></li>
 </ul>
 <p><strong>random</strong>:
-Randomizes the order of elements in <code>data</code>. Random pre-computes all of the elements in data, if you want to keep some of the elements together, use the <code>wrapper</code> mixer. If you want to mark a specific mixer within random not to be pre-computed, simply add <code>wrapper:true</code>.
-Please note that the randomizer pre-computes all the content in data, so that any branching mixers will be branched according to the environment as it is when the random mixer is reached. If you want to delay the branching until it is reached, simply wrap it within a <code>wrapper</code> mixer or add <code>wrapper:true</code>.</p>
+Randomizes the order of elements in <code>data</code>. Random randomizes the order of all the elements under the random mixer’s data array, even if they are inside a mixer. For example, consider the following code:</p>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> mixer = {
+    mixer:<span class="hljs-string">'random'</span>,
+    data: [
+        obj1,
+        {
+            mixer:<span class="hljs-string">'repeat'</span>,
+            times:<span class="hljs-number">2</span>,
+            data:[
+                obj2
+            ]
+        }
+    ]
+}
+</code></pre>
+<p>It will form one of the following sequences: </p>
 <ul>
-<li><code>{mixer:&#39;random&#39;, data: [obj1,obj2]}</code></li>
-<li><code>{mixer:&#39;random&#39;, data: [obj1,{mixer:&#39;repeat&#39;, wrapper:true,data:[1,2,3]}]}</code></li>
+<li>[obj1,obj2,obj2]</li>
+<li>[obj2,obj1,obj2]</li>
+<li>[obj2,obj2,obj1]</li>
 </ul>
-<p><strong>weightedRandom</strong>:
-Selects a single element using a weighted random algorithm. Each element in <code>data</code> is given the appropriate weight from <code>weights</code>. In the following example obj2 has four times the probability of being selected as obj1.</p>
+<p>If you want to keep some of the elements in the data together (and not randomized), use the <code>wrapper</code> mixer. For instance:</p>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> mixer = {
+    mixer:<span class="hljs-string">'random'</span>,
+    data: [
+        obj1
+        {
+            mixer:<span class="hljs-string">'wrapper'</span>,
+            data:[
+                obj2,
+                obj3,
+                obj4
+            ]
+        }
+    ]
+}
+</code></pre>
+<p>This code will keep obj2, obj3, and obj4 together, in that same order (obj2, obj3, obj4), and will randomly present obj1 before or after these three objects.</p>
+<p>You can make any mixer into a wrapper by adding <code>wrapper:true</code>. For example: </p>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> mixer = {
+    mixer:<span class="hljs-string">'random'</span>,
+    data: [
+        obj1,
+        {
+            mixer:<span class="hljs-string">'repeat'</span>,
+            times:<span class="hljs-number">2</span>,
+            wrapper:<span class="hljs-literal">true</span>,
+            data:[
+                obj2,
+                obj3
+            ]
+        }
+    ]
+}
+</code></pre>
+<p>This code will results in one of the following sequences:</p>
 <ul>
-<li><code>{mixer:&#39;weightedRandom&#39;, weights: [0.2,0.8], data: [obj1,obj2]}</code></li>
+<li>[obj1,obj2,obj3,obj2,obj3]</li>
+<li>[obj2,obj3,obj2,obj3,obj1]</li>
 </ul>
+<p>If you want to randomize the order of two lists, and randomize the objects within each list but without mixing the two lists together, the following code will do the trick: </p>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> mixer = {
+    mixer:<span class="hljs-string">'random'</span>,
+    data: [
+        {
+            mixer:<span class="hljs-string">'random'</span>,
+            wrapper:<span class="hljs-literal">true</span>,
+            data:[obj1,obj2]
+        },
+        {
+            mixer:<span class="hljs-string">'random'</span>,
+            wrapper:<span class="hljs-literal">true</span>,
+            data:[obj3,obj4]
+        }
+    ]
+}
+</code></pre>
+<p>This code will create one of the following sequences: </p>
+<ul>
+<li>[obj1,obj2,obj3,obj4]</li>
+<li>[obj1,obj2,obj4,obj3]</li>
+<li>[obj2,obj1,obj3,obj4]</li>
+<li>[obj2,obj1,obj4,obj3]</li>
+<li>[obj3,obj4,obj1,obj2]</li>
+<li>[obj4,obj3,obj1,obj2]</li>
+<li>[obj3,obj4,obj2,obj1]</li>
+<li>[obj4,obj3,obj2,obj1]</li>
+</ul>
+<p>Please note that the <code>random</code> mixer pre-computes all the content in <code>data</code>, so that any branching mixers will be branched according to the state of the study at the time of the randomization. So, if you have a branch that depends on a previous object, make sure that the branch always comes after that object. Again, you can use wrapper:true in a branch (or multiBranch) mixer, if you need to keep the order of some objects fixed for the branching to make sense. </p>
 <p><strong>choose</strong>:
 Selects <code>n</code> random elements from <code>data</code> (by default the chooser picks one element).</p>
 <ul>
 <li><code>{mixer:&#39;choose&#39;, data: [obj1,obj2]}</code> pick one of these two objs</li>
 <li><code>{mixer:&#39;choose&#39;, n:2, data: [obj1,obj2,obj3]}</code> pick two of these three objs</li>
 </ul>
+<p><strong>weightedChoose</strong>:
+Chooses <code>n</code> random elements from data using a weighted randomize algorithm. Each element in <code>data</code> is given the appropriate weight from <code>weights</code>. And may be picked once or more. In the following example obj2 has four times the probability of being selected as obj1.</p>
+<pre><code class="lang-js">{
+    mixer:<span class="hljs-string">'weightedChoose'</span>,
+    n: <span class="hljs-number">2</span>,
+    weights: [<span class="hljs-number">0.2</span>,<span class="hljs-number">0.8</span>],
+    data: [obj1,obj2]}
+}
+</code></pre>
+<p>This code will create one of the following sequences: </p>
+<ul>
+<li>[obj1,obj1] - 4% of cases</li>
+<li>[obj1,obj2] - 16% of cases</li>
+<li>[obj2,obj1] - 16% of cases</li>
+<li>[obj2,obj2] - 64% of cases</li>
+</ul>
+<p><strong>weightedRandom</strong>:
+Alias for <code>weightedChoose</code>.</p>
 <p><strong>wrapper</strong>:
 The wrapper mixer serves a sort of parenthesis for the mixer. In case you want to keep a set of elements as a block (when randomizing) simply wrap them and they’ll stay together.</p>
 <ul>
