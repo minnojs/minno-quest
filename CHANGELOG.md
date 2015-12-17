@@ -1,3 +1,21 @@
+<a name"0.0.70"></a>
+### 0.0.70 (2015-12-17)
+
+
+#### Bug Fixes
+
+* **style:** prevent cutting off of bottom of decline bottom when chrome zooms ([a0e888ad](https://github.com/ProjectImplicit/PIquest/commit/a0e888ad))
+
+
+#### Features
+
+* **bootstrap:** allow manual bootstrap (maybe solve the missing resumeBootstrap bug?) ([938e31ad](https://github.com/ProjectImplicit/PIquest/commit/938e31ad))
+* **manager:** warn for repeating task names ([0625c284](https://github.com/ProjectImplicit/PIquest/commit/0625c284))
+* **mixer:**
+  * add n to weighted random so it compares with choose. Changed weightedRandom into ([c82120da](https://github.com/ProjectImplicit/PIquest/commit/c82120da), closes [#130](https://github.com/ProjectImplicit/PIquest/issues/130))
+  * add deep mixing to choose and weighted random. ([b9c18c8b](https://github.com/ProjectImplicit/PIquest/commit/b9c18c8b), closes [#129](https://github.com/ProjectImplicit/PIquest/issues/129))
+
+
 <a name"0.0.69"></a>
 ### 0.0.69 (2015-12-03)
 
