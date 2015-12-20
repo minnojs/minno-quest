@@ -73,6 +73,11 @@ define(['../questDirectivesModule', 'utils/database/randomize/randomizeModuleMoc
 				select = element.children().first();
 			}
 
+			function submitAttempt(){
+				scope.$parent.$parent.submitAttempt = true; // submit
+				scope.$digest();
+			}
+
 			function choose(val){
 				select.val(val);
 				select.trigger('change');
@@ -164,14 +169,12 @@ define(['../questDirectivesModule', 'utils/database/randomize/randomizeModuleMoc
 				expect(errorElm.text()).toBe('correct msg');
 
 				expect(errorElm).toBeHidden();
-				scope.$parent.$parent.submitAttempt = true; // submit
-				scope.$digest();
+				submitAttempt();
 				expect(errorElm).not.toBeHidden();
 
 				choose(0);
 				expect(element).toBeValid();
 				expect(errorElm).toBeHidden();
-
 
 				choose(2);
 				expect(element).toBeInvalid();
@@ -185,8 +188,7 @@ define(['../questDirectivesModule', 'utils/database/randomize/randomizeModuleMoc
 				expect(element).toBeInvalid();
 				expect(errorElm).toBeHidden();
 
-				scope.$parent.$parent.submitAttempt = true; // submit
-				scope.$digest();
+				submitAttempt();
 				expect(errorElm).not.toBeHidden();
 
 				choose(0);
@@ -209,6 +211,12 @@ define(['../questDirectivesModule', 'utils/database/randomize/randomizeModuleMoc
 
 				formElm = element.children().first().children().first();
 			};
+
+			function submitAttempt(){
+				scope.$parent.$parent.submitAttempt = true; // submit
+				scope.$digest();
+			}
+
 
 			beforeEach(module('ui.bootstrap.buttons',function($compileProvider, $provide){
 				$provide.value('mixerRecursive', mixerSpy);
@@ -324,9 +332,14 @@ define(['../questDirectivesModule', 'utils/database/randomize/randomizeModuleMoc
 
 			it('should support "required" validation',function(){
 				compileInput({answers: [1,2,3], required:true, errorMsg:{required: 'required msg'}});
-				var errorElm = element.find('[pi-quest-validation="model.$error.required && $parent.$parent.submitAttempt"]');
+				var errorElm = element.find('[pi-quest-validation="model.$error.required"]');
 				expect(errorElm.text()).toBe('required msg');
+
 				expect(element).toBeInvalid();
+				expect(errorElm).toBeHidden();
+
+				submitAttempt();
+				expect(errorElm).not.toBeHidden();
 
 				choose(0);
 				expect(element).toBeValid();
@@ -347,6 +360,11 @@ define(['../questDirectivesModule', 'utils/database/randomize/randomizeModuleMoc
 				log = element.controller('questSelectMulti').log;
 				formElm = element.children().first();
 			};
+
+			function submitAttempt(){
+				scope.$parent.$parent.submitAttempt = true; // submit
+				scope.$digest();
+			}
 
 			beforeEach(module('ui.bootstrap.buttons',function($compileProvider, $provide){
 				$provide.value('mixerRecursive', mixerSpy);
@@ -442,6 +460,9 @@ define(['../questDirectivesModule', 'utils/database/randomize/randomizeModuleMoc
 				expect(element).toBeInvalid();
 				expect(errorElm).toBeHidden();
 
+				submitAttempt();
+				expect(errorElm).not.toBeHidden();
+
 				choose(1);
 				expect(element).toBeValid();
 				expect(errorElm).toBeHidden();
@@ -452,10 +473,14 @@ define(['../questDirectivesModule', 'utils/database/randomize/randomizeModuleMoc
 
 			it('should support "required" validation',function(){
 				compileInput({answers: [1,2,3], required:true, errorMsg:{required: 'required msg'}});
-				var errorElm = element.find('[pi-quest-validation="model.$error.required && $parent.$parent.submitAttempt"]');
+				var errorElm = element.find('[pi-quest-validation="model.$error.required"]');
 				expect(errorElm.text()).toBe('required msg');
 
 				expect(element).toBeInvalid();
+				expect(errorElm).toBeHidden();
+
+				submitAttempt();
+				expect(errorElm).not.toBeHidden();
 
 				choose(0);
 				expect(element).toBeValid();

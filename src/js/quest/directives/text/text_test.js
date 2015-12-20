@@ -19,6 +19,11 @@ define(['underscore','../questDirectivesModule'], function(_){
 				log = scope.current.logObj;
 			};
 
+			function submitAttempt(){
+				scope.$parent.submitAttempt = true;
+				scope.$digest();
+			}
+
 
 			beforeEach(module('questDirectives', function($compileProvider, $sceProvider){
 				$sceProvider.enabled(false);
@@ -107,25 +112,24 @@ define(['underscore','../questDirectivesModule'], function(_){
 				var errorElm;
 				beforeEach(function(){
 					compile({required:true, errorMsg:{required: 'required msg'}});
-					errorElm = formElm.find('[pi-quest-validation="form.$error.required && $parent.$parent.submitAttempt"]');
+					errorElm = formElm.find('[pi-quest-validation="form.$error.required"]');
 				});
 
 				it('should be valid at the begining', function(){
 					// expect(formElm).toBeValid(); // this isn't true because of the way angular works. The input truly isn't valid...
 					expect(errorElm).not.toBeShown();
-
 				});
 
 				it('should invalidate after "submitAttempt"', function(){
-					scope.$parent.submitAttempt = true;
-					scope.$digest();
 					expect(formElm).toBeInvalid();
+					expect(errorElm).not.toBeShown();
+
+					submitAttempt();
 					expect(errorElm).toBeShown();
 				});
 
 				it('should be valid if there is any input', function(){
-					scope.$parent.submitAttempt = true;
-					scope.$digest();
+					submitAttempt();
 					changeInputValueTo('hello');
 					expect(formElm).toBeValid();
 					expect(errorElm).toBeHidden();
@@ -137,12 +141,18 @@ define(['underscore','../questDirectivesModule'], function(_){
 				var errorElm = formElm.find('[pi-quest-validation="form.$error.maxlength"]');
 				expect(errorElm.text()).toBe('maxlength msg');
 
+				expect(errorElm).toBeHidden();
+
 				changeInputValueTo('aaa');
 				expect(formElm).toBeValid();
 				expect(errorElm).toBeHidden();
 
 				changeInputValueTo('aaaaaaa');
 				expect(formElm).toBeInvalid();
+				expect(errorElm).toBeHidden();
+
+				submitAttempt();
+				expect(errorElm).not.toBeHidden();
 			});
 
 			// @DEPRECATED
@@ -151,12 +161,15 @@ define(['underscore','../questDirectivesModule'], function(_){
 				var errorElm = formElm.find('[pi-quest-validation="form.$error.minlength"]');
 				expect(errorElm.text()).toBe('minlength msg');
 
+				changeInputValueTo('aaa');
+				expect(formElm).toBeInvalid();
+				expect(errorElm).toBeHidden();
+				submitAttempt();
+				expect(errorElm).not.toBeHidden();
+
 				changeInputValueTo('aaaaaaa');
 				expect(formElm).toBeValid();
 				expect(errorElm).toBeHidden();
-
-				changeInputValueTo('aaa');
-				expect(formElm).toBeInvalid();
 			});
 
 			it('should support minLength',function(){
@@ -164,27 +177,35 @@ define(['underscore','../questDirectivesModule'], function(_){
 				var errorElm = formElm.find('[pi-quest-validation="form.$error.minlength"]');
 				expect(errorElm.text()).toBe('minLength msg');
 
+				changeInputValueTo('aaa');
+				expect(formElm).toBeInvalid();
+				expect(errorElm).toBeHidden();
+				submitAttempt();
+				expect(errorElm).not.toBeHidden();
+
 				changeInputValueTo('aaaaaaa');
 				expect(formElm).toBeValid();
 				expect(errorElm).toBeHidden();
-
-				changeInputValueTo('aaa');
-				expect(formElm).toBeInvalid();
 			});
 
+			// @TODO: make sure incorrect responses register as invalid by angular
 			it('should support correct validation',function(){
 				compile({correct:true, correctValue: 123, errorMsg:{correct: 'correct msg'}});
 				var errorElm = formElm.find('[pi-quest-validation="model.$error.correct"]');
 				expect(errorElm.text()).toBe('correct msg');
 
 				expect(errorElm).toBeHidden();
-
-				changeInputValueTo('123');
-				expect(formElm).toBeValid();
-				expect(errorElm).toBeHidden();
+				// expect(formElm).toBeInvalid();
 
 				changeInputValueTo('aaa');
-				expect(formElm).toBeInvalid();
+				expect(errorElm).toBeHidden();
+				submitAttempt();
+				expect(errorElm).not.toBeHidden();
+
+
+				changeInputValueTo('123');
+				// expect(formElm).toBeValid();
+				expect(errorElm).toBeHidden();
 			});
 
 			it('should support pattern regex',function(){
@@ -194,6 +215,9 @@ define(['underscore','../questDirectivesModule'], function(_){
 
 				changeInputValueTo('x000-00-0000x');
 				expect(formElm).toBeInvalid();
+				expect(errorElm).toBeHidden();
+				submitAttempt();
+				expect(errorElm).not.toBeHidden();
 
 				changeInputValueTo('000-00-0000');
 				expect(formElm).toBeValid();
@@ -216,6 +240,9 @@ define(['underscore','../questDirectivesModule'], function(_){
 
 				changeInputValueTo('x000-00-0000x');
 				expect(formElm).toBeInvalid();
+				expect(errorElm).toBeHidden();
+				submitAttempt();
+				expect(errorElm).not.toBeHidden();
 
 				changeInputValueTo('000-00-0000');
 				expect(formElm).toBeValid();

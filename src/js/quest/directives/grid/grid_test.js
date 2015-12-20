@@ -13,6 +13,11 @@ define(function(require){
 			$scope.$digest();
 		}
 
+		function submitAttempt(){
+			$scope.$parent.submitAttempt = true;
+			$scope.$digest();
+		}
+
 		function choose(row, column){
 			$table.find('tbody tr').eq(row-1).find('td [ng-switch-when]').eq(column-1).trigger('click');
 		}
@@ -156,7 +161,7 @@ define(function(require){
 		});
 
 		describe(': required validation', function(){
-			var VALIDATION_ELEMENT = '[pi-quest-validation="form.$error.required && $parent.$parent.submitAttempt"]';
+			var VALIDATION_ELEMENT = '[pi-quest-validation="form.$error.required"]';
 
 			it('should be required', function(){
 				compile({rows:[1,2], columns: [111,222], required:true});
@@ -175,8 +180,7 @@ define(function(require){
 
 			it('should show validation message after submitAttempt', function(){
 				compile({rows:[1,2], columns: [111,222], required:true});
-				$scope.$parent.submitAttempt = true;
-				$scope.$digest();
+				submitAttempt();
 				var errorElm = $table.find(VALIDATION_ELEMENT);
 				expect(errorElm).toBeShown();
 			});

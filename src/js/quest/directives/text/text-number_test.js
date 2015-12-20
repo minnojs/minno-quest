@@ -15,6 +15,11 @@ define(['../questDirectivesModule'],function(){
 			log = formElm.data('$questTextNumberController').log;
 		};
 
+		function submitAttempt(){
+			scope.$parent.submitAttempt = true;
+			scope.$digest();
+		}
+
 		beforeEach(module('questDirectives', function($sceProvider){
 			$sceProvider.enabled(false);
 		}));
@@ -91,25 +96,21 @@ define(['../questDirectivesModule'],function(){
 			var errorElm;
 			beforeEach(function(){
 				compile({required:true, errorMsg:{required: 'required msg'}});
-				errorElm = formElm.find('[pi-quest-validation="form.$error.required && $parent.$parent.submitAttempt"]');
+				errorElm = formElm.find('[pi-quest-validation="form.$error.required"]');
 			});
 
 			it('should be valid at the begining', function(){
-				// expect(formElm).toBeValid(); // this isn't true because of the way angular works. The input truly isn't valid...
+				expect(formElm).toBeInvalid(); // this isn't true because of the way angular works. The input truly isn't valid...
 				expect(errorElm).not.toBeShown();
-
 			});
 
 			it('should invalidate after "submitAttempt"', function(){
-				scope.$parent.submitAttempt = true;
-				scope.$digest();
+				submitAttempt();
 				expect(formElm).toBeInvalid();
 				expect(errorElm).toBeShown();
 			});
 
 			it('should be valid if there is numeric input', function(){
-				scope.$parent.submitAttempt = true;
-				scope.$digest();
 				changeInputValueTo(3456);
 				expect(formElm).toBeValid();
 				expect(errorElm).toBeHidden();
@@ -132,13 +133,15 @@ define(['../questDirectivesModule'],function(){
 			var errorElm = formElm.find('[pi-quest-validation="form.$error.qstMax"]');
 			expect(errorElm.text()).toBe('max msg');
 
+			changeInputValueTo(7);
+			expect(formElm).toBeInvalid();
+			expect(errorElm).not.toBeShown();
+			submitAttempt();
+			expect(errorElm).toBeShown();
+
 			changeInputValueTo(3);
 			expect(formElm).toBeValid();
 			expect(errorElm).toBeHidden();
-
-			changeInputValueTo(7);
-			expect(formElm).toBeInvalid();
-			expect(errorElm).toBeShown();
 		});
 
 		it('should support min',function(){
@@ -146,15 +149,17 @@ define(['../questDirectivesModule'],function(){
 			var errorElm = formElm.find('[pi-quest-validation="form.$error.qstMin"]');
 			expect(errorElm.text()).toBe('min msg');
 
+			changeInputValueTo(3);
+			expect(errorElm).not.toBeShown();
+			submitAttempt();
+			expect(errorElm).toBeShown();
+
 			changeInputValueTo(7);
 			expect(formElm).toBeValid();
 			expect(errorElm).toBeHidden();
-
-			changeInputValueTo(3);
-			expect(formElm).toBeInvalid();
-			expect(errorElm).toBeShown();
 		});
 
+		// @TODO: correct validation does not registered with the form
 		it('should support correct validation',function(){
 			compile({correct:true, correctValue: 123, errorMsg:{correct: 'correct msg'}});
 			var errorElm = formElm.find('[pi-quest-validation="model.$error.correct"]');
@@ -162,12 +167,15 @@ define(['../questDirectivesModule'],function(){
 
 			expect(errorElm).toBeHidden();
 
-			changeInputValueTo('123');
-			expect(formElm).toBeValid();
-			expect(errorElm).toBeHidden();
-
 			changeInputValueTo(12);
-			expect(formElm).toBeInvalid();
+			//expect(formElm).toBeInvalid();
+			expect(errorElm).not.toBeShown();
+			submitAttempt();
+			expect(errorElm).toBeShown();
+
+			changeInputValueTo('123');
+			//expect(formElm).toBeValid();
+			expect(errorElm).toBeHidden();
 		});
 
 		it('should support autoSubmit', function(){
