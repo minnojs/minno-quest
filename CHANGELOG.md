@@ -1,3 +1,14 @@
+<a name"0.0.73"></a>
+### 0.0.73 (2015-12-20)
+
+
+#### Bug Fixes
+
+* **questDirectives:**
+  * validation should show only after the first submit attempt ([48df6b5f](https://github.com/ProjectImplicit/PIquest/commit/48df6b5f))
+  * allow rowStemCss to affect stem width ([a10ea9a2](https://github.com/ProjectImplicit/PIquest/commit/a10ea9a2))
+
+
 <a name"0.0.72"></a>
 ### 0.0.72 (2015-12-17)
 

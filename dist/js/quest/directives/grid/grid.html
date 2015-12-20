@@ -12,7 +12,7 @@
 		<thead ng-if="!data.columnStemHide">
 			<tr>
 				<th
-					ng-style="allCss(data.columnStemCss,column.stemCss)"
+					ng-style="allCss(data.columnStemCss,column.stemCss, data.rowStemCss)"
 					ng-if="!data.rowStemHide"
 				></th>
 				<th
@@ -32,5 +32,5 @@
 			></tr>
 		</tbody>
 	</table>
-	<div pi-quest-validation="form.$error.required && $parent.$parent.submitAttempt">{{data.errorMsg.required || "Please respond to this question"}}</div>
+	<div pi-quest-validation="form.$error.required">{{data.errorMsg.required || "Please respond to this question"}}</div>
 </div>
