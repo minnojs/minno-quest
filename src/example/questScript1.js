@@ -26,6 +26,20 @@ define(['questAPI'], function(Quest){
 	});
 
 	API.addSequence([
+
+	        { // page begins
+	            header: 'Grid questions simple',
+	            questions: [
+	                {
+	                    type: 'grid',
+	                    stem: 'What sort of things do you like?',
+	                    columns: ['Strongly agree' , 'agree' , 'don\'t know' , 'disagree' , 'Strongly disagree'],
+	                    rows: ['I like grids', 'I like bannanas too'],
+	                    rowStemCss: {width:'280px'}
+	                }
+	            ]
+	        }, // page ends
+
 			{
 				header: 'Header',
 				questions: 		{

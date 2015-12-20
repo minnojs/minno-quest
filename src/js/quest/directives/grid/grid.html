@@ -12,7 +12,7 @@
 		<thead ng-if="!data.columnStemHide">
 			<tr>
 				<th
-					ng-style="allCss(data.columnStemCss,column.stemCss)"
+					ng-style="allCss(data.columnStemCss,column.stemCss, data.rowStemCss)"
 					ng-if="!data.rowStemHide"
 				></th>
 				<th
