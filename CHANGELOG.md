@@ -1,3 +1,12 @@
+<a name"0.0.74"></a>
+### 0.0.74 (2015-12-24)
+
+
+#### Bug Fixes
+
+* **page:** prev now works again ([6cf5e800](https://github.com/ProjectImplicit/PIquest/commit/6cf5e800))
+
+
 <a name"0.0.73"></a>
 ### 0.0.73 (2015-12-20)
 
