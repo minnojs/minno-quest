@@ -48,12 +48,12 @@ define(['managerAPI'], function(Manager){
 		// 	scriptUrl: 'questScript1.js'
 		// },
 
-		// {
-		// 	type: 'pip',
-		// 	name: 'iat',
-		// 	version: '123',
-		// 	scriptUrl: '/test/imageTest.js'
-		// },
+		{
+			type: 'pip',
+			name: 'iat',
+			version: '123',
+			scriptUrl: '/test/imageTest.js'
+		},
 
 		{
 			type:'quest',

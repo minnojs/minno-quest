@@ -14,7 +14,7 @@ define(function(){
 		paths: {
 			// libs
 			underscore: "../../bower_components/lodash-compat/lodash.min",
-			angular: '../../bower_components/angular/angular',
+			angular: '../../bower_components/angular/angular.min',
 			animate: '../../bower_components/angular-animate/angular-animate.min',
 			text: '../../bower_components/requirejs-text/text',
 			fastclick: '../../bower_components/fastclick/lib/fastclick',
