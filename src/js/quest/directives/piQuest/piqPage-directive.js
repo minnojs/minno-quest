@@ -98,7 +98,7 @@ define(function (require) {
 		$scope.prev = function(){
 			// broadcast to the quest controller
 			self.proceed();
-			$scope.$broadcast('quest:prev');
+			$scope.$emit('quest:prev');
 		};
 
 

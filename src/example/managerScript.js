@@ -42,17 +42,17 @@ define(['managerAPI'], function(Manager){
 				done();}
 		},
 
-		{
-			type:'quest',
-			name: 'first',
-			scriptUrl: 'questScript1.js'
-		},
+		// {
+		// 	type:'quest',
+		// 	name: 'first',
+		// 	scriptUrl: 'questScript1.js'
+		// },
 
 		// {
 		// 	type: 'pip',
 		// 	name: 'iat',
 		// 	version: '123',
-		// 	scriptUrl: '/test/example.js'
+		// 	scriptUrl: '/test/imageTest.js'
 		// },
 
 		{
