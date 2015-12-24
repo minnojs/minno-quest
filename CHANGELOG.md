@@ -1,3 +1,12 @@
+<a name"0.0.75"></a>
+### 0.0.75 (2015-12-24)
+
+
+#### Bug Fixes
+
+* **IE:** IE8 now works - fixed bootstrapped elements ([2ef481de](https://github.com/ProjectImplicit/PIquest/commit/2ef481de))
+
+
 <a name"0.0.74"></a>
 ### 0.0.74 (2015-12-24)
 
