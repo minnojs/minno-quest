@@ -31,6 +31,8 @@ String getBase = getProtocol+"://"+getDomain;
 		<meta name="description" content="Project Implicit Questionnaire">
 		<meta name="viewport" content="width=device-width">
 		<meta name="viewport" content="user-scalable=no, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1" />
+		<meta name="pinterest" content="nopin" />
+
 
 		<% if (org.uva.Implicit.IS_PRODUCTION == "true") {%>
 			<script>

@@ -16,7 +16,8 @@ define(function (require) {
 				var context = {
 					global : $rootScope.global,
 					current : $rootScope.current,
-					task: script
+					task: script,
+					tasksData: _.get(script, 'data', {})
 				};
 
 				if (script.$template == null){
