@@ -232,6 +232,7 @@
 								<a href="javascript:void(0)">Examples</a>
 								<ul class="nav">
 									{{ example("Weight experiment", "weightManager", data.basename) }}
+									{{ example("Displaying Video", "videoManager", data.basename) }}
 								</ul>
 							</li>
 							{{ navitem("API", "../manager/API", data.basename) }}

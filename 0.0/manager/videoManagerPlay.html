@@ -40,9 +40,14 @@
 	    	margin-top: 1em;
 	        border-radius: 4px 4px 0;
 	        border: 1px solid #ddd;
-	        height: 30em;
+	        height: 80vh;
 	        font-size: 14px;
 	    }
+
+		/* IE8 only */
+		@media \0screen {
+		    #editor {height:80px;}
+		}
 
 		@-webkit-keyframes fadeIn {
 		  0% {opacity: 0;}
@@ -131,8 +136,10 @@
 		<div id="content" class="bs-docs-header">
 			<div class="container">
 				
-	<h1>Playground</h1>
-	<p>You can play around with the player right here. All you need to do is write your script and then click the activate button.</p>
+	<h1>Video manager</h1>
+	
+		<p>You can play around with videoManager.js right here. All you need to do is change the script and then click the activate button.</p>
+	
 
 			</div>
 		</div>
@@ -142,28 +149,131 @@
 				<div class="col-md-9" role="main">
 					
 		<p>
-			<button class="btn btn-default btn-lg btn-block" onclick="window.click()" type="button">Activate</button>
+			<button class="btn btn-default btn-lg btn-block" onclick="window.click(event)" type="button">Activate</button>
 		</p>
 
 		<div id="success" role="alert" class="alert alert-success" style="display:none">
-			<strong>Well Done!</strong> The questionnaire has been successfully completed.
+			<strong>Well Done!</strong> The task has been successfully completed.
 		</div>
 		<div id="error" role="alert" class="alert alert-danger" style="display:none">
-			<strong>Oh Snap!</strong> Something went wrong with the questionnaire. Why don't you fix it and try again?
+			<strong>Oh Snap!</strong> Something went wrong with the task. Why don't you fix it and try again?
 		</div>
 
    		<div id="editor">
+// The Video manager is a basic example of how to display videos.
+// It is heavily commented so that you can follow everything that goes on.
+// After reading the documentation feel free to download the file and modify it according to your needs.
+//
+// ### Opening section
+//
+// The opening section of each script is always more or less the same.
+// We create the wrapper for the script (`define`), and create a new instance of a manager.
+define([&#39;managerAPI&#39;], function(Manager){
 
-define(['managerAPI'], function(Manager){
+  var API = new Manager();
 
-    var API = new Manager();
+  // ### The sequence
+  // The most important part of every manager script is the sequence.
+  // This is where you tell it how to interact with the participants.
+  API.addSequence([
 
-    API.addSequence([
-        {type:'message', template:'&lt;h1&gt;Hellow world&lt;/h1&gt;', keys: ' '}
-    ]);
+    // #### Show Video
+    // This message simply displays a video
+    // You can use [this site](http://v4e.thewikies.com/) to create appropriate templates
+    // Note that the video url is set within the data attributes
+    {
+      type: &#39;message&#39;,
 
-    return API.script;
+      data: {
+        // The video url (as mp4!)
+        videoUrl: &#39;http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4&#39;,
+        // An image to use as a poster until the video plays
+        imageUrl: &#39;http://sandbox.thewikies.com/vfe-generator/images/big-buck-bunny_poster.jpg&#39;
+      },
+
+      // We create the video template itself
+      template: [
+        &#39;&lt;div class=&quot;text-center&quot;&gt;&#39;,
+        &#39; &lt;video controls=&quot;controls&quot; autoplay=&quot;autoplay&quot; poster=&quot;&lt;%= tasksData.imageUrl %&gt;&quot; width=&quot;640&quot; height=&quot;360&quot; style=&quot;margin:auto&quot;&gt;&#39;,
+        &#39;   &lt;source src=&quot;&lt;%= tasksData.videoUrl %&gt;&quot; type=&quot;video/mp4&quot;/&gt;&#39;,
+        &#39;   &lt;object type=&quot;application/x-shockwave-flash&quot; data=&quot;http://flashfox.googlecode.com/svn/trunk/flashfox.swf&quot; width=&quot;640&quot; height=&quot;360&quot;&gt;&#39;,
+        &#39;     &lt;param name=&quot;movie&quot; value=&quot;http://flashfox.googlecode.com/svn/trunk/flashfox.swf&quot; /&gt;&#39;,
+        &#39;     &lt;param name=&quot;allowFullScreen&quot; value=&quot;true&quot; /&gt;&#39;,
+        &#39;     &lt;param name=&quot;wmode&quot; value=&quot;transparent&quot; /&gt;&#39;,
+        &#39;     &lt;param name=&quot;flashVars&quot; value=&quot;autoplay=true&amp;controls=true&amp;poster=&lt;%= tasksData.imageUrl %&gt;&amp;src=&lt;%= tasksData.videoUrl %&gt;&quot; /&gt;&#39;,
+        &#39;   &lt;/object&gt;&#39;,
+        &#39; &lt;/video&gt;&#39;,
+        &#39;&lt;/div&gt;&#39;,
+        &#39;&lt;div class=&quot;text-center proceed&quot; style=&quot;margin: 30px auto 10px;&quot;&gt;&#39;,
+        &#39; &lt;button pi-message-done type=&quot;button&quot; class=&quot;btn btn-primary&quot;&gt;Click Here to Proceed&lt;/button&gt;&#39;,
+        &#39;&lt;/div&gt;&#39;
+      ].join(&#39;\n&#39;)
+    },
+
+
+    // ### Show video and defer proceed
+    // This message is identical to the previous one,
+    // only now we use a trick to defer the presentation of the proceed button until the video completes
+    {
+      type: &#39;message&#39;,
+
+      data: {
+        // The video url (as mp4!)
+        videoUrl: &#39;http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4&#39;,
+        // An image to use as a poster until the video plays
+        imageUrl: &#39;http://sandbox.thewikies.com/vfe-generator/images/big-buck-bunny_poster.jpg&#39;
+      },
+
+      // We create the video template itself
+      template: [
+        &#39;&lt;div class=&quot;text-center&quot;&gt;&#39;,
+        &#39; &lt;video controls=&quot;controls&quot; autoplay=&quot;autoplay&quot; poster=&quot;&lt;%= tasksData.imageUrl %&gt;&quot; width=&quot;640&quot; height=&quot;360&quot; style=&quot;margin:auto&quot;&gt;&#39;,
+        &#39;   &lt;source src=&quot;&lt;%= tasksData.videoUrl %&gt;&quot; type=&quot;video/mp4&quot;/&gt;&#39;,
+        &#39;   &lt;object type=&quot;application/x-shockwave-flash&quot; data=&quot;http://flashfox.googlecode.com/svn/trunk/flashfox.swf&quot; width=&quot;640&quot; height=&quot;360&quot;&gt;&#39;,
+        &#39;     &lt;param name=&quot;movie&quot; value=&quot;http://flashfox.googlecode.com/svn/trunk/flashfox.swf&quot; /&gt;&#39;,
+        &#39;     &lt;param name=&quot;allowFullScreen&quot; value=&quot;true&quot; /&gt;&#39;,
+        &#39;     &lt;param name=&quot;wmode&quot; value=&quot;transparent&quot; /&gt;&#39;,
+        &#39;     &lt;param name=&quot;flashVars&quot; value=&quot;autoplay=true&amp;controls=true&amp;poster=&lt;%= tasksData.imageUrl %&gt;&amp;src=&lt;%= tasksData.videoUrl %&gt;&quot; /&gt;&#39;,
+        &#39;   &lt;/object&gt;&#39;,
+        &#39; &lt;/video&gt;&#39;,
+        &#39;&lt;/div&gt;&#39;,
+        &#39;&lt;div class=&quot;text-center proceed&quot; style=&quot;margin: 30px auto 10px;&quot;&gt;&#39;,
+        &#39; &lt;button pi-message-done type=&quot;button&quot; class=&quot;btn btn-primary&quot;&gt;Click Here to Proceed&lt;/button&gt;&#39;,
+        &#39;&lt;/div&gt;&#39;
+      ].join(&#39;\n&#39;),
+
+
+      // This is where the magic happens. as soon as the page is loaded
+      // We hide The proceed button, and show it only after 60 seconds when the video is supposed to end.
+      // (Note that in certain situations the button may be displayed before the video finishes playing. This is because the timing is absolute and not dependant on the video actually finishing)
+      load: function(){
+        var proceed = document.querySelectorAll(&#39;.proceed&#39;)[0];
+        proceed.style.visibility = &#39;hidden&#39;;
+        setTimeout(function(){
+          proceed.style.visibility = &#39;&#39;;
+        }, 60 * 1000); // after 10 seconds
+      }
+
+    }
+
+
+    // Now, we just close the sequence.
+  ]);
+
+  // ### Closing section
+  //
+  // And finally, we close the script.
+  // Here again, all scripts look more or less the same.
+  // We return the `script` and close the `define` wrapper.
+  return API.script;
 });
+
+
+
+
+
+
+
 
 		</div>
 
@@ -171,10 +281,13 @@ define(['managerAPI'], function(Manager){
 		    var editor = ace.edit("editor");
 		    editor.setTheme("ace/theme/monokai");
 		    editor.getSession().setMode("ace/mode/javascript");
+		    editor.setOption("showPrintMargin", false);
 		    var win;
 		    var feedbackId = 'success';
 
-		    function click(){
+		    function click(event){
+		    	event.target.blur();
+
 		    	// assume the feedback is success
 				feedbackId = 'success';
 
@@ -184,7 +297,8 @@ define(['managerAPI'], function(Manager){
 		    		win = null;
 		    	}
 
-		    	win = window.open('manageractivate.html', 'Manager');
+		    	win = window.open('../manager/manageractivate.html', 'pip');
+		    	win.focus();
 
 		    	win.onload = function(){
 		    		// first set the unload listener
@@ -268,7 +382,7 @@ define(['managerAPI'], function(Manager){
 							</li>
 						
 									
-							<li class="">
+							<li class=" active ">
 								<div>
 									<a href="videoManagerDocco.html">Displaying Video</a>
 									<a href="videoManager.js" download="videoManager.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
