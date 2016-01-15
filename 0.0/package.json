@@ -1,6 +1,6 @@
 {
   "name": "PIQuest",
-  "version": "0.0.72",
+  "version": "0.0.76",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -38,7 +38,7 @@
     "time-grunt": "~0.2.1"
   },
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">=0.4.11"
   },
   "scripts": {
     "test": "grunt test --sauce --report",

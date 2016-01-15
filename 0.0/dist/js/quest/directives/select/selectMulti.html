@@ -15,6 +15,6 @@
 		>
 		</a>
 	</div>
-	<div pi-quest-validation="model.$error.required && $parent.$parent.submitAttempt">{{data.errorMsg.required || "Please respond to this question"}}</div>
-	<div pi-quest-validation="model.$error.correct" pi-post-submit="true">{{data.errorMsg.correct || "You must answer the correct answer!"}}</div>
+	<div pi-quest-validation="model.$error.required">{{data.errorMsg.required || "Please respond to this question"}}</div>
+	<div pi-quest-validation="model.$error.correct">{{data.errorMsg.correct || "You must answer the correct answer!"}}</div>
 </div>

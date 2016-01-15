@@ -6,5 +6,5 @@
 		ng-required="{{data.required}}"
 	></div>
 	<h4 ng-if="data.displayValue" class="text-center"><span class="label label-info">{{ response | number }}</span></h4>
-	<div pi-quest-validation="form.$error.required && $parent.$parent.submitAttempt">{{data.errorMsg.required || "Please respond to this question"}}</div>
+	<div pi-quest-validation="form.$error.required">{{data.errorMsg.required || "Please respond to this question"}}</div>
 </div>
