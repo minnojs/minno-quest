@@ -1,11 +1,11 @@
 <div class="text-center">
-	<video controls="controls" poster="<%= tasksData.imgUrl %>" width="640" height="360" style="margin:auto">
+	<video controls="controls" poster="<%= tasksData.imageUrl %>" width="640" height="360" style="margin:auto">
 		<source src="<%= tasksData.videoUrl %>" type="video/mp4"/>
 		<object type="application/x-shockwave-flash" data="http://flashfox.googlecode.com/svn/trunk/flashfox.swf" width="640" height="360">
 			<param name="movie" value="http://flashfox.googlecode.com/svn/trunk/flashfox.swf" />
 			<param name="allowFullScreen" value="true" />
 			<param name="wmode" value="transparent" />
-			<param name="flashVars" value="controls=true&amp;poster=<%= tasksData.imgUrl %>&amp;src=<%= tasksData.videoUrl %>" />
+			<param name="flashVars" value="controls=true&amp;poster=<%= tasksData.imageUrl %>&amp;src=<%= tasksData.videoUrl %>" />
 		</object>
 	</video>
 </div>

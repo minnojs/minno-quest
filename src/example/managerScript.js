@@ -34,12 +34,27 @@ define(['managerAPI'], function(Manager){
 	API.addSettings('skip', true);
 
 	API.addSequence([
-		// {inherit:'instructions', template:'test'},
-		// {script:function(done){done();}},
 		{
 			script:function(done, managerBeforeUnload){
 				managerBeforeUnload.deactivate();
 				done();}
+		},
+
+		{
+			type: 'message',
+			templateUrl: '/quest/src/example/video.jst',
+			piTemplate: true,
+			load: function(){
+				var proceed = document.querySelectorAll('.proceed')[0];
+				proceed.style.visibility = 'hidden';
+				setTimeout(function(){
+					proceed.style.visibility = '';
+				}, 10 * 1000); // after 10 seconds
+			},
+			data: {
+				videoUrl: 'http://clips.vorwaerts-gmbh.de/big_buck_bnny.mp4',
+				imageUrl: 'http://sandbox.thewikies.com/vfe-generator/images/big-buck-bunny_poster.jpg'
+			}
 		},
 
 		// {

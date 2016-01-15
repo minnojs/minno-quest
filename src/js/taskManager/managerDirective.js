@@ -93,9 +93,10 @@ define(function(require){
 					var locals = {prevTask: prevTask, currentTask: currentTask};
 					$qSequence([
 						$scope.settings.onPreTask,
-						prevTask && prevTask.post,
+						_.get(prevTask,'post'),
 						currentTask.pre,
 						_.bind(swap.next, swap, {task:currentTask, settings:$scope.settings}),
+						currentTask.load,
 						function(){
 							$scope.loading = false;
 						}

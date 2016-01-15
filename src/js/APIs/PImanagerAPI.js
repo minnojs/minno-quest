@@ -61,7 +61,8 @@ define(function(require){
 			_.extend(context, templateDefaultContext, {
 				global: global,
 				current: global.current,
-				task: currentTask
+				task: currentTask,
+				tasksData: _.get(currentTask,'data',{})
 			});
 
 			// compile template here so that we have all the addtional functions available
