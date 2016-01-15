@@ -1,3 +1,17 @@
+<a name"0.0.76"></a>
+### 0.0.76 (2016-01-15)
+
+
+#### Bug Fixes
+
+* **message:** support tasksData for templateUrls ([94085a4a](https://github.com/ProjectImplicit/PIquest/commit/94085a4a))
+
+
+#### Features
+
+* **manager:** added callback for task load ([38a24948](https://github.com/ProjectImplicit/PIquest/commit/38a24948))
+
+
 <a name"0.0.75"></a>
 ### 0.0.75 (2015-12-24)
 
