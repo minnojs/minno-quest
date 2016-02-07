@@ -59,6 +59,20 @@ define(function(require){
 	module.filter('toRegex', require('./toRegexFilter'));
 	module.filter('dfltUnits', require('./dfltUnitsFilter'));
 
+	// auto focus on first input element
+	module.directive('piqPage', function(){
+		return {
+			link: function(scope, element){
+				var page = scope.page;
+				page.autoFocus && setTimeout(function(){
+					var el = element[0].querySelector('input, textArea, select, button');
+					if (el) {
+						el.focus();
+					}
+				});
+			}
+		}
+	})
 
 	return module;
 

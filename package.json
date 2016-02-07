@@ -42,6 +42,7 @@
   },
   "scripts": {
     "test": "grunt test --sauce --report",
+    "localtest": "grunt test",
     "start": "grunt serve",
     "postinstall": "./node_modules/grunt-cli/bin/grunt githooks"
   }

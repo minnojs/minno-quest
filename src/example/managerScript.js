@@ -10,7 +10,10 @@ define(['managerAPI'], function(Manager){
 		'[pi-quest]::after {clear: both;}',
 		'[pi-quest] h3 { border-bottom: 1px solid transparent; border-top-left-radius: 3px; border-top-right-radius: 3px; padding: 10px 15px; color: inherit; font-size: 2em; margin-bottom: 0; margin-top: 0;background-color: #d9edf7;border-color: #bce8f1;color: #31708f;}',
 		'[pi-quest] .form-group > label {font-size:1.2em; font-weight:normal;}',
-		'[pi-quest] .btn-toolbar {margin-bottom:1px;}'
+		'[pi-quest] .btn-toolbar {margin-bottom:1px;}',
+		'[pi-quest] .btn-toolbar {margin:15px;float:none !important; text-align:center;}',
+		'[pi-quest] [ng-click="submit()"] {width:30%;padding: 10px 16px;font-size: 1.6em;line-height: 1.3333333;border-radius: 6px;}',
+		'[pi-quest] [ng-click="decline($event)"] {position:absolute; left:15px; margin:8px 0}'
 	].join(''));
 
 	API.addGlobal({$mTurk:{assignmentId:0,hitId:0,workerId:0}});
@@ -41,6 +44,12 @@ define(['managerAPI'], function(Manager){
 		},
 
 		{
+			type:'quest',
+			name: 'first',
+			scriptUrl: 'questScript1.js'
+		},
+
+		{
 			type: 'message',
 			templateUrl: '/quest/src/example/video.jst',
 			piTemplate: true,
@@ -57,11 +66,6 @@ define(['managerAPI'], function(Manager){
 			}
 		},
 
-		// {
-		// 	type:'quest',
-		// 	name: 'first',
-		// 	scriptUrl: 'questScript1.js'
-		// },
 
 		{
 			type: 'pip',

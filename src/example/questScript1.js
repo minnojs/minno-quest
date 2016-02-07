@@ -29,19 +29,37 @@ define(['questAPI'], function(Quest){
 
 	        { // page begins
 	            header: 'Grid questions simple',
+	            autoFocus:true,
+	            decline: true,
+	            v1style: 2,
 	            questions: [
+						{
+							stem: 'how are you?',
+							name: 'secondary',
+							type: 'dropdown',
+							dflt:'good',
+							answers: ['good','bad','ugly'],
+							errorMsg: {correct:"That may not be correct... say good!"}
+						},
+
 	                {
 	                    type: 'grid',
 	                    stem: 'What sort of things do you like?',
 	                    columns: ['Strongly agree' , 'agree' , 'don\'t know' , 'disagree' , 'Strongly disagree'],
 	                    rows: ['I like grids', 'I like bannanas too'],
 	                    rowStemCss: {width:'280px'}
-	                }
+	                },
+	            	{
+	            		type:'text',
+	            		stem: 'iso'
+	            	},
+
 	            ]
 	        }, // page ends
 
 			{
 				header: 'Header',
+	            v1style: 2,
 				questions: 		{
 					stem: 'myStem <%= pagesMeta.number %>',
 					type:'selectOne',
@@ -49,39 +67,40 @@ define(['questAPI'], function(Quest){
 					autoSubmit: true,
 					answers : [1,2,3,4,5]
 				}
-			}
+			},
 
-		// {
-		// 	//animate:"fade drop-in fakeAnimation",
-		// 	prevText: '123',
-		// 	prev:true,
-		// 	progressBar: '<%= pagesMeta.number %> out of <%= pagesMeta.outOf%>',
-		// 	header: 'Questionnaire: example for realtime branching',
-		// 	timer: {duration:1.5, show:true, submitOnEnd:true,removeOnEnd:true, message:'doooooo'},
-		// 	questions: [
-		// 		{
-		// 			name: 'myName',
-		// 			stem: "What is your name? (try yba!)",
-		// 			autoSubmit: true
-		// 		},
-		// 		{
-		// 			mixer:'branch',
-		// 			remix:true,
-		// 			conditions:[{compare: 'questions.myName.response',to:'yba', DEBUG:false}],
-		// 			data:[
-		// 				{
-		// 					stem: 'how are you?',
-		// 					name: 'secondary',
-		// 					type: 'dropdown',
-		// 					autoSubmit: true,
-		// 					dflt:'good',
-		// 					answers: ['good','bad','ugly'],
-		// 					errorMsg: {correct:"That may not be correct... say good!"}
-		// 				}
-		// 			]
-		// 		}
-		// 	]
-		// },
+		{
+			//animate:"fade drop-in fakeAnimation",
+			prevText: '123',
+            v1style: 2,
+			prev:true,
+			progressBar: '<%= pagesMeta.number %> out of <%= pagesMeta.outOf%>',
+			header: 'Questionnaire: example for realtime branching',
+			//timer: {duration:1.5, show:true, submitOnEnd:true,removeOnEnd:true, message:'doooooo'},
+			questions: [
+				{
+					name: 'myName',
+					stem: "What is your name? (try yba!)",
+					autoSubmit: true
+				},
+				{
+					mixer:'branch',
+					remix:true,
+					conditions:[{compare: 'questions.myName.response',to:'yba', DEBUG:false}],
+					data:[
+						{
+							stem: 'how are you?',
+							name: 'secondary',
+							type: 'dropdown',
+							autoSubmit: true,
+							dflt:'good',
+							answers: ['good','bad','ugly'],
+							errorMsg: {correct:"That may not be correct... say good!"}
+						}
+					]
+				}
+			]
+		},
 
 		// {
 		// 	prevText: '123',
