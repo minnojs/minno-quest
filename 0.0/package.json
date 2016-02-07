@@ -1,6 +1,6 @@
 {
   "name": "PIQuest",
-  "version": "0.0.76",
+  "version": "0.0.77",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -42,6 +42,7 @@
   },
   "scripts": {
     "test": "grunt test --sauce --report",
+    "localtest": "grunt test",
     "start": "grunt serve",
     "postinstall": "./node_modules/grunt-cli/bin/grunt githooks"
   }
