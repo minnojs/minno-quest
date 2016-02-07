@@ -1,3 +1,12 @@
+<a name"0.0.77"></a>
+### 0.0.77 (2016-02-07)
+
+
+#### Features
+
+* **piqPage:** autoFocus on first input in page ([196c927b](https://github.com/ProjectImplicit/PIquest/commit/196c927b))
+
+
 <a name"0.0.76"></a>
 ### 0.0.76 (2016-01-15)
 
