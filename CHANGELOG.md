@@ -1,3 +1,13 @@
+<a name"0.0.79"></a>
+### 0.0.79 (2016-02-18)
+
+
+#### Bug Fixes
+
+* **PI:** updated debrief urls ([11785ad9](https://github.com/ProjectImplicit/PIquest/commit/11785ad9))
+* **page:** autoFocus now only focuses on elements in the first question ([a370e782](https://github.com/ProjectImplicit/PIquest/commit/a370e782))
+
+
 <a name"0.0.78"></a>
 ### 0.0.78 (2016-02-18)
 
