@@ -115,16 +115,15 @@ $slider-bar-height: $slider-height / 4;
     height: .64em;
     top: -.64em;
 
-    &:before {
-        border-left: 1px solid #ccc;
-        content: '';
-        position: absolute;
-        height: .64em;
-        top: .64em;
+    &:before, &.last:after {
+      border-left: 1px solid #ccc;
+      content: '';
+      position: absolute;
+      height: .64em;
+      top: .64em;
     }
 
     &.last:after{
-      @extend &:before;
       right:0;
     }
 
