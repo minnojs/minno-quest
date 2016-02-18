@@ -1,3 +1,12 @@
+<a name"0.0.78"></a>
+### 0.0.78 (2016-02-18)
+
+
+#### Bug Fixes
+
+* **page:** autoFocus now only focuses on elements in the first question ([a370e782](https://github.com/ProjectImplicit/PIquest/commit/a370e782))
+
+
 <a name"0.0.77"></a>
 ### 0.0.77 (2016-02-07)
 
