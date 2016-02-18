@@ -64,8 +64,10 @@ define(function(require){
 		return {
 			link: function(scope, element){
 				var page = scope.page;
+				// let page render before focusing
 				page.autoFocus && setTimeout(function(){
-					var el = element[0].querySelector('input, textArea, select, button');
+					var wrapper = element[0].querySelector('[quest-wrapper]');
+					var el = wrapper && wrapper.querySelector('input, textArea, select, button');
 					if (el) {
 						el.focus();
 					}

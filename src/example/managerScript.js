@@ -51,9 +51,15 @@ define(['managerAPI'], function(Manager){
 
 		{
 			type: 'message',
-			templateUrl: '/quest/src/example/video.jst',
-			piTemplate: true,
-			load: function(){
+			template: [
+				'<div pi-message-done>',
+					'<div >first</div>',
+					'<div>second</div>',
+					'<div>third</div>',
+				'</div>'
+			].join('\n'),
+			piTemplate: false,
+			sload: function(){
 				var proceed = document.querySelectorAll('.proceed')[0];
 				proceed.style.visibility = 'hidden';
 				setTimeout(function(){

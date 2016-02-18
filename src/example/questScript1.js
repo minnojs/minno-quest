@@ -26,6 +26,18 @@ define(['questAPI'], function(Quest){
 	});
 
 	API.addSequence([
+			{
+				header: 'Header',
+				autoFocus:true,
+	            v1style: 2,
+				questions: 		{
+					stem: 'myStem <%= pagesMeta.number %>',
+					type:'selectOne',
+					label:'label',
+					autoSubmit: true,
+					answers : [1,2,3,4,5]
+				}
+			},
 
 	        { // page begins
 	            header: 'Grid questions simple',
@@ -57,17 +69,6 @@ define(['questAPI'], function(Quest){
 	            ]
 	        }, // page ends
 
-			{
-				header: 'Header',
-	            v1style: 2,
-				questions: 		{
-					stem: 'myStem <%= pagesMeta.number %>',
-					type:'selectOne',
-					label:'label',
-					autoSubmit: true,
-					answers : [1,2,3,4,5]
-				}
-			},
 
 		{
 			//animate:"fade drop-in fakeAnimation",
