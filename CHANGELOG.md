@@ -1,3 +1,14 @@
+<a name"0.0.81"></a>
+### 0.0.81 (2016-03-06)
+
+
+#### Bug Fixes
+
+* **modal:**
+  * this time fix css regression? ([240dd4ec](https://github.com/ProjectImplicit/PIquest/commit/240dd4ec))
+  * css regression ([b89991b7](https://github.com/ProjectImplicit/PIquest/commit/b89991b7))
+
+
 <a name"0.0.80"></a>
 ### 0.0.80 (2016-03-06)
 
