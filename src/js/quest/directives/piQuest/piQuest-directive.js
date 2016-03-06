@@ -16,7 +16,6 @@ define(function (require) {
 
 	piQuestCtrl.$inject = ['$scope','$rootScope','QuestTask','templateDefaultContext', 'mixerDefaultContext', 'piModal'];
 	function piQuestCtrl($scope, $rootScope, QuestTask, templateDefaultContext, mixerDefaultContext, piModal){
-		window.pi = piModal;
 		var task = new QuestTask($scope.script);
 		var defaultContext; // for templates and the mixer
 		var global = $rootScope.global; // setup in app.run

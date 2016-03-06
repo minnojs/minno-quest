@@ -17,7 +17,7 @@ label {
 	@include no-select();
 }
 
-[ng-app] .modal {display: block;}
+#pi-app .modal {display: block;}
 
 [pi-quest] {
 	position: relative;

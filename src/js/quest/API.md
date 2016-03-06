@@ -70,7 +70,7 @@ submitOnEnd 	| (true or false) Whether to submit when the timer ends (true by de
 show 			| (true or false) Whether to display a visual countdown (true by default).
 direction 		| ("up" or "down") Whether to use a countdown or to count up ("down" by default).
 removeOnEnd 	| (true or false) Whether to remove the visual timer when the countdown ends (if you don't auto proceed when the timer ends. ).		
-message 		| (String or Object) Display a message at the end the timer duration. You can imput a simple string here, but if you want finer control over the content of the message you can use the [object API](#page-messages).
+message 		| (String or Object) Display a message at the end the timer duration. You can input a simple string here, but if you want finer control over the content of the message you can use the [object API](#page-messages).
 
 #### Page Messages
 You may want to display a message to the users when they run out of time at the end of a timer. Messages can be simple strings, or if you want finer control over the content of the message you can use the object API, that may be used as follows:
