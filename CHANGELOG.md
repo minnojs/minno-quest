@@ -1,3 +1,12 @@
+<a name"0.0.82"></a>
+### 0.0.82 (2016-03-10)
+
+
+#### Features
+
+* **PI:** added donation button to debriefing page ([411ba37e](https://github.com/ProjectImplicit/PIquest/commit/411ba37e))
+
+
 <a name"0.0.81"></a>
 ### 0.0.81 (2016-03-06)
 
