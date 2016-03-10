@@ -42,7 +42,11 @@ define(['managerAPI'], function(Manager){
 				managerBeforeUnload.deactivate();
 				done();}
 		},
-
+		{
+			type:'message',
+			template: 'Debriefing content',
+			piTemplate: 'debrief'
+		},
 		{
 			type:'quest',
 			name: 'first',
