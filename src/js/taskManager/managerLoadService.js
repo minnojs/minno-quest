@@ -10,7 +10,7 @@ define(function(require){
 	function managerLoadService($q, getScript){
 
 		function managerLoadScript(source){
-			var promise = _.isString(source) ? getScript(source) : source;
+			var promise = _.isString(source) ? getScript(source,{bustCache:true}) : source;
 			return $q.when(promise);
 		}
 

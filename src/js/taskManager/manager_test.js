@@ -499,7 +499,7 @@ define(['require','./managerModule'], function(require){
 
 			it('should getScript the url', inject(function(managerGetScript){
 				load('my/url');
-				expect(managerGetScript).toHaveBeenCalledWith('my/url');
+				expect(managerGetScript).toHaveBeenCalledWith('my/url',jasmine.any(Object));
 			}));
 
 
