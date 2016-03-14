@@ -1,3 +1,13 @@
+<a name"0.0.83"></a>
+### 0.0.83 (2016-03-14)
+
+
+#### Features
+
+* **PI:** added donation button to debriefing page ([411ba37e](https://github.com/ProjectImplicit/PIquest/commit/411ba37e))
+* **manager:** always bust cache ([9e721ee6](https://github.com/ProjectImplicit/PIquest/commit/9e721ee6))
+
+
 <a name"0.0.82"></a>
 ### 0.0.82 (2016-03-10)
 
