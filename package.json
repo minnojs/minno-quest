@@ -4,6 +4,7 @@
   "description": "questDocs",
   "main": "gulpfile.js",
   "scripts": {
+    "render": "gulp",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
