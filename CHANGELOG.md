@@ -1,3 +1,12 @@
+<a name"0.0.84"></a>
+### 0.0.84 (2016-03-15)
+
+
+#### Bug Fixes
+
+* **pi:** update donate button ([47fe160b](https://github.com/ProjectImplicit/PIquest/commit/47fe160b))
+
+
 <a name"0.0.83"></a>
 ### 0.0.83 (2016-03-14)
 
