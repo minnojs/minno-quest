@@ -184,9 +184,12 @@
 
 							{{ navitem("Overview", "../quest/overview", data.basename) }}
 							{{ navitem("Introduction", "../quest/introduction", data.basename) }}
+							{{ navitem("API", "../quest/API", data.basename) }}
+							{{ navitem("Playground", "../quest/questplayground", data.basename) }}
 							<li>
 								<a href="helloworldDocco.html">Examples</a>
 								<ul class="nav">
+									{{ example("Intro", "../quest/intro", data.basename) }}
 									{{ example("Hello world", "../quest/helloworld", data.basename) }}
 									{{ example("Body Awareness", "../quest/bodyAwareness", data.basename) }}
 									{{ example("Weight demo", "../quest/weight", data.basename) }}
@@ -220,8 +223,6 @@
 									{{ example("Slider", "../questExamples/slider", data.basename) }}
 								</ul>
 							</li>
-							{{ navitem("API", "../quest/API", data.basename) }}
-							{{ navitem("Playground", "../quest/questplayground", data.basename) }}
 						{% elseif data.typeName == 'manager' %}
 
 							{{ navitem("Overview", "overview", data.basename) }}
