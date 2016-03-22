@@ -1,3 +1,12 @@
+<a name"0.0.85"></a>
+### 0.0.85 (2016-03-22)
+
+
+#### Features
+
+* **manager:** support "skin" option ([28b3bf1e](https://github.com/ProjectImplicit/PIquest/commit/28b3bf1e))
+
+
 <a name"0.0.84"></a>
 ### 0.0.84 (2016-03-15)
 
