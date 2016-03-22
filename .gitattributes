@@ -25,3 +25,6 @@
 *.PDF diff=astextplain
 *.rtf diff=astextplain
 *.RTF diff=astextplain
+
+src/styles/*.css -diff
+src/styles/*.map -diff

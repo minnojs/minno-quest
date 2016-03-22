@@ -106,7 +106,8 @@ define(function(require){
 			var preloader = $injector.get('piPreloader');
 			var beforeUnload = $injector.get('managerBeforeUnload');
 			var injectStyle = $injector.get('managerInjectStyle');
-			var canvasOff, stylesOff;
+			var rootElement = $injector.get('$rootElement');
+			var canvasOff, stylesOff, skinClass = settings.skin;
 
 			// prevent accidental browsing away
 			beforeUnload.activate();
@@ -127,8 +128,9 @@ define(function(require){
 			if (settings.title){
 				$document[0].title = settings.title;
 			}
-		}
 
+			rootElement.addClass(skinClass + '-skin');
+		}
 	}
 
 
