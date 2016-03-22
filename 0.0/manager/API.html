@@ -117,6 +117,7 @@
 <li><a href="#title">title</a></li>
 <li><a href="#preloadimages">preloadImages</a></li>
 <li><a href="#skip">skip</a></li>
+<li><a href="#skin">Skin</a></li>
 </ul>
 </li>
 <li><a href="#tasks">Tasks</a><ul>
@@ -235,6 +236,10 @@ All the functions within settings are invoked using angular. This means that you
 <h4 id="skip">skip</h4>
 <p>Whether to activate the skip and refresh option. If activated, clicking <code>ctrl r</code> reloads the current task (this feature may not be supported on older browsers), clicking <code>escape</code> and then the right or left arrows skips to the next or previous tasks.</p>
 <pre><code class="lang-js">API.addSettings(<span class="hljs-string">'skip'</span>, <span class="hljs-literal">true</span>);
+</code></pre>
+<h3 id="skin">Skin</h3>
+<p>Add a skin to your project. Skins change the way that your tasks look. Currently the only skins that we support are <code>simple</code> and <code>demo</code>.</p>
+<pre><code class="lang-js">API.addSettings(<span class="hljs-string">'skin'</span>, <span class="hljs-string">'demo'</span>);
 </code></pre>
 <h3 id="tasks">Tasks</h3>
 <p>The basic unit in piManager is the <strong>task</strong>. The manager currently supports several types of tasks; <code>quest</code>, <code>message</code> and <code>post</code>. You should just cue them into the sequence (you can use mixers to your hearts content as well).</p>

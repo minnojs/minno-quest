@@ -11,6 +11,7 @@ description: All the little details...
     - [title](#title)
     - [preloadImages](#preloadimages)
     - [skip](#skip)
+    - [Skin](#skin)
 - [Tasks](#tasks)
     - [Quest](#quest)
     - [Message](#message)
@@ -108,6 +109,12 @@ Whether to activate the skip and refresh option. If activated, clicking `ctrl r`
 API.addSettings('skip', true);
 ```
 
+### Skin
+Add a skin to your project. Skins change the way that your tasks look. Currently the only skins that we support are `simple` and `demo`.
+
+```js
+API.addSettings('skin', 'demo');
+```
 
 ### Tasks
 The basic unit in piManager is the **task**. The manager currently supports several types of tasks; `quest`, `message` and `post`. You should just cue them into the sequence (you can use mixers to your hearts content as well).
