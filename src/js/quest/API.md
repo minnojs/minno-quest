@@ -26,7 +26,8 @@ The basic unit in PIquest is the **page**. A page is usually one screen in your 
 
 property		| description
 --------------- | ---------------------
-name 			| (text) The identifier for this page, is used mainly for logging
+name 			| (text) The identifier for this page, is used mainly for logging.
+text			| (text) Some html to present above the questions.
 decline 		| (true, false, 'double'. default:false) Whether to allow participants decline to answer the questions on this page. This option displays a "decline" button that proceeds to the next page without validation and marks this response as "declined". If decline is set to 'double' then two click are required in order to decline answering.
 declineText		| (text) The text for the decline button (default value: "Decline to answer")
 prev 			| (true or false) Whether to allow users to return to the previous page. The previous button does not appear on the first page (default value: false).
