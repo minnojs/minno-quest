@@ -1,0 +1,50 @@
+#pi-app .modal {display: block;}
+
+[piq-page]{
+	position: relative;
+	width: 100%;
+	overflow: hidden;
+
+	background-color: #fff; 
+	border: 1px solid transparent; 
+	border-radius: 4px; 
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05); 
+	margin-bottom: 20px; 
+	border-color: #bce8f1;
+
+	
+	> ol {margin: 15px;}
+	> .btn-group {margin: 0px 15px 15px 15px;}
+
+	.page-buttons {
+		margin-bottom:1px;
+		margin:15px;
+		text-align:center;
+
+		.page-submit {
+			color: #fff;
+			background-color: #337ab7;
+			border-color: #2e6da4;
+		}
+	
+		.page-decline, .page-prev {
+			 color: #333;
+			 background-color: #fff;
+			 border-color: #ccc;	 
+		}
+	 }
+}
+
+[pi-console] {
+	margin: 20px 0px;
+
+	.pre a{
+		white-space: pre;
+		text-decoration:none
+	}
+
+	.alert span {
+		margin-right:5px;
+	}
+}
+

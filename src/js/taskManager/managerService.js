@@ -107,7 +107,7 @@ define(function(require){
 			var beforeUnload = $injector.get('managerBeforeUnload');
 			var injectStyle = $injector.get('managerInjectStyle');
 			var rootElement = $injector.get('$rootElement');
-			var canvasOff, stylesOff, skinClass = settings.skin;
+			var canvasOff, stylesOff, skinClass = settings.skin || 'default';
 
 			// prevent accidental browsing away
 			beforeUnload.activate();

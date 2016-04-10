@@ -8,7 +8,7 @@ define(['questAPI'], function(Quest){
 		console.log('onEnd script1');
 		//location.href = location.href;
 	});
-
+	API.addSettings('skin', 'demo');
 	API.addSettings('timers', {
 		duration: 1,
 		message: {
@@ -30,7 +30,7 @@ define(['questAPI'], function(Quest){
 				header: 'Header',
 				autoFocus:true,
 				decline:true,
-	            v1style: 2,
+				v1style: 2,
 				questions: 		{
 					stem: 'myStem <%= pagesMeta.number %>',
 					type:'selectOne',

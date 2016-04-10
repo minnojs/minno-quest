@@ -34,6 +34,7 @@
     "karma-sauce-launcher": "^0.2.8",
     "karma-spec-reporter": "0.0.12",
     "load-grunt-tasks": "~0.2.0",
+    "node-sass": "^3.4.2",
     "requirejs": "^2.1.17",
     "time-grunt": "~0.2.1"
   },
@@ -44,6 +45,8 @@
     "test": "grunt test --sauce --report",
     "localtest": "grunt test",
     "start": "grunt serve",
-    "postinstall": "./node_modules/grunt-cli/bin/grunt githooks"
+    "postinstall": "./node_modules/grunt-cli/bin/grunt githooks",
+    "css": "node-sass src/styles/main.scss --output src/styles --include-path=bower_components/bootstrap-sass-official/assets/stylesheets/ --include-path=bower_components --source-map=true",
+    "css:watch": "node-sass --watch=src/styles/*.scss src/styles/main.scss --output src/styles --include-path=bower_components/bootstrap-sass-official/assets/stylesheets/ --include-path=bower_components --source-map=true"
   }
 }

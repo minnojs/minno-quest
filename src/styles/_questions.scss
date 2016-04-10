@@ -1,52 +1,11 @@
-.container {padding:0}
-
-label {
-	font-size: $font-size-large
-}
-
-@mixin no-select {
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-}
-
-[unselectable="on"] {
-	@include no-select();
-}
-
-#pi-app .modal {display: block;}
-
 [pi-quest] {
-	position: relative;
-
-	// copied from container
-	@media (min-width: $screen-sm-min) {
-		width: $container-sm;
+	.form-group > label {
+		font-size:1.2em; 
+		font-weight:normal;
 	}
-	@media (min-width: $screen-md-min) {
-		width: $container-md;
-	}
-	@media (min-width: $screen-lg-min) {
-		width: $container-lg;
-	}
-
-	// prevent rendering bug when chrome zooms around...
-	.btn-toolbar {
-		margin-bottom: 1px;
-	}
-}
-
-[piq-page]{
-	position: relative;
-	width: 100%;
-	overflow: hidden;
 }
 
 [pi-quest-validation]{
-
 	margin: 10px 0;
 
 	.glyphicon {
@@ -54,23 +13,8 @@ label {
 	}
 }
 
-[pi-console] {
-	margin: 20px 0px;
-
-	.pre a{
-		white-space: pre;
-		text-decoration:none
-	}
-
-	.alert span {
-		margin-right:5px;
-	}
-
-
-}
-
 // ripped off regular buttons and group-list-item for conformity with the list style
-.btn-select {
+[quest-select-one] .btn-select, [quest-select-multi] .btn-select {
 	background-color: #fff;
 	border-color: #ccc;
 	color: #333;
@@ -91,10 +35,6 @@ label {
 		background-color: #337ab7;
 		border-color: #337ab7;
 	}
-}
-
-.btn-active-accented.active{
-	color:black;
 }
 
 [quest-grid]{

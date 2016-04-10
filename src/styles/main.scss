@@ -55,8 +55,10 @@ $icon-font-path: "../../bower_components/bootstrap-sass-official/assets/fonts/bo
 @import "bootstrap/utilities";
 @import "bootstrap/responsive-utilities";
 
-@import "custom";
+@import "manager";
 @import "skins";
 @import "slider";
+@import "pages";
+@import "questions";
 
 @import "PIPlayer/src/css/pip.scss";

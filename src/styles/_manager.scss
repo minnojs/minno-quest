@@ -1,0 +1,37 @@
+.container {padding:5px}
+
+[unselectable="on"] {
+	@include no-select();
+}
+
+[pi-quest] {
+	&::before, &::after {content: " ";display: table;}
+	&::after {clear: both;}
+
+	h3 { 
+		border-bottom: 1px solid transparent; 
+		border-top-left-radius: 3px; 
+		border-top-right-radius: 3px; 
+		padding: 10px 15px; 
+		color: inherit; 
+		font-size: 2em; 
+		margin-bottom: 0; margin-top: 0;
+		background-color: #d9edf7;
+		border-color: #bce8f1;
+		color: #31708f;
+	 }
+
+	position: relative;
+
+	// copied from container
+	@media (min-width: $screen-sm-min) {
+		width: $container-sm;
+	}
+	@media (min-width: $screen-md-min) {
+		width: $container-md;
+	}
+	@media (min-width: $screen-lg-min) {
+		width: $container-lg;
+	}
+
+}
