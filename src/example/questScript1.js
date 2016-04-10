@@ -30,7 +30,7 @@ define(['questAPI'], function(Quest){
 				header: 'Header',
 				autoFocus:true,
 				decline:true,
-	            v1style: 2,
+//            v1style: 2,
 				questions: 		{
 					stem: 'myStem <%= pagesMeta.number %>',
 					type:'selectOne',
