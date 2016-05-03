@@ -123,6 +123,8 @@ load        | A function to invoke as soon as the task is loaded (may return a p
 post        | A function to invoke after the task (may return a promise).
 canvas      | A canvas object (as defined under [settings](#canvas)) to invoke at the beginning of the task and remove 
 title       | A string to be used as the page title (the name displayed on the tag). It is reset at the end of the task.
+preText		| A template to be expanded before the task
+postText	| A template to be expanded after the task
 
 #### Quest
 
