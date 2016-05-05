@@ -1,0 +1,6 @@
+<div class="form-group">
+	<label ng-hide="data.inline" for="{{data.name}}" ng-bind-html="data.stem" ng-style="data.stemCss"></label>
+	<div ng-bind-html="data.description"></div>
+	<div quest-data="data" ng-model="current.questions[data.name]" ng-style="{'max-width':data.maxWidth}"></div>
+	<p class="help-block" ng-if="data.help" ng-bind-html="data.helpText"></p>
+</div>

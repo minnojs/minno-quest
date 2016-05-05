@@ -1,0 +1,27 @@
+{
+  "name": "PIPlayer",
+  "version": "0.3.0",
+  "main": ["dist/js/app/activatePIP", "dist/js/app/API"],
+  "ignore": [
+    ".gitattributes",
+    ".gitignore",
+    ".jshintrc",
+    "bower_components",
+    "docs",
+    "Gruntfile.js",
+    "node_modules",
+    "package.json",
+    "README.md",
+    "resources",
+    "test",
+    "user"
+  ],
+  "devDependencies": {
+    "requirejs": "~2.1.14",
+    "lodash": "2.4.1",
+    "requirejs-text": "~2.0.12",
+    "backbone": "1.1.2",
+    "json2": "*",
+    "jquery": "components/jquery#~1.10.2"
+  }
+}

@@ -1,0 +1,20 @@
+<div>
+	<div ng-class="listClass" ng-style="listCss">
+		<!-- track by in the ng-repeat allows us to keep the repeated object clean so that angular doesn't add a $$hashkey property -->
+		<a
+			href="javascript:void(0);"
+			ng-repeat="answer in quest.answers track by answer.order"
+			ng-model="answer.chosen"
+			btn-checkbox
+			ng-class="$parent.listItemClass"
+			ng-style="listItemCss"
+			class="{{ answer.chosen ? 'active' : '' }}"
+			uncheckable
+			ng-bind-html="answer.text"
+			unselectable="on"
+		>
+		</a>
+	</div>
+	<div pi-quest-validation="model.$error.required">{{data.errorMsg.required || "Please respond to this question"}}</div>
+	<div pi-quest-validation="model.$error.correct">{{data.errorMsg.correct || "You must answer the correct answer!"}}</div>
+</div>

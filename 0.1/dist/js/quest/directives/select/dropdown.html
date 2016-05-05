@@ -1,0 +1,13 @@
+<div ng-form>
+	<select
+		ng-model="response"
+		ng-options="answer.value as answer.text group by answer.group for answer in quest.answers"
+		ng-required="data.required"
+		ng-change="data.autoSubmit && autoSubmit($event)"
+		class="form-control"
+		>
+		<option value="">{{chooseText || "-- Choose an option --"}}</option>
+	</select>
+	<div pi-quest-validation="form.$error.required">{{data.errorMsg.required || "Please respond to this question"}}</div>
+	<div pi-quest-validation="model.$error.correct">{{data.errorMsg.correct || "You must answer the correct answer!"}}</div>
+</div>

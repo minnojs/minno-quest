@@ -1,0 +1,30 @@
+<div class="panel panel-info" style="margin-top:1em">
+	<% if (task.header){ %>
+		<div class="panel-heading">
+			<h1 class="panel-title" style="font-size:2em"><%= task.header %></h1>
+		</div>
+	<% } %>
+
+	<div class="panel-body">
+		<%= content %>
+
+		<% if (!task.buttonHide){ %>
+			<div class="text-center proceed" style="margin: 30px auto 10px;">
+				<button pi-message-done type="button" class="btn btn-primary">
+					<% if (task.buttonText){ %>
+						<%= task.buttonText %>
+					<% } else { %>
+						Click Here or press the space button to Proceed
+					<% } %>
+				</button>
+			</div>
+		<% } %>
+	</div>
+
+	<% if (task.footer){ %>
+		<div class="panel-footer">
+			<%= task.footer %>
+		</div>
+	<% } %>
+</div>
+<div style="text-align:center; padding: 1em">&middot; Project Implicit &middot;</div>

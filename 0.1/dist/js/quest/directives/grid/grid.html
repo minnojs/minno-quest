@@ -1,0 +1,36 @@
+<div ng-form class="table-responsive" ng-class="{'pi-page-submitted':$parent.$parent.submitAttempt}">
+	<table class="table table-hover">
+		<colgroup>
+			<col
+				ng-if="!data.rowStemHide"
+			></col>
+			<col
+				ng-repeat="column in columns"
+				ng-style="column.css"
+			></col>
+		</colgroup>
+		<thead ng-if="!data.columnStemHide">
+			<tr>
+				<th
+					ng-style="allCss(data.columnStemCss,column.stemCss, data.rowStemCss)"
+					ng-if="!data.rowStemHide"
+				></th>
+				<th
+					ng-repeat="column in columns"
+					ng-bind-html="column.stem"
+					ng-style="allCss(data.columnStemCss,column.stemCss)"
+				></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr
+				ng-repeat="row in rows"
+				quest-grid-row="row"
+				quest-grid-data="data"
+				ng-model="$parent.$parent.current.questions[row.name]"
+				ng-required="{{data.required || row.required}}"
+			></tr>
+		</tbody>
+	</table>
+	<div pi-quest-validation="form.$error.required">{{data.errorMsg.required || "Please respond to this question"}}</div>
+</div>

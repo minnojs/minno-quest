@@ -1,0 +1,17 @@
+<div class="panel panel-info" style="margin-top:1em">
+	<% if (header){ %>
+		<div class="panel-heading">
+			<h2 class="panel-title text-center" style="font-size:1.3em"><%= header %></h2>
+		</div>
+	<% } %>
+
+	<div class="panel-body">
+		<%= content %>
+	</div>
+
+	<% if (footer){ %>
+		<div class="panel-footer">
+			<%= footer %>
+		</div>
+	<% } %>
+</div>

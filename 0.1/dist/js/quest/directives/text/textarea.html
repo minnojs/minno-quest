@@ -1,0 +1,24 @@
+<div ng-form ng-class="{'form-inline':data.inline}">
+	<label ng-show="data.inline" for="{{data.name}}" ng-bind-html="data.stem" ng-style="data.stemCss"></label>
+	<textarea
+	 	type="text"
+		ng-model="response"
+		ng-minlength="{{data.minLength || data.minlength}}"
+		ng-maxlength="{{data.maxlength}}"
+		ng-pattern="data.pattern | toRegex"
+		ng-required="{{data.required}}"
+		class="form-control"
+
+		ng-attr-style="resize:none;width:{{data.columns? 'auto' : data.width | dfltUnits}};"
+		cols="{{data.columns}}"
+		rows="{{data.rows}}"
+
+		ng-keydown="data.maxlengthLimit && maxlengthLimit($event)"
+		ng-keyup="data.maxlengthLimit && maxlengthLimit($event)"
+	/>
+	<div pi-quest-validation="form.$error.minlength">{{data.errorMsg.minLength || data.errorMsg.minlength || "Too short!"}}</div>
+	<div pi-quest-validation="form.$error.maxlength">{{data.errorMsg.maxlength || "Too long!"}}</div>
+	<div pi-quest-validation="form.$error.pattern">{{data.errorMsg.pattern || "wrong pattern!"}}</div>
+	<div pi-quest-validation="form.$error.required">{{data.errorMsg.required || "Please respond to this question"}}</div>
+	<div pi-quest-validation="model.$error.correct">{{data.errorMsg.correct || "You must answer the correct answer!"}}</div>
+</div>
