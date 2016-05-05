@@ -1,3 +1,14 @@
+<a name"0.1.0"></a>
+## 0.1.0 (2016-05-05)
+
+
+#### Features
+
+* **manager:**
+  * support pre and post text ([b8b54d1e](https://github.com/ProjectImplicit/PIquest/commit/b8b54d1e))
+  * support "skin" option ([28b3bf1e](https://github.com/ProjectImplicit/PIquest/commit/28b3bf1e))
+
+
 <a name"0.0.86"></a>
 ### 0.0.86 (2016-05-03)
 
