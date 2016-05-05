@@ -1,11 +1,7 @@
 #!/usr/bin/env bash
 
-# get base dir so that we source from the correct location
-DIR="${BASH_SOURCE%/*}"
-if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi
-
-# get absolute path to the base repository
-DIR=$(readlink -f $DIR/..)
+# path to repo
+DIR=$(git rev-parse --show-toplevel)
 
 # get helpers
 source "$DIR/scripts/errorExit.sh" || error_exit "$LINENO: errorExit not found."
@@ -13,42 +9,52 @@ source "$DIR/scripts/errorExit.sh" || error_exit "$LINENO: errorExit not found."
 # create temporary directory that we can use for our stuff...
 # http://unix.stackexchange.com/questions/30091/fix-or-alternative-for-mktemp-in-os-x
 TMPDIR=`mktemp -d 2>/dev/null || mktemp -d -t 'myTMPDIR'`
-TMPDIR=$(readlink -f $TMPDIR)
+# TMPDIR=$(cd "$(dirname "$TEMPDIR")"; pwd) # get absolute path to $TMPDIR
 trap "rm -Rf $TEMPDIR" EXIT
 
+# make sure current repository is up to date
 git fetch --quiet
+git fetch --quiet --tags
 
 # create repository clone
 cd $TMPDIR
 git clone --quiet $DIR .
 
-# Get new tags from remote
-git fetch --quiet --tags
+# checkout_latest($version): $LATESTTAG
+function checkout_latest {
+	VERSION=$1
 
-VERSION="0.0"
+	# Get latest tag name
+	LATESTTAG=$(git describe --tags $(git rev-list --tags="v$VERSION*" --max-count=1))
 
-# Get latest tag name
-LATESTTAG=$(git describe --tags $(git rev-list --tags="v$VERSION*" --max-count=1))
+	# Checkout latest tag
+	git checkout --quiet $LATESTTAG || error_exit "$LINENO: could not checkout $LATESTTAG."
 
-# Checkout latest tag
-git checkout --quiet $LATESTTAG || error_exit "$LINENO: could not checkout LATESTTAG."
-
+	echo $LATESTTAG
+}
 
 
 ###################################################################
 #	copy in all the interestin files...
 ###################################################################
 
+# copy_dist($SOURCE_DIR, $TARGET_DIR): void
+function copy_dist {
+	SOURCE_DIR=$1
+	TARGET_DIR=$2
+	# creat target directory just in gase
+	mkdir -p $TARGET_DIR
 
-# creat the 0.0 directory just in case
-mkdir -p $DIR/$VERSION
+	# copy dirs that we want to gh-pages
+	rm -rf $TARGET_DIR{dist,bower_components,package.json}
+	cp -r $SOURCE_DIR/{dist,bower_components,package.json} $TARGET_DIR || error_exit "$LINENO: could not import dist/bower_components."
 
-# copy dirs that we want to gh-pages
-rm -rf $DIR/$VERSION/{dist,bower_components,package.json}
-cp -r $TMPDIR/{dist,bower_components,package.json} $DIR/$VERSION/ || error_exit "$LINENO: could not import dist/bower_components."
+	# create 0.0 directory if needed
+	mkdir -p "$DIR/../src/0.0"
+}
 
-# create 0.0 directory if needed
-mkdir -p "$DIR/../src/0.0"
+LATESTTAG=$(checkout_latest 0.0)
+copy_dist $TMPDIR $DIR/0.0
 
 # Concatenate front matter and API.md
 # http://stackoverflow.com/questions/23929235/bash-multi-line-string-with-extra-space
