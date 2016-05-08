@@ -31,6 +31,8 @@ define(['managerAPI'], function(Manager){
 		},
 		
 		{
+			preText: 'asdf',
+			postText: 'zxc',
 			type:'quest',
 			name: 'first',
 			scriptUrl: 'questScript1.js'

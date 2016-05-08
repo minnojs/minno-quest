@@ -29,7 +29,7 @@ module.exports = function (grunt) {
 				files:			['package.json'],
 				commitMessage:	'chore: release v%VERSION%',
 				updateConfigs:	['pkg'],
-				commitFiles:	['package.json','CHANGELOG.md', 'dist/**/*'],
+				commitFiles:	['package.json','CHANGELOG.md', 'dist/**/*', 'src/styles/main.css*'],
 				push: false
 			}
 		},
