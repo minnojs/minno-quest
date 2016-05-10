@@ -189,7 +189,6 @@
 							<li>
 								<a href="helloworldDocco.html">Examples</a>
 								<ul class="nav">
-									{{ example("Intro", "../quest/intro", data.basename) }}
 									{{ example("Hello world", "../quest/helloworld", data.basename) }}
 									{{ example("Body Awareness", "../quest/bodyAwareness", data.basename) }}
 									{{ example("Weight demo", "../quest/weight", data.basename) }}
