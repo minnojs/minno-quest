@@ -1,3 +1,12 @@
+<a name"0.0.90"></a>
+### 0.0.90 (2016-05-13)
+
+
+#### Bug Fixes
+
+* **PI:** move manager no-cache from requirejs bustUrl to meta content=no-store ([a7f78ba0](https://github.com/ProjectImplicit/PIquest/commit/a7f78ba0))
+
+
 <a name"0.0.89"></a>
 ### 0.0.89 (2016-05-05)
 
