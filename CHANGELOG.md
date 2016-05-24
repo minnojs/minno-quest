@@ -1,3 +1,12 @@
+<a name"0.0.91"></a>
+### 0.0.91 (2016-05-24)
+
+
+#### Bug Fixes
+
+* **sequencer:** branch:equals now returns false when comparing to a nonexistant variable ([5c220e5d](https://github.com/ProjectImplicit/PIquest/commit/5c220e5d))
+
+
 <a name"0.0.90"></a>
 ### 0.0.90 (2016-05-13)
 
