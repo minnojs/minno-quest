@@ -26,6 +26,30 @@ define(['questAPI'], function(Quest){
 	});
 
 	API.addSequence([
+{
+    remix: true,
+    mixer:'branch',
+    conditions:{or:[{compare: 1, to: 'current.questions.b1_teacher.response',DEBUG:true}]},
+        data:[  { // page begins
+            header: 'Hello world!',
+            decline: true,
+            declineText: 'I prefer to keep this information to myself',
+            questions: [
+                { // question begins
+                    type: 'selectOne',
+                    name: 'test',
+                    stem: 'When you say good morning, what do you mean?',
+                    answers: [
+                        'Do you wish me a good morning',
+                        'Or mean that it is a good morning whether I want it or not',
+                        'Or that you feel good this morning',
+                        'Or that it is a morning to be good on',
+                        'All of them at once'
+                    ]
+                } // question ends
+            ]
+        }]
+},
 			{
 				header: 'Header',
 				autoFocus:true,
