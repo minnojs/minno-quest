@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+
+		<!-- Meta, title, CSS, favicons, etc. -->
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="Bootstrap, a sleek, intuitive, and powerful mobile first front-end framework for faster and easier web development.">
+		<meta name="keywords" content="HTML, CSS, JS, JavaScript, framework, bootstrap, front-end, frontend, web development">
+		<meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+
+		<title>
+			
+				Basics
+			
+			&middot; V0.0
+		</title>
+
+		
+		<!-- Bootstrap core CSS -->
+		<link href="../../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/highlight.css" rel="stylesheet">
+		<link href="../css/style.css" rel="stylesheet">
+		<style type="text/css">
+			pre {display:block;overflow-x:auto;padding:0.5em;background:#000;color:#f8f8f8;-webkit-text-size-adjust:none}
+			table {padding: 0;}
+			table tr {border-top: 1px solid #cccccc;background-color: white;margin: 0;padding: 0;}
+			table tr:nth-child(2n) {background-color: #f8f8f8;}
+			table tr th {font-weight: bold;border: 1px solid #cccccc;text-align: left;margin: 0;padding: 6px 13px;}
+			table tr td {border: 1px solid #cccccc;text-align: left;margin: 0;padding: 6px 13px;}
+			table tr th :first-child, table tr td :first-child {margin-top: 0;}
+			table tr th :last-child, table tr td :last-child {margin-bottom: 0;}
+		</style>
+		
+
+		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+		<!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+			<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+		<![endif]-->
+
+		<!-- Favicons -->
+		<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+		<link rel="icon" href="../favicon.ico">
+
+	</head>
+
+	<body>
+		<a id="skippy" class="sr-only sr-only-focusable" href="#content"><div class="container"><span class="skiplink-text">Skip to main content</span></div></a>
+
+		<!-- Docs master nav -->
+		<header class="navbar navbar-static-top bs-docs-nav" id="top" role="banner">
+			<div class="container">
+				<div class="navbar-header">
+					<button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a href="../../" class="navbar-brand">Project Implicit</a>
+				</div>
+				<nav class="collapse navbar-collapse bs-navbar-collapse">
+					<ul class="nav navbar-nav">
+						<li class=" active ">
+							<a href="../basics/overview.html">Basics</a>
+						</li>
+						<li class="">
+							<a href="../quest/overview.html">piQuest</a>
+						</li>
+						<li class="">
+							<a href="../manager/overview.html">piManager</a>
+						</li>
+						<li>
+							<a href="/PIPlayer">piPlayer</a>
+						</li>
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+						<li>
+							<form class="navbar-form navbar-left" role="search" method="get" action="http://www.google.com/search">
+							  <div class="form-group">
+							    <input type="text" class="form-control" placeholder="Search" name="q" size="25" maxlength="255">
+							  </div>
+							  <button type="submit" class="btn btn-default" value="Google Search">
+							    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+							  </button>
+							  <input type="hidden" name="sitesearch" value="projectimplicit.github.io" checked />
+							</form>
+						</li>
+
+						<li><a href="https://github.com/ProjectImplicit/PIquest">Github</a></li>
+					</ul>
+				</nav>
+			</div>
+		</header>
+
+		<div id="content" class="bs-docs-header">
+			<div class="container">
+				
+	<h1>Mixers</h1>
+	<p>Controlling the flow of the sequence</p>
+
+			</div>
+		</div>
+
+		<div class="container bs-docs-container">
+			<div class="row">
+				<div class="col-md-9" role="main">
+					
+	<h3 id="introduction">Introduction</h3>
+<p>Mixers allow you to control the flow of your sequences within the PI players.
+In particular it allows you to repeat, randomize and even branch sections of your sequence according to <a href="./variables.html">environmental variables</a>.</p>
+<h4 id="structure">Structure</h4>
+<p>Each one of the PI tasks is composed of a sequence of elements that is sequentially evaluated and presented to the user.
+For example, the sequence in piManager is composed of elements (objects usually) that represent a task each.
+These sequences are created using the <code>API.addSequence</code> method in your script.
+Mixers are inserted into the sequence the same way that regular elements are, each mixer represents a sub-sequence that is to be manipulated and the inserted in its place.</p>
+<p>For example, in the following sequence the second element in the sequence is a mixer.
+It takes a sub-sequence of tasks two and three and randomizes their order.
+Note that the single mixer element is effectively replaced by the two elements of the sub-sequence, turning this sequence into a four task sequence.</p>
+<pre><code class="lang-js"><span class="hljs-comment">// The task sequence</span>
+API.addSequence([
+    <span class="hljs-comment">// First Element: task 1</span>
+    {type:<span class="hljs-string">'message'</span>, template: <span class="hljs-string">'Task 2'</span>, keys: <span class="hljs-string">' '</span>},
+
+    <span class="hljs-comment">// Second Element: the mixer (task 2 and 3 randomized)</span>
+    {
+        mixer: <span class="hljs-string">'randomize'</span>,
+        data: [
+            {type:<span class="hljs-string">'message'</span>, template: <span class="hljs-string">'Task 2'</span>, keys: <span class="hljs-string">' '</span>},
+            {type:<span class="hljs-string">'message'</span>, template: <span class="hljs-string">'Task 3'</span>, keys: <span class="hljs-string">' '</span>}
+        ]
+    },
+
+    <span class="hljs-comment">// Third Element: task 4</span>
+    {type:<span class="hljs-string">'message'</span>, template: <span class="hljs-string">'Task 4'</span>, keys: <span class="hljs-string">' '</span>}
+]);
+</code></pre>
+<p>All mixers have a type associated with them as well as at least one sub-sequence.
+The <code>mixer</code> property always holds the mixer type (see below for the available types).
+In most cases the <code>data</code> property holds the sub-sequence (the exception is with the branching mixers that may hold multiple sub-sequences).</p>
+<p>This looks something like this: (from now on, instead of explicitly writing in the mixed elements we will use arbitrary variable names instead, such as <code>elem1</code> and <code>elem2</code>. We are doing this to keep the structures as simple and short as possible).</p>
+<pre><code class="lang-js">{
+    mixer: <span class="hljs-string">'randomize'</span>,     <span class="hljs-comment">// &lt;== The mixer type (randomize in this case)</span>
+    data: [elem1, elem2]    <span class="hljs-comment">// &lt;== The sub-sequence (holding elem1 and elem2)</span>
+}
+</code></pre>
+<h4 id="sequence-evaluation">Sequence evaluation</h4>
+<p>Most of the time, mixers are lazily evaluated. This means that the sequencer waits until it reaches the sequencer before expanding it.
+This behaviour allows us to use branching mixers - we don’t decide which branch to take until we reach it.
+The exception to this rule is randomizing mixers (such as <code>randomize</code> or <code>choose</code>), that in order to randomize <em>everything</em> inside them, must pre-mix all their content.</p>
+<p>This behaviour may cause some unexpected results.
+For instance, a branching mixer within a randomization mixer, will be calculated according to the state of the player when it first reaches the randomizer, and not according to the state when it reaches the branch itself.
+If you have a randomizer &gt; repeat &gt; randomizer then the repeat will process an already randomized random mixer, and the repeated units will all be the same.
+The solution in this case it to wrap the inner mixer within a <a href="#wrapper">wrapper mixer</a> (or set the <code>wrapper</code> property to true).
+This way the randomizer will treat anything within the wrapper as a single unit and will not pre-mix it.</p>
+<h4 id="nesting">Nesting</h4>
+<p>Mixers may be nested inside each other as much as you like. The following example illustrates a more complex example.
+Here, we have an opening and ending element (<code>firstelem</code> and <code>lastelem</code>).
+Between them them we repeat a set of four elements ten times.
+The order within the four objects is randomized, so that <code>elem1</code> always comes first and the order of the following elements is randomized but <code>elem3</code> and <code>elem4</code> are wrapped together and therefore always stay consecutive.</p>
+<pre><code class="lang-js">API.addSequence([
+    <span class="hljs-comment">// The first element</span>
+    firstelem,
+
+    <span class="hljs-comment">// Repeat the structure inside 10 time (so we get 40 objects overall)</span>
+    {
+        mixer: <span class="hljs-string">'repeat'</span>,
+        wrapper:<span class="hljs-literal">true</span>, <span class="hljs-comment">// Delay the mixing of these elements until after the `repeat`.</span>
+        times: <span class="hljs-number">10</span>,
+        data: [
+            elem1,
+
+            <span class="hljs-comment">// Randomize the order of the elements within.</span>
+            {
+                mixer: <span class="hljs-string">'random'</span>,
+                data: [
+                    elem2,
+                    <span class="hljs-comment">// Keep obj 3 and 4 together.</span>
+                    {
+                        mixer: <span class="hljs-string">'wrapper'</span>,
+                        data: [
+                            elem3,
+                            elem4
+                        ]
+                    }
+                ]
+            } <span class="hljs-comment">// end random</span>
+        ]
+    }, <span class="hljs-comment">// end repeat</span>
+
+    <span class="hljs-comment">// the last element</span>
+    lastelem
+]);
+</code></pre>
+<h3 id="mixer-types">Mixer types</h3>
+<h4 id="repeat">repeat</h4>
+<p>Repeats the sub-sequence in <code>data</code> <code>times</code> times.
+So that the following mixer:</p>
+<pre><code class="lang-js">{mixer:<span class="hljs-string">'repeat'</span>, times:<span class="hljs-number">10</span>, data: [elem1,elem2]}
+</code></pre>
+<p>Will be transformed into:</p>
+<pre><code class="lang-js">[elem1,elem2,elem1,elem2,elem1,elem2]
+</code></pre>
+<h4 id="random">random</h4>
+<p>Randomizes the order of elements in <code>data</code>. Random randomizes the order of all the elements under the random mixer’s data array, even if they are inside a mixer. For example, consider the following code:</p>
+<pre><code class="lang-js">{
+    mixer:<span class="hljs-string">'random'</span>,
+    data: [
+        elem1,
+        {
+            mixer:<span class="hljs-string">'repeat'</span>,
+            times:<span class="hljs-number">2</span>,
+            data:[
+                elem2
+            ]
+        }
+    ]
+}
+</code></pre>
+<p>It will form one of the following sequences: </p>
+<ul>
+<li>[elem1,elem2,elem2]</li>
+<li>[elem2,elem1,elem2]</li>
+<li>[elem2,elem2,elem1]</li>
+</ul>
+<p>If you want to keep some of the elements in the data together (and not randomized), use the <code>wrapper</code> mixer. For instance:</p>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> mixer = {
+    mixer:<span class="hljs-string">'random'</span>,
+    data: [
+        elem1
+        {
+            mixer:<span class="hljs-string">'wrapper'</span>,
+            data:[
+                elem2,
+                elem3,
+                elem4
+            ]
+        }
+    ]
+}
+</code></pre>
+<p>This code will keep elem2, elem3, and elem4 together, in that same order (elem2, elem3, elem4), and will randomly present elem1 before or after these three objects.</p>
+<p>You can make any mixer into a wrapper by adding <code>wrapper:true</code>. For example: </p>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> mixer = {
+    mixer:<span class="hljs-string">'random'</span>,
+    data: [
+        elem1,
+        {
+            mixer:<span class="hljs-string">'repeat'</span>,
+            times:<span class="hljs-number">2</span>,
+            wrapper:<span class="hljs-literal">true</span>,
+            data:[
+                elem2,
+                elem3
+            ]
+        }
+    ]
+}
+</code></pre>
+<p>This code will results in one of the following sequences:</p>
+<ul>
+<li>[elem1,elem2,elem3,elem2,elem3]</li>
+<li>[elem2,elem3,elem2,elem3,elem1]</li>
+</ul>
+<p>If you want to randomize the order of two lists, and randomize the objects within each list but without mixing the two lists together, the following code will do the trick: </p>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> mixer = {
+    mixer:<span class="hljs-string">'random'</span>,
+    data: [
+        {
+            mixer:<span class="hljs-string">'random'</span>,
+            wrapper:<span class="hljs-literal">true</span>,
+            data:[elem1,elem2]
+        },
+        {
+            mixer:<span class="hljs-string">'random'</span>,
+            wrapper:<span class="hljs-literal">true</span>,
+            data:[elem3,elem4]
+        }
+    ]
+}
+</code></pre>
+<p>This code will create one of the following sequences: </p>
+<ul>
+<li>[elem1,elem2,elem3,elem4]</li>
+<li>[elem1,elem2,elem4,elem3]</li>
+<li>[elem2,elem1,elem3,elem4]</li>
+<li>[elem2,elem1,elem4,elem3]</li>
+<li>[elem3,elem4,elem1,elem2]</li>
+<li>[elem4,elem3,elem1,elem2]</li>
+<li>[elem3,elem4,elem2,elem1]</li>
+<li>[elem4,elem3,elem2,elem1]</li>
+</ul>
+<p>Please note that the <code>random</code> mixer pre-computes all the content in <code>data</code>, so that any branching mixers will be branched according to the state of the study at the time of the randomization. So, if you have a branch that depends on a previous object, make sure that the branch always comes after that object. Again, you can use wrapper:true in a branch (or multiBranch) mixer, if you need to keep the order of some objects fixed for the branching to make sense. </p>
+<h4 id="choose">choose</h4>
+<p>Selects <code>n</code> random elements from <code>data</code> (by default the chooser picks one element).</p>
+<ul>
+<li><code>{mixer:&#39;choose&#39;, data: [elem1,elem2]}</code> pick one of these two objs</li>
+<li><code>{mixer:&#39;choose&#39;, n:2, data: [elem1,elem2,elem3]}</code> pick two of these three objs</li>
+</ul>
+<h4 id="weightedchoose">weightedChoose</h4>
+<p>Chooses <code>n</code> random elements from data using a weighted randomize algorithm. Each element in <code>data</code> is given the appropriate weight from <code>weights</code>. And may be picked once or more. In the following example elem2 has four times the probability of being selected as elem1.</p>
+<pre><code class="lang-js">{
+    mixer:<span class="hljs-string">'weightedChoose'</span>,
+    n: <span class="hljs-number">2</span>,
+    weights: [<span class="hljs-number">0.2</span>,<span class="hljs-number">0.8</span>],
+    data: [elem1,elem2]}
+}
+</code></pre>
+<p>This code will create one of the following sequences: </p>
+<ul>
+<li>[elem1,elem1] - 4% of cases</li>
+<li>[elem1,elem2] - 16% of cases</li>
+<li>[elem2,elem1] - 16% of cases</li>
+<li>[elem2,elem2] - 64% of cases</li>
+</ul>
+<h4 id="weightedrandom">weightedRandom</h4>
+<p>Alias for <code>weightedChoose</code>.</p>
+<h4 id="wrapper">wrapper</h4>
+<p>The wrapper mixer serves a sort of parenthesis for the mixer. In case you want to keep a set of elements as a block (when randomizing) simply wrap them and they’ll stay together.</p>
+<ul>
+<li><code>{mixer:&#39;wrapper&#39;, data: [elem1,elem2]}</code></li>
+</ul>
+<h4 id="branch">branch</h4>
+<ul>
+<li><code>{mixer:&#39;branch&#39;, conditions:[cond], data:[elem1,elem2]}</code></li>
+<li><code>{mixer:&#39;branch&#39;, conditions:[cond], data:[elem1,elem2], elseData: [elem3, elem4]}</code>
+Select the elements in <code>data</code> if all the conditions in the <code>conditions</code> array are true, select the elements in <code>elseData</code> if at least one of the conditions in <code>conditions</code> are not true. If <code>elseData</code> is not defined, or is left empty, then nothing happen in case the conditions are not true (See <a href="#conditions">conditions</a> to learn about how conditions work).</li>
+</ul>
+<h4 id="multibranch">multiBranch</h4>
+<pre><code class="lang-js">{
+    mixer: <span class="hljs-string">'multiBranch'</span>,
+    branches: [
+        {conditions: [],data: []},
+        {conditions: [],data: []}
+    ],
+    elseData: [] <span class="hljs-comment">// optional</span>
+}
+</code></pre>
+<p>Find the first object within <code>branches</code> for which <code>conditions</code> is true, and select the elements in that objects <code>data</code>. If no object is selected then select <code>elseData</code> (optional). (See <a href="#conditions">conditions</a> to learn about how conditions work).</p>
+<h3 id="conditions">Conditions</h3>
+<p>The conditional mixers (<code>branch</code> &amp; <code>multiBranch</code>) allow you to change the content of a list according to <a href="#variables">environmental variables</a>. Each list has specific variables available to it, you can find the relevant details in the documentation for each list, but all lists have access to the <code>global</code> and <code>current</code> objects, so we’ll use them for all examples here.</p>
+<p>A condition is a proposition, it is evaluated to either a <code>true</code> or <code>false</code> value. Conditions are used for decision making within the branching mixers. Conditions are represented by objects. The following condition object <code>compare</code>s <strong>global.var</strong> <code>to</code> <strong>current.otherVar</strong> and examines if they are equal (if you aren’t sure what <strong>global.var</strong> means, see <a href="#variables">here</a>):</p>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> cond = {
+    compare: <span class="hljs-string">'global.myVar'</span>,
+    to: <span class="hljs-string">'current.myOtherVar'</span>
+}
+</code></pre>
+<p>Conditions should be treated as a type of equation.</p>
+<p>In the <code>compare</code> and <code>to</code> properties you can set either straight forward values or references to a variable:</p>
+<pre><code class="lang-js"><span class="hljs-comment">//Compares the variable time to the value 12</span>
+<span class="hljs-keyword">var</span> cond1 = {
+    compare: <span class="hljs-string">'global.time'</span>,
+    to: <span class="hljs-string">'12'</span>
+}
+<span class="hljs-comment">//Compare the variable gender to the value 'Female'</span>
+<span class="hljs-keyword">var</span> cond2 = {
+    compare: <span class="hljs-string">'Female'</span>,
+    to: <span class="hljs-string">'local.gender'</span>
+}
+</code></pre>
+<p>When you want to refer to a variable, you use text with dots: <code>global.var</code>, <code>questions.q1.response</code>; these values will be treated as pointing to variables within the lists context. <code>questions.q1.response</code> will retrieve the value of the response for q1 from the questions object.</p>
+<p>Here are the condition’s possible properties:</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>compare</td>
+<td>The left side of the equation.</td>
+</tr>
+<tr>
+<td>to</td>
+<td>The right side of the equation.</td>
+</tr>
+<tr>
+<td>operator</td>
+<td>The type of comparison to do (read more about operators <a href="#operators">here</a>).</td>
+</tr>
+</tbody>
+</table>
+<p>In piQuest and piManager, you may want to debug conditions by <a href="#debugging">activating the DEBUG <code>conditions</code> setting</a>. When activated, then any condition that is evaluated will be logged to the console.</p>
+<p>Advanced users may want to replace the whole condition object with a custom function that returns true or false. The context for the function is an object holding the <em>global</em>, <em>current</em> and <em>questions</em> objects.</p>
+<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">cond</span>(<span class="hljs-params"></span>)</span>{
+    <span class="hljs-keyword">var</span> global = <span class="hljs-keyword">this</span>.global; <span class="hljs-comment">// get the global from the context</span>
+    <span class="hljs-keyword">return</span> global.skip;
+}
+</code></pre>
+<h4 id="operators">Operators</h4>
+<p>The default comparison for a condition is to check equality (supports comparison of objects and arrays too). You can use the <code>operator</code> property to change the comparison method. The following checks if var is greater than otherVar:</p>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> cond = {
+    compare: <span class="hljs-string">'global.var'</span>,
+    to: <span class="hljs-string">'local.otherVar'</span>,
+    operator: <span class="hljs-string">'greaterThan'</span>
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Operator</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>equals</td>
+<td>This is the default operator. It checks if <em>compare</em> is equal to <em>to</em> (supports comparison of objects and arrays too)</td>
+</tr>
+<tr>
+<td>exactly</td>
+<td>Checks if <em>compare</em> is exactly equal to <em>to</em> (uses ===)</td>
+</tr>
+<tr>
+<td>greaterThan</td>
+<td><em>compare</em> &gt; <em>to</em></td>
+</tr>
+<tr>
+<td>greaterThanOrEquals</td>
+<td><em>compare</em> &gt;= <em>to</em></td>
+</tr>
+<tr>
+<td>in</td>
+<td><em>compare</em> is in the Array <em>to</em>;</td>
+</tr>
+<tr>
+<td>function(){}</td>
+<td>This operator allows you to use a custom function of the form: <code>function(compareValue, toValue, context){return {Boolean}}</code>. The context is an object holding the <em>global</em>, <em>current</em> and <em>questions</em> objects.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="aggregation">Aggregation</h4>
+<p>Sometimes you will want a branch to be activated only if more than one condition is true, or in some other complex specific condition. For cases like this, the mixer supports aggregation. The mixer supports applying logical operations on conditions in the following way:</p>
+<p>An aggregator object has a single property, denoting the type of aggregation, holding an array of conditions to aggregate. The following condition will only be true if <code>cond1</code> and <code>cond2</code> are both true:</p>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> cond = {and:[cond1, cond2]};
+</code></pre>
+<p>The mixer supports several types of aggregators:</p>
+<table>
+<thead>
+<tr>
+<th>Aggregator</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>and</td>
+<td>If all conditions are true</td>
+</tr>
+<tr>
+<td>or</td>
+<td>If at least one condition is true</td>
+</tr>
+<tr>
+<td>nor</td>
+<td>If all conditions are false</td>
+</tr>
+<tr>
+<td>nand</td>
+<td>If at least one condition is false</td>
+</tr>
+</tbody>
+</table>
+<p>By default, if the mixer runs into an array instead of an object, it will treat it as an <code>and</code> aggregator and be true only if all conditions within the array are true.</p>
+<p>Following are several examples for how to create different aggregations:</p>
+<pre><code class="lang-js"><span class="hljs-comment">// cond1 &amp;&amp; cond2</span>
+<span class="hljs-keyword">var</span> conds = [cond1, cond2];
+
+<span class="hljs-comment">// cond1 &amp;&amp; (cond2 || cond3)</span>
+<span class="hljs-keyword">var</span> conds = [cond1, {or:[cond2,cond3]}];
+
+<span class="hljs-comment">// (cond1 &amp;&amp; cond2) || cond2</span>
+<span class="hljs-keyword">var</span> conds = [{or:[{and:[cond1,cond2]},cond3]}]
+</code></pre>
+
+
+				</div>
+
+				<div class="col-md-3" role="complementary">
+					<nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm">
+
+						
+
+						
+
+						
+
+						<ul class="nav bs-docs-sidenav">
+						
+
+							
+							<li class="">
+							<li class="">
+
+								<a href="../basics/overview.html">Overview</a>
+							</li>
+						
+							
+							<li class="">
+							<li class="">
+
+								<a href="../basics/javascript.html">Javascript</a>
+							</li>
+						
+							
+							<li class="">
+							<li class="">
+
+								<a href="../basics/create.html">Creating a task</a>
+							</li>
+						
+                            <li>
+								<a href="../sequencer/overview.html">Sequencer</a>
+                                <ul class="nav">
+									
+							<li class="">
+                                <a href="../sequencer/overview.html">Overview</a>
+							</li>
+						
+									
+							<li class="">
+                                <a href="../sequencer/mixer.html">Mixer</a>
+							</li>
+						
+									
+							<li class="">
+                                <a href="../sequencer/templates.html">Templates</a>
+							</li>
+						
+									
+							<li class="">
+                                <a href="../sequencer/variables.html">Variables</a>
+							</li>
+						
+									
+							<li class="">
+                                <a href="../sequencer/inheritance.html">Inheritance</a>
+							</li>
+						
+                                </ul>
+                            </li>
+							
+							<li class="">
+							<li class="">
+
+								<a href="../basics/API.html">API</a>
+							</li>
+						
+							
+							<li class="">
+							<li class="">
+
+								<a href="../basics/resources.html">Resources</a>
+							</li>
+						
+
+							<li>
+								<a href="javascript:void(0)">Inheritance</a>
+								<ul class="nav">
+									
+							<li class="">
+								<div>
+									<a href="../basics/inheritanceAbstractionDocco.html">Abstraction</a>
+									<a href="../basics/inheritanceAbstraction.js" download="../basics/inheritanceAbstraction.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../basics/inheritanceAbstractionPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../basics/inheritanceRandomDocco.html">Random</a>
+									<a href="../basics/inheritanceRandom.js" download="../basics/inheritanceRandom.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../basics/inheritanceRandomPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../basics/inheritanceExRandomDocco.html">Exclusive Random</a>
+									<a href="../basics/inheritanceExRandom.js" download="../basics/inheritanceExRandom.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../basics/inheritanceExRandomPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../basics/inheritanceSequentialDocco.html">Sequential</a>
+									<a href="../basics/inheritanceSequential.js" download="../basics/inheritanceSequential.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../basics/inheritanceSequentialPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../basics/inheritanceByDataDocco.html">By Data</a>
+									<a href="../basics/inheritanceByData.js" download="../basics/inheritanceByData.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../basics/inheritanceByDataPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../basics/inheritanceCustomDocco.html">Custom</a>
+									<a href="../basics/inheritanceCustom.js" download="../basics/inheritanceCustom.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../basics/inheritanceCustomPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+
+									
+							<li class="">
+								<div>
+									<a href="../basics/inheritanceSeedDocco.html">Seed</a>
+									<a href="../basics/inheritanceSeed.js" download="../basics/inheritanceSeed.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../basics/inheritanceSeedPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../basics/inheritanceRepeatDocco.html">Repeat</a>
+									<a href="../basics/inheritanceRepeat.js" download="../basics/inheritanceRepeat.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../basics/inheritanceRepeatPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+								</ul>
+							</li>
+
+							<li>
+								<a href="javascript:void(0)">Mixers</a>
+								<ul class="nav">
+									
+							<li class="">
+								<div>
+									<a href="../basics/mixerRandomDocco.html">Random</a>
+									<a href="../basics/mixerRandom.js" download="../basics/mixerRandom.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../basics/mixerRandomPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../basics/mixerRepeatDocco.html">Repeat</a>
+									<a href="../basics/mixerRepeat.js" download="../basics/mixerRepeat.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../basics/mixerRepeatPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../basics/mixerWeightedRandomDocco.html">Weighted Random</a>
+									<a href="../basics/mixerWeightedRandom.js" download="../basics/mixerWeightedRandom.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../basics/mixerWeightedRandomPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../basics/mixerChooseDocco.html">Choose</a>
+									<a href="../basics/mixerChoose.js" download="../basics/mixerChoose.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../basics/mixerChoosePlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../basics/mixerWrapperDocco.html">Wrapper</a>
+									<a href="../basics/mixerWrapper.js" download="../basics/mixerWrapper.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../basics/mixerWrapperPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../basics/mixerBranchDocco.html">Branch</a>
+									<a href="../basics/mixerBranch.js" download="../basics/mixerBranch.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../basics/mixerBranchPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../basics/mixerMultiBranchDocco.html">Multi Branch</a>
+									<a href="../basics/mixerMultiBranch.js" download="../basics/mixerMultiBranch.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../basics/mixerMultiBranchPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+								</ul>
+							</li>
+
+							<li>
+								<a href="javascript:void(0)">Variables & Templates</a>
+								<ul class="nav">
+									
+							<li class="">
+								<div>
+									<a href="../basics/templateGlobalDocco.html">Global</a>
+									<a href="../basics/templateGlobal.js" download="../basics/templateGlobal.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../basics/templateGlobalPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../basics/templateDataDocco.html">Data</a>
+									<a href="../basics/templateData.js" download="../basics/templateData.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../basics/templateDataPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+									
+							<li class="">
+								<div>
+									<a href="../basics/templateMetaDocco.html">Meta</a>
+									<a href="../basics/templateMeta.js" download="../basics/templateMeta.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
+									<a href="../basics/templateMetaPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
+								</div>
+							</li>
+						
+								</ul>
+							</li>
+
+						
+						</ul>
+						<!-- <a class="back-to-top" href="#top">
+							Back to top
+						</a> -->
+					</nav>
+				</div>
+			</div>
+		</div>
+
+		<!-- Footer
+		================================================== -->
+		<footer class="bs-docs-footer" role="contentinfo">
+			<div class="container">
+				<p>Created by Project Implicit for the benefit of all.</p>
+				<!-- <p>Code licensed under <a href="https://github.com/twbs/bootstrap/blob/master/LICENSE" target="_blank">MIT</a>, documentation under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p> -->
+				<ul class="bs-docs-footer-links text-muted">
+					<li>Currently v0.0.45</li>
+					<li>&middot;</li>
+					<li><a href="https://github.com/ProjectImplicit/PIquest">GitHub</a></li>
+					<li>&middot;</li>
+					<li><a href="https://github.com/ProjectImplicit/PIquest/releases">Releases</a></li>
+				</ul>
+			</div>
+		</footer>
+
+	</body>
+</html>

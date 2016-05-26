@@ -122,6 +122,12 @@
 							</li>
 						{% endmacro listitem %}
 
+						{% macro navsubitem(name, filename, current) %}
+							<li class="{%if filename == current %} active {% endif %}">
+                                <a href="{{ filename }}.html">{{ name }}</a>
+							</li>
+						{% endmacro navsubitem %}
+
 						{% macro example(name, filename, current) %}
 							<li class="{%if filename == current %} active {% endif %}">
 								<div>
@@ -138,8 +144,16 @@
 							{{ navitem("Overview", "../basics/overview", data.basename) }}
 							{{ navitem("Javascript", "../basics/javascript", data.basename) }}
 							{{ navitem("Creating a task", "../basics/create", data.basename) }}
-
-							{{ navitem("Sequencer", "../basics/sequencer", data.basename) }}
+                            <li>
+								<a href="../sequencer/overview.html">Sequencer</a>
+                                <ul class="nav">
+									{{ navsubitem("Overview", "../sequencer/overview", data.basename) }}
+									{{ navsubitem("Mixer", "../sequencer/mixer", data.basename) }}
+									{{ navsubitem("Templates", "../sequencer/templates", data.basename) }}
+									{{ navsubitem("Variables", "../sequencer/variables", data.basename) }}
+									{{ navsubitem("Inheritance", "../sequencer/inheritance", data.basename) }}
+                                </ul>
+                            </li>
 							{{ navitem("API", "../basics/API", data.basename) }}
 							{{ navitem("Resources", "../basics/resources", data.basename) }}
 

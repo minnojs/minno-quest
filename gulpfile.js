@@ -6,14 +6,15 @@ var path = require('path');
 var exec = require('child_process').exec;
 //var debug = require('gulp-debug');
 
-var pagesPath = 'src/[0-9].[0-9]/{quest,questExamples,qsts,manager,basics}/';
+var pagesPath = 'src/[0-9].[0-9]/{quest,questExamples,qsts,manager,basics,sequencer}/';
 
 function addNames(file,obj){
 	obj.dirname = path.dirname(file.path).match(/[^\/]*$/)[0]; // only the last segment of the dirname
 	obj.typeName = obj.dirname;
-	if (obj.dirname == 'questExamples' || obj.dirname == 'qsts'){
-		obj.typeName = 'quest';
-	}
+
+	if (obj.dirname == 'questExamples' || obj.dirname == 'qsts'){ obj.typeName = 'quest'; }
+    if (obj.dirname == 'sequencer') { obj.typeName = 'basics'; }
+
 	return obj;
 }
 
