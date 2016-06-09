@@ -1,3 +1,12 @@
+<a name"0.0.92"></a>
+### 0.0.92 (2016-06-09)
+
+
+#### Bug Fixes
+
+* **database:** regenerate templates that have been inherited correctly ([03a8b5c5](https://github.com/ProjectImplicit/PIquest/commit/03a8b5c5))
+
+
 <a name"0.0.91"></a>
 ### 0.0.91 (2016-05-24)
 
