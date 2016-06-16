@@ -110,6 +110,7 @@
 					
 	<p>The sequencer is an overarching term for all of the features that allow you to dynamically change the flow of your tasks.
 It has three critical components: The mixer, templating and inheritance.</p>
+<p>Throughout the sequencer documentation we will use <a href="../manager/messages.html">messages</a> as examples, simply because they are the simplest type of element.</p>
 <h3 id="mixers">Mixers</h3>
 <p>Each PI task is composed of a series of elements sequentially activated and presented to the users (these are trials for piPlayer, pages for piQuest and tasks for piManager). 
 The sequence <a href="./mixer.html"><strong>mixer</strong></a> is responsible for the order  that these elements are presented to the users, 
@@ -127,7 +128,7 @@ it allows you to randomize the order of you elements as well as repeating them a
 </code></pre>
 <h3 id="inheritance">Inheritance</h3>
 <p>The basic unit that is used across all players is the element. 
-You can use the <a href="#inheritance">inheritance</a> system in order to compose elements and base them one upon another, as well as grouping them into distinct sets.
+You can use the <a href="./inheritance.html">inheritance</a> system in order to compose elements and base themselves one upon another, as well as grouping them into distinct sets.
 This is useful both as a tool to improve the readability of you scripts (for instance keep code away from stucture), and to allow another level of randomiziation and control.</p>
 <p>Following is an example of inheritance that improves the readability of a task sequence (real world examples are of course more complex…).</p>
 <pre><code class="lang-js">API.addTasksSet(<span class="hljs-string">'simpleMessage'</span>, [
@@ -135,12 +136,13 @@ This is useful both as a tool to improve the readability of you scripts (for ins
 ]);
 
 API.addSequence([
-    {inherit: <span class="hljs-string">'message'</span>}
+    {inherit: <span class="hljs-string">'simpleMessage'</span>}
 ]);
 </code></pre>
 <h3 id="templates">Templates</h3>
-<p>Finally you may have fine control down to the level of an element property using <a href="#templates">templates</a>. 
-Templates allow you to use <a href="./variables.html">Environmental Variables</a> as values within your elements.</p>
+<p>Finally you have fine control down to the level of individual element properties using <a href="./templates.html">templates</a>. 
+Templates allow you to use <a href="./variables.html">Environmental Variables</a> in order to customize you elements.</p>
+<p>The following code will display a message that says “Hello Randall Munroe”.</p>
 <pre><code class="lang-js">API.addCurrent({userName: <span class="hljs-string">'Randall Munroe'</span>});
 
 API.addSequence([

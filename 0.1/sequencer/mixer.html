@@ -110,15 +110,15 @@
 					
 	<h3 id="introduction">Introduction</h3>
 <p>Mixers allow you to control the flow of your sequences within the PI players.
-In particular it allows you to repeat, randomize and even branch sections of your sequence according to <a href="./variables.html">environmental variables</a>.</p>
+In particular they allow you to repeat, randomize and even branch sections of your sequence according to <a href="./variables.html">environmental variables</a>.</p>
 <h4 id="structure">Structure</h4>
 <p>Each one of the PI tasks is composed of a sequence of elements that is sequentially evaluated and presented to the user.
-For example, the sequence in piManager is composed of elements (objects usually) that represent a task each.
+For example, the sequence in piManager is composed of elements that represent a task each.
 These sequences are created using the <code>API.addSequence</code> method in your script.
-Mixers are inserted into the sequence the same way that regular elements are, each mixer represents a sub-sequence that is to be manipulated and the inserted in its place.</p>
+Mixers are inserted into the sequence the same way that regular elements are, each mixer represents a sub-sequence that is to be manipulated and then inserted in its place.</p>
 <p>For example, in the following sequence the second element in the sequence is a mixer.
-It takes a sub-sequence of tasks two and three and randomizes their order.
-Note that the single mixer element is effectively replaced by the two elements of the sub-sequence, turning this sequence into a four task sequence.</p>
+It takes a sub-sequence than includes tasks two and three and randomizes their order.
+Note that the mixer element is effectively replaced by the two elements from the sub-sequence, turning this sequence into a four task sequence.</p>
 <pre><code class="lang-js"><span class="hljs-comment">// The task sequence</span>
 API.addSequence([
     <span class="hljs-comment">// First Element: task 1</span>
@@ -137,15 +137,17 @@ API.addSequence([
     {type:<span class="hljs-string">'message'</span>, template: <span class="hljs-string">'Task 4'</span>, keys: <span class="hljs-string">' '</span>}
 ]);
 </code></pre>
-<p>All mixers have a type associated with them as well as at least one sub-sequence.
+<p>Each mixer has a type associated with it as well as at least one sub-sequence.
 The <code>mixer</code> property always holds the mixer type (see below for the available types).
 In most cases the <code>data</code> property holds the sub-sequence (the exception is with the branching mixers that may hold multiple sub-sequences).</p>
-<p>This looks something like this: (from now on, instead of explicitly writing in the mixed elements we will use arbitrary variable names instead, such as <code>elem1</code> and <code>elem2</code>. We are doing this to keep the structures as simple and short as possible).</p>
+<p>A typical mixer looks something like this: </p>
 <pre><code class="lang-js">{
     mixer: <span class="hljs-string">'randomize'</span>,     <span class="hljs-comment">// &lt;== The mixer type (randomize in this case)</span>
     data: [elem1, elem2]    <span class="hljs-comment">// &lt;== The sub-sequence (holding elem1 and elem2)</span>
 }
 </code></pre>
+<p>From now on, instead of explicitly writing in the mixed elements we will use arbitrary variable names instead, such as <code>elem1</code> and <code>elem2</code>. 
+We are doing this to keep the structures as simple and readable as possible.</p>
 <h4 id="sequence-evaluation">Sequence evaluation</h4>
 <p>Most of the time, mixers are lazily evaluated. This means that the sequencer waits until it reaches the sequencer before expanding it.
 This behaviour allows us to use branching mixers - we don’t decide which branch to take until we reach it.

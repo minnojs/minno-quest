@@ -4,19 +4,18 @@ description: Controlling the flow of the sequence
 ---
 
 ### Introduction
-
 Mixers allow you to control the flow of your sequences within the PI players.
-In particular it allows you to repeat, randomize and even branch sections of your sequence according to [environmental variables](./variables.html).
+In particular they allow you to repeat, randomize and even branch sections of your sequence according to [environmental variables](./variables.html).
 
 #### Structure
 Each one of the PI tasks is composed of a sequence of elements that is sequentially evaluated and presented to the user.
-For example, the sequence in piManager is composed of elements (objects usually) that represent a task each.
+For example, the sequence in piManager is composed of elements that represent a task each.
 These sequences are created using the `API.addSequence` method in your script.
-Mixers are inserted into the sequence the same way that regular elements are, each mixer represents a sub-sequence that is to be manipulated and the inserted in its place.
+Mixers are inserted into the sequence the same way that regular elements are, each mixer represents a sub-sequence that is to be manipulated and then inserted in its place.
 
 For example, in the following sequence the second element in the sequence is a mixer.
-It takes a sub-sequence of tasks two and three and randomizes their order.
-Note that the single mixer element is effectively replaced by the two elements of the sub-sequence, turning this sequence into a four task sequence.
+It takes a sub-sequence than includes tasks two and three and randomizes their order.
+Note that the mixer element is effectively replaced by the two elements from the sub-sequence, turning this sequence into a four task sequence.
 
 ```js
 // The task sequence
@@ -38,11 +37,11 @@ API.addSequence([
 ]);
 ```
 
-All mixers have a type associated with them as well as at least one sub-sequence.
+Each mixer has a type associated with it as well as at least one sub-sequence.
 The `mixer` property always holds the mixer type (see below for the available types).
 In most cases the `data` property holds the sub-sequence (the exception is with the branching mixers that may hold multiple sub-sequences).
 
-This looks something like this: (from now on, instead of explicitly writing in the mixed elements we will use arbitrary variable names instead, such as `elem1` and `elem2`. We are doing this to keep the structures as simple and short as possible).
+A typical mixer looks something like this: 
 
 ```js
 {
@@ -50,6 +49,10 @@ This looks something like this: (from now on, instead of explicitly writing in t
     data: [elem1, elem2]    // <== The sub-sequence (holding elem1 and elem2)
 }
 ```
+
+From now on, instead of explicitly writing in the mixed elements we will use arbitrary variable names instead, such as `elem1` and `elem2`. 
+We are doing this to keep the structures as simple and readable as possible.
+
 #### Sequence evaluation
 Most of the time, mixers are lazily evaluated. This means that the sequencer waits until it reaches the sequencer before expanding it.
 This behaviour allows us to use branching mixers - we don't decide which branch to take until we reach it.
