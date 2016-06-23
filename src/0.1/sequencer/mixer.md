@@ -25,7 +25,7 @@ API.addSequence([
 
     // Second Element: the mixer (task 2 and 3 randomized)
     {
-        mixer: 'randomize',
+        mixer: 'random',
         data: [
             {type:'message', template: 'Task 2', keys: ' '},
             {type:'message', template: 'Task 3', keys: ' '}
@@ -45,24 +45,13 @@ A typical mixer looks something like this:
 
 ```js
 {
-    mixer: 'randomize',     // <== The mixer type (randomize in this case)
+    mixer: 'random',     // <== The mixer type (randomize in this case)
     data: [elem1, elem2]    // <== The sub-sequence (holding elem1 and elem2)
 }
 ```
 
 From now on, instead of explicitly writing in the mixed elements we will use arbitrary variable names instead, such as `elem1` and `elem2`. 
 We are doing this to keep the structures as simple and readable as possible.
-
-#### Sequence evaluation
-Most of the time, mixers are lazily evaluated. This means that the sequencer waits until it reaches the sequencer before expanding it.
-This behaviour allows us to use branching mixers - we don't decide which branch to take until we reach it.
-The exception to this rule is randomizing mixers (such as `randomize` or `choose`), that in order to randomize *everything* inside them, must pre-mix all their content.
-
-This behaviour may cause some unexpected results.
-For instance, a branching mixer within a randomization mixer, will be calculated according to the state of the player when it first reaches the randomizer, and not according to the state when it reaches the branch itself.
-If you have a randomizer > repeat > randomizer then the repeat will process an already randomized random mixer, and the repeated units will all be the same.
-The solution in this case it to wrap the inner mixer within a [wrapper mixer](#wrapper) (or set the `wrapper` property to true).
-This way the randomizer will treat anything within the wrapper as a single unit and will not pre-mix it.
 
 #### Nesting
 Mixers may be nested inside each other as much as you like. The following example illustrates a more complex example.
@@ -106,24 +95,21 @@ API.addSequence([
 ]);
 ```
 
-### Mixer types
+#### Sequence evaluation
+Most of the time, mixers are lazily evaluated. This means that the sequencer waits until it reaches the mixer before expanding it.
+This behaviour allows us to use branching mixers - we don't decide which branch to take until we reach it.
+The exception to this rule is randomizing mixers (such as `randomize` or `choose`), that in order to randomize *everything* inside them, must pre-mix all their content.
 
-#### repeat
-Repeats the sub-sequence in `data` `times` times.
-So that the following mixer:
+This behaviour may cause some problematic results.
+For instance, a branching mixer within a randomization mixer, will be calculated according to the state of the player when it first reaches the randomizer, and not according to the state when it reaches the branch itself.
+If you have a randomizer > repeat > randomizer then the repeat will process an already randomized random mixer, and the repeated units will all be the same.
+The solution in this case is to wrap the inner mixer within a [wrapper mixer](#wrapper) (or set the `wrapper` property to true).
+This way the randomizer will treat anything within the wrapper as a single unit and will not pre-mix it.
 
-```js
-{mixer:'repeat', times:10, data: [elem1,elem2]}
-```
 
-Will be transformed into:
+Random randomizes the order of all the elements under the random mixer's data array, even if they are inside a mixer. 
+For example, consider the following code:
 
-```js
-[elem1,elem2,elem1,elem2,elem1,elem2]
-```
-
-#### random
-Randomizes the order of elements in `data`. Random randomizes the order of all the elements under the random mixer's data array, even if they are inside a mixer. For example, consider the following code:
 ```js
 {
     mixer:'random',
@@ -221,15 +207,97 @@ This code will create one of the following sequences:
 * [elem3,elem4,elem2,elem1]
 * [elem4,elem3,elem2,elem1]
 
-Please note that the `random` mixer pre-computes all the content in `data`, so that any branching mixers will be branched according to the state of the study at the time of the randomization. So, if you have a branch that depends on a previous object, make sure that the branch always comes after that object. Again, you can use wrapper:true in a branch (or multiBranch) mixer, if you need to keep the order of some objects fixed for the branching to make sense. 
+The following snippet uses the wrapper property to keep the content of the repeat mixer together.
+@TODO: find a good example for the use of wrappers.
+```js
+{
+    mixer: 'random',
+    data: [
+        elem1,
+        {
+            mixer: 'repeat',
+            times: 2,
+            wrapper: true,
+            data: [elem2]
+        }
+    ]
+}
+```
+
+### Mixer types
+
+#### repeat
+Repeats the sub-sequence in `data` `times` times.
+So that the following mixer:
+
+```js
+{
+    mixer:'repeat', 
+    times:3, 
+    data: [elem1,elem2]
+}
+```
+
+Will be transformed into:
+
+* [elem1,elem2,elem1,elem2,elem1,elem2]
+
+#### random
+Randomizes the order of elements in `data`. 
+So that the following mixer:
+
+```js
+{
+    mixer:'random',
+    data:[elem1,elem2]
+}
+```
+
+Will be transformed into one of the following:
+
+* [elem1, elem2]
+* [elem2, elem1]
+
+Please note that the `random` mixer pre-mixes all the content in `data`, please see [sequence evaluation](#sequence-evaluation) and the [wrapper mixer](#wrapper) for more details and related problems.
 
 #### choose
-Selects `n` random elements from `data` (by default the chooser picks one element).
-* `{mixer:'choose', data: [elem1,elem2]}` pick one of these two objs
-* `{mixer:'choose', n:2, data: [elem1,elem2,elem3]}` pick two of these three objs
+Choose one or more (`n`) elements out of `data`.
+By default, `choose` picks a single element form the `data` subsequence:
+
+```js
+{
+    mixer:'choose',
+    data: [elem1, elem2, elem3]
+}
+```
+
+Will be transformed into one of the following:
+
+* [elem1]
+* [elem2]
+* [elem3]
+
+You can choose more than one element by setting `n`:
+
+```js
+{
+    mixer:'choose',
+    n: 2,
+    data: [elem1, elem2, elem3]
+}
+```
+
+That will return one of the following:
+* [elem1, elem2]
+* [elem1, elem3]
+* [elem2, elem3]
 
 #### weightedChoose
-Chooses `n` random elements from data using a weighted randomize algorithm. Each element in `data` is given the appropriate weight from `weights`. And may be picked once or more. In the following example elem2 has four times the probability of being selected as elem1.
+Choose one or more (`n`) elements out of `data`. Using a weighted random algorithm.
+Each element in `data` is given the appropriate weight from `weights`.
+`weightedChoose` does inclusive randomization. This means that elements may be picked more than once.
+
+In the following example elem2 has four times the probability of being selected as elem1;
 
 ```js
 {
@@ -248,34 +316,112 @@ This code will create one of the following sequences:
 * [elem2,elem2] - 64% of cases
 
 #### weightedRandom
-Alias for `weightedChoose`.
+Alias for [`weightedChoose`](#weightedChoose).
 
 #### wrapper
-The wrapper mixer serves a sort of parenthesis for the mixer. In case you want to keep a set of elements as a block (when randomizing) simply wrap them and they'll stay together.
-* `{mixer:'wrapper', data: [elem1,elem2]}`
+The wrapper mixer serves a sort of parenthesis for the mixer.
+It is used to keep a sub-sequence of elements to be randomized within one of the randomizing mixers (such as [random](#random) or [choose](#choose)).
+In case you want to keep a sub-sequence as a block (when randomizing) simply wrap them and they'll stay together.
+You can find more use cases in the [sequence evaluation](#sequence-evaluation) section.
+
+The following snippet uses a wrapper to keep two elements together despite a being in a randomizer;
+
+```js
+{
+    mixer: 'random',
+    data: [
+        elem1,
+        {
+            mixer: 'wrapper',
+            data: [elem2, elem3]
+        }
+    ]
+}
+```
+
+It will return one of the following (elem2 and elem3 are always kept together):
+
+* [elem1, elem2, elem3]
+* [elem2, elem3, elem1]
+
+The wrapper mixer is special in that it has an alternative syntax.
+You can add a `wrapper` property to any existing mixer, and it contents will be treated as if they where wrapped in a wrapper.
+This will look like this:
+
+```js
+{
+    mixer:'repeat',
+    time:10,
+    wrapper:true,
+    data: [elem1]
+}
+```
 
 #### branch
-* `{mixer:'branch', conditions:[cond], data:[elem1,elem2]}`
-* `{mixer:'branch', conditions:[cond], data:[elem1,elem2], elseData: [elem3, elem4]}`
-Select the elements in `data` if all the conditions in the `conditions` array are true, select the elements in `elseData` if at least one of the conditions in `conditions` are not true. If `elseData` is not defined, or is left empty, then nothing happen in case the conditions are not true (See [conditions](#conditions) to learn about how conditions work).
+The branch mixer allows you to choose the flow of your sequence according to environmental conditions.
+You can learn about environmental conditions [here](./variables.html) and about how to create conditions [here](#conditions).
+This section will deal only with the stucture and use of the `branch` mixer itself.
+
+The branch mixer evaluates the `conditions` if they are true it returns the sequence in `data`, if they are false it returns the sequence in `elseData`.
+If `elseData` is not defined, or is left empty, then nothing happen in case the conditions are not true (see [conditions](#conditions) to learn more about how conditions work).
+
+The following mixer:
+
+```js
+{
+    mixer:'branch',
+    conditions:[cond],
+    data:[elem1,elem2],
+    elseData:[elem3,elem4] // optional
+}
+```
+
+Will return
+
+* [elem1,elem2] - if the condition is true
+* [elem3,elem4] - if the condition is false
 
 #### multiBranch
+`multiBranch` is similar to the [`branch`](#branch) mixer, only it allows you to switch between a list of conditions instead of only one.
+The mixer will attempt to find the first object within the `branches` array for which `conditions` is true, and select the sub-sequence in that objects `data`.
+If no object is selected then select the sub-sequence in `elseData`.
+
 ```js
 {
     mixer: 'multiBranch',
     branches: [
-        {conditions: [],data: []},
-        {conditions: [],data: []}
+        {conditions: [cond1],data: [elem1]},
+        {conditions: [cond2],data: [elem2]}
     ],
-    elseData: [] // optional
+    elseData: [elem3] // optional
 }
 ```
-Find the first object within `branches` for which `conditions` is true, and select the elements in that objects `data`. If no object is selected then select `elseData` (optional). (See [conditions](#conditions) to learn about how conditions work).
+
+Will return
+
+* [elem1] - if cond1 is true
+* [elem2] - if cond2 is true (but not cond1)
+* [elem3] - if both cond1 and cond2 are false
 
 ### Conditions
-The conditional mixers (`branch` & `multiBranch`) allow you to change the content of a list according to [environmental variables](#variables). Each list has specific variables available to it, you can find the relevant details in the documentation for each list, but all lists have access to the `global` and `current` objects, so we'll use them for all examples here.
+The conditional mixers ([`branch`](#branch) & [`multiBranch`](#multibranch)) allow you to change the content of your sequence depending on [environmental variables](#./variables.html). 
+This is done using `conditions`.
+A condition is a proposition; it is a statement that is evaluated either as `true` or `false`. 
+You can think of each condition as an equation that compares two values.
+Conditions are each represented by an object as follows:
 
-A condition is a proposition, it is evaluated to either a `true` or `false` value. Conditions are used for decision making within the branching mixers. Conditions are represented by objects. The following condition object `compare`s **global.var** `to` **current.otherVar** and examines if they are equal (if you aren't sure what **global.var** means, see [here](#variables)):
+Property        | Description
+--------------- | -------------------
+compare         | The left side of the equation.
+to              | The right side of the equation.
+operator        | The type of comparison to do (defaults to 'equals'. read more about operators [here](#operators)).
+
+The values set into `compare` and `to` can be set either as plain values or as references to environmental variables:
+When you want to refer to an environmental variable, you use text with dots: `global.var`, `questions.q1.response`
+(questions.q1.response` will retrieve the value of the response for q1 from the questions object).
+
+The following condition object `compare`s **global.var** `to` **current.otherVar** and examines if they are equal.
+It is equivalent to the following equation: global.myVar === current.myOtherVar.
 
 ```js
 var cond = {
@@ -284,9 +430,7 @@ var cond = {
 }
 ```
 
-Conditions should be treated as a type of equation.
-
-In the `compare` and `to` properties you can set either straight forward values or references to a variable:
+Here are some examples of comparing variables with plain values:
 
 ```js
 //Compares the variable time to the value 12
@@ -301,19 +445,9 @@ var cond2 = {
 }
 ```
 
-When you want to refer to a variable, you use text with dots: `global.var`, `questions.q1.response`; these values will be treated as pointing to variables within the lists context. `questions.q1.response` will retrieve the value of the response for q1 from the questions object.
-
-Here are the condition's possible properties:
-
-Property        | Description
---------------- | -------------------
-compare         | The left side of the equation.
-to              | The right side of the equation.
-operator        | The type of comparison to do (read more about operators [here](#operators)).
-
-In piQuest and piManager, you may want to debug conditions by [activating the DEBUG `conditions` setting](#debugging). When activated, then any condition that is evaluated will be logged to the console.
-
-Advanced users may want to replace the whole condition object with a custom function that returns true or false. The context for the function is an object holding the *global*, *current* and *questions* objects.
+Sometimes the standard conditions are not enough.
+More advanced users may want to replace the whole condition object with a custom function that returns true or false. 
+The context (`this`) for the function is an object holding the *global*, *current* and *questions* objects.
 
 ```js
 function cond(){
@@ -322,6 +456,7 @@ function cond(){
 }
 ```
 
+In piQuest and piManager, you may want to debug conditions by [activating the DEBUG `conditions` setting](#debugging). When activated, then any condition that is evaluated will be logged to the console.
 
 #### Operators
 The default comparison for a condition is to check equality (supports comparison of objects and arrays too). You can use the `operator` property to change the comparison method. The following checks if var is greater than otherVar:
