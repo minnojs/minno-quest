@@ -145,7 +145,7 @@
 							{{ navitem("Javascript", "../basics/javascript", data.basename) }}
 							{{ navitem("Creating a task", "../basics/create", data.basename) }}
                             <li>
-								<a href="../sequencer/overview.html">Sequencer</a>
+								<a href="../sequencer/introduction.html">Sequencer</a>
                                 <ul class="nav">
 									{{ navsubitem("Introduction", "../sequencer/introduction", data.basename) }}
 									{{ navsubitem("Mixer", "../sequencer/mixer", data.basename) }}
