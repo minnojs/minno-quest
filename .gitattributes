@@ -28,3 +28,4 @@
 
 src/styles/*.css -diff
 src/styles/*.map -diff
+dist/**/* -diff
