@@ -3,11 +3,35 @@ title: Mixers
 description: Controlling the flow of the sequence
 ---
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+- [Introduction](#introduction)
+  - [Syntax](#syntax)
+  - [Nesting](#nesting)
+  - [Real time (remix)](#real-time-remix)
+  - [Sequence evaluation (wrapper)](#sequence-evaluation-wrapper)
+- [Mixer types](#mixer-types)
+  - [repeat](#repeat)
+  - [random](#random)
+  - [choose](#choose)
+  - [weightedChoose](#weightedchoose)
+  - [weightedRandom](#weightedrandom)
+  - [wrapper](#wrapper)
+  - [branch](#branch)
+  - [multiBranch](#multibranch)
+- [Conditions](#conditions)
+  - [Operators](#operators)
+  - [Aggregation](#aggregation)
+  - [Debugging](#debugging)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ### Introduction
 Mixers allow you to control the flow of your sequences within the PI players.
 In particular they allow you to repeat, randomize and even branch sections of your sequence according to [environmental variables](./variables.html).
 
-#### Structure
+#### Syntax
 Each one of the PI tasks is composed of a sequence of elements that is sequentially evaluated and presented to the user.
 For example, the sequence in piManager is composed of elements that represent a task each.
 These sequences are created using the `API.addSequence` method in your script.
@@ -95,7 +119,45 @@ API.addSequence([
 ]);
 ```
 
-#### Sequence evaluation
+#### Real time (remix)
+[remix]: #real-time-remix-
+
+By default each mixer is evaluated only once. This usually should not affect you at all.
+It becomes relevant on two conditions, one is if your task allows moving back to previous elements; in that case the mixer will keep the mixer elements as they where previously evaluated.
+The second condition is when you have a branch that you want to react to live changes (at this time this is relevant only for piQuest answers).
+
+If you want a mixer to react to changes in the environment you need to set `remix=true`.
+
+The following snippet uses `remix` to show a second question depending on the response of the first one (in piQuest).
+
+```js
+var page = {
+    questions: [
+        // First question
+        {
+            name: 'q1,
+            stem: 'Please write "hello"'
+        },
+
+        // The mixer
+        {
+            mixer: 'branch',
+            remix: true,
+            conditions: [ {compare: 'current.questions.q1', to: 'hello'} ],
+            data: [
+                // Dependant question
+                {
+                    stem: 'You said "hello"!'
+                } 
+            ]
+        }
+    ]
+}
+```
+
+#### Sequence evaluation (wrapper)
+[wrapper]: sequence-evaluation-wrapper-
+
 Most of the time, mixers are lazily evaluated. This means that the sequencer waits until it reaches the mixer before expanding it.
 This behaviour allows us to use branching mixers - we don't decide which branch to take until we reach it.
 The exception to this rule is randomizing mixers (such as `randomize` or `choose`), that in order to randomize *everything* inside them, must pre-mix all their content.
@@ -105,7 +167,6 @@ For instance, a branching mixer within a randomization mixer, will be calculated
 If you have a randomizer > repeat > randomizer then the repeat will process an already randomized random mixer, and the repeated units will all be the same.
 The solution in this case is to wrap the inner mixer within a [wrapper mixer](#wrapper) (or set the `wrapper` property to true).
 This way the randomizer will treat anything within the wrapper as a single unit and will not pre-mix it.
-
 
 Random randomizes the order of all the elements under the random mixer's data array, even if they are inside a mixer. 
 For example, consider the following code:
@@ -404,9 +465,10 @@ Will return
 * [elem3] - if both cond1 and cond2 are false
 
 ### Conditions
-The conditional mixers ([`branch`](#branch) & [`multiBranch`](#multibranch)) allow you to change the content of your sequence depending on [environmental variables](#./variables.html). 
-This is done using `conditions`.
-A condition is a proposition; it is a statement that is evaluated either as `true` or `false`. 
+The conditional mixers ([`branch`](#branch) & [`multiBranch`](#multibranch)) allow you to change the content of your sequence depending on [environmental variables](./variables.html). 
+This is done by settings `conditions`.
+A condition is a proposition; it is a statement that is evaluated either as `true` or `false`.
+We choose the branch we advance to according to the result.
 You can think of each condition as an equation that compares two values.
 Conditions are each represented by an object as follows:
 
@@ -414,14 +476,14 @@ Property        | Description
 --------------- | -------------------
 compare         | The left side of the equation.
 to              | The right side of the equation.
-operator        | The type of comparison to do (defaults to 'equals'. read more about operators [here](#operators)).
+operator        | The type of comparison to do (defaults to 'equals'. Read more about operators [here](#operators)).
 
 The values set into `compare` and `to` can be set either as plain values or as references to environmental variables:
-When you want to refer to an environmental variable, you use text with dots: `global.var`, `questions.q1.response`
+When you want to reference an environmental variable, you use text with dots: `global.var`, `questions.q1.response`
 (questions.q1.response` will retrieve the value of the response for q1 from the questions object).
 
-The following condition object `compare`s **global.var** `to` **current.otherVar** and examines if they are equal.
-It is equivalent to the following equation: global.myVar === current.myOtherVar.
+The following condition object `compare`s **global.var** `to` **current.otherVar** and checks if they are equal.
+It is equivalent to the following equation: `global.myVar === current.myOtherVar`.
 
 ```js
 var cond = {
@@ -438,6 +500,7 @@ var cond1 = {
     compare: 'global.time',
     to: '12'
 }
+
 //Compare the variable gender to the value 'Female'
 var cond2 = {
     compare: 'Female',
@@ -447,7 +510,8 @@ var cond2 = {
 
 Sometimes the standard conditions are not enough.
 More advanced users may want to replace the whole condition object with a custom function that returns true or false. 
-The context (`this`) for the function is an object holding the *global*, *current* and *questions* objects.
+The context (`this`) for the function is an object holding the *global* and *current* objects 
+(there are some cases where additional properties are available, they are documented in their own docs).
 
 ```js
 function cond(){
@@ -456,7 +520,6 @@ function cond(){
 }
 ```
 
-In piQuest and piManager, you may want to debug conditions by [activating the DEBUG `conditions` setting](#debugging). When activated, then any condition that is evaluated will be logged to the console.
 
 #### Operators
 The default comparison for a condition is to check equality (supports comparison of objects and arrays too). You can use the `operator` property to change the comparison method. The following checks if var is greater than otherVar:
@@ -479,9 +542,12 @@ in                  | *compare* is in the Array *to*;
 function(){}        | This operator allows you to use a custom function of the form: `function(compareValue, toValue, context){return {Boolean}}`. The context is an object holding the *global*, *current* and *questions* objects.
 
 #### Aggregation
-Sometimes you will want a branch to be activated only if more than one condition is true, or in some other complex specific condition. For cases like this, the mixer supports aggregation. The mixer supports applying logical operations on conditions in the following way:
+Sometimes you will want a branch to be activated only if more than one condition is true, or in some other complex specific condition.
+For cases like this, the mixer supports aggregation.
+The mixer supports applying logical operations on conditions in the following way:
 
-An aggregator object has a single property, denoting the type of aggregation, holding an array of conditions to aggregate. The following condition will only be true if `cond1` and `cond2` are both true:
+An aggregator object has a single property, denoting the type of aggregation, holding an array of conditions to aggregate.
+The following condition will only be true if `cond1` and `cond2` are both true:
 
 ```js
 var cond = {and:[cond1, cond2]};
@@ -510,3 +576,22 @@ var conds = [cond1, {or:[cond2,cond3]}];
 // (cond1 && cond2) || cond2
 var conds = [{or:[{and:[cond1,cond2]},cond3]}]
 ```
+#### Debugging
+Conditions are notoriously difficult to get just right.
+If they aren't working as you expected, you might want to see exactly which values you are getting for each of your conditions.
+The mixer provides you with an easy way to do this; just set `DEBUG=true` on your condition, and you will see all the said values being printed into your [console](../basics/javascript.html#errors-and-debugging).
+
+```js
+API.addGlobal({
+    value: 123,
+    otherVar: 345
+});
+
+var cond = {
+    compare: 'global.var',
+    to: 'global.otherVar',
+    DEBUG: true
+}
+```
+
+Will log something like `Conditions: 123 equals 345` as well as the full condition object as it appears in your code.

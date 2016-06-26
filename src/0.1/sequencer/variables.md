@@ -1,3 +1,12 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Environmental Variables](#environmental-variables)
+- [Local Variables](#local-variables)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ---
 title: Variables
 description: Setting and controling environmental variables

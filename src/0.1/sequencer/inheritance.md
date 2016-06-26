@@ -1,3 +1,17 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Sets](#sets)
+- [Inheriting](#inheriting)
+- [Merge](#merge)
+- [Type](#type)
+- [Seed](#seed)
+- [Repeat](#repeat)
+- [Customization](#customization)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ---
 title: Inheritance
 description: Setting and controling environmental variables

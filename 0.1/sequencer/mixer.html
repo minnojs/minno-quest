@@ -108,10 +108,37 @@
 			<div class="row">
 				<div class="col-md-9" role="main">
 					
-	<h3 id="introduction">Introduction</h3>
+	<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+<ul>
+<li><a href="#introduction">Introduction</a><ul>
+<li><a href="#structure">Structure</a></li>
+<li><a href="#nesting">Nesting</a></li>
+<li><a href="#sequence-evaluation">Sequence evaluation</a></li>
+</ul>
+</li>
+<li><a href="#mixer-types">Mixer types</a><ul>
+<li><a href="#repeat">repeat</a></li>
+<li><a href="#random">random</a></li>
+<li><a href="#choose">choose</a></li>
+<li><a href="#weightedchoose">weightedChoose</a></li>
+<li><a href="#weightedrandom">weightedRandom</a></li>
+<li><a href="#wrapper">wrapper</a></li>
+<li><a href="#branch">branch</a></li>
+<li><a href="#multibranch">multiBranch</a></li>
+</ul>
+</li>
+<li><a href="#conditions">Conditions</a><ul>
+<li><a href="#operators">Operators</a></li>
+<li><a href="#aggregation">Aggregation</a></li>
+</ul>
+</li>
+</ul>
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+<h3 id="introduction">Introduction</h3>
 <p>Mixers allow you to control the flow of your sequences within the PI players.
 In particular they allow you to repeat, randomize and even branch sections of your sequence according to <a href="./variables.html">environmental variables</a>.</p>
-<h4 id="structure">Structure</h4>
+<h4 id="syntax">Syntax</h4>
 <p>Each one of the PI tasks is composed of a sequence of elements that is sequentially evaluated and presented to the user.
 For example, the sequence in piManager is composed of elements that represent a task each.
 These sequences are created using the <code>API.addSequence</code> method in your script.
@@ -126,7 +153,7 @@ API.addSequence([
 
     <span class="hljs-comment">// Second Element: the mixer (task 2 and 3 randomized)</span>
     {
-        mixer: <span class="hljs-string">'randomize'</span>,
+        mixer: <span class="hljs-string">'random'</span>,
         data: [
             {type:<span class="hljs-string">'message'</span>, template: <span class="hljs-string">'Task 2'</span>, keys: <span class="hljs-string">' '</span>},
             {type:<span class="hljs-string">'message'</span>, template: <span class="hljs-string">'Task 3'</span>, keys: <span class="hljs-string">' '</span>}
@@ -142,7 +169,7 @@ The <code>mixer</code> property always holds the mixer type (see below for the a
 In most cases the <code>data</code> property holds the sub-sequence (the exception is with the branching mixers that may hold multiple sub-sequences).</p>
 <p>A typical mixer looks something like this: </p>
 <pre><code class="lang-js">{
-    mixer: <span class="hljs-string">'randomize'</span>,     <span class="hljs-comment">// &lt;== The mixer type (randomize in this case)</span>
+    mixer: <span class="hljs-string">'random'</span>,     <span class="hljs-comment">// &lt;== The mixer type (randomize in this case)</span>
     data: [elem1, elem2]    <span class="hljs-comment">// &lt;== The sub-sequence (holding elem1 and elem2)</span>
 }
 </code></pre>
@@ -187,7 +214,37 @@ The order within the four objects is randomized, so that <code>elem1</code> alwa
     lastelem
 ]);
 </code></pre>
-<h4 id="sequence-evaluation">Sequence evaluation</h4>
+<h4 id="real-time-remix-">Real time (remix)</h4>
+<p><a href="#real-time-remix">link</a>
+By default each mixer is evaluated only once. This usually should not affect you at all.
+It becomes relevant on two conditions, one is if your task allows moving back to previous elements; in that case the mixer will keep the mixer elements as they where previously evaluated.
+The second condition is when you have a branch that you want to react to live changes (at this time this is relevant only for piQuest answers).</p>
+<p>If you want a mixer to react to changes in the environment you need to set <code>remix=true</code>.</p>
+<p>The following snippet uses <code>remix</code> to show a second question depending on the response of the first one (in piQuest).</p>
+<pre><code class="lang-js">var page = {
+    questions: [
+        // First question
+        {
+            name: &#39;q1,
+            stem: &#39;Please write &quot;hello&quot;&#39;
+        },
+
+        // The mixer
+        {
+            mixer: &#39;branch&#39;,
+            remix: true,
+            conditions: [ {compare: &#39;current.questions.q1&#39;, to: &#39;hello&#39;} ],
+            data: [
+                // Dependant question
+                {
+                    stem: &#39;You said &quot;hello&quot;!&#39;
+                } 
+            ]
+        }
+    ]
+}
+</code></pre>
+<h4 id="sequence-evaluation-wrapper-">Sequence evaluation (wrapper)</h4>
 <p>Most of the time, mixers are lazily evaluated. This means that the sequencer waits until it reaches the mixer before expanding it.
 This behaviour allows us to use branching mixers - we don’t decide which branch to take until we reach it.
 The exception to this rule is randomizing mixers (such as <code>randomize</code> or <code>choose</code>), that in order to randomize <em>everything</em> inside them, must pre-mix all their content.</p>
@@ -288,7 +345,7 @@ For example, consider the following code:</p>
 <p>The following snippet uses the wrapper property to keep the content of the repeat mixer together.
 @TODO: find a good example for the use of wrappers.</p>
 <pre><code class="lang-js">{
-    mixer: <span class="hljs-string">'randomize'</span>,
+    mixer: <span class="hljs-string">'random'</span>,
     data: [
         elem1,
         {
@@ -383,7 +440,7 @@ In case you want to keep a sub-sequence as a block (when randomizing) simply wra
 You can find more use cases in the <a href="#sequence-evaluation">sequence evaluation</a> section.</p>
 <p>The following snippet uses a wrapper to keep two elements together despite a being in a randomizer;</p>
 <pre><code class="lang-js">{
-    mixer: <span class="hljs-string">'randomize'</span>,
+    mixer: <span class="hljs-string">'random'</span>,
     data: [
         elem1,
         {
@@ -447,28 +504,12 @@ If no object is selected then select the sub-sequence in <code>elseData</code>.<
 <li>[elem3] - if both cond1 and cond2 are false</li>
 </ul>
 <h3 id="conditions">Conditions</h3>
-<p>The conditional mixers (<a href="#branch"><code>branch</code></a> &amp; <a href="#multibranch"><code>multiBranch</code></a>) allow you to change the content of your sequence according to <a href="#./variables.html">environmental variables</a>. </p>
-<p>A condition is a proposition, it is evaluated to either a <code>true</code> or <code>false</code> value. Conditions are used for decision making within the branching mixers. Conditions are represented by objects. The following condition object <code>compare</code>s <strong>global.var</strong> <code>to</code> <strong>current.otherVar</strong> and examines if they are equal (if you aren’t sure what <strong>global.var</strong> means, see <a href="#variables">here</a>):</p>
-<pre><code class="lang-js"><span class="hljs-keyword">var</span> cond = {
-    compare: <span class="hljs-string">'global.myVar'</span>,
-    to: <span class="hljs-string">'current.myOtherVar'</span>
-}
-</code></pre>
-<p>Conditions should be treated as a type of equation.</p>
-<p>In the <code>compare</code> and <code>to</code> properties you can set either straight forward values or references to a variable:</p>
-<pre><code class="lang-js"><span class="hljs-comment">//Compares the variable time to the value 12</span>
-<span class="hljs-keyword">var</span> cond1 = {
-    compare: <span class="hljs-string">'global.time'</span>,
-    to: <span class="hljs-string">'12'</span>
-}
-<span class="hljs-comment">//Compare the variable gender to the value 'Female'</span>
-<span class="hljs-keyword">var</span> cond2 = {
-    compare: <span class="hljs-string">'Female'</span>,
-    to: <span class="hljs-string">'local.gender'</span>
-}
-</code></pre>
-<p>When you want to refer to a variable, you use text with dots: <code>global.var</code>, <code>questions.q1.response</code>; these values will be treated as pointing to variables within the lists context. <code>questions.q1.response</code> will retrieve the value of the response for q1 from the questions object.</p>
-<p>Here are the condition’s possible properties:</p>
+<p>The conditional mixers (<a href="#branch"><code>branch</code></a> &amp; <a href="#multibranch"><code>multiBranch</code></a>) allow you to change the content of your sequence depending on <a href="./variables.html">environmental variables</a>. 
+This is done by settings <code>conditions</code>.
+A condition is a proposition; it is a statement that is evaluated either as <code>true</code> or <code>false</code>.
+We choose the branch we advance to according to the result.
+You can think of each condition as an equation that compares two values.
+Conditions are each represented by an object as follows:</p>
 <table>
 <thead>
 <tr>
@@ -487,12 +528,37 @@ If no object is selected then select the sub-sequence in <code>elseData</code>.<
 </tr>
 <tr>
 <td>operator</td>
-<td>The type of comparison to do (read more about operators <a href="#operators">here</a>).</td>
+<td>The type of comparison to do (defaults to ‘equals’. Read more about operators <a href="#operators">here</a>).</td>
 </tr>
 </tbody>
 </table>
-<p>In piQuest and piManager, you may want to debug conditions by <a href="#debugging">activating the DEBUG <code>conditions</code> setting</a>. When activated, then any condition that is evaluated will be logged to the console.</p>
-<p>Advanced users may want to replace the whole condition object with a custom function that returns true or false. The context for the function is an object holding the <em>global</em>, <em>current</em> and <em>questions</em> objects.</p>
+<p>The values set into <code>compare</code> and <code>to</code> can be set either as plain values or as references to environmental variables:
+When you want to reference an environmental variable, you use text with dots: <code>global.var</code>, <code>questions.q1.response</code>
+(questions.q1.response` will retrieve the value of the response for q1 from the questions object).</p>
+<p>The following condition object <code>compare</code>s <strong>global.var</strong> <code>to</code> <strong>current.otherVar</strong> and checks if they are equal.
+It is equivalent to the following equation: <code>global.myVar === current.myOtherVar</code>.</p>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> cond = {
+    compare: <span class="hljs-string">'global.myVar'</span>,
+    to: <span class="hljs-string">'current.myOtherVar'</span>
+}
+</code></pre>
+<p>Here are some examples of comparing variables with plain values:</p>
+<pre><code class="lang-js"><span class="hljs-comment">//Compares the variable time to the value 12</span>
+<span class="hljs-keyword">var</span> cond1 = {
+    compare: <span class="hljs-string">'global.time'</span>,
+    to: <span class="hljs-string">'12'</span>
+}
+
+<span class="hljs-comment">//Compare the variable gender to the value 'Female'</span>
+<span class="hljs-keyword">var</span> cond2 = {
+    compare: <span class="hljs-string">'Female'</span>,
+    to: <span class="hljs-string">'local.gender'</span>
+}
+</code></pre>
+<p>Sometimes the standard conditions are not enough.
+More advanced users may want to replace the whole condition object with a custom function that returns true or false. 
+The context (<code>this</code>) for the function is an object holding the <em>global</em> and <em>current</em> objects 
+(there are some cases where additional properties are available, they are documented in their own docs).</p>
 <pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">cond</span>(<span class="hljs-params"></span>)</span>{
     <span class="hljs-keyword">var</span> global = <span class="hljs-keyword">this</span>.global; <span class="hljs-comment">// get the global from the context</span>
     <span class="hljs-keyword">return</span> global.skip;
@@ -541,8 +607,11 @@ If no object is selected then select the sub-sequence in <code>elseData</code>.<
 </tbody>
 </table>
 <h4 id="aggregation">Aggregation</h4>
-<p>Sometimes you will want a branch to be activated only if more than one condition is true, or in some other complex specific condition. For cases like this, the mixer supports aggregation. The mixer supports applying logical operations on conditions in the following way:</p>
-<p>An aggregator object has a single property, denoting the type of aggregation, holding an array of conditions to aggregate. The following condition will only be true if <code>cond1</code> and <code>cond2</code> are both true:</p>
+<p>Sometimes you will want a branch to be activated only if more than one condition is true, or in some other complex specific condition.
+For cases like this, the mixer supports aggregation.
+The mixer supports applying logical operations on conditions in the following way:</p>
+<p>An aggregator object has a single property, denoting the type of aggregation, holding an array of conditions to aggregate.
+The following condition will only be true if <code>cond1</code> and <code>cond2</code> are both true:</p>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> cond = {and:[cond1, cond2]};
 </code></pre>
 <p>The mixer supports several types of aggregators:</p>
@@ -583,6 +652,22 @@ If no object is selected then select the sub-sequence in <code>elseData</code>.<
 <span class="hljs-comment">// (cond1 &amp;&amp; cond2) || cond2</span>
 <span class="hljs-keyword">var</span> conds = [{or:[{and:[cond1,cond2]},cond3]}]
 </code></pre>
+<h4 id="debugging">Debugging</h4>
+<p>Conditions are notoriously difficult to get just right.
+If they aren’t working as you expected, you might want to see exactly which values you are getting for each of your conditions.
+The mixer provides you with an easy way to do this; just set <code>DEBUG=true</code> on your condition, and you will see all the said values being printed into your <a href="../basics/javascript.html#errors-and-debugging">console</a>.</p>
+<pre><code class="lang-js">API.addGlobal({
+    value: <span class="hljs-number">123</span>,
+    otherVar: <span class="hljs-number">345</span>
+});
+
+<span class="hljs-keyword">var</span> cond = {
+    compare: <span class="hljs-string">'global.var'</span>,
+    to: <span class="hljs-string">'global.otherVar'</span>,
+    DEBUG: <span class="hljs-literal">true</span>
+}
+</code></pre>
+<p>Will log something like <code>Conditions: 123 equals 345</code> as well as the full condition object as it appears in your code.</p>
 
 
 				</div>
@@ -625,11 +710,11 @@ If no object is selected then select the sub-sequence in <code>elseData</code>.<
                                 <ul class="nav">
 									
 							<li class="">
-                                <a href="../sequencer/overview.html">Overview</a>
+                                <a href="../sequencer/introduction.html">Introduction</a>
 							</li>
 						
 									
-							<li class="">
+							<li class=" active ">
                                 <a href="../sequencer/mixer.html">Mixer</a>
 							</li>
 						

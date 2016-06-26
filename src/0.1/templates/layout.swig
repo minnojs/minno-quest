@@ -115,7 +115,7 @@
 					<nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm">
 
 						{% macro navitem(name, filename, current) %}
-							<li class="{%if filename == current %} active {% endif %}">
+							<li class="{%if filename.endsWith(current) %} active {% endif %}">
 							<li class="{%if filename.indexOf('/' + current, filename.length - current.length - 1) !== -1 %} active {% endif %}">
 
 								<a href="{{ filename }}.html">{{ name }}</a>
@@ -123,13 +123,13 @@
 						{% endmacro listitem %}
 
 						{% macro navsubitem(name, filename, current) %}
-							<li class="{%if filename == current %} active {% endif %}">
+							<li class="{%if filename.endsWith(current) %} active {% endif %}">
                                 <a href="{{ filename }}.html">{{ name }}</a>
 							</li>
 						{% endmacro navsubitem %}
 
 						{% macro example(name, filename, current) %}
-							<li class="{%if filename == current %} active {% endif %}">
+							<li class="{%if filename.endsWith(current) %} active {% endif %}">
 								<div>
 									<a href="{{ filename }}Docco.html">{{ name }}</a>
 									<a href="{{ filename }}.js" download="{{filename}}.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
@@ -147,7 +147,7 @@
                             <li>
 								<a href="../sequencer/overview.html">Sequencer</a>
                                 <ul class="nav">
-									{{ navsubitem("Overview", "../sequencer/overview", data.basename) }}
+									{{ navsubitem("Introduction", "../sequencer/introduction", data.basename) }}
 									{{ navsubitem("Mixer", "../sequencer/mixer", data.basename) }}
 									{{ navsubitem("Templates", "../sequencer/templates", data.basename) }}
 									{{ navsubitem("Variables", "../sequencer/variables", data.basename) }}
