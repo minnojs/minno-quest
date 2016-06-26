@@ -1,3 +1,12 @@
+<a name"0.0.93"></a>
+### 0.0.93 (2016-06-26)
+
+
+#### Features
+
+* **mixer:** re-added condition.DEBUG ([b96bfa3b](https://github.com/ProjectImplicit/PIquest/commit/b96bfa3b))
+
+
 <a name"0.0.92"></a>
 ### 0.0.92 (2016-06-09)
 
