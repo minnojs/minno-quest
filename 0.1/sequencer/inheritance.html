@@ -123,28 +123,26 @@
 <p>The inheritance system allows you to compose task elements based on previously defined prototypes.</p>
 <p>This behavior is often used for the abstraction of tasks; having the behavior of multiple elements defined at a single location. The other typical use, is for different types of randomizations.</p>
 <p>We will first cover the creation of prototype sets from which we can inherit. Then we will go over the actual inheritance behavior.</p>
-<h4 id="sets">Sets</h4>
-<p>Each element in the PI tasks can inherit its attributes from an element set.</p>
+<h4><a name="sets" class="header-link" href="#sets"><span class="glyphicon glyphicon-link"></span></a>Sets</h4><p>Each element in the PI tasks can inherit its attributes from an element set.</p>
 <p>The element sets are defined using the <code>addSet</code> functions defined in the <a href="API.html">API</a>. Each element type has its own function (for example, <code>addQuestionsSets</code> for piQuest).</p>
 <p>Each set holds an array of elements that can later be referred to as prototypes for new elements.</p>
-<pre><code class="lang-js">API.addQuestionsSet(<span class="hljs-string">'likert'</span>, [
-    {type: <span class="hljs-string">'selectOne'</span>, numericValues: <span class="hljs-literal">true</span>}
+<pre><code class="lang-js"><span class="hljs-tag">API</span><span class="hljs-class">.addQuestionsSet</span>(<span class="hljs-string">'likert'</span>, [
+    {<span class="hljs-attribute">type</span>: <span class="hljs-string">'selectOne'</span>, <span class="hljs-attribute">numericValues</span>: true}
 ]);
 
-API.addQuestionsSet(<span class="hljs-string">'sizeLikert'</span>, [
-    {inherit: <span class="hljs-string">'likert'</span>, answers: [<span class="hljs-string">'Big'</span>, <span class="hljs-string">'Medium'</span>, <span class="hljs-string">'Small'</span>]}
+<span class="hljs-tag">API</span><span class="hljs-class">.addQuestionsSet</span>(<span class="hljs-string">'sizeLikert'</span>, [
+    {<span class="hljs-attribute">inherit</span>: <span class="hljs-string">'likert'</span>, <span class="hljs-attribute">answers</span>: [<span class="hljs-string">'Big'</span>, <span class="hljs-string">'Medium'</span>, <span class="hljs-string">'Small'</span>]}
 ]);
 </code></pre>
 <p>Note that the name that you give the set (in the example: <em>likert</em> or <em>sizeLikert</em>) is the handle that you will later use to refer to it.</p>
-<h4 id="inheriting">Inheriting</h4>
-<p>Inheritance means that we use one element as the prototype, or parent, for another element.</p>
+<h4><a name="inheriting" class="header-link" href="#inheriting"><span class="glyphicon glyphicon-link"></span></a>Inheriting</h4><p>Inheritance means that we use one element as the prototype, or parent, for another element.</p>
 <p>When inheriting an element, the child element starts out with all of the parent’s attributes and extends them with its own. This means that we use the parent element as a base and then copy in any properties that the child has, overwriting any existing properties.
 One exception to this rule is the <code>data</code> objects which we attempt to merge (giving precedence to the child).</p>
 <p>Follow this pseudo code:</p>
 <pre><code class="lang-js"><span class="hljs-comment">// The parent page</span>
 {
-    data: {name: <span class="hljs-string">'jhon'</span>, family:<span class="hljs-string">'doe'</span>}
-    questions: [
+<span class="hljs-label">    data:</span> {<span class="hljs-string">name:</span> <span class="hljs-string">'jhon'</span>, <span class="hljs-string">family:</span><span class="hljs-string">'doe'</span>}
+<span class="hljs-label">    questions:</span> [
         quest1,
         quest2
     ]
@@ -152,9 +150,9 @@ One exception to this rule is the <code>data</code> objects which we attempt to 
 
 <span class="hljs-comment">// The child page which attempts to inherit the parent</span>
 {
-    inherit: <span class="hljs-string">'parent'</span>,
-    data: {name: <span class="hljs-string">'jack'</span>}
-    questions: [
+<span class="hljs-label">    inherit:</span> <span class="hljs-string">'parent'</span>,
+<span class="hljs-label">    data:</span> {<span class="hljs-string">name:</span> <span class="hljs-string">'jack'</span>}
+<span class="hljs-label">    questions:</span> [
         quest3
     ]
 }
@@ -162,16 +160,16 @@ One exception to this rule is the <code>data</code> objects which we attempt to 
 <span class="hljs-comment">// The result would be:</span>
 {
     <span class="hljs-comment">// the child kept its own name but inherited the family name</span>
-    data: {name: <span class="hljs-string">'jack'</span>, family:<span class="hljs-string">'doe'</span>}
+<span class="hljs-label">    data:</span> {<span class="hljs-string">name:</span> <span class="hljs-string">'jack'</span>, <span class="hljs-string">family:</span><span class="hljs-string">'doe'</span>}
     <span class="hljs-comment">// the questions array was completely overwritten</span>
-    questions: [                          
+<span class="hljs-label">    questions:</span> [                          
         quest3
     ]
 }
 </code></pre>
 <p>In order for an element to inherit another element it must use the <code>inherit</code> property. <code>inherit</code> takes an object or a string, with instructions for which element to inherit. If a string is used, the sequencer treats it as if it was a set name, and picks a random element from within that set.</p>
-<pre><code class="lang-js">{
-    inherit: {set:<span class="hljs-string">'mySetName'</span>, type:<span class="hljs-string">'random'</span>}
+<pre><code class="lang-js"><span class="hljs-rules">{
+    <span class="hljs-rule"><span class="hljs-attribute">inherit</span>:<span class="hljs-value"> {set:<span class="hljs-string">'mySetName'</span>, type:<span class="hljs-string">'random'</span></span></span></span>}
 }
 </code></pre>
 <table>
@@ -208,56 +206,50 @@ One exception to this rule is the <code>data</code> objects which we attempt to 
 </tr>
 </tbody>
 </table>
-<h4 id="merge">Merge</h4>
-<p>By default, inheritance overwrites each property of the parent that the child already has. In order to change this behavior, you can add property names to the <code>merge</code> array, and the sequencer will attempt to merge the data from the parent into the child.
+<h4><a name="merge" class="header-link" href="#merge"><span class="glyphicon glyphicon-link"></span></a>Merge</h4><p>By default, inheritance overwrites each property of the parent that the child already has. In order to change this behavior, you can add property names to the <code>merge</code> array, and the sequencer will attempt to merge the data from the parent into the child.
 This can look something like this:</p>
-<pre><code class="lang-js"><span class="hljs-comment">// The parent page</span>
+<pre><code class="lang-js">// <span class="hljs-type">The</span> parent page
 {    
-    set: <span class="hljs-string">'parent'</span>
+    <span class="hljs-type">set</span>: 'parent'
     stimuli: [
         stim1        
     ]
 }
 
-<span class="hljs-comment">// The child page which attempts to inherit the parent</span>
+// <span class="hljs-type">The</span> child page which attempts to inherit the parent
 {
-    inherit: {set:<span class="hljs-string">'parent'</span>, merge:[<span class="hljs-string">'stimuli'</span>]},    
+    inherit: {<span class="hljs-type">set</span>:'parent', merge:['stimuli']},    
     stimuli: [
         stim2
     ]
 }
 
-<span class="hljs-comment">// The result would be:</span>
+// <span class="hljs-type">The</span> <span class="hljs-literal">result</span> would be:
 {
-    <span class="hljs-comment">// the stimuli array was merged instead of overwritten</span>
+    // the stimuli <span class="hljs-type">array</span> was merged instead <span class="hljs-keyword">of</span> overwritten
     stimuli: [                          
         stim1,
         stim2
     ]
 }
 </code></pre>
-<h4 id="type">Type</h4>
-<p>We have implemented several types of inheritance:</p>
-<h5 id="random-">random:</h5>
-<p>Randomly selects an element from the set (in case the set has only one element, the same element will always be selected, of course). </p>
+<h4><a name="type" class="header-link" href="#type"><span class="glyphicon glyphicon-link"></span></a>Type</h4><p>We have implemented several types of inheritance:</p>
+<h5><a name="random" class="header-link" href="#random"><span class="glyphicon glyphicon-link"></span></a>random:</h5><p>Randomly selects an element from the set (in case the set has only one element, the same element will always be selected, of course). </p>
 <ul>
 <li><code>&#39;setName&#39;</code></li>
 <li><code>{set: &#39;setName&#39;}</code></li>
 <li><code>{set: &#39;setName&#39;, type:&#39;random&#39;}</code></li>
 </ul>
 <p>This is the default inheritance type, so it is not obligatory to use the <code>type</code> property. You can also use a short cut and set the <code>set</code> using only its name, like we did in the example above</p>
-<h5 id="exrandom-">exRandom:</h5>
-<p>Selects a random element without repeating the same element until we’ve gone through the whole set</p>
+<h5><a name="exrandom" class="header-link" href="#exrandom"><span class="glyphicon glyphicon-link"></span></a>exRandom:</h5><p>Selects a random element without repeating the same element until we’ve gone through the whole set</p>
 <ul>
 <li><code>{set: &#39;setName&#39;, type:&#39;exRandom&#39;}</code></li>
 </ul>
-<h5 id="sequential-">sequential:</h5>
-<p>Selects the elements by the order they were inserted into the set</p>
+<h5><a name="sequential" class="header-link" href="#sequential"><span class="glyphicon glyphicon-link"></span></a>sequential:</h5><p>Selects the elements by the order they were inserted into the set</p>
 <ul>
 <li><code>{set: &#39;setName&#39;, type:&#39;sequential&#39;}</code></li>
 </ul>
-<h5 id="bydata-">byData:</h5>
-<p>Selects a specific element from the set.
+<h5><a name="bydata" class="header-link" href="#bydata"><span class="glyphicon glyphicon-link"></span></a>byData:</h5><p>Selects a specific element from the set.
 We compare the <code>data</code> property to the <code>element.data</code> property and if <code>data</code> is a subset of <code>element.data</code> it selects the element (this means that if all properties of data property equal to the properties of the same name in element.data it is a fit).
 This function will select only the first element to fit the data.
 If the data property is set as a string, we assume it refers to the element handle.</p>
@@ -265,39 +257,36 @@ If the data property is set as a string, we assume it refers to the element hand
 <li><code>{set: &#39;setName&#39;, type: &#39;byData&#39;, data: {block:1, row:2}}</code> picks the element with both block:1 and row:2</li>
 <li><code>{set: &#39;setName&#39;, type: &#39;byData&#39;, data: &quot;myStimHandle&quot;}</code> picks the element that has the “myStimHandle” handle</li>
 </ul>
-<h5 id="function-">function:</h5>
-<p>You may also use a custom function to select your element (the function here, fully replaces the inherit object).</p>
-<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">collection</span>)</span>{
+<h5><a name="function" class="header-link" href="#function"><span class="glyphicon glyphicon-link"></span></a>function:</h5><p>You may also use a custom function to select your element (the function here, fully replaces the inherit object).</p>
+<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(collection)</span></span>{
     <span class="hljs-comment">// The collection holds all the elements within the namespace you are querying.</span>
     <span class="hljs-comment">// Simply return the element you want to inherit.</span>
 }
 </code></pre>
-<h4 id="seed">Seed</h4>
-<p>The inheritance systems uses seeds to keep track of consecutive calls to the different types of inheritance. If you want to have parallel groups of inheritance to the same set, you can use seeds.
+<h4><a name="seed" class="header-link" href="#seed"><span class="glyphicon glyphicon-link"></span></a>Seed</h4><p>The inheritance systems uses seeds to keep track of consecutive calls to the different types of inheritance. If you want to have parallel groups of inheritance to the same set, you can use seeds.
 Each inheritance query automatically gets assigned to a “seed” that is used to track its progress. For example, the seed is used to keep track of the current element in the <code>sequential</code> type inheritance.
 Most of the time, the seed is transparent to the user, but sometimes it becomes useful to have manual control over the inheritance seed. For instance, if you want to reset an <code>exRandom</code> inheritance - simply use <code>exRandom</code> with a new seed. Same goes if you want to keep two instances of a <code>sequential</code> inheritance.</p>
 <p>In the following example, both elements inherit exRandomly from the trials set. But the second element restarts the randomization.</p>
 <pre><code class="lang-js">[
     {
-        inherit: {set:<span class="hljs-string">'trials'</span>, type:<span class="hljs-string">'exRandom'</span>,seed:<span class="hljs-string">'block1'</span>}
+<span class="hljs-label">        inherit:</span> {<span class="hljs-string">set:</span><span class="hljs-string">'trials'</span>, <span class="hljs-string">type:</span><span class="hljs-string">'exRandom'</span>,<span class="hljs-string">seed:</span><span class="hljs-string">'block1'</span>}
     },
     {
-        inherit: {set:<span class="hljs-string">'trials'</span>, type:<span class="hljs-string">'exRandom'</span>,seed:<span class="hljs-string">'block2'</span>}
+<span class="hljs-label">        inherit:</span> {<span class="hljs-string">set:</span><span class="hljs-string">'trials'</span>, <span class="hljs-string">type:</span><span class="hljs-string">'exRandom'</span>,<span class="hljs-string">seed:</span><span class="hljs-string">'block2'</span>}
     }
 ]
 </code></pre>
 <p>Seeds are not confined to a specific set, and not even to a specific element type. Maybe a more interesting use, is to use the same seed across two different sets (you can see a real world application for this under the <a href="#repeat">repeat</a> option).
 It is important to take note that if you create custom seeds, it is your responsibility that they query sets of the same length. If you try to inherit two sets with different lengths the sequencer will throw an error.
 In order to create a new seed all you have to do is set the <code>seed</code> property with the new seeds name (String).</p>
-<h4 id="repeat">Repeat</h4>
-<p>Sometimes we have need to repeat a previous choice done by the inheritance picker (especially in cases of randomization). In order to do this, all you have to do is set the <code>repeat</code> property to true.</p>
+<h4><a name="repeat" class="header-link" href="#repeat"><span class="glyphicon glyphicon-link"></span></a>Repeat</h4><p>Sometimes we have need to repeat a previous choice done by the inheritance picker (especially in cases of randomization). In order to do this, all you have to do is set the <code>repeat</code> property to true.</p>
 <p>For instance, the following sequence will display a random element from the trials set twice.</p>
 <pre><code class="lang-js">[
     {
-        inherit:{set:<span class="hljs-string">'trials'</span>,type:<span class="hljs-string">'random'</span>}
+<span class="hljs-label">        inherit:</span>{<span class="hljs-string">set:</span><span class="hljs-string">'trials'</span>,<span class="hljs-string">type:</span><span class="hljs-string">'random'</span>}
     },
     {
-        inherit:{set:<span class="hljs-string">'trials'</span>,type:<span class="hljs-string">'random'</span>, repeat:<span class="hljs-literal">true</span>}
+<span class="hljs-label">        inherit:</span>{<span class="hljs-string">set:</span><span class="hljs-string">'trials'</span>,<span class="hljs-string">type:</span><span class="hljs-string">'random'</span>, <span class="hljs-string">repeat:</span><span class="hljs-literal">true</span>}
     }
 ]
 </code></pre>
@@ -305,23 +294,22 @@ In order to create a new seed all you have to do is set the <code>seed</code> pr
 <p>The following example uses the same exRandom seed to pick a both a trial and the two stimuli associated with it (the n<sup>th</sup> element in trials is always associated with the n<sup>th</sup> elements of stimuli-1 and stimuli-2).</p>
 <pre><code class="lang-js">[
     {
-        inherit: {set:<span class="hljs-string">'trials'</span>, type:<span class="hljs-string">'exRandom'</span>, seed:<span class="hljs-string">'mySeed'</span>}
-        stimuli:[
-            {inherit: {set:<span class="hljs-string">'stimuli-1'</span>, type:<span class="hljs-string">'exRandom'</span>, seed:<span class="hljs-string">'mySeed'</span>, repeat:<span class="hljs-literal">true</span>}
-            {inherit: {set:<span class="hljs-string">'stimuli-2'</span>, type:<span class="hljs-string">'exRandom'</span>, seed:<span class="hljs-string">'mySeed'</span>, repeat:<span class="hljs-literal">true</span>}
+<span class="hljs-label">        inherit:</span> {<span class="hljs-string">set:</span><span class="hljs-string">'trials'</span>, <span class="hljs-string">type:</span><span class="hljs-string">'exRandom'</span>, <span class="hljs-string">seed:</span><span class="hljs-string">'mySeed'</span>}
+<span class="hljs-label">        stimuli:</span>[
+            {<span class="hljs-string">inherit:</span> {<span class="hljs-string">set:</span><span class="hljs-string">'stimuli-1'</span>, <span class="hljs-string">type:</span><span class="hljs-string">'exRandom'</span>, <span class="hljs-string">seed:</span><span class="hljs-string">'mySeed'</span>, <span class="hljs-string">repeat:</span><span class="hljs-literal">true</span>}
+            {<span class="hljs-string">inherit:</span> {<span class="hljs-string">set:</span><span class="hljs-string">'stimuli-2'</span>, <span class="hljs-string">type:</span><span class="hljs-string">'exRandom'</span>, <span class="hljs-string">seed:</span><span class="hljs-string">'mySeed'</span>, <span class="hljs-string">repeat:</span><span class="hljs-literal">true</span>}
         ]
     }
 ]
 </code></pre>
-<h4 id="customization">Customization</h4>
-<p>Each element can also define a <code>customize</code> method, this method is called once the element is inherited but before it is activated.
+<h4><a name="customization" class="header-link" href="#customization"><span class="glyphicon glyphicon-link"></span></a>Customization</h4><p>Each element can also define a <code>customize</code> method, this method is called once the element is inherited but before it is activated.
 It accepts two argument: the source element on which it is called, and the global object (in which you can find the current object etc.). The source element is also the context for the function.
 You should make any changes that you want on the source element itself.</p>
-<pre><code class="lang-js">{    
-    inherit: <span class="hljs-string">'mySet'</span>,
-    customize : <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">element, global</span>)</span>{
-        element.questions.push(quest);
-    }
+<pre><code class="lang-js"><span class="hljs-rules">{    
+    <span class="hljs-rule"><span class="hljs-attribute">inherit</span>:<span class="hljs-value"> <span class="hljs-string">'mySet'</span>,
+    customize : <span class="hljs-function">function</span>(element, global){
+        element.questions.<span class="hljs-function">push</span>(quest)</span></span>;
+    }</span>
 }
 </code></pre>
 

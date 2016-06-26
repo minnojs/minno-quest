@@ -109,10 +109,9 @@
 				<div class="col-md-9" role="main">
 					
 	<p>This document will walk you through all you need to know in order to create a task. Anything appearing here is relevant to all types of tasks.</p>
-<h3 id="the-wrapper">The Wrapper</h3>
-<p>Each task consists of a single javascript file, which is a simple text file with a <code>js</code> extenssion. The file should be setup with some code at the begining and the end, this code is used by the player to register the task. </p>
+<h3><a name="the-wrapper" class="header-link" href="#the-wrapper"><span class="glyphicon glyphicon-link"></span></a>The Wrapper</h3><p>Each task consists of a single javascript file, which is a simple text file with a <code>js</code> extenssion. The file should be setup with some code at the begining and the end, this code is used by the player to register the task. </p>
 <p>First, all your code should be wrapped by a define statement (if you want to understand more about how this work you can read up on <a href="http://requirejs.org/docs/whyamd.html">AMD modules</a>):</p>
-<pre><code class="lang-js">define([<span class="hljs-string">'taskAPI'</span>],<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">taskAPI</span>)</span>{
+<pre><code class="lang-js">define([<span class="hljs-string">'taskAPI'</span>],<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(taskAPI)</span></span>{
     <span class="hljs-comment">// all sorts of code...</span>
 });
 </code></pre>
@@ -121,55 +120,53 @@
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> API = <span class="hljs-keyword">new</span> taskAPI();
 </code></pre>
 <p>After creating the API, you can start putting your task together, we’ll see how to do that in a moment. But before getting to the creation of the task itself, we’ll note that at the very end of the task you need to return the <code>API.script</code>. This exports the task you have created and allows the the task to be registered. It looks something like this:</p>
-<pre><code class="lang-js"><span class="hljs-keyword">return</span> API.script;
+<pre><code class="lang-js"><span class="hljs-command">return</span> API.<span class="hljs-keyword">script</span>;
 </code></pre>
 <p>All taken into account this is the structure of any script you create:</p>
-<pre><code class="lang-js">define([<span class="hljs-string">'taskAPI'</span>],<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">taskAPI</span>)</span>{
+<pre><code class="lang-js">define([<span class="hljs-string">'taskAPI'</span>],<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(taskAPI)</span></span>{
     <span class="hljs-keyword">var</span> API = <span class="hljs-keyword">new</span> taskAPI();
     <span class="hljs-comment">// Use the API to create your task here...</span>
     <span class="hljs-keyword">return</span> API.script;
 });
 </code></pre>
-<h3 id="the-sequence">The sequence</h3>
-<p>Tasks can be seen a series of frames. Each frame includes some type of interaction with the user. It may be a questionnaire page, a time sensitive trial or even a simple message - depends which type of task you are using. Each of the interaction frames is described by a single object (that may include sub objects that represent sub frames…). You can learn all about the properties that the objects use to describe their tasks in each of their individual API documentation sections.</p>
+<h3><a name="the-sequence" class="header-link" href="#the-sequence"><span class="glyphicon glyphicon-link"></span></a>The sequence</h3><p>Tasks can be seen a series of frames. Each frame includes some type of interaction with the user. It may be a questionnaire page, a time sensitive trial or even a simple message - depends which type of task you are using. Each of the interaction frames is described by a single object (that may include sub objects that represent sub frames…). You can learn all about the properties that the objects use to describe their tasks in each of their individual API documentation sections.</p>
 <p>In order to register an object with the task we need to add it to the <code>sequence</code>. The sequence is an array of objects that get activate sequentially when the task is activated.</p>
 <p>We’ll use piQuest for this example, where each object represents a page with an array of questions:</p>
 <pre><code class="lang-js">API.addSequence([
     <span class="hljs-comment">// page 1</span>
     {
-        header: <span class="hljs-string">'header 1'</span>,
-        questions: [{stem:<span class="hljs-string">'What is your first name?'</span>}]
+<span class="hljs-label">        header:</span> <span class="hljs-string">'header 1'</span>,
+<span class="hljs-label">        questions:</span> [{<span class="hljs-string">stem:</span><span class="hljs-string">'What is your first name?'</span>}]
     },
     <span class="hljs-comment">// page 2</span>
     {
-        header: <span class="hljs-string">'header 2'</span>,
-        questions: [{stem:<span class="hljs-string">'What is your last name?'</span>}]
+<span class="hljs-label">        header:</span> <span class="hljs-string">'header 2'</span>,
+<span class="hljs-label">        questions:</span> [{<span class="hljs-string">stem:</span><span class="hljs-string">'What is your last name?'</span>}]
     }
 ]);
 </code></pre>
 <p>This will tell piQuest to first activate page 1 and then activate page 2. The sequence works in a similar way for all of our tasks, just add in objects and they’ll be activated one after another.</p>
 <p>Of course a simple sequential sequence is rarely what you’ll need. All sequences support some powerful tools for enriching the way your sequence works. These are described in detail in the <a href="sequencer.html">sequencer section</a>, here we’ll only touch on some basic randomization (using the mixer) and abstraction (using inheritance). </p>
-<h3 id="basic-randomization">Basic Randomization</h3>
-<p>All sequences support a special type of object called a mixer. A mixer holds several regular objects and control the way they are activated. A mixer can reorder the objects, chose among them and even skip them. To illustrate how a mixer works, let’s learn more about the mixer used for randomization.</p>
+<h3><a name="basic-randomization" class="header-link" href="#basic-randomization"><span class="glyphicon glyphicon-link"></span></a>Basic Randomization</h3><p>All sequences support a special type of object called a mixer. A mixer holds several regular objects and control the way they are activated. A mixer can reorder the objects, chose among them and even skip them. To illustrate how a mixer works, let’s learn more about the mixer used for randomization.</p>
 <p>The randomization mixer has the following structure:</p>
 <pre><code class="lang-js">{
-    mixer: <span class="hljs-string">'random'</span>,    <span class="hljs-comment">// declare this object as a randomization mixer</span>
-    data: [obj1, obj2]  <span class="hljs-comment">// the objects to be randomized</span>
+    <span class="hljs-attribute">mixer</span>: <span class="hljs-string">'random'</span>,    <span class="hljs-comment">// declare this object as a randomization mixer</span>
+    <span class="hljs-attribute">data</span>: [obj1, obj2]  <span class="hljs-comment">// the objects to be randomized</span>
 }
 </code></pre>
 <p>To randomize the order of the presentation of the pages from our previous example, we’d write something like this:</p>
 <pre><code class="lang-js">API.addSequence([
     {
         mixer: <span class="hljs-string">'random'</span>,
-        data: [
+        <span class="hljs-keyword">data</span>: [
              <span class="hljs-comment">// page 1</span>
              {
-                header: <span class="hljs-string">'header 1'</span>,
+                <span class="hljs-keyword">header</span>: <span class="hljs-string">'header 1'</span>,
                 questions: [{stem:<span class="hljs-string">'What is you\'r first name?'</span>}]
             },
             <span class="hljs-comment">// page 2</span>
             {
-                header: <span class="hljs-string">'header 2'</span>,
+                <span class="hljs-keyword">header</span>: <span class="hljs-string">'header 2'</span>,
                 questions: [{stem:<span class="hljs-string">'What is you\'r last name?'</span>}]
             }
         ]
@@ -177,14 +174,13 @@
 ]);
 </code></pre>
 <p>Instead of always presenting page 2 after page 1, the sequencer will now randomize their order. Page 2 will appear first half of the time. The full documentation for the mixer is <a href="sequencer.html#mixer">right here</a>.</p>
-<h3 id="basic-abstraction">Basic abstraction</h3>
-<p>Many times we want to create several objects with mostly similar properties. For instance we may want to create a set of questions that have the same response options, and only change the text used for each question. </p>
+<h3><a name="basic-abstraction" class="header-link" href="#basic-abstraction"><span class="glyphicon glyphicon-link"></span></a>Basic abstraction</h3><p>Many times we want to create several objects with mostly similar properties. For instance we may want to create a set of questions that have the same response options, and only change the text used for each question. </p>
 <p>In order to share properties among several objects, we use the concept of inheritance. Each object that we use can inherit some of its properties from an object we created previously. </p>
 <p>Each API has a function that allows defining sets of objects that can later be inherited. There is a separate function for each type of object. Let’s define a question set with specific response options:</p>
-<pre><code class="lang-js">API.addQuestionsSet(<span class="hljs-string">'likert'</span>, [
+<pre><code class="lang-js"><span class="hljs-tag">API</span><span class="hljs-class">.addQuestionsSet</span>(<span class="hljs-string">'likert'</span>, [
     {
-        type: <span class="hljs-string">'selectOne'</span>,
-        answers: [
+        <span class="hljs-attribute">type</span>: <span class="hljs-string">'selectOne'</span>,
+        <span class="hljs-attribute">answers</span>: [
             <span class="hljs-string">'Strongly disagree'</span>,
             <span class="hljs-string">'Disagree'</span>,
             <span class="hljs-string">'Neither agree nor disagree'</span>,
@@ -199,11 +195,11 @@
 <pre><code class="lang-js">API.addSequence([
     <span class="hljs-comment">// page 1</span>
     {
-        questions: [{stem:<span class="hljs-string">'I like cake.'</span>, inherit: <span class="hljs-string">'likert'</span>}]
+<span class="hljs-label">        questions:</span> [{<span class="hljs-string">stem:</span><span class="hljs-string">'I like cake.'</span>, <span class="hljs-string">inherit:</span> <span class="hljs-string">'likert'</span>}]
     },
     <span class="hljs-comment">// page 2</span>
     {
-        questions: [{stem:<span class="hljs-string">'I like chicken.'</span>, inherit: <span class="hljs-string">'likert'</span>}]
+<span class="hljs-label">        questions:</span> [{<span class="hljs-string">stem:</span><span class="hljs-string">'I like chicken.'</span>, <span class="hljs-string">inherit:</span> <span class="hljs-string">'likert'</span>}]
     }
 ]);
 </code></pre>

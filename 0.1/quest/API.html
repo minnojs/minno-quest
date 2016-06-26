@@ -108,8 +108,7 @@
 			<div class="row">
 				<div class="col-md-9" role="main">
 					
-	<h3 id="table-of-contents">Table of contents</h3>
-<ul>
+	<h3><a name="table-of-contents" class="header-link" href="#table-of-contents"><span class="glyphicon glyphicon-link"></span></a>Table of contents</h3><ul>
 <li><a href="#pages">Pages</a><ul>
 <li><a href="#page-timer">Page Timer</a></li>
 <li><a href="#page-messages">Page Messages</a></li>
@@ -139,8 +138,7 @@
 </ul>
 </li>
 </ul>
-<h3 id="pages">Pages</h3>
-<p>The basic unit in PIquest is the <strong>page</strong>. A page is usually one screen in your questionnaire. If your questionnaire presents all its questions in one screen, it will probably have only one page. The properties within a page manage how the question(s) is(are) displayed and how the participants interact with it (e.g., select an answer and then click a submit button).</p>
+<h3><a name="pages" class="header-link" href="#pages"><span class="glyphicon glyphicon-link"></span></a>Pages</h3><p>The basic unit in PIquest is the <strong>page</strong>. A page is usually one screen in your questionnaire. If your questionnaire presents all its questions in one screen, it will probably have only one page. The properties within a page manage how the question(s) is(are) displayed and how the participants interact with it (e.g., select an answer and then click a submit button).</p>
 <table>
 <thead>
 <tr>
@@ -229,18 +227,17 @@
 </table>
 <p>For example, a page can look something like this:</p>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> page = {
-    header: <span class="hljs-string">'Personal information:'</span>,
-    headerStyle: {<span class="hljs-string">'background-color'</span>:<span class="hljs-string">'red'</span>,color:<span class="hljs-string">'blue'</span>},
+    header: <span class="hljs-symbol">'Personal</span> information:',
+    headerStyle: {<span class="hljs-symbol">'background</span>-color':<span class="hljs-symbol">'re</span>d',color:<span class="hljs-symbol">'blu</span>e'},
     decline: <span class="hljs-literal">true</span>,
-    declineText: <span class="hljs-string">'I prefer to keep this information to myself'</span>,
+    declineText: <span class="hljs-symbol">'I</span> prefer to keep <span class="hljs-keyword">this</span> information to myself',
     questions: [
-        {type:<span class="hljs-string">'text'</span>, stem:<span class="hljs-string">'What is your name?'</span>},
-        {type:<span class="hljs-string">'text'</span>, stem:<span class="hljs-string">'Where do you live?'</span>}
+        {<span class="hljs-class"><span class="hljs-keyword">type</span>:</span><span class="hljs-symbol">'tex</span>t', stem:<span class="hljs-symbol">'What</span> is your name?'},
+        {<span class="hljs-class"><span class="hljs-keyword">type</span>:</span><span class="hljs-symbol">'tex</span>t', stem:<span class="hljs-symbol">'Where</span> do you live?'}
     ]
 }
 </code></pre>
-<h4 id="page-timer">Page Timer</h4>
-<p>The page timer allows you to constrain the time that users have to answer their questions. In order to control it, you may use the following properties.</p>
+<h4><a name="page-timer" class="header-link" href="#page-timer"><span class="glyphicon glyphicon-link"></span></a>Page Timer</h4><p>The page timer allows you to constrain the time that users have to answer their questions. In order to control it, you may use the following properties.</p>
 <table>
 <thead>
 <tr>
@@ -275,8 +272,7 @@
 </tr>
 </tbody>
 </table>
-<h4 id="page-messages">Page Messages</h4>
-<p>You may want to display a message to the users when they run out of time at the end of a timer. Messages can be simple strings, or if you want finer control over the content of the message you can use the object API, that may be used as follows:</p>
+<h4><a name="page-messages" class="header-link" href="#page-messages"><span class="glyphicon glyphicon-link"></span></a>Page Messages</h4><p>You may want to display a message to the users when they run out of time at the end of a timer. Messages can be simple strings, or if you want finer control over the content of the message you can use the object API, that may be used as follows:</p>
 <table>
 <thead>
 <tr>
@@ -300,8 +296,7 @@
 </tbody>
 </table>
 <p>All these strings may use templates, and have access to the following objects: <code>global</code>, <code>current</code>, <code>pagesData</code>, <code>pagesMeta</code>.</p>
-<h3 id="questions">Questions</h3>
-<p>Here are the types of questions PIQuest currently supports:</p>
+<h3><a name="questions" class="header-link" href="#questions"><span class="glyphicon glyphicon-link"></span></a>Questions</h3><p>Here are the types of questions PIQuest currently supports:</p>
 <ul>
 <li><a href="#info">info</a></li>
 <li><a href="#text-textarea">text &amp; textarea</a></li>
@@ -363,8 +358,7 @@
 </tbody>
 </table>
 <p>You may want to debug questions by <a href="#debugging">activating the <code>question</code> DEBUG setting</a>. You will then be warned in the console if a question name is reused (note: sometimes a question is supposed to be reused, if this warning pops up just make sure the use case is correct).</p>
-<h4 id="hooks">Hooks</h4>
-<p>Questions have hooks that allow you to respond to many events in the life time of the question. Each hook is invoked with <code>global</code>, <code>current</code> and the question <code>log</code>. </p>
+<h4><a name="hooks" class="header-link" href="#hooks"><span class="glyphicon glyphicon-link"></span></a>Hooks</h4><p>Questions have hooks that allow you to respond to many events in the life time of the question. Each hook is invoked with <code>global</code>, <code>current</code> and the question <code>log</code>. </p>
 <table>
 <thead>
 <tr>
@@ -402,7 +396,7 @@
 <p>For example, in case the participant made an error you can mark it on the current object:</p>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> questions = {
     stem: <span class="hljs-string">'Please write "Hello"'</span>,
-    onSubmit: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">log, current</span>)</span>{
+    onSubmit: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(log, current)</span></span>{
         <span class="hljs-comment">// if the question response is not correct</span>
         <span class="hljs-keyword">if</span> (log.response !== <span class="hljs-string">'Hello'</span>){
             <span class="hljs-comment">// mark an arbitrary flag so that it may be accessed somewhere else</span>
@@ -411,17 +405,15 @@
     }
 }
 </code></pre>
-<h4 id="info">Info</h4>
-<p>The info question isn’t strictly a question. It allows you to use the common question properties in order to display information to the users. For example you can use it as follows:</p>
-<pre><code class="lang-js">{
-    type: <span class="hljs-string">'info'</span>,
+<h4><a name="info" class="header-link" href="#info"><span class="glyphicon glyphicon-link"></span></a>Info</h4><p>The info question isn’t strictly a question. It allows you to use the common question properties in order to display information to the users. For example you can use it as follows:</p>
+<pre><code class="lang-js"><span class="hljs-rules">{
+    <span class="hljs-rule"><span class="hljs-attribute">type</span>:<span class="hljs-value"> <span class="hljs-string">'info'</span>,
     description: <span class="hljs-string">'&lt;p&gt;The following questions deal with emotions&lt;/p&gt;'</span> +
         <span class="hljs-string">'&lt;p&gt;Please answer them as honestly as possible&lt;/p&gt;'</span>
-}
+</span></span></span>}
 </code></pre>
 <p>This question will simply display the description without offering any additional user interface (explicit question).</p>
-<h4 id="text-textarea">Text &amp; Textarea</h4>
-<p>The <code>text</code> and <code>textarea</code> questions consist of a simple text input in which the users can type in text. The difference between them is that text questions consist of a single line, whereas textareas are multiline. There are also several properties that are unique to textareas.
+<h4><a name="text-&amp-textarea" class="header-link" href="#text-&amp-textarea"><span class="glyphicon glyphicon-link"></span></a>Text &amp; Textarea</h4><p>The <code>text</code> and <code>textarea</code> questions consist of a simple text input in which the users can type in text. The difference between them is that text questions consist of a single line, whereas textareas are multiline. There are also several properties that are unique to textareas.
 Both types of questions support the following properties.</p>
 <table>
 <thead>
@@ -505,19 +497,18 @@ Both types of questions support the following properties.</p>
 </tbody>
 </table>
 <p>For example, this is a text question that requires a valid email address (although there are better <em>patterns</em> out there for this purpose):</p>
-<pre><code class="lang-js"><span class="hljs-keyword">var</span> quest = {
+<pre><code class="lang-js">var quest = {
     stem: <span class="hljs-string">"Please type your email address"</span>,
     dflt: <span class="hljs-string">"my@email.com"</span>,
     required: <span class="hljs-literal">true</span>,
-    pattern: <span class="hljs-regexp">/[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}/igm</span>,
+    pattern: /[A-Z0-<span class="hljs-number">9.</span>_%+-]+@[A-Z0-<span class="hljs-number">9.</span>-]+.[A-Z]{<span class="hljs-number">2</span>,<span class="hljs-number">4</span>}/igm,
     errorMsg: {
         required: <span class="hljs-string">"You must enter a valid email address."</span>,
         pattern: <span class="hljs-string">"This is not a valid email address"</span>
     }
 }
 </code></pre>
-<h4 id="textnumber">textNumber</h4>
-<p>The <code>textNumber</code> questions consist of a simple text input that limits the participant to numeric responses only. This type of questions have the following parameters:</p>
+<h4><a name="textnumber" class="header-link" href="#textnumber"><span class="glyphicon glyphicon-link"></span></a>textNumber</h4><p>The <code>textNumber</code> questions consist of a simple text input that limits the participant to numeric responses only. This type of questions have the following parameters:</p>
 <table>
 <thead>
 <tr>
@@ -565,19 +556,18 @@ Both types of questions support the following properties.</p>
 </tbody>
 </table>
 <p>For example, this is a text question that asks for a number under 273:</p>
-<pre><code class="lang-js"><span class="hljs-keyword">var</span> quest = {
-    type: <span class="hljs-string">'textNumber'</span>,
+<pre><code class="lang-js"><span class="hljs-built_in">var</span> quest = {
+    <span class="hljs-keyword">type</span>: <span class="hljs-string">'textNumber'</span>,
     stem: <span class="hljs-string">"Please enter your height in cm"</span>,
-    max: <span class="hljs-number">273</span>,
+    <span class="hljs-keyword">max</span>: <span class="hljs-number">273</span>,
     required: <span class="hljs-literal">true</span>,
     errorMsg: {
-        max: <span class="hljs-string">"That is a bit too much to believe... - even Robert Wadlow wasn't this tall!"</span>,
+        <span class="hljs-keyword">max</span>: <span class="hljs-string">"That is a bit too much to believe... - even Robert Wadlow wasn't this tall!"</span>,
         number: <span class="hljs-string">"Your height has to be a number"</span>
     }
 }
 </code></pre>
-<h4 id="dropdown">dropdown</h4>
-<p>The <code>dropdown</code> question presents a dropdown that the user can use to select a single response. It has the following parameters: </p>
+<h4><a name="dropdown" class="header-link" href="#dropdown"><span class="glyphicon glyphicon-link"></span></a>dropdown</h4><p>The <code>dropdown</code> question presents a dropdown that the user can use to select a single response. It has the following parameters: </p>
 <table>
 <thead>
 <tr>
@@ -628,8 +618,7 @@ Both types of questions support the following properties.</p>
 </tr>
 </tbody>
 </table>
-<h4 id="selectone-selectmulti">selectOne &amp; selectMulti</h4>
-<p>The <code>selectOne</code> and <code>selectMulti</code> questions present a list of possible response options for the user to pick from. The only difference between them is that select Multi allows the user to select more than one response option. They have the following parameters:</p>
+<h4><a name="selectone-&amp-selectmulti" class="header-link" href="#selectone-&amp-selectmulti"><span class="glyphicon glyphicon-link"></span></a>selectOne &amp; selectMulti</h4><p>The <code>selectOne</code> and <code>selectMulti</code> questions present a list of possible response options for the user to pick from. The only difference between them is that select Multi allows the user to select more than one response option. They have the following parameters:</p>
 <table>
 <thead>
 <tr>
@@ -695,30 +684,29 @@ Both types of questions support the following properties.</p>
 <p>Each answer on the list has a value associated with it. By default the value is equal to the text of the answer. If <code>numericValues</code> is set, the value is set to the appropriate number. Using the object notation, you can set values of your own.</p>
 <p>For example, the following question uses the plain notations, using <code>numericValues</code> to abstract numbers out of the result.</p>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> quest = {
-    type: <span class="hljs-string">'selectOne'</span>,
+    <span class="hljs-class"><span class="hljs-keyword">type</span>:</span> <span class="hljs-symbol">'selectOn</span>e',
     stem: <span class="hljs-string">"Do you like bananas?"</span>
     numericValues: <span class="hljs-literal">true</span>,
     answers: [
-        <span class="hljs-string">'Very much'</span>,    <span class="hljs-comment">// ==&gt; 0</span>
-        <span class="hljs-string">'I guess'</span>,        <span class="hljs-comment">// ==&gt; 1</span>
-        <span class="hljs-string">'Not at all'</span>    <span class="hljs-comment">// ==&gt; 2</span>
+        <span class="hljs-symbol">'Very</span> much',    <span class="hljs-comment">// ==&gt; 0</span>
+        <span class="hljs-symbol">'I</span> guess',        <span class="hljs-comment">// ==&gt; 1</span>
+        <span class="hljs-symbol">'Not</span> at all'    <span class="hljs-comment">// ==&gt; 2</span>
     ]
 }
 </code></pre>
 <p>The following question uses the object notation to do the exact same thing:</p>
-<pre><code class="lang-js"><span class="hljs-keyword">var</span> quest = {
-    type: <span class="hljs-string">'selectMulti'</span>,
-    stem: <span class="hljs-string">"Do you like bananas?"</span>
-    numericValues: <span class="hljs-literal">true</span>,
-    answers: [
-        {text:<span class="hljs-string">'Very much'</span>, value:<span class="hljs-number">0</span>},    <span class="hljs-comment">// ==&gt; 0</span>
-        {text:<span class="hljs-string">'I guess'</span>, value:<span class="hljs-number">1</span>},        <span class="hljs-comment">// ==&gt; 1</span>
-        {text:<span class="hljs-string">'Not at all'</span>, value:<span class="hljs-number">2</span>}    <span class="hljs-comment">// ==&gt; 2</span>
+<pre><code class="lang-js">var quest = {
+<span class="hljs-label">    type:</span> <span class="hljs-string">'selectMulti'</span>,
+<span class="hljs-label">    stem:</span> <span class="hljs-string">"Do you like bananas?"</span>
+<span class="hljs-label">    numericValues:</span> <span class="hljs-literal">true</span>,
+<span class="hljs-label">    answers:</span> [
+        {<span class="hljs-string">text:</span><span class="hljs-string">'Very much'</span>, <span class="hljs-string">value:</span><span class="hljs-number">0</span>},    <span class="hljs-comment">// ==&gt; 0</span>
+        {<span class="hljs-string">text:</span><span class="hljs-string">'I guess'</span>, <span class="hljs-string">value:</span><span class="hljs-number">1</span>},        <span class="hljs-comment">// ==&gt; 1</span>
+        {<span class="hljs-string">text:</span><span class="hljs-string">'Not at all'</span>, <span class="hljs-string">value:</span><span class="hljs-number">2</span>}    <span class="hljs-comment">// ==&gt; 2</span>
     ]
 }
 </code></pre>
-<h4 id="grid">grid</h4>
-<p>The grid question allows you to group multiple “multiple choice” questions into a single table. This is often useful when asking several likert type questions using the same scale.</p>
+<h4><a name="grid" class="header-link" href="#grid"><span class="glyphicon glyphicon-link"></span></a>grid</h4><p>The grid question allows you to group multiple “multiple choice” questions into a single table. This is often useful when asking several likert type questions using the same scale.</p>
 <p>The grid question itself keeps track of the sum of the row questions (excluding any questions that have non-number values).</p>
 <table>
 <thead>
@@ -770,8 +758,7 @@ Both types of questions support the following properties.</p>
 </tr>
 </tbody>
 </table>
-<h5 id="grid-columns">grid.columns</h5>
-<p>If you set a string instead of a column object it will be treated as if you set only the stem and all other values will be set by default.</p>
+<h5><a name="gridcolumns" class="header-link" href="#gridcolumns"><span class="glyphicon glyphicon-link"></span></a>grid.columns</h5><p>If you set a string instead of a column object it will be treated as if you set only the stem and all other values will be set by default.</p>
 <table>
 <thead>
 <tr>
@@ -806,8 +793,7 @@ Both types of questions support the following properties.</p>
 </tr>
 </tbody>
 </table>
-<h5 id="grid-rows">grid.rows</h5>
-<p>If you set a string instead of a row object it will be treated as if you set only the stem and all other values will be set by default.</p>
+<h5><a name="gridrows" class="header-link" href="#gridrows"><span class="glyphicon glyphicon-link"></span></a>grid.rows</h5><p>If you set a string instead of a row object it will be treated as if you set only the stem and all other values will be set by default.</p>
 <table>
 <thead>
 <tr>
@@ -835,34 +821,33 @@ Both types of questions support the following properties.</p>
 </tbody>
 </table>
 <p>Here is a simple example of using a grid:</p>
-<pre><code class="lang-js"><span class="hljs-keyword">var</span> grid =     {
-    type: <span class="hljs-string">'grid'</span>,
-    name:<span class="hljs-string">'grid'</span>,
-    columns: [<span class="hljs-string">'Strongly agree'</span> , <span class="hljs-string">'agree'</span> , <span class="hljs-string">'don\'t know'</span> , <span class="hljs-string">'disagree'</span> , <span class="hljs-string">'Strongly disagree'</span>],
-    rows: [<span class="hljs-string">'I like grids'</span>, <span class="hljs-string">'I like bananas too'</span>]
+<pre><code class="lang-js">var grid =     {
+    <span class="hljs-keyword">type</span>: <span class="hljs-symbol">'grid'</span>,
+    name:<span class="hljs-symbol">'grid'</span>,
+    columns: [<span class="hljs-symbol">'Strongly</span> agree' , <span class="hljs-symbol">'agree'</span> , <span class="hljs-symbol">'don</span>\<span class="hljs-symbol">'t</span> know' , <span class="hljs-symbol">'disagree'</span> , <span class="hljs-symbol">'Strongly</span> disagree'],
+    rows: [<span class="hljs-symbol">'I</span> like grids', <span class="hljs-symbol">'I</span> like bananas too']
 }
 </code></pre>
 <p>You can, of course have tighter control over the way things work:</p>
-<pre><code class="lang-js"><span class="hljs-keyword">var</span> grid =     {
-    type: <span class="hljs-string">'grid'</span>,
-    name:<span class="hljs-string">'grid'</span>,
-    columns: [
+<pre><code class="lang-js">var grid =     {
+<span class="hljs-label">    type:</span> <span class="hljs-string">'grid'</span>,
+<span class="hljs-label">    name:</span><span class="hljs-string">'grid'</span>,
+<span class="hljs-label">    columns:</span> [
         <span class="hljs-string">'Strongly agree'</span>,
         <span class="hljs-string">'agree'</span>,
         <span class="hljs-string">'don\'t know'</span>,
         <span class="hljs-string">'disagree'</span>,
         <span class="hljs-string">'Strongly disagree'</span>,
-        {stem:<span class="hljs-string">'Decline to answer'</span>, value:<span class="hljs-string">'n/a'</span>, noReverse:<span class="hljs-literal">true</span>}
+        {<span class="hljs-string">stem:</span><span class="hljs-string">'Decline to answer'</span>, <span class="hljs-string">value:</span><span class="hljs-string">'n/a'</span>, <span class="hljs-string">noReverse:</span><span class="hljs-literal">true</span>}
     ],
-    rows: [
-        {stem:<span class="hljs-string">'I like grids'</span>,name:<span class="hljs-string">'likeGrids'</span>},
+<span class="hljs-label">    rows:</span> [
+        {<span class="hljs-string">stem:</span><span class="hljs-string">'I like grids'</span>,<span class="hljs-string">name:</span><span class="hljs-string">'likeGrids'</span>},
         <span class="hljs-comment">// This questions scores will be reversed so that the sum of scores is meaningful </span>
-        {stem:<span class="hljs-string">'I hate bananas'</span>, name:<span class="hljs-string">'likeBananas'</span>, reverse:<span class="hljs-literal">true</span>}
+        {<span class="hljs-string">stem:</span><span class="hljs-string">'I hate bananas'</span>, <span class="hljs-string">name:</span><span class="hljs-string">'likeBananas'</span>, <span class="hljs-string">reverse:</span><span class="hljs-literal">true</span>}
     ]
 }
 </code></pre>
-<h4 id="slider">slider</h4>
-<p>The slider question presents a slider that allows the user to pick a response along a preassigned range. It allows either the creation a continuous scale or dividing the range into steps. The values of the slider are always numbers.
+<h4><a name="slider" class="header-link" href="#slider"><span class="glyphicon glyphicon-link"></span></a>slider</h4><p>The slider question presents a slider that allows the user to pick a response along a preassigned range. It allows either the creation a continuous scale or dividing the range into steps. The values of the slider are always numbers.
 These are the supported properties:</p>
 <table>
 <thead>
@@ -939,31 +924,28 @@ These are the supported properties:</p>
 </tbody>
 </table>
 <p>The most common use of the slider is the creation of a visual analog scale (VAS). This is an example of using a slider to create a Likert type scale:</p>
-<pre><code class="lang-js"><span class="hljs-keyword">var</span> quest = {
-    type: <span class="hljs-string">'slider'</span>,
+<pre><code class="lang-js"><span class="hljs-built_in">var</span> quest = {
+    <span class="hljs-keyword">type</span>: <span class="hljs-string">'slider'</span>,
     stem: <span class="hljs-string">'Sliders are exremely useful.'</span>,
-    min:<span class="hljs-number">1</span>,
-    max:<span class="hljs-number">7</span>,
+    <span class="hljs-keyword">min</span>:<span class="hljs-number">1</span>,
+    <span class="hljs-keyword">max</span>:<span class="hljs-number">7</span>,
     steps:<span class="hljs-number">7</span>,
-    labels: [<span class="hljs-string">'Strongly Agree'</span>, <span class="hljs-string">'Neutral'</span>, <span class="hljs-string">'Strongly Disagree'</span>]    
-}
+    labels: <span class="hljs-preprocessor">[</span><span class="hljs-string">'Strongly Agree'</span>, <span class="hljs-string">'Neutral'</span>, <span class="hljs-string">'Strongly Disagree'</span><span class="hljs-preprocessor">]</span><span class="hljs-markup">    
+}</span>
 </code></pre>
-<h3 id="settings">settings</h3>
-<p>Settings allow you to control the generic way that the player works. Change the settings using the <code>addSettings</code> function. The first argument to the function is always the name of the setting, the second argument is the setting values. In case the setting is an object, subsequent objects will extend each other so that settings may be progressively added.</p>
-<h4 id="onend">onEnd</h4>
-<p><code>onEnd</code> is a function to be called as soon as the task ends. It should be taken care of automatically when PIQuest is run from within the task manager.</p>
-<pre><code class="lang-js">API.addSettings(<span class="hljs-string">'onEnd'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
-    <span class="hljs-comment">// Do something: for instance, redirect to 'my/url.js'</span>
+<h3><a name="settings" class="header-link" href="#settings"><span class="glyphicon glyphicon-link"></span></a>settings</h3><p>Settings allow you to control the generic way that the player works. Change the settings using the <code>addSettings</code> function. The first argument to the function is always the name of the setting, the second argument is the setting values. In case the setting is an object, subsequent objects will extend each other so that settings may be progressively added.</p>
+<h4><a name="onend" class="header-link" href="#onend"><span class="glyphicon glyphicon-link"></span></a>onEnd</h4><p><code>onEnd</code> is a function to be called as soon as the task ends. It should be taken care of automatically when PIQuest is run from within the task manager.</p>
+<pre><code class="lang-js">API.addSettings(<span class="hljs-string">'onEnd'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
+    // Do somethin<span class="hljs-variable">g:</span> <span class="hljs-keyword">for</span> instance, redirect <span class="hljs-keyword">to</span> <span class="hljs-string">'my/url.js'</span>
     location.href = <span class="hljs-string">'my/url.js'</span>;
 });
 </code></pre>
-<h4 id="logger">logger</h4>
-<p>This setting controls the way that logging works within the player.</p>
+<h4><a name="logger" class="header-link" href="#logger"><span class="glyphicon glyphicon-link"></span></a>logger</h4><p>This setting controls the way that logging works within the player.</p>
 <pre><code class="lang-js">API.addSettings(<span class="hljs-string">"logger"</span>, {
     pulse: <span class="hljs-number">34</span>,
-    url: <span class="hljs-string">'/my/url'</span>,    
-    logfn: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">log,pagesData, global</span>)</span>{
-        <span class="hljs-keyword">return</span> {name: log.name, set: global.setName};
+    url: '/<span class="hljs-keyword">my</span>/url',    
+    logfn: function(<span class="hljs-command">log</span>,pagesData, <span class="hljs-keyword">global</span>){
+<span class="hljs-command">        return</span> {<span class="hljs-property">name</span>: <span class="hljs-command">log</span>.<span class="hljs-property">name</span>, <span class="hljs-keyword">set</span>: <span class="hljs-keyword">global</span>.setName};
     }
 });
 </code></pre>
@@ -992,13 +974,12 @@ These are the supported properties:</p>
 <p>Within the player, each question (as defined by unique question name) may be logged only once. By default questions are logged at the end of a page (on submit or decline), if you want to delay logging until the end of the task, you may do so by setting <code>nolog</code> in the appropriate page or question.</p>
 <p>If you want a question not to be logged at all, simply do not give it a name.</p>
 <p>You may want to debug the logger by <a href="#debugging">activating the DEBUG <code>logger</code> setting</a>. When activated, it prints each logged object into the console.</p>
-<h4 id="timer">Timer</h4>
-<p>The questionnaire timer allows you to constrain the time that users have to answer the whole questionnaire.</p>
-<pre><code class="lang-js">API.addSettings(<span class="hljs-string">'timer'</span>, {
-    duration: <span class="hljs-number">10</span>,
-    message: {
-        header: <span class="hljs-string">'Time out!'</span>,
-        body: <span class="hljs-string">'You will now be redirected to the next task.'</span>
+<h4><a name="timer" class="header-link" href="#timer"><span class="glyphicon glyphicon-link"></span></a>Timer</h4><p>The questionnaire timer allows you to constrain the time that users have to answer the whole questionnaire.</p>
+<pre><code class="lang-js"><span class="hljs-tag">API</span><span class="hljs-class">.addSettings</span>(<span class="hljs-string">'timer'</span>, {
+    <span class="hljs-tag">duration</span>: <span class="hljs-tag">10</span>,
+    <span class="hljs-tag">message</span>: {
+        <span class="hljs-attribute">header</span>: <span class="hljs-string">'Time out!'</span>,
+        <span class="hljs-attribute">body</span>: <span class="hljs-string">'You will now be redirected to the next task.'</span>
     }
 });
 </code></pre>
@@ -1033,13 +1014,12 @@ These are the supported properties:</p>
 </tr>
 </tbody>
 </table>
-<h4 id="debugging">Debugging</h4>
-<p>PIQuest can supply some extra information regarding its inner workings, all you have to do is set the DEBUG setting property like so:</p>
+<h4><a name="debugging" class="header-link" href="#debugging"><span class="glyphicon glyphicon-link"></span></a>Debugging</h4><p>PIQuest can supply some extra information regarding its inner workings, all you have to do is set the DEBUG setting property like so:</p>
 <pre><code class="lang-js"><span class="hljs-comment">// Log everything</span>
-API.addSettings(<span class="hljs-string">'DEBUG'</span>, {
-    level: <span class="hljs-string">'warn'</span>, <span class="hljs-comment">// log errors and warnings</span>
-    tags: [<span class="hljs-string">'page'</span>,<span class="hljs-string">'animation'</span>], <span class="hljs-comment">// Log page and animation related messages</span>
-    hideConsole: <span class="hljs-literal">true</span> 
+<span class="hljs-tag">API</span><span class="hljs-class">.addSettings</span>(<span class="hljs-string">'DEBUG'</span>, {
+    <span class="hljs-attribute">level</span>: <span class="hljs-string">'warn'</span>, <span class="hljs-comment">// log errors and warnings</span>
+    <span class="hljs-attribute">tags</span>: [<span class="hljs-string">'page'</span>,<span class="hljs-string">'animation'</span>], <span class="hljs-comment">// Log page and animation related messages</span>
+    <span class="hljs-attribute">hideConsole</span>: true 
 });
 </code></pre>
 <p><strong>tags</strong>:
@@ -1079,9 +1059,7 @@ The player has several levels of logging, by default it logs only <code>error</c
 </table>
 <p><strong>hideConsole</strong>:
 This property allows you to control the display of logs inside the browser, if it is set to <code>true</code> then the logs will only be printed into your console.</p>
-<h2 id="data">Data</h2>
-<h3 id="logs">Logs</h3>
-<p>piQuest keeps record of user responses using plain js objects. These objects are kept locally (see #variables) and sent to the server (see <a href="#logger">logger</a> setting).</p>
+<h2><a name="data" class="header-link" href="#data"><span class="glyphicon glyphicon-link"></span></a>Data</h2><h3><a name="logs" class="header-link" href="#logs"><span class="glyphicon glyphicon-link"></span></a>Logs</h3><p>piQuest keeps record of user responses using plain js objects. These objects are kept locally (see #variables) and sent to the server (see <a href="#logger">logger</a> setting).</p>
 <p>Following are the properties of the logged object:</p>
 <table>
 <thead>
@@ -1113,11 +1091,10 @@ This property allows you to control the display of logs inside the browser, if i
 </tr>
 </tbody>
 </table>
-<h3 id="variables">Variables</h3>
-<p>The data logs are available as variables under the current object like so:</p>
+<h3><a name="variables" class="header-link" href="#variables"><span class="glyphicon glyphicon-link"></span></a>Variables</h3><p>The data logs are available as variables under the current object like so:</p>
 <pre><code class="lang-js">current.questions = {
-    questionName1 : {...}, <span class="hljs-comment">// log object</span>
-    questionName2 : {...} <span class="hljs-comment">// log object</span>
+    questionName1 : <span class="hljs-decorator">{...}</span>, // log <span class="hljs-keyword">object</span>
+    questionName2 : <span class="hljs-decorator">{...}</span> // log <span class="hljs-keyword">object</span>
 }
 </code></pre>
 <p>The response for questionName1 can be accessed using <code>current.questions.questionName1.response</code>. You can use this data within <a href="../basics/sequencer.html#templates">templates</a> or from within <a href="../basics/sequencer.html#conditions">branches</a>.</p>

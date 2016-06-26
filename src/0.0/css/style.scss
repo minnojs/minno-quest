@@ -335,40 +335,21 @@ body {
   }
 }
 
-/*
- * ZeroClipboard styles
- */
-
-.zero-clipboard {
-  position: relative;
-  display: none;
-}
-.btn-clipboard {
+.header-link {
   position: absolute;
-  top: 0;
-  right: 0;
-  z-index: 10;
-  display: block;
-  padding: 5px 8px;
-  font-size: 12px;
-  color: #767676;
-  cursor: pointer;
-  background-color: #fff;
-  border: 1px solid #e1e1e8;
-  border-radius: 0 4px 0 4px;
-}
-.btn-clipboard-hover {
-  color: #fff;
-  background-color: #563d7c;
-  border-color: #563d7c;
+  left: -0.5em;
+  opacity: 0;
+
+  transition: opacity 0.2s ease-in-out 0.1s;
+  -webkit-transition: opacity 0.2s ease-in-out 0.1s;
+  -moz-transition: opacity 0.2s ease-in-out 0.1s;
+  -ms-transition: opacity 0.2s ease-in-out 0.1s;
 }
 
-@media (min-width: 768px) {
-  .zero-clipboard {
-    display: block;
-  }
-  .bs-example + .zero-clipboard .btn-clipboard {
-    top: -16px;
-    border-top-right-radius: 0;
-  }
+h2:hover .header-link,
+h3:hover .header-link,
+h4:hover .header-link,
+h5:hover .header-link,
+h6:hover .header-link {
+  opacity: 1;
 }

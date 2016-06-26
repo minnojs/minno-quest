@@ -110,10 +110,10 @@
 					
 	<p>The post task is responsible for posting plain data to the server. You can either send data directly from the global object or create it yourself. This is a good way to keep track of complex conditions within your tasks or of manual manipulation of all sorts.</p>
 <p>A typical post task may look like this:</p>
-<pre><code class="lang-js">{
-    type:<span class="hljs-string">'post'</span>,
+<pre><code class="lang-js"><span class="hljs-rules">{
+    <span class="hljs-rule"><span class="hljs-attribute">type</span>:<span class="hljs-value"><span class="hljs-string">'post'</span>,
     url: <span class="hljs-string">'my/post/url'</span>,
-    data: {something:<span class="hljs-string">'I'</span>,want:<span class="hljs-string">'to save.'</span>}
+    data: {something:<span class="hljs-string">'I'</span>,want:<span class="hljs-string">'to save.'</span></span></span></span>}
 }
 </code></pre>
 <p>The API is as follows:</p>

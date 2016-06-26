@@ -119,42 +119,39 @@
 <p>The sequencer is an overarching term for all of the features that allow you to dynamically change the flow of your tasks.
 It has three critical components: The mixer, templating and inheritance.</p>
 <p>Throughout the sequencer documentation we will use <a href="../manager/messages.html">messages</a> as examples, simply because they are the simplest type of element.</p>
-<h3 id="mixers">Mixers</h3>
-<p>Each PI task is composed of a series of elements sequentially activated and presented to the users (these are trials for piPlayer, pages for piQuest and tasks for piManager). 
+<h3><a name="mixers" class="header-link" href="#mixers"><span class="glyphicon glyphicon-link"></span></a>Mixers</h3><p>Each PI task is composed of a series of elements sequentially activated and presented to the users (these are trials for piPlayer, pages for piQuest and tasks for piManager). 
 The sequence <a href="./mixer.html"><strong>mixer</strong></a> is responsible for the order  that these elements are presented to the users, 
 it allows you to randomize the order of you elements as well as repeating them and branching the flow according to different conditions.</p>
 <p>For example, the following mixer randomizes the order of two tasks in <em>piManager</em>:</p>
 <pre><code class="lang-js">API.addSequence([
     {
-        mixer: <span class="hljs-string">'randomize'</span>,
-        data: [
-            {type:<span class="hljs-string">'message'</span>, template: <span class="hljs-string">'Task 1'</span>, keys: <span class="hljs-string">' '</span>},
-            {type:<span class="hljs-string">'message'</span>, template: <span class="hljs-string">'Task 2'</span>, keys: <span class="hljs-string">' '</span>}
+<span class="hljs-label">        mixer:</span> <span class="hljs-string">'randomize'</span>,
+<span class="hljs-label">        data:</span> [
+            {<span class="hljs-string">type:</span><span class="hljs-string">'message'</span>, <span class="hljs-string">template:</span> <span class="hljs-string">'Task 1'</span>, <span class="hljs-string">keys:</span> <span class="hljs-string">' '</span>},
+            {<span class="hljs-string">type:</span><span class="hljs-string">'message'</span>, <span class="hljs-string">template:</span> <span class="hljs-string">'Task 2'</span>, <span class="hljs-string">keys:</span> <span class="hljs-string">' '</span>}
         ]
     }
 ]);
 </code></pre>
-<h3 id="inheritance">Inheritance</h3>
-<p>The basic unit that is used across all players is the element. 
+<h3><a name="inheritance" class="header-link" href="#inheritance"><span class="glyphicon glyphicon-link"></span></a>Inheritance</h3><p>The basic unit that is used across all players is the element. 
 You can use the <a href="./inheritance.html">inheritance</a> system in order to compose elements and base themselves one upon another, as well as grouping them into distinct sets.
 This is useful both as a tool to improve the readability of you scripts (for instance keep code away from stucture), and to allow another level of randomiziation and control.</p>
 <p>Following is an example of inheritance that improves the readability of a task sequence (real world examples are of course more complex…).</p>
-<pre><code class="lang-js">API.addTasksSet(<span class="hljs-string">'simpleMessage'</span>, [
-    {type:<span class="hljs-string">'message'</span>, template: <span class="hljs-string">'Task 1'</span>, keys: <span class="hljs-string">' '</span>}
+<pre><code class="lang-js"><span class="hljs-tag">API</span><span class="hljs-class">.addTasksSet</span>(<span class="hljs-string">'simpleMessage'</span>, [
+    {<span class="hljs-attribute">type</span>:<span class="hljs-string">'message'</span>, <span class="hljs-attribute">template</span>: <span class="hljs-string">'Task 1'</span>, <span class="hljs-attribute">keys</span>: <span class="hljs-string">' '</span>}
 ]);
 
-API.addSequence([
-    {inherit: <span class="hljs-string">'simpleMessage'</span>}
+<span class="hljs-tag">API</span><span class="hljs-class">.addSequence</span>([
+    {<span class="hljs-attribute">inherit</span>: <span class="hljs-string">'simpleMessage'</span>}
 ]);
 </code></pre>
-<h3 id="templates">Templates</h3>
-<p>Finally you have fine control down to the level of individual element properties using <a href="./templates.html">templates</a>. 
+<h3><a name="templates" class="header-link" href="#templates"><span class="glyphicon glyphicon-link"></span></a>Templates</h3><p>Finally you have fine control down to the level of individual element properties using <a href="./templates.html">templates</a>. 
 Templates allow you to use <a href="./variables.html">Environmental Variables</a> in order to customize you elements.</p>
 <p>The following code will display a message that says “Hello Randall Munroe”.</p>
-<pre><code class="lang-js">API.addCurrent({userName: <span class="hljs-string">'Randall Munroe'</span>});
+<pre><code class="lang-js"><span class="hljs-tag">API</span><span class="hljs-class">.addCurrent</span>({<span class="hljs-attribute">userName</span>: <span class="hljs-string">'Randall Munroe'</span>});
 
-API.addSequence([
-    {type:<span class="hljs-string">'message'</span>, template: <span class="hljs-string">'Hello &lt;%= current.userName %&gt;'</span>, keys: <span class="hljs-string">' '</span>}
+<span class="hljs-tag">API</span><span class="hljs-class">.addSequence</span>([
+    {<span class="hljs-attribute">type</span>:<span class="hljs-string">'message'</span>, <span class="hljs-attribute">template</span>: <span class="hljs-string">'Hello &lt;%= current.userName %&gt;'</span>, <span class="hljs-attribute">keys</span>: <span class="hljs-string">' '</span>}
 ]);
 </code></pre>
 

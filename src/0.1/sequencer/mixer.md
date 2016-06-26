@@ -6,6 +6,7 @@ description: Controlling the flow of the sequence
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
+
 - [Introduction](#introduction)
   - [Syntax](#syntax)
   - [Nesting](#nesting)
@@ -120,7 +121,7 @@ API.addSequence([
 ```
 
 #### Real time (remix)
-[remix]: #real-time-remix-
+[remix]: #real-time-remix
 
 By default each mixer is evaluated only once. This usually should not affect you at all.
 It becomes relevant on two conditions, one is if your task allows moving back to previous elements; in that case the mixer will keep the mixer elements as they where previously evaluated.
@@ -156,7 +157,7 @@ var page = {
 ```
 
 #### Sequence evaluation (wrapper)
-[wrapper]: sequence-evaluation-wrapper-
+[evaluation]: sequence-evaluation-wrapper
 
 Most of the time, mixers are lazily evaluated. This means that the sequencer waits until it reaches the mixer before expanding it.
 This behaviour allows us to use branching mixers - we don't decide which branch to take until we reach it.
@@ -319,7 +320,7 @@ Will be transformed into one of the following:
 * [elem1, elem2]
 * [elem2, elem1]
 
-Please note that the `random` mixer pre-mixes all the content in `data`, please see [sequence evaluation](#sequence-evaluation) and the [wrapper mixer](#wrapper) for more details and related problems.
+Please note that the `random` mixer pre-mixes all the content in `data`, please see [sequence evaluation](#evaluation) and the [wrapper mixer](#wrapper) for more details and related problems.
 
 #### choose
 Choose one or more (`n`) elements out of `data`.
@@ -383,7 +384,7 @@ Alias for [`weightedChoose`](#weightedChoose).
 The wrapper mixer serves a sort of parenthesis for the mixer.
 It is used to keep a sub-sequence of elements to be randomized within one of the randomizing mixers (such as [random](#random) or [choose](#choose)).
 In case you want to keep a sub-sequence as a block (when randomizing) simply wrap them and they'll stay together.
-You can find more use cases in the [sequence evaluation](#sequence-evaluation) section.
+You can find more use cases in the [sequence evaluation](#evaluation) section.
 
 The following snippet uses a wrapper to keep two elements together despite a being in a randomizer;
 

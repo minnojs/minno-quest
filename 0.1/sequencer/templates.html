@@ -121,10 +121,10 @@ Element templates also have access to their own data property as {namespace}Data
 Some objects have access to additional properties, you can find them in their respective documentation.</p>
 <p>Normaly each template gets rendered only once, when it is first encountered. Sometimes you may want it to update in response to various realtime changes. 
 In order to for the templates to re-render each time you should set the <code>reRender</code> property to be true.</p>
-<pre><code class="lang-js">{
-    stem: <span class="hljs-string">'&lt;%= global.value %&gt;'</span>,
-    regenerateTemplate: <span class="hljs-literal">true</span>
-}
+<pre><code class="lang-js"><span class="hljs-rules">{
+    <span class="hljs-rule"><span class="hljs-attribute">stem</span>:<span class="hljs-value"> <span class="hljs-string">'&lt;%= global.value %&gt;'</span>,
+    regenerateTemplate: true
+</span></span></span>}
 </code></pre>
 
 

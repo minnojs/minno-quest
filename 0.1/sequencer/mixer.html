@@ -112,9 +112,10 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 <ul>
 <li><a href="#introduction">Introduction</a><ul>
-<li><a href="#structure">Structure</a></li>
+<li><a href="#syntax">Syntax</a></li>
 <li><a href="#nesting">Nesting</a></li>
-<li><a href="#sequence-evaluation">Sequence evaluation</a></li>
+<li><a href="#real-time-remix">Real time (remix)</a></li>
+<li><a href="#sequence-evaluation-wrapper">Sequence evaluation (wrapper)</a></li>
 </ul>
 </li>
 <li><a href="#mixer-types">Mixer types</a><ul>
@@ -131,15 +132,14 @@
 <li><a href="#conditions">Conditions</a><ul>
 <li><a href="#operators">Operators</a></li>
 <li><a href="#aggregation">Aggregation</a></li>
+<li><a href="#debugging">Debugging</a></li>
 </ul>
 </li>
 </ul>
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-<h3 id="introduction">Introduction</h3>
-<p>Mixers allow you to control the flow of your sequences within the PI players.
+<h3><a name="introduction" class="header-link" href="#introduction"><span class="glyphicon glyphicon-link"></span></a>Introduction</h3><p>Mixers allow you to control the flow of your sequences within the PI players.
 In particular they allow you to repeat, randomize and even branch sections of your sequence according to <a href="./variables.html">environmental variables</a>.</p>
-<h4 id="syntax">Syntax</h4>
-<p>Each one of the PI tasks is composed of a sequence of elements that is sequentially evaluated and presented to the user.
+<h4><a name="syntax" class="header-link" href="#syntax"><span class="glyphicon glyphicon-link"></span></a>Syntax</h4><p>Each one of the PI tasks is composed of a sequence of elements that is sequentially evaluated and presented to the user.
 For example, the sequence in piManager is composed of elements that represent a task each.
 These sequences are created using the <code>API.addSequence</code> method in your script.
 Mixers are inserted into the sequence the same way that regular elements are, each mixer represents a sub-sequence that is to be manipulated and then inserted in its place.</p>
@@ -149,19 +149,19 @@ Note that the mixer element is effectively replaced by the two elements from the
 <pre><code class="lang-js"><span class="hljs-comment">// The task sequence</span>
 API.addSequence([
     <span class="hljs-comment">// First Element: task 1</span>
-    {type:<span class="hljs-string">'message'</span>, template: <span class="hljs-string">'Task 2'</span>, keys: <span class="hljs-string">' '</span>},
+    {<span class="hljs-string">type:</span><span class="hljs-string">'message'</span>, <span class="hljs-string">template:</span> <span class="hljs-string">'Task 2'</span>, <span class="hljs-string">keys:</span> <span class="hljs-string">' '</span>},
 
     <span class="hljs-comment">// Second Element: the mixer (task 2 and 3 randomized)</span>
     {
-        mixer: <span class="hljs-string">'random'</span>,
-        data: [
-            {type:<span class="hljs-string">'message'</span>, template: <span class="hljs-string">'Task 2'</span>, keys: <span class="hljs-string">' '</span>},
-            {type:<span class="hljs-string">'message'</span>, template: <span class="hljs-string">'Task 3'</span>, keys: <span class="hljs-string">' '</span>}
+<span class="hljs-label">        mixer:</span> <span class="hljs-string">'random'</span>,
+<span class="hljs-label">        data:</span> [
+            {<span class="hljs-string">type:</span><span class="hljs-string">'message'</span>, <span class="hljs-string">template:</span> <span class="hljs-string">'Task 2'</span>, <span class="hljs-string">keys:</span> <span class="hljs-string">' '</span>},
+            {<span class="hljs-string">type:</span><span class="hljs-string">'message'</span>, <span class="hljs-string">template:</span> <span class="hljs-string">'Task 3'</span>, <span class="hljs-string">keys:</span> <span class="hljs-string">' '</span>}
         ]
     },
 
     <span class="hljs-comment">// Third Element: task 4</span>
-    {type:<span class="hljs-string">'message'</span>, template: <span class="hljs-string">'Task 4'</span>, keys: <span class="hljs-string">' '</span>}
+    {<span class="hljs-string">type:</span><span class="hljs-string">'message'</span>, <span class="hljs-string">template:</span> <span class="hljs-string">'Task 4'</span>, <span class="hljs-string">keys:</span> <span class="hljs-string">' '</span>}
 ]);
 </code></pre>
 <p>Each mixer has a type associated with it as well as at least one sub-sequence.
@@ -169,14 +169,13 @@ The <code>mixer</code> property always holds the mixer type (see below for the a
 In most cases the <code>data</code> property holds the sub-sequence (the exception is with the branching mixers that may hold multiple sub-sequences).</p>
 <p>A typical mixer looks something like this: </p>
 <pre><code class="lang-js">{
-    mixer: <span class="hljs-string">'random'</span>,     <span class="hljs-comment">// &lt;== The mixer type (randomize in this case)</span>
-    data: [elem1, elem2]    <span class="hljs-comment">// &lt;== The sub-sequence (holding elem1 and elem2)</span>
+    mixer: 'random',     // &lt;== The mixer type<span class="hljs-function"> (</span>randomize in this case<span class="hljs-function">)</span>
+    data: <span class="hljs-keyword">[</span>elem1, elem2]    // &lt;== The<span class="hljs-instruction"> sub-sequence </span>(holding elem1<span class="hljs-instruction"> and </span>elem2<span class="hljs-function">)</span>
 }
 </code></pre>
 <p>From now on, instead of explicitly writing in the mixed elements we will use arbitrary variable names instead, such as <code>elem1</code> and <code>elem2</code>. 
 We are doing this to keep the structures as simple and readable as possible.</p>
-<h4 id="nesting">Nesting</h4>
-<p>Mixers may be nested inside each other as much as you like. The following example illustrates a more complex example.
+<h4><a name="nesting" class="header-link" href="#nesting"><span class="glyphicon glyphicon-link"></span></a>Nesting</h4><p>Mixers may be nested inside each other as much as you like. The following example illustrates a more complex example.
 Here, we have an opening and ending element (<code>firstelem</code> and <code>lastelem</code>).
 Between them them we repeat a set of four elements ten times.
 The order within the four objects is randomized, so that <code>elem1</code> always comes first and the order of the following elements is randomized but <code>elem3</code> and <code>elem4</code> are wrapped together and therefore always stay consecutive.</p>
@@ -187,20 +186,20 @@ The order within the four objects is randomized, so that <code>elem1</code> alwa
     <span class="hljs-comment">// Repeat the structure inside 10 time (so we get 40 objects overall)</span>
     {
         mixer: <span class="hljs-string">'repeat'</span>,
-        wrapper:<span class="hljs-literal">true</span>, <span class="hljs-comment">// Delay the mixing of these elements until after the `repeat`.</span>
+        wrapper:true, <span class="hljs-comment">// Delay the mixing of these elements until after the `repeat`.</span>
         times: <span class="hljs-number">10</span>,
-        data: [
+        <span class="hljs-keyword">data</span>: [
             elem1,
 
             <span class="hljs-comment">// Randomize the order of the elements within.</span>
             {
                 mixer: <span class="hljs-string">'random'</span>,
-                data: [
+                <span class="hljs-keyword">data</span>: [
                     elem2,
                     <span class="hljs-comment">// Keep obj 3 and 4 together.</span>
                     {
                         mixer: <span class="hljs-string">'wrapper'</span>,
-                        data: [
+                        <span class="hljs-keyword">data</span>: [
                             elem3,
                             elem4
                         ]
@@ -214,38 +213,35 @@ The order within the four objects is randomized, so that <code>elem1</code> alwa
     lastelem
 ]);
 </code></pre>
-<h4 id="real-time-remix-">Real time (remix)</h4>
-<p><a href="#real-time-remix">link</a>
-By default each mixer is evaluated only once. This usually should not affect you at all.
+<h4><a name="real-time-remix" class="header-link" href="#real-time-remix"><span class="glyphicon glyphicon-link"></span></a>Real time (remix)</h4><p>By default each mixer is evaluated only once. This usually should not affect you at all.
 It becomes relevant on two conditions, one is if your task allows moving back to previous elements; in that case the mixer will keep the mixer elements as they where previously evaluated.
 The second condition is when you have a branch that you want to react to live changes (at this time this is relevant only for piQuest answers).</p>
 <p>If you want a mixer to react to changes in the environment you need to set <code>remix=true</code>.</p>
 <p>The following snippet uses <code>remix</code> to show a second question depending on the response of the first one (in piQuest).</p>
-<pre><code class="lang-js">var page = {
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> page = {
     questions: [
-        // First question
+        <span class="hljs-comment">// First question</span>
         {
-            name: &#39;q1,
-            stem: &#39;Please write &quot;hello&quot;&#39;
+            name: <span class="hljs-symbol">'q1</span>,
+            stem: <span class="hljs-symbol">'Please</span> write <span class="hljs-string">"hello"</span>'
         },
 
-        // The mixer
+        <span class="hljs-comment">// The mixer</span>
         {
-            mixer: &#39;branch&#39;,
-            remix: true,
-            conditions: [ {compare: &#39;current.questions.q1&#39;, to: &#39;hello&#39;} ],
+            mixer: <span class="hljs-symbol">'branc</span>h',
+            remix: <span class="hljs-literal">true</span>,
+            conditions: [ {compare: <span class="hljs-symbol">'current</span>.questions.q1', to: <span class="hljs-symbol">'hell</span>o'} ],
             data: [
-                // Dependant question
+                <span class="hljs-comment">// Dependant question</span>
                 {
-                    stem: &#39;You said &quot;hello&quot;!&#39;
+                    stem: <span class="hljs-symbol">'You</span> said <span class="hljs-string">"hello"</span>!'
                 } 
             ]
         }
     ]
 }
 </code></pre>
-<h4 id="sequence-evaluation-wrapper-">Sequence evaluation (wrapper)</h4>
-<p>Most of the time, mixers are lazily evaluated. This means that the sequencer waits until it reaches the mixer before expanding it.
+<h4><a name="sequence-evaluation-wrapper" class="header-link" href="#sequence-evaluation-wrapper"><span class="glyphicon glyphicon-link"></span></a>Sequence evaluation (wrapper)</h4><p>Most of the time, mixers are lazily evaluated. This means that the sequencer waits until it reaches the mixer before expanding it.
 This behaviour allows us to use branching mixers - we don’t decide which branch to take until we reach it.
 The exception to this rule is randomizing mixers (such as <code>randomize</code> or <code>choose</code>), that in order to randomize <em>everything</em> inside them, must pre-mix all their content.</p>
 <p>This behaviour may cause some problematic results.
@@ -255,8 +251,8 @@ The solution in this case is to wrap the inner mixer within a <a href="#wrapper"
 This way the randomizer will treat anything within the wrapper as a single unit and will not pre-mix it.</p>
 <p>Random randomizes the order of all the elements under the random mixer’s data array, even if they are inside a mixer. 
 For example, consider the following code:</p>
-<pre><code class="lang-js">{
-    mixer:<span class="hljs-string">'random'</span>,
+<pre><code class="lang-js"><span class="hljs-rules">{
+    <span class="hljs-rule"><span class="hljs-attribute">mixer</span>:<span class="hljs-value"><span class="hljs-string">'random'</span>,
     data: [
         elem1,
         {
@@ -265,7 +261,7 @@ For example, consider the following code:</p>
             data:[
                 elem2
             ]
-        }
+        </span></span></span>}
     ]
 }
 </code></pre>
@@ -276,16 +272,16 @@ For example, consider the following code:</p>
 <li>[elem2,elem2,elem1]</li>
 </ul>
 <p>If you want to keep some of the elements in the data together (and not randomized), use the <code>wrapper</code> mixer. For instance:</p>
-<pre><code class="lang-js"><span class="hljs-keyword">var</span> mixer = {
+<pre><code class="lang-js">var mixer = {
     mixer:<span class="hljs-string">'random'</span>,
     data: [
-        elem1
+        ele<span class="hljs-title">m1</span>
         {
             mixer:<span class="hljs-string">'wrapper'</span>,
             data:[
-                elem2,
-                elem3,
-                elem4
+                ele<span class="hljs-title">m2</span>,
+                ele<span class="hljs-title">m3</span>,
+                ele<span class="hljs-title">m4</span>
             ]
         }
     ]
@@ -293,21 +289,21 @@ For example, consider the following code:</p>
 </code></pre>
 <p>This code will keep elem2, elem3, and elem4 together, in that same order (elem2, elem3, elem4), and will randomly present elem1 before or after these three objects.</p>
 <p>You can make any mixer into a wrapper by adding <code>wrapper:true</code>. For example: </p>
-<pre><code class="lang-js"><span class="hljs-keyword">var</span> mixer = {
+<pre><code class="lang-js"><span class="hljs-built_in">var</span> mixer = {
     mixer:<span class="hljs-string">'random'</span>,
-    data: [
+    <span class="hljs-built_in">data</span>: <span class="hljs-preprocessor">[</span>
         elem1,
         {
             mixer:<span class="hljs-string">'repeat'</span>,
             times:<span class="hljs-number">2</span>,
             wrapper:<span class="hljs-literal">true</span>,
-            data:[
+            <span class="hljs-built_in">data</span>:<span class="hljs-preprocessor">[</span>
                 elem2,
                 elem3
-            ]
+            <span class="hljs-preprocessor">]</span><span class="hljs-markup">
         }
     ]
-}
+}</span>
 </code></pre>
 <p>This code will results in one of the following sequences:</p>
 <ul>
@@ -315,18 +311,18 @@ For example, consider the following code:</p>
 <li>[elem2,elem3,elem2,elem3,elem1]</li>
 </ul>
 <p>If you want to randomize the order of two lists, and randomize the objects within each list but without mixing the two lists together, the following code will do the trick: </p>
-<pre><code class="lang-js"><span class="hljs-keyword">var</span> mixer = {
+<pre><code class="lang-js">var mixer = {
     mixer:<span class="hljs-string">'random'</span>,
     data: [
         {
             mixer:<span class="hljs-string">'random'</span>,
-            wrapper:<span class="hljs-literal">true</span>,
-            data:[elem1,elem2]
+            wrapper:true,
+            data:[ele<span class="hljs-title">m1</span>,ele<span class="hljs-title">m2</span>]
         },
         {
             mixer:<span class="hljs-string">'random'</span>,
-            wrapper:<span class="hljs-literal">true</span>,
-            data:[elem3,elem4]
+            wrapper:true,
+            data:[ele<span class="hljs-title">m3</span>,ele<span class="hljs-title">m4</span>]
         }
     ]
 }
@@ -344,54 +340,50 @@ For example, consider the following code:</p>
 </ul>
 <p>The following snippet uses the wrapper property to keep the content of the repeat mixer together.
 @TODO: find a good example for the use of wrappers.</p>
-<pre><code class="lang-js">{
-    mixer: <span class="hljs-string">'random'</span>,
+<pre><code class="lang-js"><span class="hljs-rules">{
+    <span class="hljs-rule"><span class="hljs-attribute">mixer</span>:<span class="hljs-value"> <span class="hljs-string">'random'</span>,
     data: [
         elem1,
         {
             mixer: <span class="hljs-string">'repeat'</span>,
             times: <span class="hljs-number">2</span>,
-            wrapper: <span class="hljs-literal">true</span>,
+            wrapper: true,
             data: [elem2]
-        }
+        </span></span></span>}
     ]
 }
 </code></pre>
-<h3 id="mixer-types">Mixer types</h3>
-<h4 id="repeat">repeat</h4>
-<p>Repeats the sub-sequence in <code>data</code> <code>times</code> times.
+<h3><a name="mixer-types" class="header-link" href="#mixer-types"><span class="glyphicon glyphicon-link"></span></a>Mixer types</h3><h4><a name="repeat" class="header-link" href="#repeat"><span class="glyphicon glyphicon-link"></span></a>repeat</h4><p>Repeats the sub-sequence in <code>data</code> <code>times</code> times.
 So that the following mixer:</p>
-<pre><code class="lang-js">{
-    mixer:<span class="hljs-string">'repeat'</span>, 
+<pre><code class="lang-js"><span class="hljs-rules">{
+    <span class="hljs-rule"><span class="hljs-attribute">mixer</span>:<span class="hljs-value"><span class="hljs-string">'repeat'</span>, 
     times:<span class="hljs-number">3</span>, 
     data: [elem1,elem2]
-}
+</span></span></span>}
 </code></pre>
 <p>Will be transformed into:</p>
 <ul>
 <li>[elem1,elem2,elem1,elem2,elem1,elem2]</li>
 </ul>
-<h4 id="random">random</h4>
-<p>Randomizes the order of elements in <code>data</code>. 
+<h4><a name="random" class="header-link" href="#random"><span class="glyphicon glyphicon-link"></span></a>random</h4><p>Randomizes the order of elements in <code>data</code>. 
 So that the following mixer:</p>
-<pre><code class="lang-js">{
-    mixer:<span class="hljs-string">'random'</span>,
+<pre><code class="lang-js"><span class="hljs-rules">{
+    <span class="hljs-rule"><span class="hljs-attribute">mixer</span>:<span class="hljs-value"><span class="hljs-string">'random'</span>,
     data:[elem1,elem2]
-}
+</span></span></span>}
 </code></pre>
 <p>Will be transformed into one of the following:</p>
 <ul>
 <li>[elem1, elem2]</li>
 <li>[elem2, elem1]</li>
 </ul>
-<p>Please note that the <code>random</code> mixer pre-mixes all the content in <code>data</code>, please see <a href="#sequence-evaluation">sequence evaluation</a> and the <a href="#wrapper">wrapper mixer</a> for more details and related problems.</p>
-<h4 id="choose">choose</h4>
-<p>Choose one or more (<code>n</code>) elements out of <code>data</code>.
+<p>Please note that the <code>random</code> mixer pre-mixes all the content in <code>data</code>, please see <a href="#evaluation">sequence evaluation</a> and the <a href="#wrapper">wrapper mixer</a> for more details and related problems.</p>
+<h4><a name="choose" class="header-link" href="#choose"><span class="glyphicon glyphicon-link"></span></a>choose</h4><p>Choose one or more (<code>n</code>) elements out of <code>data</code>.
 By default, <code>choose</code> picks a single element form the <code>data</code> subsequence:</p>
-<pre><code class="lang-js">{
-    mixer:<span class="hljs-string">'choose'</span>,
+<pre><code class="lang-js"><span class="hljs-rules">{
+    <span class="hljs-rule"><span class="hljs-attribute">mixer</span>:<span class="hljs-value"><span class="hljs-string">'choose'</span>,
     data: [elem1, elem2, elem3]
-}
+</span></span></span>}
 </code></pre>
 <p>Will be transformed into one of the following:</p>
 <ul>
@@ -400,11 +392,11 @@ By default, <code>choose</code> picks a single element form the <code>data</code
 <li>[elem3]</li>
 </ul>
 <p>You can choose more than one element by setting <code>n</code>:</p>
-<pre><code class="lang-js">{
-    mixer:<span class="hljs-string">'choose'</span>,
+<pre><code class="lang-js"><span class="hljs-rules">{
+    <span class="hljs-rule"><span class="hljs-attribute">mixer</span>:<span class="hljs-value"><span class="hljs-string">'choose'</span>,
     n: <span class="hljs-number">2</span>,
     data: [elem1, elem2, elem3]
-}
+</span></span></span>}
 </code></pre>
 <p>That will return one of the following:</p>
 <ul>
@@ -412,16 +404,15 @@ By default, <code>choose</code> picks a single element form the <code>data</code
 <li>[elem1, elem3]</li>
 <li>[elem2, elem3]</li>
 </ul>
-<h4 id="weightedchoose">weightedChoose</h4>
-<p>Choose one or more (<code>n</code>) elements out of <code>data</code>. Using a weighted random algorithm.
+<h4><a name="weightedchoose" class="header-link" href="#weightedchoose"><span class="glyphicon glyphicon-link"></span></a>weightedChoose</h4><p>Choose one or more (<code>n</code>) elements out of <code>data</code>. Using a weighted random algorithm.
 Each element in <code>data</code> is given the appropriate weight from <code>weights</code>.
 <code>weightedChoose</code> does inclusive randomization. This means that elements may be picked more than once.</p>
 <p>In the following example elem2 has four times the probability of being selected as elem1;</p>
 <pre><code class="lang-js">{
-    mixer:<span class="hljs-string">'weightedChoose'</span>,
-    n: <span class="hljs-number">2</span>,
-    weights: [<span class="hljs-number">0.2</span>,<span class="hljs-number">0.8</span>],
-    data: [elem1,elem2]}
+    <span class="hljs-attribute">mixer</span>:<span class="hljs-string">'weightedChoose'</span>,
+    <span class="hljs-attribute">n</span>: <span class="hljs-number">2</span>,
+    <span class="hljs-attribute">weights</span>: [<span class="hljs-number">0.2</span>,<span class="hljs-number">0.8</span>],
+    <span class="hljs-attribute">data</span>: [elem1,elem2]}
 }
 </code></pre>
 <p>This code will create one of the following sequences: </p>
@@ -431,22 +422,20 @@ Each element in <code>data</code> is given the appropriate weight from <code>wei
 <li>[elem2,elem1] - 16% of cases</li>
 <li>[elem2,elem2] - 64% of cases</li>
 </ul>
-<h4 id="weightedrandom">weightedRandom</h4>
-<p>Alias for <a href="#weightedChoose"><code>weightedChoose</code></a>.</p>
-<h4 id="wrapper">wrapper</h4>
-<p>The wrapper mixer serves a sort of parenthesis for the mixer.
+<h4><a name="weightedrandom" class="header-link" href="#weightedrandom"><span class="glyphicon glyphicon-link"></span></a>weightedRandom</h4><p>Alias for <a href="#weightedChoose"><code>weightedChoose</code></a>.</p>
+<h4><a name="wrapper" class="header-link" href="#wrapper"><span class="glyphicon glyphicon-link"></span></a>wrapper</h4><p>The wrapper mixer serves a sort of parenthesis for the mixer.
 It is used to keep a sub-sequence of elements to be randomized within one of the randomizing mixers (such as <a href="#random">random</a> or <a href="#choose">choose</a>).
 In case you want to keep a sub-sequence as a block (when randomizing) simply wrap them and they’ll stay together.
-You can find more use cases in the <a href="#sequence-evaluation">sequence evaluation</a> section.</p>
+You can find more use cases in the <a href="#evaluation">sequence evaluation</a> section.</p>
 <p>The following snippet uses a wrapper to keep two elements together despite a being in a randomizer;</p>
-<pre><code class="lang-js">{
-    mixer: <span class="hljs-string">'random'</span>,
+<pre><code class="lang-js"><span class="hljs-rules">{
+    <span class="hljs-rule"><span class="hljs-attribute">mixer</span>:<span class="hljs-value"> <span class="hljs-string">'random'</span>,
     data: [
         elem1,
         {
             mixer: <span class="hljs-string">'wrapper'</span>,
             data: [elem2, elem3]
-        }
+        </span></span></span>}
     ]
 }
 </code></pre>
@@ -459,24 +448,23 @@ You can find more use cases in the <a href="#sequence-evaluation">sequence evalu
 You can add a <code>wrapper</code> property to any existing mixer, and it contents will be treated as if they where wrapped in a wrapper.
 This will look like this:</p>
 <pre><code class="lang-js">{
-    mixer:<span class="hljs-string">'repeat'</span>,
-    time:<span class="hljs-number">10</span>,
-    wrapper:<span class="hljs-literal">true</span>,
-    data: [elem1]
+    <span class="hljs-attribute">mixer</span>:<span class="hljs-string">'repeat'</span>,
+    <span class="hljs-attribute">time</span>:<span class="hljs-number">10</span>,
+    <span class="hljs-attribute">wrapper</span>:true,
+    <span class="hljs-attribute">data</span>: [elem1]
 }
 </code></pre>
-<h4 id="branch">branch</h4>
-<p>The branch mixer allows you to choose the flow of your sequence according to environmental conditions.
+<h4><a name="branch" class="header-link" href="#branch"><span class="glyphicon glyphicon-link"></span></a>branch</h4><p>The branch mixer allows you to choose the flow of your sequence according to environmental conditions.
 You can learn about environmental conditions <a href="./variables.html">here</a> and about how to create conditions <a href="#conditions">here</a>.
 This section will deal only with the stucture and use of the <code>branch</code> mixer itself.</p>
 <p>The branch mixer evaluates the <code>conditions</code> if they are true it returns the sequence in <code>data</code>, if they are false it returns the sequence in <code>elseData</code>.
 If <code>elseData</code> is not defined, or is left empty, then nothing happen in case the conditions are not true (see <a href="#conditions">conditions</a> to learn more about how conditions work).</p>
 <p>The following mixer:</p>
 <pre><code class="lang-js">{
-    mixer:<span class="hljs-string">'branch'</span>,
-    conditions:[cond],
-    data:[elem1,elem2],
-    elseData:[elem3,elem4] <span class="hljs-comment">// optional</span>
+    <span class="hljs-attribute">mixer</span>:<span class="hljs-string">'branch'</span>,
+    <span class="hljs-attribute">conditions</span>:[cond],
+    <span class="hljs-attribute">data</span>:[elem1,elem2],
+    <span class="hljs-attribute">elseData</span>:[elem3,elem4] <span class="hljs-comment">// optional</span>
 }
 </code></pre>
 <p>Will return</p>
@@ -484,18 +472,17 @@ If <code>elseData</code> is not defined, or is left empty, then nothing happen i
 <li>[elem1,elem2] - if the condition is true</li>
 <li>[elem3,elem4] - if the condition is false</li>
 </ul>
-<h4 id="multibranch">multiBranch</h4>
-<p><code>multiBranch</code> is similar to the <a href="#branch"><code>branch</code></a> mixer, only it allows you to switch between a list of conditions instead of only one.
+<h4><a name="multibranch" class="header-link" href="#multibranch"><span class="glyphicon glyphicon-link"></span></a>multiBranch</h4><p><code>multiBranch</code> is similar to the <a href="#branch"><code>branch</code></a> mixer, only it allows you to switch between a list of conditions instead of only one.
 The mixer will attempt to find the first object within the <code>branches</code> array for which <code>conditions</code> is true, and select the sub-sequence in that objects <code>data</code>.
 If no object is selected then select the sub-sequence in <code>elseData</code>.</p>
-<pre><code class="lang-js">{
-    mixer: <span class="hljs-string">'multiBranch'</span>,
-    branches: [
-        {conditions: [cond1],data: [elem1]},
-        {conditions: [cond2],data: [elem2]}
-    ],
-    elseData: [elem3] <span class="hljs-comment">// optional</span>
-}
+<pre><code class="lang-js"><span class="hljs-collection">{
+    mixer: 'multiBranch',
+    branches: <span class="hljs-collection">[
+        <span class="hljs-collection">{conditions: <span class="hljs-collection">[cond1]</span>,data: <span class="hljs-collection">[elem1]</span>}</span>,
+        <span class="hljs-collection">{conditions: <span class="hljs-collection">[cond2]</span>,data: <span class="hljs-collection">[elem2]</span>}</span>
+    ]</span>,
+    elseData: <span class="hljs-collection">[elem3]</span> // optional
+}</span>
 </code></pre>
 <p>Will return</p>
 <ul>
@@ -503,8 +490,7 @@ If no object is selected then select the sub-sequence in <code>elseData</code>.<
 <li>[elem2] - if cond2 is true (but not cond1)</li>
 <li>[elem3] - if both cond1 and cond2 are false</li>
 </ul>
-<h3 id="conditions">Conditions</h3>
-<p>The conditional mixers (<a href="#branch"><code>branch</code></a> &amp; <a href="#multibranch"><code>multiBranch</code></a>) allow you to change the content of your sequence depending on <a href="./variables.html">environmental variables</a>. 
+<h3><a name="conditions" class="header-link" href="#conditions"><span class="glyphicon glyphicon-link"></span></a>Conditions</h3><p>The conditional mixers (<a href="#branch"><code>branch</code></a> &amp; <a href="#multibranch"><code>multiBranch</code></a>) allow you to change the content of your sequence depending on <a href="./variables.html">environmental variables</a>. 
 This is done by settings <code>conditions</code>.
 A condition is a proposition; it is a statement that is evaluated either as <code>true</code> or <code>false</code>.
 We choose the branch we advance to according to the result.
@@ -537,39 +523,38 @@ When you want to reference an environmental variable, you use text with dots: <c
 (questions.q1.response` will retrieve the value of the response for q1 from the questions object).</p>
 <p>The following condition object <code>compare</code>s <strong>global.var</strong> <code>to</code> <strong>current.otherVar</strong> and checks if they are equal.
 It is equivalent to the following equation: <code>global.myVar === current.myOtherVar</code>.</p>
-<pre><code class="lang-js"><span class="hljs-keyword">var</span> cond = {
-    compare: <span class="hljs-string">'global.myVar'</span>,
-    to: <span class="hljs-string">'current.myOtherVar'</span>
+<pre><code class="lang-js">var cond = {
+    compare: <span class="hljs-symbol">'global</span>.myVar',
+    <span class="hljs-keyword">to</span>: <span class="hljs-symbol">'current</span>.myOtherVar'
 }
 </code></pre>
 <p>Here are some examples of comparing variables with plain values:</p>
-<pre><code class="lang-js"><span class="hljs-comment">//Compares the variable time to the value 12</span>
-<span class="hljs-keyword">var</span> cond1 = {
+<pre><code class="lang-js">//Compares <span class="hljs-operator">the</span> <span class="hljs-built_in">variable</span> <span class="hljs-built_in">time</span> <span class="hljs-built_in">to</span> <span class="hljs-operator">the</span> <span class="hljs-built_in">value</span> <span class="hljs-number">12</span>
+var cond1 = {
     compare: <span class="hljs-string">'global.time'</span>,
-    to: <span class="hljs-string">'12'</span>
+    <span class="hljs-built_in">to</span>: <span class="hljs-string">'12'</span>
 }
-
-<span class="hljs-comment">//Compare the variable gender to the value 'Female'</span>
-<span class="hljs-keyword">var</span> cond2 = {
+<span class="hljs-comment">
+//Compare the variable gender to the value 'Female'</span>
+var cond2 = {
     compare: <span class="hljs-string">'Female'</span>,
-    to: <span class="hljs-string">'local.gender'</span>
+    <span class="hljs-built_in">to</span>: <span class="hljs-string">'local.gender'</span>
 }
 </code></pre>
 <p>Sometimes the standard conditions are not enough.
 More advanced users may want to replace the whole condition object with a custom function that returns true or false. 
 The context (<code>this</code>) for the function is an object holding the <em>global</em> and <em>current</em> objects 
 (there are some cases where additional properties are available, they are documented in their own docs).</p>
-<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">cond</span>(<span class="hljs-params"></span>)</span>{
-    <span class="hljs-keyword">var</span> global = <span class="hljs-keyword">this</span>.global; <span class="hljs-comment">// get the global from the context</span>
-    <span class="hljs-keyword">return</span> global.skip;
+<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">cond</span><span class="hljs-params">()</span></span>{
+    <span class="hljs-keyword">var</span> <span class="hljs-keyword">global</span> = this.<span class="hljs-keyword">global</span>; <span class="hljs-comment">// get the global from the context</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">global</span>.skip;
 }
 </code></pre>
-<h4 id="operators">Operators</h4>
-<p>The default comparison for a condition is to check equality (supports comparison of objects and arrays too). You can use the <code>operator</code> property to change the comparison method. The following checks if var is greater than otherVar:</p>
-<pre><code class="lang-js"><span class="hljs-keyword">var</span> cond = {
-    compare: <span class="hljs-string">'global.var'</span>,
-    to: <span class="hljs-string">'local.otherVar'</span>,
-    operator: <span class="hljs-string">'greaterThan'</span>
+<h4><a name="operators" class="header-link" href="#operators"><span class="glyphicon glyphicon-link"></span></a>Operators</h4><p>The default comparison for a condition is to check equality (supports comparison of objects and arrays too). You can use the <code>operator</code> property to change the comparison method. The following checks if var is greater than otherVar:</p>
+<pre><code class="lang-js">var cond = {
+    compare: <span class="hljs-symbol">'global</span>.var',
+    <span class="hljs-keyword">to</span>: <span class="hljs-symbol">'local</span>.otherVar',
+    operator: <span class="hljs-symbol">'greaterThan'</span>
 }
 </code></pre>
 <table>
@@ -606,13 +591,12 @@ The context (<code>this</code>) for the function is an object holding the <em>gl
 </tr>
 </tbody>
 </table>
-<h4 id="aggregation">Aggregation</h4>
-<p>Sometimes you will want a branch to be activated only if more than one condition is true, or in some other complex specific condition.
+<h4><a name="aggregation" class="header-link" href="#aggregation"><span class="glyphicon glyphicon-link"></span></a>Aggregation</h4><p>Sometimes you will want a branch to be activated only if more than one condition is true, or in some other complex specific condition.
 For cases like this, the mixer supports aggregation.
 The mixer supports applying logical operations on conditions in the following way:</p>
 <p>An aggregator object has a single property, denoting the type of aggregation, holding an array of conditions to aggregate.
 The following condition will only be true if <code>cond1</code> and <code>cond2</code> are both true:</p>
-<pre><code class="lang-js"><span class="hljs-keyword">var</span> cond = {and:[cond1, cond2]};
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> cond = {<span class="hljs-keyword">and</span>:[cond1, cond2]};
 </code></pre>
 <p>The mixer supports several types of aggregators:</p>
 <table>
@@ -644,27 +628,26 @@ The following condition will only be true if <code>cond1</code> and <code>cond2<
 <p>By default, if the mixer runs into an array instead of an object, it will treat it as an <code>and</code> aggregator and be true only if all conditions within the array are true.</p>
 <p>Following are several examples for how to create different aggregations:</p>
 <pre><code class="lang-js"><span class="hljs-comment">// cond1 &amp;&amp; cond2</span>
-<span class="hljs-keyword">var</span> conds = [cond1, cond2];
+<span class="hljs-variable"><span class="hljs-keyword">var</span> conds</span> = [cond1, cond2];
 
 <span class="hljs-comment">// cond1 &amp;&amp; (cond2 || cond3)</span>
-<span class="hljs-keyword">var</span> conds = [cond1, {or:[cond2,cond3]}];
+<span class="hljs-variable"><span class="hljs-keyword">var</span> conds</span> = [cond1, {or:[cond2,cond3]}];
 
 <span class="hljs-comment">// (cond1 &amp;&amp; cond2) || cond2</span>
-<span class="hljs-keyword">var</span> conds = [{or:[{and:[cond1,cond2]},cond3]}]
+<span class="hljs-variable"><span class="hljs-keyword">var</span> conds</span> = [{or:[{and:[cond1,cond2]},cond3]}]
 </code></pre>
-<h4 id="debugging">Debugging</h4>
-<p>Conditions are notoriously difficult to get just right.
+<h4><a name="debugging" class="header-link" href="#debugging"><span class="glyphicon glyphicon-link"></span></a>Debugging</h4><p>Conditions are notoriously difficult to get just right.
 If they aren’t working as you expected, you might want to see exactly which values you are getting for each of your conditions.
 The mixer provides you with an easy way to do this; just set <code>DEBUG=true</code> on your condition, and you will see all the said values being printed into your <a href="../basics/javascript.html#errors-and-debugging">console</a>.</p>
-<pre><code class="lang-js">API.addGlobal({
-    value: <span class="hljs-number">123</span>,
+<pre><code class="lang-js"><span class="hljs-type">API</span>.addGlobal({
+    <span class="hljs-keyword">value</span>: <span class="hljs-number">123</span>,
     otherVar: <span class="hljs-number">345</span>
 });
 
-<span class="hljs-keyword">var</span> cond = {
-    compare: <span class="hljs-string">'global.var'</span>,
-    to: <span class="hljs-string">'global.otherVar'</span>,
-    DEBUG: <span class="hljs-literal">true</span>
+var cond = {
+    compare: <span class="hljs-symbol">'global</span>.var',
+    <span class="hljs-keyword">to</span>: <span class="hljs-symbol">'global</span>.otherVar',
+    <span class="hljs-type">DEBUG</span>: <span class="hljs-literal">true</span>
 }
 </code></pre>
 <p>Will log something like <code>Conditions: 123 equals 345</code> as well as the full condition object as it appears in your code.</p>

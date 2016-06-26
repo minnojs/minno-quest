@@ -135,8 +135,8 @@
 <p>&nbsp;</p>
 <p>The following example will display the message “Hello World. I am a template.”, and procede when the <strong>keys</strong> space is pressed.</p>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> task = {
-    template: <span class="hljs-string">'&lt;div&gt;Hello World. I am a template.&lt;/div&gt;'</span>,
-    keys: <span class="hljs-string">' '</span>
+    <span class="hljs-keyword">template</span>: '&lt;<span class="hljs-keyword">div</span>&gt;<span class="hljs-type">Hello</span> <span class="hljs-type">World</span>. I am a <span class="hljs-keyword">template</span>.&lt;/<span class="hljs-keyword">div</span>&gt;',
+    keys: ' '
 }
 </code></pre>
 <p>The following task will do the exact same thing using two separate files:</p>
@@ -147,12 +147,11 @@
 }
 </code></pre>
 <p><em>hello.jst</em></p>
-<pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>Hello World. I am a template.<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+<pre><code class="lang-html">&lt;<span class="hljs-operator">div</span>&gt;Hello World. I am <span class="hljs-operator">a</span> template.&lt;/<span class="hljs-operator">div</span>&gt;
 </code></pre>
-<h4 id="proceeding">Proceeding</h4>
-<p>There are two types of controls that allow users to proceed to the next task.</p>
+<h4><a name="proceeding" class="header-link" href="#proceeding"><span class="glyphicon glyphicon-link"></span></a>Proceeding</h4><p>There are two types of controls that allow users to proceed to the next task.</p>
 <p>First, you can use any element in your template as a proceed button, all you have to do is add the <code>pi-message-done</code> attribute to the appropriate element.</p>
-<pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-title">button</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"button"</span> <span class="hljs-attribute">pi-message-done</span>&gt;</span>Click here to proceed<span class="hljs-tag">&lt;/<span class="hljs-title">button</span>&gt;</span>
+<pre><code class="lang-html">&lt;button <span class="hljs-class"><span class="hljs-keyword">type</span></span>=<span class="hljs-string">"button"</span> pi-message-<span class="hljs-keyword">done</span>&gt;Click here <span class="hljs-keyword">to</span> proceed&lt;/button&gt;
 </code></pre>
 <p>Alternatively you may use the <code>keys</code> property in order to set a key (or keys) that proceed. The keys property takes either a key (i.e. <code>&#39;a&#39;</code>) a keyCode (i.e. <code>65</code>) or an array of such (i.e. <code>[&#39;a&#39;,&#39;b&#39;]</code>).</p>
 <p>This table shows several useful keyCodes for your convinience (there are more <a href="http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes">here</a>):</p>
@@ -194,8 +193,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="project-implicit-build">Project Implicit build</h3>
-<p>The project implicit build has an optional “meta template” that you may use by setting the <code>piTemplate</code> property to true. When using it, you have several additional options.</p>
+<h3><a name="project-implicit-build" class="header-link" href="#project-implicit-build"><span class="glyphicon glyphicon-link"></span></a>Project Implicit build</h3><p>The project implicit build has an optional “meta template” that you may use by setting the <code>piTemplate</code> property to true. When using it, you have several additional options.</p>
 <table>
 <thead>
 <tr>
@@ -228,8 +226,7 @@
 </table>
 <p>The project implicit template supports a debrief template activated by setting <code>piTemplate</code> to ‘debrief’. If it is activated, there are two additional functions exposed from within the template.
 They can be used like so: <code>&lt;%= showPanel(&#39;body&#39;,&#39;header&#39;,&#39;footer&#39;) %&gt;</code> or <code>&lt;%= showFeedback({wrap:false}) %&gt;</code>.</p>
-<h4 id="showpanel-body-header-footer-">showPanel(body, header, footer)</h4>
-<pre><code>&lt;%= showPanel(<span class="hljs-string">'body'</span>,<span class="hljs-string">'header'</span>,<span class="hljs-string">'footer'</span>) %&gt;
+<h4><a name="showpanelbody-header-footer" class="header-link" href="#showpanelbody-header-footer"><span class="glyphicon glyphicon-link"></span></a>showPanel(body, header, footer)</h4><pre><code>&lt;<span class="hljs-variable">%=</span> showPanel(<span class="hljs-string">'body'</span>,<span class="hljs-string">'header'</span>,<span class="hljs-string">'footer'</span>) <span class="hljs-variable">%&gt;</span>
 </code></pre><p><code>showPanel</code> displays content within a stylized panel.</p>
 <table>
 <thead>
@@ -253,8 +250,7 @@ They can be used like so: <code>&lt;%= showPanel(&#39;body&#39;,&#39;header&#39;
 </tr>
 </tbody>
 </table>
-<h4 id="showfeedback-options-">showFeedback(options)</h4>
-<pre><code>&lt;%= showFeedback({wrap:<span class="hljs-literal">false</span>}) %&gt;
+<h4><a name="showfeedbackoptions" class="header-link" href="#showfeedbackoptions"><span class="glyphicon glyphicon-link"></span></a>showFeedback(options)</h4><pre><code>&lt;<span class="hljs-preprocessor">%</span>= showFeedback<span class="hljs-comment">({wrap:false})</span> <span class="hljs-preprocessor">%</span>&gt;
 </code></pre><p><code>showFeedback</code> automatically gathers feedback from the global object and displays it within your page. It takes an options object as its single argument. The feedback is gathered from the global object by going through each task object (current) and searching for the <code>feedback</code> property. It depends on the individual tasks respecting this convention.
 You can fine tune the way feedback is collected and desplayed using the following options:</p>
 <table>

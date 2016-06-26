@@ -136,15 +136,13 @@
 <li><a href="#project-implicit-build">Project Implicit Build</a></li>
 </ul>
 <p>The piManager is responsible for managing several piTasks sequentially. It uses the same API used throughout the project implicit tasks.</p>
-<h3 id="settings">Settings</h3>
-<p>Settings allow you to control the generic way that the player works. Change the settings using the <code>addSettings</code> function. The first argument to the function is always the name of the setting, the second argument is the setting values. In case the setting is an object, subsequent objects will extend each other so that settings may be progressively added.
+<h3><a name="settings" class="header-link" href="#settings"><span class="glyphicon glyphicon-link"></span></a>Settings</h3><p>Settings allow you to control the generic way that the player works. Change the settings using the <code>addSettings</code> function. The first argument to the function is always the name of the setting, the second argument is the setting values. In case the setting is an object, subsequent objects will extend each other so that settings may be progressively added.
 All the functions within settings are invoked using angular. This means that you have access to any service you like, as well as some specific assets. <a href="https://docs.angularjs.org/api/auto/service/$injector">In order to access the services</a> simply use arguments with the appropriate name. For instance, this is how you would access <code>$rootScope</code>:</p>
-<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">onEnd</span>(<span class="hljs-params">$rootScope</span>)</span>{
-    $rootScope.$emit(<span class="hljs-string">'end!!'</span>);
+<pre><code class="lang-js"><span class="hljs-keyword">function</span> onEnd(<span class="hljs-variable">$rootScope</span>){
+    <span class="hljs-variable">$rootScope</span>.<span class="hljs-variable">$emit</span>(<span class="hljs-string">'end!!'</span>);
 }
 </code></pre>
-<h4 id="canvas">canvas</h4>
-<p><code>canvas</code> takes an object that describes the style of the task environment. Each property of the object changes a different style element.</p>
+<h4><a name="canvas" class="header-link" href="#canvas"><span class="glyphicon glyphicon-link"></span></a>canvas</h4><p><code>canvas</code> takes an object that describes the style of the task environment. Each property of the object changes a different style element.</p>
 <table>
 <thead>
 <tr>
@@ -171,18 +169,16 @@ All the functions within settings are invoked using angular. This means that you
 </tr>
 </tbody>
 </table>
-<pre><code class="lang-js">API.addSettings(<span class="hljs-string">'canvas'</span>, {
-    fontSize: <span class="hljs-string">'2em'</span>
+<pre><code class="lang-js"><span class="hljs-tag">API</span><span class="hljs-class">.addSettings</span>(<span class="hljs-string">'canvas'</span>, {
+    <span class="hljs-attribute">fontSize</span>: <span class="hljs-string">'2em'</span>
 });
 </code></pre>
 <p>In case you need to fine tune the styles even further you can add css rules into the raw HTML. Support for dynamically adding CSS is planned but not yet supported.</p>
-<h4 id="injectstyle">injectStyle</h4>
-<p>Injects a string of css into the page.</p>
-<pre><code class="lang-js">API.addSettings(<span class="hljs-string">'injectStyle'</span>, <span class="hljs-string">'[pi-quest] label {font-size:1.2em; font-weight:normal;}'</span>);
+<h4><a name="injectstyle" class="header-link" href="#injectstyle"><span class="glyphicon glyphicon-link"></span></a>injectStyle</h4><p>Injects a string of css into the page.</p>
+<pre><code class="lang-js"><span class="hljs-tag">API</span><span class="hljs-class">.addSettings</span>(<span class="hljs-string">'injectStyle'</span>, <span class="hljs-string">'[pi-quest] label {font-size:1.2em; font-weight:normal;}'</span>);
 </code></pre>
-<h4 id="onpretask">onPreTask</h4>
-<p><code>onPreTask</code> is a function to be called before each task is called.</p>
-<pre><code class="lang-js">API.addSettings(<span class="hljs-string">'onPreTask'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">currentTask</span>)</span>{
+<h4><a name="onpretask" class="header-link" href="#onpretask"><span class="glyphicon glyphicon-link"></span></a>onPreTask</h4><p><code>onPreTask</code> is a function to be called before each task is called.</p>
+<pre><code class="lang-js">API.addSettings(<span class="hljs-string">'onPreTask'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(currentTask)</span></span>{
     doSomethingWith(currentTask);
 });
 </code></pre>
@@ -204,10 +200,9 @@ All the functions within settings are invoked using angular. This means that you
 </tr>
 </tbody>
 </table>
-<h4 id="onend">onEnd</h4>
-<p><code>onEnd</code> is a function to be called as soon as the task sequence ends.</p>
-<pre><code class="lang-js">API.addSettings(<span class="hljs-string">'onEnd'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
-    <span class="hljs-comment">// Do something: for instance, redirect to 'my/url.js'</span>
+<h4><a name="onend" class="header-link" href="#onend"><span class="glyphicon glyphicon-link"></span></a>onEnd</h4><p><code>onEnd</code> is a function to be called as soon as the task sequence ends.</p>
+<pre><code class="lang-js">API.addSettings(<span class="hljs-string">'onEnd'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
+    // Do somethin<span class="hljs-variable">g:</span> <span class="hljs-keyword">for</span> instance, redirect <span class="hljs-keyword">to</span> <span class="hljs-string">'my/url.js'</span>
     location.href = <span class="hljs-string">'my/url.js'</span>;
 });
 </code></pre>
@@ -225,24 +220,19 @@ All the functions within settings are invoked using angular. This means that you
 </tr>
 </tbody>
 </table>
-<h4 id="title">title</h4>
-<p><code>title</code> is a string to be used as the page title (the name displayed on the tag).</p>
+<h4><a name="title" class="header-link" href="#title"><span class="glyphicon glyphicon-link"></span></a>title</h4><p><code>title</code> is a string to be used as the page title (the name displayed on the tag).</p>
 <pre><code class="lang-js">API.addSettings(<span class="hljs-string">'title'</span>, <span class="hljs-string">'My Manager Title'</span>);
 </code></pre>
-<h4 id="preloadimages">preloadImages</h4>
-<p>Accepts an array of image urls to preload. The manager will <strong>not</strong> wait until all images are loaded, but it will make images displayed later in the manager sequence be displayed significantly faster.</p>
-<pre><code class="lang-js">API.addSettings(<span class="hljs-string">'preloadImages'</span>, [<span class="hljs-string">'my/image/url/imageName.png'</span>, <span class="hljs-string">'my/other/url/otherImage.jpg'</span>]);
+<h4><a name="preloadimages" class="header-link" href="#preloadimages"><span class="glyphicon glyphicon-link"></span></a>preloadImages</h4><p>Accepts an array of image urls to preload. The manager will <strong>not</strong> wait until all images are loaded, but it will make images displayed later in the manager sequence be displayed significantly faster.</p>
+<pre><code class="lang-js"><span class="hljs-type">API</span>.addSettings(<span class="hljs-symbol">'preloadImages'</span>, [<span class="hljs-symbol">'my</span>/image/url/imageName.png', <span class="hljs-symbol">'my</span>/other/url/otherImage.jpg']);
 </code></pre>
-<h4 id="skip">skip</h4>
-<p>Whether to activate the skip and refresh option. If activated, clicking <code>ctrl r</code> reloads the current task (this feature may not be supported on older browsers), clicking <code>escape</code> and then the right or left arrows skips to the next or previous tasks.</p>
+<h4><a name="skip" class="header-link" href="#skip"><span class="glyphicon glyphicon-link"></span></a>skip</h4><p>Whether to activate the skip and refresh option. If activated, clicking <code>ctrl r</code> reloads the current task (this feature may not be supported on older browsers), clicking <code>escape</code> and then the right or left arrows skips to the next or previous tasks.</p>
 <pre><code class="lang-js">API.addSettings(<span class="hljs-string">'skip'</span>, <span class="hljs-literal">true</span>);
 </code></pre>
-<h3 id="skin">Skin</h3>
-<p>Add a skin to your project. Skins change the way that your tasks look. Currently the only skins that we support are <code>simple</code> and <code>demo</code>.</p>
+<h3><a name="skin" class="header-link" href="#skin"><span class="glyphicon glyphicon-link"></span></a>Skin</h3><p>Add a skin to your project. Skins change the way that your tasks look. Currently the only skins that we support are <code>simple</code> and <code>demo</code>.</p>
 <pre><code class="lang-js">API.addSettings(<span class="hljs-string">'skin'</span>, <span class="hljs-string">'demo'</span>);
 </code></pre>
-<h3 id="tasks">Tasks</h3>
-<p>The basic unit in piManager is the <strong>task</strong>. The manager currently supports several types of tasks; <code>quest</code>, <code>message</code> and <code>post</code>. You should just cue them into the sequence (you can use mixers to your hearts content as well).</p>
+<h3><a name="tasks" class="header-link" href="#tasks"><span class="glyphicon glyphicon-link"></span></a>Tasks</h3><p>The basic unit in piManager is the <strong>task</strong>. The manager currently supports several types of tasks; <code>quest</code>, <code>message</code> and <code>post</code>. You should just cue them into the sequence (you can use mixers to your hearts content as well).</p>
 <table>
 <thead>
 <tr>
@@ -281,8 +271,7 @@ All the functions within settings are invoked using angular. This means that you
 </tr>
 </tbody>
 </table>
-<h4 id="quest">Quest</h4>
-<table>
+<h4><a name="quest" class="header-link" href="#quest"><span class="glyphicon glyphicon-link"></span></a>Quest</h4><table>
 <thead>
 <tr>
 <th>Property</th>
@@ -300,8 +289,7 @@ All the functions within settings are invoked using angular. This means that you
 </tr>
 </tbody>
 </table>
-<h4 id="message">Message</h4>
-<table>
+<h4><a name="message" class="header-link" href="#message"><span class="glyphicon glyphicon-link"></span></a>Message</h4><table>
 <thead>
 <tr>
 <th>Property</th>
@@ -323,8 +311,7 @@ All the functions within settings are invoked using angular. This means that you
 </tr>
 </tbody>
 </table>
-<h4 id="post">Post</h4>
-<table>
+<h4><a name="post" class="header-link" href="#post"><span class="glyphicon glyphicon-link"></span></a>Post</h4><table>
 <thead>
 <tr>
 <th>property</th>
@@ -346,19 +333,15 @@ All the functions within settings are invoked using angular. This means that you
 </tr>
 </tbody>
 </table>
-<h3 id="inheritance">Inheritance</h3>
-<p>piManager uses the same inheritance system used by piQuest. It has one type of set: the task set. In order to create task sets use <code>addTasksSet(set, list)</code>.</p>
-<h3 id="custom-tasks">Custom tasks</h3>
-<p>The piManager allows the creation of custom tasks. The format is fairly simple though you probably need at least some experience with programing for it. </p>
-<h4 id="plugging-in">Plugging in</h4>
-<p>piManager manages the task sequence for you as well as loading the task script (if needed). There are several ways to plug a new task into piManager, the all involve passing the activator function to the manager in various ways.</p>
+<h3><a name="inheritance" class="header-link" href="#inheritance"><span class="glyphicon glyphicon-link"></span></a>Inheritance</h3><p>piManager uses the same inheritance system used by piQuest. It has one type of set: the task set. In order to create task sets use <code>addTasksSet(set, list)</code>.</p>
+<h3><a name="custom-tasks" class="header-link" href="#custom-tasks"><span class="glyphicon glyphicon-link"></span></a>Custom tasks</h3><p>The piManager allows the creation of custom tasks. The format is fairly simple though you probably need at least some experience with programing for it. </p>
+<h4><a name="plugging-in" class="header-link" href="#plugging-in"><span class="glyphicon glyphicon-link"></span></a>Plugging in</h4><p>piManager manages the task sequence for you as well as loading the task script (if needed). There are several ways to plug a new task into piManager, the all involve passing the activator function to the manager in various ways.</p>
 <ol>
 <li>You can pass the activator function as a script.</li>
 <li>You can pass it as the play property of the script object ().</li>
 <li>You can set it into the <code>taskActivateProvider</code> using <code>taskActivateProvider.set(taskName, activatorFunction)</code> during the configuration stage of the angular flow (This is worth the trouble mainly if you intend to use this task many times).</li>
 </ol>
-<h4 id="activator-function">Activator function</h4>
-<p>The activator function is the function that is responsible for the activation of your task as well as for the communication with piManager.</p>
+<h4><a name="activator-function" class="header-link" href="#activator-function"><span class="glyphicon glyphicon-link"></span></a>Activator function</h4><p>The activator function is the function that is responsible for the activation of your task as well as for the communication with piManager.</p>
 <p>It should:</p>
 <ul>
 <li>Run your task (just do whatever you like).</li>
@@ -409,44 +392,42 @@ All the functions within settings are invoked using angular. This means that you
 </tr>
 </tbody>
 </table>
-<h4 id="custom-task-example">Custom Task Example</h4>
-<p>The following script will display a messages to the user and proceed to the next task after 5 seconds:</p>
+<h4><a name="custom-task-example" class="header-link" href="#custom-task-example"><span class="glyphicon glyphicon-link"></span></a>Custom Task Example</h4><p>The following script will display a messages to the user and proceed to the next task after 5 seconds:</p>
 <pre><code class="lang-js"><span class="hljs-comment">// the define wrapper</span>
-define(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+define(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{
     <span class="hljs-comment">// the script object being returned</span>
     <span class="hljs-keyword">return</span> {
         <span class="hljs-comment">// custom script content</span>
         content: <span class="hljs-string">'Hi there, I\'m your custom message'</span>,
 
         <span class="hljs-comment">// the activator function uses three dependencie</span>
-        play: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">activator</span>(<span class="hljs-params">done, script, $element</span>)</span>{
+        play: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">activator</span><span class="hljs-params">(done, script, <span class="hljs-variable">$element</span>)</span></span>{
             <span class="hljs-keyword">var</span> timeoutId = setTimeout(done, <span class="hljs-number">5000</span>);
-            $element.html(script.content);
+            <span class="hljs-variable">$element</span>.html(script.content);
 
             <span class="hljs-comment">// will be called at the end of the task to clean things up</span>
             <span class="hljs-comment">// (whether the end is forced or triggered by 'done')</span>
-            <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">clear</span>(<span class="hljs-params"></span>)</span>{
+            <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">clear</span><span class="hljs-params">()</span></span>{
                 clearTimeout(timeoutId);
-                $element.empty();           
+                <span class="hljs-variable">$element</span>.<span class="hljs-keyword">empty</span>();           
             };
         }
     };
 });
 </code></pre>
 <p>In order to use it all you have to do is point the task to the correct url:</p>
-<pre><code class="lang-js"><span class="hljs-keyword">var</span> taskElement = {scriptUrl:<span class="hljs-string">'path/to/script'</span>};
+<pre><code class="lang-js">var taskElement = {scriptUrl:<span class="hljs-symbol">'path</span>/<span class="hljs-keyword">to</span>/script'};
 </code></pre>
-<h3 id="project-implicit-build">Project Implicit Build</h3>
-<p>The project implicit build has a feature for integration with mTurk.
+<h3><a name="project-implicit-build" class="header-link" href="#project-implicit-build"><span class="glyphicon glyphicon-link"></span></a>Project Implicit Build</h3><p>The project implicit build has a feature for integration with mTurk.
 All you have to do is add The following code to your project, replacing the <code>&lt;id#&gt;</code> tags with the appropriate data of course.
 The player will redirect the users back to mTurk immediately after the final task in the manager (as defined by the <code>last</code> property).
 Setting the <code>isProduction</code> property allows you to switch between the development and production urls for mTurk.</p>
-<pre><code class="lang-js">API.addGlobal({
-    $mTurk: {
-        assignmentId:<span class="hljs-string">'&lt;id#&gt;'</span>,
-        hitId:<span class="hljs-string">'&lt;id#&gt;'</span>,
-        workerId:<span class="hljs-string">'&lt;id#&gt;'</span>,
-        isProduction: <span class="hljs-literal">true</span>
+<pre><code class="lang-js"><span class="hljs-tag">API</span><span class="hljs-class">.addGlobal</span>({
+    $<span class="hljs-tag">mTurk</span>: {
+        <span class="hljs-attribute">assignmentId</span>:<span class="hljs-string">'&lt;id#&gt;'</span>,
+        <span class="hljs-attribute">hitId</span>:<span class="hljs-string">'&lt;id#&gt;'</span>,
+        <span class="hljs-attribute">workerId</span>:<span class="hljs-string">'&lt;id#&gt;'</span>,
+        <span class="hljs-attribute">isProduction</span>: true
     }
 });
 </code></pre>

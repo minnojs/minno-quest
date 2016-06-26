@@ -30,7 +30,7 @@ gulp.task('build:html', function(){
 });
 
 gulp.task('build:md', function () {
-	var marked = require('gulp-marked');
+	var marked = require('gulp-markdown');
 	var highlight = require('highlight.js');
 	var frontMatter = require('gulp-front-matter');
 
@@ -44,13 +44,41 @@ gulp.task('build:md', function () {
 		.pipe(marked({											// highlight pre
 			highlight: function(code){
 				return highlight.highlightAuto(code).value;
-			}
+			},
+            renderer: getRenderer()
 		}))
 		.pipe(applyTemplate({engine:'swig', template: function(context,file){
 			return path.join(path.dirname(file.path), '../templates','md.swig');
 		}}))
 		.pipe(rename({extname: '.html'}))
 		.pipe(gulp.dest('.'));
+
+    // from https://github.com/chjj/marked
+    function getRenderer(){
+        var renderer = new marked.marked.Renderer();
+
+        renderer.heading = function (text, level) {
+
+            // from https://github.com/thlorenz/anchor-markdown-header/blob/master/anchor-markdown-header.js
+            var escapedText =  text.replace(/ /g,'-')
+                .toLowerCase()
+                // escape codes
+                .replace(/%([abcdef]|\d){2,2}/ig, '')
+                // single chars that are removed
+                .replace(/[\/?!:\[\]`.,()*"';{}+=<>~\$|#@]/g,'');
+          
+            return [
+                '<h' + level + '>',
+                    '<a name="' + escapedText + '" class="header-link" href="#' + escapedText + '">',
+                        '<span class="glyphicon glyphicon-link"></span>',
+                    '</a>',
+                    text,
+                '</h' + level + '>'
+            ].join('');
+        };
+
+        return renderer;
+    } 
 });
 
 gulp.task('build:swig', function(){
