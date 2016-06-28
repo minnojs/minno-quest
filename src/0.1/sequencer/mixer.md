@@ -29,16 +29,17 @@ description: Controlling the flow of the sequence
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ### Introduction
-Mixers allow you to control the flow of your sequences within the PI players.
+Mixers allow you to control the flow of your sequences within the PI tasks.
 In particular they allow you to repeat, randomize and even branch sections of your sequence according to [environmental variables](./variables.html).
 
 #### Syntax
-Each one of the PI tasks is composed of a sequence of elements that is sequentially evaluated and presented to the user.
-For example, the sequence in piManager is composed of elements that represent a task each.
+Each one of the PI tasks is composed of a sequence of elements that is presented sequentially.
+For example, the sequence in piManager is composed of elements that each represent a task.
 These sequences are created using the `API.addSequence` method in your script.
-Mixers are inserted into the sequence the same way that regular elements are, each mixer represents a sub-sequence that is to be manipulated and then inserted in its place.
+Mixers are inserted into the sequence the same way that regular elements are. 
+Each mixer represents a sub-sequence that is to be manipulated and then inserted in its place.
 
-For example, in the following sequence the second element in the sequence is a mixer.
+For example, in the following sequence the second element is a mixer.
 It takes a sub-sequence than includes tasks two and three and randomizes their order.
 Note that the mixer element is effectively replaced by the two elements from the sub-sequence, turning this sequence into a four task sequence.
 
@@ -81,7 +82,7 @@ We are doing this to keep the structures as simple and readable as possible.
 #### Nesting
 Mixers may be nested inside each other as much as you like. The following example illustrates a more complex example.
 Here, we have an opening and ending element (`firstelem` and `lastelem`).
-Between them them we repeat a set of four elements ten times.
+Between them we repeat a set of four elements ten times.
 The order within the four objects is randomized, so that `elem1` always comes first and the order of the following elements is randomized but `elem3` and `elem4` are wrapped together and therefore always stay consecutive.
 
 ```js
