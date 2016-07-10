@@ -124,8 +124,9 @@ API.addSequence([
 #### Real time (remix)
 [remix]: #real-time-remix
 
-By default each mixer is evaluated only once. This usually should not affect you at all.
-It becomes relevant on two conditions, one is if your task allows moving back to previous elements; in that case the mixer will keep the mixer elements as they where previously evaluated.
+By default each mixer is processed only once, when it is first encountered during the sequence. 
+There are only two conditions for when this is relevant.
+The first is when your task allows moving back to previous elements; in that case the mixer will keep the mixer elements as they where previously evaluated.
 The second condition is when you have a branch that you want to react to live changes (at this time this is relevant only for piQuest answers).
 
 If you want a mixer to react to changes in the environment you need to set `remix=true`.
@@ -147,7 +148,7 @@ var page = {
             remix: true,
             conditions: [ {compare: 'current.questions.q1', to: 'hello'} ],
             data: [
-                // Dependant question
+                // Dependent question
                 {
                     stem: 'You said "hello"!'
                 } 
@@ -160,12 +161,12 @@ var page = {
 #### Sequence evaluation (wrapper)
 [evaluation]: sequence-evaluation-wrapper
 
-Most of the time, mixers are lazily evaluated. This means that the sequencer waits until it reaches the mixer before expanding it.
+Most of the time, mixers are lazily processed. This means that the sequencer waits until it reaches the mixer before expanding it.
 This behaviour allows us to use branching mixers - we don't decide which branch to take until we reach it.
 The exception to this rule is randomizing mixers (such as `randomize` or `choose`), that in order to randomize *everything* inside them, must pre-mix all their content.
 
 This behaviour may cause some problematic results.
-For instance, a branching mixer within a randomization mixer, will be calculated according to the state of the player when it first reaches the randomizer, and not according to the state when it reaches the branch itself.
+For instance, a branching mixer within a randomization mixer, will be calculated according to the state of the task when it first reaches the randomizer, and not according to the state when it reaches the branch itself.
 If you have a randomizer > repeat > randomizer then the repeat will process an already randomized random mixer, and the repeated units will all be the same.
 The solution in this case is to wrap the inner mixer within a [wrapper mixer](#wrapper) (or set the `wrapper` property to true).
 This way the randomizer will treat anything within the wrapper as a single unit and will not pre-mix it.
@@ -215,7 +216,8 @@ var mixer = {
 ```
 This code will keep elem2, elem3, and elem4 together, in that same order (elem2, elem3, elem4), and will randomly present elem1 before or after these three objects.
 
-You can make any mixer into a wrapper by adding `wrapper:true`. For example: 
+Sometimes you may want to make a mixer be a `wrapper` enen though it is already another kind of mixer.
+You can do that by adding `wrapper:true`. For example: 
 
 ```js
 var mixer = {
@@ -379,7 +381,7 @@ This code will create one of the following sequences:
 * [elem2,elem2] - 64% of cases
 
 #### weightedRandom
-Alias for [`weightedChoose`](#weightedChoose).
+Alias (synonym) that can be used interchangeably with [`weightedChoose`](#weightedChoose).
 
 #### wrapper
 The wrapper mixer serves a sort of parenthesis for the mixer.
@@ -408,7 +410,7 @@ It will return one of the following (elem2 and elem3 are always kept together):
 * [elem2, elem3, elem1]
 
 The wrapper mixer is special in that it has an alternative syntax.
-You can add a `wrapper` property to any existing mixer, and it contents will be treated as if they where wrapped in a wrapper.
+You can add a `wrapper` property to any existing mixer, and it contents will be treated as if they were wrapped in a wrapper.
 This will look like this:
 
 ```js
@@ -469,7 +471,7 @@ Will return
 ### Conditions
 The conditional mixers ([`branch`](#branch) & [`multiBranch`](#multibranch)) allow you to change the content of your sequence depending on [environmental variables](./variables.html). 
 This is done by settings `conditions`.
-A condition is a proposition; it is a statement that is evaluated either as `true` or `false`.
+A condition is a statement that is evaluated either as `true` or `false`.
 We choose the branch we advance to according to the result.
 You can think of each condition as an equation that compares two values.
 Conditions are each represented by an object as follows:
@@ -484,7 +486,7 @@ The values set into `compare` and `to` can be set either as plain values or as r
 When you want to reference an environmental variable, you use text with dots: `global.var`, `questions.q1.response`
 (questions.q1.response` will retrieve the value of the response for q1 from the questions object).
 
-The following condition object `compare`s **global.var** `to` **current.otherVar** and checks if they are equal.
+The following condition object `compare's **global.var** `to` **current.otherVar** and checks if they are equal.
 It is equivalent to the following equation: `global.myVar === current.myOtherVar`.
 
 ```js
@@ -581,7 +583,7 @@ var conds = [{or:[{and:[cond1,cond2]},cond3]}]
 #### Debugging
 Conditions are notoriously difficult to get just right.
 If they aren't working as you expected, you might want to see exactly which values you are getting for each of your conditions.
-The mixer provides you with an easy way to do this; just set `DEBUG=true` on your condition, and you will see all the said values being printed into your [console](../basics/javascript.html#errors-and-debugging).
+The mixer provides you with an easy way to do this. Just set `DEBUG=true` on your condition, and you will see all the said values being printed into your [console](../basics/javascript.html#errors-and-debugging).
 
 ```js
 API.addGlobal({
@@ -596,4 +598,4 @@ var cond = {
 }
 ```
 
-Will log something like `Conditions: 123 equals 345` as well as the full condition object as it appears in your code.
+The debugger will log something like `Conditions: 123 equals 345` as well as the full condition object as it appears in your code.
