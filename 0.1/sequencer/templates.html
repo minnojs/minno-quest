@@ -108,24 +108,53 @@
 			<div class="row">
 				<div class="col-md-9" role="main">
 					
-	<p>One of the ways to create dynamic questionnaires is using templates. Templates are a format that allows you to dynamically generate settings for your questions. 
-You can replace any string setting from within your elements with a template, and it will be rendered according to the <a href="#variables">environmental variables</a> 
-(The exception to this rule is the <code>inherit</code> setting that cannot use templates).</p>
-<p>A template is a string that has a section of the form <code>&lt;%= %&gt;</code> in it.
-Within these brackets you can write any Javascript that you like and it will be evaluated and printed out. 
-The player uses <a href="http://lodash.com/docs#template">lodash templates</a> internally, you can look them up to see all the possible uses.</p>
-<p>The main use of templates is probably accessing local and global variables. 
+	<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+<ul>
+<li><a href="#syntax">Syntax</a></li>
+<li><a href="#available-variables">Available variables</a></li>
+<li><a href="#limitations">Limitations</a></li>
+<li><a href="#rerendering">Rerendering</a></li>
+</ul>
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+<p>One of the ways to create dynamic questionnaires is using templates.
+Templates are a format that allows you to dynamically generate properties for your elements according to the <a href="./variables.html">environmental variables</a>. </p>
+<h3><a name="syntax" class="header-link" href="#syntax"><span class="glyphicon glyphicon-link"></span></a>Syntax</h3><p>A template is a string that has a section of the form <code>&lt;%= %&gt;</code> in it.
+Within these brackets you can write any <a href="./variables.html">environmental variables</a> that you like.
+For example: the following message task will print out “<em>Hi Andy, this is an example for the use of templates</em>“.</p>
+<pre><code class="lang-js"><span class="hljs-type">API</span>.addGlobal({
+    userName: '<span class="hljs-type">Andy</span>'
+});
+
+<span class="hljs-keyword">var</span> task = {
+    <span class="hljs-keyword">type</span>: 'message',
+    <span class="hljs-keyword">template</span>: '<span class="hljs-type">Hi</span> &lt;%= global.userName %&gt;, this <span class="hljs-keyword">is</span> an example <span class="hljs-keyword">for</span> the use <span class="hljs-keyword">of</span> templates',
+    keys: ' '
+}
+</code></pre>
+<p>This example is an extremely simple use case.
+Templates actually allow you to run any Javascript that you like, so they allow to do some really complex things; 
+We’ll give just one example of how you can make a simple condition within a template using a <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Conditional_Operator">conditional operator</a>.
+The player uses <a href="http://lodash.com/docs#template">lodash templates</a> internally, you should look them up to see some of the more advanced uses.
+The following message will read “<em>Your name is Andy</em>“ if userName actually equals Andy, and “<em>Your name is not Andy</em>“ otherwise.</p>
+<pre><code class="lang-js"><span class="hljs-keyword">var</span> task = {
+    <span class="hljs-keyword">type</span>: 'message',
+    <span class="hljs-keyword">template</span>: '<span class="hljs-type">Your</span> name <span class="hljs-keyword">is</span> &lt;%= global.userName === '<span class="hljs-type">Andy</span>' ? '' : '<span class="hljs-keyword">not</span>' %&gt; <span class="hljs-type">Andy</span>',
+    keys: ' '
+}
+</code></pre>
+<p>You can replace any string setting in your elements with a template, and it will be rendered according to the <a href="./variables.html">environmental variables</a> 
+The exception to this rule are the <code>inherit</code> and <code>mixer</code> properties that cannot use templates.
+The reason for this is the sesquencers order of execution.
+It first mixes, then inherits and only finaly parses templates.</p>
+<h3><a name="available-variables" class="header-link" href="#available-variables"><span class="glyphicon glyphicon-link"></span></a>Available variables</h3><p>The main use of templates is probably accessing local and global variables. 
 For instance, in order to print the global variable “name”, you could create a template that looks like this: <code>My name is &lt;%= global.name%&gt;</code>.</p>
 <p>Templates allow access only to a confined number of variables; These vary a bit between different tasks, but you can expect the templates to have access to the <code>global</code> and <code>current</code> objects. 
 Element templates also have access to their own data property as {namespace}Data (so that trials will have a <code>trialData</code> object, and stimuli a <code>mediaData</code> property). 
 Some objects have access to additional properties, you can find them in their respective documentation.</p>
-<p>Normaly each template gets rendered only once, when it is first encountered. Sometimes you may want it to update in response to various realtime changes. 
+<p>@TODO: meta variables + <task>Data</p>
+<h3><a name="rerendering" class="header-link" href="#rerendering"><span class="glyphicon glyphicon-link"></span></a>Rerendering</h3><p>Normaly each template gets rendered only once, when it is first encountered. Sometimes you may want it to update in response to various realtime changes. 
 In order to for the templates to re-render each time you should set the <code>reRender</code> property to be true.</p>
-<pre><code class="lang-js"><span class="hljs-rules">{
-    <span class="hljs-rule"><span class="hljs-attribute">stem</span>:<span class="hljs-value"> <span class="hljs-string">'&lt;%= global.value %&gt;'</span>,
-    regenerateTemplate: true
-</span></span></span>}
-</code></pre>
 
 
 				</div>
