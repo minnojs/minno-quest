@@ -7,9 +7,10 @@ description: Setting and controling environmental variables
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
+- [Accessing variables](#accessing-variables)
 - [Global](#global)
-- [Current](#current)
-- [Local Variables](#local-variables)
+- [The task object (current)](#the-task-object-current)
+- [Local Variables (local & meta)](#local-variables-local-&-meta)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -21,16 +22,18 @@ In order to achieve these behaviors you can use variables.
 We will first describe variables that are common across all tasks, and are always available - these are the `global` and `current` variables.
 Then we will get down to variables variables that are available only in specific contexts - such as the `data` and `meta` variables.
 
+### Accessing variables
+There are many ways to use variables within the PI tasks.
+You can learn about them in their respective documentation, check out [conditions](.mixer.html#conditions) and [templates](templates.html).
+In addition, some of the variables can be accessed directly from your JavaScript, in cases that this is possible it will be mentioned in the description of the variable.
+
 ### Global
-The PI tasks expose 
-The `global` variable is an object that holds all the public information that is exposed by the various tasks.
-It has a property for each task that is run. 
+The PI tasks expose one central object that serves as the hub of all of you tasks.
+The [task objects][current] get automatically registered on the `global` object, so that you can access them all from here.
+In addition, you can register any data that you want shared between your tasks onto `global`.
+This options is useful in various cases of branching, as well as when you want a common theme to appear in multiple tasks.
 
-the context of everything that happens within the task manager.
-
-In addition, you can extend it manually using the `API.addGlobal` or `API.addCurrent` functions.
-Any Task element can have the additional property `addGlobal` or `addCurrent` that get added to the global/current whenever that element is activated.
-This options is useful in various cases of branching.For advanced uses you can also access the global object directly by changing the `window.piGlobal` object.
+The following snippet sets `global.value` to 123, and `global.variable` to [1,2,3].
 
 ```js
 API.addGlobal({
@@ -39,28 +42,57 @@ API.addGlobal({
 })
 ```
 
-It may sometimes be more handy to access `global` directly as `window.piGlobal`.
+It may sometimes be handy to access `global` directly as `window.piGlobal`.
+Note that this allows you to access task objects as well.
 
 ```js
 window.piGlobal.greeting = 'Hello world';
 console.log(window.piGlobal);
 ```
 
-### Current
-Each task creates an object associated with it that logs anything that happens within the task. In the duration of the task, this object can be accessed using the `current` object. After the task ends, the object stays available from within the global object as `global.taskName`, where "taskName" is the name associated with this specific task.
-The task object is there for you to change. You can xtend it to your hearts content using `API.addCurrent`:
+### The task object (current)
+[current]: #the-task-object-current
+
+Each PI task creates an object that holds information regarding that task.
+The object is automatically updated with data from within the tasks (such as question answers or other logs).
+The task object can be changed manually as well. You can extend it however you like using `API.addCurrent`:
 
 ```js
 API.addCurrent({
     value: 123,
     variable: [1,2,3]
-})
+});
 ```
 
-Tasks add any data that they log into their task object. For instance, piQuest maintains a `current.questions` object that holds the responses for all questions.
+From within each task, the task object is available as `current`.
+Even when the task is not active it is available from within the [`global`](#global) object, as `global.<taskName>`, 
+where `<taskName>` stands for the [task name](../manager/API.html#tasks) as defined within the task manager.
 
-### Local Variables
-In addition to these environmental variables, you have access to two types of local variables; *Data* and *Meta* . They are each available within the mixer/templates with specific names tied to their type. The naming convention for these variables is `<elementName>Data` and `<elementName>Meta`. For example, for tasks they appear as `tasksData` and `tasksMeta`. 
+For your convenience, here is a table describing some of the data available within the different task objects.
+
+Task    | Description
+------- | -----------
+PIP     | The task object holds all trial logs: `current.logs`.
+piQuest | The task object holds all questions: `current.questions`.
+
+### Local Variables (local & meta)
+The variables that we've discussed so far are relevant for whole tasks or even whole studies.
+We now approach variables that have a narrower scope: they have to do with specific elements within your task.
+These variables are called *Data* and *Meta*. 
+
+The *Data* variables allow you to manually set useful information into each element. 
+Their behaviour is described fully within as part of element [inheritance](./inheritance.html#data).
+
+The *Meta* variables hold some meta information regarding this element that is auto-generated by the mixer.
+In particular it holds two properties: `
+
+Property    | Description  
+----------- | -----------
+number      | The serial number for this element within the sequence (i.e. 3 if this is the third element to be presented).
+outOf       | An attempt to estimate how many elements are in the sequence overall. This number cannot be fully trusted as the number of elements may be dynamically generated and depend on various variables not yet determined.
+
+The naming convention for these variables is `<elementName>Data` and `<elementName>Meta` respectively.
+For example, for tasks they appear as `tasksData` and `tasksMeta`. 
 
 The elementNames for the various tasks are as follows:
 
@@ -72,13 +104,3 @@ piQuest     | pages       | pagesData, pagesMeta
 piPlayer    | trial       | trialData, trialMeta
             | stimulus    | stimulusData, stimulusMeta
             | media       | mediaData, mediaMeta
-
-If you set the data property of your elements, then they become available as the `<elementName>Data` objects.
-
-Each element within the sequence gets a Meta object that holds automatically generated information regarding the location of the element within the sequence. It has two properties:
-
-Property    | Description  
------------ | -----------
-number      | The serial number for this element within the sequence (i.e. 3 if this is the third element to be presented).
-outOf       | An attempt to estimate how many elements are in the sequence overall. This number cannot be fully trusted as the number of elements may be dynamically generated and depend on various variables not yet determined.
-

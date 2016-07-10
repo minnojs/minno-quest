@@ -159,9 +159,10 @@ var page = {
 ```
 
 #### Sequence evaluation (wrapper)
-[evaluation]: sequence-evaluation-wrapper
+[evaluation]: #sequence-evaluation-wrapper
 
-Most of the time, mixers are lazily processed. This means that the sequencer waits until it reaches the mixer before expanding it.
+Most of the time, mixers are lazily processed. 
+This means that the sequencer waits until it reaches the mixer before expanding it.
 This behaviour allows us to use branching mixers - we don't decide which branch to take until we reach it.
 The exception to this rule is randomizing mixers (such as `randomize` or `choose`), that in order to randomize *everything* inside them, must pre-mix all their content.
 

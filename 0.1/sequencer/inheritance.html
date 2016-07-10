@@ -168,8 +168,8 @@ One exception to this rule is the <code>data</code> objects which we attempt to 
 }
 </code></pre>
 <p>In order for an element to inherit another element it must use the <code>inherit</code> property. <code>inherit</code> takes an object or a string, with instructions for which element to inherit. If a string is used, the sequencer treats it as if it was a set name, and picks a random element from within that set.</p>
-<pre><code class="lang-js">{
-    <span class="hljs-tag">inherit</span>: {<span class="hljs-attribute">set</span>:<span class="hljs-string">'mySetName'</span>, <span class="hljs-attribute">type</span>:<span class="hljs-string">'random'</span>}
+<pre><code class="lang-js"><span class="hljs-rules">{
+    <span class="hljs-rule"><span class="hljs-attribute">inherit</span>:<span class="hljs-value"> {set:<span class="hljs-string">'mySetName'</span>, type:<span class="hljs-string">'random'</span></span></span></span>}
 }
 </code></pre>
 <table>

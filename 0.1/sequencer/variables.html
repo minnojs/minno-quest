@@ -111,27 +111,93 @@
 	<!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 <ul>
-<li><a href="#environmental-variables">Environmental Variables</a></li>
-<li><a href="#local-variables">Local Variables</a></li>
+<li><a href="#accessing-variables">Accessing variables</a></li>
+<li><a href="#global">Global</a></li>
+<li><a href="#the-task-object-current">The task object (current)</a></li>
+<li><a href="#local-variables-local-&amp;-meta">Local Variables (local &amp; meta)</a></li>
 </ul>
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-<p>Sometimes it is not enough to hard code behaviors into your tasks, sometimes you want behavior to depend on a previous response, or change your texts according to randomization. In order to support these behaviors you can use variables.</p>
-<h4><a name="environmental-variables" class="header-link" href="#environmental-variables"><span class="glyphicon glyphicon-link"></span></a>Environmental Variables</h4><p>The <code>global</code> variable is the context of everything that happens within the task manager. It is an object that holds a property for each task that is run. 
-In addition, you as a user may extend it manually using the <code>API.addGlobal</code> or <code>API.addCurrent</code> functions. Any Task element can have the additional property <code>addGlobal</code> or <code>addCurrent</code> that get added to the global/current whenever that element is activated. This options is useful in various cases of branching.For advanced uses you can also access the global object directly by changing the <code>window.piGlobal</code> object.</p>
-<pre><code class="lang-js"><span class="hljs-tag">API</span><span class="hljs-class">.addGlobal</span>({
-    <span class="hljs-attribute">value</span>: <span class="hljs-number">123</span>,
-    <span class="hljs-attribute">variable</span>: [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>]
-})
+<p>Sometimes it is not enough to hard code behaviors into your tasks, 
+sometimes you want behavior to depend on a previous response,
+or change some texts according to randomization.
+In order to achieve these behaviors you can use variables.</p>
+<p>We will first describe variables that are common across all tasks, and are always available - these are the <code>global</code> and <code>current</code> variables.
+Then we will get down to variables variables that are available only in specific contexts - such as the <code>data</code> and <code>meta</code> variables.</p>
+<h3><a name="accessing-variables" class="header-link" href="#accessing-variables"><span class="glyphicon glyphicon-link"></span></a>Accessing variables</h3><p>There are many ways to use variables within the PI tasks.
+You can learn about them in their respective documentation, check out <a href=".mixer.html#conditions">conditions</a> and <a href="templates.html">templates</a>.
+In addition, some of the variables can be accessed directly from your JavaScript, in cases that this is possible it will be mentioned in the description of the variable.</p>
+<h3><a name="global" class="header-link" href="#global"><span class="glyphicon glyphicon-link"></span></a>Global</h3><p>The PI tasks expose one central object that serves as the hub of all of you tasks.
+The <a href="#the-task-object-current">task objects</a> get automatically registered on the <code>global</code> object, so that you can access them all from here.
+In addition, you can register any data that you want shared between your tasks onto <code>global</code>.
+This options is useful in various cases of branching, as well as when you want a common theme to appear in multiple tasks.</p>
+<p>The following snippet sets <code>global.value</code> to 123, and <code>global.variable</code> to [1,2,3].</p>
+<pre><code class="lang-js"><span class="hljs-tag">API</span><span class="hljs-class">.addGlobal</span>(<span class="hljs-rules">{
+    <span class="hljs-rule"><span class="hljs-attribute">value</span>:<span class="hljs-value"> <span class="hljs-number">123</span>,
+    variable: [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>]
+</span></span></span>})
 </code></pre>
-<p>Each task creates an object associated with it that logs anything that happens within the task. In the duration of the task, this object can be accessed using the <code>current</code> object. After the task ends, the object stays available from within the global object as <code>global.taskName</code>, where “taskName” is the name associated with this specific task.
-The task object is there for you to change. You can extend it to your hearts content using <code>API.addCurrent</code>:</p>
-<pre><code class="lang-js"><span class="hljs-tag">API</span><span class="hljs-class">.addCurrent</span>({
-    <span class="hljs-attribute">value</span>: <span class="hljs-number">123</span>,
-    <span class="hljs-attribute">variable</span>: [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>]
-})
+<p>It may sometimes be handy to access <code>global</code> directly as <code>window.piGlobal</code>.
+Note that this allows you to access task objects as well.</p>
+<pre><code class="lang-js"><span class="hljs-built_in">window</span>.piGlobal.greeting = <span class="hljs-string">'Hello world'</span>;
+<span class="hljs-built_in">console</span>.log(<span class="hljs-built_in">window</span>.piGlobal);
 </code></pre>
-<p>Tasks add any data that they log into their task object. For instance, piQuest maintains a <code>current.questions</code> object that holds the responses for all questions.</p>
-<h4><a name="local-variables" class="header-link" href="#local-variables"><span class="glyphicon glyphicon-link"></span></a>Local Variables</h4><p>In addition to these environmental variables, you have access to two types of local variables; <em>Data</em> and <em>Meta</em> . They are each available within the mixer/templates with specific names tied to their type. The naming convention for these variables is <code>&lt;elementName&gt;Data</code> and <code>&lt;elementName&gt;Meta</code>. For example, for tasks they appear as <code>tasksData</code> and <code>tasksMeta</code>. </p>
+<h3><a name="the-task-object-current" class="header-link" href="#the-task-object-current"><span class="glyphicon glyphicon-link"></span></a>The task object (current)</h3><p>Each PI task creates an object that holds information regarding that task.
+The object is automatically updated with data from within the tasks (such as question answers or other logs).
+The task object can be changed manually as well. You can extend it however you like using <code>API.addCurrent</code>:</p>
+<pre><code class="lang-js"><span class="hljs-tag">API</span><span class="hljs-class">.addCurrent</span>(<span class="hljs-rules">{
+    <span class="hljs-rule"><span class="hljs-attribute">value</span>:<span class="hljs-value"> <span class="hljs-number">123</span>,
+    variable: [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>]
+</span></span></span>});
+</code></pre>
+<p>From within each task, the task object is available as <code>current</code>.
+Even when the task is not active it is available from within the <a href="#global"><code>global</code></a> object, as <code>global.&lt;taskName&gt;</code>, 
+where <code>&lt;taskName&gt;</code> stands for the <a href="../manager/API.html#tasks">task name</a> as defined within the task manager.</p>
+<p>For your convenience, here is a table describing some of the data available within the different task objects.</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PIP</td>
+<td>The task object holds all trial logs: <code>current.logs</code>.</td>
+</tr>
+<tr>
+<td>piQuest</td>
+<td>The task object holds all questions: <code>current.questions</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3><a name="local-variables-local-&amp-meta" class="header-link" href="#local-variables-local-&amp-meta"><span class="glyphicon glyphicon-link"></span></a>Local Variables (local &amp; meta)</h3><p>The variables that we’ve discussed so far are relevant for whole tasks or even whole studies.
+We now approach variables that have a narrower scope: they have to do with specific elements within your task.
+These variables are called <em>Data</em> and <em>Meta</em>. </p>
+<p>The <em>Data</em> variables allow you to manually set useful information into each element. 
+Their behaviour is described fully within as part of element <a href="./inheritance.html#data">inheritance</a>.</p>
+<p>The <em>Meta</em> variables hold some meta information regarding this element that is auto-generated by the mixer.
+In particular it holds two properties: `</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description  </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>number</td>
+<td>The serial number for this element within the sequence (i.e. 3 if this is the third element to be presented).</td>
+</tr>
+<tr>
+<td>outOf</td>
+<td>An attempt to estimate how many elements are in the sequence overall. This number cannot be fully trusted as the number of elements may be dynamically generated and depend on various variables not yet determined.</td>
+</tr>
+</tbody>
+</table>
+<p>The naming convention for these variables is <code>&lt;elementName&gt;Data</code> and <code>&lt;elementName&gt;Meta</code> respectively.
+For example, for tasks they appear as <code>tasksData</code> and <code>tasksMeta</code>. </p>
 <p>The elementNames for the various tasks are as follows:</p>
 <table>
 <thead>
@@ -171,26 +237,6 @@ The task object is there for you to change. You can extend it to your hearts con
 <td></td>
 <td>media</td>
 <td>mediaData, mediaMeta</td>
-</tr>
-</tbody>
-</table>
-<p>If you set the data property of your elements, then they become available as the <code>&lt;elementName&gt;Data</code> objects.</p>
-<p>Each element within the sequence gets a Meta object that holds automatically generated information regarding the location of the element within the sequence. It has two properties:</p>
-<table>
-<thead>
-<tr>
-<th>Property</th>
-<th>Description  </th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>number</td>
-<td>The serial number for this element within the sequence (i.e. 3 if this is the third element to be presented).</td>
-</tr>
-<tr>
-<td>outOf</td>
-<td>An attempt to estimate how many elements are in the sequence overall. This number cannot be fully trusted as the number of elements may be dynamically generated and depend on various variables not yet determined.</td>
 </tr>
 </tbody>
 </table>

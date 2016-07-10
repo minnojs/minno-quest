@@ -168,22 +168,22 @@ console.<span class="hljs-function"><span class="hljs-title">log</span><span cla
 </code></pre>
 <h3><a name="array-literals" class="header-link" href="#array-literals"><span class="glyphicon glyphicon-link"></span></a>Array literals</h3><p>Arrays are ordered lists of values, their elements may be any value types (including other arrays). When you create the array, you can assign the elements within the array with commas (learn <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">more</a>).</p>
 <pre><code class="lang-js"><span class="hljs-comment">// Define arr</span>
-<span class="hljs-tag">var</span> arr = [<span class="hljs-number">1</span>,<span class="hljs-number">3</span>,<span class="hljs-number">5</span>,<span class="hljs-number">7</span>,<span class="hljs-number">11</span>]
+var arr = [<span class="hljs-number">1</span>,<span class="hljs-number">3</span>,<span class="hljs-number">5</span>,<span class="hljs-number">7</span>,<span class="hljs-number">11</span>]
 
 <span class="hljs-comment">// Access arr elements</span>
-console.<span class="hljs-function"><span class="hljs-title">log</span><span class="hljs-params">(arr[<span class="hljs-number">0</span>])</span></span>            <span class="hljs-comment">// prints 1</span>
-console.<span class="hljs-function"><span class="hljs-title">log</span><span class="hljs-params">(arr[<span class="hljs-number">3</span>])</span></span>            <span class="hljs-comment">// prints 7</span>
+console.<span class="hljs-built_in">log</span>(arr[<span class="hljs-number">0</span>])            <span class="hljs-comment">// prints 1</span>
+console.<span class="hljs-built_in">log</span>(arr[<span class="hljs-number">3</span>])            <span class="hljs-comment">// prints 7</span>
 </code></pre>
 <p>Arrays have cells. To refer to one value in the array, we use the value’s cell index inside []. </p>
 <h3><a name="object-literals" class="header-link" href="#object-literals"><span class="glyphicon glyphicon-link"></span></a>Object literals</h3><p>Object literals are a structure of variables. The structure is a list of property names and associated values. Like arrays, objects group of few variables together. However, in objects, each value has a name (rather than a cell number). For instance, you can think of a person as an object with many different properties. The person has a name, a family name, age, weight, and more. </p>
-<pre><code class="lang-js">// Define an object named <span class="hljs-keyword">person</span>.
-var <span class="hljs-keyword">person</span> = {name: 'John Ridley', family:'Stroop', age:33, weight:{lbs:150, kg:68}} 
-//This object has four variables in it. The weight variable <span class="hljs-keyword">is</span> an object <span class="hljs-keyword">inside</span> an object.
+<pre><code class="lang-js"><span class="hljs-comment">// Define an object named person.</span>
+var person = {<span class="hljs-string">name:</span> <span class="hljs-string">'John Ridley'</span>, <span class="hljs-string">family:</span><span class="hljs-string">'Stroop'</span>, <span class="hljs-string">age:</span><span class="hljs-number">33</span>, <span class="hljs-string">weight:</span>{<span class="hljs-string">lbs:</span><span class="hljs-number">150</span>, <span class="hljs-string">kg:</span><span class="hljs-number">68</span>}} 
+<span class="hljs-comment">//This object has four variables in it. The weight variable is an object inside an object.</span>
 
-// Here <span class="hljs-keyword">are</span> the two main methods to refer to the object's properties
-console.log(<span class="hljs-keyword">person</span>.name)            // prints 'John Ridley'
-console.log(<span class="hljs-keyword">person</span><span class="hljs-comment">['family']</span>)        // prints 'Stroop'
-console.log(<span class="hljs-keyword">person</span>.weight.kg)        // prints '68'
+<span class="hljs-comment">// Here are the two main methods to refer to the object's properties</span>
+console.log(person.name)            <span class="hljs-comment">// prints 'John Ridley'</span>
+console.log(person[<span class="hljs-string">'family'</span>])        <span class="hljs-comment">// prints 'Stroop'</span>
+console.log(person.weight.kg)        <span class="hljs-comment">// prints '68'</span>
 </code></pre>
 <p>The property name (sometimes called key) and values are separated using a colon <code>:</code>, propertyName:value pairs are separated using a comma <code>,</code>. Property names can be any string (=text). The properties are accessed either using brackets <code>obj[&#39;propertyName&#39;]</code> or using dot(.) notation <code>obj.propertyName</code>.</p>
 <h3><a name="functions" class="header-link" href="#functions"><span class="glyphicon glyphicon-link"></span></a>Functions</h3><p>Functions are one of the fundamental building blocks in JavaScript. A function is a JavaScript procedure—a set of statements that perform a task or calculate a value.</p>
