@@ -43,12 +43,18 @@ define(function(require){
 		var settings, context = {};
 		var data = {taskName: currentTask.name || 'namelessTask', taskNumber: currentTask.$meta.number, taskURL:currentTask.scriptUrl || currentTask.templateUrl};
 
+		// set last task flag
+		if (currentTask.last){
+			data.sessionStatus = "C";
+			beforeUnload.deactivate();
+		}
+
 		// add logging meta
 		if (currentTask.type == 'quest' || currentTask.type == 'pip'){
 			currentTask.$script.serial = currentTask.$meta.number;
 			settings = currentTask.$script.settings;
 			settings.logger = settings.logger || {};
-			settings.logger.meta = angular.extend(settings.logger.meta || {}, data);
+			settings.logger.meta = angular.extend({}, data, settings.logger.meta, global.$meta);
 		}
 
 		// add feedback functions to the default template context
@@ -77,11 +83,6 @@ define(function(require){
 			}
 		}
 
-		// set last task flag
-		if (currentTask.last){
-			data.sessionStatus = "C";
-			beforeUnload.deactivate();
-		}
 
 		if (currentTask.last && global.$mTurk){
 			var $mTurk = global.$mTurk;
