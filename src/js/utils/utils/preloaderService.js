@@ -69,7 +69,7 @@ define(function(require){
                 resultObj.value = result;
                 return result;
             })
-            .catch(function(){
+            ['catch'](function(){
 				$console('preload').error('Failed to preload:', type, ' - ', description);
             });
 
