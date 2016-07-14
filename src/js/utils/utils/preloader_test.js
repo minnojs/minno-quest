@@ -1,10 +1,11 @@
 define(function(require){
 	require('./utilsModule');
+	require('../console/consoleModule');
 
 	describe('preloader', function(){
 		var preloader,spy, $q, $rootScope,def;
 
-		beforeEach(module('pi.utils'));
+		beforeEach(module('pi.utils','piConsole'));
 
 		beforeEach(inject(function($injector){
 			$q = $injector.get('$q');

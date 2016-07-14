@@ -1,9 +1,10 @@
 define(function(require){
 	var _ = require('underscore');
 
-	preloaderService.$inject = ['$q'];
-	function preloaderService($q){
+	preloaderService.$inject = ['$q', 'piConsole'];
+	function preloaderService($q, $console){
 		this.$q = $q;
+        this.$console = $console;
 		this.loaders = {};
 		this.loaded = [];
 	}
@@ -35,6 +36,7 @@ define(function(require){
 	}
 
 	function preloaderLoad(type, description){
+        var $console = this.$console;
 		var loader = this.loaders[type];
 		var promise, resultObj;
 
@@ -61,11 +63,15 @@ define(function(require){
 		}
 
 		// save result into the loaded array (we use an array in order to allow non string descriptions)
-		promise.then(function(result){
-			resultObj.promise = null; // so that the promise can be garbage collected
-			resultObj.value = result;
-			return result;
-		});
+		promise
+            .then(function(result){
+                resultObj.promise = null; // so that the promise can be garbage collected
+                resultObj.value = result;
+                return result;
+            })
+            .catch(function(){
+				$console('preload').error('Failed to preload:', type, ' - ', description);
+            });
 
 		return promise;
 	}

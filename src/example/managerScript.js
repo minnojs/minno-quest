@@ -2,6 +2,7 @@ define(['managerAPI'], function(Manager){
 
 	var API = new Manager();
 	API.addSettings('skin', '');
+	API.addSettings('preloadImages', ['asdf/sdf.jpg']);
 
 	API.addGlobal({$mTurk:{assignmentId:0,hitId:0,workerId:0}});
 
