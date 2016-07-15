@@ -180,10 +180,7 @@ object      | object        | An Object to be JSONified then posted.
 
 ##### example:
 ```js
-API.post('my/server/url', {my:'data'})
-    .then(function(){
-        // proceed doing important stuff...
-    });
+API.post('my/server/url', {my:'data'});
 ```
 
 #### shuffle(collection)
@@ -201,3 +198,20 @@ collection  | Array, Object or String   | The collection to shuffle.
 var shuffled = API.shuffle([1,2,3,4]);
 console.log(shuffled); // prints [4, 1, 3, 2] for example
 ```
+
+#### save(object)
+This function is available only on the project implicit build.
+Posts JSONified data to the server. 
+
+Argument    | Type          | Description
+----------- | ----          | -----------
+object      | object        | An Object to be JSONified then posted.
+
+##### returns:
+(*Promise*) a promise to be resolved when the post completes.
+
+##### example:
+```js
+API.save({my:'data'});
+```
+
