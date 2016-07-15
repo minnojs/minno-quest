@@ -125,12 +125,12 @@ The sequence <a href="./mixer.html"><strong>mixer</strong></a> is responsible fo
 It allows you to randomize the order of your elements.
 It also allows you to repeat a task multiple times and randomly assign participants to experimental conditions.</p>
 <p>For example, the following mixer randomizes the order of two tasks in <em>piManager</em>:</p>
-<pre><code class="lang-js">API.addSequence([
+<pre><code class="lang-js"><span class="hljs-type">API</span>.addSequence([
     {
-<span class="hljs-label">        mixer:</span> <span class="hljs-string">'randomize'</span>,
-<span class="hljs-label">        data:</span> [
-            {<span class="hljs-string">type:</span><span class="hljs-string">'message'</span>, <span class="hljs-string">template:</span> <span class="hljs-string">'Task 1'</span>, <span class="hljs-string">keys:</span> <span class="hljs-string">' '</span>},
-            {<span class="hljs-string">type:</span><span class="hljs-string">'message'</span>, <span class="hljs-string">template:</span> <span class="hljs-string">'Task 2'</span>, <span class="hljs-string">keys:</span> <span class="hljs-string">' '</span>}
+        mixer: 'randomize',
+        data: [
+            {<span class="hljs-keyword">type</span>:'message', <span class="hljs-keyword">template</span>: '<span class="hljs-type">Task</span> <span class="hljs-number">1</span>', keys: ' '},
+            {<span class="hljs-keyword">type</span>:'message', <span class="hljs-keyword">template</span>: '<span class="hljs-type">Task</span> <span class="hljs-number">2</span>', keys: ' '}
         ]
     }
 ]);

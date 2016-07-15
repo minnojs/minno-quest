@@ -24,7 +24,7 @@ Then we will get down to variables variables that are available only in specific
 
 ### Accessing variables
 There are many ways to use variables within the PI tasks.
-You can learn about them in their respective documentation, check out [conditions](.mixer.html#conditions) and [templates](templates.html).
+You can learn about them in their respective documentation, check out [conditions](mixer.html#conditions) and [templates](templates.html).
 In addition, some of the variables can be accessed directly from your JavaScript, in cases that this is possible it will be mentioned in the description of the variable.
 
 ### Global
@@ -55,7 +55,8 @@ console.log(window.piGlobal);
 
 Each PI task creates an object that holds information regarding that task.
 The object is automatically updated with data from within the tasks (such as question answers or other logs).
-The task object can be changed manually as well. You can extend it however you like using `API.addCurrent`:
+The task object can be changed manually as well.
+You can extend it however you like using `API.addCurrent`:
 
 ```js
 API.addCurrent({
@@ -64,7 +65,7 @@ API.addCurrent({
 });
 ```
 
-From within each task, the task object is available as `current`.
+While a task is running, its task object is available as `current`.
 Even when the task is not active it is available from within the [`global`](#global) object, as `global.<taskName>`, 
 where `<taskName>` stands for the [task name](../manager/API.html#tasks) as defined within the task manager.
 
