@@ -19,5 +19,9 @@ define(function(require){
 	module.directive('piManager', require('./managerDirective'));
 	module.directive('piManagerTask', require('./managerTaskDirective'));
 
+    module.directive('piLink', require('./piLinkDirective'));
+
 	return module;
 });
+
+

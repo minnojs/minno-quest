@@ -2,7 +2,6 @@ define(['managerAPI'], function(Manager){
 
 	var API = new Manager();
 	API.addSettings('skin', '');
-	API.addSettings('preloadImages', ['asdf/sdf.jpg']);
 
 	API.addGlobal({$mTurk:{assignmentId:0,hitId:0,workerId:0}});
 
@@ -25,6 +24,18 @@ define(['managerAPI'], function(Manager){
 	API.addSettings('skip', true);
 
 	API.addSequence([
+        {
+            type: 'message',
+			template: [
+				'<div pi-done>',
+                    '<a href="google.com" pi-link>piLink</a>',
+                    '<a href="google.com">reglink</a>',
+					'<div >first</div>',
+					'<div>second</div>',
+					'<div>third</div>',
+				'</div>'
+			].join('\n'),
+        },
 		{
 			script:function(done, managerBeforeUnload){
 				managerBeforeUnload.deactivate();
@@ -32,8 +43,6 @@ define(['managerAPI'], function(Manager){
 		},
 		
 		{
-			preText: 'asdf',
-			postText: 'zxc',
 			type:'quest',
 			name: 'first',
 			scriptUrl: 'questScript1.js'
