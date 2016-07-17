@@ -193,7 +193,7 @@ Repeats the element in <code>data</code> <code>times</code> times.</p>
 </ul>
 <p><strong>random</strong>:
 Randomizes the order of elements in <code>data</code>. Random randomizes the order of all the elements under the random mixer’s data array, even if they are inside a mixer. For example, consider the following code:</p>
-<pre><code class="lang-js"><span class="hljs-built_in">var</span> mixer <span class="hljs-subst">=</span> {
+<pre><code class="lang-js"><span class="hljs-built_in">var</span> mixer = {
     mixer:<span class="hljs-string">'random'</span>,
     <span class="hljs-built_in">data</span>: <span class="hljs-preprocessor">[</span>
         obj1,
@@ -214,7 +214,7 @@ Randomizes the order of elements in <code>data</code>. Random randomizes the ord
 <li>[obj2,obj2,obj1]</li>
 </ul>
 <p>If you want to keep some of the elements in the data together (and not randomized), use the <code>wrapper</code> mixer. For instance:</p>
-<pre><code class="lang-js"><span class="hljs-built_in">var</span> mixer <span class="hljs-subst">=</span> {
+<pre><code class="lang-js"><span class="hljs-built_in">var</span> mixer = {
     mixer:<span class="hljs-string">'random'</span>,
     <span class="hljs-built_in">data</span>: <span class="hljs-preprocessor">[</span>
         obj1
@@ -231,7 +231,7 @@ Randomizes the order of elements in <code>data</code>. Random randomizes the ord
 </code></pre>
 <p>This code will keep obj2, obj3, and obj4 together, in that same order (obj2, obj3, obj4), and will randomly present obj1 before or after these three objects.</p>
 <p>You can make any mixer into a wrapper by adding <code>wrapper:true</code>. For example: </p>
-<pre><code class="lang-js"><span class="hljs-built_in">var</span> mixer <span class="hljs-subst">=</span> {
+<pre><code class="lang-js"><span class="hljs-built_in">var</span> mixer = {
     mixer:<span class="hljs-string">'random'</span>,
     <span class="hljs-built_in">data</span>: <span class="hljs-preprocessor">[</span>
         obj1,
@@ -336,15 +336,15 @@ Select the elements in <code>data</code> if all the conditions in the <code>cond
 </code></pre>
 <p>Conditions should be treated as a type of equation.</p>
 <p>In the <code>compare</code> and <code>to</code> properties you can set either straight forward values or references to a variable:</p>
-<pre><code class="lang-js">//Compares the variable time to the value 12
+<pre><code class="lang-js">//Compares <span class="hljs-operator">the</span> <span class="hljs-built_in">variable</span> <span class="hljs-built_in">time</span> <span class="hljs-built_in">to</span> <span class="hljs-operator">the</span> <span class="hljs-built_in">value</span> <span class="hljs-number">12</span>
 var cond1 = {
-    compare: 'global.time',
-    to: '12'
-}
-//Compare the variable <span class="hljs-keyword">gender</span> to the value 'Female'
+    compare: <span class="hljs-string">'global.time'</span>,
+    <span class="hljs-built_in">to</span>: <span class="hljs-string">'12'</span>
+}<span class="hljs-comment">
+//Compare the variable gender to the value 'Female'</span>
 var cond2 = {
-    compare: 'Female',
-    to: 'local.<span class="hljs-keyword">gender</span>'
+    compare: <span class="hljs-string">'Female'</span>,
+    <span class="hljs-built_in">to</span>: <span class="hljs-string">'local.gender'</span>
 }
 </code></pre>
 <p>When you want to refer to a variable, you use text with dots: <code>global.var</code>, <code>questions.q1.response</code>; these values will be treated as pointing to variables within the lists context. <code>questions.q1.response</code> will retrieve the value of the response for q1 from the questions object.</p>
@@ -468,17 +468,17 @@ var cond2 = {
 <h3><a name="variables" class="header-link" href="#variables"><span class="glyphicon glyphicon-link"></span></a>Variables</h3><p>Sometimes it is not enough to hard code behaviors into your tasks, sometimes you want behavior to depend on a previous response, or change your texts according to randomization. In order to support these behaviors you can use variables.</p>
 <h4><a name="environmental-variables" class="header-link" href="#environmental-variables"><span class="glyphicon glyphicon-link"></span></a>Environmental Variables</h4><p>The <code>global</code> variable is the context of everything that happens within the task manager. It is an object that holds a property for each task that is run. 
 In addition, you as a user may extend it manually using the <code>API.addGlobal</code> or <code>API.addCurrent</code> functions. Any Task element can have the additional property <code>addGlobal</code> or <code>addCurrent</code> that get added to the global/current whenever that element is activated. This options is useful in various cases of branching.For advanced uses you can also access the global object directly by changing the <code>window.piGlobal</code> object.</p>
-<pre><code class="lang-js"><span class="hljs-tag">API</span><span class="hljs-class">.addGlobal</span>({
-    <span class="hljs-attribute">value</span>: <span class="hljs-number">123</span>,
-    <span class="hljs-attribute">variable</span>: [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>]
-})
+<pre><code class="lang-js"><span class="hljs-tag">API</span><span class="hljs-class">.addGlobal</span>(<span class="hljs-rules">{
+    <span class="hljs-rule"><span class="hljs-attribute">value</span>:<span class="hljs-value"> <span class="hljs-number">123</span>,
+    variable: [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>]
+</span></span></span>})
 </code></pre>
 <p>Each task creates an object associated with it that logs anything that happens within the task. In the duration of the task, this object can be accessed using the <code>current</code> object. After the task ends, the object stays available from within the global object as <code>global.taskName</code>, where “taskName” is the name associated with this specific task.
 The task object is there for you to change. You can extend it to your hearts content using <code>API.addCurrent</code>:</p>
-<pre><code class="lang-js"><span class="hljs-tag">API</span><span class="hljs-class">.addCurrent</span>({
-    <span class="hljs-attribute">value</span>: <span class="hljs-number">123</span>,
-    <span class="hljs-attribute">variable</span>: [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>]
-})
+<pre><code class="lang-js"><span class="hljs-tag">API</span><span class="hljs-class">.addCurrent</span>(<span class="hljs-rules">{
+    <span class="hljs-rule"><span class="hljs-attribute">value</span>:<span class="hljs-value"> <span class="hljs-number">123</span>,
+    variable: [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>]
+</span></span></span>})
 </code></pre>
 <p>Tasks add any data that they log into their task object. For instance, piQuest maintains a <code>current.questions</code> object that holds the responses for all questions.</p>
 <h4><a name="local-variables" class="header-link" href="#local-variables"><span class="glyphicon glyphicon-link"></span></a>Local Variables</h4><p>In addition to these environmental variables, you have access to two types of local variables; <em>Data</em> and <em>Meta</em> . They are each available within the mixer/templates with specific names tied to their type. The naming convention for these variables is <code>&lt;elementName&gt;Data</code> and <code>&lt;elementName&gt;Meta</code>. For example, for tasks they appear as <code>tasksData</code> and <code>tasksMeta</code>. </p>
@@ -592,8 +592,8 @@ One exception to this rule is the <code>data</code> objects which we attempt to 
 }
 </code></pre>
 <p>In order for an element to inherit another element it must use the <code>inherit</code> property. <code>inherit</code> takes an object or a string, with instructions for which element to inherit. If a string is used, the sequencer treats it as if it was a set name, and picks a random element from within that set.</p>
-<pre><code class="lang-js">{
-    <span class="hljs-tag">inherit</span>: {<span class="hljs-attribute">set</span>:<span class="hljs-string">'mySetName'</span>, <span class="hljs-attribute">type</span>:<span class="hljs-string">'random'</span>}
+<pre><code class="lang-js"><span class="hljs-rules">{
+    <span class="hljs-rule"><span class="hljs-attribute">inherit</span>:<span class="hljs-value"> {set:<span class="hljs-string">'mySetName'</span>, type:<span class="hljs-string">'random'</span></span></span></span>}
 }
 </code></pre>
 <table>

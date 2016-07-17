@@ -3,7 +3,8 @@ title: Messages
 description: A simple task that displays plain messages to the user.
 ---
 
-The message tasks are built to be as simple as possible, all they do is present simple html templates. In order to load a template simply set it into the `template` property as a string, or set the appropriate URL into `templateUrl`. Thats it. (This is not relevant for most users, but the templates are rendered using angularjs $compile and therefore all the relevant directives are available).
+The message tasks are built to be as simple as possible, all they do is present simple html templates. In order to load a template simply set it into the `template` property as a string, or set the appropriate URL into `templateUrl`. 
+That's it. (This is not relevant for most users, but the templates are rendered using angularjs $compile and therefore all the relevant directives are available).
 
 The context for the template has the following variables available: {global, current, task}.
 
@@ -15,7 +16,7 @@ keys            | Sets a key (or keys) that allow users to proceed. The keys pro
 
 &nbsp;
 
-The following example will display the message "Hello World. I am a template.", and procede when the **keys** space is pressed.
+The following example will display the message "Hello World. I am a template.", and proceed when the **keys** space is pressed.
 
 ```js
 var task = {
@@ -51,7 +52,7 @@ First, you can use any element in your template as a proceed button, all you hav
 
 Alternatively you may use the `keys` property in order to set a key (or keys) that proceed. The keys property takes either a key (i.e. `'a'`) a keyCode (i.e. `65`) or an array of such (i.e. `['a','b']`).
 
-This table shows several useful keyCodes for your convinience (there are more [here](http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes)):
+This table shows several useful keyCodes for your convenience (there are more [here](http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes)):
 
 Code    | Function
 ------- | -----------
@@ -66,7 +67,7 @@ Code    | Function
 ### Links out
 PI tasks have a system to prevent accidental browsing away from your tasks.
 It will ask the user if she is sure that she wants to navigate away.
-When using links within you tasks you want the links to allow imediate navigation away.
+When using links within you tasks you want the links to allow immediate navigation away.
 In order to do that, all you have to do is add a `pi-link` attribute to your link,
 
 ```jst
@@ -77,7 +78,7 @@ In order to do that, all you have to do is add a `pi-link` attribute to your lin
 
 The project implicit build has an optional "meta template" that you may use by setting the `piTemplate` property to true. When using it, you have several additional options.
 
-property        | description
+Property        | Description
 --------------- | ---------------------
 piTemplate      | (true, false or 'debrief') Activates the PI template. If set to 'debrief' activates the debrief template, and makes the debrief functions available.
 header          | Header text.
@@ -95,7 +96,7 @@ They can be used like so: `<%= showPanel('body','header','footer') %>` or `<%= s
 
 `showPanel` displays content within a stylized panel.
 
-argument        | description
+Argument        | Description
 --------------- | ---------------------
 body            | The main text of the panel
 header          | The panel header (optional)
@@ -107,9 +108,9 @@ footer          | The panel footer (optional)
 ```
 
 `showFeedback` automatically gathers feedback from the global object and displays it within your page. It takes an options object as its single argument. The feedback is gathered from the global object by going through each task object (current) and searching for the `feedback` property. It depends on the individual tasks respecting this convention.
-You can fine tune the way feedback is collected and desplayed using the following options:
+You can fine tune the way feedback is collected and displayed using the following options:
 
-property        | description
+Property        | Description
 --------------- | ---------------------
 pre             | A string to be injected before each feedback (default :'&lt;p&gt;').
 post            | A string to be injected after each feedback (default :'&lt;/p&gt;').

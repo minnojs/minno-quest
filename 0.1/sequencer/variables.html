@@ -131,10 +131,10 @@ The <a href="#the-task-object-current">task objects</a> get automatically regist
 In addition, you can register any data that you want shared between your tasks onto <code>global</code>.
 This options is useful in various cases of branching, as well as when you want a common theme to appear in multiple tasks.</p>
 <p>The following snippet sets <code>global.value</code> to 123, and <code>global.variable</code> to [1,2,3].</p>
-<pre><code class="lang-js"><span class="hljs-tag">API</span><span class="hljs-class">.addGlobal</span>({
-    <span class="hljs-attribute">value</span>: <span class="hljs-number">123</span>,
-    <span class="hljs-attribute">variable</span>: [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>]
-})
+<pre><code class="lang-js"><span class="hljs-tag">API</span><span class="hljs-class">.addGlobal</span>(<span class="hljs-rules">{
+    <span class="hljs-rule"><span class="hljs-attribute">value</span>:<span class="hljs-value"> <span class="hljs-number">123</span>,
+    variable: [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>]
+</span></span></span>})
 </code></pre>
 <p>It may sometimes be handy to access <code>global</code> directly as <code>window.piGlobal</code>.
 Note that this allows you to access task objects as well.</p>
@@ -145,10 +145,10 @@ Note that this allows you to access task objects as well.</p>
 The object is automatically updated with data from within the tasks (such as question answers or other logs).
 The task object can be changed manually as well.
 You can extend it however you like using <code>API.addCurrent</code>:</p>
-<pre><code class="lang-js"><span class="hljs-tag">API</span><span class="hljs-class">.addCurrent</span>({
-    <span class="hljs-attribute">value</span>: <span class="hljs-number">123</span>,
-    <span class="hljs-attribute">variable</span>: [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>]
-});
+<pre><code class="lang-js"><span class="hljs-tag">API</span><span class="hljs-class">.addCurrent</span>(<span class="hljs-rules">{
+    <span class="hljs-rule"><span class="hljs-attribute">value</span>:<span class="hljs-value"> <span class="hljs-number">123</span>,
+    variable: [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>]
+</span></span></span>});
 </code></pre>
 <p>While a task is running, its task object is available as <code>current</code>.
 Even when the task is not active it is available from within the <a href="#global"><code>global</code></a> object, as <code>global.&lt;taskName&gt;</code>, 
