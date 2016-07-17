@@ -36,7 +36,7 @@ define(function(require){
 			API.prototype[_.camelCase('add-' + set + '-set')] = add_set(set);
 		});
 
-		_.extend(API.prototype, {
+		_.extend(API.prototype, options.static, {
 
 			setName: function(name){
 				this.script.name = name;

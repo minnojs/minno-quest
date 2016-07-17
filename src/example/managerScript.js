@@ -24,18 +24,6 @@ define(['managerAPI'], function(Manager){
 	API.addSettings('skip', true);
 
 	API.addSequence([
-        {
-            type: 'message',
-			template: [
-				'<div pi-done>',
-                    '<a href="google.com" pi-link>piLink</a>',
-                    '<a href="google.com">reglink</a>',
-					'<div >first</div>',
-					'<div>second</div>',
-					'<div>third</div>',
-				'</div>'
-			].join('\n'),
-        },
 		{
 			script:function(done, managerBeforeUnload){
 				managerBeforeUnload.deactivate();
@@ -43,12 +31,14 @@ define(['managerAPI'], function(Manager){
 		},
 		
 		{
-			type:'quest',
+            preText: API.PROGRESS_BAR, 
+            type:'quest',
 			name: 'first',
 			scriptUrl: 'questScript1.js'
 		},
 
 		{
+            preText: API.PROGRESS_BAR, 
 			type: 'message',
 			template: [
 				'<div pi-message-done>',
