@@ -39,7 +39,7 @@ var task = {
 <div>Hello World. I am a template.</div>
 ```
 
-#### Proceeding
+### Proceeding
 
 There are two types of controls that allow users to proceed to the next task.
 
@@ -63,7 +63,17 @@ Code    | Function
 39      | Right arrow
 40      | Down arrow
 
-### Project Implicit build
+### Links out
+PI tasks have a system to prevent accidental browsing away from your tasks.
+It will ask the user if she is sure that she wants to navigate away.
+When using links within you tasks you want the links to allow imediate navigation away.
+In order to do that, all you have to do is add a `pi-link` attribute to your link,
+
+```jst
+<a href="google.com" pi-link>Link text</a>
+```
+
+## Project Implicit build
 
 The project implicit build has an optional "meta template" that you may use by setting the `piTemplate` property to true. When using it, you have several additional options.
 

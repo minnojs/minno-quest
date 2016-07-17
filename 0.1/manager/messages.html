@@ -149,7 +149,7 @@
 <p><em>hello.jst</em></p>
 <pre><code class="lang-html">&lt;<span class="hljs-keyword">div</span>&gt;<span class="hljs-type">Hello</span> <span class="hljs-type">World</span>. I am a <span class="hljs-keyword">template</span>.&lt;/<span class="hljs-keyword">div</span>&gt;
 </code></pre>
-<h4><a name="proceeding" class="header-link" href="#proceeding"><span class="glyphicon glyphicon-link"></span></a>Proceeding</h4><p>There are two types of controls that allow users to proceed to the next task.</p>
+<h3><a name="proceeding" class="header-link" href="#proceeding"><span class="glyphicon glyphicon-link"></span></a>Proceeding</h3><p>There are two types of controls that allow users to proceed to the next task.</p>
 <p>First, you can use any element in your template as a proceed button, all you have to do is add the <code>pi-message-done</code> attribute to the appropriate element.</p>
 <pre><code class="lang-html">&lt;button <span class="hljs-class"><span class="hljs-keyword">type</span></span>=<span class="hljs-string">"button"</span> pi-message-<span class="hljs-keyword">done</span>&gt;Click here <span class="hljs-keyword">to</span> proceed&lt;/button&gt;
 </code></pre>
@@ -193,7 +193,13 @@
 </tr>
 </tbody>
 </table>
-<h3><a name="project-implicit-build" class="header-link" href="#project-implicit-build"><span class="glyphicon glyphicon-link"></span></a>Project Implicit build</h3><p>The project implicit build has an optional “meta template” that you may use by setting the <code>piTemplate</code> property to true. When using it, you have several additional options.</p>
+<h3><a name="links-out" class="header-link" href="#links-out"><span class="glyphicon glyphicon-link"></span></a>Links out</h3><p>PI tasks have a system to prevent accidental browsing away from your tasks.
+It will ask the user if she is sure that she wants to navigate away.
+When using links within you tasks you want the links to allow imediate navigation away.
+In order to do that, all you have to do is add a <code>pi-link</code> attribute to your link,</p>
+<pre><code class="lang-jst">&lt;<span class="hljs-operator">a</span> href=<span class="hljs-string">"google.com"</span> <span class="hljs-constant">pi</span>-link&gt;Link <span class="hljs-keyword">text</span>&lt;/<span class="hljs-operator">a</span>&gt;
+</code></pre>
+<h2><a name="project-implicit-build" class="header-link" href="#project-implicit-build"><span class="glyphicon glyphicon-link"></span></a>Project Implicit build</h2><p>The project implicit build has an optional “meta template” that you may use by setting the <code>piTemplate</code> property to true. When using it, you have several additional options.</p>
 <table>
 <thead>
 <tr>
