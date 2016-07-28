@@ -1,0 +1,18 @@
+<div>
+    <div class="list-group">
+        <a href="#" class="list-group-item" ng-repeat="row in list">
+            <div class="row">
+                <div class="col-xs-1" ng-init="selected = $index" >
+                    <select ng-model="selected" ng-change="$parent.move($index, selected)">
+                        <option ng-repeat="i in $parent.list track by i.id" value="{{$index}}" ng-selected="$index===$parent.$index">{{$index + 1}}</option>
+                    </select>
+                </div>
+                <div class="col-xs-11">
+                    value {{ row.text }}
+                </div>
+            </div>
+        </a>
+    </div>
+	<div pi-quest-validation="model.$error.required">{{data.errorMsg.required || "Please respond to this question"}}</div>
+	<div pi-quest-validation="model.$error.correct">{{data.errorMsg.correct || "You must answer the correct answer!"}}</div>
+</div>
