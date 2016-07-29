@@ -1,5 +1,6 @@
 define(function (require) {
 
+    var _ = require('underscore');
 	var angular = require('angular');
 	var template = require('text!./rank.html');
 
@@ -25,42 +26,43 @@ define(function (require) {
                     return value;
                 });
 
-                scope.list = list;
+                if (!data.noRandomize) { list = _.shuffle(list); }
+                updateOrder(list);
 
-
-                scope.reset = function(){
-                    // sort by id
-                }
-
-                scope.move = function(fromIndex, toIndex){
-                    arraymove(list, fromIndex, toIndex);
-                }
-
+                // Setup the model
+                // ***************
 				ctrl.registerModel(ngModel, {
-					dflt: NaN
+					dflt: _.pluck(list, 'id')
 				});
 
-                return;
-
-                function arraymove(arr, fromIndex, toIndex) {
-                    var element = arr[fromIndex];
-                    arr.splice(fromIndex, 1);
-                    arr.splice(toIndex, 0, element);
+                ngModel.$isEmpty = function(value){
+                    return _.isEqual(value, _.range(1, list.length +1));
                 }
 
-                // render quest if needed
-				scope.quest = {
-					answers: mixer(scope.data.answers || [], scope.data)
-				};
+                // Expose the list
+                // ***************
+                scope.list = list;
+                scope.$watchCollection('list', function(newValue, oldValue){
+                    scope.response = _.pluck(list, 'value');
+                });
 
-				// update controller with the response
-				scope.$watch('responseObj',function(newValue, oldValue){
-					if (newValue === oldValue){
-						return;
-					}
+                scope.setupWatch = function(scope){
+                    scope.$watch('$parent.response', function(){
+                        // this needs to be async in order for the select box to catch up with the model
+                        scope.$evalAsync('selected = row.order');
+                    });
+                }
 
-					scope.response = newValue && newValue.value;
-				});
+                // Actions
+                // *******
+                scope.reset = function(){
+                    list = scope.list = _.sortBy(list, 'id');
+                }
+
+                scope.move = function(fromIndex, toIndex, s){
+                    arraymove(list, fromIndex, toIndex);
+                    updateOrder(list);
+                }
 
 				/**
 				 * Required
@@ -68,63 +70,21 @@ define(function (require) {
 				 * we don't implement $observe since in our case required is static
 				 */
 
-				if (scope.data.required){
+				if (data.required){
 					ngModel.$formatters.push(requiredValidator);
 					ngModel.$parsers.unshift(requiredValidator);
 					requiredValidator(scope.response); // check validity at the begining - without need for change...
 				}
 
-				/**
-				 * Compute list styles
-				 */
+                function updateOrder(list){
+                    list.forEach(function(value, index){value.order = index;});
+                }
 
-				// back support for "buttons"
-				// @DEPRICATED
-				if (scope.data.buttons){
-					scope.data.style = 'horizontal';
-				} else {
-					scope.data.style == 'horizontal' && (scope.data.buttons = true);
-				}
-
-				// some specific css added to the list
-				scope.listCss = {};
-				scope.listItemCss = {};
-
-				switch (data.style){
-					case 'horizontal' :
-						scope.listClass = 'btn-group btn-group-justified btn-group-lg';
-						scope.listItemClass = 'btn btn-select';
-						break;
-					case 'multiButtons':
-						scope.listClass = 'btn-toolbar';
-						scope.listItemClass = 'btn  btn-select';
-						scope.listCss.lineHeight = 2.8;
-						break;
-					case 'list':
-						/* fall through */
-					default:
-						scope.listClass = 'list-group';
-						scope.listItemClass = 'list-group-item';
-				}
-
-				data.minWidth && (scope.listItemCss.minWidth = data.minWidth);
-
-				/**
-				 * Manage auto submit
-				 * @param  {event} e [description]
-				 */
-				scope.autoSubmit = function(e){
-					if (!scope.data.autoSubmit){
-						return;
-					}
-
-					var isActive = angular.element(e.target).hasClass(buttonConfig.activeClass);
-
-					if (isActive){
-						// this whole function happens within a digest cycle, so we don't need to $apply
-						scope.$emit('quest:submit:now');
-					}
-				};
+                function arraymove(arr, fromIndex, toIndex) {
+                    var element = arr[fromIndex];
+                    arr.splice(fromIndex, 1);
+                    arr.splice(toIndex, 0, element);
+                }
 
 				function requiredValidator(value){
 					var ctrl = ngModel;

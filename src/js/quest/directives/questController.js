@@ -121,7 +121,6 @@ define(function(require){
 
 			$scope.$watch('response',function(newValue, oldValue /*, scope*/){
 				if (!_.isEqual(newValue, oldValue)){
-				//if (newValue !== oldValue){
 					ngModel.$setViewValue(newValue);
 					invoke(data.onChange, {log:log});
 				}

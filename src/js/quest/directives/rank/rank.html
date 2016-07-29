@@ -1,15 +1,13 @@
 <div>
     <div class="list-group">
-        <a href="#" class="list-group-item" ng-repeat="row in list">
+        <a href="#" class="list-group-item" ng-repeat="row in list track by row.id">
             <div class="row">
-                <div class="col-xs-1" ng-init="selected = $index" >
-                    <select ng-model="selected" ng-change="$parent.move($index, selected)">
-                        <option ng-repeat="i in $parent.list track by i.id" value="{{$index}}" ng-selected="$index===$parent.$index">{{$index + 1}}</option>
+                <div class="col-xs-1">
+                    <select ng-init="setupWatch(this)" ng-model="selected" ng-change="$parent.move(row.order, selected, this)">
+                        <option ng-repeat="r in list" ng-selected="r.order === row.order" label="{{r.order+1}}" value="{{r.order}}">{{r.order+1}}</option>
                     </select>
                 </div>
-                <div class="col-xs-11">
-                    value {{ row.text }}
-                </div>
+                <div class="col-xs-11"> {{row.text}} </div>
             </div>
         </a>
     </div>

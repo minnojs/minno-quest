@@ -32,7 +32,9 @@ define(['questAPI'], function(Quest){
                     type: 'rank',
                     stem: 'rank quest',
                     name: 'mart',
-                    list: [1,2,3,4,5,6]
+                    correct: false,
+                    correctValue: [1,3,2,4],
+                    list: ['ark', {text:'snark',value:23234234}, 'dog', 'cat']
                 }
             ]
         },
