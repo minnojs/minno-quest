@@ -26,6 +26,19 @@ define(['questAPI'], function(Quest){
 	});
 
 	API.addSequence([
+{
+            questions: [
+                {
+                    type: 'rank',
+                    stem: 'rank quest',
+                    name: 'mart',
+                    correct: false,
+                    correctValue: [1,3,2,4],
+                    noRandomize: true,
+                    list: ['ark', 'snark', 'dog', 'cat']
+                }
+            ]
+        },
         {
             questions: [
                 {
@@ -34,7 +47,8 @@ define(['questAPI'], function(Quest){
                     name: 'mart',
                     correct: false,
                     correctValue: [1,3,2,4],
-                    list: ['ark', {text:'snark',value:23234234}, 'dog', 'cat']
+                    noRandomize: true,
+                    list: ['ark', 'snark', 'dog', 'cat']
                 }
             ]
         },

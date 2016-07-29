@@ -19,20 +19,12 @@ define(function (require) {
 				var ngModel = ctrls[0];
 				var ctrl = scope.ctrl;
 				var data = scope.data;
-                var list = (data.list || []).map(function(value, index){
-                    typeof value === 'object' || (value = {text:value});
-                    value.value || (value.value = index + 1);
-                    value.id = index + 1;
-                    return value;
-                });
-
-                if (!data.noRandomize) { list = _.shuffle(list); }
-                updateOrder(list);
+                var range = _.isArray(data.list) && data.list.length ? _.range(1, data.list.length +1) : [];
 
                 // Setup the model
                 // ***************
 				ctrl.registerModel(ngModel, {
-					dflt: _.pluck(list, 'id')
+                    dflt: data.noRandomize ? range : _.shuffle(range)
 				});
 
                 ngModel.$isEmpty = function(value){
@@ -41,14 +33,23 @@ define(function (require) {
 
                 // Expose the list
                 // ***************
-                scope.list = list;
-                scope.$watchCollection('list', function(newValue, oldValue){
-                    scope.response = _.pluck(list, 'value');
+
+                // model --> view
+                // map the existing response into a full fledged list
+                // existign response is either from a previous response or from the default
+                var list = scope.list = ctrl.log.response.map(function(value, index){
+                    return {order: index, id: value, text: data.list[value-1]};
                 });
 
+                // view --> model
+                scope.$watchCollection('list', function(newValue, oldValue){
+                    scope.response = _.pluck(list, 'id');
+                });
+
+                // We need to update the model for the dropdowns manually
+                // this needs to be async in order for the select box to catch up with the model
                 scope.setupWatch = function(scope){
                     scope.$watch('$parent.response', function(){
-                        // this needs to be async in order for the select box to catch up with the model
                         scope.$evalAsync('selected = row.order');
                     });
                 }
