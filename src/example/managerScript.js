@@ -29,7 +29,6 @@ define(['managerAPI'], function(Manager){
 				managerBeforeUnload.deactivate();
 				done();}
 		},
-		
 		{
 			type:'quest',
 			name: 'first',
@@ -58,7 +57,6 @@ define(['managerAPI'], function(Manager){
 				imageUrl: 'http://sandbox.thewikies.com/vfe-generator/images/big-buck-bunny_poster.jpg'
 			}
 		},
-
 
 		{
 			type: 'pip',
