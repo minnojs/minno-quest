@@ -240,25 +240,25 @@ Sometimes, you have proprties of the child that you’d like to extend instead o
 In order to do this, you can set an array of property names to the <code>merge</code> property.
 Any property that appears in this array will be extended instead of skipped.</p>
 <p>This can look something like this:</p>
-<pre><code class="lang-js"><span class="hljs-comment">// The parent element</span>
+<pre><code class="lang-js">// <span class="hljs-type">The</span> parent element
 {    
-    <span class="hljs-keyword">set</span>: <span class="hljs-string">'parent'</span>
+    <span class="hljs-type">set</span>: 'parent'
     stimuli: [
         stim1        
     ]
 }
 
-<span class="hljs-comment">// The child page which attempts to inherit the parent</span>
+// <span class="hljs-type">The</span> child page which attempts to inherit the parent
 {
-    inherit: {<span class="hljs-keyword">set</span>:<span class="hljs-string">'parent'</span>, merge:[<span class="hljs-string">'stimuli'</span>]},    
+    inherit: {<span class="hljs-type">set</span>:'parent', merge:['stimuli']},    
     stimuli: [
         stim2
     ]
 }
 
-<span class="hljs-comment">// The result would be:</span>
+// <span class="hljs-type">The</span> <span class="hljs-literal">result</span> would be:
 {
-    <span class="hljs-comment">// the stimuli array was merged instead of overwritten</span>
+    // the stimuli <span class="hljs-type">array</span> was merged instead <span class="hljs-keyword">of</span> overwritten
     stimuli: [                          
         stim1,
         stim2
