@@ -1,3 +1,14 @@
+<a name"0.0.95"></a>
+### 0.0.95 (2016-07-31)
+
+
+#### Features
+
+* **PI:**
+  * noDonate - hide allow hiding donate button in debrief ([22fa84b4](https://github.com/ProjectImplicit/PIquest/commit/22fa84b4))
+  * auto log global. ([74215d92](https://github.com/ProjectImplicit/PIquest/commit/74215d92))
+
+
 <a name"0.0.94"></a>
 ### 0.0.94 (2016-07-01)
 
