@@ -2,6 +2,7 @@ define(function (require) {
 
     var _ = require('underscore');
 	var angular = require('angular');
+    var dragula = require('dragula');
 	var template = require('text!./rank.html');
 
 	directive.$inject = ['$compile'];
@@ -60,9 +61,37 @@ define(function (require) {
                     list = scope.list = _.sortBy(list, 'id');
                 }
 
-                scope.move = function(fromIndex, toIndex, s){
+                scope.move = function(fromIndex, toIndex){
                     arraymove(list, fromIndex, toIndex);
                     updateOrder(list);
+                }
+
+                /**
+                 * Drag and drop
+                 **/
+
+                var dragIndex, dropIndex;
+                drake = dragula({
+                    // a container needs the dragula-container attr and to be in the current question
+                    isContainer: function(el){
+                        return el.hasAttribute('dragula-container') && element[0].contains(el);
+                    }
+                });
+
+                drake.on('drag', function(dragElm, source){
+                    dragIndex = domIndexOf(dragElm, source);
+                });
+
+                drake.on('drop', function(dropElm, target, source){
+                    dropIndex = domIndexOf(dropElm, target);
+                    scope.move(dragIndex, dropIndex);
+                    scope.$digest();
+                });
+
+                scope.$on('$destroy',drake.destroy);
+
+                function domIndexOf(child, parent) {
+                    return Array.prototype.indexOf.call(angular.element(parent).children(), child);
                 }
 
 				/**
