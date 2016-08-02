@@ -1,3 +1,12 @@
+<a name"0.0.96"></a>
+### 0.0.96 (2016-08-02)
+
+
+#### Features
+
+* **mixer:** custom mixer ([7197238d](https://github.com/ProjectImplicit/PIquest/commit/7197238d))
+
+
 <a name"0.0.95"></a>
 ### 0.0.95 (2016-07-31)
 
