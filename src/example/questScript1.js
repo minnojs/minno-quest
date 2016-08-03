@@ -27,6 +27,32 @@ define(['questAPI'], function(Quest){
 
 	API.addSequence([
 {
+            questions: [
+                {
+                    type: 'rank',
+                    stem: 'rank quest',
+                    name: 'mart',
+                    correct: false,
+                    correctValue: [1,3,2,4],
+                    noRandomize: true,
+                    list: ['ark', 'snark', 'dog', 'cat']
+                }
+            ]
+        },
+        {
+            questions: [
+                {
+                    type: 'rank',
+                    stem: 'rank quest',
+                    name: 'mart',
+                    correct: false,
+                    correctValue: [1,3,2,4],
+                    noRandomize: true,
+                    list: ['ark', 'snark', 'dog', 'cat']
+                }
+            ]
+        },
+{
     remix: true,
     mixer:'branch',
     conditions:{or:[{compare: 1, to: 'current.questions.b1_teacher.response',DEBUG:true}]},
