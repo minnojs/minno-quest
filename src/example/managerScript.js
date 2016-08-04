@@ -33,7 +33,7 @@ define(['managerAPI'], function(Manager){
             preText: API.PROGRESS_BAR, 
             type:'quest',
 			name: 'first',
-			scriptUrl: 'questScript1.js'
+			scriptUrl: '/test/allocation.js'
 		},
 
 		{
