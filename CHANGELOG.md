@@ -1,3 +1,12 @@
+<a name"0.0.97"></a>
+### 0.0.97 (2016-08-04)
+
+
+#### Bug Fixes
+
+* **questDirective:** make sure the ngModel unregisters from the form after every redraw ([c45d7476](https://github.com/ProjectImplicit/PIquest/commit/c45d7476))
+
+
 <a name"0.0.96"></a>
 ### 0.0.96 (2016-08-02)
 
