@@ -406,11 +406,11 @@
 }
 </code></pre>
 <h4><a name="info" class="header-link" href="#info"><span class="glyphicon glyphicon-link"></span></a>Info</h4><p>The info question isn’t strictly a question. It allows you to use the common question properties in order to display information to the users. For example you can use it as follows:</p>
-<pre><code class="lang-js"><span class="hljs-rules">{
-    <span class="hljs-rule"><span class="hljs-attribute">type</span>:<span class="hljs-value"> <span class="hljs-string">'info'</span>,
-    description: <span class="hljs-string">'&lt;p&gt;The following questions deal with emotions&lt;/p&gt;'</span> +
+<pre><code class="lang-js">{
+    <span class="hljs-attribute">type</span>: <span class="hljs-string">'info'</span>,
+    <span class="hljs-attribute">description</span>: <span class="hljs-string">'&lt;p&gt;The following questions deal with emotions&lt;/p&gt;'</span> +
         <span class="hljs-string">'&lt;p&gt;Please answer them as honestly as possible&lt;/p&gt;'</span>
-</span></span></span>}
+}
 </code></pre>
 <p>This question will simply display the description without offering any additional user interface (explicit question).</p>
 <h4><a name="text-&amp-textarea" class="header-link" href="#text-&amp-textarea"><span class="glyphicon glyphicon-link"></span></a>Text &amp; Textarea</h4><p>The <code>text</code> and <code>textarea</code> questions consist of a simple text input in which the users can type in text. The difference between them is that text questions consist of a single line, whereas textareas are multiline. There are also several properties that are unique to textareas.
@@ -497,14 +497,14 @@ Both types of questions support the following properties.</p>
 </tbody>
 </table>
 <p>For example, this is a text question that requires a valid email address (although there are better <em>patterns</em> out there for this purpose):</p>
-<pre><code class="lang-js">var quest = {
-    stem: <span class="hljs-string">"Please type your email address"</span>,
-    dflt: <span class="hljs-string">"my@email.com"</span>,
-    required: <span class="hljs-literal">true</span>,
-    pattern: /[A-Z0-<span class="hljs-number">9.</span>_%+-]+@[A-Z0-<span class="hljs-number">9.</span>-]+.[A-Z]{<span class="hljs-number">2</span>,<span class="hljs-number">4</span>}/igm,
-    errorMsg: {
-        required: <span class="hljs-string">"You must enter a valid email address."</span>,
-        pattern: <span class="hljs-string">"This is not a valid email address"</span>
+<pre><code class="lang-js"><span class="hljs-reserved">var</span> quest = {
+    <span class="hljs-attribute">stem</span>: <span class="hljs-string">"Please type your email address"</span>,
+    <span class="hljs-attribute">dflt</span>: <span class="hljs-string">"my@email.com"</span>,
+    <span class="hljs-attribute">required</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attribute">pattern</span>: <span class="hljs-regexp">/[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}/igm</span>,
+    <span class="hljs-attribute">errorMsg</span>: {
+        <span class="hljs-attribute">required</span>: <span class="hljs-string">"You must enter a valid email address."</span>,
+        <span class="hljs-attribute">pattern</span>: <span class="hljs-string">"This is not a valid email address"</span>
     }
 }
 </code></pre>
@@ -556,7 +556,7 @@ Both types of questions support the following properties.</p>
 </tbody>
 </table>
 <p>For example, this is a text question that asks for a number under 273:</p>
-<pre><code class="lang-js"><span class="hljs-built_in">var</span> quest = {
+<pre><code class="lang-js"><span class="hljs-built_in">var</span> quest <span class="hljs-subst">=</span> {
     <span class="hljs-keyword">type</span>: <span class="hljs-string">'textNumber'</span>,
     stem: <span class="hljs-string">"Please enter your height in cm"</span>,
     <span class="hljs-keyword">max</span>: <span class="hljs-number">273</span>,
@@ -924,7 +924,7 @@ These are the supported properties:</p>
 </tbody>
 </table>
 <p>The most common use of the slider is the creation of a visual analog scale (VAS). This is an example of using a slider to create a Likert type scale:</p>
-<pre><code class="lang-js"><span class="hljs-built_in">var</span> quest = {
+<pre><code class="lang-js"><span class="hljs-built_in">var</span> quest <span class="hljs-subst">=</span> {
     <span class="hljs-keyword">type</span>: <span class="hljs-string">'slider'</span>,
     stem: <span class="hljs-string">'Sliders are exremely useful.'</span>,
     <span class="hljs-keyword">min</span>:<span class="hljs-number">1</span>,
