@@ -469,6 +469,23 @@ Will return
 * [elem2] - if cond2 is true (but not cond1)
 * [elem3] - if both cond1 and cond2 are false
 
+#### custom
+`custom` allows you to create arbitrary sub-sequences.
+It uses the sub-sequence that is returned from the `fn` function.
+`fn` must return an array of elements.
+
+`fn` has two arguments available: the mixer object itself, and the mixer context (as defined [here](./variables.html)).
+You can either use them to create your elments or create elements arbitrarily.
+
+``js
+{
+    mixer: 'custom',
+    prop: 'Custom property'
+    fn: function(obj, context){
+        return [elem1, elem2]
+    }
+}
+```
 ### Conditions
 The conditional mixers ([`branch`](#branch) & [`multiBranch`](#multibranch)) allow you to change the content of your sequence depending on [environmental variables](./variables.html). 
 This is done by settings `conditions`.
