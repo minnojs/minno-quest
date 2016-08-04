@@ -234,6 +234,7 @@
 									{{ example("Select Multi", "../questExamples/selectMulti", data.basename) }}
 									{{ example("Grid", "../questExamples/grid", data.basename) }}
 									{{ example("Slider", "../questExamples/slider", data.basename) }}
+									{{ example("Rank", "../questExamples/rank", data.basename) }}
 								</ul>
 							</li>
 						{% elseif data.typeName == 'manager' %}

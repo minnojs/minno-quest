@@ -136,9 +136,9 @@
 		<div id="content" class="bs-docs-header">
 			<div class="container">
 				
-	<h1>Buttons</h1>
+	<h1>Rank</h1>
 	
-		<p>You can play around with buttons.js right here. All you need to do is change the script and then click the activate button.</p>
+		<p>You can play around with rank.js right here. All you need to do is change the script and then click the activate button.</p>
 	
 
 			</div>
@@ -160,88 +160,37 @@
 		</div>
 
    		<div id="editor">
-/**
- * @author Yoav Bar-Anan &lt;baranany@bgu.ac.il&gt;
- */
+// ### Rank question
+// An example for a rank question.
+//
+// Full documentation is right [here](../quest/API.html#rank).
 define([&#39;questAPI&#39;], function(Quest){
-	var API = new Quest();
+    var API = new Quest();
 
-	// ### Questions
-	API.addQuestionsSet(&#39;basicSelect&#39;,{
-		type: &#39;selectOne&#39;,
-		autoSubmit:true,
-		numericValues:true,
-		required:true,
-		style:&#39;multiButtons&#39;,
-		errorMsg: {
-			required: &quot;Please select an answer, or click &#39;decline to answer&#39;&quot;
-		},
-		answers : [
-			&#39;1 - Extremely negative&#39;,
-			&#39;2&#39;,
-			&#39;3&#39;,
-			&#39;4&#39;,
-			&#39;5&#39;,
-			&#39;6&#39;,
-			&#39;7&#39;,
-			&#39;8&#39;,
-			&#39;9 - Extremely positive&#39;
-		],
-		help: &#39;&lt;%= pagesMeta.number &lt; 3 %&gt;&#39;,
-		helpText: &#39;Selecting an answer once colors it blue.&lt;br/&gt;You can change your answer by selecting another option.&lt;br/&gt;To confirm, click the selected (blue) button a second time.&#39;
-	});
+    API.addSequence([
+        { // page begins
+            questions: [
+                { // question begins
+                    type: &#39;rank&#39;,
+                    stem: &#39;Please rank the colors of the rainbow by brighness:&#39;,
+                    list: [
+                        &#39;Red&#39;,
+                        &#39;Orange&#39;,
+                        &#39;Yellow&#39;,
+                        &#39;Green&#39;,
+                        &#39;Blue&#39;,
+                        &#39;Indigo&#39;,
+                        &#39;Violet&#39;
+                    ]
+                } // question ends
+            ]
+        } // page ends
 
-	API.addQuestionsSet(&#39;people&#39;,[
-		{
-			inherit : &#39;basicSelect&#39;,
-			name : &#39;Obama&#39;,
-			stem : &#39;What are your feelings toward Barack Obama?&#39;
-		},
-		{
-			inherit : &#39;basicSelect&#39;,
-			name : &#39;Beyonce&#39;,
-			stem : &#39;What are your feelings toward Beyonce Knowles?&#39;
-		},
-		{
-			inherit : &#39;basicSelect&#39;,
-			name : &#39;Colbert&#39;,
-			stem : &#39;What are your feelings toward Stephen Colbert?&#39;
-		},
-		{
-			inherit : &#39;basicSelect&#39;,
-			name : &#39;Letterman&#39;,
-			stem : &#39;What are your feelings toward David Letterman?&#39;
-		}
-	]);
+    ]);
 
-	// ### Pages
-	API.addPagesSet(&#39;basicPage&#39;,
-	{
-		progressBar: &#39;&lt;%= pagesMeta.number %&gt; out of 4&#39;,
-		questions : {inherit:{set:&#39;people&#39;, type:&#39;exRandom&#39;}}, //One question in the page, selected randomly (exhaustive)
-		v1style:2,
-		decline:true,
-		numbered: false
-	});
-
-	// ### Sequence
-	API.addSequence(
-	[
-		{
-			mixer : &#39;repeat&#39;,
-			times : 4,
-			data :
-			[
-				{inherit : &#39;basicPage&#39;}
-			]
-		}
-	]);
-
-	/**
-	Return the script to piquest&#39;s god, or something of that sort.
-	**/
-	return API.script;
+    return API.script;
 });
+
 		</div>
 
 		<script>
@@ -378,7 +327,7 @@ define([&#39;questAPI&#39;], function(Quest){
 							</li>
 						
 									
-							<li class=" active ">
+							<li class="">
 								<div>
 									<a href="../qsts/buttonsDocco.html">Buttons</a>
 									<a href="../qsts/buttons.js" download="../qsts/buttons.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
@@ -581,7 +530,7 @@ define([&#39;questAPI&#39;], function(Quest){
 							</li>
 						
 									
-							<li class="">
+							<li class=" active ">
 								<div>
 									<a href="../questExamples/rankDocco.html">Rank</a>
 									<a href="../questExamples/rank.js" download="../questExamples/rank.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
