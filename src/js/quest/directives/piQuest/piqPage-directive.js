@@ -53,6 +53,7 @@ define(function (require) {
 		 * @param  {Boolean} skipValidation [Should skip validation of the form before submitting?]
 		 */
 		$scope.submit = function(skipValidation){
+
 			var valid = $scope.pageForm.$valid;
 
 			// mark this attempt for submitting
@@ -199,8 +200,17 @@ define(function (require) {
 			template:template,
 			require: ['piqPage','piTimer'],
 			link: function($scope, $el, $attr, $ctrl){
-				$window.scrollTo(0,0);
-				$ctrl[0].setup($ctrl[1]);
+                var page = $scope.page;
+                $window.scrollTo(0,0);
+                // setup timer
+                $ctrl[0].setup($ctrl[1]); 
+
+                // setup page validation
+                if (_.isFunction(page.pageValidation)){
+                    $scope.$watch(function(){
+                        $scope.pageForm.$setValidity('pageValidation', page.pageValidation(page, $scope.current));
+                    });
+                }
 			}
 		};
 	}

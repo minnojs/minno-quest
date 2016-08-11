@@ -45,6 +45,8 @@ lognow 			| (true or false) Whether to log the questions on this page. This opti
 animate 		| (text) What types of animation to use when this page enters and leaves the screen. We currently support three animations: fade, slide, and drop-in. You can use any and all of them by adding them to the string (for example: "slide fade" will activate both of these animations).
 v1style			| (true or false or 2) Activate in order to use the version 0.1 style. Currently this only affects the way that the submit/decline buttons are presented. Set this to 2 in order to use the latest version of 0.1
 autoFocus 		| (true or false) Automatically focus on the first input in the page so that keyboard users have an easier time.
+pageValidation  | (function) A custom validation function. Return `false` if the page is unvalid. You can control the error message using the `pageValidationText` property.
+pageValidationText | (text) The error message for cases where `pageValidation` is not valid. By default the error message here is *Page Invalid*.
 
 For example, a page can look something like this:
 
