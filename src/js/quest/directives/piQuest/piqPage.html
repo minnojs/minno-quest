@@ -10,6 +10,8 @@
 		</li>
 	</ol>
 
+	<div pi-quest-validation="pageForm.$error.pageValidation" pi-post-submit="submitAttempt">{{page.pageValidationText || 'Invalid page'}}</div>
+
 	<div class="page-buttons">
 		<button
 			ng-click="prev()"

@@ -161,9 +161,6 @@ define(['underscore', '../questDirectivesModule'],function(_){
 				expect(scope.submit).toHaveBeenCalled();
 			});
 
-			// it('should setup page, when page changes', function(){
-			// });
-
 			it('should refresh page when questions is changed', function(){
 				var refresh = jasmine.createSpy('refresh');
 				compile({});
@@ -310,7 +307,6 @@ define(['underscore', '../questDirectivesModule'],function(_){
 				});
 			});
 
-
 			describe(': harvest', function(){
 
 				var harvest, spy;
@@ -421,6 +417,31 @@ define(['underscore', '../questDirectivesModule'],function(_){
 					});
 					expect(element).toBeInvalid();
 				});
+
+                it('should validate page if page.pageValidation is set', function(){
+                    compile({pageValidation:function(){}});
+
+                    scope.page.pageValidation = function(){return false};
+					scope.$digest();
+                    expect(scope.pageForm.$error.pageValidation).toBeTruthy();
+
+                    scope.page.pageValidation = function(){return true};
+					scope.$digest();
+                    expect(scope.pageForm.$error.pageValidation).toBeFalsy();
+                });
+
+                it('should should show a warning if pageValidation is not valid', function(){
+                    var page = {pageValidationText: 'myText'};
+                    compile(page);
+                    var validityEl = element.children('[pi-quest-validation]');
+                    expect(validityEl.text()).toBe(page.pageValidationText);
+                    expect(validityEl).toBeHidden();
+
+                    scope.pageForm.$setValidity('pageValidation', false);
+                    scope.submitAttempt = true;
+                    scope.$digest();
+                    expect(validityEl).not.toBeHidden();
+                });
 
 				it('should not show a header if it doesnt exist', function(){
 					compile({});
