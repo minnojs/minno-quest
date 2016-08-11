@@ -2,7 +2,6 @@ define(function(require){
 
 	var Constructor = require('./managerAPI');
 	var _ = require('underscore');
-	var isDev = /^(localhost|127.0.0.1)/.test(location.host) || window.DEBUG;
 	var decorator = require('./PIAPIdecorator');
 
 	var messageTemplate = require('text!./pi/messageTemplate.jst');
@@ -41,7 +40,7 @@ define(function(require){
 
 		var global = $rootScope.global;
 		var settings, context = {};
-		var data = {taskName: currentTask.name || 'namelessTask', taskNumber: currentTask.$meta.number, taskURL:currentTask.scriptUrl || currentTask.templateUrl};
+		var data = _.assign({}, global.$meta, {taskName: currentTask.name || 'namelessTask', taskNumber: currentTask.$meta.number, taskURL:currentTask.scriptUrl || currentTask.templateUrl});
 
 		// set last task flag
 		if (currentTask.last){
@@ -54,7 +53,7 @@ define(function(require){
 			currentTask.$script.serial = currentTask.$meta.number;
 			settings = currentTask.$script.settings;
 			settings.logger = settings.logger || {};
-			settings.logger.meta = angular.extend({}, data, settings.logger.meta, global.$meta);
+			settings.logger.meta = _.assign({}, data, settings.logger.meta);
 		}
 
 		// add feedback functions to the default template context
@@ -64,7 +63,7 @@ define(function(require){
 		});
 
 		if (currentTask.type == 'message' && currentTask.piTemplate){
-			_.extend(context, templateDefaultContext, {
+			_.assign(context, templateDefaultContext, {
 				global: global,
 				current: global.current,
 				task: currentTask,
@@ -106,7 +105,7 @@ define(function(require){
 			meta.subtaskURL = currentTask.scriptUrl || currentTask.templateUrl;
 		}
 
-		return isDev ? true : $http.post('/implicit/PiManager', data);
+		return $http.post('/implicit/PiManager', data);
 	}
 
 	function postRedirect(path, params, method) {
