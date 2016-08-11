@@ -1,3 +1,13 @@
+<a name"0.0.98"></a>
+### 0.0.98 (2016-08-11)
+
+
+#### Bug Fixes
+
+* **PI:** added global. to manager posts ([b0d25e48](https://github.com/ProjectImplicit/PIquest/commit/b0d25e48))
+* **questController:** treat undefined values correctly ([fc3b885e](https://github.com/ProjectImplicit/PIquest/commit/fc3b885e))
+
+
 <a name"0.0.97"></a>
 ### 0.0.97 (2016-08-04)
 
