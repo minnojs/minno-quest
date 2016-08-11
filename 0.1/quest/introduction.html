@@ -151,27 +151,27 @@
 <h3><a name="pages-&amp-questions" class="header-link" href="#pages-&amp-questions"><span class="glyphicon glyphicon-link"></span></a>Pages &amp; questions</h3><p>The basic building blocks within piQuest are <strong>pages</strong> and <strong>questions</strong>.</p>
 <p>A page is an object that describes one screen within your questionnaire. If your questionnaire presents all of its questions in one screen, it will probably have only one page. The properties within a page manage how the question(s) is(are) displayed and how the participants interact with it (e.g., select an answer and then click a submit button).</p>
 <p>For the purpose of this presentation we will create a page that has a “Hello world!” header, and allows participants to decline answering the questions. Further documentation of the properties of pages may be found in the <a href="API.html#pages">API docs</a>.</p>
-<pre><code class="lang-js"><span class="hljs-built_in">var</span> page = {
-    <span class="hljs-keyword">header</span>: <span class="hljs-string">'Hello world!'</span>,
-    decline: <span class="hljs-literal">true</span>,
-    declineText: <span class="hljs-string">'I prefer to keep this information to myself'</span>,
-    questions: <span class="hljs-preprocessor">[</span>
-        <span class="hljs-comment">/* This is where we will soon set our questions */</span>
-    <span class="hljs-preprocessor">]</span><span class="hljs-markup">
-}</span>
+<pre><code class="lang-js">var page = {
+    header: 'Hello world!',
+    decline: <span class="hljs-constant">true</span>,
+    declineText: 'I prefer <span class="hljs-keyword">to</span> keep this information <span class="hljs-keyword">to</span> myself',
+    questions: [
+        /* This <span class="hljs-keyword">is</span> <span class="hljs-keyword">where</span> we will soon <span class="hljs-keyword">set</span> our questions */
+    ]
+}
 </code></pre>
 <p>Within our page we want to ask the participant a question: ‘When you say good morning, what do you mean?’. We want the user to select the correct answer out of a list, so we pick the <em>type</em> <code>selectOne</code> and set the answers within the <em>answers</em> property. Further documentation of the properties of questions may be found in the <a href="API.html#questions">API docs</a>.</p>
 <pre><code class="lang-js">var quest = {
     type: 'selectOne',
-    stem: 'When you <span class="hljs-command">say</span> good morning, what do you mean?',
+    stem: 'When you say good morning, what <span class="hljs-operator"><span class="hljs-keyword">do</span> you mean?<span class="hljs-string">',
     answers: [
-        'Do you wish <span class="hljs-keyword">me</span> a good morning',
-        'Or mean <span class="hljs-keyword">that</span> <span class="hljs-keyword">it</span> <span class="hljs-keyword">is</span> a good morning whether I want <span class="hljs-keyword">it</span> <span class="hljs-keyword">or</span> <span class="hljs-keyword">not</span>',
-        'Or <span class="hljs-keyword">that</span> you feel good this morning',
-        'Or <span class="hljs-keyword">that</span> <span class="hljs-keyword">it</span> <span class="hljs-keyword">is</span> a morning <span class="hljs-keyword">to</span> be good <span class="hljs-function_start"><span class="hljs-keyword">on</span></span>',
-        'All <span class="hljs-keyword">of</span> them <span class="hljs-keyword">at</span> once'
+        '</span><span class="hljs-keyword">Do</span> you wish me a good morning<span class="hljs-string">',
+        '</span><span class="hljs-keyword">Or</span> mean that it <span class="hljs-keyword">is</span> a good morning whether I want it <span class="hljs-keyword">or</span> <span class="hljs-keyword">not</span><span class="hljs-string">',
+        '</span><span class="hljs-keyword">Or</span> that you feel good this morning<span class="hljs-string">',
+        '</span><span class="hljs-keyword">Or</span> that it <span class="hljs-keyword">is</span> a morning <span class="hljs-keyword">to</span> be good <span class="hljs-keyword">on</span><span class="hljs-string">',
+        '</span><span class="hljs-keyword">All</span> <span class="hljs-keyword">of</span> them <span class="hljs-keyword">at</span> once<span class="hljs-string">'
     ]
-}
+}</span></span>
 </code></pre>
 <p>We will put the page and question together in a moment, but first let us get back to the API object and how we actually use these questions and objects.</p>
 <h3><a name="thats-it" class="header-link" href="#thats-it"><span class="glyphicon glyphicon-link"></span></a>Thats it</h3><p>The most important part of every questionnaire is the sequence. This is where you tell piQuest how to interact with the participants. In our case we want to simply present a single page with a single question so we get something like this:</p>

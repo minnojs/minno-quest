@@ -5,13 +5,13 @@ styles/main.css
 
 js/bootstrap.js
 ----------------
-/home/eladzlot/public_html/quest/bower_components/angular/angular.min.js
-/home/eladzlot/public_html/quest/bower_components/angular-animate/angular-animate.min.js
-/home/eladzlot/public_html/quest/bower_components/lodash-compat/lodash.min.js
-/home/eladzlot/public_html/quest/bower_components/requirejs-text/text.js
+/Users/eladzlot/www/quest/bower_components/angular/angular.min.js
+/Users/eladzlot/www/quest/bower_components/angular-animate/angular-animate.min.js
+/Users/eladzlot/www/quest/bower_components/lodash-compat/lodash.min.js
+/Users/eladzlot/www/quest/bower_components/requirejs-text/text.js
 js/config.js
 js/bootstrap.js
-/home/eladzlot/public_html/quest/bower_components/fastclick/lib/fastclick.js
+/Users/eladzlot/www/quest/bower_components/fastclick/lib/fastclick.js
 js/utils/timer/timerStopper.js
 js/utils/timer/timerDirective.js
 js/utils/timer/timerNow.js
@@ -50,9 +50,6 @@ text!quest/directives/select/selectOne.html
 js/quest/directives/select/selectOneDirective.js
 text!quest/directives/select/selectMulti.html
 js/quest/directives/select/selectMultiDirective.js
-/home/eladzlot/public_html/quest/bower_components/dragula.js/dist/dragula.js
-text!quest/directives/rank/rank.html
-js/quest/directives/rank/rankDirective.js
 text!quest/directives/grid/grid.html
 js/quest/directives/grid/gridDirective.js
 text!quest/directives/grid/gridRow.html
@@ -113,7 +110,6 @@ js/taskManager/beforeUnloadFactory.js
 js/taskManager/injectStyle.js
 js/taskManager/managerDirective.js
 js/taskManager/managerTaskDirective.js
-js/taskManager/piLinkDirective.js
 js/taskManager/managerModule.js
 js/utils/animations/rafPolyfill.js
 js/utils/animations/dropInAnimation.js
@@ -129,13 +125,13 @@ js/APIs/managerAPI.js
 
 js/pibootstrap.js
 ----------------
-/home/eladzlot/public_html/quest/bower_components/angular/angular.min.js
-/home/eladzlot/public_html/quest/bower_components/angular-animate/angular-animate.min.js
-/home/eladzlot/public_html/quest/bower_components/lodash-compat/lodash.min.js
-/home/eladzlot/public_html/quest/bower_components/requirejs-text/text.js
+/Users/eladzlot/www/quest/bower_components/angular/angular.min.js
+/Users/eladzlot/www/quest/bower_components/angular-animate/angular-animate.min.js
+/Users/eladzlot/www/quest/bower_components/lodash-compat/lodash.min.js
+/Users/eladzlot/www/quest/bower_components/requirejs-text/text.js
 js/config.js
 js/pibootstrap.js
-/home/eladzlot/public_html/quest/bower_components/fastclick/lib/fastclick.js
+/Users/eladzlot/www/quest/bower_components/fastclick/lib/fastclick.js
 js/utils/timer/timerStopper.js
 js/utils/timer/timerDirective.js
 js/utils/timer/timerNow.js
@@ -174,9 +170,6 @@ text!quest/directives/select/selectOne.html
 js/quest/directives/select/selectOneDirective.js
 text!quest/directives/select/selectMulti.html
 js/quest/directives/select/selectMultiDirective.js
-/home/eladzlot/public_html/quest/bower_components/dragula.js/dist/dragula.js
-text!quest/directives/rank/rank.html
-js/quest/directives/rank/rankDirective.js
 text!quest/directives/grid/grid.html
 js/quest/directives/grid/gridDirective.js
 text!quest/directives/grid/gridRow.html
@@ -237,7 +230,6 @@ js/taskManager/beforeUnloadFactory.js
 js/taskManager/injectStyle.js
 js/taskManager/managerDirective.js
 js/taskManager/managerTaskDirective.js
-js/taskManager/piLinkDirective.js
 js/taskManager/managerModule.js
 js/utils/animations/rafPolyfill.js
 js/utils/animations/dropInAnimation.js

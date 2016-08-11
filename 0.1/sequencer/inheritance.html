@@ -143,8 +143,8 @@ Finaly, the parent element is <a href="#merging">merged</a> into the the child e
 <h3><a name="syntax" class="header-link" href="#syntax"><span class="glyphicon glyphicon-link"></span></a>Syntax</h3><p>In order for an element to inherit another element you should use the <code>inherit</code> property.
 Inherit` takes either an object or a string, with instructions for which element to inherit. </p>
 <p>The following element uses an object to inherit.</p>
-<pre><code class="lang-js"><span class="hljs-rules">{
-    <span class="hljs-rule"><span class="hljs-attribute">inherit</span>:<span class="hljs-value"> {set:<span class="hljs-string">'setName'</span>, type:<span class="hljs-string">'exRandom'</span></span></span></span>}
+<pre><code class="lang-js">{
+    <span class="hljs-tag">inherit</span>: {<span class="hljs-attribute">set</span>:<span class="hljs-string">'setName'</span>, <span class="hljs-attribute">type</span>:<span class="hljs-string">'exRandom'</span>}
 }
 </code></pre>
 <p>Using a string instead, affords a usefull shortcut to the same end.
@@ -240,25 +240,25 @@ Sometimes, you have proprties of the child that you’d like to extend instead o
 In order to do this, you can set an array of property names to the <code>merge</code> property.
 Any property that appears in this array will be extended instead of skipped.</p>
 <p>This can look something like this:</p>
-<pre><code class="lang-js">// <span class="hljs-type">The</span> parent element
+<pre><code class="lang-js"><span class="hljs-comment">// The parent element</span>
 {    
-    <span class="hljs-type">set</span>: 'parent'
+    <span class="hljs-keyword">set</span>: <span class="hljs-string">'parent'</span>
     stimuli: [
         stim1        
     ]
 }
 
-// <span class="hljs-type">The</span> child page which attempts to inherit the parent
+<span class="hljs-comment">// The child page which attempts to inherit the parent</span>
 {
-    inherit: {<span class="hljs-type">set</span>:'parent', merge:['stimuli']},    
+    inherit: {<span class="hljs-keyword">set</span>:<span class="hljs-string">'parent'</span>, merge:[<span class="hljs-string">'stimuli'</span>]},    
     stimuli: [
         stim2
     ]
 }
 
-// <span class="hljs-type">The</span> <span class="hljs-literal">result</span> would be:
+<span class="hljs-comment">// The result would be:</span>
 {
-    // the stimuli <span class="hljs-type">array</span> was merged instead <span class="hljs-keyword">of</span> overwritten
+    <span class="hljs-comment">// the stimuli array was merged instead of overwritten</span>
     stimuli: [                          
         stim1,
         stim2

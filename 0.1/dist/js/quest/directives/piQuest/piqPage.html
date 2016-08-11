@@ -10,23 +10,27 @@
 		</li>
 	</ol>
 
-	<div class="page-buttons">
+	<div class="pull-right" ng-class="{'btn-group': !page.v1style, 'btn-toolbar': page.v1style}">
 		<button
 			ng-click="prev()"
-			class="btn page-prev"
+			data-role="submit"
+			class="btn"
 			ng-if="page.prev && page.$meta.number > 1"
 		>{{page.prevText || "Go Back"}}</button>
 
 		<button
-			ng-click="decline($event)"
-			class="btn page-decline"
-			ng-if="page.decline"
-		>{{page.declineText || "Decline"}}</button>
-
-		<button
 			ng-click="submit()"
-			class="btn page-submit"
+			data-role="submit"
+			class="btn btn-primary"
 			ng-if="!page.noSubmit"
 		>{{page.submitText || "Submit"}}</button>
+
+		<button
+			ng-click="decline($event)"
+			data-role="submit"
+			class="btn"
+			ng-class="{'btn-active-accented':page.v1style, 'btn-warning': page.v1style != 2, 'btn-default': page.v1style == 2}"
+			ng-if="page.decline"
+		>{{page.declineText || "Decline to Answer"}}</button>
 	</div>
 </div>
