@@ -433,7 +433,7 @@ list        | (Array) An array values to be sorted (can be either strings or num
 required    | (true of false; default: false) Require the user to make a change from the original order (as defined in `list`).
 correct     | (true of false; default: false) Require the user to order the list according to a preset value (as defined in `correctValue`
 correctValue| (Array) The order that the list should be organized for the `correct` validator. This value should be a list of numbers coresponding to the target order.
-noRandomize | (true of false; default: false) If true prevents the automatic randomization of the list order.
+randomize   | (true of false; default: true) If false prevents the automatic randomization of the list order.
 
 ### settings
 Settings allow you to control the generic way that the player works. Change the settings using the `addSettings` function. The first argument to the function is always the name of the setting, the second argument is the setting values. In case the setting is an object, subsequent objects will extend each other so that settings may be progressively added.
