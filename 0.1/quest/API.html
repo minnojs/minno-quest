@@ -123,6 +123,7 @@
 <li><a href="#selectone-selectmulti">selectOne &amp; selectMulti</a></li>
 <li><a href="#grid">grid</a></li>
 <li><a href="#slider">slider</a></li>
+<li><a href="#rank">rank</a></li>
 </ul>
 </li>
 <li><a href="#settings">settings</a><ul>
@@ -185,7 +186,7 @@
 </tr>
 <tr>
 <td>headerStyle</td>
-<td>(Object) A A <a href="#http://api.jquery.com/css/#css-properties">css object</a>  to set the style of the header (see examples below).</td>
+<td>(Object) A <a href="#http://api.jquery.com/css/#css-properties">css object</a>  to set the style of the header (see examples below).</td>
 </tr>
 <tr>
 <td>progressBar</td>
@@ -968,23 +969,23 @@ For example if you had a list <code>[&#39;a&#39;,&#39;b&#39;,&#39;c&#39;]</code>
 </tr>
 <tr>
 <td>list</td>
-<td>An array values to be sorted (can be either strings or numbers).</td>
+<td>(Array) An array values to be sorted (can be either strings or numbers).</td>
 </tr>
 <tr>
 <td>required</td>
-<td>Require the user to make a change from the original order (as defined in <code>list</code>).</td>
+<td>(true of false; default: false) Require the user to make a change from the original order (as defined in <code>list</code>).</td>
 </tr>
 <tr>
 <td>correct</td>
-<td>Require the user to order the list according to a preset value (as defined in <code>correctValue</code></td>
+<td>(true of false; default: false) Require the user to order the list according to a preset value (as defined in <code>correctValue</code></td>
 </tr>
 <tr>
 <td>correctValue</td>
-<td>The order that the list should be organized for the <code>correct</code> validator. This value should be a list of numbers coresponding to the target order.</td>
+<td>(Array) The order that the list should be organized for the <code>correct</code> validator. This value should be a list of numbers coresponding to the target order.</td>
 </tr>
 <tr>
 <td>noRandomize</td>
-<td>If true prevents the automatic randomization of the list order.</td>
+<td>(true of false; default: false) If true prevents the automatic randomization of the list order.</td>
 </tr>
 </tbody>
 </table>

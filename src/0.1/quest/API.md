@@ -17,6 +17,7 @@ description: All the little details...
 	- [selectOne & selectMulti](#selectone-selectmulti)
 	- [grid](#grid)
 	- [slider](#slider)
+	- [rank](#rank)
 - [settings](#settings)
 	- [onEnd](#onend)
 	- [logger](#logger)
@@ -40,7 +41,7 @@ prevText		| (text) The text for the previous button (default value: "Go Back")
 noSubmit		| (true of false) remove submit button (useful when using the 'autoSubmit' function of some questions; default value: false).
 submitText		| (text) The text of the submit button (default: "Submit").
 header  		| (text) Text for the page header.
-headerStyle		| (Object) A A [css object](#http://api.jquery.com/css/#css-properties)  to set the style of the header (see examples below).
+headerStyle		| (Object) A [css object](#http://api.jquery.com/css/#css-properties)  to set the style of the header (see examples below).
 progressBar 	| (text) Text for the progress bar (You might want to use a template for this, maybe something like: `<%= pagesMeta.number %> out of <%= pagesMeta.outOf%>`.).
 numbered 		| (true of false) Whether to  display the number of each question (default value: false).
 numberStart		| (Number) The number for the first question in the page (default: 1).
@@ -428,11 +429,11 @@ var quest = {
 Property    | Description
 ----------  | -----------
 type        | Must be set to `'rank'`.
-list        | An array values to be sorted (can be either strings or numbers).
-required    | Require the user to make a change from the original order (as defined in `list`).
-correct     | Require the user to order the list according to a preset value (as defined in `correctValue`
-correctValue| The order that the list should be organized for the `correct` validator. This value should be a list of numbers coresponding to the target order.
-noRandomize | If true prevents the automatic randomization of the list order.
+list        | (Array) An array values to be sorted (can be either strings or numbers).
+required    | (true of false; default: false) Require the user to make a change from the original order (as defined in `list`).
+correct     | (true of false; default: false) Require the user to order the list according to a preset value (as defined in `correctValue`
+correctValue| (Array) The order that the list should be organized for the `correct` validator. This value should be a list of numbers coresponding to the target order.
+noRandomize | (true of false; default: false) If true prevents the automatic randomization of the list order.
 
 ### settings
 Settings allow you to control the generic way that the player works. Change the settings using the `addSettings` function. The first argument to the function is always the name of the setting, the second argument is the setting values. In case the setting is an object, subsequent objects will extend each other so that settings may be progressively added.
