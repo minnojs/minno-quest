@@ -25,7 +25,7 @@ define(function (require) {
                 // Setup the model
                 // ***************
 				ctrl.registerModel(ngModel, {
-                    dflt: data.noRandomize ? range : _.shuffle(range)
+                    dflt: _.get(data,'randomize', true) ? _.shuffle(range) : range
 				});
 
                 ngModel.$isEmpty = function(value){

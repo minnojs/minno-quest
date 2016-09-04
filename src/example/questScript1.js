@@ -34,7 +34,7 @@ define(['questAPI'], function(Quest){
                     name: 'mart',
                     correct: false,
                     correctValue: [1,3,2,4],
-                    noRandomize: true,
+                    randomize: false,
                     list: ['ark', 'snark', 'dog', 'cat']
                 }
             ]
