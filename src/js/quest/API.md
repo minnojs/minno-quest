@@ -12,6 +12,7 @@
 	- [selectOne & selectMulti](#selectone-selectmulti)
 	- [grid](#grid)
 	- [slider](#slider)
+	- [rank](#rank)
 - [settings](#settings)
 	- [onEnd](#onend)
 	- [logger](#logger)
@@ -35,7 +36,7 @@ prevText		| (text) The text for the previous button (default value: "Go Back")
 noSubmit		| (true of false) remove submit button (useful when using the 'autoSubmit' function of some questions; default value: false).
 submitText		| (text) The text of the submit button (default: "Submit").
 header  		| (text) Text for the page header.
-headerStyle		| (Object) A A [css object](#http://api.jquery.com/css/#css-properties)  to set the style of the header (see examples below).
+headerStyle		| (Object) A [css object](#http://api.jquery.com/css/#css-properties)  to set the style of the header (see examples below).
 progressBar 	| (text) Text for the progress bar (You might want to use a template for this, maybe something like: `<%= pagesMeta.number %> out of <%= pagesMeta.outOf%>`.).
 numbered 		| (true of false) Whether to  display the number of each question (default value: false).
 numberStart		| (Number) The number for the first question in the page (default: 1).
