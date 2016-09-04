@@ -1,4 +1,4 @@
-<div class="form-group">
+<div class="form-group" ng-form="questForm">
 	<label ng-hide="data.inline" for="{{data.name}}" ng-bind-html="data.stem" ng-style="data.stemCss"></label>
 	<div ng-bind-html="data.description"></div>
 	<div quest-data="data" ng-model="current.questions[data.name]" ng-style="{'max-width':data.maxWidth}"></div>

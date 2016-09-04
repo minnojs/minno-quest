@@ -1,3 +1,36 @@
+<a name"0.1.1"></a>
+### 0.1.1 (2016-09-04)
+
+
+#### Bug Fixes
+
+* **PI:**
+  * added global. to manager posts ([4aff2981](https://github.com/ProjectImplicit/PIquest/commit/4aff2981))
+  * move manager no-cache from requirejs bustUrl to meta content=no-store ([e7bc513a](https://github.com/ProjectImplicit/PIquest/commit/e7bc513a))
+* **database:** regenerate templates that have been inherited correctly ([a9bef97c](https://github.com/ProjectImplicit/PIquest/commit/a9bef97c))
+* **preload:** support IE8 ([cee2f3e3](https://github.com/ProjectImplicit/PIquest/commit/cee2f3e3))
+* **questController:** treat undefined values correctly ([1f739bc5](https://github.com/ProjectImplicit/PIquest/commit/1f739bc5))
+* **questDirective:** make sure the ngModel unregisters from the form after every redraw ([af1810a9](https://github.com/ProjectImplicit/PIquest/commit/af1810a9))
+* **sequencer:** branch:equals now returns false when comparing to a nonexistant variable ([36f17a25](https://github.com/ProjectImplicit/PIquest/commit/36f17a25))
+
+
+#### Features
+
+* **PI:**
+  * noDonate - hide allow hiding donate button in debrief ([ff0132cb](https://github.com/ProjectImplicit/PIquest/commit/ff0132cb))
+  * auto log global. ([1c5d0ae2](https://github.com/ProjectImplicit/PIquest/commit/1c5d0ae2))
+* **manager:**
+  * default progress-bar ([a8db58d3](https://github.com/ProjectImplicit/PIquest/commit/a8db58d3))
+  * added support for links out ([2d132382](https://github.com/ProjectImplicit/PIquest/commit/2d132382))
+  * support pre and post text ([b8b54d1e](https://github.com/ProjectImplicit/PIquest/commit/b8b54d1e))
+  * support "skin" option ([28b3bf1e](https://github.com/ProjectImplicit/PIquest/commit/28b3bf1e))
+* **mixer:**
+  * custom mixer ([fc17fc16](https://github.com/ProjectImplicit/PIquest/commit/fc17fc16))
+  * re-added condition.DEBUG ([3ff29703](https://github.com/ProjectImplicit/PIquest/commit/3ff29703))
+* **preload:** added error logging ([17b99e29](https://github.com/ProjectImplicit/PIquest/commit/17b99e29))
+* **questDirectives:** rank question ([f8b6ccc9](https://github.com/ProjectImplicit/PIquest/commit/f8b6ccc9))
+
+
 <a name"0.1.0"></a>
 ## 0.1.0 (2016-05-05)
 
