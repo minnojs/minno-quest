@@ -50,6 +50,9 @@ text!quest/directives/select/selectOne.html
 js/quest/directives/select/selectOneDirective.js
 text!quest/directives/select/selectMulti.html
 js/quest/directives/select/selectMultiDirective.js
+/Users/eladzlot/www/quest/bower_components/dragula.js/dist/dragula.js
+text!quest/directives/rank/rank.html
+js/quest/directives/rank/rankDirective.js
 text!quest/directives/grid/grid.html
 js/quest/directives/grid/gridDirective.js
 text!quest/directives/grid/gridRow.html
@@ -110,6 +113,7 @@ js/taskManager/beforeUnloadFactory.js
 js/taskManager/injectStyle.js
 js/taskManager/managerDirective.js
 js/taskManager/managerTaskDirective.js
+js/taskManager/piLinkDirective.js
 js/taskManager/managerModule.js
 js/utils/animations/rafPolyfill.js
 js/utils/animations/dropInAnimation.js
@@ -170,6 +174,9 @@ text!quest/directives/select/selectOne.html
 js/quest/directives/select/selectOneDirective.js
 text!quest/directives/select/selectMulti.html
 js/quest/directives/select/selectMultiDirective.js
+/Users/eladzlot/www/quest/bower_components/dragula.js/dist/dragula.js
+text!quest/directives/rank/rank.html
+js/quest/directives/rank/rankDirective.js
 text!quest/directives/grid/grid.html
 js/quest/directives/grid/gridDirective.js
 text!quest/directives/grid/gridRow.html
@@ -230,6 +237,7 @@ js/taskManager/beforeUnloadFactory.js
 js/taskManager/injectStyle.js
 js/taskManager/managerDirective.js
 js/taskManager/managerTaskDirective.js
+js/taskManager/piLinkDirective.js
 js/taskManager/managerModule.js
 js/utils/animations/rafPolyfill.js
 js/utils/animations/dropInAnimation.js

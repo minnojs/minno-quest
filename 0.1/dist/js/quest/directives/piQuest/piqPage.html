@@ -10,27 +10,25 @@
 		</li>
 	</ol>
 
-	<div class="pull-right" ng-class="{'btn-group': !page.v1style, 'btn-toolbar': page.v1style}">
+	<div pi-quest-validation="pageForm.$error.pageValidation" pi-post-submit="submitAttempt">{{page.pageValidationText || 'Invalid page'}}</div>
+
+	<div class="page-buttons">
 		<button
 			ng-click="prev()"
-			data-role="submit"
-			class="btn"
+			class="btn page-prev"
 			ng-if="page.prev && page.$meta.number > 1"
 		>{{page.prevText || "Go Back"}}</button>
 
 		<button
-			ng-click="submit()"
-			data-role="submit"
-			class="btn btn-primary"
-			ng-if="!page.noSubmit"
-		>{{page.submitText || "Submit"}}</button>
+			ng-click="decline($event)"
+			class="btn page-decline"
+			ng-if="page.decline"
+		>{{page.declineText || "Decline"}}</button>
 
 		<button
-			ng-click="decline($event)"
-			data-role="submit"
-			class="btn"
-			ng-class="{'btn-active-accented':page.v1style, 'btn-warning': page.v1style != 2, 'btn-default': page.v1style == 2}"
-			ng-if="page.decline"
-		>{{page.declineText || "Decline to Answer"}}</button>
+			ng-click="submit()"
+			class="btn page-submit"
+			ng-if="!page.noSubmit"
+		>{{page.submitText || "Submit"}}</button>
 	</div>
 </div>
