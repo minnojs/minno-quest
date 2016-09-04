@@ -1,3 +1,12 @@
+<a name"0.1.4"></a>
+### 0.1.4 (2016-09-04)
+
+
+#### Features
+
+* **questDirectives:** change rank.noRandomize into rank.randomize ([e12874e4](https://github.com/ProjectImplicit/PIquest/commit/e12874e4))
+
+
 <a name"0.1.3"></a>
 ### 0.1.3 (2016-09-04)
 
