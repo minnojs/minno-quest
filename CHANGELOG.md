@@ -1,3 +1,12 @@
+<a name"0.1.2"></a>
+### 0.1.2 (2016-09-04)
+
+
+#### Bug Fixes
+
+* **questDirectives:** rank - clicking a row does not navigate away any more ([aa2927e0](https://github.com/ProjectImplicit/PIquest/commit/aa2927e0))
+
+
 <a name"0.1.1"></a>
 ### 0.1.1 (2016-09-04)
 

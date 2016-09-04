@@ -1,6 +1,6 @@
 <div>
     <div class="list-group" dragula-container>
-        <a href="#" class="list-group-item" ng-repeat="row in list track by row.id">
+        <a href="javascript:void(0)" class="list-group-item" ng-repeat="row in list track by row.id">
             <div class="row">
                 <div class="col-xs-1">
                     <select ng-init="setupWatch(this)" ng-model="selected" ng-change="$parent.move(row.order, selected, this)">
