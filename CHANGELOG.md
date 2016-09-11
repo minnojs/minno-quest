@@ -1,3 +1,12 @@
+<a name"0.0.99"></a>
+### 0.0.99 (2016-09-11)
+
+
+#### Features
+
+* **PI:** fit manager to serverless paradigm ([b1c5ffc2](https://github.com/ProjectImplicit/PIquest/commit/b1c5ffc2))
+
+
 <a name"0.0.98"></a>
 ### 0.0.98 (2016-08-11)
 
