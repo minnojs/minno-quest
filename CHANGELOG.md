@@ -1,3 +1,14 @@
+<a name"0.1.5"></a>
+### 0.1.5 (2016-09-16)
+
+
+#### Features
+
+* **PI:**
+  * add global meta to API.save posts ([89c5868e](https://github.com/ProjectImplicit/PIquest/commit/89c5868e))
+  * fit manager to serverless paradigm ([7f2cfa08](https://github.com/ProjectImplicit/PIquest/commit/7f2cfa08))
+
+
 <a name"0.1.4"></a>
 ### 0.1.4 (2016-09-04)
 
