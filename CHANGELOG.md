@@ -1,3 +1,12 @@
+<a name"0.0.100"></a>
+### 0.0.100 (2016-09-16)
+
+
+#### Features
+
+* **PI:** add global meta to API.save posts ([c7b172d6](https://github.com/ProjectImplicit/PIquest/commit/c7b172d6))
+
+
 <a name"0.0.99"></a>
 ### 0.0.99 (2016-09-11)
 
