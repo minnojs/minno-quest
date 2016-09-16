@@ -15,6 +15,8 @@ define(function(require){
 			throw new Error('API.save can send only objects.');
 		}
 
+        var globalMeta = (window.piGlobal && window.piGlobal.$meta) || {};
+
 		var meta = {
 			taskName: script.name,
 			taskNumber: script.serial || 0
@@ -25,7 +27,7 @@ define(function(require){
 				name: key,
 				response: value,
 				serial: ++counter
-			}, meta);
+			}, meta, globalMeta);
 		});
 
 		return this.post('/implicit/PiQuest', arr);
