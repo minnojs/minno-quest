@@ -1,3 +1,12 @@
+<a name"0.1.6"></a>
+### 0.1.6 (2016-09-18)
+
+
+#### Features
+
+* **logger:** added logger.error so that errors in posting can be managed. ([fd7c66bf](https://github.com/ProjectImplicit/PIquest/commit/fd7c66bf))
+
+
 <a name"0.1.5"></a>
 ### 0.1.5 (2016-09-16)
 

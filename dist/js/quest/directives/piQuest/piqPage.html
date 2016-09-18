@@ -12,17 +12,10 @@
 
 	<div pi-quest-validation="pageForm.$error.pageValidation" pi-post-submit="submitAttempt">{{page.pageValidationText || 'Invalid page'}}</div>
 
-<<<<<<< HEAD
 	<div class="page-buttons">
 		<button
 			ng-click="prev()"
 			class="btn page-prev"
-=======
-	<div class="pull-right" ng-class="{'btn-group': !page.v1style, 'btn-toolbar': page.v1style}">
-		<button
-			ng-click="prev()"
-			class="btn"
->>>>>>> gap
 			ng-if="page.prev && page.$meta.number > 1"
 		>{{page.prevText || "Go Back"}}</button>
 
@@ -34,21 +27,8 @@
 
 		<button
 			ng-click="submit()"
-<<<<<<< HEAD
 			class="btn page-submit"
 			ng-if="!page.noSubmit"
 		>{{page.submitText || "Submit"}}</button>
-=======
-			class="btn btn-primary"
-			ng-if="!page.noSubmit"
-		>{{page.submitText || "Submit"}}</button>
-
-		<button
-			ng-click="decline($event)"
-			class="btn"
-			ng-class="{'btn-active-accented':page.v1style, 'btn-warning': page.v1style != 2, 'btn-default': page.v1style == 2}"
-			ng-if="page.decline"
-		>{{page.declineText || "Decline to Answer"}}</button>
->>>>>>> gap
 	</div>
 </div>
