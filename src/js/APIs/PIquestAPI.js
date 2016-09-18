@@ -10,10 +10,7 @@ define(function(require){
 	 */
 	function API(){
 		Constructor.call(this);
-
-		this.settings.logger = {
-			url: '/implicit/PiQuest'
-		};
+        _.set(this, 'settings.logger.url', '/implicit/PiQuest');
 	}
 
 	decorator(API);

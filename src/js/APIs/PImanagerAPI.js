@@ -51,9 +51,8 @@ define(function(require){
 		// add logging meta
 		if (currentTask.type == 'quest' || currentTask.type == 'pip'){
 			currentTask.$script.serial = currentTask.$meta.number;
-			settings = currentTask.$script.settings;
-			settings.logger = settings.logger || {};
-			settings.logger.meta = _.assign({}, data, settings.logger.meta);
+            _.set(currentTask, '$script.settings.logger.meta', _.assign({}, data, _.get(currentTask, '$script.settings.logger.meta', {})));
+            _.set(currentTask, '$script.settings.logger.error', error);
 		}
 
 		// add feedback functions to the default template context
@@ -105,7 +104,17 @@ define(function(require){
 			meta.subtaskURL = currentTask.scriptUrl || currentTask.templateUrl;
 		}
 
-		return $http.post('/implicit/PiManager', data);
+		return $http.post('/implicit/PiManager', data)['catch'](error);
+
+        function error(){
+            var reportNoConnection = currentTask.reportNoConnection;
+            if (reportNoConnection){
+                var message = document.createElement('div');
+                message.className = 'crash-message';
+                message.innerHTML = reportNoConnection;
+                document.body.insertBefore(message, document.body.firstChild);
+            }
+        }
 	}
 
 	function postRedirect(path, params, method) {

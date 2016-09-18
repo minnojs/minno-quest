@@ -258,7 +258,7 @@ module.exports = function (grunt) {
 					baseUrl: 'js',
 					removeCombined: true,
 					generateSourceMaps: true,
-					preserveLicenseComments: false,
+				    preserveLicenseComments: false,
 					optimize: 'uglify2',
 					// optimize:'none', // toggle this for fast optimized debuging
 					skipDirOptimize: true,
