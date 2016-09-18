@@ -1025,6 +1025,10 @@ For example if you had a list <code>[&#39;a&#39;,&#39;b&#39;,&#39;c&#39;]</code>
 <td>logfn</td>
 <td>(Function) The task has a default object that it logs, if you want to change the logged object itself, you may use a function of the form: <code>function(log, pagesData, global){return logObj;}</code></td>
 </tr>
+<tr>
+<td>error</td>
+<td>(Function) A function to manage errors in logging. It gets called when a post to the server fails.</td>
+</tr>
 </tbody>
 </table>
 <p>Within the player, each question (as defined by unique question name) may be logged only once. By default questions are logged at the end of a page (on submit or decline), if you want to delay logging until the end of the task, you may do so by setting <code>nolog</code> in the appropriate page or question.</p>

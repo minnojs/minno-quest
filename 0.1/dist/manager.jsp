@@ -1,15 +1,24 @@
 <%@page pageEncoding="UTF-8" %>
-<%@page import="org.uva.*, java.io.*" %>
+<%@page import="org.uva.*, java.io.*,org.implicit.random.RandomStudy" %>
 <%
 
 StudySession studySession = (StudySession) session.getAttribute("studysession");
 String fullUrl = ((PageTask)studySession.getCurrentTask()).getUrl();
 String urlPath = fullUrl.substring(0,fullUrl.indexOf("manager.jsp"));
-
+String sessionId= studySession.encryptId();
+String datagroup=studySession.getStudy().getDataGroup();
+String studyId=studySession.getStudy().getId();
+String studyUrl="null";
+String rulesUrl="null";
 String getProtocol=request.getScheme();
 String getDomain=request.getServerName();
 String getBase = getProtocol+"://"+getDomain;
-
+RandomStudy randomStudy= studySession.getRandomStudy();
+if(randomStudy!=null)
+{
+	studyUrl=randomStudy.getStudyUrlString();
+	rulesUrl=randomStudy.getRulesUrlString();
+}
 	String script = request.getParameter("i");
 	try{
 		if (script == null){
@@ -41,20 +50,32 @@ String getBase = getProtocol+"://"+getDomain;
 			    c.src="//beacon.errorception.com/"+s+".js";c.async=!0;b.parentNode.insertBefore(c,b)};
 			    _.addEventListener?_.addEventListener("load",b,!1):_.attachEvent("onload",b)})
 			    (window,document,"script","55530734a1b3d51609003d1c");
-				_errs.meta = {
-					script: '<%= script %>',
-					session: '<%= studySession.getId() %>',
-					taskId: '<%= studySession.getCurrentTask().getId() %>',
-					studyId: '<%= studySession.getStudy().getId() %>',
-					app: 'manager'
+                 _errs.meta = {
+                     script: '<%= script %>',
+                     studyId: '<%=studyId%>',
+                     sessionId: '<%=sessionId%>',
+                     datagroup: '<%=datagroup%>',
+                     studyUrl: '<%=studyUrl%>',
+                     rulesUrl: '<%=rulesUrl%>'
+                     app: 'manager'
 				}
 
 				// https://github.com/yeoman/yeoman/issues/1051
 				// prevent load timeouts
-				var require = {waitSeconds:120}
+				var require = {waitSeconds:120};
+				
 			</script>
 		<% } %>
-
+		<script>
+			window.piGlobal = {};
+			window.piGlobal.$meta = {
+			    'studyId': '<%=studyId%>',
+			    'sessionId': '<%=sessionId%>',
+				'datagroup': '<%=datagroup%>',
+				'studyUrl': '<%=studyUrl%>',
+				'rulesUrl': '<%=rulesUrl%>'
+			};
+		</script>
 		<link rel="stylesheet" href="styles/main.css" />
 
 		<style type="text/css">

@@ -466,6 +466,7 @@ Setting 	| Description
 pulse 		| (Number; Default: 0) How many rows to collect before posting to the server. 0 means that the player sends to the server only at the end of the task. Note that only questions and pages marked with the `lognow` property will be pulsed. All other questions will be sent at the end of the task.
 url 		| (Text; default:"") The URL to which we should post the data to.
 logfn 		| (Function) The task has a default object that it logs, if you want to change the logged object itself, you may use a function of the form: `function(log, pagesData, global){return logObj;}`
+error       | (Function) A function to manage errors in logging. It gets called when a post to the server fails.
 
 Within the player, each question (as defined by unique question name) may be logged only once. By default questions are logged at the end of a page (on submit or decline), if you want to delay logging until the end of the task, you may do so by setting `nolog` in the appropriate page or question.
 

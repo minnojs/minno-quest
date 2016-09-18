@@ -327,14 +327,27 @@ Select the elements in <code>data</code> if all the conditions in the <code>cond
 }</span>
 </code></pre>
 <p>Find the first object within <code>branches</code> for which <code>conditions</code> is true, and select the elements in that objects <code>data</code>. If no object is selected then select <code>elseData</code> (optional). (See <a href="#conditions">conditions</a> to learn about how conditions work).</p>
-<h4><a name="conditions" class="header-link" href="#conditions"><span class="glyphicon glyphicon-link"></span></a>Conditions</h4><p>The conditional mixers (<code>branch</code> &amp; <code>multiBranch</code>) allow you to change the content of a list according to <a href="#variables">environmental variables</a>. Each list has specific variables available to it, you can find the relevant details in the documentation for each list, but all lists have access to the <code>global</code> and <code>current</code> objects, so we’ll use them for all examples here.</p>
-<p>A condition is a proposition, it is evaluated to either a <code>true</code> or <code>false</code> value. Conditions are used for decision making within the branching mixers. Conditions are represented by objects. The following condition object <code>compare</code>s <strong>global.var</strong> <code>to</code> <strong>current.otherVar</strong> and examines if they are equal (if you aren’t sure what <strong>global.var</strong> means, see <a href="#variables">here</a>):</p>
-<pre><code class="lang-js">var cond = {
-    compare: <span class="hljs-symbol">'global</span>.myVar',
-    <span class="hljs-keyword">to</span>: <span class="hljs-symbol">'current</span>.myOtherVar'
+<p><strong>custom</strong>
+Custom mixers must return an array of appropriate elements.
+You can create them using the mixer context and the mixer element itself, or use them to create arbitrary elements as you like.</p>
+<p>``js
+{
+    mixer: ‘custom’,
+    fn: function(obj, context){
+        return [elem1, elem2]
+    }
+}</p>
+<pre><code><span class="hljs-header">#### Conditions</span>
+The conditional mixers (<span class="hljs-code">`branch`</span> &amp; <span class="hljs-code">`multiBranch`</span>) allow you to change the content of a list according to [<span class="hljs-link_label">environmental variables</span>](<span class="hljs-link_url">#variables</span>). Each list has specific variables available to it, you can find the relevant details in the documentation for each list, but all lists have access to the <span class="hljs-code">`global`</span> and <span class="hljs-code">`current`</span> objects, so we'll use them for all examples here.
+
+A condition is a proposition, it is evaluated to either a <span class="hljs-code">`true`</span> or <span class="hljs-code">`false`</span> value. Conditions are used for decision making within the branching mixers. Conditions are represented by objects. The following condition object <span class="hljs-code">`compare`</span>s <span class="hljs-strong">**global.var**</span> <span class="hljs-code">`to`</span> <span class="hljs-strong">**current.otherVar**</span> and examines if they are equal (if you aren't sure what <span class="hljs-strong">**global.var**</span> means, see [<span class="hljs-link_label">here</span>](<span class="hljs-link_url">#variables</span>)):
+
+<span class="hljs-code">```</span>js
+var cond = {
+<span class="hljs-code">    compare: 'global.myVar',</span>
+<span class="hljs-code">    to: 'current.myOtherVar'</span>
 }
-</code></pre>
-<p>Conditions should be treated as a type of equation.</p>
+</code></pre><p>Conditions should be treated as a type of equation.</p>
 <p>In the <code>compare</code> and <code>to</code> properties you can set either straight forward values or references to a variable:</p>
 <pre><code class="lang-js">//Compares the variable time to the value 12
 var cond1 = {
