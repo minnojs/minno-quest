@@ -1,3 +1,12 @@
+<a name"0.0.101"></a>
+### 0.0.101 (2016-09-20)
+
+
+#### Bug Fixes
+
+* **pip:** updated lodash to correct version ([4c9959ee](https://github.com/ProjectImplicit/PIquest/commit/4c9959ee))
+
+
 <a name"0.0.100"></a>
 ### 0.0.100 (2016-09-16)
 
