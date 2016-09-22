@@ -1,8 +1,6 @@
 define(function(require){
 
 	var _ = require('underscore');
-	_;
-
 
 	sliderDirective.$inject = [];
 	function sliderDirective(){
@@ -23,15 +21,19 @@ define(function(require){
 
 				scope.form = form;
 
-				ctrl.registerModel(ngModel, {
-					dflt: undefined
-				});
+				ctrl.registerModel(ngModel, { dflt: undefined });
 
-				data.autoSubmit && scope.$on('slider:change', function(){
-					scope.$emit('quest:submit:now');
+                // setup model => view
+                scope.sliderResponse = scope.response;
+
+                // setup view => model
+				scope.$on('slider:change', function(e, newValue){
+                    scope.$apply(function(){
+                        scope.response = newValue;
+                        data.autoSubmit && scope.$emit('quest:submit:now');
+                    });
 				});
 			}
-
 		};
 	}
 
