@@ -32,7 +32,7 @@ define(['managerAPI'], function(Manager){
 		{
 			type:'quest',
 			name: 'first',
-			scriptUrl: '/test/allocation.js'
+			scriptUrl: 'questScript1.js'
 		},
 
 		{

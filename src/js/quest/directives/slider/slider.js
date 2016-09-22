@@ -151,7 +151,7 @@
             event.preventDefault();
             $document.off('mousemove touchmove', mouseMove);
             $document.off('mouseup touchend', mouseUp);
-            scope.$emit(SLIDER_CHANGE_EVENT, ngModel.$viewValue); // emit only on mouse drop
+            scope.$emit(SLIDER_CHANGE_EVENT, ngModel.$modelValue); // emit only on mouse drop
           }
         }
 
@@ -168,7 +168,6 @@
 
           // auto "$apply" by ng-mousedown
           setValue(percentage);
-          scope.$emit(SLIDER_CHANGE_EVENT, ngModel.$viewValue);
           onHandleMousedown(event); // allow dragging after a slider click.
         }
 
