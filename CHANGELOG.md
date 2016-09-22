@@ -1,3 +1,12 @@
+<a name"0.0.102"></a>
+### 0.0.102 (2016-09-22)
+
+
+#### Bug Fixes
+
+* **questDirectives:** slider updates only on mouseup so that redraw doesn't break it ([117dc439](https://github.com/ProjectImplicit/PIquest/commit/117dc439))
+
+
 <a name"0.0.101"></a>
 ### 0.0.101 (2016-09-20)
 
