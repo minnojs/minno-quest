@@ -143,8 +143,8 @@ Finaly, the parent element is <a href="#merging">merged</a> into the the child e
 <h3><a name="syntax" class="header-link" href="#syntax"><span class="glyphicon glyphicon-link"></span></a>Syntax</h3><p>In order for an element to inherit another element you should use the <code>inherit</code> property.
 Inherit` takes either an object or a string, with instructions for which element to inherit. </p>
 <p>The following element uses an object to inherit.</p>
-<pre><code class="lang-js">{
-    <span class="hljs-tag">inherit</span>: {<span class="hljs-attribute">set</span>:<span class="hljs-string">'setName'</span>, <span class="hljs-attribute">type</span>:<span class="hljs-string">'exRandom'</span>}
+<pre><code class="lang-js"><span class="hljs-rules">{
+    <span class="hljs-rule"><span class="hljs-attribute">inherit</span>:<span class="hljs-value"> {set:<span class="hljs-string">'setName'</span>, type:<span class="hljs-string">'exRandom'</span></span></span></span>}
 }
 </code></pre>
 <p>Using a string instead, affords a usefull shortcut to the same end.

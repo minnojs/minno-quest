@@ -146,12 +146,6 @@
 							{{ navitem("Creating a task", "../basics/create", data.basename) }}
 
 							{{ navitem("Sequencer", "../basics/sequencer", data.basename) }}
-                            <li>
-								<a href="../sequencer/overview.html">Sequencer</a>
-                                <ul class="nav">
-									{{ navsubitem("Overview", "../sequencer/overview", data.basename) }}
-                                </ul>
-                            </li>
 							{{ navitem("API", "../basics/API", data.basename) }}
 							{{ navitem("Resources", "../basics/resources", data.basename) }}
 
