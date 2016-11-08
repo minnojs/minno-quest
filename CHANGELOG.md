@@ -1,3 +1,12 @@
+<a name"0.0.103"></a>
+### 0.0.103 (2016-11-08)
+
+
+#### Features
+
+* **manager:** allow 'skip' only when DEBUG is set to true ([c7af2b6d](https://github.com/ProjectImplicit/PIquest/commit/c7af2b6d))
+
+
 <a name"0.0.102"></a>
 ### 0.0.102 (2016-09-22)
 
