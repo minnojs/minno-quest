@@ -62,7 +62,6 @@ if(randomStudy!=null)
 				// https://github.com/yeoman/yeoman/issues/1051
 				// prevent load timeouts
 				var require = {waitSeconds:120};
-				
 			</script>
 		<% } %>
 		<script>
@@ -74,6 +73,8 @@ if(randomStudy!=null)
 				'studyUrl': '<%=studyUrl%>',
 				'rulesUrl': '<%=rulesUrl%>'
 			};
+
+			<% if (org.uva.Implicit.IS_PRODUCTION == "false") { %> window.DEBUG = true; <% } %>
 		</script>
 		<link rel="stylesheet" href="styles/main.css" />
 
