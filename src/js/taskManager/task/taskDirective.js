@@ -29,7 +29,7 @@ define(function(require){
 				/**
 				 * listen for skip events
 				 */
-				if (settings.skip){
+				if (settings.skip && window.DEBUG === true){
 					$document.on('keydown',proceedListener);
 					$scope.$on('$destroy', function(){
 						$document.off('keydown', proceedListener);
