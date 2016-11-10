@@ -105,7 +105,7 @@ define(function(require){
 			meta.subtaskURL = currentTask.scriptUrl || currentTask.templateUrl;
 		}
 
-		return $http.post('/implicit/PiManager', data);
+		return $http.post('/implicit/PiManager', data)['catch'](function(e){throw new Error('Failed to update server ("/implicit/PiManager/")');});
 	}
 
 	function postRedirect(path, params, method) {
