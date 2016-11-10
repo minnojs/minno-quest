@@ -114,6 +114,8 @@ define(function(require){
                 message.innerHTML = reportNoConnection;
                 document.body.insertBefore(message, document.body.firstChild);
             }
+
+            throw new Error('Failed to update server ("/implicit/PiManager/")');
         }
 	}
 
