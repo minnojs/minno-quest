@@ -50,24 +50,23 @@ define(function(require){
 			});
 
 			describe(': checkbox', function(){
-				it('should be the default', function(){
-					compile({columns:[{}], rows:[1]});
-					var cell = $table.find('tbody tr [ng-switch-when="checkbox"]');
-					expect(cell.is('button')).toBeTruthy();
-				});
+                it('should be the default', function(){
+                    compile({columns:[{}], rows:[1]});
+                    var cell = $table.find('tbody tr [ng-switch-when="checkbox"]');
+                    expect(cell.is('button')).toBeTruthy();
+                });
 
-				it('should set checkboxType', function(){
-					compile({columns:[{}], rows:[1], checkboxType:'test'});
-					var cell = $table.find('tbody tr [ng-switch-when="checkbox"]');
-					expect(cell).toHaveClass('test');
-				});
-			});
+                it('should set checkboxType', function(){
+                    compile({columns:[{}], rows:[1], checkboxType:'test'});
+                    var cell = $table.find('tbody tr [ng-switch-when="checkbox"]');
+                    expect(cell).toHaveClass('test');
+                });
 
-
-			it('should respect type=checkbox', function(){
-				compile({columns:[{type:'checkbox'}], rows:[1]});
-				var cell = $table.find('tbody tr [ng-switch-when="checkbox"]');
-				expect(cell.is('button')).toBeTruthy();
+                it('should respect type=checkbox', function(){
+                    compile({columns:[{type:'checkbox'}], rows:[1]});
+                    var cell = $table.find('tbody tr [ng-switch-when="checkbox"]');
+                    expect(cell.is('button')).toBeTruthy();
+                });
 			});
 
 			it('should respect type=text', function(){
@@ -75,6 +74,32 @@ define(function(require){
 				var cell = $table.find('tbody tr [ng-switch-when="text"]');
 				expect(cell.text()).toBe('1234');
 			});
+
+            describe(': input', function(){
+                it('should respect type=input', function(){
+                    compile({columns:[{type:'input'}], rows:[{test1:1234}]});
+                    var cell = $table.find('tbody tr [ng-switch-when="input"]');
+                    expect(cell.children('input').length).toBeTruthy();
+                });
+
+                it('should not respond to the user picking other columns', function(){
+                    compile({name:'name', columns:[{type:'input'}, {type:'checkbox'}], rows:[{test1:1234}]});
+                    var input = $table.find('tbody tr input');
+                    expect(input.val()).toBe('');
+
+                    choose(1,2);
+                    expect($scope.current.questions.name001.response).toBe(2);
+                    expect(input.val()).toBe('');
+
+                    input.val(1234).trigger('change');
+                    expect($scope.current.questions.name001.response).toBe('1234');
+                    expect(input.val()).toBe('1234');
+                    
+                    choose(1,2);
+                    expect($scope.current.questions.name001.response).toBe(2);
+                    expect(input.val()).toBe('1234');
+                });
+            });
 
 		});
 

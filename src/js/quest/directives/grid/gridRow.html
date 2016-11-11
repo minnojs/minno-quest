@@ -8,10 +8,10 @@
 	<td ng-repeat="column in $parent.columns">
 		<div ng-switch="column.type">
 			<button
+				class="btn btn-default"
 				ng-switch-when="checkbox"
 				btn-radio="row.reverse && !column.noReverse ? column.reverseValue : column.value"
 				ng-model="$parent.$parent.response"
-				class="btn btn-default"
 				ng-class="data.checkboxType"
 				uncheckable
 			></button>
@@ -20,6 +20,17 @@
 				ng-switch-when="text"
 				ng-bind-html="row[column.textProperty]"
 			></div>
+			<div
+				class="grid-input input-group input-group-small"
+				ng-switch-when="input"
+                ng-init="response=''"
+                title="insert your response"
+			>
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-edit" ng-class="{active:$parent.$parent.response===response}"></span>
+                </span>
+                <input type="text" class="form-control" ng-model="response" ng-change="$parent.$parent.response = response">
+            </div>
 		</div>
 		<div
 			class="cell-labels"

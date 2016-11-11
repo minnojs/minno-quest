@@ -64,8 +64,6 @@
 
 
 	.colorMark.btn.active{
-
-
 			&:before{
 				visibility: hidden
 			}
@@ -83,6 +81,15 @@
 	.btn.active:before {
 		visibility: visible;
 	}
+
+    .grid-input .input-group-addon {
+        background : #e6e6e6;
+
+        .glyphicon.active {
+            font-weight: bold;
+            font-color: black;
+        }
+    }
 }
 
 [dragula-container] > * {

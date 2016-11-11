@@ -26,6 +26,36 @@ define(['questAPI'], function(Quest){
 	});
 
 	API.addSequence([
+	        { // page begins
+	            header: 'Grid questions simple',
+	            autoFocus:true,
+	            decline: true,
+	            v1style: 2,
+	            questions: [
+						{
+							stem: 'how are you?',
+							name: 'secondary',
+							type: 'dropdown',
+							dflt:'good',
+							answers: ['good','bad','ugly'],
+							errorMsg: {correct:"That may not be correct... say good!"}
+						},
+
+	                {
+	                    type: 'grid',
+                        name:'gonzales',
+	                    stem: 'What sort of things do you like?',
+	                    columns: ['Strongly agree' , 'agree' , 'don\'t know' , 'disagree' , {stem:'Strongly disagree', type:'input'}],
+	                    rows: ['I like grids', 'I like bannanas too'],
+	                    rowStemCss: {width:'280px'}
+	                },
+	            	{
+	            		type:'text',
+	            		stem: 'iso'
+	            	},
+
+	            ]
+	        }, // page ends
 {
             questions: [
                 {
@@ -90,35 +120,6 @@ define(['questAPI'], function(Quest){
 				}
 			},
 
-	        { // page begins
-	            header: 'Grid questions simple',
-	            autoFocus:true,
-	            decline: true,
-	            v1style: 2,
-	            questions: [
-						{
-							stem: 'how are you?',
-							name: 'secondary',
-							type: 'dropdown',
-							dflt:'good',
-							answers: ['good','bad','ugly'],
-							errorMsg: {correct:"That may not be correct... say good!"}
-						},
-
-	                {
-	                    type: 'grid',
-	                    stem: 'What sort of things do you like?',
-	                    columns: ['Strongly agree' , 'agree' , 'don\'t know' , 'disagree' , 'Strongly disagree'],
-	                    rows: ['I like grids', 'I like bannanas too'],
-	                    rowStemCss: {width:'280px'}
-	                },
-	            	{
-	            		type:'text',
-	            		stem: 'iso'
-	            	},
-
-	            ]
-	        }, // page ends
 
 
 		{
