@@ -5,7 +5,7 @@
 		ng-bind-html="row.stem"
 		ng-style="data.rowStemCss"
 	></th>
-	<td ng-repeat="column in $parent.columns">
+	<td ng-repeat="column in columns">
 		<div ng-switch="column.type">
 			<button
 				class="btn btn-default"
@@ -30,6 +30,12 @@
                     <span class="glyphicon glyphicon-edit" ng-class="{active:$parent.$parent.response===response}"></span>
                 </span>
                 <input type="text" class="form-control" ng-model="response" ng-change="$parent.$parent.response = response">
+            </div>
+            <div ng-switch-when="dropdown" ng-init="response=''"> 
+                <select ng-model="response" ng-change="$parent.$parent.response = response" class="form-control">
+                    <option value="" ng-selected="response===undefined">----</option>
+                    <option ng-repeat="r in column.answers" ng-selected="r.value === $parent.$parent.response" value="{{r.value}}">{{r.text}}</option>
+                </select>
             </div>
 		</div>
 		<div

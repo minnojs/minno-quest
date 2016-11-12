@@ -32,6 +32,8 @@ define(function(require){
 	module.value('questShuffle', _.shuffle); // we already have this in database but I don't want the directives to be too interdependant
 	module.directive('questGrid', require('./grid/gridDirective'));
 	module.directive('questGridRow', require('./grid/gridRowDirective'));
+	module.directive('questMultiGrid', require('./multiGrid/multiGridDirective'));
+	module.directive('questMultiGridRow', require('./multiGrid/multiGridRowDirective'));
 
 	module.directive('questSlider',require('./slider/sliderDirective'));
 	module.directive('piSlider',require('./slider/slider'));

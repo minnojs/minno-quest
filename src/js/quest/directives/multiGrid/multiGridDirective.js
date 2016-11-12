@@ -5,7 +5,7 @@ define(function (require) {
 	function gridDirective(shuffle){
 		return {
 			replace: true,
-			template: require('text!./grid.html'),
+			template: require('text!./multiGrid.html'),
 			require: ['ngModel','form'],
 			controller: 'questController',
 			controllerAs: 'ctrl',
@@ -22,20 +22,8 @@ define(function (require) {
 
 				scope.columns = mapColumns(data.columns);
 				scope.rows = mapRows(data.rows, data);
+
 				scope.allCss = allCss;
-
-
-				scope.$watchCollection(function getResponses(){
-					return _.pluck(scope.rows, '$response');
-				}, function sumResponses(responses){
-					scope.response = _.reduce(responses, function(total, response) {
-						return _.isFinite(response) ? total + response : total;
-					},0);
-				});
-
-				ctrl.registerModel(ngModel, {
-					dflt: 0
-				});
 			}
 		};
 
