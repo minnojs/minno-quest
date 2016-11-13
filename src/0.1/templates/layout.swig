@@ -233,6 +233,7 @@
 									{{ example("Select One", "../questExamples/selectOne", data.basename) }}
 									{{ example("Select Multi", "../questExamples/selectMulti", data.basename) }}
 									{{ example("Grid", "../questExamples/grid", data.basename) }}
+									{{ example("Multi Grid", "../questExamples/gridMulti", data.basename) }}
 									{{ example("Slider", "../questExamples/slider", data.basename) }}
 									{{ example("Rank", "../questExamples/rank", data.basename) }}
 								</ul>

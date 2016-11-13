@@ -98,9 +98,9 @@
 		<div id="content" class="bs-docs-header">
 			<div class="container">
 				
-	<h1>User prev resp</h1>
+	<h1>Grid multi</h1>
 
-	<p>Documentation for userPrevResp.js </p>
+	<p>Documentation for gridMulti.js </p>
 
 			</div>
 		</div>
@@ -110,87 +110,47 @@
 				<div class="col-md-9" role="main">
 					
 	
-		
-
-		
-		  <div class='highlight'><pre><span class="hljs-comment">/**
- * @author Yoav Bar-Anan &lt;baranany@bgu.ac.il&gt;
- */</span>
-define([<span class="hljs-string">'questAPI'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">Quest</span>)</span>{
-	<span class="hljs-keyword">var</span> API = <span class="hljs-keyword">new</span> Quest();
-
-	<span class="hljs-comment">/**
-	 * Questions
-	 **/</span>
-	API.addQuestionsSet(<span class="hljs-string">'basicSelect'</span>,
-	{
-		type: <span class="hljs-string">'selectOne'</span>,
-		autoSubmit:<span class="hljs-literal">true</span>,
-		numericValues:<span class="hljs-literal">true</span>,
-		required:<span class="hljs-literal">true</span>,
-		errorMsg: {
-			required: <span class="hljs-string">"Please select an answer, or click 'decline to answer'"</span>
-		},
-		help: <span class="hljs-string">'&lt;%= pagesMeta.number &lt; 3 %&gt;'</span>,
-		helpText: <span class="hljs-string">'Selecting an answer once colors it blue.&lt;br/&gt;You can change your answer by selecting another option.&lt;br/&gt;To confirm, click the selected (blue) button a second time.'</span>
-	});</pre></div>
-		
-	
-		<p>Set the value of each response, to use it in the next question.</p>
+		<h3 id="grid-question">Grid question</h3>
+<p>An example for a simple grid question.
+It allows you to create a series of multiple choice questions.</p>
+<p>Full documentation is right <a href="../quest/API.html#grid">here</a>.</p>
 
 
 		
-		  <div class='highlight'><pre>	API.addQuestionsSet(<span class="hljs-string">'selectGroup'</span>, [{
-		inherit: <span class="hljs-string">'basicSelect'</span>,
-		name:<span class="hljs-string">'selectGroup'</span>,
-		stem:<span class="hljs-string">'Please choose, who would you prefer to rate now?'</span>,
-		answers : [
-			{text:<span class="hljs-string">'Black people'</span>, value:<span class="hljs-string">'Black people'</span>},
-			{text:<span class="hljs-string">'White people'</span>, value:<span class="hljs-string">'White people'</span>}
-		]
-	}]);</pre></div>
-		
-	
-		<p>The name of the group in this question is the response from the previous question.</p>
+		  <div class='highlight'><pre>define([<span class="hljs-string">'questAPI'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">Quest</span>)</span>{
+    <span class="hljs-keyword">var</span> API = <span class="hljs-keyword">new</span> Quest();
 
+    API.addSequence([
+        { <span class="hljs-comment">// page begins</span>
+            header: <span class="hljs-string">'GridMulti questions simple'</span>,
+            questions: [
+                {
+                    type: <span class="hljs-string">'multiGrid'</span>,
+                    name:<span class="hljs-string">'multiGrid1'</span>,
+                    columns: [<span class="hljs-string">'Sunday'</span>, <span class="hljs-string">'Monday'</span>, <span class="hljs-string">'Tuesday'</span>, <span class="hljs-string">'Wednesday'</span>, <span class="hljs-string">'Thursday'</span>, <span class="hljs-string">'Friday'</span>, <span class="hljs-string">'Saturday'</span>],
+                    rows: [<span class="hljs-string">'Days you work out'</span>, <span class="hljs-string">'Days you go to work'</span>]
+                }
+            ]
+        }, <span class="hljs-comment">// page ends</span>
+        { <span class="hljs-comment">// page begins</span>
+            header: <span class="hljs-string">'GridMulti questions advanced'</span>,
+            questions: [
+                {
+                    type: <span class="hljs-string">'multiGrid'</span>,
+                    name:<span class="hljs-string">'multiGrid2'</span>,
+                    columns: [
+                        {stem:<span class="hljs-string">'Gender'</span>, type:<span class="hljs-string">'dropdown'</span>, answers: [<span class="hljs-string">'Male'</span>, <span class="hljs-string">'Female'</span>]},
+                        <span class="hljs-string">'Study together'</span>,
+                        <span class="hljs-string">'Work together'</span>,
+                        {stem:<span class="hljs-string">'Description'</span>, type:<span class="hljs-string">'input'</span>}
+                    ],
+                    rows: [<span class="hljs-string">'Friend 1'</span>, <span class="hljs-string">'Friend 2'</span> ]
+                }
+            ]
+        } <span class="hljs-comment">// page ends</span>
+    ]);
 
-		
-		  <div class='highlight'><pre>	API.addQuestionsSet(<span class="hljs-string">'groupLike'</span>, [{
-		inherit: <span class="hljs-string">'basicSelect'</span>,
-		name:<span class="hljs-string">'groupLike'</span>,
-		stem:<span class="hljs-string">'How much do you like &lt;%=current.questions.selectGroup.response%&gt;?'</span>,
-		answers : [<span class="hljs-string">'Extremely dislike'</span>, <span class="hljs-string">'Moderately dislike'</span>, <span class="hljs-string">'Slightly disklike'</span>, <span class="hljs-string">'Slightly like'</span>, <span class="hljs-string">'Moderaltey like'</span>, <span class="hljs-string">'Extremely like'</span>]
-	}]);</pre></div>
-		
-	
-		<h3 id="pages">Pages</h3>
-
-
-		
-		  <div class='highlight'><pre>	API.addPagesSet(<span class="hljs-string">'basicPage'</span>,
-	{
-		progressBar: <span class="hljs-string">'&lt;%= pagesMeta.number %&gt; out of 2'</span>,
-		headerStyle : {<span class="hljs-string">'font-size'</span>:<span class="hljs-string">'1em'</span>},
-		v1style:<span class="hljs-number">2</span>,
-		decline:<span class="hljs-literal">true</span>,
-		numbered: <span class="hljs-literal">false</span>
-	});</pre></div>
-		
-	
-		<h3 id="sequence">Sequence</h3>
-
-
-		
-		  <div class='highlight'><pre>	API.addSequence(
-	[
-		{inherit :<span class="hljs-string">'basicPage'</span>, questions:{inherit:<span class="hljs-string">'selectGroup'</span>}},
-		{inherit :<span class="hljs-string">'basicPage'</span>, questions:{inherit:<span class="hljs-string">'groupLike'</span>}}
-	]);
-
-	<span class="hljs-comment">/**
-	Return the script to piquest's god, or something of that sort.
-	**/</span>
-	<span class="hljs-keyword">return</span> API.script;
+    <span class="hljs-keyword">return</span> API.script;
 });</pre></div>
 		
 	
@@ -394,7 +354,7 @@ define([<span class="hljs-string">'questAPI'</span>], <span class="hljs-function
 							</li>
 						
 									
-							<li class=" active ">
+							<li class="">
 								<div>
 									<a href="../qsts/userPrevRespDocco.html">User Prev Resp</a>
 									<a href="../qsts/userPrevResp.js" download="../qsts/userPrevResp.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
@@ -471,7 +431,7 @@ define([<span class="hljs-string">'questAPI'</span>], <span class="hljs-function
 							</li>
 						
 									
-							<li class="">
+							<li class=" active ">
 								<div>
 									<a href="../questExamples/gridMultiDocco.html">Multi Grid</a>
 									<a href="../questExamples/gridMulti.js" download="../questExamples/gridMulti.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
