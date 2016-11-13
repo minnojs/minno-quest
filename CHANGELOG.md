@@ -1,3 +1,22 @@
+<a name"0.1.7"></a>
+### 0.1.7 (2016-11-13)
+
+
+#### Bug Fixes
+
+* **questDirectives:** slider updates only on mouseup so that redraw doesn't break it ([11343115](https://github.com/ProjectImplicit/PIquest/commit/11343115))
+
+
+#### Features
+
+* **manager:**
+  * improve error message for failed requests. ([e7ffcc9d](https://github.com/ProjectImplicit/PIquest/commit/e7ffcc9d), closes [#146](https://github.com/ProjectImplicit/PIquest/issues/146))
+  * allow 'skip' only when DEBUG is set to true ([cc26e47d](https://github.com/ProjectImplicit/PIquest/commit/cc26e47d))
+* **questDirectives:**
+  * multiGrid ([50cba478](https://github.com/ProjectImplicit/PIquest/commit/50cba478))
+  * added input type to grid ([cc5f060e](https://github.com/ProjectImplicit/PIquest/commit/cc5f060e))
+
+
 <a name"0.1.6"></a>
 ### 0.1.6 (2016-09-18)
 
