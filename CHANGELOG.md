@@ -1,3 +1,18 @@
+<a name"0.1.8"></a>
+### 0.1.8 (2016-11-15)
+
+
+#### Bug Fixes
+
+* **PI:** fix PI urls ([c5d253d0](https://github.com/ProjectImplicit/PIquest/commit/c5d253d0))
+* **questDirectives:** multiGrid.dropdown has an empty value now ([21b58860](https://github.com/ProjectImplicit/PIquest/commit/21b58860))
+
+
+#### Features
+
+* **questDirectives:** multiGrid.required ([7dbf1e9b](https://github.com/ProjectImplicit/PIquest/commit/7dbf1e9b))
+
+
 <a name"0.1.7"></a>
 ### 0.1.7 (2016-11-13)
 

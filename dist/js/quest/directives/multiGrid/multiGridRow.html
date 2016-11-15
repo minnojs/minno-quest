@@ -30,8 +30,8 @@
                 <input type="text" class="form-control" ng-model="$parent.$parent.response[$index]">
             </div>
             <div ng-switch-when="dropdown"> 
-                <select ng-model="$parent.$parent.response[$index]" class="form-control">
-                    <option ng-repeat="r in column.answers track by $index" ng-selected="r.value === $parent.$parent.response[$index]" value="{{r.value}}">{{r.text}}</option>
+                <select ng-model="$parent.$parent.response[$index]" class="form-control" ng-options="r.value as r.text for r in column.answers">
+                    <option value="">{{column.chooseText || "-- Choose an option --"}}</option>
                 </select>
             </div>
 		</div>
