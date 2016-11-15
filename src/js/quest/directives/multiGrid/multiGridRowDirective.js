@@ -41,6 +41,29 @@ define(function (require) {
 					data: scope.row,
                     dflt: (scope.columns || []).map(mapDefault)
 				});
+
+                // setup validation
+                ngModel.$parsers.unshift(requiredValidator);
+                requiredValidator(ngModel.$viewValue);
+                scope.$watchCollection('response', function(value){ngModel.$setViewValue(value.slice())}); // reset response so that parsers trigger
+                
+				function requiredValidator(value){
+                    var isValid = scope.columns.every(isFull);
+					ngModel.$setValidity('required', isValid);
+					return value;
+
+                    function isFull(column, index){
+                        var val = value[index];
+                        // if not required
+                        if (!scope.data.required && !scope.row.required && !column.required) return true; 
+                        switch (column.type){
+                            case 'text': return true;
+                            case 'input': return val !== '';
+                            case 'dropdown': return !isNaN(val) && val !== null;
+                            default: return val;
+                        };
+                    }
+				}
 			}
 		};
 	}
