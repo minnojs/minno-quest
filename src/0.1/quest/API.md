@@ -1,3 +1,8 @@
+---
+title: API
+description: All the little details...
+---
+
 ### Table of contents
 
 - [Pages](#pages)
@@ -11,7 +16,7 @@
 	- [dropdown](#dropdown)
 	- [selectOne & selectMulti](#selectone-selectmulti)
 	- [grid](#grid)
-	- [gridMulti](#gridmulti)
+	- [multGrid](#multigrid)
 	- [slider](#slider)
 	- [rank](#rank)
 - [settings](#settings)
@@ -381,16 +386,16 @@ var grid = 	{
 }
 ```
 
-#### gridMulti
-The gridMulti question allows you to group multiple questions into a single table. 
+#### multiGrid
+The multiGrid question allows you to group multiple questions into a single table. 
 This is often useful when you are asking a set of simple qustions repeatedly.
 
 The response for this question is an array of responses corresponding to the columns of the grid, so that the first item in the array corresponds to the response in the first column and so on.
 
 Property    	| Description
 ----------- 	| -----------
-columns 		| An array of column descriptions. You can use a string here or a column object as described [below](#gridmulticolumns).
-rows 			| An array of row descriptions. You can use a string here or a row object as described [below](#gridmultirows).
+columns 		| An array of column descriptions. You can use a string here or a column object as described [below](#multigridcolumns).
+rows 			| An array of row descriptions. You can use a string here or a row object as described [below](#multigridrows).
 shuffle 		| Whether to randomize the order of the rows.
 columnStemCss	| CSS object for *all* the column stems.
 columnStemHide	| Hide the column stem row.
@@ -398,8 +403,9 @@ rowStemCss		| CSS object for the row stems.
 rowStemHide 	| Hide the row stem column.
 checkboxType	| Customize the type of checbox we use. `checkMark`: the default check style. `xMark`: use an X instead of the check. `colorMark`: fill the checkbox with a dark background.
 cellLabels 		| Show the column label within the grid cells.
+required        | Require all subquestions in the multigrid to be full
 
-##### gridMulti.columns
+##### multiGrid.columns
 If you set a string instead of a column object it will be treated as if you set only the stem and all other values will be set by default.
 
 Property    | Description
@@ -409,6 +415,7 @@ value 		| The value to set for this column checkboxes. Defaults to `true`.
 type		| What type of interface should this column have (see below, defaults to checkbox)
 css 		| CSS object for the whole column. This is the place that you can control the column width (using the `width` property).
 stemCss		| CSS object for the column stem.
+required    | Require all subquestions in the column to be full
 
 There are several column types at your disposal, 
 
@@ -419,7 +426,7 @@ text        | Display text of you choice (use the `textProperty` property to set
 dropdown    | Display a dropdown input. Use the `answers` property to set the options for the dropdown. For example `{type:'text', answers: ['Male', 'Female']}'. See the [dropdown](#dropdown) question for more `answers` options.
 input       | Display a text input. Note that users can input responses that may be confused with other responses (if a user inputs a 1 it may be confused with a selection of a checkbox in the first column).
 
-##### gridMulti.rows
+##### multiGrid.rows
 If you set a string instead of a row object it will be treated as if you set only the stem and all other values will be set by default.
 
 Property     | Description
@@ -427,6 +434,7 @@ Property     | Description
 stem 		| (text) The description of this row.
 name 		| The name you want this row to be called within the `questions` object. If this is not set the grid automatically sets it according to the grid name. So that if grid.name is "myGrid" then you're first row will be called by default "myGrid001".
 overwrite   | An array of column deffinitions to overwrite. Each element of the array overwrites the corresponding column column (so that the first element in the array overwrites the first column definitions and so on). If you do not want to overwrite a specific column, simply set it to `false`.
+required    | Require all subquestions in the row to be full
 
 Here is a simple example of using a multiGrid:
 

@@ -98,8 +98,8 @@
 		<div id="content" class="bs-docs-header">
 			<div class="container">
 				
-	<h1></h1>
-	<p></p>
+	<h1>API</h1>
+	<p>All the little details...</p>
 
 			</div>
 		</div>
@@ -122,7 +122,7 @@
 <li><a href="#dropdown">dropdown</a></li>
 <li><a href="#selectone-selectmulti">selectOne &amp; selectMulti</a></li>
 <li><a href="#grid">grid</a></li>
-<li><a href="#gridmulti">gridMulti</a></li>
+<li><a href="#multigrid">multGrid</a></li>
 <li><a href="#slider">slider</a></li>
 <li><a href="#rank">rank</a></li>
 </ul>
@@ -871,7 +871,7 @@ input       | Display a text input. Note that users can input responses that may
     ]
 }
 </code></pre>
-<h4><a name="gridmulti" class="header-link" href="#gridmulti"><span class="glyphicon glyphicon-link"></span></a>gridMulti</h4><p>The gridMulti question allows you to group multiple questions into a single table. 
+<h4><a name="multigrid" class="header-link" href="#multigrid"><span class="glyphicon glyphicon-link"></span></a>multiGrid</h4><p>The multiGrid question allows you to group multiple questions into a single table. 
 This is often useful when you are asking a set of simple qustions repeatedly.</p>
 <p>The response for this question is an array of responses corresponding to the columns of the grid, so that the first item in the array corresponds to the response in the first column and so on.</p>
 <table>
@@ -884,11 +884,11 @@ This is often useful when you are asking a set of simple qustions repeatedly.</p
 <tbody>
 <tr>
 <td>columns</td>
-<td>An array of column descriptions. You can use a string here or a column object as described <a href="#gridmulticolumns">below</a>.</td>
+<td>An array of column descriptions. You can use a string here or a column object as described <a href="#multigridcolumns">below</a>.</td>
 </tr>
 <tr>
 <td>rows</td>
-<td>An array of row descriptions. You can use a string here or a row object as described <a href="#gridmultirows">below</a>.</td>
+<td>An array of row descriptions. You can use a string here or a row object as described <a href="#multigridrows">below</a>.</td>
 </tr>
 <tr>
 <td>shuffle</td>
@@ -918,9 +918,13 @@ This is often useful when you are asking a set of simple qustions repeatedly.</p
 <td>cellLabels</td>
 <td>Show the column label within the grid cells.</td>
 </tr>
+<tr>
+<td>required</td>
+<td>Require all subquestions in the multigrid to be full</td>
+</tr>
 </tbody>
 </table>
-<h5><a name="gridmulticolumns" class="header-link" href="#gridmulticolumns"><span class="glyphicon glyphicon-link"></span></a>gridMulti.columns</h5><p>If you set a string instead of a column object it will be treated as if you set only the stem and all other values will be set by default.</p>
+<h5><a name="multigridcolumns" class="header-link" href="#multigridcolumns"><span class="glyphicon glyphicon-link"></span></a>multiGrid.columns</h5><p>If you set a string instead of a column object it will be treated as if you set only the stem and all other values will be set by default.</p>
 <table>
 <thead>
 <tr>
@@ -948,6 +952,10 @@ This is often useful when you are asking a set of simple qustions repeatedly.</p
 <tr>
 <td>stemCss</td>
 <td>CSS object for the column stem.</td>
+</tr>
+<tr>
+<td>required</td>
+<td>Require all subquestions in the column to be full</td>
 </tr>
 </tbody>
 </table>
@@ -978,7 +986,7 @@ This is often useful when you are asking a set of simple qustions repeatedly.</p
 </tr>
 </tbody>
 </table>
-<h5><a name="gridmultirows" class="header-link" href="#gridmultirows"><span class="glyphicon glyphicon-link"></span></a>gridMulti.rows</h5><p>If you set a string instead of a row object it will be treated as if you set only the stem and all other values will be set by default.</p>
+<h5><a name="multigridrows" class="header-link" href="#multigridrows"><span class="glyphicon glyphicon-link"></span></a>multiGrid.rows</h5><p>If you set a string instead of a row object it will be treated as if you set only the stem and all other values will be set by default.</p>
 <table>
 <thead>
 <tr>
@@ -998,6 +1006,10 @@ This is often useful when you are asking a set of simple qustions repeatedly.</p
 <tr>
 <td>overwrite</td>
 <td>An array of column deffinitions to overwrite. Each element of the array overwrites the corresponding column column (so that the first element in the array overwrites the first column definitions and so on). If you do not want to overwrite a specific column, simply set it to <code>false</code>.</td>
+</tr>
+<tr>
+<td>required</td>
+<td>Require all subquestions in the row to be full</td>
 </tr>
 </tbody>
 </table>

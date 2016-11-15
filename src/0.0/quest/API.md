@@ -11,7 +11,7 @@ description: All the little details...
 - [Questions](#questions)
 	- [Hooks](#hooks)
 	- [Info](#info)
-	- [Text & Textarea](#text-textarea)
+	- [Text & Textarea](#text-&-textarea)
 	- [textNumber](#textnumber)
 	- [dropdown](#dropdown)
 	- [selectOne & selectMulti](#selectone-selectmulti)
@@ -94,14 +94,15 @@ All these strings may use templates, and have access to the following objects: `
 ### Questions
 
 Here are the types of questions PIQuest currently supports:
-* [info](#info)
-* [text & textarea](#text-textarea)
-* [textNumber](#textnumber)
-* [dropdown](#dropdown)
-* [selectOne & selectMulti](#selectone-selectmulti)
-* [grid](#grid)
-* [slider](#slider)
 
+- [Info](#info)
+- [Text & Textarea](#text-&-textarea)
+- [textNumber](#textnumber)
+- [dropdown](#dropdown)
+- [selectOne & selectMulti](#selectone-selectmulti)
+- [grid](#grid)
+- [slider](#slider)
+    
 All question types share some basic properties:
 
 property		| description
