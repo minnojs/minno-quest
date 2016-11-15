@@ -7,7 +7,7 @@ define(function (require) {
 			replace: true,
 			template: require('text!./multiGrid.html'),
 			require: ['ngModel','form'],
-			controller: 'questController',
+//			controller: 'questController',
 			controllerAs: 'ctrl',
 			scope:{
 				data: '=questData',

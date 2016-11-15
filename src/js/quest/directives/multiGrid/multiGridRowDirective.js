@@ -51,7 +51,7 @@ define(function (require) {
         if (typeof column === 'string') return false;
         if (column.type === 'text') return null;
         if (column.type === 'input') return '';
-        if (column.type === 'dropdown') return column.answers[0].value;
+        if (column.type === 'dropdown') return NaN;
         return false; // checkbox
     }
 });
