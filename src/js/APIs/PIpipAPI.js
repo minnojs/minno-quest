@@ -2,7 +2,7 @@ define(function(require){
 
 	var Constructor = require('./pipAPI');
 	var _ = require('underscore');
-	var isDev = /^(localhost|127.0.0.1)/.test(location.host) || window.DEBUG;
+	var isDev = /^(localhost|127.0.0.1)/.test(location.host);
 	var decorator = require('./PIAPIdecorator');
 
 	/**
