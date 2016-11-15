@@ -1,3 +1,17 @@
+<a name"0.0.104"></a>
+### 0.0.104 (2016-11-15)
+
+
+#### Bug Fixes
+
+* **PI:** fix PI urls ([ee3c3b1e](https://github.com/ProjectImplicit/PIquest/commit/ee3c3b1e))
+
+
+#### Features
+
+* **manager:** improve error message for failed requests. ([e8572473](https://github.com/ProjectImplicit/PIquest/commit/e8572473), closes [#146](https://github.com/ProjectImplicit/PIquest/issues/146))
+
+
 <a name"0.0.103"></a>
 ### 0.0.103 (2016-11-08)
 
