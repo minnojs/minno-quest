@@ -645,25 +645,25 @@ One exception to this rule is the <code>data</code> objects which we attempt to 
 </table>
 <h4><a name="merge" class="header-link" href="#merge"><span class="glyphicon glyphicon-link"></span></a>Merge</h4><p>By default, inheritance overwrites each property of the parent that the child already has. In order to change this behavior, you can add property names to the <code>merge</code> array, and the sequencer will attempt to merge the data from the parent into the child.
 This can look something like this:</p>
-<pre><code class="lang-js">// <span class="hljs-type">The</span> parent page
+<pre><code class="lang-js"><span class="hljs-comment">// The parent page</span>
 {    
-    <span class="hljs-type">set</span>: 'parent'
+    <span class="hljs-keyword">set</span>: <span class="hljs-string">'parent'</span>
     stimuli: [
         stim1        
     ]
 }
 
-// <span class="hljs-type">The</span> child page which attempts to inherit the parent
+<span class="hljs-comment">// The child page which attempts to inherit the parent</span>
 {
-    inherit: {<span class="hljs-type">set</span>:'parent', merge:['stimuli']},    
+    inherit: {<span class="hljs-keyword">set</span>:<span class="hljs-string">'parent'</span>, merge:[<span class="hljs-string">'stimuli'</span>]},    
     stimuli: [
         stim2
     ]
 }
 
-// <span class="hljs-type">The</span> <span class="hljs-literal">result</span> would be:
+<span class="hljs-comment">// The result would be:</span>
 {
-    // the stimuli <span class="hljs-type">array</span> was merged instead <span class="hljs-keyword">of</span> overwritten
+    <span class="hljs-comment">// the stimuli array was merged instead of overwritten</span>
     stimuli: [                          
         stim1,
         stim2
