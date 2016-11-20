@@ -1,3 +1,12 @@
+<a name"0.1.9"></a>
+### 0.1.9 (2016-11-20)
+
+
+#### Features
+
+* **questDirectives:** added pattern validation to multiGrid ([afe1216d](https://github.com/ProjectImplicit/PIquest/commit/afe1216d))
+
+
 <a name"0.1.8"></a>
 ### 0.1.8 (2016-11-15)
 
