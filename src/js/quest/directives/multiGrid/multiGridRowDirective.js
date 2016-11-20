@@ -44,6 +44,7 @@ define(function (require) {
 
                 // setup validation
                 ngModel.$parsers.unshift(requiredValidator);
+                ngModel.$parsers.unshift(patternValidator);
                 requiredValidator(ngModel.$viewValue);
                 scope.$watchCollection('response', function(value){ngModel.$setViewValue(value.slice())}); // reset response so that parsers trigger
                 
@@ -64,6 +65,21 @@ define(function (require) {
                         };
                     }
 				}
+
+                function patternValidator(value){
+                    var isValid = scope.columns.every(fitsPattern);
+					ngModel.$setValidity('pattern', isValid);
+					return value;
+
+                    function fitsPattern(column, index){
+                        var val = value[index];
+                        if (column.type !== 'input' || !column.pattern) return true;
+                        if (_.isRegExp(val) || _.isString(val)){
+                            return (new RegExp(column.pattern)).test(val);
+                        } 
+                        else return false;
+                    }
+                }
 			}
 		};
 	}

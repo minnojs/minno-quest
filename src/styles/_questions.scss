@@ -46,7 +46,7 @@
 		text-align:center;
 	}
 
-	&.pi-page-submitted tr.ng-invalid-required {
+	&.pi-page-submitted tr.ng-invalid-required, &.pi-page-submitted tr.ng-invalid-pattern {
 		background-color: #f2dede;
 	}
 

@@ -411,6 +411,7 @@ type		| What type of interface should this column have (see below, defaults to c
 css 		| CSS object for the whole column. This is the place that you can control the column width (using the `width` property).
 stemCss		| CSS object for the column stem.
 required    | Require all subquestions in the column to be full
+pattern     | (text or [regular expression](http://www.regular-expressions.info/)) Require all subquestions in the column to match the pattern. This validation method only affects input type columns.
 
 There are several column types at your disposal, 
 

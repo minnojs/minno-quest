@@ -27,7 +27,7 @@
                 title="insert your response"
 			>
                 <span class="input-group-addon glyphicon glyphicon-edit"></span>
-                <input type="text" class="form-control" ng-model="$parent.$parent.response[$index]">
+                <input type="text" class="form-control" ng-model="$parent.$parent.response[$index]" >
             </div>
             <div ng-switch-when="dropdown"> 
                 <select ng-model="$parent.$parent.response[$index]" class="form-control" ng-options="r.value as r.text for r in column.answers">
