@@ -117,8 +117,13 @@
 		</div>
 
 		<div class="container bs-docs-container">
+
 			<div class="row">
 				<div class="col-md-9" role="main">
+                    <div class="row">
+                        <div class="alert alert-warning">This documentation is for version <strong>0.0</strong>. You can switch to the latest version by using the dropdown on the top right, or clicking <a id="version-0.1" href="#">here</a>.</div>
+                    </div>
+
 					
 	
 		<h3 id="select-one-question">Select One question</h3>
@@ -476,11 +481,17 @@ It allows you to pick one or more answers to the question. In this case we use i
 
         <script>
             (function(){
-                var select = document.getElementById('version-select');
-                select.addEventListener('change', function(event){
-                    var version = event.target.value;
-                    location.href = location.href.replace(/[0-9]\.[0-9]/, version)
-                });
+                document
+                    .getElementById('version-select')
+                    addEventListener('change', function(event){
+                        location.href = location.href.replace(/[0-9]\.[0-9]/, event.target.value)
+                    });
+
+                document
+                    .getElementById('version-0.1')
+                    .addEventListener('click', function(event){
+                        location.href = location.href.replace('0.0', '0.1');
+                    });
             })();
         </script>
 	</body>

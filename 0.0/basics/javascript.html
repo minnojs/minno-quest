@@ -116,8 +116,13 @@
 		</div>
 
 		<div class="container bs-docs-container">
+
 			<div class="row">
 				<div class="col-md-9" role="main">
+                    <div class="row">
+                        <div class="alert alert-warning">This documentation is for version <strong>0.0</strong>. You can switch to the latest version by using the dropdown on the top right, or clicking <a id="version-0.1" href="#">here</a>.</div>
+                    </div>
+
 					
 	<p>Task scripts are written using JavaScript; <a href="http://en.wikipedia.org/wiki/JavaScript">JavaScript</a> is a programming language used by browsers (like Internet Explorer, Chrome or Safari). Our scripts do not require you to program any JavaScript but you should have a basic grasp of the basic syntax before we go on. If you know some basic JavaScript you can skip this section and go directly to the Hello world tutorial.</p>
 <p>If you want to get a deeper understanding of Javascript, or if you would like a more methodical introduction you might want to try out one of the many Javascript introduction courses on the net (we recommend <a href="http://www.codecademy.com/en/tracks/javascript-combined">Codecademy</a> or <a href="https://www.khanacademy.org/computing/computer-programming/programming">Khan Academy</a>).</p>
@@ -486,11 +491,17 @@ console.<span class="hljs-function"><span class="hljs-title">log</span><span cla
 
         <script>
             (function(){
-                var select = document.getElementById('version-select');
-                select.addEventListener('change', function(event){
-                    var version = event.target.value;
-                    location.href = location.href.replace(/[0-9]\.[0-9]/, version)
-                });
+                document
+                    .getElementById('version-select')
+                    addEventListener('change', function(event){
+                        location.href = location.href.replace(/[0-9]\.[0-9]/, event.target.value)
+                    });
+
+                document
+                    .getElementById('version-0.1')
+                    .addEventListener('click', function(event){
+                        location.href = location.href.replace('0.0', '0.1');
+                    });
             })();
         </script>
 	</body>

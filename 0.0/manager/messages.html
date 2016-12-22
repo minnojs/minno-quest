@@ -116,8 +116,13 @@
 		</div>
 
 		<div class="container bs-docs-container">
+
 			<div class="row">
 				<div class="col-md-9" role="main">
+                    <div class="row">
+                        <div class="alert alert-warning">This documentation is for version <strong>0.0</strong>. You can switch to the latest version by using the dropdown on the top right, or clicking <a id="version-0.1" href="#">here</a>.</div>
+                    </div>
+
 					
 	<p>The message tasks are built to be as simple as possible, all they do is present simple html templates. In order to load a template simply set it into the <code>template</code> property as a string, or set the appropriate URL into <code>templateUrl</code>. Thats it. (This is not relevant for most users, but the templates are rendered using angularjs $compile and therefore all the relevant directives are available).</p>
 <p>The context for the template has the following variables available: {global, current, task}.</p>
@@ -419,11 +424,17 @@ You can fine tune the way feedback is collected and desplayed using the followin
 
         <script>
             (function(){
-                var select = document.getElementById('version-select');
-                select.addEventListener('change', function(event){
-                    var version = event.target.value;
-                    location.href = location.href.replace(/[0-9]\.[0-9]/, version)
-                });
+                document
+                    .getElementById('version-select')
+                    addEventListener('change', function(event){
+                        location.href = location.href.replace(/[0-9]\.[0-9]/, event.target.value)
+                    });
+
+                document
+                    .getElementById('version-0.1')
+                    .addEventListener('click', function(event){
+                        location.href = location.href.replace('0.0', '0.1');
+                    });
             })();
         </script>
 	</body>
