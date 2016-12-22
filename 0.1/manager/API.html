@@ -59,7 +59,7 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a href="../../" class="navbar-brand">Project Implicit</a>
+					<a href="../../" class="navbar-brand">Minno</a>
 				</div>
 				<nav class="collapse navbar-collapse bs-navbar-collapse">
 					<ul class="nav navbar-nav">
@@ -135,7 +135,7 @@
 </li>
 <li><a href="#project-implicit-build">Project Implicit Build</a></li>
 </ul>
-<p>The piManager is responsible for managing several piTasks sequentially. It uses the same API used throughout the project implicit tasks.</p>
+<p>The piManager is responsible for managing several piTasks sequentially. It uses the same API used throughout Minno tasks.</p>
 <h3><a name="settings" class="header-link" href="#settings"><span class="glyphicon glyphicon-link"></span></a>Settings</h3><p>Settings allow you to control the generic way that the player works. Change the settings using the <code>addSettings</code> function. The first argument to the function is always the name of the setting, the second argument is the setting values. In case the setting is an object, subsequent objects will extend each other so that settings may be progressively added.
 All the functions within settings are invoked using angular. This means that you have access to any service you like, as well as some specific assets. <a href="https://docs.angularjs.org/api/auto/service/$injector">In order to access the services</a> simply use arguments with the appropriate name. For instance, this is how you would access <code>$rootScope</code>:</p>
 <pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">onEnd</span><span class="hljs-params">(<span class="hljs-variable">$rootScope</span>)</span></span>{

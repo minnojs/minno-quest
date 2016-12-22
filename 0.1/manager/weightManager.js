@@ -41,8 +41,7 @@ define(['managerAPI'], function(Manager){
             '</div>' +
           '</div>' +
 
-        '</div>' +
-        '<div style="text-align:center; padding: 1em">&middot; Project Implicit &middot;</div>'
+        '</div>'
     },
     // #### Weight Questionnaire
     // This is a piQuest task. In this case it is the central task of this experiment.

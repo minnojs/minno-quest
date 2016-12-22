@@ -23,7 +23,7 @@ description: All the little details...
     - [Custom Task Example](#custom-task-example)
 - [Project Implicit Build](#project-implicit-build)
 
-The piManager is responsible for managing several piTasks sequentially. It uses the same API used throughout the project implicit tasks.
+The piManager is responsible for managing several piTasks sequentially. It uses the same API used throughout Minno tasks.
 
 ### Settings
 Settings allow you to control the generic way that the player works. Change the settings using the `addSettings` function. The first argument to the function is always the name of the setting, the second argument is the setting values. In case the setting is an object, subsequent objects will extend each other so that settings may be progressively added.
