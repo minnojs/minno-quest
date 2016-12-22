@@ -4,7 +4,7 @@ var rename = require('gulp-rename');
 var data = require('gulp-data');
 var path = require('path');
 var exec = require('child_process').exec;
-//var debug = require('gulp-debug');
+var debug = require('gulp-debug');
 
 var pagesPath = 'src/[0-9].[0-9]/{quest,questExamples,qsts,manager,basics,sequencer}/';
 
@@ -25,7 +25,8 @@ gulp.task('clean', function(cb){
 
 // just copy html over
 gulp.task('build:html', function(){
-	return gulp.src(['src/[0-9].[0.9]/index.html', pagesPath + '*.html'])
+	return gulp.src(['src/**/index.html', pagesPath + '*.html'])
+        .pipe(debug())
 		.pipe(gulp.dest('.'));
 });
 
