@@ -18,7 +18,7 @@
 			{% elseif data.typeName == 'basics' %}
 				Basics
 			{% endif %}
-			&middot; V0.0
+			&middot; V0.1
 		</title>
 
 		{% block head %}
@@ -77,7 +77,7 @@
 							<a href="../manager/overview.html">piManager</a>
 						</li>
 						<li>
-							<a href="/PIPlayer">piPlayer</a>
+							<a href="/PIPlayer/0.3">piPlayer</a>
 						</li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
