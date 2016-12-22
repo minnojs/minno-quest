@@ -93,16 +93,27 @@
 							</form>
 						</li>
 
-						<li><a href="https://github.com/ProjectImplicit/PIquest">Github</a></li>
-					</ul>
-				</nav>
-			</div>
-		</header>
+						<li>
+                            <form class="navbar-form navbar-left" role="search">
+                                <div class="form-group">
+                                    <select class="form-control" id="version-select">
+                                        <option value="0.0">v0.0</option>
+                                        <option value="0.1" selected>v0.1</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </li>
 
-		<div id="content" class="bs-docs-header">
-			<div class="container">
-				{% block title %} Project Implicit {% endblock %}
-			</div>
+                        <li><a href="https://github.com/ProjectImplicit/PIquest">Github</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <div id="content" class="bs-docs-header">
+            <div class="container">
+                {% block title %} Project Implicit {% endblock %}
+            </div>
 		</div>
 
 		<div class="container bs-docs-container">
@@ -279,5 +290,14 @@
 			</div>
 		</footer>
 
+        <script>
+            (function(){
+                var select = document.getElementById('version-select');
+                select.addEventListener('change', function(event){
+                    var version = event.target.value;
+                    location.href = location.href.replace(/[0-9]\.[0-9]/, version)
+                });
+            })();
+        </script>
 	</body>
 </html>

@@ -89,6 +89,17 @@
 							</form>
 						</li>
 
+						<li>
+                            <form class="navbar-form navbar-left" role="search">
+                                <div class="form-group">
+                                    <select class="form-control" id="version-select">
+                                        <option value="0.0" selected>v0.0</option>
+                                        <option value="0.1">v0.1</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </li>
+
 						<li><a href="https://github.com/ProjectImplicit/PIquest">Github</a></li>
 					</ul>
 				</nav>
@@ -581,5 +592,14 @@ define([<span class="hljs-string">'questAPI'</span>], <span class="hljs-function
 			</div>
 		</footer>
 
+        <script>
+            (function(){
+                var select = document.getElementById('version-select');
+                select.addEventListener('change', function(event){
+                    var version = event.target.value;
+                    location.href = location.href.replace(/[0-9]\.[0-9]/, version)
+                });
+            })();
+        </script>
 	</body>
 </html>

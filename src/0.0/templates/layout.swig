@@ -77,7 +77,7 @@
 							<a href="../manager/overview.html">piManager</a>
 						</li>
 						<li>
-							<a href="/PIPlayer">piPlayer</a>
+							<a href="/PIPlayer/0.3/tutorials/overview.html">piPlayer</a>
 						</li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
@@ -92,6 +92,17 @@
 							  <input type="hidden" name="sitesearch" value="projectimplicit.github.io" checked />
 							</form>
 						</li>
+
+						<li>
+                            <form class="navbar-form navbar-left" role="search">
+                                <div class="form-group">
+                                    <select class="form-control" id="version-select">
+                                        <option value="0.0" selected>v0.0</option>
+                                        <option value="0.1">v0.1</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </li>
 
 						<li><a href="https://github.com/ProjectImplicit/PIquest">Github</a></li>
 					</ul>
@@ -269,5 +280,14 @@
 			</div>
 		</footer>
 
+        <script>
+            (function(){
+                var select = document.getElementById('version-select');
+                select.addEventListener('change', function(event){
+                    var version = event.target.value;
+                    location.href = location.href.replace(/[0-9]\.[0-9]/, version)
+                });
+            })();
+        </script>
 	</body>
 </html>
