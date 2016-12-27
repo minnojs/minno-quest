@@ -77,7 +77,7 @@
 							<a href="../manager/overview.html">miManager</a>
 						</li>
 						<li>
-							<a href="../../../minno-time/0.3/tutorials/overview.html">piPlayer</a>
+							<a href="../../../minno-time/0.3/tutorials/overview.html">miPlayer</a>
 						</li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
@@ -89,7 +89,7 @@
 							  <button type="submit" class="btn btn-default" value="Google Search">
 							    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 							  </button>
-							  <input type="hidden" name="sitesearch" value="projectimplicit.github.io" checked />
+							  <input type="hidden" name="sitesearch" value="minnojs.github.io" checked />
 							</form>
 						</li>
 
