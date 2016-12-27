@@ -12,9 +12,9 @@
 
 		<title>
 			{% if data.typeName == 'quest' %}
-				piQuest
+				miQuest
 			{% elseif data.typeName == 'manager' %}
-				piManager
+				miManager
 			{% elseif data.typeName == 'basics' %}
 				Basics
 			{% endif %}
@@ -71,13 +71,13 @@
 							<a href="../basics/overview.html">Basics</a>
 						</li>
 						<li class="{% if data.typeName == 'quest' %} active {% endif %}">
-							<a href="../quest/overview.html">piQuest</a>
+							<a href="../quest/overview.html">miQuest</a>
 						</li>
 						<li class="{% if data.typeName == 'manager' %} active {% endif %}">
-							<a href="../manager/overview.html">piManager</a>
+							<a href="../manager/overview.html">miManager</a>
 						</li>
 						<li>
-							<a href="/PIPlayer/0.3/tutorials/overview.html">piPlayer</a>
+							<a href="../../../minno-time/0.3/tutorials/overview.html">piPlayer</a>
 						</li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
@@ -104,7 +104,7 @@
                             </form>
                         </li>
 
-						<li><a href="https://github.com/ProjectImplicit/PIquest">Github</a></li>
+						<li><a href="https://github.com/minnojs/minno-quest">Github</a></li>
 					</ul>
 				</nav>
 			</div>
@@ -278,9 +278,9 @@
 				<ul class="bs-docs-footer-links text-muted">
 					<li>Currently v0.0.45</li>
 					<li>&middot;</li>
-					<li><a href="https://github.com/ProjectImplicit/PIquest">GitHub</a></li>
+					<li><a href="https://github.com/minnojs/minno-quest">GitHub</a></li>
 					<li>&middot;</li>
-					<li><a href="https://github.com/ProjectImplicit/PIquest/releases">Releases</a></li>
+					<li><a href="https://github.com/minnojs/minno-quest/releases">Releases</a></li>
 				</ul>
 			</div>
 		</footer>
