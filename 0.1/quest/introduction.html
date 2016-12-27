@@ -12,7 +12,7 @@
 
 		<title>
 			
-				piQuest
+				miQuest
 			
 			&middot; V0.1
 		</title>
@@ -59,7 +59,7 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a href="../../" class="navbar-brand">Minno</a>
+					<a href="/" class="navbar-brand">Minno</a>
 				</div>
 				<nav class="collapse navbar-collapse bs-navbar-collapse">
 					<ul class="nav navbar-nav">
@@ -67,13 +67,13 @@
 							<a href="../basics/overview.html">Basics</a>
 						</li>
 						<li class=" active ">
-							<a href="../quest/overview.html">piQuest</a>
+							<a href="../quest/overview.html">miQuest</a>
 						</li>
 						<li class="">
-							<a href="../manager/overview.html">piManager</a>
+							<a href="../manager/overview.html">miManager</a>
 						</li>
 						<li>
-							<a href="/PIPlayer/0.3">piPlayer</a>
+							<a href="../../../minno-time/0.3">miPlayer</a>
 						</li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
@@ -100,7 +100,7 @@
                             </form>
                         </li>
 
-                        <li><a href="https://github.com/ProjectImplicit/PIquest">Github</a></li>
+                        <li><a href="https://github.com/minnojs/minno-quest">Github</a></li>
                     </ul>
                 </nav>
             </div>
@@ -124,7 +124,7 @@
 <li><a href="#pages-questions">Pages &amp; Questions</a></li>
 <li><a href="#thats-it">Thats it</a></li>
 </ul>
-<h3><a name="structure" class="header-link" href="#structure"><span class="glyphicon glyphicon-link"></span></a>Structure</h3><p>The first step learning to use piQuest is getting to know the structure of a piQuest script. The scripts are written in javascript, although all you really need to know is how to use our very specific API (this means that if you’re in to that sort of thing, you can write any javascript that you like…).</p>
+<h3><a name="structure" class="header-link" href="#structure"><span class="glyphicon glyphicon-link"></span></a>Structure</h3><p>The first step learning to use piQuest is getting to know the structure of a piQuest script. The scripts are written in javascript, although all you really need to know is how to use our very specific API (this means that if you&#39;re in to that sort of thing, you can write any javascript that you like...).</p>
 <p>Each script is wrapped within a <a href="http://requirejs.org/docs/whyamd.html#amd"><code>define</code></a> statement. At the beginning you create the API object, and at the end you return the script that you have created. This basic structure stays more or less constant across any script that you create. In other words: you can always just copy paste this portion of the script and get on with building your questionnaire:</p>
 <pre><code class="lang-js">define([<span class="hljs-string">'questAPI'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(Quest)</span></span>{
     <span class="hljs-comment">// create new quest API</span>
@@ -161,28 +161,28 @@
 <p>Before we jump into learning how each of these functions work, let us take a look at the basic building block of the questionnaire; pages and questions.</p>
 <h3><a name="pages-&amp-questions" class="header-link" href="#pages-&amp-questions"><span class="glyphicon glyphicon-link"></span></a>Pages &amp; questions</h3><p>The basic building blocks within piQuest are <strong>pages</strong> and <strong>questions</strong>.</p>
 <p>A page is an object that describes one screen within your questionnaire. If your questionnaire presents all of its questions in one screen, it will probably have only one page. The properties within a page manage how the question(s) is(are) displayed and how the participants interact with it (e.g., select an answer and then click a submit button).</p>
-<p>For the purpose of this presentation we will create a page that has a “Hello world!” header, and allows participants to decline answering the questions. Further documentation of the properties of pages may be found in the <a href="API.html#pages">API docs</a>.</p>
-<pre><code class="lang-js">var page = {
-    header: 'Hello world!',
-    decline: <span class="hljs-constant">true</span>,
-    declineText: 'I prefer <span class="hljs-keyword">to</span> keep this information <span class="hljs-keyword">to</span> myself',
-    questions: [
-        /* This <span class="hljs-keyword">is</span> <span class="hljs-keyword">where</span> we will soon <span class="hljs-keyword">set</span> our questions */
-    ]
-}
+<p>For the purpose of this presentation we will create a page that has a &quot;Hello world!&quot; header, and allows participants to decline answering the questions. Further documentation of the properties of pages may be found in the <a href="API.html#pages">API docs</a>.</p>
+<pre><code class="lang-js"><span class="hljs-built_in">var</span> page = {
+    <span class="hljs-keyword">header</span>: <span class="hljs-string">'Hello world!'</span>,
+    decline: <span class="hljs-literal">true</span>,
+    declineText: <span class="hljs-string">'I prefer to keep this information to myself'</span>,
+    questions: <span class="hljs-preprocessor">[</span>
+        <span class="hljs-comment">/* This is where we will soon set our questions */</span>
+    <span class="hljs-preprocessor">]</span><span class="hljs-markup">
+}</span>
 </code></pre>
-<p>Within our page we want to ask the participant a question: ‘When you say good morning, what do you mean?’. We want the user to select the correct answer out of a list, so we pick the <em>type</em> <code>selectOne</code> and set the answers within the <em>answers</em> property. Further documentation of the properties of questions may be found in the <a href="API.html#questions">API docs</a>.</p>
+<p>Within our page we want to ask the participant a question: &#39;When you say good morning, what do you mean?&#39;. We want the user to select the correct answer out of a list, so we pick the <em>type</em> <code>selectOne</code> and set the answers within the <em>answers</em> property. Further documentation of the properties of questions may be found in the <a href="API.html#questions">API docs</a>.</p>
 <pre><code class="lang-js">var quest = {
     type: 'selectOne',
-    stem: 'When you say good morning, what <span class="hljs-operator"><span class="hljs-keyword">do</span> you mean?<span class="hljs-string">',
+    stem: 'When you <span class="hljs-command">say</span> good morning, what do you mean?',
     answers: [
-        '</span><span class="hljs-keyword">Do</span> you wish me a good morning<span class="hljs-string">',
-        '</span><span class="hljs-keyword">Or</span> mean that it <span class="hljs-keyword">is</span> a good morning whether I want it <span class="hljs-keyword">or</span> <span class="hljs-keyword">not</span><span class="hljs-string">',
-        '</span><span class="hljs-keyword">Or</span> that you feel good this morning<span class="hljs-string">',
-        '</span><span class="hljs-keyword">Or</span> that it <span class="hljs-keyword">is</span> a morning <span class="hljs-keyword">to</span> be good <span class="hljs-keyword">on</span><span class="hljs-string">',
-        '</span><span class="hljs-keyword">All</span> <span class="hljs-keyword">of</span> them <span class="hljs-keyword">at</span> once<span class="hljs-string">'
+        'Do you wish <span class="hljs-keyword">me</span> a good morning',
+        'Or mean <span class="hljs-keyword">that</span> <span class="hljs-keyword">it</span> <span class="hljs-keyword">is</span> a good morning whether I want <span class="hljs-keyword">it</span> <span class="hljs-keyword">or</span> <span class="hljs-keyword">not</span>',
+        'Or <span class="hljs-keyword">that</span> you feel good this morning',
+        'Or <span class="hljs-keyword">that</span> <span class="hljs-keyword">it</span> <span class="hljs-keyword">is</span> a morning <span class="hljs-keyword">to</span> be good <span class="hljs-function_start"><span class="hljs-keyword">on</span></span>',
+        'All <span class="hljs-keyword">of</span> them <span class="hljs-keyword">at</span> once'
     ]
-}</span></span>
+}
 </code></pre>
 <p>We will put the page and question together in a moment, but first let us get back to the API object and how we actually use these questions and objects.</p>
 <h3><a name="thats-it" class="header-link" href="#thats-it"><span class="glyphicon glyphicon-link"></span></a>Thats it</h3><p>The most important part of every questionnaire is the sequence. This is where you tell piQuest how to interact with the participants. In our case we want to simply present a single page with a single question so we get something like this:</p>
@@ -546,9 +546,9 @@
 				<ul class="bs-docs-footer-links text-muted">
 					<li>Currently v0.0.45</li>
 					<li>&middot;</li>
-					<li><a href="https://github.com/ProjectImplicit/PIquest">GitHub</a></li>
+					<li><a href="https://github.com/minnojs/minno-quest">GitHub</a></li>
 					<li>&middot;</li>
-					<li><a href="https://github.com/ProjectImplicit/PIquest/releases">Releases</a></li>
+					<li><a href="https://github.com/minnojs/minno-quest/releases">Releases</a></li>
 				</ul>
 			</div>
 		</footer>

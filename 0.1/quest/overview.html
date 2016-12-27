@@ -12,7 +12,7 @@
 
 		<title>
 			
-				piQuest
+				miQuest
 			
 			&middot; V0.1
 		</title>
@@ -59,7 +59,7 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a href="../../" class="navbar-brand">Minno</a>
+					<a href="/" class="navbar-brand">Minno</a>
 				</div>
 				<nav class="collapse navbar-collapse bs-navbar-collapse">
 					<ul class="nav navbar-nav">
@@ -67,13 +67,13 @@
 							<a href="../basics/overview.html">Basics</a>
 						</li>
 						<li class=" active ">
-							<a href="../quest/overview.html">piQuest</a>
+							<a href="../quest/overview.html">miQuest</a>
 						</li>
 						<li class="">
-							<a href="../manager/overview.html">piManager</a>
+							<a href="../manager/overview.html">miManager</a>
 						</li>
 						<li>
-							<a href="/PIPlayer/0.3">piPlayer</a>
+							<a href="../../../minno-time/0.3">miPlayer</a>
 						</li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
@@ -100,7 +100,7 @@
                             </form>
                         </li>
 
-                        <li><a href="https://github.com/ProjectImplicit/PIquest">Github</a></li>
+                        <li><a href="https://github.com/minnojs/minno-quest">Github</a></li>
                     </ul>
                 </nav>
             </div>
@@ -127,13 +127,13 @@
 <h3><a name="central-concepts" class="header-link" href="#central-concepts"><span class="glyphicon glyphicon-link"></span></a>Central concepts</h3><p>The player treats each questionnaire a <strong>sequence</strong> of <strong>pages</strong>. Each page may have one or more <strong>questions</strong>.</p>
 <p>The pages are set into a sequence and presented sequentially. This is essentially all you need to know in order to start writing questionnaires.</p>
 <p>The sequence supports <strong><em>mixers</em></strong> that allow randomizing the order of the pages (or questions) that you create, and other features often needed when creating the sequence of a questionnaire. The questionnaire also supports an <em>inheritance</em> system, that allows abstracting questionnaires and makes them shorter, simpler, more dynamic, and most important, reusable.</p>
-<p>Questionnaires are created by writing a Java-script object that has several property objects: <code>settings</code>, <code>sequence</code>, <code>pages</code>, <code>questions</code>, <code>global</code> and <code>current</code>. Some of these properties have to do with advanced uses of the player. The only objects that you <strong>have</strong> to know are <code>sequence</code> and <code>settings</code>. We’ll first show a simple questionnaire, then go through each of the more advanced options.</p>
-<h3><a name="a-short-introduction" class="header-link" href="#a-short-introduction"><span class="glyphicon glyphicon-link"></span></a>A short introduction</h3><p>The basic unit in PIquest’s scripts is the page. A page represents one screen in the questionnaire. A page can have a few properties to define its settings, and, most importantly, a list of one or more questions that will be displayed in the page. Here is the most basic page. It only has the <code>questions</code> property. It creates a simple page with no header/progress-bar/decline button, and other features.</p>
+<p>Questionnaires are created by writing a Java-script object that has several property objects: <code>settings</code>, <code>sequence</code>, <code>pages</code>, <code>questions</code>, <code>global</code> and <code>current</code>. Some of these properties have to do with advanced uses of the player. The only objects that you <strong>have</strong> to know are <code>sequence</code> and <code>settings</code>. We&#39;ll first show a simple questionnaire, then go through each of the more advanced options.</p>
+<h3><a name="a-short-introduction" class="header-link" href="#a-short-introduction"><span class="glyphicon glyphicon-link"></span></a>A short introduction</h3><p>The basic unit in PIquest&#39;s scripts is the page. A page represents one screen in the questionnaire. A page can have a few properties to define its settings, and, most importantly, a list of one or more questions that will be displayed in the page. Here is the most basic page. It only has the <code>questions</code> property. It creates a simple page with no header/progress-bar/decline button, and other features.</p>
 <pre><code class="lang-js"><span class="hljs-variable"><span class="hljs-keyword">var</span> page</span> = {
     questions: []
 }
 </code></pre>
-<p>There are plenty of additional features that <a href="API.html#pages">pages have</a>, but this is the very minimum that you’ll need.</p>
+<p>There are plenty of additional features that <a href="API.html#pages">pages have</a>, but this is the very minimum that you&#39;ll need.</p>
 <p>Well, you also need to define the questions. There are several <a href="API.html#questions">types of questions</a>. All share a few basic properties.</p>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> question = {
     <span class="hljs-class"><span class="hljs-keyword">type</span>:</span> <span class="hljs-symbol">'tex</span>t',
@@ -141,8 +141,8 @@
     stem: <span class="hljs-symbol">'What</span> would you like to know?'
 }
 </code></pre>
-<p>The <code>type</code> of question is the first decision that you have to make, it defines the question type and interface. This is where you decide if you want the user to enter some text, choose from a list or use a slider. The <code>name</code> is the question’s name to save when logged to the server. The name also allows you to refer to the question from other objects. Finally, <code>stem</code> is the text that will be displayed.</p>
-<p>The question in the example above shows a text input with the question ‘What would you like to know?’. </p>
+<p>The <code>type</code> of question is the first decision that you have to make, it defines the question type and interface. This is where you decide if you want the user to enter some text, choose from a list or use a slider. The <code>name</code> is the question&#39;s name to save when logged to the server. The name also allows you to refer to the question from other objects. Finally, <code>stem</code> is the text that will be displayed.</p>
+<p>The question in the example above shows a text input with the question &#39;What would you like to know?&#39;. </p>
 <p>Here is an example of a <code>selectOne</code> question that prompts the user to choose one response out of a list of answers: red, blue or green.</p>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> question = {
     <span class="hljs-class"><span class="hljs-keyword">type</span>:</span> <span class="hljs-symbol">'selectOn</span>e',
@@ -155,7 +155,7 @@
     ]
 }
 </code></pre>
-<p>Now that we know how to create questions, let’s create the sequence. The main component of your questionnaire will always be the sequence. The sequence describes the course of your questionnaire; most of the time it is possible to create everything that you want just within the sequence (i.e., define all the pages and all the questions when you define the sequence). The sequence is a javascript array of page objects that are activated one after the other. The following sequence includes two pages, the first has two questions, the second only one:</p>
+<p>Now that we know how to create questions, let&#39;s create the sequence. The main component of your questionnaire will always be the sequence. The sequence describes the course of your questionnaire; most of the time it is possible to create everything that you want just within the sequence (i.e., define all the pages and all the questions when you define the sequence). The sequence is a javascript array of page objects that are activated one after the other. The following sequence includes two pages, the first has two questions, the second only one:</p>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> sequence = [
     <span class="hljs-comment">// 1. This is a page object</span>
     {
@@ -188,7 +188,7 @@
 ]
 </code></pre>
 <p>The sequence also supports randomization and branching. Read about it <a href="API.html#mixer">here</a>.</p>
-<p>Now that we’ve created the sequence, let’s put it into the player. The first and last two lines are the same for all scripts (they have to do with the way Javascript works), you can simply ignore them. The <code>API</code> object assists you in putting your script together, you will <a href="API.html#API">eventually</a> learn more about its functionality, but for now we only need to know that the <code>addSequence</code> function is responsible for adding pages into the sequence. You may call it as many times as you like.</p>
+<p>Now that we&#39;ve created the sequence, let&#39;s put it into the player. The first and last two lines are the same for all scripts (they have to do with the way Javascript works), you can simply ignore them. The <code>API</code> object assists you in putting your script together, you will <a href="API.html#API">eventually</a> learn more about its functionality, but for now we only need to know that the <code>addSequence</code> function is responsible for adding pages into the sequence. You may call it as many times as you like.</p>
 <pre><code class="lang-js">define([<span class="hljs-symbol">'questAP</span>I'], function(quest){
     <span class="hljs-keyword">var</span> <span class="hljs-type">API</span> = <span class="hljs-keyword">new</span> quest();
 
@@ -219,7 +219,7 @@
     <span class="hljs-keyword">return</span> <span class="hljs-type">API</span>.script;
 });
 </code></pre>
-<p>That’s it! PIquest has loads of additional features (as you can read below), but this was the very basic information that you must know first. (by the way, if you want to log the responses to your questions you should learn about the <a href="API.html#settings"> logger setting </a>).</p>
+<p>That&#39;s it! PIquest has loads of additional features (as you can read below), but this was the very basic information that you must know first. (by the way, if you want to log the responses to your questions you should learn about the <a href="API.html#settings"> logger setting </a>).</p>
 
 
 				</div>
@@ -545,9 +545,9 @@
 				<ul class="bs-docs-footer-links text-muted">
 					<li>Currently v0.0.45</li>
 					<li>&middot;</li>
-					<li><a href="https://github.com/ProjectImplicit/PIquest">GitHub</a></li>
+					<li><a href="https://github.com/minnojs/minno-quest">GitHub</a></li>
 					<li>&middot;</li>
-					<li><a href="https://github.com/ProjectImplicit/PIquest/releases">Releases</a></li>
+					<li><a href="https://github.com/minnojs/minno-quest/releases">Releases</a></li>
 				</ul>
 			</div>
 		</footer>

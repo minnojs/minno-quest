@@ -12,7 +12,7 @@
 
 		<title>
 			
-				piManager
+				miManager
 			
 			&middot; V0.1
 		</title>
@@ -59,7 +59,7 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a href="../../" class="navbar-brand">Minno</a>
+					<a href="/" class="navbar-brand">Minno</a>
 				</div>
 				<nav class="collapse navbar-collapse bs-navbar-collapse">
 					<ul class="nav navbar-nav">
@@ -67,13 +67,13 @@
 							<a href="../basics/overview.html">Basics</a>
 						</li>
 						<li class="">
-							<a href="../quest/overview.html">piQuest</a>
+							<a href="../quest/overview.html">miQuest</a>
 						</li>
 						<li class=" active ">
-							<a href="../manager/overview.html">piManager</a>
+							<a href="../manager/overview.html">miManager</a>
 						</li>
 						<li>
-							<a href="/PIPlayer/0.3">piPlayer</a>
+							<a href="../../../minno-time/0.3">miPlayer</a>
 						</li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
@@ -100,7 +100,7 @@
                             </form>
                         </li>
 
-                        <li><a href="https://github.com/ProjectImplicit/PIquest">Github</a></li>
+                        <li><a href="https://github.com/minnojs/minno-quest">Github</a></li>
                     </ul>
                 </nav>
             </div>
@@ -110,7 +110,7 @@
             <div class="container">
                 
 	<h1>API</h1>
-	<p>All the little details...</p>
+	<p>All the little details</p>
 
             </div>
 		</div>
@@ -119,7 +119,8 @@
 			<div class="row">
 				<div class="col-md-9" role="main">
 					
-	<ul>
+	<hr>
+<ul>
 <li><a href="#settings">Settings</a><ul>
 <li><a href="#canvas">canvas</a></li>
 <li><a href="#injectstyle">injectStyle</a></li>
@@ -149,7 +150,7 @@
 <p>The piManager is responsible for managing several piTasks sequentially. It uses the same API used throughout Minno tasks.</p>
 <h3><a name="settings" class="header-link" href="#settings"><span class="glyphicon glyphicon-link"></span></a>Settings</h3><p>Settings allow you to control the generic way that the player works. Change the settings using the <code>addSettings</code> function. The first argument to the function is always the name of the setting, the second argument is the setting values. In case the setting is an object, subsequent objects will extend each other so that settings may be progressively added.
 All the functions within settings are invoked using angular. This means that you have access to any service you like, as well as some specific assets. <a href="https://docs.angularjs.org/api/auto/service/$injector">In order to access the services</a> simply use arguments with the appropriate name. For instance, this is how you would access <code>$rootScope</code>:</p>
-<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">onEnd</span><span class="hljs-params">(<span class="hljs-variable">$rootScope</span>)</span></span>{
+<pre><code class="lang-js"><span class="hljs-keyword">function</span> onEnd(<span class="hljs-variable">$rootScope</span>){
     <span class="hljs-variable">$rootScope</span>.<span class="hljs-variable">$emit</span>(<span class="hljs-string">'end!!'</span>);
 }
 </code></pre>
@@ -207,7 +208,7 @@ All the functions within settings are invoked using angular. This means that you
 </tr>
 <tr>
 <td>prevTask</td>
-<td>The previous task object (this may be used as a post task action as well…)</td>
+<td>The previous task object (this may be used as a post task action as well...)</td>
 </tr>
 </tbody>
 </table>
@@ -550,9 +551,9 @@ Setting the <code>isProduction</code> property allows you to switch between the 
 				<ul class="bs-docs-footer-links text-muted">
 					<li>Currently v0.0.45</li>
 					<li>&middot;</li>
-					<li><a href="https://github.com/ProjectImplicit/PIquest">GitHub</a></li>
+					<li><a href="https://github.com/minnojs/minno-quest">GitHub</a></li>
 					<li>&middot;</li>
-					<li><a href="https://github.com/ProjectImplicit/PIquest/releases">Releases</a></li>
+					<li><a href="https://github.com/minnojs/minno-quest/releases">Releases</a></li>
 				</ul>
 			</div>
 		</footer>

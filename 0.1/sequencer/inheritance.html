@@ -59,7 +59,7 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a href="../../" class="navbar-brand">Minno</a>
+					<a href="/" class="navbar-brand">Minno</a>
 				</div>
 				<nav class="collapse navbar-collapse bs-navbar-collapse">
 					<ul class="nav navbar-nav">
@@ -67,13 +67,13 @@
 							<a href="../basics/overview.html">Basics</a>
 						</li>
 						<li class="">
-							<a href="../quest/overview.html">piQuest</a>
+							<a href="../quest/overview.html">miQuest</a>
 						</li>
 						<li class="">
-							<a href="../manager/overview.html">piManager</a>
+							<a href="../manager/overview.html">miManager</a>
 						</li>
 						<li>
-							<a href="/PIPlayer/0.3">piPlayer</a>
+							<a href="../../../minno-time/0.3">miPlayer</a>
 						</li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
@@ -100,7 +100,7 @@
                             </form>
                         </li>
 
-                        <li><a href="https://github.com/ProjectImplicit/PIquest">Github</a></li>
+                        <li><a href="https://github.com/minnojs/minno-quest">Github</a></li>
                     </ul>
                 </nav>
             </div>
@@ -154,8 +154,8 @@ Finaly, the parent element is <a href="#merging">merged</a> into the the child e
 <h3><a name="syntax" class="header-link" href="#syntax"><span class="glyphicon glyphicon-link"></span></a>Syntax</h3><p>In order for an element to inherit another element you should use the <code>inherit</code> property.
 Inherit` takes either an object or a string, with instructions for which element to inherit. </p>
 <p>The following element uses an object to inherit.</p>
-<pre><code class="lang-js">{
-    <span class="hljs-tag">inherit</span>: {<span class="hljs-attribute">set</span>:<span class="hljs-string">'setName'</span>, <span class="hljs-attribute">type</span>:<span class="hljs-string">'exRandom'</span>}
+<pre><code class="lang-js"><span class="hljs-rules">{
+    <span class="hljs-rule"><span class="hljs-attribute">inherit</span>:<span class="hljs-value"> {set:<span class="hljs-string">'setName'</span>, type:<span class="hljs-string">'exRandom'</span></span></span></span>}
 }
 </code></pre>
 <p>Using a string instead, affords a usefull shortcut to the same end.
@@ -247,7 +247,7 @@ The exception to this rule is the <code>data</code> objects which we merge (agai
 }
 </code></pre>
 <p>By default, inheritance ignores the properties that the child already has.
-Sometimes, you have proprties of the child that you’d like to extend instead of just keeping as is (for example: a list of stimuli in PIP).
+Sometimes, you have proprties of the child that you&#39;d like to extend instead of just keeping as is (for example: a list of stimuli in PIP).
 In order to do this, you can set an array of property names to the <code>merge</code> property.
 Any property that appears in this array will be extended instead of skipped.</p>
 <p>This can look something like this:</p>
@@ -285,7 +285,7 @@ By default a <a href="#random">random</a> element is chosen.</p>
 <li><code>{set: &#39;setName&#39;, type:&#39;random&#39;}</code></li>
 </ul>
 <p>This is the default inheritance type, so it is not obligatory to use the <code>type</code> property. You can also use a short cut and set the <code>set</code> using only its name, like we did in the example above</p>
-<h4><a name="exrandom" class="header-link" href="#exrandom"><span class="glyphicon glyphicon-link"></span></a>exRandom:</h4><p>Selects a random element without repeating the same element until we’ve gone through the whole set</p>
+<h4><a name="exrandom" class="header-link" href="#exrandom"><span class="glyphicon glyphicon-link"></span></a>exRandom:</h4><p>Selects a random element without repeating the same element until we&#39;ve gone through the whole set</p>
 <ul>
 <li><code>{set: &#39;setName&#39;, type:&#39;exRandom&#39;}</code></li>
 </ul>
@@ -299,18 +299,18 @@ This function will select only the first element to fit the data.
 If the data property is set as a string, we assume it refers to the element handle.</p>
 <ul>
 <li><code>{set: &#39;setName&#39;, type: &#39;byData&#39;, data: {block:1, row:2}}</code> picks the element with both block:1 and row:2</li>
-<li><code>{set: &#39;setName&#39;, type: &#39;byData&#39;, data: &quot;myStimHandle&quot;}</code> picks the element that has the “myStimHandle” handle</li>
+<li><code>{set: &#39;setName&#39;, type: &#39;byData&#39;, data: &quot;myStimHandle&quot;}</code> picks the element that has the &quot;myStimHandle&quot; handle</li>
 </ul>
 <h3><a name="seed" class="header-link" href="#seed"><span class="glyphicon glyphicon-link"></span></a>Seed</h3><p>Some of the inheritance types keep track of consecutive calls.
 For instance <a href="#sequential"><code>sequential</code></a> presents the elements in a set one after the other.
 It needs to keep track of its place within the list.</p>
 <p>The inheritance system uses seeds to keep track of consecutive calls to the different types of inheritance.
-Each inheritance query automatically gets assigned to a “seed” that is used to track its progress.
+Each inheritance query automatically gets assigned to a &quot;seed&quot; that is used to track its progress.
 For example, the seed is used to keep track of the current element in the <code>sequential</code> type inheritance.
 Most of the time, the seed is transparent to the user, but sometimes it becomes useful to have manual control over the inheritance seed.
 For instance, if you want to reset an <code>exRandom</code> inheritance - simply use <code>exRandom</code> with a new seed, the same goes if you want to keep two instances of a <code>sequential</code> inheritance.
 If you want to have parallel groups of inheritance to the same set, you can use seeds.</p>
-<p>In the following example, both elements inherit exRandomly from the “trials” set. But the second element restarts the randomization.</p>
+<p>In the following example, both elements inherit exRandomly from the &quot;trials&quot; set. But the second element restarts the randomization.</p>
 <pre><code class="lang-js">[
     {
 <span class="hljs-label">        inherit:</span> {<span class="hljs-string">set:</span><span class="hljs-string">'trials'</span>, <span class="hljs-string">type:</span><span class="hljs-string">'exRandom'</span>,<span class="hljs-string">seed:</span><span class="hljs-string">'block1'</span>}
@@ -338,7 +338,7 @@ In order to do this, all you have to do is set the <code>repeat</code> property 
 ]
 </code></pre>
 <p>The <code>repeat</code> property can used within any type of randomization.
-We’ve seen a simple use, but its true power comes when combined with <a href="#seeds">seeds</a>.</p>
+We&#39;ve seen a simple use, but its true power comes when combined with <a href="#seeds">seeds</a>.</p>
 <p>The following example uses an exRandom <code>seed</code> to pick both a trial and the two stimuli associated with it 
 (the n<sup>th</sup> element in trials is always associated with the n<sup>th</sup> elements of stimuli-1 and stimuli-2).</p>
 <pre><code class="lang-js">[
@@ -369,7 +369,7 @@ The function takes a single argument: an array that holds all elements in all se
 Each element within the array has its set name set into it automatically.
 The function should return an element that will be used as the parent for the inheritance.
 If it has an <code>inherit</code> property then the inheritance cascade will continue.</p>
-<p>The following function will randomly choose an element from one of two sets: ‘setOne’ or ‘setTwo’
+<p>The following function will randomly choose an element from one of two sets: &#39;setOne&#39; or &#39;setTwo&#39;
 (for reasons of brefity this snippet users ES5, if you need to support legacy browsers, you can find other ways to achieve the same thing).</p>
 <pre><code class="lang-js"><span class="hljs-comment">// setup the inheriting function</span>
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">seek</span><span class="hljs-params">(collection)</span></span>{
@@ -387,7 +387,7 @@ If it has an <code>inherit</code> property then the inheritance cascade will con
 </code></pre>
 <p>You can use this option in order to create custom elements as well.
 Instead of returning an element from within the element collection, you can return an element of your own.</p>
-<p>The following function will show the string ‘Question number 1’, and increment it by 1 each time that it is called.</p>
+<p>The following function will show the string &#39;Question number 1&#39;, and increment it by 1 each time that it is called.</p>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> i = <span class="hljs-number">1</span>;
 
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">count</span><span class="hljs-params">()</span></span>{
@@ -684,9 +684,9 @@ If you want to re-inherit an element when it is re-encountered, you should set <
 				<ul class="bs-docs-footer-links text-muted">
 					<li>Currently v0.0.45</li>
 					<li>&middot;</li>
-					<li><a href="https://github.com/ProjectImplicit/PIquest">GitHub</a></li>
+					<li><a href="https://github.com/minnojs/minno-quest">GitHub</a></li>
 					<li>&middot;</li>
-					<li><a href="https://github.com/ProjectImplicit/PIquest/releases">Releases</a></li>
+					<li><a href="https://github.com/minnojs/minno-quest/releases">Releases</a></li>
 				</ul>
 			</div>
 		</footer>

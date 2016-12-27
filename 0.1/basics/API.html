@@ -59,7 +59,7 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a href="../../" class="navbar-brand">Minno</a>
+					<a href="/" class="navbar-brand">Minno</a>
 				</div>
 				<nav class="collapse navbar-collapse bs-navbar-collapse">
 					<ul class="nav navbar-nav">
@@ -67,13 +67,13 @@
 							<a href="../basics/overview.html">Basics</a>
 						</li>
 						<li class="">
-							<a href="../quest/overview.html">piQuest</a>
+							<a href="../quest/overview.html">miQuest</a>
 						</li>
 						<li class="">
-							<a href="../manager/overview.html">piManager</a>
+							<a href="../manager/overview.html">miManager</a>
 						</li>
 						<li>
-							<a href="/PIPlayer/0.3">piPlayer</a>
+							<a href="../../../minno-time/0.3">miPlayer</a>
 						</li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
@@ -100,7 +100,7 @@
                             </form>
                         </li>
 
-                        <li><a href="https://github.com/ProjectImplicit/PIquest">Github</a></li>
+                        <li><a href="https://github.com/minnojs/minno-quest">Github</a></li>
                     </ul>
                 </nav>
             </div>
@@ -207,7 +207,7 @@
     trial2
 ])<span class="hljs-comment">;</span>
 </code></pre>
-<h4><a name="addsetsetname-setarray" class="header-link" href="#addsetsetname-setarray"><span class="glyphicon glyphicon-link"></span></a>addSet(setName, setArray)</h4><p>Each task API has one or more “addSet” functions. These function take the form <code>add&lt;*SetName*&gt;Set</code> so that, for instance pages use the <code>API.addPagesSet</code> function and tasks use the <code>API.addTaskSet</code> function. They are used in order to register prototypes of objects for the sequencer <a href="sequencer.html#inheritance">inheritance</a> system.</p>
+<h4><a name="addsetsetname-setarray" class="header-link" href="#addsetsetname-setarray"><span class="glyphicon glyphicon-link"></span></a>addSet(setName, setArray)</h4><p>Each task API has one or more &quot;addSet&quot; functions. These function take the form <code>add&lt;*SetName*&gt;Set</code> so that, for instance pages use the <code>API.addPagesSet</code> function and tasks use the <code>API.addTaskSet</code> function. They are used in order to register prototypes of objects for the sequencer <a href="sequencer.html#inheritance">inheritance</a> system.</p>
 <table>
 <thead>
 <tr>
@@ -287,7 +287,7 @@
 </tr>
 </tbody>
 </table>
-<h5><a name="returns" class="header-link" href="#returns"><span class="glyphicon glyphicon-link"></span></a>returns:</h5><p>‘undefined’</p>
+<h5><a name="returns" class="header-link" href="#returns"><span class="glyphicon glyphicon-link"></span></a>returns:</h5><p>&#39;undefined&#39;</p>
 <h5><a name="examples" class="header-link" href="#examples"><span class="glyphicon glyphicon-link"></span></a>examples:</h5><p>First notation:</p>
 <pre><code class="lang-js"><span class="hljs-name">API</span>.<span class="hljs-atom">addTrialSet</span>(<span class="hljs-string">'set1'</span>, <span class="hljs-atom">trial1</span>);
 <span class="hljs-name">API</span>.<span class="hljs-atom">addTrialSet</span>(<span class="hljs-string">'set2'</span>, [<span class="hljs-atom">trial2</span>, <span class="hljs-atom">trial3</span>]);
@@ -315,11 +315,11 @@
 </tbody>
 </table>
 <h5><a name="returns" class="header-link" href="#returns"><span class="glyphicon glyphicon-link"></span></a>returns:</h5><p>(<em>Object</em>) <code>global</code> object.</p>
-<h5><a name="example" class="header-link" href="#example"><span class="glyphicon glyphicon-link"></span></a>example:</h5><pre><code class="lang-js"><span class="hljs-tag">API</span><span class="hljs-class">.addGlobal</span>(<span class="hljs-rules">{<span class="hljs-rule"><span class="hljs-attribute">myFlag</span>:<span class="hljs-value"> true})</span></span>;</span>
+<h5><a name="example" class="header-link" href="#example"><span class="glyphicon glyphicon-link"></span></a>example:</h5><pre><code class="lang-js"><span class="hljs-tag">API</span><span class="hljs-class">.addGlobal</span>(<span class="hljs-rules">{<span class="hljs-rule"><span class="hljs-attribute">myFlag</span>:<span class="hljs-value"> true</span></span></span>});
 </code></pre>
 <h4><a name="getglobal" class="header-link" href="#getglobal"><span class="glyphicon glyphicon-link"></span></a>getGlobal()</h4><h5><a name="returns" class="header-link" href="#returns"><span class="glyphicon glyphicon-link"></span></a>returns:</h5><p>(<em>Object</em>) <code>global</code> object.</p>
-<h5><a name="example" class="header-link" href="#example"><span class="glyphicon glyphicon-link"></span></a>example:</h5><pre><code class="lang-js"><span class="hljs-reserved">var</span> <span class="hljs-built_in">global</span> = API.getGlobal();
-<span class="hljs-built_in">global</span>.myFlag = <span class="hljs-literal">true</span>;
+<h5><a name="example" class="header-link" href="#example"><span class="glyphicon glyphicon-link"></span></a>example:</h5><pre><code class="lang-js"><span class="hljs-built_in">var</span> <span class="hljs-built_in">global</span> = API<span class="hljs-built_in">.</span>getGlobal();
+<span class="hljs-built_in">global</span><span class="hljs-built_in">.</span>myFlag = <span class="hljs-literal">true</span>;
 </code></pre>
 <h4><a name="addcurrentobj" class="header-link" href="#addcurrentobj"><span class="glyphicon glyphicon-link"></span></a>addCurrent(obj)</h4><table>
 <thead>
@@ -338,7 +338,7 @@
 </tbody>
 </table>
 <h5><a name="returns" class="header-link" href="#returns"><span class="glyphicon glyphicon-link"></span></a>returns:</h5><p>(<em>Object</em>) <code>current</code> object.</p>
-<h5><a name="example" class="header-link" href="#example"><span class="glyphicon glyphicon-link"></span></a>example:</h5><pre><code class="lang-js"><span class="hljs-tag">API</span><span class="hljs-class">.addCurrent</span>(<span class="hljs-rules">{<span class="hljs-rule"><span class="hljs-attribute">myFlag</span>:<span class="hljs-value"> true})</span></span>;</span>
+<h5><a name="example" class="header-link" href="#example"><span class="glyphicon glyphicon-link"></span></a>example:</h5><pre><code class="lang-js"><span class="hljs-tag">API</span><span class="hljs-class">.addCurrent</span>(<span class="hljs-rules">{<span class="hljs-rule"><span class="hljs-attribute">myFlag</span>:<span class="hljs-value"> true</span></span></span>});
 </code></pre>
 <h4><a name="getcurrent" class="header-link" href="#getcurrent"><span class="glyphicon glyphicon-link"></span></a>getCurrent()</h4><h5><a name="returns" class="header-link" href="#returns"><span class="glyphicon glyphicon-link"></span></a>returns:</h5><p>(<em>Object</em>) <code>current</code> object.</p>
 <h5><a name="example" class="header-link" href="#example"><span class="glyphicon glyphicon-link"></span></a>example:</h5><pre><code class="lang-js"><span class="hljs-variable"><span class="hljs-keyword">var</span> current</span> = API.getCurrent();
@@ -387,8 +387,8 @@ current.myFlag = <span class="hljs-literal">true</span>;
 </tbody>
 </table>
 <h5><a name="returns" class="header-link" href="#returns"><span class="glyphicon glyphicon-link"></span></a>returns:</h5><p>(<em>Array</em>) The new shuffled array.</p>
-<h5><a name="example" class="header-link" href="#example"><span class="glyphicon glyphicon-link"></span></a>example:</h5><pre><code class="lang-js">var shuffled = API.shuffle<span class="hljs-params">([<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>])</span>;
-console.<span class="hljs-built_in">log</span><span class="hljs-params">(shuffled)</span>; <span class="hljs-comment">// prints [4, 1, 3, 2] for example</span>
+<h5><a name="example" class="header-link" href="#example"><span class="glyphicon glyphicon-link"></span></a>example:</h5><pre><code class="lang-js">var shuffled = API.shuffle([<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>]);
+console.<span class="hljs-built_in">log</span>(shuffled); <span class="hljs-comment">// prints [4, 1, 3, 2] for example</span>
 </code></pre>
 <h4><a name="saveobject" class="header-link" href="#saveobject"><span class="glyphicon glyphicon-link"></span></a>save(object)</h4><p>This function is available only on the project implicit build.
 Posts JSONified data to the server. </p>
@@ -409,7 +409,7 @@ Posts JSONified data to the server. </p>
 </tbody>
 </table>
 <h5><a name="returns" class="header-link" href="#returns"><span class="glyphicon glyphicon-link"></span></a>returns:</h5><p>(<em>Promise</em>) a promise to be resolved when the post completes.</p>
-<h5><a name="example" class="header-link" href="#example"><span class="glyphicon glyphicon-link"></span></a>example:</h5><pre><code class="lang-js"><span class="hljs-tag">API</span><span class="hljs-class">.save</span>(<span class="hljs-rules">{<span class="hljs-rule"><span class="hljs-attribute">my</span>:<span class="hljs-value"><span class="hljs-string">'data'</span>})</span></span>;</span>
+<h5><a name="example" class="header-link" href="#example"><span class="glyphicon glyphicon-link"></span></a>example:</h5><pre><code class="lang-js"><span class="hljs-tag">API</span><span class="hljs-class">.save</span>(<span class="hljs-rules">{<span class="hljs-rule"><span class="hljs-attribute">my</span>:<span class="hljs-value"><span class="hljs-string">'data'</span></span></span></span>});
 </code></pre>
 
 
@@ -693,9 +693,9 @@ Posts JSONified data to the server. </p>
 				<ul class="bs-docs-footer-links text-muted">
 					<li>Currently v0.0.45</li>
 					<li>&middot;</li>
-					<li><a href="https://github.com/ProjectImplicit/PIquest">GitHub</a></li>
+					<li><a href="https://github.com/minnojs/minno-quest">GitHub</a></li>
 					<li>&middot;</li>
-					<li><a href="https://github.com/ProjectImplicit/PIquest/releases">Releases</a></li>
+					<li><a href="https://github.com/minnojs/minno-quest/releases">Releases</a></li>
 				</ul>
 			</div>
 		</footer>

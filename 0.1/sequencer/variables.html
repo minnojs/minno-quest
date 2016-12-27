@@ -59,7 +59,7 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a href="../../" class="navbar-brand">Minno</a>
+					<a href="/" class="navbar-brand">Minno</a>
 				</div>
 				<nav class="collapse navbar-collapse bs-navbar-collapse">
 					<ul class="nav navbar-nav">
@@ -67,13 +67,13 @@
 							<a href="../basics/overview.html">Basics</a>
 						</li>
 						<li class="">
-							<a href="../quest/overview.html">piQuest</a>
+							<a href="../quest/overview.html">miQuest</a>
 						</li>
 						<li class="">
-							<a href="../manager/overview.html">piManager</a>
+							<a href="../manager/overview.html">miManager</a>
 						</li>
 						<li>
-							<a href="/PIPlayer/0.3">piPlayer</a>
+							<a href="../../../minno-time/0.3">miPlayer</a>
 						</li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
@@ -100,7 +100,7 @@
                             </form>
                         </li>
 
-                        <li><a href="https://github.com/ProjectImplicit/PIquest">Github</a></li>
+                        <li><a href="https://github.com/minnojs/minno-quest">Github</a></li>
                     </ul>
                 </nav>
             </div>
@@ -142,10 +142,10 @@ The <a href="#the-task-object-current">task objects</a> get automatically regist
 In addition, you can register any data that you want shared between your tasks onto <code>global</code>.
 This options is useful in various cases of branching, as well as when you want a common theme to appear in multiple tasks.</p>
 <p>The following snippet sets <code>global.value</code> to 123, and <code>global.variable</code> to [1,2,3].</p>
-<pre><code class="lang-js"><span class="hljs-tag">API</span><span class="hljs-class">.addGlobal</span>({
-    <span class="hljs-attribute">value</span>: <span class="hljs-number">123</span>,
-    <span class="hljs-attribute">variable</span>: [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>]
-})
+<pre><code class="lang-js"><span class="hljs-tag">API</span><span class="hljs-class">.addGlobal</span>(<span class="hljs-rules">{
+    <span class="hljs-rule"><span class="hljs-attribute">value</span>:<span class="hljs-value"> <span class="hljs-number">123</span>,
+    variable: [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>]
+</span></span></span>})
 </code></pre>
 <p>It may sometimes be handy to access <code>global</code> directly as <code>window.piGlobal</code>.
 Note that this allows you to access task objects as well.</p>
@@ -156,10 +156,10 @@ Note that this allows you to access task objects as well.</p>
 The object is automatically updated with data from within the tasks (such as question answers or other logs).
 The task object can be changed manually as well.
 You can extend it however you like using <code>API.addCurrent</code>:</p>
-<pre><code class="lang-js"><span class="hljs-tag">API</span><span class="hljs-class">.addCurrent</span>({
-    <span class="hljs-attribute">value</span>: <span class="hljs-number">123</span>,
-    <span class="hljs-attribute">variable</span>: [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>]
-});
+<pre><code class="lang-js"><span class="hljs-tag">API</span><span class="hljs-class">.addCurrent</span>(<span class="hljs-rules">{
+    <span class="hljs-rule"><span class="hljs-attribute">value</span>:<span class="hljs-value"> <span class="hljs-number">123</span>,
+    variable: [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>]
+</span></span></span>});
 </code></pre>
 <p>While a task is running, its task object is available as <code>current</code>.
 Even when the task is not active it is available from within the <a href="#global"><code>global</code></a> object, as <code>global.&lt;taskName&gt;</code>, 
@@ -183,7 +183,7 @@ where <code>&lt;taskName&gt;</code> stands for the <a href="../manager/API.html#
 </tr>
 </tbody>
 </table>
-<h3><a name="local-variables-local-&amp-meta" class="header-link" href="#local-variables-local-&amp-meta"><span class="glyphicon glyphicon-link"></span></a>Local Variables (local &amp; meta)</h3><p>The variables that we’ve discussed so far are relevant for whole tasks or even whole studies.
+<h3><a name="local-variables-local-&amp-meta" class="header-link" href="#local-variables-local-&amp-meta"><span class="glyphicon glyphicon-link"></span></a>Local Variables (local &amp; meta)</h3><p>The variables that we&#39;ve discussed so far are relevant for whole tasks or even whole studies.
 We now approach variables that have a narrower scope: they have to do with specific elements within your task.
 These variables are called <em>Data</em> and <em>Meta</em>. </p>
 <p>The <em>Data</em> variables allow you to manually set useful information into each element. 
@@ -534,9 +534,9 @@ For example, for tasks they appear as <code>tasksData</code> and <code>tasksMeta
 				<ul class="bs-docs-footer-links text-muted">
 					<li>Currently v0.0.45</li>
 					<li>&middot;</li>
-					<li><a href="https://github.com/ProjectImplicit/PIquest">GitHub</a></li>
+					<li><a href="https://github.com/minnojs/minno-quest">GitHub</a></li>
 					<li>&middot;</li>
-					<li><a href="https://github.com/ProjectImplicit/PIquest/releases">Releases</a></li>
+					<li><a href="https://github.com/minnojs/minno-quest/releases">Releases</a></li>
 				</ul>
 			</div>
 		</footer>

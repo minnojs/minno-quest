@@ -208,8 +208,8 @@ Repeats the element in <code>data</code> <code>times</code> times.</p>
 <li><code>{mixer:&#39;repeat&#39;, times:10, data: [obj1,obj2]}</code></li>
 </ul>
 <p><strong>random</strong>:
-Randomizes the order of elements in <code>data</code>. Random randomizes the order of all the elements under the random mixer’s data array, even if they are inside a mixer. For example, consider the following code:</p>
-<pre><code class="lang-js"><span class="hljs-built_in">var</span> mixer <span class="hljs-subst">=</span> {
+Randomizes the order of elements in <code>data</code>. Random randomizes the order of all the elements under the random mixer&#39;s data array, even if they are inside a mixer. For example, consider the following code:</p>
+<pre><code class="lang-js"><span class="hljs-built_in">var</span> mixer = {
     mixer:<span class="hljs-string">'random'</span>,
     <span class="hljs-built_in">data</span>: <span class="hljs-preprocessor">[</span>
         obj1,
@@ -230,7 +230,7 @@ Randomizes the order of elements in <code>data</code>. Random randomizes the ord
 <li>[obj2,obj2,obj1]</li>
 </ul>
 <p>If you want to keep some of the elements in the data together (and not randomized), use the <code>wrapper</code> mixer. For instance:</p>
-<pre><code class="lang-js"><span class="hljs-built_in">var</span> mixer <span class="hljs-subst">=</span> {
+<pre><code class="lang-js"><span class="hljs-built_in">var</span> mixer = {
     mixer:<span class="hljs-string">'random'</span>,
     <span class="hljs-built_in">data</span>: <span class="hljs-preprocessor">[</span>
         obj1
@@ -247,7 +247,7 @@ Randomizes the order of elements in <code>data</code>. Random randomizes the ord
 </code></pre>
 <p>This code will keep obj2, obj3, and obj4 together, in that same order (obj2, obj3, obj4), and will randomly present obj1 before or after these three objects.</p>
 <p>You can make any mixer into a wrapper by adding <code>wrapper:true</code>. For example: </p>
-<pre><code class="lang-js"><span class="hljs-built_in">var</span> mixer <span class="hljs-subst">=</span> {
+<pre><code class="lang-js"><span class="hljs-built_in">var</span> mixer = {
     mixer:<span class="hljs-string">'random'</span>,
     <span class="hljs-built_in">data</span>: <span class="hljs-preprocessor">[</span>
         obj1,
@@ -322,7 +322,7 @@ Chooses <code>n</code> random elements from data using a weighted randomize algo
 <p><strong>weightedRandom</strong>:
 Alias for <code>weightedChoose</code>.</p>
 <p><strong>wrapper</strong>:
-The wrapper mixer serves a sort of parenthesis for the mixer. In case you want to keep a set of elements as a block (when randomizing) simply wrap them and they’ll stay together.</p>
+The wrapper mixer serves a sort of parenthesis for the mixer. In case you want to keep a set of elements as a block (when randomizing) simply wrap them and they&#39;ll stay together.</p>
 <ul>
 <li><code>{mixer:&#39;wrapper&#39;, data: [obj1,obj2]}</code></li>
 </ul>
@@ -348,7 +348,7 @@ Custom mixers must return an array of appropriate elements.
 You can create them using the mixer context and the mixer element itself, or use them to create arbitrary elements as you like.</p>
 <p>``js
 {
-    mixer: ‘custom’,
+    mixer: &#39;custom&#39;,
     fn: function(obj, context){
         return [elem1, elem2]
     }
@@ -365,19 +365,19 @@ var cond = {
 }
 </code></pre><p>Conditions should be treated as a type of equation.</p>
 <p>In the <code>compare</code> and <code>to</code> properties you can set either straight forward values or references to a variable:</p>
-<pre><code class="lang-js">//Compares the variable time to the value 12
+<pre><code class="lang-js">//Compares <span class="hljs-operator">the</span> <span class="hljs-built_in">variable</span> <span class="hljs-built_in">time</span> <span class="hljs-built_in">to</span> <span class="hljs-operator">the</span> <span class="hljs-built_in">value</span> <span class="hljs-number">12</span>
 var cond1 = {
-    compare: 'global.time',
-    to: '12'
-}
-//Compare the variable <span class="hljs-keyword">gender</span> to the value 'Female'
+    compare: <span class="hljs-string">'global.time'</span>,
+    <span class="hljs-built_in">to</span>: <span class="hljs-string">'12'</span>
+}<span class="hljs-comment">
+//Compare the variable gender to the value 'Female'</span>
 var cond2 = {
-    compare: 'Female',
-    to: 'local.<span class="hljs-keyword">gender</span>'
+    compare: <span class="hljs-string">'Female'</span>,
+    <span class="hljs-built_in">to</span>: <span class="hljs-string">'local.gender'</span>
 }
 </code></pre>
 <p>When you want to refer to a variable, you use text with dots: <code>global.var</code>, <code>questions.q1.response</code>; these values will be treated as pointing to variables within the lists context. <code>questions.q1.response</code> will retrieve the value of the response for q1 from the questions object.</p>
-<p>Here are the condition’s possible properties:</p>
+<p>Here are the condition&#39;s possible properties:</p>
 <table>
 <thead>
 <tr>
@@ -492,22 +492,22 @@ var cond2 = {
 </code></pre>
 <h3><a name="templates" class="header-link" href="#templates"><span class="glyphicon glyphicon-link"></span></a>Templates</h3><p>One of the ways to create dynamic questionnaires is using templates. Templates are a format that allows you to dynamically generate settings for your questions. You can replace any non-object setting from within your elements with a template, and it will be rendered according to the <a href="#variables">environmental variables</a> (The exception to this rule is the <code>inherit</code> setting that cannot use templates).</p>
 <p>A template is a string that has a section of the form <code>&lt;%= %&gt;</code> in it. Within these brackets you can write any Javascript that you like and it will be evaluated and printed out. The player uses <a href="http://lodash.com/docs#template">lodash templates</a> internally, you can look them up to see all the possible uses.</p>
-<p>The main use of templates is probably accessing local and global variables. For instance, in order to print the global variable “name”, you could create a template that looks like this: <code>My name is &lt;%= global.name%&gt;</code>.</p>
+<p>The main use of templates is probably accessing local and global variables. For instance, in order to print the global variable &quot;name&quot;, you could create a template that looks like this: <code>My name is &lt;%= global.name%&gt;</code>.</p>
 <p>Templates allow access only to a confined number of variables; These vary a bit between different tasks, but you can expect the templates to have access to the <code>global</code> and <code>current</code> objects. Element templates also have access to their own data property as {namespace}Data (so that trials will have a <code>trialData</code> object, and stimuli a <code>mediaData</code> property). Some objects have access to additional properties, you can find them in their respective documentation.</p>
 <h3><a name="variables" class="header-link" href="#variables"><span class="glyphicon glyphicon-link"></span></a>Variables</h3><p>Sometimes it is not enough to hard code behaviors into your tasks, sometimes you want behavior to depend on a previous response, or change your texts according to randomization. In order to support these behaviors you can use variables.</p>
 <h4><a name="environmental-variables" class="header-link" href="#environmental-variables"><span class="glyphicon glyphicon-link"></span></a>Environmental Variables</h4><p>The <code>global</code> variable is the context of everything that happens within the task manager. It is an object that holds a property for each task that is run. 
 In addition, you as a user may extend it manually using the <code>API.addGlobal</code> or <code>API.addCurrent</code> functions. Any Task element can have the additional property <code>addGlobal</code> or <code>addCurrent</code> that get added to the global/current whenever that element is activated. This options is useful in various cases of branching.For advanced uses you can also access the global object directly by changing the <code>window.piGlobal</code> object.</p>
-<pre><code class="lang-js"><span class="hljs-tag">API</span><span class="hljs-class">.addGlobal</span>({
-    <span class="hljs-attribute">value</span>: <span class="hljs-number">123</span>,
-    <span class="hljs-attribute">variable</span>: [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>]
-})
+<pre><code class="lang-js"><span class="hljs-tag">API</span><span class="hljs-class">.addGlobal</span>(<span class="hljs-rules">{
+    <span class="hljs-rule"><span class="hljs-attribute">value</span>:<span class="hljs-value"> <span class="hljs-number">123</span>,
+    variable: [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>]
+</span></span></span>})
 </code></pre>
-<p>Each task creates an object associated with it that logs anything that happens within the task. In the duration of the task, this object can be accessed using the <code>current</code> object. After the task ends, the object stays available from within the global object as <code>global.taskName</code>, where “taskName” is the name associated with this specific task.
+<p>Each task creates an object associated with it that logs anything that happens within the task. In the duration of the task, this object can be accessed using the <code>current</code> object. After the task ends, the object stays available from within the global object as <code>global.taskName</code>, where &quot;taskName&quot; is the name associated with this specific task.
 The task object is there for you to change. You can extend it to your hearts content using <code>API.addCurrent</code>:</p>
-<pre><code class="lang-js"><span class="hljs-tag">API</span><span class="hljs-class">.addCurrent</span>({
-    <span class="hljs-attribute">value</span>: <span class="hljs-number">123</span>,
-    <span class="hljs-attribute">variable</span>: [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>]
-})
+<pre><code class="lang-js"><span class="hljs-tag">API</span><span class="hljs-class">.addCurrent</span>(<span class="hljs-rules">{
+    <span class="hljs-rule"><span class="hljs-attribute">value</span>:<span class="hljs-value"> <span class="hljs-number">123</span>,
+    variable: [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>]
+</span></span></span>})
 </code></pre>
 <p>Tasks add any data that they log into their task object. For instance, piQuest maintains a <code>current.questions</code> object that holds the responses for all questions.</p>
 <h4><a name="local-variables" class="header-link" href="#local-variables"><span class="glyphicon glyphicon-link"></span></a>Local Variables</h4><p>In addition to these environmental variables, you have access to two types of local variables; <em>Data</em> and <em>Meta</em> . They are each available within the mixer/templates with specific names tied to their type. The naming convention for these variables is <code>&lt;elementName&gt;Data</code> and <code>&lt;elementName&gt;Meta</code>. For example, for tasks they appear as <code>tasksData</code> and <code>tasksMeta</code>. </p>
@@ -589,7 +589,7 @@ The task object is there for you to change. You can extend it to your hearts con
 </code></pre>
 <p>Note that the name that you give the set (in the example: <em>likert</em> or <em>sizeLikert</em>) is the handle that you will later use to refer to it.</p>
 <h4><a name="inheriting" class="header-link" href="#inheriting"><span class="glyphicon glyphicon-link"></span></a>Inheriting</h4><p>Inheritance means that we use one element as the prototype, or parent, for another element.</p>
-<p>When inheriting an element, the child element starts out with all of the parent’s attributes and extends them with its own. This means that we use the parent element as a base and then copy in any properties that the child has, overwriting any existing properties.
+<p>When inheriting an element, the child element starts out with all of the parent&#39;s attributes and extends them with its own. This means that we use the parent element as a base and then copy in any properties that the child has, overwriting any existing properties.
 One exception to this rule is the <code>data</code> objects which we attempt to merge (giving precedence to the child).</p>
 <p>Follow this pseudo code:</p>
 <pre><code class="lang-js"><span class="hljs-comment">// The parent page</span>
@@ -621,8 +621,8 @@ One exception to this rule is the <code>data</code> objects which we attempt to 
 }
 </code></pre>
 <p>In order for an element to inherit another element it must use the <code>inherit</code> property. <code>inherit</code> takes an object or a string, with instructions for which element to inherit. If a string is used, the sequencer treats it as if it was a set name, and picks a random element from within that set.</p>
-<pre><code class="lang-js">{
-    <span class="hljs-tag">inherit</span>: {<span class="hljs-attribute">set</span>:<span class="hljs-string">'mySetName'</span>, <span class="hljs-attribute">type</span>:<span class="hljs-string">'random'</span>}
+<pre><code class="lang-js"><span class="hljs-rules">{
+    <span class="hljs-rule"><span class="hljs-attribute">inherit</span>:<span class="hljs-value"> {set:<span class="hljs-string">'mySetName'</span>, type:<span class="hljs-string">'random'</span></span></span></span>}
 }
 </code></pre>
 <table>
@@ -694,7 +694,7 @@ This can look something like this:</p>
 <li><code>{set: &#39;setName&#39;, type:&#39;random&#39;}</code></li>
 </ul>
 <p>This is the default inheritance type, so it is not obligatory to use the <code>type</code> property. You can also use a short cut and set the <code>set</code> using only its name, like we did in the example above</p>
-<h5><a name="exrandom" class="header-link" href="#exrandom"><span class="glyphicon glyphicon-link"></span></a>exRandom:</h5><p>Selects a random element without repeating the same element until we’ve gone through the whole set</p>
+<h5><a name="exrandom" class="header-link" href="#exrandom"><span class="glyphicon glyphicon-link"></span></a>exRandom:</h5><p>Selects a random element without repeating the same element until we&#39;ve gone through the whole set</p>
 <ul>
 <li><code>{set: &#39;setName&#39;, type:&#39;exRandom&#39;}</code></li>
 </ul>
@@ -708,7 +708,7 @@ This function will select only the first element to fit the data.
 If the data property is set as a string, we assume it refers to the element handle.</p>
 <ul>
 <li><code>{set: &#39;setName&#39;, type: &#39;byData&#39;, data: {block:1, row:2}}</code> picks the element with both block:1 and row:2</li>
-<li><code>{set: &#39;setName&#39;, type: &#39;byData&#39;, data: &quot;myStimHandle&quot;}</code> picks the element that has the “myStimHandle” handle</li>
+<li><code>{set: &#39;setName&#39;, type: &#39;byData&#39;, data: &quot;myStimHandle&quot;}</code> picks the element that has the &quot;myStimHandle&quot; handle</li>
 </ul>
 <h5><a name="function" class="header-link" href="#function"><span class="glyphicon glyphicon-link"></span></a>function:</h5><p>You may also use a custom function to select your element (the function here, fully replaces the inherit object).</p>
 <pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(collection)</span></span>{
@@ -717,7 +717,7 @@ If the data property is set as a string, we assume it refers to the element hand
 }
 </code></pre>
 <h4><a name="seed" class="header-link" href="#seed"><span class="glyphicon glyphicon-link"></span></a>Seed</h4><p>The inheritance systems uses seeds to keep track of consecutive calls to the different types of inheritance. If you want to have parallel groups of inheritance to the same set, you can use seeds.
-Each inheritance query automatically gets assigned to a “seed” that is used to track its progress. For example, the seed is used to keep track of the current element in the <code>sequential</code> type inheritance.
+Each inheritance query automatically gets assigned to a &quot;seed&quot; that is used to track its progress. For example, the seed is used to keep track of the current element in the <code>sequential</code> type inheritance.
 Most of the time, the seed is transparent to the user, but sometimes it becomes useful to have manual control over the inheritance seed. For instance, if you want to reset an <code>exRandom</code> inheritance - simply use <code>exRandom</code> with a new seed. Same goes if you want to keep two instances of a <code>sequential</code> inheritance.</p>
 <p>In the following example, both elements inherit exRandomly from the trials set. But the second element restarts the randomization.</p>
 <pre><code class="lang-js">[
@@ -743,7 +743,7 @@ In order to create a new seed all you have to do is set the <code>seed</code> pr
     }
 ]
 </code></pre>
-<p>The <code>repeat</code> property can used within any type of randomization. We’ve seen a simple use, but its true power comes when combined with <a href="#seeds">seeds</a>.</p>
+<p>The <code>repeat</code> property can used within any type of randomization. We&#39;ve seen a simple use, but its true power comes when combined with <a href="#seeds">seeds</a>.</p>
 <p>The following example uses the same exRandom seed to pick a both a trial and the two stimuli associated with it (the n<sup>th</sup> element in trials is always associated with the n<sup>th</sup> elements of stimuli-1 and stimuli-2).</p>
 <pre><code class="lang-js">[
     {

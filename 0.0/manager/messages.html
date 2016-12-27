@@ -149,7 +149,7 @@
 </tbody>
 </table>
 <p>&nbsp;</p>
-<p>The following example will display the message “Hello World. I am a template.”, and procede when the <strong>keys</strong> space is pressed.</p>
+<p>The following example will display the message &quot;Hello World. I am a template.&quot;, and procede when the <strong>keys</strong> space is pressed.</p>
 <pre><code class="lang-js"><span class="hljs-keyword">var</span> task = {
     <span class="hljs-keyword">template</span>: '&lt;<span class="hljs-keyword">div</span>&gt;<span class="hljs-type">Hello</span> <span class="hljs-type">World</span>. I am a <span class="hljs-keyword">template</span>.&lt;/<span class="hljs-keyword">div</span>&gt;',
     keys: ' '
@@ -163,7 +163,7 @@
 }
 </code></pre>
 <p><em>hello.jst</em></p>
-<pre><code class="lang-html">&lt;<span class="hljs-keyword">div</span>&gt;<span class="hljs-type">Hello</span> <span class="hljs-type">World</span>. I am a <span class="hljs-keyword">template</span>.&lt;/<span class="hljs-keyword">div</span>&gt;
+<pre><code class="lang-html">&lt;<span class="hljs-operator">div</span>&gt;Hello World. I am <span class="hljs-operator">a</span> template.&lt;/<span class="hljs-operator">div</span>&gt;
 </code></pre>
 <h4><a name="proceeding" class="header-link" href="#proceeding"><span class="glyphicon glyphicon-link"></span></a>Proceeding</h4><p>There are two types of controls that allow users to proceed to the next task.</p>
 <p>First, you can use any element in your template as a proceed button, all you have to do is add the <code>pi-message-done</code> attribute to the appropriate element.</p>
@@ -209,7 +209,7 @@
 </tr>
 </tbody>
 </table>
-<h3><a name="project-implicit-build" class="header-link" href="#project-implicit-build"><span class="glyphicon glyphicon-link"></span></a>Project Implicit build</h3><p>The project implicit build has an optional “meta template” that you may use by setting the <code>piTemplate</code> property to true. When using it, you have several additional options.</p>
+<h3><a name="project-implicit-build" class="header-link" href="#project-implicit-build"><span class="glyphicon glyphicon-link"></span></a>Project Implicit build</h3><p>The project implicit build has an optional &quot;meta template&quot; that you may use by setting the <code>piTemplate</code> property to true. When using it, you have several additional options.</p>
 <table>
 <thead>
 <tr>
@@ -220,7 +220,7 @@
 <tbody>
 <tr>
 <td>piTemplate</td>
-<td>(true, false or ‘debrief’) Activates the PI template. If set to ‘debrief’ activates the debrief template, and makes the debrief functions available.</td>
+<td>(true, false or &#39;debrief&#39;) Activates the PI template. If set to &#39;debrief&#39; activates the debrief template, and makes the debrief functions available.</td>
 </tr>
 <tr>
 <td>header</td>
@@ -240,7 +240,7 @@
 </tr>
 <tr>
 <td>demo</td>
-<td>If piTemplate is set to ‘debrief’, this property set to <code>true</code> will activate the demo version of the debrief.</td>
+<td>If piTemplate is set to &#39;debrief&#39;, this property set to <code>true</code> will activate the demo version of the debrief.</td>
 </tr>
 <tr>
 <td>noDonate</td>
@@ -248,7 +248,7 @@
 </tr>
 </tbody>
 </table>
-<p>The project implicit template supports a debrief template activated by setting <code>piTemplate</code> to ‘debrief’. If it is activated, there are two additional functions exposed from within the template.
+<p>The project implicit template supports a debrief template activated by setting <code>piTemplate</code> to &#39;debrief&#39;. If it is activated, there are two additional functions exposed from within the template.
 They can be used like so: <code>&lt;%= showPanel(&#39;body&#39;,&#39;header&#39;,&#39;footer&#39;) %&gt;</code> or <code>&lt;%= showFeedback({wrap:false}) %&gt;</code>.</p>
 <h4><a name="showpanelbody-header-footer" class="header-link" href="#showpanelbody-header-footer"><span class="glyphicon glyphicon-link"></span></a>showPanel(body, header, footer)</h4><pre><code>&lt;<span class="hljs-variable">%=</span> showPanel(<span class="hljs-string">'body'</span>,<span class="hljs-string">'header'</span>,<span class="hljs-string">'footer'</span>) <span class="hljs-variable">%&gt;</span>
 </code></pre><p><code>showPanel</code> displays content within a stylized panel.</p>
@@ -287,11 +287,11 @@ You can fine tune the way feedback is collected and desplayed using the followin
 <tbody>
 <tr>
 <td>pre</td>
-<td>A string to be injected before each feedback (default :’&lt;p&gt;’).</td>
+<td>A string to be injected before each feedback (default :&#39;&lt;p&gt;&#39;).</td>
 </tr>
 <tr>
 <td>post</td>
-<td>A string to be injected after each feedback (default :’&lt;/p&gt;’).</td>
+<td>A string to be injected after each feedback (default :&#39;&lt;/p&gt;&#39;).</td>
 </tr>
 <tr>
 <td>wrap</td>
@@ -303,11 +303,11 @@ You can fine tune the way feedback is collected and desplayed using the followin
 </tr>
 <tr>
 <td>noFeedback</td>
-<td>The text to show if no feedback is found (default: ‘&lt;p&gt;No feedback was found&lt;/p&gt;’).</td>
+<td>The text to show if no feedback is found (default: &#39;&lt;p&gt;No feedback was found&lt;/p&gt;&#39;).</td>
 </tr>
 <tr>
 <td>property</td>
-<td>The default property in which to look for the feedback string (default: ‘feedback’).</td>
+<td>The default property in which to look for the feedback string (default: &#39;feedback&#39;).</td>
 </tr>
 <tr>
 <td>exclude</td>
