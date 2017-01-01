@@ -3,7 +3,16 @@ define(['managerAPI'], function(Manager){
 	var API = new Manager();
 	API.addSettings('skin', '');
 
-	API.addGlobal({$mTurk:{assignmentId:0,hitId:0,workerId:0}});
+    API.addSettings('injectStyle', [
+        '[pi-player] {position:fixed;left:0; right:0;}',
+        '[pi-player] #canvas { margin-top: auto;}',
+    ].join(''));
+
+	API.addGlobal({
+        $mTurk:{assignmentId:0,hitId:0,workerId:0},
+        audit: {questions: {a:{response:'5'}, b:{response:undefined}, c:{response:3}}},
+        demographics: {questions: {demo02:{response:'23'}, b:{response:undefined}, c:{response:345}}}
+    });
 
 	API.addTasksSet('instructions', {type:'message', keys:' '});
 
@@ -29,6 +38,41 @@ define(['managerAPI'], function(Manager){
 				managerBeforeUnload.deactivate();
 				done();}
 		},
+		{
+			type:'quest',
+			name: 'first',
+			scriptUrl: 'questScript1.js'
+		},
+        //{ type: 'quest', name: 'dotWidth', scriptUrl: '/test/dotwidth.js' },
+        {
+			type: 'pip',
+			name: 'iat',
+			version: '123',
+			scriptUrl: '/test/dotprobe3.js'
+		},
+        {
+            mixer: 'branch',
+            conditions: [
+                // you can insert any additional conditions that you like here
+                {compare:'global.demographics.questions.demo02.response', operator: function(val){
+                    return +val >= 18 && +val <= 25;
+                }},
+                {operator: function(){
+                    var questions = API.getGlobal().audit.questions;
+                    var responses = [];
+                    for (var key in questions) responses.push(+questions[key].response || 0); 
+                    var sum = responses.reduce(function(sum, value){return sum + value}, 0);
+                    return sum >= 8;
+                }}
+            ],
+            
+            data: [
+                {type:'message', template: '123'}
+            ],
+            elseData: [
+                {type:'message', template: '456'}
+            ]
+        },
 		{
             preText: API.PROGRESS_BAR, 
             type:'quest',
