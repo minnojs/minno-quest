@@ -43,6 +43,7 @@
   },
   "scripts": {
     "test": "grunt test --sauce --report",
+    "gendocs" : "gendocs docs pages",
     "localtest": "grunt test",
     "start": "grunt serve",
     "postinstall": "./node_modules/grunt-cli/bin/grunt githooks",
