@@ -1,3 +1,17 @@
+<a name"0.1.10"></a>
+### 0.1.10 (2017-01-05)
+
+
+#### Bug Fixes
+
+* **selectOne:** focused button now have the corect color ([27bfa39d](https://github.com/ProjectImplicit/PIquest/commit/27bfa39d))
+
+
+#### Features
+
+* **pip:** added support for baseUrl in pip tasks ([337e9ea0](https://github.com/ProjectImplicit/PIquest/commit/337e9ea0))
+
+
 <a name"0.1.9"></a>
 ### 0.1.9 (2016-11-20)
 
