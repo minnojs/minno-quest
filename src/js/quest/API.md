@@ -243,6 +243,7 @@ required		| (true or false; default: false) Validation: require a response.
 correct 		| (true or false; default: false) Validation: require the response to be correct (set the target value using `correctValue`)
 correctValue 	| (*) Set the correct response value for the correct validation.
 errorMsg		| (Object: {}) This object has a property for each validation type. Setting the appropriate type changes the validation message. For instance setting the `correct` property will change the validation message for instances where the correct response was not given.
+chooseText      | (String) The text to show instead of "-- Choose an option --".
 
 #### selectOne & selectMulti
 The `selectOne` and `selectMulti` questions present a list of possible response options for the user to pick from. The only difference between them is that select Multi allows the user to select more than one response option. They have the following parameters:
