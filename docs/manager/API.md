@@ -1,7 +1,4 @@
----
-title: API
-description: All the little details...
----
+# API
 
 - [Settings](#settings)
     - [canvas](#canvas)

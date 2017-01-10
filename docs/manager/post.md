@@ -1,7 +1,4 @@
----
-title: Post
-description: A simple task that posts data to the server.
----
+# Post
 
 The post task is responsible for posting plain data to the server. You can either send data directly from the global object or create it yourself. This is a good way to keep track of complex conditions within your tasks or of manual manipulation of all sorts.
 

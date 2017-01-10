@@ -1,13 +1,8 @@
----
-title: Introduction
-description: This tutorial will walk you through the first steps of creating a piQuest questionnaire. You can download or activate it from the "Hello world" section in the bar on the right.
----
+# Introduction
 
-### Contents
-
-* [Structure](#structure)
-* [Pages & Questions](#pages-questions)
-* [Thats it](#thats-it)
+- [Structure](#structure)
+- [Pages & Questions](#pages-questions)
+- [Thats it](#thats-it)
 
 ### Structure
 

@@ -1,7 +1,4 @@
----
-title: Redirect
-description: A simple task that redirects users to an external url.
----
+# Redirect
 
 The post task is responsible for redirecting users to an external url. It is 
 

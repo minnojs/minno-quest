@@ -1,7 +1,4 @@
----
-title: Messages
-description: A simple task that displays plain messages to the user.
----
+# Messages
 
 The message tasks are built to be as simple as possible, all they do is present simple html templates. In order to load a template simply set it into the `template` property as a string, or set the appropriate URL into `templateUrl`. 
 That's it. (This is not relevant for most users, but the templates are rendered using angularjs $compile and therefore all the relevant directives are available).

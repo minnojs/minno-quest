@@ -1,9 +1,4 @@
----
-title: API
-description: All the little details...
----
-
-### Table of contents
+# API
 
 - [Pages](#pages)
 	- [Page Timer](#page-timer)

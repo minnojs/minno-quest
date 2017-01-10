@@ -1,7 +1,4 @@
----
-title: Overview
-description: piManager is responsible for managing several piTasks sequentially.
----
+# Overview
 
 piManager is a player intent on presenting a series of tasks to the users. It uses the same overall API used throught the project implicit tasks.
 
