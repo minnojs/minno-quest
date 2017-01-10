@@ -1,0 +1,127 @@
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Minno.js</title>
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+		<link href="../assets/prism.css" rel="stylesheet" />
+		<link href="../assets/style.css" rel="stylesheet" />
+	</head>
+	<body>
+		<header>
+			<section>
+				<nav class="brand">
+                    <a href="/"><h1>Minno</h1></a>
+				</nav>
+				<nav>
+					<a href="minno-quest/0.1/basics/overview.html">Basics</a>
+					<a href="minno-quest/0.1/manager/overview.html">miManager</a>
+					<a href="minno-quest/0.1/quest/overview.html">miQuest</a>
+					<a href="minno-time/0.3/tutorials/overview.html">miTime</a>
+				</nav>
+				<nav>
+					<a href="https://github.com/minnojs">Github</a>
+				</nav>
+			</section>
+		</header>
+		<main>
+			<section class="content">
+				<h1><a name="introduction" class="header-link" href="#introduction"><span></span></a>Introduction</h1><ul>
+<li>Core<ul>
+<li><a href="overview.html">Overview</a></li>
+<li><a href="javascript.html">Javascript</a></li>
+<li><a href="create.html">Creating a task</a></li>
+<li><a href="API.html">API</a></li>
+<li><a href="resources.html">Resources</a></li>
+</ul>
+</li>
+<li>Sequencer<ul>
+<li><strong><a href="introduction.html">Introduction</a></strong><ul>
+<li><a href="#mixers">Mixers</a></li>
+<li><a href="#inheritance">Inheritance</a></li>
+<li><a href="#templates">Templates</a></li>
+</ul>
+</li>
+<li><a href="mixer.html">Mixer</a></li>
+<li><a href="templates.html">Templates</a></li>
+<li><a href="variables.html">Variables</a></li>
+<li><a href="inheritance.html">Inheritance</a></li>
+</ul>
+</li>
+<li>Inheritance<ul>
+<li><a href="inheritanceAbstraction.html">Abstraction</a></li>
+<li><a href="inheritanceRandom.html">Random</a></li>
+<li><a href="inheritanceExRandom.html">Exclusive Random</a></li>
+<li><a href="inheritanceSequential.html">Sequential</a></li>
+<li><a href="inheritanceByData.html">By Data</a></li>
+<li><a href="inheritanceCustom.html">Custom</a></li>
+<li><a href="inheritanceSeed.html">Seed</a></li>
+<li><a href="inheritanceRepeat.html">Repeat</a></li>
+</ul>
+</li>
+<li>Mixers<ul>
+<li><a href="mixerRandom.html">Random</a></li>
+<li><a href="mixerRepeat.html">Repeat</a></li>
+<li><a href="mixerWeightedRandom.html">Weighted Random</a></li>
+<li><a href="mixerChoose.html">Choose</a></li>
+<li><a href="mixerWrapper.html">Wrapper</a></li>
+<li><a href="mixerBranch.html">Branch</a></li>
+<li><a href="mixerMultiBranch.html">Multi Branch</a></li>
+</ul>
+</li>
+<li>Variables &amp; Templates<ul>
+<li><a href="templateGlobal.html">Global</a></li>
+<li><a href="templateData.html">Data</a></li>
+<li><a href="templateMeta.html">Meta</a></li>
+</ul>
+</li>
+</ul>
+<p>The sequencer is an overarching term for all of the features that allow you to dynamically change the flow of your tasks.
+It has three critical components: The mixer, templating and inheritance.</p>
+<p>Throughout the sequencer documentation we will use <a href="../manager/messages.html">messages</a> as examples because they are the simplest element type.</p>
+<h3><a name="mixers" class="header-link" href="#mixers"><span></span></a>Mixers</h3><p>Each PI task is composed of a series of elements which are presented to the users sequentially 
+(i.e. trials for piPlayer, pages for piQuest and tasks for piManager). 
+The sequence <a href="./mixer.html"><strong>mixer</strong></a> is responsible for the order  that these elements are presented to the users. 
+It allows you to randomize the order of your elements.
+It also allows you to repeat a task multiple times and randomly assign participants to experimental conditions.</p>
+<p>For example, the following mixer randomizes the order of two tasks in <em>piManager</em>:</p>
+<pre><code class="lang-javascript">API.addSequence([
+    {
+        mixer: &#39;randomize&#39;,
+        data: [
+            {type:&#39;message&#39;, template: &#39;Task 1&#39;, keys: &#39; &#39;},
+            {type:&#39;message&#39;, template: &#39;Task 2&#39;, keys: &#39; &#39;}
+        ]
+    }
+]);
+</code></pre>
+<h3><a name="inheritance" class="header-link" href="#inheritance"><span></span></a>Inheritance</h3><p>The element is the basic unit that is used across all tasks.
+You can use the <a href="./inheritance.html">inheritance</a> system in order to compose elements and base themselves one upon another, as well as grouping them into distinct sets.
+This is useful both as a tool to improve the readability of you scripts (for instance keep code away from structure), and to allow another level of randomization and control.</p>
+<p>The following is an example of inheritance that improves the readability of a task sequence.
+It uses a message defined within the &quot;simpleMessage&quot; <code>set</code> as the base for the element within the sequence.
+This allows the sequence to be less cluttered, and thus more readable.</p>
+<pre><code class="lang-javascript">API.addTasksSet(&#39;simpleMessage&#39;, [
+    {type:&#39;message&#39;, template: &#39;Task 1&#39;, keys: &#39; &#39;}
+]);
+
+API.addSequence([
+    {inherit: &#39;simpleMessage&#39;}
+]);
+</code></pre>
+<h3><a name="templates" class="header-link" href="#templates"><span></span></a>Templates</h3><p>Finally you have fine control down to the level of individual element properties using <a href="./templates.html">templates</a>. 
+Templates allow you to use <a href="./variables.html">Environmental Variables</a> in order to customize you elements.</p>
+<p>The following code will display a message that says &quot;Hello Randall Munroe&quot;.</p>
+<pre><code class="lang-javascript">API.addCurrent({userName: &#39;Randall Munroe&#39;});
+
+API.addSequence([
+    {type:&#39;message&#39;, template: &#39;Hello &lt;%= current.userName %&gt;&#39;, keys: &#39; &#39;}
+]);
+</code></pre>
+
+				<hr />
+				<small>License: Apache 2. &copy; Project Implicit. &middot; Current version 0.1</small>
+			</section>
+		</main>
+		<script src="../assets/prism.js"></script>
+	</body>
+</html

@@ -1,0 +1,372 @@
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Minno.js</title>
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+		<link href="../assets/prism.css" rel="stylesheet" />
+		<link href="../assets/style.css" rel="stylesheet" />
+	</head>
+	<body>
+		<header>
+			<section>
+				<nav class="brand">
+                    <a href="/"><h1>Minno</h1></a>
+				</nav>
+				<nav>
+					<a href="minno-quest/0.1/basics/overview.html">Basics</a>
+					<a href="minno-quest/0.1/manager/overview.html">miManager</a>
+					<a href="minno-quest/0.1/quest/overview.html">miQuest</a>
+					<a href="minno-time/0.3/tutorials/overview.html">miTime</a>
+				</nav>
+				<nav>
+					<a href="https://github.com/minnojs">Github</a>
+				</nav>
+			</section>
+		</header>
+		<main>
+			<section class="content">
+				<h1><a name="api" class="header-link" href="#api"><span></span></a>API</h1><ul>
+<li>Core<ul>
+<li><a href="overview.html">Overview</a></li>
+<li><a href="javascript.html">Javascript</a></li>
+<li><a href="create.html">Creating a task</a></li>
+<li><strong><a href="API.html">API</a></strong><ul>
+<li><a href="#task-creation">Task creation</a><ul>
+<li><a href="#setname-name-">setName(name)</a></li>
+<li><a href="#addsettings-name-setting-">addSettings(name, setting)</a></li>
+<li><a href="#addsequence-sequence-">addSequence(sequence)</a></li>
+<li><a href="#addset-setname-setarray-">addSet(setName, setArray)</a></li>
+</ul>
+</li>
+<li><a href="#environmental-variables">Environmental variables</a><ul>
+<li><a href="#addglobal-obj-">addGlobal(obj)</a></li>
+<li><a href="#getglobal-">getGlobal()</a></li>
+<li><a href="#addcurrent-obj-">addCurrent(obj)</a></li>
+<li><a href="#getcurrent-">getCurrent()</a></li>
+</ul>
+</li>
+<li><a href="#convenience-methods">Convenience methods</a><ul>
+<li><a href="#post-url-object-">post(url, object)</a></li>
+<li><a href="#shuffle-collection-">shuffle(collection)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="resources.html">Resources</a></li>
+</ul>
+</li>
+<li>Sequencer<ul>
+<li><a href="introduction.html">Introduction</a></li>
+<li><a href="mixer.html">Mixer</a></li>
+<li><a href="templates.html">Templates</a></li>
+<li><a href="variables.html">Variables</a></li>
+<li><a href="inheritance.html">Inheritance</a></li>
+</ul>
+</li>
+<li>Inheritance<ul>
+<li><a href="inheritanceAbstraction.html">Abstraction</a></li>
+<li><a href="inheritanceRandom.html">Random</a></li>
+<li><a href="inheritanceExRandom.html">Exclusive Random</a></li>
+<li><a href="inheritanceSequential.html">Sequential</a></li>
+<li><a href="inheritanceByData.html">By Data</a></li>
+<li><a href="inheritanceCustom.html">Custom</a></li>
+<li><a href="inheritanceSeed.html">Seed</a></li>
+<li><a href="inheritanceRepeat.html">Repeat</a></li>
+</ul>
+</li>
+<li>Mixers<ul>
+<li><a href="mixerRandom.html">Random</a></li>
+<li><a href="mixerRepeat.html">Repeat</a></li>
+<li><a href="mixerWeightedRandom.html">Weighted Random</a></li>
+<li><a href="mixerChoose.html">Choose</a></li>
+<li><a href="mixerWrapper.html">Wrapper</a></li>
+<li><a href="mixerBranch.html">Branch</a></li>
+<li><a href="mixerMultiBranch.html">Multi Branch</a></li>
+</ul>
+</li>
+<li>Variables &amp; Templates<ul>
+<li><a href="templateGlobal.html">Global</a></li>
+<li><a href="templateData.html">Data</a></li>
+<li><a href="templateMeta.html">Meta</a></li>
+</ul>
+</li>
+</ul>
+<h3><a name="task-creation" class="header-link" href="#task-creation"><span></span></a>Task creation</h3><h4><a name="setnamename" class="header-link" href="#setnamename"><span></span></a>setName(name)</h4><table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td>String</td>
+<td>The name of this task. If used as part of piManager, this setting may be overided by the manager task object.</td>
+</tr>
+</tbody>
+</table>
+<h5><a name="returns" class="header-link" href="#returns"><span></span></a>returns:</h5><p>(<em>Object</em>) this <code>API</code></p>
+<h5><a name="example" class="header-link" href="#example"><span></span></a>example:</h5><pre><code class="lang-javascript">API.setName(&#39;taskName&#39;);
+</code></pre>
+<h4><a name="addsettingsname-setting" class="header-link" href="#addsettingsname-setting"><span></span></a>addSettings(name, setting)</h4><table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td>String</td>
+<td>The name of the setting that you want to change.</td>
+</tr>
+<tr>
+<td>setting</td>
+<td>* or Object</td>
+<td>The setting value. If this is an object, it will extend the existing setting object instead of overwriting it.</td>
+</tr>
+</tbody>
+</table>
+<h5><a name="returns" class="header-link" href="#returns"><span></span></a>returns:</h5><p>(<em>Object</em>) this <code>API</code></p>
+<h5><a name="example" class="header-link" href="#example"><span></span></a>example:</h5><pre><code class="lang-javascript">API.addSettings(&#39;onEnd&#39;, function(){
+    // something to do at the end of the task    
+});
+</code></pre>
+<h4><a name="addsequencesequence" class="header-link" href="#addsequencesequence"><span></span></a>addSequence(sequence)</h4><table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sequence</td>
+<td>Array or Object</td>
+<td>An array of objects or a single object to add to the sequence (for example, trial or page objects).</td>
+</tr>
+</tbody>
+</table>
+<h5><a name="returns" class="header-link" href="#returns"><span></span></a>returns:</h5><p>(<em>Object</em>) this <code>API</code></p>
+<h5><a name="example" class="header-link" href="#example"><span></span></a>example:</h5><pre><code class="lang-javascript">API.addSequence([
+    trial1,
+    trial2
+]);
+</code></pre>
+<h4><a name="addsetsetname-setarray" class="header-link" href="#addsetsetname-setarray"><span></span></a>addSet(setName, setArray)</h4><p>Each task API has one or more &quot;addSet&quot; functions. These function take the form <code>add&lt;*SetName*&gt;Set</code> so that, for instance pages use the <code>API.addPagesSet</code> function and tasks use the <code>API.addTaskSet</code> function. They are used in order to register prototypes of objects for the sequencer <a href="sequencer.html#inheritance">inheritance</a> system.</p>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>setName</td>
+<td>String</td>
+<td>The name of the set to be registered.</td>
+</tr>
+<tr>
+<td>setArray</td>
+<td>Array or Object</td>
+<td>An array or object to add this this set.</td>
+</tr>
+</tbody>
+</table>
+<p>This function has an alternative notation : <code>add&lt;*SetName*&gt;Set(setName, setArray)</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>setsObject</td>
+<td>String</td>
+<td>An object where each property name is a setName and the content is the set content.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>setName</th>
+<th>Function Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>piManager</td>
+<td>tasks</td>
+<td>addTasksSet</td>
+</tr>
+<tr>
+<td>piQuest</td>
+<td>pages</td>
+<td>addPagesSet</td>
+</tr>
+<tr>
+<td></td>
+<td>questions</td>
+<td>addQuestionsSet</td>
+</tr>
+<tr>
+<td>piPlayer</td>
+<td>trial</td>
+<td>addTrialSet</td>
+</tr>
+<tr>
+<td></td>
+<td>stimulus</td>
+<td>addStimulusSet</td>
+</tr>
+<tr>
+<td></td>
+<td>media</td>
+<td>addMediaSet</td>
+</tr>
+</tbody>
+</table>
+<h5><a name="returns" class="header-link" href="#returns"><span></span></a>returns:</h5><p>&#39;undefined&#39;</p>
+<h5><a name="examples" class="header-link" href="#examples"><span></span></a>examples:</h5><p>First notation:</p>
+<pre><code class="lang-javascript">API.addTrialSet(&#39;set1&#39;, trial1);
+API.addTrialSet(&#39;set2&#39;, [trial2, trial3]);
+</code></pre>
+<p>Second notation. Does the same thing as the first pair:</p>
+<pre><code class="lang-javascript">API.addTrialSet({
+    set1: [trial1],
+    set2: [trial2,trial3]
+});
+</code></pre>
+<h3><a name="environmental-variables" class="header-link" href="#environmental-variables"><span></span></a>Environmental variables</h3><h4><a name="addglobalobj" class="header-link" href="#addglobalobj"><span></span></a>addGlobal(obj)</h4><table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>obj</td>
+<td>Object</td>
+<td>An object to merged into the global object</td>
+</tr>
+</tbody>
+</table>
+<h5><a name="returns" class="header-link" href="#returns"><span></span></a>returns:</h5><p>(<em>Object</em>) <code>global</code> object.</p>
+<h5><a name="example" class="header-link" href="#example"><span></span></a>example:</h5><pre><code class="lang-javascript">API.addGlobal({myFlag: true});
+</code></pre>
+<h4><a name="getglobal" class="header-link" href="#getglobal"><span></span></a>getGlobal()</h4><h5><a name="returns" class="header-link" href="#returns"><span></span></a>returns:</h5><p>(<em>Object</em>) <code>global</code> object.</p>
+<h5><a name="example" class="header-link" href="#example"><span></span></a>example:</h5><pre><code class="lang-javascript">var global = API.getGlobal();
+global.myFlag = true;
+</code></pre>
+<h4><a name="addcurrentobj" class="header-link" href="#addcurrentobj"><span></span></a>addCurrent(obj)</h4><table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>obj</td>
+<td>Object</td>
+<td>An object to merged into the current object.</td>
+</tr>
+</tbody>
+</table>
+<h5><a name="returns" class="header-link" href="#returns"><span></span></a>returns:</h5><p>(<em>Object</em>) <code>current</code> object.</p>
+<h5><a name="example" class="header-link" href="#example"><span></span></a>example:</h5><pre><code class="lang-javascript">API.addCurrent({myFlag: true});
+</code></pre>
+<h4><a name="getcurrent" class="header-link" href="#getcurrent"><span></span></a>getCurrent()</h4><h5><a name="returns" class="header-link" href="#returns"><span></span></a>returns:</h5><p>(<em>Object</em>) <code>current</code> object.</p>
+<h5><a name="example" class="header-link" href="#example"><span></span></a>example:</h5><pre><code class="lang-javascript">var current = API.getCurrent();
+current.myFlag = true;
+</code></pre>
+<h3><a name="convenience-methods" class="header-link" href="#convenience-methods"><span></span></a>Convenience methods</h3><h4><a name="posturl-object" class="header-link" href="#posturl-object"><span></span></a>post(url, object)</h4><p>Posts JSONified data to the server. </p>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>url</td>
+<td>String</td>
+<td>The url to post to.</td>
+</tr>
+<tr>
+<td>object</td>
+<td>object</td>
+<td>An Object to be JSONified then posted.</td>
+</tr>
+</tbody>
+</table>
+<h5><a name="returns" class="header-link" href="#returns"><span></span></a>returns:</h5><p>(<em>Promise</em>) a promise to be resolved when the post completes.</p>
+<h5><a name="example" class="header-link" href="#example"><span></span></a>example:</h5><pre><code class="lang-javascript">API.post(&#39;my/server/url&#39;, {my:&#39;data&#39;});
+</code></pre>
+<h4><a name="shufflecollection" class="header-link" href="#shufflecollection"><span></span></a>shuffle(collection)</h4><p>Returns an array of shuffled values, using a version of the Fisher-Yates shuffle (Uses <a href="https://lodash.com/docs#shuffle">lodash shuffle</a>).</p>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>collection</td>
+<td>Array, Object or String</td>
+<td>The collection to shuffle.</td>
+</tr>
+</tbody>
+</table>
+<h5><a name="returns" class="header-link" href="#returns"><span></span></a>returns:</h5><p>(<em>Array</em>) The new shuffled array.</p>
+<h5><a name="example" class="header-link" href="#example"><span></span></a>example:</h5><pre><code class="lang-javascript">var shuffled = API.shuffle([1,2,3,4]);
+console.log(shuffled); // prints [4, 1, 3, 2] for example
+</code></pre>
+<h4><a name="saveobject" class="header-link" href="#saveobject"><span></span></a>save(object)</h4><p>This function is available only on the project implicit build.
+Posts JSONified data to the server. </p>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>object</td>
+<td>object</td>
+<td>An Object to be JSONified then posted.</td>
+</tr>
+</tbody>
+</table>
+<h5><a name="returns" class="header-link" href="#returns"><span></span></a>returns:</h5><p>(<em>Promise</em>) a promise to be resolved when the post completes.</p>
+<h5><a name="example" class="header-link" href="#example"><span></span></a>example:</h5><pre><code class="lang-javascript">API.save({my:&#39;data&#39;});
+</code></pre>
+
+				<hr />
+				<small>License: Apache 2. &copy; Project Implicit. &middot; Current version 0.1</small>
+			</section>
+		</main>
+		<script src="../assets/prism.js"></script>
+	</body>
+</html
