@@ -134,7 +134,7 @@ define(function(require){
                     expect($scope.current.questions.name.response).toBe('1234');
                 });
 
-                iit('should bind dropdown to model', function(){
+                it('should bind dropdown to model', function(){
                     compile({rows:[{name:'name'}], columns: [1, {type:'dropdown', answers: [{text:1, value:555}, 44]}, 3]});
                     var input = $table.find('tbody tr select');
                     input.val(555).trigger('change');
