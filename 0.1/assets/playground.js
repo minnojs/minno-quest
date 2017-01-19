@@ -2,9 +2,14 @@
 /* global ace */
 (function(){
     var win, hasError = false;
-    setup(document.getElementById('editor'));
+    var elements = document.querySelectorAll('[playground]') || [];
+    Array.prototype.forEach.call(elements, playgroundSetup);
 
-    function setup(el, mgrFn){
+    var scripts = document.getElementsByTagName('script');
+    var runminnoUrl = scripts[scripts.length-1].src.replace(/playground\.js$/, 'runminno.html');
+    window.playgroundSetup = playgroundSetup;
+
+    function playgroundSetup(el, mgrFn){
         var button = el.querySelector('.activate-button');
         var editor = window.e = ace.edit(el.querySelector('.editor'));
 
@@ -28,7 +33,7 @@
                 win = null;
             }
 
-            win = window.open('../assets/runminno.html', 'Playground');
+            win = window.open(runminnoUrl, 'Playground');
 
             win.onload = function(){
                 win.addEventListener('unload', function() {

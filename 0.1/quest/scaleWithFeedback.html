@@ -1,0 +1,263 @@
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Minno.js</title>
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+		<link href="../assets/prism.css" rel="stylesheet" />
+		<link href="../assets/style.css" rel="stylesheet" />
+	</head>
+	<body>
+		<header>
+			<section>
+				<nav class="brand">
+                    <a href="/"><h1>Minno</h1></a>
+				</nav>
+				<nav>
+					<a href="/minno-quest/0.1/basics/overview.html">Basics</a>
+					<a href="/minno-quest/0.1/manager/overview.html">miManager</a>
+					<a href="/minno-quest/0.1/quest/overview.html">miQuest</a>
+					<a href="/minno-time/0.3/time/overview.html">miTime</a>
+				</nav>
+				<nav>
+                    <select id="version-select"><option value="0.0" >v0.0</option>,<option value="0.1" selected>v0.1</option></select>
+					<a href="https://github.com/minnojs">Github</a>
+				</nav>
+			</section>
+		</header>
+		<main>
+			<section class="docs">
+                <h1><a name="a-hrefscalewithfeedbackhtmlscale-with-feedbacka" class="header-link" href="#a-hrefscalewithfeedbackhtmlscale-with-feedbacka"><span></span></a><a href="scaleWithFeedback.html">Scale With Feedback</a></h1><ul>
+<li>Core<ul>
+<li><a href="overview.html">Overview</a></li>
+<li><a href="introduction.html">Introduction</a></li>
+<li><a href="API.html">API</a></li>
+<li><a href="playground.html">Playground</a></li>
+</ul>
+</li>
+<li>Question types<ul>
+<li><a href="text.html">Text</a></li>
+<li><a href="textarea.html">Textarea</a></li>
+<li><a href="textNumber.html">Text Number</a></li>
+<li><a href="selectOne.html">Select One</a></li>
+<li><a href="selectMulti.html">Select Multi</a></li>
+<li><a href="grid.html">Grid</a></li>
+<li><a href="gridMulti.html">Multi Grid</a></li>
+<li><a href="slider.html">Slider</a></li>
+<li><a href="rank.html">Rank</a></li>
+</ul>
+</li>
+<li>Examples<ul>
+<li><a href="helloworld.html">Hello world</a></li>
+<li><a href="bodyAwareness.html">Body Awareness</a></li>
+<li><a href="weight.html">Weight demo</a></li>
+<li><a href="usingImages.html">Using Images</a></li>
+<li><a href="buttons.html">Buttons</a></li>
+<li><a href="buttonsAdvanced.html">Buttons Advanced</a></li>
+<li><a href="buttonsOnePage.html">Buttons One Page</a></li>
+<li><a href="dependency.html">Dependency</a></li>
+<li><a href="liveDependency.html">Live Dependency</a></li>
+<li><a href="gridExample.html">Grid</a></li>
+<li><a href="timer.html">Timer</a></li>
+<li><a href="openEnded.html">Open Ended</a></li>
+<li><a href="openEndedLong.html">Open Ended Long</a></li>
+<li><a href="rateImages.html">Rate Images</a></li>
+<li><a href="rateImagesSizes.html">Rate Images Sizes</a></li>
+<li><strong>Scale With Feedback</strong></li>
+<li><a href="sliderExample.html">Slider</a></li>
+<li><a href="userPrevResp.html">User Prev Resp</a></li>
+<li><a href="nfc.html">Agreement scale</a></li>
+</ul>
+</li>
+</ul>
+<p>/**</p>
+<ul>
+<li>@author Yoav Bar-Anan <a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#x6f;&#58;&#x62;&#x61;&#114;&#97;&#x6e;&#x61;&#110;&#121;&#64;&#x62;&#x67;&#x75;&#46;&#97;&#99;&#46;&#x69;&#108;">&#x62;&#x61;&#114;&#97;&#x6e;&#x61;&#110;&#121;&#64;&#x62;&#x67;&#x75;&#46;&#97;&#99;&#46;&#x69;&#108;</a>
+*/</li>
+</ul>
+<section playground>
+    <div class="buttons">
+        <a class="activate-button">Activate</a>
+        <a class="download-button" href="scaleWithFeedback.js" download>Download</a>
+    </div>
+    <div class="editor">/**
+* @author Yoav Bar-Anan <baranany@bgu.ac.il>
+ */
+define(['questAPI'], function(Quest){
+	var API = new Quest();
+
+	// ### Questions
+	API.addQuestionsSet('basicSelect',
+	{
+		type: 'selectOne',
+		autoSubmit:true,
+		numericValues:true,
+		required:true,
+		errorMsg: {
+			required: "Please select an answer, or click 'decline to answer'"
+		},
+		answers : ['Strongly disagree', 'Moderately disagree', 'Slightly disagree', 'Slightly agree', 'Moderately agree', 'Strongly agree'],
+		help: '<%= pagesMeta.number < 3 %>',
+		helpText: 'Selecting an answer once colors it blue.<br/>You can change your answer by selecting another option.<br/>To confirm, click the selected (blue) button a second time.'
+	});
+
+
+	API.addQuestionsSet('rosenberg',
+	[
+		{
+			inherit : 'basicSelect',
+			name : 'ros1',
+			stem : "On the whole, I am satisfied with myself."
+		},
+		{
+			inherit : 'basicSelect',
+			name : 'ros2',
+			reverse:true,
+			stem : "At times, I think I am no good at all."
+		},
+		{
+			inherit : 'basicSelect',
+			name : 'ros3',
+			stem : "I feel that I have a number of good qualities."
+		},
+		{
+			inherit : 'basicSelect',
+			name : 'ros4',
+			stem : "I am able to do things as well as most other people."
+		},
+		{
+			inherit : 'basicSelect',
+			name : 'ros5',
+			reverse:true,
+			stem : "I feel I do not have much to be proud of."
+		},
+		{
+			inherit : 'basicSelect',
+			name : 'ros6',
+			reverse:true,
+			stem : "I certainly feel useless at times."
+		},
+		{
+			inherit : 'basicSelect',
+			name : 'ros7',
+			stem : "I feel that I'm a person of worth, at least on an equal plane with others."
+		},
+		{
+			inherit : 'basicSelect',
+			name : 'ros8',
+			reverse:true,
+			stem : "I wish I could have more respect for myself."
+		},
+		{
+			inherit : 'basicSelect',
+			name : 'ros9',
+			reverse:true,
+			stem : "All in all, I am inclined to feel that I am a failure."
+		},
+		{
+			inherit : 'basicSelect',
+			name : 'ros10',
+			stem : "I take a positive attitude toward myself."
+		}
+	]);
+
+	API.addQuestionsSet('showme', {
+		type: 'selectOne',
+		autoSubmit:true,
+		stem:'Click next to see your self-esteem score',
+		name:'next',
+		answers : ['ok'],
+		onSubmit : function(log, current){
+			var sum=0, count=0, prop, response;
+
+			// for each question (that has a response and begings with "ros") add to sum
+			for (prop in current.questions){
+				response = current.questions[prop].response;
+				if (response && /^ros/.test(prop)) {
+					sum += response;
+					count+=1;
+				}
+			}
+
+			if (count === 10){
+				current.selfEsteemScore = sum/10;
+			} else {
+				current.selfEsteemScore = 'No score; You did not answer all the questions';
+			}
+		}
+	});
+
+	API.addQuestionsSet('score', {
+		type: 'selectOne',
+		autoSubmit:true,
+		stem: "Your self-esteem score: <%=current.selfEsteemScore%>.<br/><br/>"+
+		"A score above 5 means you're a douche; A score below 2 means you probably deserve more love than you give yourself.",
+		name:'end'
+	});
+
+
+	// ### Pages
+	API.addPagesSet('scalePage',
+	{
+		progressBar: '<%= pagesMeta.number %> out of 10',
+		header: 'Please rate your agreement with the following statement',
+		headerStyle : {'font-size':'1em'},
+		questions : {inherit:{set:'rosenberg', type:'exRandom'}},
+		v1style:2,
+		decline:true,
+		numbered: false
+	});
+
+	API.addPagesSet('endPage',
+	{
+		v1style:2,
+		decline:false,
+		numbered: false
+	});
+
+
+	// ### Sequence
+	API.addSequence(
+	[
+		{
+			mixer : 'repeat',
+			times : 10,
+			data :
+			[
+				{inherit : 'scalePage'}
+			]
+		},
+		{
+			inherit:'endPage',
+			questions:[{inherit:'showme'}]
+		},
+		{
+			inherit:'endPage',
+			questions:[{inherit:'score'}]
+		}
+	]);
+
+	/**
+	Return the script to piquest's god, or something of that sort.
+	**/
+	return API.script;
+});</div>
+</section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js" integrity="sha256-xrr4HH5eSY+cFz4SH7ja/LaAi9qcEdjMpeMP49/iOLs=" crossorigin="anonymous"></script>
+<script src="../assets/playground.js"></script>
+
+				<hr />
+				<small>License: Apache 2. &copy; Project Implicit. &middot; Current version [version]</small>
+			</section>
+		</main>
+		<script src="../assets/prism.js"></script>
+        <script>
+            (function(){
+                var select = document.getElementById('version-select');
+                select.addEventListener('change', function(event){
+                    var version = event.target.value;
+                    location.href = location.href.replace(/[0-9]\.[0-9]/, version)
+                });
+            })();
+        </script>
+	</body>
+</html>

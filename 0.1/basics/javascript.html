@@ -1,130 +1,81 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 	<head>
-
-		<!-- Meta, title, CSS, favicons, etc. -->
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta name="description" content="Bootstrap, a sleek, intuitive, and powerful mobile first front-end framework for faster and easier web development.">
-		<meta name="keywords" content="HTML, CSS, JS, JavaScript, framework, bootstrap, front-end, frontend, web development">
-		<meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-
-		<title>
-			
-				Basics
-			
-			&middot; V0.1
-		</title>
-
-		
-		<!-- Bootstrap core CSS -->
-		<link href="../../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-		<link href="../css/highlight.css" rel="stylesheet">
-		<link href="../css/style.css" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
-		<style type="text/css">
-			pre {display:block;overflow-x:auto;padding:0.5em;background:#000;color:#f8f8f8;-webkit-text-size-adjust:none}
-			table {padding: 0;}
-			table tr {border-top: 1px solid #cccccc;background-color: white;margin: 0;padding: 0;}
-			table tr:nth-child(2n) {background-color: #f8f8f8;}
-			table tr th {font-weight: bold;border: 1px solid #cccccc;text-align: left;margin: 0;padding: 6px 13px;}
-			table tr td {border: 1px solid #cccccc;text-align: left;margin: 0;padding: 6px 13px;}
-			table tr th :first-child, table tr td :first-child {margin-top: 0;}
-			table tr th :last-child, table tr td :last-child {margin-bottom: 0;}
-		</style>
-		
-
-		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-		<!--[if lt IE 9]>
-			<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-			<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-		<![endif]-->
-
-		<!-- Favicons -->
-		<link rel="apple-touch-icon" href="../apple-touch-icon.png">
-		<link rel="icon" href="../favicon.ico">
-
+		<meta charset="UTF-8" />
+		<title>Minno.js</title>
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+		<link href="../assets/prism.css" rel="stylesheet" />
+		<link href="../assets/style.css" rel="stylesheet" />
 	</head>
-
 	<body>
-		<a id="skippy" class="sr-only sr-only-focusable" href="#content"><div class="container"><span class="skiplink-text">Skip to main content</span></div></a>
-
-		<!-- Docs master nav -->
-		<header class="navbar navbar-static-top bs-docs-nav" id="top" role="banner">
-			<div class="container">
-				<div class="navbar-header">
-					<button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
-						<span class="sr-only">Toggle navigation</span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
-					<a href="/" class="navbar-brand">Minno</a>
-				</div>
-				<nav class="collapse navbar-collapse bs-navbar-collapse">
-					<ul class="nav navbar-nav">
-						<li class=" active ">
-							<a href="../basics/overview.html">Basics</a>
-						</li>
-						<li class="">
-							<a href="../quest/overview.html">miQuest</a>
-						</li>
-						<li class="">
-							<a href="../manager/overview.html">miManager</a>
-						</li>
-						<li>
-							<a href="../../../minno-time/0.3/tutorials/overview.html">miPlayer</a>
-						</li>
-					</ul>
-					<ul class="nav navbar-nav navbar-right">
-						<li>
-							<form class="navbar-form navbar-left" role="search" method="get" action="http://www.google.com/search">
-							  <div class="form-group">
-							    <input type="text" class="form-control" placeholder="Search" name="q" size="25" maxlength="255">
-							  </div>
-							  <button type="submit" class="btn btn-default" value="Google Search">
-							    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-							  </button>
-							  <input type="hidden" name="sitesearch" value="minnojs.github.io" checked />
-							</form>
-						</li>
-
-						<li>
-                            <form class="navbar-form navbar-left" role="search">
-                                <div class="form-group">
-                                    <select class="form-control" id="version-select">
-                                        <option value="0.0">v0.0</option>
-                                        <option value="0.1" selected>v0.1</option>
-                                    </select>
-                                </div>
-                            </form>
-                        </li>
-
-                        <li><a href="https://github.com/minnojs/minno-quest">Github</a></li>
-                    </ul>
-                </nav>
-            </div>
-        </header>
-
-        <div id="content" class="bs-docs-header">
-            <div class="container">
-                
-	<h1>Javascript</h1>
-	<p>Getting to know the environment we work with.</p>
-
-            </div>
-		</div>
-
-		<div class="container bs-docs-container">
-			<div class="row">
-				<div class="col-md-9" role="main">
-					
-	<p>Task scripts are written using JavaScript; <a href="http://en.wikipedia.org/wiki/JavaScript">JavaScript</a> is a programming language used by browsers (like Internet Explorer, Chrome or Safari). Our scripts do not require you to program any JavaScript but you should have a basic grasp of the basic syntax before we go on. If you know some basic JavaScript you can skip this section and go directly to the Hello world tutorial.</p>
+		<header>
+			<section>
+				<nav class="brand">
+                    <a href="/"><h1>Minno</h1></a>
+				</nav>
+				<nav>
+					<a href="/minno-quest/0.1/basics/overview.html">Basics</a>
+					<a href="/minno-quest/0.1/manager/overview.html">miManager</a>
+					<a href="/minno-quest/0.1/quest/overview.html">miQuest</a>
+					<a href="/minno-time/0.3/time/overview.html">miTime</a>
+				</nav>
+				<nav>
+                    <select id="version-select"><option value="0.0" >v0.0</option>,<option value="0.1" selected>v0.1</option></select>
+					<a href="https://github.com/minnojs">Github</a>
+				</nav>
+			</section>
+		</header>
+		<main>
+			<section class="docs">
+                <h1><a name="javascript" class="header-link" href="#javascript"><span></span></a>Javascript</h1><ul>
+<li>Core<ul>
+<li><a href="overview.html">Overview</a></li>
+<li><strong><a href="javascript.html">Javascript</a></strong></li>
+<li><a href="create.html">Creating a task</a></li>
+<li><a href="API.html">API</a></li>
+<li><a href="resources.html">Resources</a></li>
+</ul>
+</li>
+<li>Sequencer<ul>
+<li><a href="introduction.html">Introduction</a></li>
+<li><a href="mixer.html">Mixer</a></li>
+<li><a href="templates.html">Templates</a></li>
+<li><a href="variables.html">Variables</a></li>
+<li><a href="inheritance.html">Inheritance</a></li>
+</ul>
+</li>
+<li>Inheritance<ul>
+<li><a href="inheritanceAbstraction.html">Abstraction</a></li>
+<li><a href="inheritanceRandom.html">Random</a></li>
+<li><a href="inheritanceExRandom.html">Exclusive Random</a></li>
+<li><a href="inheritanceSequential.html">Sequential</a></li>
+<li><a href="inheritanceByData.html">By Data</a></li>
+<li><a href="inheritanceCustom.html">Custom</a></li>
+<li><a href="inheritanceSeed.html">Seed</a></li>
+<li><a href="inheritanceRepeat.html">Repeat</a></li>
+</ul>
+</li>
+<li>Mixers<ul>
+<li><a href="mixerRandom.html">Random</a></li>
+<li><a href="mixerRepeat.html">Repeat</a></li>
+<li><a href="mixerWeightedRandom.html">Weighted Random</a></li>
+<li><a href="mixerChoose.html">Choose</a></li>
+<li><a href="mixerWrapper.html">Wrapper</a></li>
+<li><a href="mixerBranch.html">Branch</a></li>
+<li><a href="mixerMultiBranch.html">Multi Branch</a></li>
+</ul>
+</li>
+<li>Variables &amp; Templates<ul>
+<li><a href="templateGlobal.html">Global</a></li>
+<li><a href="templateData.html">Data</a></li>
+<li><a href="templateMeta.html">Meta</a></li>
+</ul>
+</li>
+</ul>
+<p>Task scripts are written using JavaScript; <a href="http://en.wikipedia.org/wiki/JavaScript">JavaScript</a> is a programming language used by browsers (like Internet Explorer, Chrome or Safari). Our scripts do not require you to program any JavaScript but you should have a basic grasp of the basic syntax before we go on. If you know some basic JavaScript you can skip this section and go directly to the Hello world tutorial.</p>
 <p>If you want to get a deeper understanding of Javascript, or if you would like a more methodical introduction you might want to try out one of the many Javascript introduction courses on the net (we recommend <a href="http://www.codecademy.com/en/tracks/javascript-combined">Codecademy</a> or <a href="https://www.khanacademy.org/computing/computer-programming/programming">Khan Academy</a>).</p>
 <p>The fundamental building blocks of javascript expressions are variables and literals (more details <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Values,_variables,_and_literals">here</a>).</p>
 <p>Variables store information. Each variable stores one or a few different values.</p>
-<h3><a name="value-types" class="header-link" href="#value-types"><span class="glyphicon glyphicon-link"></span></a>Value types</h3><p>There are several types of values recognized by JavaScript.</p>
+<h3><a name="value-types" class="header-link" href="#value-types"><span></span></a>Value types</h3><p>There are several types of values recognized by JavaScript.</p>
 <table>
 <thead>
 <tr>
@@ -159,49 +110,49 @@
 </tr>
 </tbody>
 </table>
-<h3><a name="variables" class="header-link" href="#variables"><span class="glyphicon glyphicon-link"></span></a>Variables</h3><p>Variables are symbolic names for values in your script. You can define variables using the keyword <code>var</code>; for example <code>var x=42</code> sets the value 42 into the variable <code>x</code>. Any time you want to refer to the value stored in a variable you can refer to the variable name instead. This is useful if you want to define a value at one point in your script and reuse it again and again.</p>
-<pre><code class="lang-js"><span class="hljs-comment">// Define variable</span>
-<span class="hljs-tag">var</span> x = <span class="hljs-number">17</span>
-console.<span class="hljs-function"><span class="hljs-title">log</span><span class="hljs-params">(x)</span></span>        <span class="hljs-comment">// prints 17 into the browser's console.</span>
+<h3><a name="variables" class="header-link" href="#variables"><span></span></a>Variables</h3><p>Variables are symbolic names for values in your script. You can define variables using the keyword <code>var</code>; for example <code>var x=42</code> sets the value 42 into the variable <code>x</code>. Any time you want to refer to the value stored in a variable you can refer to the variable name instead. This is useful if you want to define a value at one point in your script and reuse it again and again.</p>
+<pre><code class="lang-javascript">// Define variable
+var x = 17
+console.log(x)        // prints 17 into the browser&#39;s console.
 
-<span class="hljs-comment">// change variable value</span>
-x = <span class="hljs-number">343</span>
-console.<span class="hljs-function"><span class="hljs-title">log</span><span class="hljs-params">(x)</span></span>        <span class="hljs-comment">// prints 343</span>
+// change variable value
+x = 343
+console.log(x)        // prints 343
 </code></pre>
 <p>Notice that the first time we created the variable <code>x</code>, we had to use the word <code>var</code>. Then, when we referred to that variable again, we did not use <code>var</code> anymore. You can create each variable only once in your code. You can create the variable at any point in your file. However, you can&#39;t use the variable until you created it. So, setting 343 into x before you created it won&#39;t work. </p>
-<h3><a name="comments" class="header-link" href="#comments"><span class="glyphicon glyphicon-link"></span></a>Comments</h3><p>Comments are a way to keep your code documented. You will probably not remember what you were trying to do a week after you wrote a piece of code. So make sure to document everything. Further, if you document your code, others can use it, or help you find errors.</p>
+<h3><a name="comments" class="header-link" href="#comments"><span></span></a>Comments</h3><p>Comments are a way to keep your code documented. You will probably not remember what you were trying to do a week after you wrote a piece of code. So make sure to document everything. Further, if you document your code, others can use it, or help you find errors.</p>
 <p>JavaScript has two types of comments; block comments and single line comments:</p>
-<pre><code class="lang-js"><span class="hljs-comment">// a short, single-line comment</span>
-console.<span class="hljs-function"><span class="hljs-title">log</span><span class="hljs-params">(<span class="hljs-number">123</span>)</span></span> <span class="hljs-comment">// one line comments can come at the end of a line of script too</span>
+<pre><code class="lang-javascript">// a short, single-line comment
+console.log(123) // one line comments can come at the end of a line of script too
 
-<span class="hljs-comment">/* this is a long, multi-line comment
+/* this is a long, multi-line comment
      about my script. So I am using 
-     the syntax for a block comment. */</span>
+     the syntax for a block comment. */
 </code></pre>
-<h3><a name="array-literals" class="header-link" href="#array-literals"><span class="glyphicon glyphicon-link"></span></a>Array literals</h3><p>Arrays are ordered lists of values, their elements may be any value types (including other arrays). When you create the array, you can assign the elements within the array with commas (learn <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">more</a>).</p>
-<pre><code class="lang-js"><span class="hljs-comment">// Define arr</span>
-var arr = [<span class="hljs-number">1</span>,<span class="hljs-number">3</span>,<span class="hljs-number">5</span>,<span class="hljs-number">7</span>,<span class="hljs-number">11</span>]
+<h3><a name="array-literals" class="header-link" href="#array-literals"><span></span></a>Array literals</h3><p>Arrays are ordered lists of values, their elements may be any value types (including other arrays). When you create the array, you can assign the elements within the array with commas (learn <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">more</a>).</p>
+<pre><code class="lang-javascript">// Define arr
+var arr = [1,3,5,7,11]
 
-<span class="hljs-comment">// Access arr elements</span>
-console.<span class="hljs-built_in">log</span>(arr[<span class="hljs-number">0</span>])            <span class="hljs-comment">// prints 1</span>
-console.<span class="hljs-built_in">log</span>(arr[<span class="hljs-number">3</span>])            <span class="hljs-comment">// prints 7</span>
+// Access arr elements
+console.log(arr[0])            // prints 1
+console.log(arr[3])            // prints 7
 </code></pre>
 <p>Arrays have cells. To refer to one value in the array, we use the value&#39;s cell index inside []. </p>
-<h3><a name="object-literals" class="header-link" href="#object-literals"><span class="glyphicon glyphicon-link"></span></a>Object literals</h3><p>Object literals are a structure of variables. The structure is a list of property names and associated values. Like arrays, objects group of few variables together. However, in objects, each value has a name (rather than a cell number). For instance, you can think of a person as an object with many different properties. The person has a name, a family name, age, weight, and more. </p>
-<pre><code class="lang-js"><span class="hljs-comment">// Define an object named person.</span>
-var person = {<span class="hljs-string">name:</span> <span class="hljs-string">'John Ridley'</span>, <span class="hljs-string">family:</span><span class="hljs-string">'Stroop'</span>, <span class="hljs-string">age:</span><span class="hljs-number">33</span>, <span class="hljs-string">weight:</span>{<span class="hljs-string">lbs:</span><span class="hljs-number">150</span>, <span class="hljs-string">kg:</span><span class="hljs-number">68</span>}} 
-<span class="hljs-comment">//This object has four variables in it. The weight variable is an object inside an object.</span>
+<h3><a name="object-literals" class="header-link" href="#object-literals"><span></span></a>Object literals</h3><p>Object literals are a structure of variables. The structure is a list of property names and associated values. Like arrays, objects group of few variables together. However, in objects, each value has a name (rather than a cell number). For instance, you can think of a person as an object with many different properties. The person has a name, a family name, age, weight, and more. </p>
+<pre><code class="lang-javascript">// Define an object named person.
+var person = {name: &#39;John Ridley&#39;, family:&#39;Stroop&#39;, age:33, weight:{lbs:150, kg:68}} 
+//This object has four variables in it. The weight variable is an object inside an object.
 
-<span class="hljs-comment">// Here are the two main methods to refer to the object's properties</span>
-console.log(person.name)            <span class="hljs-comment">// prints 'John Ridley'</span>
-console.log(person[<span class="hljs-string">'family'</span>])        <span class="hljs-comment">// prints 'Stroop'</span>
-console.log(person.weight.kg)        <span class="hljs-comment">// prints '68'</span>
+// Here are the two main methods to refer to the object&#39;s properties
+console.log(person.name)            // prints &#39;John Ridley&#39;
+console.log(person[&#39;family&#39;])        // prints &#39;Stroop&#39;
+console.log(person.weight.kg)        // prints &#39;68&#39;
 </code></pre>
 <p>The property name (sometimes called key) and values are separated using a colon <code>:</code>, propertyName:value pairs are separated using a comma <code>,</code>. Property names can be any string (=text). The properties are accessed either using brackets <code>obj[&#39;propertyName&#39;]</code> or using dot(.) notation <code>obj.propertyName</code>.</p>
-<h3><a name="functions" class="header-link" href="#functions"><span class="glyphicon glyphicon-link"></span></a>Functions</h3><p>Functions are one of the fundamental building blocks in JavaScript. A function is a JavaScript procedure—a set of statements that perform a task or calculate a value.</p>
+<h3><a name="functions" class="header-link" href="#functions"><span></span></a>Functions</h3><p>Functions are one of the fundamental building blocks in JavaScript. A function is a JavaScript procedure—a set of statements that perform a task or calculate a value.</p>
 <p>For example, the following code defines a simple function named square:</p>
-<pre><code class="lang-js"><span class="hljs-function"><span class="hljs-keyword">function</span></span> square(<span class="hljs-keyword">number</span>) {
-    <span class="hljs-keyword">return</span> <span class="hljs-keyword">number</span> * <span class="hljs-keyword">number</span>;
+<pre><code class="lang-javascript">function square(number) {
+    return number * number;
 }
 </code></pre>
 <p>This function accepts a number as an argument and then returns its square.</p>
@@ -212,11 +163,11 @@ console.log(person.weight.kg)        <span class="hljs-comment">// prints '68'</
 <li>The JavaScript statements that define the function, enclosed in curly braces, <code>{}</code>.</li>
 </ul>
 <p>Functions in JavaScript are a special type of object. This means that they can be stored as variables and passed as arguments. In order to activate the procedure stored within a function you use parenthesis notation <code>functionName(arguments)</code>, using the function previously defined:</p>
-<pre><code class="lang-js">console.<span class="hljs-function"><span class="hljs-title">log</span><span class="hljs-params">(square)</span></span>                <span class="hljs-comment">// prints the square function</span>
-console.<span class="hljs-function"><span class="hljs-title">log</span><span class="hljs-params">(square(<span class="hljs-number">9</span>)</span></span>)            <span class="hljs-comment">// prints 81</span>
+<pre><code class="lang-javascript">console.log(square)                // prints the square function
+console.log(square(9))            // prints 81
 </code></pre>
 <p>(learn more <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions">here</a>).</p>
-<h3><a name="errors-and-debugging" class="header-link" href="#errors-and-debugging"><span class="glyphicon glyphicon-link"></span></a>Errors and debugging</h3><p>When developing scripts things don&#39;t always go as expected.
+<h3><a name="errors-and-debugging" class="header-link" href="#errors-and-debugging"><span></span></a>Errors and debugging</h3><p>When developing scripts things don&#39;t always go as expected.
 Sometimes you might make a syntactical error, sometime you might misspell a keyword. 
 The browser always logs these errors and it is useful to see them.
 All modern browsers have a console that allows you to see the errors (if you are using firefox you should check out <a href="https://getfirebug.com/">firebug</a>).
@@ -224,294 +175,11 @@ Most browsers use <code>F12</code> as a shortcut for displaying the console.
 If that doesn&#39;t work for you search your browsers menus: look for a <strong>Web Developer</strong> or <strong>Developer Tools</strong> menu under tools or options.</p>
 <p>In case your script does not load, or freezes at a certain point, open your console and see if you have any errors.</p>
 
-
-				</div>
-
-				<div class="col-md-3" role="complementary">
-					<nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm">
-
-						
-
-						
-
-						
-
-						<ul class="nav bs-docs-sidenav">
-						
-
-							
-							<li class="">
-							<li class="">
-
-								<a href="../basics/overview.html">Overview</a>
-							</li>
-						
-							
-							<li class=" active ">
-							<li class=" active ">
-
-								<a href="../basics/javascript.html">Javascript</a>
-							</li>
-						
-							
-							<li class="">
-							<li class="">
-
-								<a href="../basics/create.html">Creating a task</a>
-							</li>
-						
-                            <li>
-								<a href="../sequencer/introduction.html">Sequencer</a>
-                                <ul class="nav">
-									
-							<li class="">
-                                <a href="../sequencer/introduction.html">Introduction</a>
-							</li>
-						
-									
-							<li class="">
-                                <a href="../sequencer/mixer.html">Mixer</a>
-							</li>
-						
-									
-							<li class="">
-                                <a href="../sequencer/templates.html">Templates</a>
-							</li>
-						
-									
-							<li class="">
-                                <a href="../sequencer/variables.html">Variables</a>
-							</li>
-						
-									
-							<li class="">
-                                <a href="../sequencer/inheritance.html">Inheritance</a>
-							</li>
-						
-                                </ul>
-                            </li>
-							
-							<li class="">
-							<li class="">
-
-								<a href="../basics/API.html">API</a>
-							</li>
-						
-							
-							<li class="">
-							<li class="">
-
-								<a href="../basics/resources.html">Resources</a>
-							</li>
-						
-
-							<li>
-								<a href="javascript:void(0)">Inheritance</a>
-								<ul class="nav">
-									
-							<li class="">
-								<div>
-									<a href="../basics/inheritanceAbstractionDocco.html">Abstraction</a>
-									<a href="../basics/inheritanceAbstraction.js" download="../basics/inheritanceAbstraction.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../basics/inheritanceAbstractionPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-									
-							<li class="">
-								<div>
-									<a href="../basics/inheritanceRandomDocco.html">Random</a>
-									<a href="../basics/inheritanceRandom.js" download="../basics/inheritanceRandom.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../basics/inheritanceRandomPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-									
-							<li class="">
-								<div>
-									<a href="../basics/inheritanceExRandomDocco.html">Exclusive Random</a>
-									<a href="../basics/inheritanceExRandom.js" download="../basics/inheritanceExRandom.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../basics/inheritanceExRandomPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-									
-							<li class="">
-								<div>
-									<a href="../basics/inheritanceSequentialDocco.html">Sequential</a>
-									<a href="../basics/inheritanceSequential.js" download="../basics/inheritanceSequential.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../basics/inheritanceSequentialPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-									
-							<li class="">
-								<div>
-									<a href="../basics/inheritanceByDataDocco.html">By Data</a>
-									<a href="../basics/inheritanceByData.js" download="../basics/inheritanceByData.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../basics/inheritanceByDataPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-									
-							<li class="">
-								<div>
-									<a href="../basics/inheritanceCustomDocco.html">Custom</a>
-									<a href="../basics/inheritanceCustom.js" download="../basics/inheritanceCustom.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../basics/inheritanceCustomPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-
-									
-							<li class="">
-								<div>
-									<a href="../basics/inheritanceSeedDocco.html">Seed</a>
-									<a href="../basics/inheritanceSeed.js" download="../basics/inheritanceSeed.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../basics/inheritanceSeedPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-									
-							<li class="">
-								<div>
-									<a href="../basics/inheritanceRepeatDocco.html">Repeat</a>
-									<a href="../basics/inheritanceRepeat.js" download="../basics/inheritanceRepeat.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../basics/inheritanceRepeatPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-								</ul>
-							</li>
-
-							<li>
-								<a href="javascript:void(0)">Mixers</a>
-								<ul class="nav">
-									
-							<li class="">
-								<div>
-									<a href="../basics/mixerRandomDocco.html">Random</a>
-									<a href="../basics/mixerRandom.js" download="../basics/mixerRandom.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../basics/mixerRandomPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-									
-							<li class="">
-								<div>
-									<a href="../basics/mixerRepeatDocco.html">Repeat</a>
-									<a href="../basics/mixerRepeat.js" download="../basics/mixerRepeat.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../basics/mixerRepeatPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-									
-							<li class="">
-								<div>
-									<a href="../basics/mixerWeightedRandomDocco.html">Weighted Random</a>
-									<a href="../basics/mixerWeightedRandom.js" download="../basics/mixerWeightedRandom.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../basics/mixerWeightedRandomPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-									
-							<li class="">
-								<div>
-									<a href="../basics/mixerChooseDocco.html">Choose</a>
-									<a href="../basics/mixerChoose.js" download="../basics/mixerChoose.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../basics/mixerChoosePlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-									
-							<li class="">
-								<div>
-									<a href="../basics/mixerWrapperDocco.html">Wrapper</a>
-									<a href="../basics/mixerWrapper.js" download="../basics/mixerWrapper.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../basics/mixerWrapperPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-									
-							<li class="">
-								<div>
-									<a href="../basics/mixerBranchDocco.html">Branch</a>
-									<a href="../basics/mixerBranch.js" download="../basics/mixerBranch.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../basics/mixerBranchPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-									
-							<li class="">
-								<div>
-									<a href="../basics/mixerMultiBranchDocco.html">Multi Branch</a>
-									<a href="../basics/mixerMultiBranch.js" download="../basics/mixerMultiBranch.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../basics/mixerMultiBranchPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-								</ul>
-							</li>
-
-							<li>
-								<a href="javascript:void(0)">Variables & Templates</a>
-								<ul class="nav">
-									
-							<li class="">
-								<div>
-									<a href="../basics/templateGlobalDocco.html">Global</a>
-									<a href="../basics/templateGlobal.js" download="../basics/templateGlobal.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../basics/templateGlobalPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-									
-							<li class="">
-								<div>
-									<a href="../basics/templateDataDocco.html">Data</a>
-									<a href="../basics/templateData.js" download="../basics/templateData.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../basics/templateDataPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-									
-							<li class="">
-								<div>
-									<a href="../basics/templateMetaDocco.html">Meta</a>
-									<a href="../basics/templateMeta.js" download="../basics/templateMeta.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../basics/templateMetaPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-								</ul>
-							</li>
-
-						
-						</ul>
-						<!-- <a class="back-to-top" href="#top">
-							Back to top
-						</a> -->
-					</nav>
-				</div>
-			</div>
-		</div>
-
-		<!-- Footer
-		================================================== -->
-		<footer class="bs-docs-footer" role="contentinfo">
-			<div class="container">
-				<p>Created by Project Implicit for the benefit of all.</p>
-				<!-- <p>Code licensed under <a href="https://github.com/twbs/bootstrap/blob/master/LICENSE" target="_blank">MIT</a>, documentation under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p> -->
-				<ul class="bs-docs-footer-links text-muted">
-					<li>Currently v0.0.45</li>
-					<li>&middot;</li>
-					<li><a href="https://github.com/minnojs/minno-quest">GitHub</a></li>
-					<li>&middot;</li>
-					<li><a href="https://github.com/minnojs/minno-quest/releases">Releases</a></li>
-				</ul>
-			</div>
-		</footer>
-
+				<hr />
+				<small>License: Apache 2. &copy; Project Implicit. &middot; Current version [version]</small>
+			</section>
+		</main>
+		<script src="../assets/prism.js"></script>
         <script>
             (function(){
                 var select = document.getElementById('version-select');

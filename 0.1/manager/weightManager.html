@@ -1,0 +1,142 @@
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Minno.js</title>
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+		<link href="../assets/prism.css" rel="stylesheet" />
+		<link href="../assets/style.css" rel="stylesheet" />
+	</head>
+	<body>
+		<header>
+			<section>
+				<nav class="brand">
+                    <a href="/"><h1>Minno</h1></a>
+				</nav>
+				<nav>
+					<a href="/minno-quest/0.1/basics/overview.html">Basics</a>
+					<a href="/minno-quest/0.1/manager/overview.html">miManager</a>
+					<a href="/minno-quest/0.1/quest/overview.html">miQuest</a>
+					<a href="/minno-time/0.3/time/overview.html">miTime</a>
+				</nav>
+				<nav>
+                    <select id="version-select"><option value="0.0" >v0.0</option>,<option value="0.1" selected>v0.1</option></select>
+					<a href="https://github.com/minnojs">Github</a>
+				</nav>
+			</section>
+		</header>
+		<main>
+			<section class="docs">
+                <h1><a name="a-hrefweightmanagerhtmlweight-experimenta" class="header-link" href="#a-hrefweightmanagerhtmlweight-experimenta"><span></span></a><a href="weightManager.html">Weight experiment</a></h1><ul>
+<li>Core<ul>
+<li><a href="overview.html">Overview</a></li>
+<li><a href="API.html">API</a></li>
+<li><a href="playground.html">Playground</a></li>
+</ul>
+</li>
+<li>Tasks<ul>
+<li><a href="messages.html">Messages</a></li>
+<li><a href="post.html">Post</a></li>
+<li><a href="redirect.html">Redirect</a></li>
+</ul>
+</li>
+<li>Examples<ul>
+<li><strong>Weight experiment</strong></li>
+<li><a href="videoManager.html">Displaying Video</a></li>
+</ul>
+</li>
+</ul>
+<p> The weight manager is a basic example of how we user piManager.
+ It is heavily commented so that you can follow everything that goes on.
+ After reading the documentation feel free to download the file and modify it according to your needs.</p>
+<h3><a name="opening-section" class="header-link" href="#opening-section"><span></span></a>Opening section</h3><p> The opening section of each script is always more or less the same.
+ We create the wrapper for the script (<code>define</code>), and create a new instance of a manager.</p>
+<section playground>
+    <div class="buttons">
+        <a class="activate-button">Activate</a>
+        <a class="download-button" href="weightManager.js" download>Download</a>
+    </div>
+    <div class="editor">//
+//The weight manager is a basic example of how we user piManager.
+// It is heavily commented so that you can follow everything that goes on.
+// After reading the documentation feel free to download the file and modify it according to your needs.
+//
+// ### Opening section
+//
+// The opening section of each script is always more or less the same.
+// We create the wrapper for the script (`define`), and create a new instance of a manager.
+define(['managerAPI'], function(Manager){
+
+  var API = new Manager();
+
+  // ### The sequence
+  // The most important part of every manager script is the sequence.
+  // This is where you tell it how to interact with the participants.
+  // In our case we want to simply present a single instruction page, and then activate a piQuest questionnaire.
+  API.addSequence([
+    // #### Instructions
+    // This is a message task. It is used to give instructions to the user.
+    //
+    // The task type is defined using the `type` property.
+    // Setting `keys` to '&nbsp;&nbsp;' allows using the space button in order to proceed.
+    // We use `template` to insert a plain html template to the task.
+    // Usually it is more convenient to use `templateUrl` and get the html out of a separate file, we chose this method here in order to keep the script concise.
+    {
+      type: 'message',
+      keys: ' ',
+      template:
+        '<div class="panel panel-info" style="margin-top:1em">' +
+
+          '<div class="panel-heading">' +
+            '<h1 class="panel-title" style="font-size:2em">Welcome</h1>' +
+          '</div>' +
+
+          '<div class="panel-body">' +
+            '<p>You are about to take a questionnaire that has to do with your perception of personal weight.</p>' +
+            '<p>Please take your time and answer to the best of your ability. In case there is no answer that fits you exactly, pick the closest answer possible.</p>' +
+            '<div style="max-width: 50%; margin: 30px auto 10px;" class="well">' +
+              '<button pi-message-done type="button" class="btn btn-primary btn-block">Click Here or press the space button to Proceed</button>' +
+            '</div>' +
+          '</div>' +
+
+        '</div>'
+    },
+    // #### Weight Questionnaire
+    // This is a piQuest task. In this case it is the central task of this experiment.
+    // The questionnaire is loaded from a file (you can see it right [here](../quest/weightDocco.html)).
+    {
+      type: 'quest',
+      name: 'weightQuest',
+      scriptUrl: '../../quest/weight.js'
+    }
+
+    // Now, we just close the sequence.
+  ]);
+
+  // ### Closing section
+  //
+  // And finally, we close the script.
+  // Here again, all scripts look more or less the same.
+  // We return the `script` and close the `define` wrapper.
+  return API.script;
+});
+</div>
+</section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js" integrity="sha256-xrr4HH5eSY+cFz4SH7ja/LaAi9qcEdjMpeMP49/iOLs=" crossorigin="anonymous"></script>
+<script src="../assets/playground.js"></script>
+
+				<hr />
+				<small>License: Apache 2. &copy; Project Implicit. &middot; Current version [version]</small>
+			</section>
+		</main>
+		<script src="../assets/prism.js"></script>
+        <script>
+            (function(){
+                var select = document.getElementById('version-select');
+                select.addEventListener('change', function(event){
+                    var version = event.target.value;
+                    location.href = location.href.replace(/[0-9]\.[0-9]/, version)
+                });
+            })();
+        </script>
+	</body>
+</html>

@@ -1,0 +1,182 @@
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Minno.js</title>
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+		<link href="../assets/prism.css" rel="stylesheet" />
+		<link href="../assets/style.css" rel="stylesheet" />
+	</head>
+	<body>
+		<header>
+			<section>
+				<nav class="brand">
+                    <a href="/"><h1>Minno</h1></a>
+				</nav>
+				<nav>
+					<a href="/minno-quest/0.1/basics/overview.html">Basics</a>
+					<a href="/minno-quest/0.1/manager/overview.html">miManager</a>
+					<a href="/minno-quest/0.1/quest/overview.html">miQuest</a>
+					<a href="/minno-time/0.3/time/overview.html">miTime</a>
+				</nav>
+				<nav>
+                    <select id="version-select"><option value="0.0" >v0.0</option>,<option value="0.1" selected>v0.1</option></select>
+					<a href="https://github.com/minnojs">Github</a>
+				</nav>
+			</section>
+		</header>
+		<main>
+			<section class="docs">
+                <h1><a name="a-hrefbuttonsonepagehtmlbuttons-one-pagea" class="header-link" href="#a-hrefbuttonsonepagehtmlbuttons-one-pagea"><span></span></a><a href="buttonsOnePage.html">Buttons One Page</a></h1><ul>
+<li>Core<ul>
+<li><a href="overview.html">Overview</a></li>
+<li><a href="introduction.html">Introduction</a></li>
+<li><a href="API.html">API</a></li>
+<li><a href="playground.html">Playground</a></li>
+</ul>
+</li>
+<li>Question types<ul>
+<li><a href="text.html">Text</a></li>
+<li><a href="textarea.html">Textarea</a></li>
+<li><a href="textNumber.html">Text Number</a></li>
+<li><a href="selectOne.html">Select One</a></li>
+<li><a href="selectMulti.html">Select Multi</a></li>
+<li><a href="grid.html">Grid</a></li>
+<li><a href="gridMulti.html">Multi Grid</a></li>
+<li><a href="slider.html">Slider</a></li>
+<li><a href="rank.html">Rank</a></li>
+</ul>
+</li>
+<li>Examples<ul>
+<li><a href="helloworld.html">Hello world</a></li>
+<li><a href="bodyAwareness.html">Body Awareness</a></li>
+<li><a href="weight.html">Weight demo</a></li>
+<li><a href="usingImages.html">Using Images</a></li>
+<li><a href="buttons.html">Buttons</a></li>
+<li><a href="buttonsAdvanced.html">Buttons Advanced</a></li>
+<li><strong>Buttons One Page</strong></li>
+<li><a href="dependency.html">Dependency</a></li>
+<li><a href="liveDependency.html">Live Dependency</a></li>
+<li><a href="gridExample.html">Grid</a></li>
+<li><a href="timer.html">Timer</a></li>
+<li><a href="openEnded.html">Open Ended</a></li>
+<li><a href="openEndedLong.html">Open Ended Long</a></li>
+<li><a href="rateImages.html">Rate Images</a></li>
+<li><a href="rateImagesSizes.html">Rate Images Sizes</a></li>
+<li><a href="scaleWithFeedback.html">Scale With Feedback</a></li>
+<li><a href="sliderExample.html">Slider</a></li>
+<li><a href="userPrevResp.html">User Prev Resp</a></li>
+<li><a href="nfc.html">Agreement scale</a></li>
+</ul>
+</li>
+</ul>
+<p>/**</p>
+<ul>
+<li>@author Yoav Bar-Anan <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#x3a;&#x62;&#x61;&#114;&#97;&#x6e;&#97;&#110;&#x79;&#64;&#98;&#x67;&#117;&#46;&#97;&#x63;&#46;&#105;&#x6c;">&#x62;&#x61;&#114;&#97;&#x6e;&#97;&#110;&#x79;&#64;&#98;&#x67;&#117;&#46;&#97;&#x63;&#46;&#105;&#x6c;</a>
+*/</li>
+</ul>
+<section playground>
+    <div class="buttons">
+        <a class="activate-button">Activate</a>
+        <a class="download-button" href="buttonsOnePage.js" download>Download</a>
+    </div>
+    <div class="editor">/**
+* @author Yoav Bar-Anan <baranany@bgu.ac.il>
+ */
+define(['questAPI'], function(Quest){
+	var API = new Quest();
+
+	// ### Questions
+	API.addQuestionsSet('basicSelect',
+	{
+		type: 'selectOne',
+		autoSubmit:false,
+		numericValues:true,
+		required:false,
+		style:'multiButtons',
+		answers : [
+			'1 - Extremely negative',
+			'2',
+			'3',
+			'4',
+			'5',
+			'6',
+			'7',
+			'8',
+			'9 - Extremely positive'
+		]
+	});
+
+	API.addQuestionsSet('people',
+	[
+		{
+			inherit : 'basicSelect',
+			name : 'Obama',
+			stem : 'Barack Obama'
+		},
+		{
+			inherit : 'basicSelect',
+			name : 'Beyonce',
+			stem : 'Beyonce Knowles'
+		},
+		{
+			inherit : 'basicSelect',
+			name : 'Colbert',
+			stem : 'Stephen Colbert'
+		},
+		{
+			inherit : 'basicSelect',
+			name : 'Letterman',
+			stem : 'David Letterman'
+		}
+	]);
+
+	// ### Pages
+	// Shows all four questions, but the order is random.
+	API.addPagesSet('basicPage',
+	{
+		progressBar: '<%= pagesMeta.number %> out of 4',
+		header: 'How positive or negative are your feelings toward the people listed below?',
+		headerStyle : {'font-size':'1em'},
+		questions : {
+			mixer : 'repeat',
+			times : 4,
+			data : [
+				{inherit:{set:'people', type:'exRandom'}}
+			]
+		},
+		v1style:2,
+		decline:false,
+		numbered: false
+	});
+
+	// ### Sequence
+	API.addSequence(
+	[
+		{inherit : 'basicPage'}
+	]);
+
+	/**
+	Return the script to piquest's god, or something of that sort.
+	**/
+	return API.script;
+});</div>
+</section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js" integrity="sha256-xrr4HH5eSY+cFz4SH7ja/LaAi9qcEdjMpeMP49/iOLs=" crossorigin="anonymous"></script>
+<script src="../assets/playground.js"></script>
+
+				<hr />
+				<small>License: Apache 2. &copy; Project Implicit. &middot; Current version [version]</small>
+			</section>
+		</main>
+		<script src="../assets/prism.js"></script>
+        <script>
+            (function(){
+                var select = document.getElementById('version-select');
+                select.addEventListener('change', function(event){
+                    var version = event.target.value;
+                    location.href = location.href.replace(/[0-9]\.[0-9]/, version)
+                });
+            })();
+        </script>
+	</body>
+</html>

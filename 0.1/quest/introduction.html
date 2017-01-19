@@ -1,559 +1,182 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 	<head>
-
-		<!-- Meta, title, CSS, favicons, etc. -->
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta name="description" content="Bootstrap, a sleek, intuitive, and powerful mobile first front-end framework for faster and easier web development.">
-		<meta name="keywords" content="HTML, CSS, JS, JavaScript, framework, bootstrap, front-end, frontend, web development">
-		<meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-
-		<title>
-			
-				miQuest
-			
-			&middot; V0.1
-		</title>
-
-		
-		<!-- Bootstrap core CSS -->
-		<link href="../../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-		<link href="../css/highlight.css" rel="stylesheet">
-		<link href="../css/style.css" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
-		<style type="text/css">
-			pre {display:block;overflow-x:auto;padding:0.5em;background:#000;color:#f8f8f8;-webkit-text-size-adjust:none}
-			table {padding: 0;}
-			table tr {border-top: 1px solid #cccccc;background-color: white;margin: 0;padding: 0;}
-			table tr:nth-child(2n) {background-color: #f8f8f8;}
-			table tr th {font-weight: bold;border: 1px solid #cccccc;text-align: left;margin: 0;padding: 6px 13px;}
-			table tr td {border: 1px solid #cccccc;text-align: left;margin: 0;padding: 6px 13px;}
-			table tr th :first-child, table tr td :first-child {margin-top: 0;}
-			table tr th :last-child, table tr td :last-child {margin-bottom: 0;}
-		</style>
-		
-
-		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-		<!--[if lt IE 9]>
-			<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-			<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-		<![endif]-->
-
-		<!-- Favicons -->
-		<link rel="apple-touch-icon" href="../apple-touch-icon.png">
-		<link rel="icon" href="../favicon.ico">
-
+		<meta charset="UTF-8" />
+		<title>Minno.js</title>
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+		<link href="../assets/prism.css" rel="stylesheet" />
+		<link href="../assets/style.css" rel="stylesheet" />
 	</head>
-
 	<body>
-		<a id="skippy" class="sr-only sr-only-focusable" href="#content"><div class="container"><span class="skiplink-text">Skip to main content</span></div></a>
-
-		<!-- Docs master nav -->
-		<header class="navbar navbar-static-top bs-docs-nav" id="top" role="banner">
-			<div class="container">
-				<div class="navbar-header">
-					<button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
-						<span class="sr-only">Toggle navigation</span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
-					<a href="/" class="navbar-brand">Minno</a>
-				</div>
-				<nav class="collapse navbar-collapse bs-navbar-collapse">
-					<ul class="nav navbar-nav">
-						<li class="">
-							<a href="../basics/overview.html">Basics</a>
-						</li>
-						<li class=" active ">
-							<a href="../quest/overview.html">miQuest</a>
-						</li>
-						<li class="">
-							<a href="../manager/overview.html">miManager</a>
-						</li>
-						<li>
-							<a href="../../../minno-time/0.3/tutorials/overview.html">miPlayer</a>
-						</li>
-					</ul>
-					<ul class="nav navbar-nav navbar-right">
-						<li>
-							<form class="navbar-form navbar-left" role="search" method="get" action="http://www.google.com/search">
-							  <div class="form-group">
-							    <input type="text" class="form-control" placeholder="Search" name="q" size="25" maxlength="255">
-							  </div>
-							  <button type="submit" class="btn btn-default" value="Google Search">
-							    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-							  </button>
-							  <input type="hidden" name="sitesearch" value="minnojs.github.io" checked />
-							</form>
-						</li>
-
-						<li>
-                            <form class="navbar-form navbar-left" role="search">
-                                <div class="form-group">
-                                    <select class="form-control" id="version-select">
-                                        <option value="0.0">v0.0</option>
-                                        <option value="0.1" selected>v0.1</option>
-                                    </select>
-                                </div>
-                            </form>
-                        </li>
-
-                        <li><a href="https://github.com/minnojs/minno-quest">Github</a></li>
-                    </ul>
-                </nav>
-            </div>
-        </header>
-
-        <div id="content" class="bs-docs-header">
-            <div class="container">
-                
-	<h1>Introduction</h1>
-	<p>This tutorial will walk you through the first steps of creating a piQuest questionnaire. You can download or activate it from the &quot;Hello world&quot; section in the bar on the right.</p>
-
-            </div>
-		</div>
-
-		<div class="container bs-docs-container">
-			<div class="row">
-				<div class="col-md-9" role="main">
-					
-	<h3><a name="contents" class="header-link" href="#contents"><span class="glyphicon glyphicon-link"></span></a>Contents</h3><ul>
+		<header>
+			<section>
+				<nav class="brand">
+                    <a href="/"><h1>Minno</h1></a>
+				</nav>
+				<nav>
+					<a href="/minno-quest/0.1/basics/overview.html">Basics</a>
+					<a href="/minno-quest/0.1/manager/overview.html">miManager</a>
+					<a href="/minno-quest/0.1/quest/overview.html">miQuest</a>
+					<a href="/minno-time/0.3/time/overview.html">miTime</a>
+				</nav>
+				<nav>
+                    <select id="version-select"><option value="0.0" >v0.0</option>,<option value="0.1" selected>v0.1</option></select>
+					<a href="https://github.com/minnojs">Github</a>
+				</nav>
+			</section>
+		</header>
+		<main>
+			<section class="docs">
+                <h1><a name="introduction" class="header-link" href="#introduction"><span></span></a>Introduction</h1><ul>
+<li>Core<ul>
+<li><a href="overview.html">Overview</a></li>
+<li><strong><a href="introduction.html">Introduction</a></strong><ul>
 <li><a href="#structure">Structure</a></li>
 <li><a href="#pages-questions">Pages &amp; Questions</a></li>
 <li><a href="#thats-it">Thats it</a></li>
 </ul>
-<h3><a name="structure" class="header-link" href="#structure"><span class="glyphicon glyphicon-link"></span></a>Structure</h3><p>The first step learning to use piQuest is getting to know the structure of a piQuest script. The scripts are written in javascript, although all you really need to know is how to use our very specific API (this means that if you&#39;re in to that sort of thing, you can write any javascript that you like...).</p>
+</li>
+<li><a href="API.html">API</a></li>
+<li><a href="playground.html">Playground</a></li>
+</ul>
+</li>
+<li>Question types<ul>
+<li><a href="text.html">Text</a></li>
+<li><a href="textarea.html">Textarea</a></li>
+<li><a href="textNumber.html">Text Number</a></li>
+<li><a href="selectOne.html">Select One</a></li>
+<li><a href="selectMulti.html">Select Multi</a></li>
+<li><a href="grid.html">Grid</a></li>
+<li><a href="gridMulti.html">Multi Grid</a></li>
+<li><a href="slider.html">Slider</a></li>
+<li><a href="rank.html">Rank</a></li>
+</ul>
+</li>
+<li>Examples<ul>
+<li><a href="helloworld.html">Hello world</a></li>
+<li><a href="bodyAwareness.html">Body Awareness</a></li>
+<li><a href="weight.html">Weight demo</a></li>
+<li><a href="usingImages.html">Using Images</a></li>
+<li><a href="buttons.html">Buttons</a></li>
+<li><a href="buttonsAdvanced.html">Buttons Advanced</a></li>
+<li><a href="buttonsOnePage.html">Buttons One Page</a></li>
+<li><a href="dependency.html">Dependency</a></li>
+<li><a href="liveDependency.html">Live Dependency</a></li>
+<li><a href="gridExample.html">Grid</a></li>
+<li><a href="timer.html">Timer</a></li>
+<li><a href="openEnded.html">Open Ended</a></li>
+<li><a href="openEndedLong.html">Open Ended Long</a></li>
+<li><a href="rateImages.html">Rate Images</a></li>
+<li><a href="rateImagesSizes.html">Rate Images Sizes</a></li>
+<li><a href="scaleWithFeedback.html">Scale With Feedback</a></li>
+<li><a href="sliderExample.html">Slider</a></li>
+<li><a href="userPrevResp.html">User Prev Resp</a></li>
+<li><a href="nfc.html">Agreement scale</a></li>
+</ul>
+</li>
+</ul>
+<h3><a name="structure" class="header-link" href="#structure"><span></span></a>Structure</h3><p>The first step learning to use piQuest is getting to know the structure of a piQuest script. The scripts are written in javascript, although all you really need to know is how to use our very specific API (this means that if you&#39;re in to that sort of thing, you can write any javascript that you like...).</p>
 <p>Each script is wrapped within a <a href="http://requirejs.org/docs/whyamd.html#amd"><code>define</code></a> statement. At the beginning you create the API object, and at the end you return the script that you have created. This basic structure stays more or less constant across any script that you create. In other words: you can always just copy paste this portion of the script and get on with building your questionnaire:</p>
-<pre><code class="lang-js">define([<span class="hljs-string">'questAPI'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(Quest)</span></span>{
-    <span class="hljs-comment">// create new quest API</span>
-    <span class="hljs-keyword">var</span> API = <span class="hljs-keyword">new</span> Quest();
+<pre><code class="lang-javascript">define([&#39;questAPI&#39;], function(Quest){
+    // create new quest API
+    var API = new Quest();
 
-    <span class="hljs-comment">/**
+    /**
      * This is where the magic happens...
-     */</span>
+     */
 
-    <span class="hljs-comment">// return questionnaire script to the player gods...</span>
-    <span class="hljs-keyword">return</span> API.script;
+    // return questionnaire script to the player gods...
+    return API.script;
 });
 </code></pre>
 <p>Between the declaration of the API and returning the script, we use the API to put the task together. The full functionality of the API is described in the <a href="API.html">documentation </a>. This tutorial will walk you through using it to create a very basic questionnaire. You can use it as a template for creating your own questionnaires in the future.</p>
 <p>We will use the API to setup the questionnaire environment (using <code>addSettings</code>), then we will create prototypes for pages and questions within the questionnaire (using <code>addPagesSet</code> and <code>addQuestionsSet</code>), and finally we will setup the sequence of questions that will be presented to the subjects (using <code>addSequence</code>).</p>
-<pre><code class="lang-js">define([<span class="hljs-string">'questAPI'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(Quest)</span></span>{
-    <span class="hljs-comment">// create new quest API</span>
-    <span class="hljs-keyword">var</span> API = <span class="hljs-keyword">new</span> Quest();
+<pre><code class="lang-javascript">define([&#39;questAPI&#39;], function(Quest){
+    // create new quest API
+    var API = new Quest();
 
-    <span class="hljs-comment">// setup the environment</span>
-    API.addSettings(<span class="hljs-comment">/* ... */</span>);
+    // setup the environment
+    API.addSettings(/* ... */);
 
-    <span class="hljs-comment">// create the prototypes</span>
-    API.addPagesSet(<span class="hljs-comment">/* ... */</span>);
-    API.addQuestionsSet(<span class="hljs-comment">/* ... */</span>);
+    // create the prototypes
+    API.addPagesSet(/* ... */);
+    API.addQuestionsSet(/* ... */);
 
-    <span class="hljs-comment">// create questionnaire sequence</span>
-    API.addSequence(<span class="hljs-comment">/* ... */</span>);
+    // create questionnaire sequence
+    API.addSequence(/* ... */);
 
-    <span class="hljs-comment">// return questionnaire script to the player gods...</span>
-    <span class="hljs-keyword">return</span> API.script;
+    // return questionnaire script to the player gods...
+    return API.script;
 });
 </code></pre>
 <p>Before we jump into learning how each of these functions work, let us take a look at the basic building block of the questionnaire; pages and questions.</p>
-<h3><a name="pages-&amp-questions" class="header-link" href="#pages-&amp-questions"><span class="glyphicon glyphicon-link"></span></a>Pages &amp; questions</h3><p>The basic building blocks within piQuest are <strong>pages</strong> and <strong>questions</strong>.</p>
+<h3><a name="pages-&amp-questions" class="header-link" href="#pages-&amp-questions"><span></span></a>Pages &amp; questions</h3><p>The basic building blocks within piQuest are <strong>pages</strong> and <strong>questions</strong>.</p>
 <p>A page is an object that describes one screen within your questionnaire. If your questionnaire presents all of its questions in one screen, it will probably have only one page. The properties within a page manage how the question(s) is(are) displayed and how the participants interact with it (e.g., select an answer and then click a submit button).</p>
 <p>For the purpose of this presentation we will create a page that has a &quot;Hello world!&quot; header, and allows participants to decline answering the questions. Further documentation of the properties of pages may be found in the <a href="API.html#pages">API docs</a>.</p>
-<pre><code class="lang-js"><span class="hljs-built_in">var</span> page = {
-    <span class="hljs-keyword">header</span>: <span class="hljs-string">'Hello world!'</span>,
-    decline: <span class="hljs-literal">true</span>,
-    declineText: <span class="hljs-string">'I prefer to keep this information to myself'</span>,
-    questions: <span class="hljs-preprocessor">[</span>
-        <span class="hljs-comment">/* This is where we will soon set our questions */</span>
-    <span class="hljs-preprocessor">]</span><span class="hljs-markup">
-}</span>
+<pre><code class="lang-javascript">var page = {
+    header: &#39;Hello world!&#39;,
+    decline: true,
+    declineText: &#39;I prefer to keep this information to myself&#39;,
+    questions: [
+        /* This is where we will soon set our questions */
+    ]
+}
 </code></pre>
 <p>Within our page we want to ask the participant a question: &#39;When you say good morning, what do you mean?&#39;. We want the user to select the correct answer out of a list, so we pick the <em>type</em> <code>selectOne</code> and set the answers within the <em>answers</em> property. Further documentation of the properties of questions may be found in the <a href="API.html#questions">API docs</a>.</p>
-<pre><code class="lang-js">var quest = {
-    type: 'selectOne',
-    stem: 'When you <span class="hljs-command">say</span> good morning, what do you mean?',
+<pre><code class="lang-javascript">var quest = {
+    type: &#39;selectOne&#39;,
+    stem: &#39;When you say good morning, what do you mean?&#39;,
     answers: [
-        'Do you wish <span class="hljs-keyword">me</span> a good morning',
-        'Or mean <span class="hljs-keyword">that</span> <span class="hljs-keyword">it</span> <span class="hljs-keyword">is</span> a good morning whether I want <span class="hljs-keyword">it</span> <span class="hljs-keyword">or</span> <span class="hljs-keyword">not</span>',
-        'Or <span class="hljs-keyword">that</span> you feel good this morning',
-        'Or <span class="hljs-keyword">that</span> <span class="hljs-keyword">it</span> <span class="hljs-keyword">is</span> a morning <span class="hljs-keyword">to</span> be good <span class="hljs-function_start"><span class="hljs-keyword">on</span></span>',
-        'All <span class="hljs-keyword">of</span> them <span class="hljs-keyword">at</span> once'
+        &#39;Do you wish me a good morning&#39;,
+        &#39;Or mean that it is a good morning whether I want it or not&#39;,
+        &#39;Or that you feel good this morning&#39;,
+        &#39;Or that it is a morning to be good on&#39;,
+        &#39;All of them at once&#39;
     ]
 }
 </code></pre>
 <p>We will put the page and question together in a moment, but first let us get back to the API object and how we actually use these questions and objects.</p>
-<h3><a name="thats-it" class="header-link" href="#thats-it"><span class="glyphicon glyphicon-link"></span></a>Thats it</h3><p>The most important part of every questionnaire is the sequence. This is where you tell piQuest how to interact with the participants. In our case we want to simply present a single page with a single question so we get something like this:</p>
-<pre><code class="lang-js">define([<span class="hljs-symbol">'questAP</span>I'], function(<span class="hljs-type">Quest</span>){
-    <span class="hljs-comment">// create new quest API</span>
-    <span class="hljs-keyword">var</span> <span class="hljs-type">API</span> = <span class="hljs-keyword">new</span> <span class="hljs-type">Quest</span>();
+<h3><a name="thats-it" class="header-link" href="#thats-it"><span></span></a>Thats it</h3><p>The most important part of every questionnaire is the sequence. This is where you tell piQuest how to interact with the participants. In our case we want to simply present a single page with a single question so we get something like this:</p>
+<pre><code class="lang-javascript">define([&#39;questAPI&#39;], function(Quest){
+    // create new quest API
+    var API = new Quest();
 
-    <span class="hljs-comment">// create questionnaire sequence</span>
-    <span class="hljs-type">API</span>.addSequence([
-        <span class="hljs-comment">// page begins</span>
+    // create questionnaire sequence
+    API.addSequence([
+        // page begins
         {
-            header: <span class="hljs-symbol">'Hello</span> world!',
-            decline: <span class="hljs-literal">true</span>,
-            declineText: <span class="hljs-symbol">'I</span> prefer to keep <span class="hljs-keyword">this</span> information to myself',
+            header: &#39;Hello world!&#39;,
+            decline: true,
+            declineText: &#39;I prefer to keep this information to myself&#39;,
             questions: [
-                <span class="hljs-comment">// question begins</span>
+                // question begins
                 {
-                    <span class="hljs-class"><span class="hljs-keyword">type</span>:</span> <span class="hljs-symbol">'selectOn</span>e',
-                    stem: <span class="hljs-symbol">'When</span> you say good morning, what do you mean?',
+                    type: &#39;selectOne&#39;,
+                    stem: &#39;When you say good morning, what do you mean?&#39;,
                     answers: [
-                        <span class="hljs-symbol">'Do</span> you wish me a good morning',
-                        <span class="hljs-symbol">'Or</span> mean that it is a good morning whether <span class="hljs-type">I</span> want it or not',
-                        <span class="hljs-symbol">'Or</span> that you feel good <span class="hljs-keyword">this</span> morning',
-                        <span class="hljs-symbol">'Or</span> that it is a morning to be good on',
-                        <span class="hljs-symbol">'All</span> of them at once'
+                        &#39;Do you wish me a good morning&#39;,
+                        &#39;Or mean that it is a good morning whether I want it or not&#39;,
+                        &#39;Or that you feel good this morning&#39;,
+                        &#39;Or that it is a morning to be good on&#39;,
+                        &#39;All of them at once&#39;
                     ]
                 }
-                <span class="hljs-comment">// question ends</span>
+                // question ends
             ]
         }
-        <span class="hljs-comment">// page ends</span>
+        // page ends
     ]);
 
-    <span class="hljs-comment">// return questionnaire script to the player gods...</span>
-    <span class="hljs-keyword">return</span> <span class="hljs-type">API</span>.script;
+    // return questionnaire script to the player gods...
+    return API.script;
 });
 </code></pre>
 <p>The code we put together is enough to run in your browser: <a href="helloworldPlay.html">check it out</a>.</p>
 
-
-				</div>
-
-				<div class="col-md-3" role="complementary">
-					<nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm">
-
-						
-
-						
-
-						
-
-						<ul class="nav bs-docs-sidenav">
-						
-
-							
-							<li class="">
-							<li class="">
-
-								<a href="../quest/overview.html">Overview</a>
-							</li>
-						
-							
-							<li class=" active ">
-							<li class=" active ">
-
-								<a href="../quest/introduction.html">Introduction</a>
-							</li>
-						
-							
-							<li class="">
-							<li class="">
-
-								<a href="../quest/API.html">API</a>
-							</li>
-						
-							
-							<li class="">
-							<li class="">
-
-								<a href="../quest/questplayground.html">Playground</a>
-							</li>
-						
-							<li>
-								<a href="helloworldDocco.html">Examples</a>
-								<ul class="nav">
-									
-							<li class="">
-								<div>
-									<a href="../quest/helloworldDocco.html">Hello world</a>
-									<a href="../quest/helloworld.js" download="../quest/helloworld.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../quest/helloworldPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-									
-							<li class="">
-								<div>
-									<a href="../quest/bodyAwarenessDocco.html">Body Awareness</a>
-									<a href="../quest/bodyAwareness.js" download="../quest/bodyAwareness.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../quest/bodyAwarenessPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-									
-							<li class="">
-								<div>
-									<a href="../quest/weightDocco.html">Weight demo</a>
-									<a href="../quest/weight.js" download="../quest/weight.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../quest/weightPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-									
-							<li class="">
-								<div>
-									<a href="../quest/usingImagesDocco.html">Using Images</a>
-									<a href="../quest/usingImages.js" download="../quest/usingImages.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../quest/usingImagesPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-									
-							<li class="">
-								<div>
-									<a href="../qsts/buttonsDocco.html">Buttons</a>
-									<a href="../qsts/buttons.js" download="../qsts/buttons.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../qsts/buttonsPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-									
-							<li class="">
-								<div>
-									<a href="../qsts/buttonsAdvancedDocco.html">Buttons Advanced</a>
-									<a href="../qsts/buttonsAdvanced.js" download="../qsts/buttonsAdvanced.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../qsts/buttonsAdvancedPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-									
-							<li class="">
-								<div>
-									<a href="../qsts/buttonsOnePageDocco.html">Buttons One Page</a>
-									<a href="../qsts/buttonsOnePage.js" download="../qsts/buttonsOnePage.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../qsts/buttonsOnePagePlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-									
-							<li class="">
-								<div>
-									<a href="../qsts/dependencyDocco.html">Dependency</a>
-									<a href="../qsts/dependency.js" download="../qsts/dependency.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../qsts/dependencyPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-									
-							<li class="">
-								<div>
-									<a href="../qsts/liveDependencyDocco.html">Live Dependency</a>
-									<a href="../qsts/liveDependency.js" download="../qsts/liveDependency.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../qsts/liveDependencyPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-									
-							<li class="">
-								<div>
-									<a href="../qsts/gridDocco.html">Grid</a>
-									<a href="../qsts/grid.js" download="../qsts/grid.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../qsts/gridPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-									
-							<li class="">
-								<div>
-									<a href="../qsts/timerDocco.html">Timer</a>
-									<a href="../qsts/timer.js" download="../qsts/timer.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../qsts/timerPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-									
-							<li class="">
-								<div>
-									<a href="../qsts/openEndedDocco.html">Open Ended</a>
-									<a href="../qsts/openEnded.js" download="../qsts/openEnded.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../qsts/openEndedPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-									
-							<li class="">
-								<div>
-									<a href="../qsts/openEndedLongDocco.html">Open Ended Long</a>
-									<a href="../qsts/openEndedLong.js" download="../qsts/openEndedLong.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../qsts/openEndedLongPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-									
-							<li class="">
-								<div>
-									<a href="../qsts/rateImagesDocco.html">Rate Images</a>
-									<a href="../qsts/rateImages.js" download="../qsts/rateImages.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../qsts/rateImagesPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-									
-							<li class="">
-								<div>
-									<a href="../qsts/rateImagesSizesDocco.html">Rate Images Sizes</a>
-									<a href="../qsts/rateImagesSizes.js" download="../qsts/rateImagesSizes.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../qsts/rateImagesSizesPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-									
-							<li class="">
-								<div>
-									<a href="../qsts/scaleWithFeedbackDocco.html">Scale With Feedback</a>
-									<a href="../qsts/scaleWithFeedback.js" download="../qsts/scaleWithFeedback.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../qsts/scaleWithFeedbackPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-									
-							<li class="">
-								<div>
-									<a href="../qsts/sliderDocco.html">Slider</a>
-									<a href="../qsts/slider.js" download="../qsts/slider.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../qsts/sliderPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-									
-							<li class="">
-								<div>
-									<a href="../qsts/userPrevRespDocco.html">User Prev Resp</a>
-									<a href="../qsts/userPrevResp.js" download="../qsts/userPrevResp.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../qsts/userPrevRespPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-									
-							<li class="">
-								<div>
-									<a href="../qsts/nfcDocco.html">Agreement scale</a>
-									<a href="../qsts/nfc.js" download="../qsts/nfc.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../qsts/nfcPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-								</ul>
-							</li>
-							<li>
-								<a href="javascript:void(0)">Questions</a>
-								<ul class="nav">
-									
-							<li class="">
-								<div>
-									<a href="../questExamples/textDocco.html">Text</a>
-									<a href="../questExamples/text.js" download="../questExamples/text.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../questExamples/textPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-									
-							<li class="">
-								<div>
-									<a href="../questExamples/textareaDocco.html">Textarea</a>
-									<a href="../questExamples/textarea.js" download="../questExamples/textarea.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../questExamples/textareaPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-									
-							<li class="">
-								<div>
-									<a href="../questExamples/textNumberDocco.html">Text Number</a>
-									<a href="../questExamples/textNumber.js" download="../questExamples/textNumber.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../questExamples/textNumberPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-									
-							<li class="">
-								<div>
-									<a href="../questExamples/selectOneDocco.html">Select One</a>
-									<a href="../questExamples/selectOne.js" download="../questExamples/selectOne.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../questExamples/selectOnePlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-									
-							<li class="">
-								<div>
-									<a href="../questExamples/selectMultiDocco.html">Select Multi</a>
-									<a href="../questExamples/selectMulti.js" download="../questExamples/selectMulti.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../questExamples/selectMultiPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-									
-							<li class="">
-								<div>
-									<a href="../questExamples/gridDocco.html">Grid</a>
-									<a href="../questExamples/grid.js" download="../questExamples/grid.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../questExamples/gridPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-									
-							<li class="">
-								<div>
-									<a href="../questExamples/gridMultiDocco.html">Multi Grid</a>
-									<a href="../questExamples/gridMulti.js" download="../questExamples/gridMulti.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../questExamples/gridMultiPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-									
-							<li class="">
-								<div>
-									<a href="../questExamples/sliderDocco.html">Slider</a>
-									<a href="../questExamples/slider.js" download="../questExamples/slider.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../questExamples/sliderPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-									
-							<li class="">
-								<div>
-									<a href="../questExamples/rankDocco.html">Rank</a>
-									<a href="../questExamples/rank.js" download="../questExamples/rank.js" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-									<a href="../questExamples/rankPlay.html" title="Play"><span class="glyphicon glyphicon-play-circle"></span></a>
-								</div>
-							</li>
-						
-								</ul>
-							</li>
-						
-						</ul>
-						<!-- <a class="back-to-top" href="#top">
-							Back to top
-						</a> -->
-					</nav>
-				</div>
-			</div>
-		</div>
-
-		<!-- Footer
-		================================================== -->
-		<footer class="bs-docs-footer" role="contentinfo">
-			<div class="container">
-				<p>Created by Project Implicit for the benefit of all.</p>
-				<!-- <p>Code licensed under <a href="https://github.com/twbs/bootstrap/blob/master/LICENSE" target="_blank">MIT</a>, documentation under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p> -->
-				<ul class="bs-docs-footer-links text-muted">
-					<li>Currently v0.0.45</li>
-					<li>&middot;</li>
-					<li><a href="https://github.com/minnojs/minno-quest">GitHub</a></li>
-					<li>&middot;</li>
-					<li><a href="https://github.com/minnojs/minno-quest/releases">Releases</a></li>
-				</ul>
-			</div>
-		</footer>
-
+				<hr />
+				<small>License: Apache 2. &copy; Project Implicit. &middot; Current version [version]</small>
+			</section>
+		</main>
+		<script src="../assets/prism.js"></script>
         <script>
             (function(){
                 var select = document.getElementById('version-select');

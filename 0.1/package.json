@@ -2,6 +2,13 @@
   "name": "PIQuest",
   "version": "0.1.10",
   "license": "Apache-2.0",
+  "minno": {
+    "activeVersions": [
+      "0.0",
+      "0.1"
+    ],
+    "timeVersion": "0.3"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/ProjectImplicit/PIquest"
@@ -43,10 +50,14 @@
   },
   "scripts": {
     "test": "grunt test --sauce --report",
+    "gendocs": "minno-gendocs docs pages",
     "localtest": "grunt test",
     "start": "grunt serve",
     "postinstall": "./node_modules/grunt-cli/bin/grunt githooks",
     "css": "node-sass src/styles/main.scss --output src/styles --include-path=bower_components/bootstrap-sass-official/assets/stylesheets/ --include-path=bower_components --source-map=true",
     "css:watch": "node-sass --watch=src/styles/*.scss src/styles/main.scss --output src/styles --include-path=bower_components/bootstrap-sass-official/assets/stylesheets/ --include-path=bower_components --source-map=true"
+  },
+  "dependencies": {
+    "minno-gendocs": "^1.0.0"
   }
 }

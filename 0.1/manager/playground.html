@@ -1,0 +1,87 @@
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Minno.js</title>
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+		<link href="../assets/prism.css" rel="stylesheet" />
+		<link href="../assets/style.css" rel="stylesheet" />
+	</head>
+	<body>
+		<header>
+			<section>
+				<nav class="brand">
+                    <a href="/"><h1>Minno</h1></a>
+				</nav>
+				<nav>
+					<a href="/minno-quest/0.1/basics/overview.html">Basics</a>
+					<a href="/minno-quest/0.1/manager/overview.html">miManager</a>
+					<a href="/minno-quest/0.1/quest/overview.html">miQuest</a>
+					<a href="/minno-time/0.3/time/overview.html">miTime</a>
+				</nav>
+				<nav>
+                    <select id="version-select"><option value="0.0" >v0.0</option>,<option value="0.1" selected>v0.1</option></select>
+					<a href="https://github.com/minnojs">Github</a>
+				</nav>
+			</section>
+		</header>
+		<main>
+			<section class="docs">
+                <h1><a name="a-hrefplaygroundhtmlplaygrounda" class="header-link" href="#a-hrefplaygroundhtmlplaygrounda"><span></span></a><a href="playground.html">Playground</a></h1><ul>
+<li>Core<ul>
+<li><a href="overview.html">Overview</a></li>
+<li><a href="API.html">API</a></li>
+<li><strong>Playground</strong></li>
+</ul>
+</li>
+<li>Tasks<ul>
+<li><a href="messages.html">Messages</a></li>
+<li><a href="post.html">Post</a></li>
+<li><a href="redirect.html">Redirect</a></li>
+</ul>
+</li>
+<li>Examples<ul>
+<li><a href="weightManager.html">Weight experiment</a></li>
+<li><a href="videoManager.html">Displaying Video</a></li>
+</ul>
+</li>
+</ul>
+<section playground>
+    <div class="buttons">
+        <a class="activate-button">Activate</a>
+        <a class="download-button" href="playground.js" download>Download</a>
+    </div>
+    <div class="editor">define(['managerAPI'],function(Manager){
+
+    var API = new Manager();
+
+    API.addSequence([
+        {
+            type:'message', 
+            template:'<h1>Hello world</h1><p>click space to end task</p>', 
+            keys: ' '
+        }
+    ]);
+
+    return API.script;
+});
+</div>
+</section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js" integrity="sha256-xrr4HH5eSY+cFz4SH7ja/LaAi9qcEdjMpeMP49/iOLs=" crossorigin="anonymous"></script>
+<script src="../assets/playground.js"></script>
+
+				<hr />
+				<small>License: Apache 2. &copy; Project Implicit. &middot; Current version [version]</small>
+			</section>
+		</main>
+		<script src="../assets/prism.js"></script>
+        <script>
+            (function(){
+                var select = document.getElementById('version-select');
+                select.addEventListener('change', function(event){
+                    var version = event.target.value;
+                    location.href = location.href.replace(/[0-9]\.[0-9]/, version)
+                });
+            })();
+        </script>
+	</body>
+</html>
