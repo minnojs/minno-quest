@@ -1,0 +1,224 @@
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Minno.js</title>
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+		<link href="../assets/prism.css" rel="stylesheet" />
+		<link href="../assets/style.css" rel="stylesheet" />
+	</head>
+	<body>
+		<header>
+			<section>
+				<nav class="brand">
+                    <a href="/"><h1>Minno</h1></a>
+				</nav>
+				<nav>
+					<a href="/minno-quest/0.0/basics/overview.html">Basics</a>
+					<a href="/minno-quest/0.0/manager/overview.html">miManager</a>
+					<a href="/minno-quest/0.0/quest/overview.html">miQuest</a>
+					<a href="/minno-time/0.0/time/overview.html">miTime</a>
+				</nav>
+				<nav>
+                    <select id="version-select"><option value="0.0" selected>v0.0</option>,<option value="0.1" >v0.1</option></select>
+					<a href="https://github.com/minnojs">Github</a>
+				</nav>
+			</section>
+		</header>
+		<main>
+			<section class="docs">
+                <h1><a name="a-hrefnfchtmlagreement-scalea" class="header-link" href="#a-hrefnfchtmlagreement-scalea"><span></span></a><a href="nfc.html">Agreement scale</a></h1><ul>
+<li>Core<ul>
+<li><a href="overview.html">Overview</a></li>
+<li><a href="introduction.html">Introduction</a></li>
+<li><a href="API.html">API</a></li>
+<li><a href="playground.html">Playground</a></li>
+</ul>
+</li>
+<li>Question types<ul>
+<li><a href="text.html">Text</a></li>
+<li><a href="textarea.html">Textarea</a></li>
+<li><a href="textNumber.html">Text Number</a></li>
+<li><a href="selectOne.html">Select One</a></li>
+<li><a href="selectMulti.html">Select Multi</a></li>
+<li><a href="grid.html">Grid</a></li>
+<li><a href="slider.html">Slider</a></li>
+</ul>
+</li>
+<li>Examples<ul>
+<li><a href="helloworld.html">Hello world</a></li>
+<li><a href="bodyAwareness.html">Body Awareness</a></li>
+<li><a href="weight.html">Weight demo</a></li>
+<li><a href="usingImages.html">Using Images</a></li>
+<li><a href="buttons.html">Buttons</a></li>
+<li><a href="buttonsAdvanced.html">Buttons Advanced</a></li>
+<li><a href="buttonsOnePage.html">Buttons One Page</a></li>
+<li><a href="dependency.html">Dependency</a></li>
+<li><a href="liveDependency.html">Live Dependency</a></li>
+<li><a href="gridExample.html">Grid</a></li>
+<li><a href="timer.html">Timer</a></li>
+<li><a href="openEnded.html">Open Ended</a></li>
+<li><a href="openEndedLong.html">Open Ended Long</a></li>
+<li><a href="rateImages.html">Rate Images</a></li>
+<li><a href="rateImagesSizes.html">Rate Images Sizes</a></li>
+<li><a href="scaleWithFeedback.html">Scale With Feedback</a></li>
+<li><a href="sliderExample.html">Slider</a></li>
+<li><a href="userPrevResp.html">User Prev Resp</a></li>
+<li><strong>Agreement scale</strong></li>
+</ul>
+</li>
+</ul>
+<section playground>
+    <div class="buttons">
+        <a class="activate-button">Activate</a>
+        <a class="download-button" href="nfc.js" download>Download</a>
+    </div>
+    <div class="editor">define(['questAPI'],function(Quest){
+	var API = new Quest();
+
+	// ### Questions
+	API.addQuestionsSet('basicSelect',
+	{
+		type: 'selectOne',
+		autoSubmit:true,
+		numericValues:true,
+		required:true,
+		errorMsg: {
+			required: "Please select an answer, or click 'decline to answer'"
+		},
+		answers : ['Strongly disagree', 'Moderately disagree', 'Slightly disagree', 'Neutral', 'Slightly agree', 'Moderately agree', 'Strongly agree'],
+		help: '<%= pagesMeta.number < 3 %>',
+		helpText: 'Selecting an answer once colors it blue.<br/>You can change your answer by selecting another option.<br/>To confirm, click the selected (blue) button a second time.'
+	});
+
+	//Define the question texts.
+	API.addQuestionsSet('nfc',
+	[
+		{
+			inherit : 'basicSelect',
+			name : 'nfc_c1',
+			stem : "I do not usually consult many different opinions before forming my own view."
+		},
+		{
+			inherit : 'basicSelect',
+			name : 'nfc_c2',
+			stem : "I feel irritated when one person disagrees with what everyone else in a group believes."
+		},
+		{
+			inherit : 'basicSelect',
+			name : 'nfc_d1',
+			stem : "When I have made a decision, I feel relieved."
+		},
+		{
+			inherit : 'basicSelect',
+			name : 'nfc_a1',
+			stem : "I feel uncomfortable when I don’t understand the reason why an event occurred in my life."
+		},
+		{
+			inherit : 'basicSelect',
+			name : 'nfc_d2',
+			stem : "When I am confronted with a problem, I’m dying to reach a solution very quickly."
+		},
+		{
+			inherit : 'basicSelect',
+			name : 'nfc_d3',
+			stem : "I would quickly become impatient and irritated if I would not find a solution to a problem immediately."
+		},
+		{
+			inherit : 'basicSelect',
+			name : 'nfc_c3',
+			stem : "I dislike questions which could be answered in many different ways."
+		},
+		{
+			inherit : 'basicSelect',
+			name : 'nfc_a2',
+			stem : "I dislike it when a person’s statement could mean many different things."
+		},
+		{
+			inherit : 'basicSelect',
+			name : 'nfc_p1',
+			stem : "I don’t like to be with people who are capable of unexpected actions."
+		},
+		{
+			inherit : 'basicSelect',
+			name : 'nfc_a3',
+			stem : "I don’t like situations that are uncertain."
+		},
+		{
+			inherit : 'basicSelect',
+			name : 'nfc_o1',
+			stem : "I find that establishing a consistent routine enables me to enjoy life more."
+		},
+		{
+			inherit : 'basicSelect',
+			name : 'nfc_o2',
+			stem : "I find that a well ordered life with regular hours suits my temperament."
+		},
+		{
+			inherit : 'basicSelect',
+			name : 'nfc_p2',
+			stem : "I don’t like to go into a situation without knowing what I can expect from it."
+		},
+		{
+			inherit : 'basicSelect',
+			name : 'nfc_p3',
+			stem : "I dislike unpredictable situations."
+		},
+		{
+			inherit : 'basicSelect',
+			name : 'nfc_o3',
+			stem : "I enjoy having a clear and structured mode of life."
+		}
+	]);
+
+	// ### Pages
+	API.addPagesSet('basicPage',
+	{
+		progressBar: '<%= pagesMeta.number %> out of 16',
+		header: 'Please rate your agreement with the following statement',
+		headerStyle : {'font-size':'1em'},
+		questions : {inherit:{set:'nfc', type:'exRandom'}}, //One question in the page, selected randomly (exhaustive)
+		v1style:2,
+		decline:true,
+		numbered: false
+	});
+
+	// ### Sequence
+	API.addSequence(
+	[
+		//Inherit the page 16 times. The page will inherit the nfc questions 16 times, thus presenting all 16 statements in random order.
+		{
+			mixer : 'repeat',
+			times : 16,
+			data :
+			[
+				{inherit : 'basicPage'}
+			]
+		}
+	]);
+
+	/**
+	Return the script to piquest's god, or something of that sort.
+	**/
+	return API.script;
+});
+</div>
+</section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js" integrity="sha256-xrr4HH5eSY+cFz4SH7ja/LaAi9qcEdjMpeMP49/iOLs=" crossorigin="anonymous"></script>
+<script src="../assets/playground.js"></script>
+
+				<hr />
+				<small>License: Apache 2. &copy; Project Implicit. &middot; Current version [version]</small>
+			</section>
+		</main>
+		<script src="../assets/prism.js"></script>
+        <script>
+            (function(){
+                var select = document.getElementById('version-select');
+                select.addEventListener('change', function(event){
+                    var version = event.target.value;
+                    location.href = location.href.replace(/[0-9]\.[0-9]/, version)
+                });
+            })();
+        </script>
+	</body>
+</html>

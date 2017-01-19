@@ -343,7 +343,7 @@ define(['questAPI'], function(Quest){
     //
     // Just to get a better  idea of what is going on here, you should know that mixers usually take the following form:
     //
-    // ```js
+    // ```javascript
     // var mixer = {
     //  mixer : 'random', // the type of mixer that we should use
     //  data : [] // the subsequence to which we apply the mixer

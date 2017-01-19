@@ -6,6 +6,10 @@
     "type": "git",
     "url": "https://github.com/ProjectImplicit/PIquest"
   },
+  "minno": {
+      "activeVersions": ["0.0", "0.1"],
+      "pipVersion": "0.3"
+  },
   "description": "Project implicit Questionnaires",
   "devDependencies": {
     "grunt": "~0.4.1",
@@ -44,6 +48,10 @@
     "test": "grunt test --sauce --report",
     "localtest": "grunt test",
     "start": "grunt serve",
-    "postinstall": "./node_modules/grunt-cli/bin/grunt githooks"
+    "postinstall": "./node_modules/grunt-cli/bin/grunt githooks",
+    "gendocs": "minno-gendocs docs pages"
+  },
+  "dependencies": {
+    "minno-gendocs": "^1.0.0"
   }
 }

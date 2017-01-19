@@ -1,0 +1,161 @@
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Minno.js</title>
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+		<link href="../assets/prism.css" rel="stylesheet" />
+		<link href="../assets/style.css" rel="stylesheet" />
+	</head>
+	<body>
+		<header>
+			<section>
+				<nav class="brand">
+                    <a href="/"><h1>Minno</h1></a>
+				</nav>
+				<nav>
+					<a href="/minno-quest/0.0/basics/overview.html">Basics</a>
+					<a href="/minno-quest/0.0/manager/overview.html">miManager</a>
+					<a href="/minno-quest/0.0/quest/overview.html">miQuest</a>
+					<a href="/minno-time/0.0/time/overview.html">miTime</a>
+				</nav>
+				<nav>
+                    <select id="version-select"><option value="0.0" selected>v0.0</option>,<option value="0.1" >v0.1</option></select>
+					<a href="https://github.com/minnojs">Github</a>
+				</nav>
+			</section>
+		</header>
+		<main>
+			<section class="docs">
+                <h1><a name="a-hrefopenendedlonghtmlopen-ended-longa" class="header-link" href="#a-hrefopenendedlonghtmlopen-ended-longa"><span></span></a><a href="openEndedLong.html">Open Ended Long</a></h1><ul>
+<li>Core<ul>
+<li><a href="overview.html">Overview</a></li>
+<li><a href="introduction.html">Introduction</a></li>
+<li><a href="API.html">API</a></li>
+<li><a href="playground.html">Playground</a></li>
+</ul>
+</li>
+<li>Question types<ul>
+<li><a href="text.html">Text</a></li>
+<li><a href="textarea.html">Textarea</a></li>
+<li><a href="textNumber.html">Text Number</a></li>
+<li><a href="selectOne.html">Select One</a></li>
+<li><a href="selectMulti.html">Select Multi</a></li>
+<li><a href="grid.html">Grid</a></li>
+<li><a href="slider.html">Slider</a></li>
+</ul>
+</li>
+<li>Examples<ul>
+<li><a href="helloworld.html">Hello world</a></li>
+<li><a href="bodyAwareness.html">Body Awareness</a></li>
+<li><a href="weight.html">Weight demo</a></li>
+<li><a href="usingImages.html">Using Images</a></li>
+<li><a href="buttons.html">Buttons</a></li>
+<li><a href="buttonsAdvanced.html">Buttons Advanced</a></li>
+<li><a href="buttonsOnePage.html">Buttons One Page</a></li>
+<li><a href="dependency.html">Dependency</a></li>
+<li><a href="liveDependency.html">Live Dependency</a></li>
+<li><a href="gridExample.html">Grid</a></li>
+<li><a href="timer.html">Timer</a></li>
+<li><a href="openEnded.html">Open Ended</a></li>
+<li><strong>Open Ended Long</strong></li>
+<li><a href="rateImages.html">Rate Images</a></li>
+<li><a href="rateImagesSizes.html">Rate Images Sizes</a></li>
+<li><a href="scaleWithFeedback.html">Scale With Feedback</a></li>
+<li><a href="sliderExample.html">Slider</a></li>
+<li><a href="userPrevResp.html">User Prev Resp</a></li>
+<li><a href="nfc.html">Agreement scale</a></li>
+</ul>
+</li>
+</ul>
+<section playground>
+    <div class="buttons">
+        <a class="activate-button">Activate</a>
+        <a class="download-button" href="openEndedLong.js" download>Download</a>
+    </div>
+    <div class="editor">define(['questAPI'],function(Quest){
+	var API = new Quest();
+
+	// ### Questions
+	API.addQuestionsSet(
+	{
+		vacation : [{
+			type: 'textarea',
+			name:'vacation',
+			stem: 'Please briefly describe your dream vacation',
+			rows:4,
+			maxlength:350,
+			maxlengthLimit:true,
+			required: true,
+			errorMsg: {
+				required: "Are you sure you don't want to describe your dream vacation? Click Decline to Answer to skip without a response"
+			}
+		}],
+		mondays : [{
+			type: 'textarea',
+			name:'mondays',
+			stem: 'Please explain why you do not like Mondays',
+			rows:4,
+			maxlength:350,
+			maxlengthLimit:true,
+			required: true,
+			errorMsg: {
+				required: "Are you sure you don't want to tell us why you don't like Mondays? Click Decline to Answer to skip without a response"
+			}
+		}]
+	});
+
+
+	// ### Pages
+	API.addPagesSet('basicPage',
+	{
+		progressBar: '<%= pagesMeta.number %> out of 2',
+		v1style:2,
+		decline:true,
+		numbered: false
+	});
+
+	// ### Sequence
+	API.addSequence(
+	[
+		{
+			mixer:'random',
+			data :
+			[
+				{
+					inherit : 'basicPage',
+					questions : [{inherit:'vacation'}]
+				},
+				{
+					inherit : 'basicPage',
+					questions : [{inherit:'mondays'}]
+				}
+			]
+		}
+	]);
+
+	/**
+	Return the script to piquest's god, or something of that sort.
+	**/
+	return API.script;
+});
+</div>
+</section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js" integrity="sha256-xrr4HH5eSY+cFz4SH7ja/LaAi9qcEdjMpeMP49/iOLs=" crossorigin="anonymous"></script>
+<script src="../assets/playground.js"></script>
+
+				<hr />
+				<small>License: Apache 2. &copy; Project Implicit. &middot; Current version [version]</small>
+			</section>
+		</main>
+		<script src="../assets/prism.js"></script>
+        <script>
+            (function(){
+                var select = document.getElementById('version-select');
+                select.addEventListener('change', function(event){
+                    var version = event.target.value;
+                    location.href = location.href.replace(/[0-9]\.[0-9]/, version)
+                });
+            })();
+        </script>
+	</body>
+</html>
