@@ -72,32 +72,32 @@
         <a class="activate-button">Activate</a>
         <a class="download-button" href="timer.js" download>Download</a>
     </div>
-    <div class="editor">define(['questAPI'],function(Quest){
+    <div class="editor">define([&quot;questAPI&quot;], function(Quest){
     var API = new Quest();
 
     API.addSequence([
         { // page begins
-            header: 'Question timer, ',
+            header: &quot;Question timer, &quot;,
             timer: {
                 duration: 10,
-                message: 'You are out of time, lets move on.'
+                message: &quot;You are out of time, lets move on.&quot;
             },
             questions: [
                 { // question begins
-                    type: 'selectOne',
-                    stem: 'When you say good morning, what do you mean?',
+                    type: &quot;selectOne&quot;,
+                    stem: &quot;When you say good morning, what do you mean?&quot;,
                     autoSubmit: true,
                     answers: [
-                        'Do you wish me a good morning',
-                        'Or mean that it is a good morning whether I want it or not',
-                        'Or that you feel good this morning',
-                        'Or that it is a morning to be good on',
-                        'All of them at once'
+                        &quot;Do you wish me a good morning&quot;,
+                        &quot;Or mean that it is a good morning whether I want it or not&quot;,
+                        &quot;Or that you feel good this morning&quot;,
+                        &quot;Or that it is a morning to be good on&quot;,
+                        &quot;All of them at once&quot;
                     ],
                     help: true,
-                    helpText: 'Selecting an answer once colors it blue.<br/>' +
-                        'You can change your answer by selecting another option.<br/>' +
-                        'To confirm, click the selected (blue) button a second time.'
+                    helpText: &quot;Selecting an answer once colors it blue.&lt;br/&gt;&quot; +
+                        &quot;You can change your answer by selecting another option.&lt;br/&gt;&quot; +
+                        &quot;To confirm, click the selected (blue) button a second time.&quot;
                 } // question ends
             ],
             noSubmit: true

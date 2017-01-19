@@ -71,7 +71,7 @@
 </ul>
 <p>/**</p>
 <ul>
-<li>@author Yoav Bar-Anan <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#x3a;&#x62;&#x61;&#114;&#97;&#x6e;&#97;&#110;&#x79;&#64;&#98;&#x67;&#117;&#46;&#97;&#x63;&#46;&#105;&#x6c;">&#x62;&#x61;&#114;&#97;&#x6e;&#97;&#110;&#x79;&#64;&#98;&#x67;&#117;&#46;&#97;&#x63;&#46;&#105;&#x6c;</a>
+<li>@author Yoav Bar-Anan <a href="&#x6d;&#97;&#105;&#108;&#116;&#111;&#58;&#x62;&#97;&#114;&#x61;&#x6e;&#97;&#x6e;&#121;&#x40;&#98;&#103;&#117;&#46;&#x61;&#99;&#46;&#105;&#x6c;">&#x62;&#97;&#114;&#x61;&#x6e;&#97;&#x6e;&#121;&#x40;&#98;&#103;&#117;&#46;&#x61;&#99;&#46;&#105;&#x6c;</a>
 */</li>
 </ul>
 <section playground>
@@ -80,68 +80,68 @@
         <a class="download-button" href="buttonsOnePage.js" download>Download</a>
     </div>
     <div class="editor">/**
-* @author Yoav Bar-Anan <baranany@bgu.ac.il>
+ * @author Yoav Bar-Anan &lt;baranany@bgu.ac.il&gt;
  */
-define(['questAPI'], function(Quest){
+define([&quot;questAPI&quot;], function(Quest){
 	var API = new Quest();
 
 	// ### Questions
-	API.addQuestionsSet('basicSelect',
+	API.addQuestionsSet(&quot;basicSelect&quot;,
 	{
-		type: 'selectOne',
+		type: &quot;selectOne&quot;,
 		autoSubmit:false,
 		numericValues:true,
 		required:false,
-		style:'multiButtons',
+		style:&quot;multiButtons&quot;,
 		answers : [
-			'1 - Extremely negative',
-			'2',
-			'3',
-			'4',
-			'5',
-			'6',
-			'7',
-			'8',
-			'9 - Extremely positive'
+			&quot;1 - Extremely negative&quot;,
+			&quot;2&quot;,
+			&quot;3&quot;,
+			&quot;4&quot;,
+			&quot;5&quot;,
+			&quot;6&quot;,
+			&quot;7&quot;,
+			&quot;8&quot;,
+			&quot;9 - Extremely positive&quot;
 		]
 	});
 
-	API.addQuestionsSet('people',
+	API.addQuestionsSet(&quot;people&quot;,
 	[
 		{
-			inherit : 'basicSelect',
-			name : 'Obama',
-			stem : 'Barack Obama'
+			inherit : &quot;basicSelect&quot;,
+			name : &quot;Obama&quot;,
+			stem : &quot;Barack Obama&quot;
 		},
 		{
-			inherit : 'basicSelect',
-			name : 'Beyonce',
-			stem : 'Beyonce Knowles'
+			inherit : &quot;basicSelect&quot;,
+			name : &quot;Beyonce&quot;,
+			stem : &quot;Beyonce Knowles&quot;
 		},
 		{
-			inherit : 'basicSelect',
-			name : 'Colbert',
-			stem : 'Stephen Colbert'
+			inherit : &quot;basicSelect&quot;,
+			name : &quot;Colbert&quot;,
+			stem : &quot;Stephen Colbert&quot;
 		},
 		{
-			inherit : 'basicSelect',
-			name : 'Letterman',
-			stem : 'David Letterman'
+			inherit : &quot;basicSelect&quot;,
+			name : &quot;Letterman&quot;,
+			stem : &quot;David Letterman&quot;
 		}
 	]);
 
 	// ### Pages
 	// Shows all four questions, but the order is random.
-	API.addPagesSet('basicPage',
+	API.addPagesSet(&quot;basicPage&quot;,
 	{
-		progressBar: '<%= pagesMeta.number %> out of 4',
-		header: 'How positive or negative are your feelings toward the people listed below?',
-		headerStyle : {'font-size':'1em'},
+		progressBar: &quot;&lt;%= pagesMeta.number %&gt; out of 4&quot;,
+		header: &quot;How positive or negative are your feelings toward the people listed below?&quot;,
+		headerStyle : {&quot;font-size&quot;:&quot;1em&quot;},
 		questions : {
-			mixer : 'repeat',
+			mixer : &quot;repeat&quot;,
 			times : 4,
 			data : [
-				{inherit:{set:'people', type:'exRandom'}}
+				{inherit:{set:&quot;people&quot;, type:&quot;exRandom&quot;}}
 			]
 		},
 		v1style:2,
@@ -152,11 +152,11 @@ define(['questAPI'], function(Quest){
 	// ### Sequence
 	API.addSequence(
 	[
-		{inherit : 'basicPage'}
+		{inherit : &quot;basicPage&quot;}
 	]);
 
 	/**
-	Return the script to piquest's god, or something of that sort.
+	Return the script to piquest&quot;s god, or something of that sort.
 	**/
 	return API.script;
 });</div>

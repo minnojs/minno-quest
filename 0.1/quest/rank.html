@@ -76,27 +76,27 @@
         <a class="activate-button">Activate</a>
         <a class="download-button" href="rank.js" download>Download</a>
     </div>
-    <div class="editor">//### Rank question
+    <div class="editor">// ### Rank question
 // An example for a rank question.
 //
 // Full documentation is right [here](../quest/API.html#rank).
-define(['questAPI'], function(Quest){
+define([&quot;questAPI&quot;], function(Quest){
     var API = new Quest();
 
     API.addSequence([
         { // page begins
             questions: [
                 { // question begins
-                    type: 'rank',
-                    stem: 'Please rank the colors of the rainbow by brighness:',
+                    type: &quot;rank&quot;,
+                    stem: &quot;Please rank the colors of the rainbow by brighness:&quot;,
                     list: [
-                        'Red',
-                        'Orange',
-                        'Yellow',
-                        'Green',
-                        'Blue',
-                        'Indigo',
-                        'Violet'
+                        &quot;Red&quot;,
+                        &quot;Orange&quot;,
+                        &quot;Yellow&quot;,
+                        &quot;Green&quot;,
+                        &quot;Blue&quot;,
+                        &quot;Indigo&quot;,
+                        &quot;Violet&quot;
                     ]
                 } // question ends
             ]

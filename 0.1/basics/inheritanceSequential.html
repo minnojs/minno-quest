@@ -77,28 +77,28 @@
         <a class="activate-button">Activate</a>
         <a class="download-button" href="inheritanceSequential.js" download>Download</a>
     </div>
-    <div class="editor">//When you want to go through a set by the order it was created.
-define(['managerAPI'], function(Manager){
+    <div class="editor">// When you want to go through a set by the order it was created.
+define([&quot;managerAPI&quot;], function(Manager){
 
   var API = new Manager();
 
-  API.addTasksSet('default', [
+  API.addTasksSet(&quot;default&quot;, [
   	{
-  		type:'message',
-  		keys: ' '
+  		type:&quot;message&quot;,
+  		keys: &quot; &quot;
   	}
   ]);
 
-  API.addTasksSet('tasks',[
-    {inherit:'default', template:'Task 1'},
-    {inherit:'default', template:'Task 2'},
-    {inherit:'default', template:'Task 3'}
+  API.addTasksSet(&quot;tasks&quot;,[
+    {inherit:&quot;default&quot;, template:&quot;Task 1&quot;},
+    {inherit:&quot;default&quot;, template:&quot;Task 2&quot;},
+    {inherit:&quot;default&quot;, template:&quot;Task 3&quot;}
   ]);
 
   API.addSequence([
-    {inherit:{set:'tasks', type:'sequential'}},
-    {inherit:{set:'tasks', type:'sequential'}},
-    {inherit:{set:'tasks', type:'sequential'}}
+    {inherit:{set:&quot;tasks&quot;, type:&quot;sequential&quot;}},
+    {inherit:{set:&quot;tasks&quot;, type:&quot;sequential&quot;}},
+    {inherit:{set:&quot;tasks&quot;, type:&quot;sequential&quot;}}
   ]);
 
   return API.script;

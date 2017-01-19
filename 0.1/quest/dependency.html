@@ -71,7 +71,7 @@
 </ul>
 <p>/**</p>
 <ul>
-<li>@author Yoav Bar-Anan <a href="&#109;&#x61;&#x69;&#x6c;&#116;&#111;&#58;&#98;&#97;&#x72;&#x61;&#x6e;&#x61;&#x6e;&#x79;&#64;&#98;&#103;&#x75;&#x2e;&#97;&#99;&#x2e;&#105;&#108;">&#98;&#97;&#x72;&#x61;&#x6e;&#x61;&#x6e;&#x79;&#64;&#98;&#103;&#x75;&#x2e;&#97;&#99;&#x2e;&#105;&#108;</a>
+<li>@author Yoav Bar-Anan <a href="&#109;&#x61;&#x69;&#108;&#116;&#111;&#x3a;&#x62;&#x61;&#114;&#x61;&#110;&#97;&#x6e;&#x79;&#x40;&#x62;&#x67;&#x75;&#46;&#97;&#x63;&#46;&#105;&#x6c;">&#x62;&#x61;&#114;&#x61;&#110;&#97;&#x6e;&#x79;&#x40;&#x62;&#x67;&#x75;&#46;&#97;&#x63;&#46;&#105;&#x6c;</a>
 */</li>
 </ul>
 <section playground>
@@ -80,51 +80,51 @@
         <a class="download-button" href="dependency.js" download>Download</a>
     </div>
     <div class="editor">/**
-* @author Yoav Bar-Anan <baranany@bgu.ac.il>
+ * @author Yoav Bar-Anan &lt;baranany@bgu.ac.il&gt;
  */
-define(['questAPI'], function(Quest){
+define([&quot;questAPI&quot;], function(Quest){
 	var API = new Quest();
 
 	// ### Questions
-	API.addQuestionsSet('basicSelect',
+	API.addQuestionsSet(&quot;basicSelect&quot;,
 	{
-		type: 'selectOne',
+		type: &quot;selectOne&quot;,
 		autoSubmit:true,
 		numericValues:true,
 		required:true,
 		errorMsg: {
-			required: "Please select an answer, or click 'decline to answer'"
+			required: "Please select an answer, or click &quot;decline to answer&quot;"
 		},
-		help: '<%= pagesMeta.number < 3 %>',
-		helpText: 'Selecting an answer once colors it blue.<br/>You can change your answer by selecting another option.<br/>To confirm, click the selected (blue) button a second time.'
+		help: &quot;&lt;%= pagesMeta.number &lt; 3 %&gt;&quot;,
+		helpText: &quot;Selecting an answer once colors it blue.&lt;br/&gt;You can change your answer by selecting another option.&lt;br/&gt;To confirm, click the selected (blue) button a second time.&quot;
 	});
 
 	API.addQuestionsSet({
 		funnyChoice: [{
-			inherit: 'basicSelect',
-			name:'moreFunny',
-			stem:'On avarage, who do you think are funnier, women or men?',
-			answers : ['Men', 'Women']
+			inherit: &quot;basicSelect&quot;,
+			name:&quot;moreFunny&quot;,
+			stem:&quot;On avarage, who do you think are funnier, women or men?&quot;,
+			answers : [&quot;Men&quot;, &quot;Women&quot;]
 		}],
 		funnyMen: [{
-			inherit: 'basicSelect',
-			name:'menMore',
-			stem:'How much funnier do you think that men are in comparison to women?',
-			answers : ['Extremely funneir', 'Moderately funnier', 'Slightly funnier']
+			inherit: &quot;basicSelect&quot;,
+			name:&quot;menMore&quot;,
+			stem:&quot;How much funnier do you think that men are in comparison to women?&quot;,
+			answers : [&quot;Extremely funneir&quot;, &quot;Moderately funnier&quot;, &quot;Slightly funnier&quot;]
 		}],
 		funnyWomen: [{
-			inherit: 'basicSelect',
-			name:'womenMore',
-			stem:'How much funnier do you think that women are in comparison to men?',
-			answers : ['Extremely funneir', 'Moderately funnier', 'Slightly funnier']
+			inherit: &quot;basicSelect&quot;,
+			name:&quot;womenMore&quot;,
+			stem:&quot;How much funnier do you think that women are in comparison to men?&quot;,
+			answers : [&quot;Extremely funneir&quot;, &quot;Moderately funnier&quot;, &quot;Slightly funnier&quot;]
 		}]
 	});
 
 	// ### Pages
-	API.addPagesSet('basicPage',
+	API.addPagesSet(&quot;basicPage&quot;,
 	{
-		progressBar: '<%= pagesMeta.number %> out of 2',
-		headerStyle : {'font-size':'1em'},
+		progressBar: &quot;&lt;%= pagesMeta.number %&gt; out of 2&quot;,
+		headerStyle : {&quot;font-size&quot;:&quot;1em&quot;},
 		v1style:2,
 		decline:true,
 		numbered: false
@@ -134,26 +134,26 @@ define(['questAPI'], function(Quest){
 	API.addSequence(
 	[
 		//Present the first question
-		{inherit :'basicPage', questions:{inherit:'funnyChoice'}},
+		{inherit :&quot;basicPage&quot;, questions:{inherit:&quot;funnyChoice&quot;}},
 
 		//Select one of the two possible questions, based on the response to the previous question.
 		{
-			mixer : 'multiBranch',
+			mixer : &quot;multiBranch&quot;,
 			branches: [
 				{
 					conditions: [
-						{compare: 'current.questions.moreFunny.response', to: 1}
+						{compare: &quot;current.questions.moreFunny.response&quot;, to: 1}
 					],
 					data: [
-						{inherit :'basicPage', questions:{inherit:'funnyMen'}}
+						{inherit :&quot;basicPage&quot;, questions:{inherit:&quot;funnyMen&quot;}}
 					]
 				},
 				{
 					conditions: [
-						{compare: 'current.questions.moreFunny.response', to: 2}
+						{compare: &quot;current.questions.moreFunny.response&quot;, to: 2}
 					],
 					data: [
-						{inherit :'basicPage', questions:{inherit:'funnyWomen'}}
+						{inherit :&quot;basicPage&quot;, questions:{inherit:&quot;funnyWomen&quot;}}
 					]
 				}
 			]
@@ -161,7 +161,7 @@ define(['questAPI'], function(Quest){
 	]);
 
 	/**
-	Return the script to piquest's god, or something of that sort.
+	Return the script to piquest&quot;s god, or something of that sort.
 	**/
 	return API.script;
 });

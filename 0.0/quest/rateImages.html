@@ -72,56 +72,56 @@
         <a class="activate-button">Activate</a>
         <a class="download-button" href="rateImages.js" download>Download</a>
     </div>
-    <div class="editor">define(['questAPI'],function(Quest){
+    <div class="editor">define([&quot;questAPI&quot;], function(Quest){
 	var API = new Quest();
 
 	// ### Setup
 	// Set the baseURL for use within images
-	API.addCurrent({baseURL:'../../images/'});
+	API.addCurrent({baseURL:&quot;../../images/&quot;});
 
 
 	// ### Questions
-	API.addQuestionsSet('basicSelect',
+	API.addQuestionsSet(&quot;basicSelect&quot;,
 	{
-		type: 'selectOne',
+		type: &quot;selectOne&quot;,
 		autoSubmit:true,
 		numericValues:true,
 		required:true,
-		name: '<%=questionsData.imageName%>',
-		stem: '<image src="<%=current.baseURL%><%=questionsData.imageName%>.jpg"></image>',
-		answers : ['Extremely negative', 'Moderately negative', 'Slightly negative', 'Neutral', 'Slightly positive', 'Moderately positive', 'Extremely positive'],
-		help: '<%= pagesMeta.number < 3 %>',
-		helpText: 'Selecting an answer once colors it blue.<br/>You can change your answer by selecting another option.<br/>To confirm, click the selected (blue) button a second time.'
+		name: &quot;&lt;%=questionsData.imageName%&gt;&quot;,
+		stem: &quot;&lt;image src="&lt;%=current.baseURL%&gt;&lt;%=questionsData.imageName%&gt;.jpg"&gt;&lt;/image&gt;&quot;,
+		answers : [&quot;Extremely negative&quot;, &quot;Moderately negative&quot;, &quot;Slightly negative&quot;, &quot;Neutral&quot;, &quot;Slightly positive&quot;, &quot;Moderately positive&quot;, &quot;Extremely positive&quot;],
+		help: &quot;&lt;%= pagesMeta.number &lt; 3 %&gt;&quot;,
+		helpText: &quot;Selecting an answer once colors it blue.&lt;br/&gt;You can change your answer by selecting another option.&lt;br/&gt;To confirm, click the selected (blue) button a second time.&quot;
 	});
 
 
-	API.addQuestionsSet('animals',
+	API.addQuestionsSet(&quot;animals&quot;,
 	[
 		{
-			inherit : 'basicSelect',
-			data : {imageName : 'bunny'}
+			inherit : &quot;basicSelect&quot;,
+			data : {imageName : &quot;bunny&quot;}
 		},
 		{
-			inherit : 'basicSelect',
-			data : {imageName : 'seal'}
+			inherit : &quot;basicSelect&quot;,
+			data : {imageName : &quot;seal&quot;}
 		},
 		{
-			inherit : 'basicSelect',
-			data : {imageName : 'shark'}
+			inherit : &quot;basicSelect&quot;,
+			data : {imageName : &quot;shark&quot;}
 		},
 		{
-			inherit : 'basicSelect',
-			data : {imageName : 'snake'}
+			inherit : &quot;basicSelect&quot;,
+			data : {imageName : &quot;snake&quot;}
 		}
 	]);
 
 	// ### Pages
-	API.addPagesSet('basicPage',
+	API.addPagesSet(&quot;basicPage&quot;,
 	{
-		progressBar: '<%= pagesMeta.number %> out of 4',
-		header: 'How positive or negative are your feelings toward the animal presented below?',
-		headerStyle : {'font-size':'1em'},
-		questions : {inherit:{set:'animals', type:'exRandom'}},
+		progressBar: &quot;&lt;%= pagesMeta.number %&gt; out of 4&quot;,
+		header: &quot;How positive or negative are your feelings toward the animal presented below?&quot;,
+		headerStyle : {&quot;font-size&quot;:&quot;1em&quot;},
+		questions : {inherit:{set:&quot;animals&quot;, type:&quot;exRandom&quot;}},
 		v1style:2,
 		decline:true,
 		numbered: false
@@ -131,17 +131,17 @@
 	API.addSequence(
 	[
 		{
-			mixer : 'repeat',
+			mixer : &quot;repeat&quot;,
 			times : 4,
 			data :
 			[
-				{inherit : 'basicPage'}
+				{inherit : &quot;basicPage&quot;}
 			]
 		}
 	]);
 
 	/**
-	Return the script to piquest's god, or something of that sort.
+	Return the script to piquest&quot;s god, or something of that sort.
 	**/
 	return API.script;
 });</div>

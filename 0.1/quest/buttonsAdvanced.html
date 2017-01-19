@@ -71,7 +71,7 @@
 </ul>
 <p>/**</p>
 <ul>
-<li>@author Yoav Bar-Anan <a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#x6f;&#58;&#98;&#x61;&#x72;&#97;&#x6e;&#x61;&#110;&#x79;&#64;&#x62;&#x67;&#117;&#46;&#97;&#x63;&#x2e;&#x69;&#108;">&#98;&#x61;&#x72;&#97;&#x6e;&#x61;&#110;&#x79;&#64;&#x62;&#x67;&#117;&#46;&#97;&#x63;&#x2e;&#x69;&#108;</a>
+<li>@author Yoav Bar-Anan <a href="&#109;&#97;&#105;&#108;&#116;&#x6f;&#58;&#x62;&#97;&#x72;&#97;&#110;&#x61;&#x6e;&#x79;&#x40;&#x62;&#103;&#117;&#x2e;&#97;&#99;&#46;&#105;&#x6c;">&#x62;&#97;&#x72;&#97;&#110;&#x61;&#x6e;&#x79;&#x40;&#x62;&#103;&#117;&#x2e;&#97;&#99;&#46;&#105;&#x6c;</a>
 */</li>
 </ul>
 <section playground>
@@ -80,96 +80,96 @@
         <a class="download-button" href="buttonsAdvanced.js" download>Download</a>
     </div>
     <div class="editor">/**
-* @author Yoav Bar-Anan <baranany@bgu.ac.il>
+ * @author Yoav Bar-Anan &lt;baranany@bgu.ac.il&gt;
  */
-define(['questAPI'], function(Quest){
+define([&quot;questAPI&quot;], function(Quest){
 	var API = new Quest();
 
 	// ### Setup
 	// Set the baseURL for use within images
-	API.addCurrent({baseURL:'../../images/'});
+	API.addCurrent({baseURL:&quot;../../images/&quot;});
 
 	// ### Questions
 	// Use variables from the data property to create the name and stem.
 	// The idea is that this question will be inherited by many other questions.
 	// Those questions will set the name and stem by setting variables into the data property (see example below).
-	API.addQuestionsSet('basicSelect',
+	API.addQuestionsSet(&quot;basicSelect&quot;,
 	{
-		type: 'selectOne',
+		type: &quot;selectOne&quot;,
 		autoSubmit:true,
 		numericValues:true,
 		required:true,
-		style:'multiButtons',
-		name:'<%=questionsData.trait%>.<%=questionsData.firstName%>.<%=questionsData.lastName%>',
-		stem : 'How <%=questionsData.trait%> or <%=questionsData.untrait%> do you think that <%=questionsData.firstName%> <%=questionsData.lastName%> is?',
+		style:&quot;multiButtons&quot;,
+		name:&quot;&lt;%=questionsData.trait%&gt;.&lt;%=questionsData.firstName%&gt;.&lt;%=questionsData.lastName%&gt;&quot;,
+		stem : &quot;How &lt;%=questionsData.trait%&gt; or &lt;%=questionsData.untrait%&gt; do you think that &lt;%=questionsData.firstName%&gt; &lt;%=questionsData.lastName%&gt; is?&quot;,
 		errorMsg: {
-			required: "Please select an answer, or click 'decline to answer'"
+			required: "Please select an answer, or click &quot;decline to answer&quot;"
 		},
 		answers : [
-			'1 - Extremely <%=questionsData.untrait%>',
-			'2',
-			'3',
-			'4',
-			'5',
-			'6',
-			'7',
-			'8',
-			'9 - Extremely <%=questionsData.trait%>'
+			&quot;1 - Extremely &lt;%=questionsData.untrait%&gt;&quot;,
+			&quot;2&quot;,
+			&quot;3&quot;,
+			&quot;4&quot;,
+			&quot;5&quot;,
+			&quot;6&quot;,
+			&quot;7&quot;,
+			&quot;8&quot;,
+			&quot;9 - Extremely &lt;%=questionsData.trait%&gt;&quot;
 		],
-		help: '<%= pagesMeta.number < 3 %>',
-		helpText: 'Selecting an answer once colors it blue.<br/>You can change your answer by selecting another option.<br/>To confirm, click the selected (blue) button a second time.'
+		help: &quot;&lt;%= pagesMeta.number &lt; 3 %&gt;&quot;,
+		helpText: &quot;Selecting an answer once colors it blue.&lt;br/&gt;You can change your answer by selecting another option.&lt;br/&gt;To confirm, click the selected (blue) button a second time.&quot;
 	});
 
 	// Create questions that inherit basicSelect and set the name of the target person.
-	API.addQuestionsSet('people',
+	API.addQuestionsSet(&quot;people&quot;,
 	[
 		{
-			inherit : 'basicSelect',
-			data : {firstName : 'Barack', lastName : 'Obama'}
+			inherit : &quot;basicSelect&quot;,
+			data : {firstName : &quot;Barack&quot;, lastName : &quot;Obama&quot;}
 		},
 		{
-			inherit : 'basicSelect',
-			data : {firstName : 'Beyonce', lastName : 'Knowles'}
+			inherit : &quot;basicSelect&quot;,
+			data : {firstName : &quot;Beyonce&quot;, lastName : &quot;Knowles&quot;}
 		},
 		{
-			inherit : 'basicSelect',
-			data : {firstName : 'Stephen', lastName : 'Colbert'}
+			inherit : &quot;basicSelect&quot;,
+			data : {firstName : &quot;Stephen&quot;, lastName : &quot;Colbert&quot;}
 		},
 		{
-			inherit : 'basicSelect',
-			data : {firstName : 'David', lastName : 'Letterman'}
+			inherit : &quot;basicSelect&quot;,
+			data : {firstName : &quot;David&quot;, lastName : &quot;Letterman&quot;}
 		}
 	]);
 
 	// Create questions that inherit one of the people questions, and set a specific trait.
 	// Note that we use the seed property in order to inherit separately the people questions for each trait.
-	// If we don't use seed, then the inheritance would be shared. Then, one trait might get the same target person.
-	API.addQuestionsSet('traits',
+	// If we don&quot;t use seed, then the inheritance would be shared. Then, one trait might get the same target person.
+	API.addQuestionsSet(&quot;traits&quot;,
 	[
 		{
-			inherit : {set:'people', type:'exRandom', seed:'friendly'},
-			data : {trait:'friendly', untrait:'unfriendly'}
+			inherit : {set:&quot;people&quot;, type:&quot;exRandom&quot;, seed:&quot;friendly&quot;},
+			data : {trait:&quot;friendly&quot;, untrait:&quot;unfriendly&quot;}
 		},
 		{
-			inherit : {set:'people', type:'exRandom', seed:'likeable'},
-			data : {trait:'likeable', untrait:'unlikeable'}
+			inherit : {set:&quot;people&quot;, type:&quot;exRandom&quot;, seed:&quot;likeable&quot;},
+			data : {trait:&quot;likeable&quot;, untrait:&quot;unlikeable&quot;}
 		},
 		{
-			inherit : {set:'people', type:'exRandom', seed:'trustworthy'},
-			data : {trait:'trustworthy', untrait:'untrustworthy'}
+			inherit : {set:&quot;people&quot;, type:&quot;exRandom&quot;, seed:&quot;trustworthy&quot;},
+			data : {trait:&quot;trustworthy&quot;, untrait:&quot;untrustworthy&quot;}
 		},
 		{
-			inherit : {set:'people', type:'exRandom', seed:'honest'},
-			data : {trait:'honest', untrait:'dishonest'}
+			inherit : {set:&quot;people&quot;, type:&quot;exRandom&quot;, seed:&quot;honest&quot;},
+			data : {trait:&quot;honest&quot;, untrait:&quot;dishonest&quot;}
 		}
 	]);
 
 	// ### Pages
 	// Each time that it is ineherited, basicPage uses one of the four trait questions. Each trait question uses one of the four people.
-	API.addPagesSet('basicPage',
+	API.addPagesSet(&quot;basicPage&quot;,
 	{
-		progressBar: '<%= pagesMeta.number %> out of 16',
-		questions : {inherit:{set:'traits', type:'exRandom'}},
+		progressBar: &quot;&lt;%= pagesMeta.number %&gt; out of 16&quot;,
+		questions : {inherit:{set:&quot;traits&quot;, type:&quot;exRandom&quot;}},
 		v1style:2,
 		decline:true,
 		numbered: false
@@ -183,17 +183,17 @@ define(['questAPI'], function(Quest){
 	API.addSequence(
 	[
 		{
-			mixer : 'repeat',
+			mixer : &quot;repeat&quot;,
 			times : 16,
 			data :
 			[
-				{inherit : 'basicPage'}
+				{inherit : &quot;basicPage&quot;}
 			]
 		}
 	]);
 
 	/**
-	Return the script to piquest's god, or something of that sort.
+	Return the script to piquest&quot;s god, or something of that sort.
 	**/
 	return API.script;
 });</div>

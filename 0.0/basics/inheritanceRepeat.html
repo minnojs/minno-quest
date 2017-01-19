@@ -72,40 +72,40 @@
         <a class="activate-button">Activate</a>
         <a class="download-button" href="inheritanceRepeat.js" download>Download</a>
     </div>
-    <div class="editor">//The inheritance systems uses seeds to keep track of consecutive calls to the different types of inheritance.
+    <div class="editor">// The inheritance systems uses seeds to keep track of consecutive calls to the different types of inheritance.
 // If you want to have paralel groups of inhertiance to the same set, you can use seeds.
 // This examples shows how to reset the `sequential` type, it works for `exRandom` as well...
-define(['managerAPI'], function(Manager){
+define([&quot;managerAPI&quot;], function(Manager){
 
   var API = new Manager();
 
-  API.addTasksSet('default', [
+  API.addTasksSet(&quot;default&quot;, [
     {
-      type:'message',
-      keys: ' '
+      type:&quot;message&quot;,
+      keys: &quot; &quot;
     }
   ]);
 
-  API.addTasksSet('tasks',[
-    {inherit:'default', template:'Task 1'},
-    {inherit:'default', template:'Task 2'},
-    {inherit:'default', template:'Task 3'}
+  API.addTasksSet(&quot;tasks&quot;,[
+    {inherit:&quot;default&quot;, template:&quot;Task 1&quot;},
+    {inherit:&quot;default&quot;, template:&quot;Task 2&quot;},
+    {inherit:&quot;default&quot;, template:&quot;Task 3&quot;}
   ]);
 
-  API.addTasksSet('pairs',[
-    {inherit:'default', template:'Pair 1'},
-    {inherit:'default', template:'Pair 2'},
-    {inherit:'default', template:'Pair 3'}
+  API.addTasksSet(&quot;pairs&quot;,[
+    {inherit:&quot;default&quot;, template:&quot;Pair 1&quot;},
+    {inherit:&quot;default&quot;, template:&quot;Pair 2&quot;},
+    {inherit:&quot;default&quot;, template:&quot;Pair 3&quot;}
   ]);
 
 
   API.addSequence([
-    {inherit:{set:'tasks', type:'exRandom', seed: 'block1'}},
-    {inherit:{set:'pairs', type:'exRandom', seed: 'block1', repeat:true}},
-    {inherit:{set:'tasks', type:'exRandom', seed: 'block1'}},
-    {inherit:{set:'pairs', type:'exRandom', seed: 'block1', repeat:true}},
-    {inherit:{set:'tasks', type:'exRandom', seed: 'block1'}},
-    {inherit:{set:'pairs', type:'exRandom', seed: 'block1', repeat:true}}
+    {inherit:{set:&quot;tasks&quot;, type:&quot;exRandom&quot;, seed: &quot;block1&quot;}},
+    {inherit:{set:&quot;pairs&quot;, type:&quot;exRandom&quot;, seed: &quot;block1&quot;, repeat:true}},
+    {inherit:{set:&quot;tasks&quot;, type:&quot;exRandom&quot;, seed: &quot;block1&quot;}},
+    {inherit:{set:&quot;pairs&quot;, type:&quot;exRandom&quot;, seed: &quot;block1&quot;, repeat:true}},
+    {inherit:{set:&quot;tasks&quot;, type:&quot;exRandom&quot;, seed: &quot;block1&quot;}},
+    {inherit:{set:&quot;pairs&quot;, type:&quot;exRandom&quot;, seed: &quot;block1&quot;, repeat:true}}
   ]);
 
   return API.script;

@@ -72,62 +72,62 @@
         <a class="activate-button">Activate</a>
         <a class="download-button" href="buttons.js" download>Download</a>
     </div>
-    <div class="editor">define(['questAPI'],function(Quest){
+    <div class="editor">define([&quot;questAPI&quot;], function(Quest){
 	var API = new Quest();
 
 	// ### Questions
-	API.addQuestionsSet('basicSelect',{
-		type: 'selectOne',
+	API.addQuestionsSet(&quot;basicSelect&quot;,{
+		type: &quot;selectOne&quot;,
 		autoSubmit:true,
 		numericValues:true,
 		required:true,
-		style:'multiButtons',
+		style:&quot;multiButtons&quot;,
 		errorMsg: {
-			required: "Please select an answer, or click 'decline to answer'"
+			required: "Please select an answer, or click &quot;decline to answer&quot;"
 		},
 		answers : [
-			'1 - Extremely negative',
-			'2',
-			'3',
-			'4',
-			'5',
-			'6',
-			'7',
-			'8',
-			'9 - Extremely positive'
+			&quot;1 - Extremely negative&quot;,
+			&quot;2&quot;,
+			&quot;3&quot;,
+			&quot;4&quot;,
+			&quot;5&quot;,
+			&quot;6&quot;,
+			&quot;7&quot;,
+			&quot;8&quot;,
+			&quot;9 - Extremely positive&quot;
 		],
-		help: '<%= pagesMeta.number < 3 %>',
-		helpText: 'Selecting an answer once colors it blue.<br/>You can change your answer by selecting another option.<br/>To confirm, click the selected (blue) button a second time.'
+		help: &quot;&lt;%= pagesMeta.number &lt; 3 %&gt;&quot;,
+		helpText: &quot;Selecting an answer once colors it blue.&lt;br/&gt;You can change your answer by selecting another option.&lt;br/&gt;To confirm, click the selected (blue) button a second time.&quot;
 	});
 
-	API.addQuestionsSet('people',[
+	API.addQuestionsSet(&quot;people&quot;,[
 		{
-			inherit : 'basicSelect',
-			name : 'Obama',
-			stem : 'What are your feelings toward Barack Obama?'
+			inherit : &quot;basicSelect&quot;,
+			name : &quot;Obama&quot;,
+			stem : &quot;What are your feelings toward Barack Obama?&quot;
 		},
 		{
-			inherit : 'basicSelect',
-			name : 'Beyonce',
-			stem : 'What are your feelings toward Beyonce Knowles?'
+			inherit : &quot;basicSelect&quot;,
+			name : &quot;Beyonce&quot;,
+			stem : &quot;What are your feelings toward Beyonce Knowles?&quot;
 		},
 		{
-			inherit : 'basicSelect',
-			name : 'Colbert',
-			stem : 'What are your feelings toward Stephen Colbert?'
+			inherit : &quot;basicSelect&quot;,
+			name : &quot;Colbert&quot;,
+			stem : &quot;What are your feelings toward Stephen Colbert?&quot;
 		},
 		{
-			inherit : 'basicSelect',
-			name : 'Letterman',
-			stem : 'What are your feelings toward David Letterman?'
+			inherit : &quot;basicSelect&quot;,
+			name : &quot;Letterman&quot;,
+			stem : &quot;What are your feelings toward David Letterman?&quot;
 		}
 	]);
 
 	// ### Pages
-	API.addPagesSet('basicPage',
+	API.addPagesSet(&quot;basicPage&quot;,
 	{
-		progressBar: '<%= pagesMeta.number %> out of 4',
-		questions : {inherit:{set:'people', type:'exRandom'}}, //One question in the page, selected randomly (exhaustive)
+		progressBar: &quot;&lt;%= pagesMeta.number %&gt; out of 4&quot;,
+		questions : {inherit:{set:&quot;people&quot;, type:&quot;exRandom&quot;}}, //One question in the page, selected randomly (exhaustive)
 		v1style:2,
 		decline:true,
 		numbered: false
@@ -137,17 +137,17 @@
 	API.addSequence(
 	[
 		{
-			mixer : 'repeat',
+			mixer : &quot;repeat&quot;,
 			times : 4,
 			data :
 			[
-				{inherit : 'basicPage'}
+				{inherit : &quot;basicPage&quot;}
 			]
 		}
 	]);
 
 	/**
-	Return the script to piquest's god, or something of that sort.
+	Return the script to piquest&quot;s god, or something of that sort.
 	**/
 	return API.script;
 });

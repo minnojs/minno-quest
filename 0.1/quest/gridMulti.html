@@ -77,39 +77,39 @@
         <a class="activate-button">Activate</a>
         <a class="download-button" href="gridMulti.js" download>Download</a>
     </div>
-    <div class="editor">//### Grid question
+    <div class="editor">// ### Grid question
 // An example for a simple grid question.
 // It allows you to create a series of multiple choice questions.
 //
 // Full documentation is right [here](../quest/API.html#grid).
-define(['questAPI'], function(Quest){
+define([&quot;questAPI&quot;], function(Quest){
     var API = new Quest();
 
     API.addSequence([
         { // page begins
-            header: 'GridMulti questions simple',
+            header: &quot;GridMulti questions simple&quot;,
             questions: [
                 {
-                    type: 'multiGrid',
-                    name:'multiGrid1',
-                    columns: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-                    rows: ['Days you work out', 'Days you go to work']
+                    type: &quot;multiGrid&quot;,
+                    name:&quot;multiGrid1&quot;,
+                    columns: [&quot;Sunday&quot;, &quot;Monday&quot;, &quot;Tuesday&quot;, &quot;Wednesday&quot;, &quot;Thursday&quot;, &quot;Friday&quot;, &quot;Saturday&quot;],
+                    rows: [&quot;Days you work out&quot;, &quot;Days you go to work&quot;]
                 }
             ]
         }, // page ends
         { // page begins
-            header: 'GridMulti questions advanced',
+            header: &quot;GridMulti questions advanced&quot;,
             questions: [
                 {
-                    type: 'multiGrid',
-                    name:'multiGrid2',
+                    type: &quot;multiGrid&quot;,
+                    name:&quot;multiGrid2&quot;,
                     columns: [
-                        {stem:'Gender', type:'dropdown', answers: ['Male', 'Female']},
-                        'Study together',
-                        'Work together',
-                        {stem:'Description', type:'input'}
+                        {stem:&quot;Gender&quot;, type:&quot;dropdown&quot;, answers: [&quot;Male&quot;, &quot;Female&quot;]},
+                        &quot;Study together&quot;,
+                        &quot;Work together&quot;,
+                        {stem:&quot;Description&quot;, type:&quot;input&quot;}
                     ],
-                    rows: ['Friend 1', 'Friend 2' ]
+                    rows: [&quot;Friend 1&quot;, &quot;Friend 2&quot; ]
                 }
             ]
         } // page ends

@@ -78,23 +78,23 @@
         <a class="activate-button">Activate</a>
         <a class="download-button" href="textNumber.js" download>Download</a>
     </div>
-    <div class="editor">//### Text Number question
+    <div class="editor">// ### Text Number question
 // An example for a simple textNumber question.
 // It allows you to input some numbers.
 // In this case we require an answer between 1 and 10.
 //
 // Full documentation is right [here](../quest/API.html#textnumber).
 
-define(['questAPI'], function(Quest){
+define([&quot;questAPI&quot;], function(Quest){
     var API = new Quest();
 
     API.addSequence([
         { // page begins
-            header: 'Text questions',
+            header: &quot;Text questions&quot;,
             questions: [
                 { // question begins
-                    type: 'textNumber',
-                    stem: 'How many cups of coffee do you drink each morning?',
+                    type: &quot;textNumber&quot;,
+                    stem: &quot;How many cups of coffee do you drink each morning?&quot;,
                     min: 1,
                     max: 10
                 } // question ends

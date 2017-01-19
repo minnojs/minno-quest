@@ -72,40 +72,40 @@
         <a class="activate-button">Activate</a>
         <a class="download-button" href="liveDependency.js" download>Download</a>
     </div>
-    <div class="editor">define(['questAPI'],function(Quest){
+    <div class="editor">define([&quot;questAPI&quot;], function(Quest){
 	var API = new Quest();
 
 	// ### Questions
-	API.addQuestionsSet('basicSelect',
+	API.addQuestionsSet(&quot;basicSelect&quot;,
 	{
-		type: 'selectOne',
+		type: &quot;selectOne&quot;,
 		autoSubmit:true,
 		numericValues:true,
 		required:true,
 		errorMsg: {
-			required: "Please select an answer, or click 'decline to answer'"
+			required: "Please select an answer, or click &quot;decline to answer&quot;"
 		}
 	});
 
 	API.addQuestionsSet({
 		base: [{
-			inherit: 'basicSelect',
-			name:'base',
-			stem:'Please select',
-			answers : ['Men', 'Women', 'Other']
+			inherit: &quot;basicSelect&quot;,
+			name:&quot;base&quot;,
+			stem:&quot;Please select&quot;,
+			answers : [&quot;Men&quot;, &quot;Women&quot;, &quot;Other&quot;]
 		}],
 		open: [{
-			type: 'text',
-			name:'other',
-			stem:'How do you mean other?'
+			type: &quot;text&quot;,
+			name:&quot;other&quot;,
+			stem:&quot;How do you mean other?&quot;
 		}]
 	});
 
 	// ### Pages
-	API.addPagesSet('basicPage',
+	API.addPagesSet(&quot;basicPage&quot;,
 	{
-		progressBar: '<%= pagesMeta.number %> out of 3',
-		headerStyle : {'font-size':'1em'},
+		progressBar: &quot;&lt;%= pagesMeta.number %&gt; out of 3&quot;,
+		headerStyle : {&quot;font-size&quot;:&quot;1em&quot;},
 		v1style:2,
 		decline:true,
 		numbered: false
@@ -115,26 +115,26 @@
 	API.addSequence(
 	[
 		{
-			inherit :'basicPage',
+			inherit :&quot;basicPage&quot;,
 			questions:[
 				// always show this question
-				{inherit:'base'},
+				{inherit:&quot;base&quot;},
 				// this question should be shown only if "other was selected"
 				{
 					remix: true, // remix:true is neccessary so that the mixer is re-evaluated each time that the responses change
-					mixer:'branch',
+					mixer:&quot;branch&quot;,
 		            conditions: [
-						{compare: 3, to: 'current.questions.base.response'}
+						{compare: 3, to: &quot;current.questions.base.response&quot;}
 					],
 					data: [
-						{inherit:'open'}
+						{inherit:&quot;open&quot;}
 					]
 				}
 			]}
 	]);
 
 	/**
-	Return the script to piquest's god, or something of that sort.
+	Return the script to piquest&quot;s god, or something of that sort.
 	**/
 	return API.script;
 });</div>

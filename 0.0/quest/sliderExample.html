@@ -75,25 +75,25 @@
         <a class="activate-button">Activate</a>
         <a class="download-button" href="sliderExample.js" download>Download</a>
     </div>
-    <div class="editor">//### Slider question
+    <div class="editor">// ### Slider question
 // An example for a simple slider question.
 // It allows you to create a slider that allows the user to pick a response along a preassigned range.
 //
 // Full documentation is right [here](../quest/API.html#slider).
-define(['questAPI'], function(Quest){
+define([&quot;questAPI&quot;], function(Quest){
     var API = new Quest();
 
     API.addSequence([
         { // page begins
-            header: 'Slider questions',
+            header: &quot;Slider questions&quot;,
             questions: [
                 {
-                    type: 'slider',
-                    stem: 'Sliders are exremely useful.',
+                    type: &quot;slider&quot;,
+                    stem: &quot;Sliders are exremely useful.&quot;,
                     min:1,
                     max:7,
                     steps:7,
-                    labels: ['Strongly Agree', 'Neutral', 'Strongly Disagree']
+                    labels: [&quot;Strongly Agree&quot;, &quot;Neutral&quot;, &quot;Strongly Disagree&quot;]
                 }
             ]
         } // page ends

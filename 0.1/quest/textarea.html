@@ -78,23 +78,23 @@
         <a class="activate-button">Activate</a>
         <a class="download-button" href="textarea.js" download>Download</a>
     </div>
-    <div class="editor">//### Textarea question
+    <div class="editor">// ### Textarea question
 // An example for a textarea question.
 // It allows you to input some text. In particular it is good for larger amounts of text as it allows better control of the text area size.
 // In this case, we use a text area 3 rows deep and require at least 80 characters of text.
 //
 // Full documentation is right [here](../quest/API.html#text-textarea).
 
-define(['questAPI'], function(Quest){
+define([&quot;questAPI&quot;], function(Quest){
     var API = new Quest();
 
     API.addSequence([
         { // page begins
-            header: 'Text questions',
+            header: &quot;Text questions&quot;,
             questions: [
                 { // question begins
-                    type: 'textarea',
-                    stem: 'When you say good morning, what do you mean?',
+                    type: &quot;textarea&quot;,
+                    stem: &quot;When you say good morning, what do you mean?&quot;,
                     rows: 3,
                     minLength: 400
                 } // question ends

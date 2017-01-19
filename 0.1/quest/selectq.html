@@ -71,7 +71,7 @@
 </ul>
 <p>/**</p>
 <ul>
-<li>@author Yoav Bar-Anan <a href="&#109;&#97;&#x69;&#x6c;&#116;&#x6f;&#x3a;&#x62;&#x61;&#x72;&#x61;&#x6e;&#x61;&#110;&#x79;&#x40;&#98;&#x67;&#117;&#46;&#97;&#x63;&#46;&#x69;&#x6c;">&#x62;&#x61;&#x72;&#x61;&#x6e;&#x61;&#110;&#x79;&#x40;&#98;&#x67;&#117;&#46;&#97;&#x63;&#46;&#x69;&#x6c;</a>
+<li>@author Yoav Bar-Anan <a href="&#109;&#97;&#105;&#x6c;&#116;&#111;&#58;&#98;&#97;&#114;&#97;&#x6e;&#x61;&#x6e;&#121;&#64;&#98;&#x67;&#x75;&#46;&#97;&#x63;&#x2e;&#105;&#x6c;">&#98;&#97;&#114;&#97;&#x6e;&#x61;&#x6e;&#121;&#64;&#98;&#x67;&#x75;&#46;&#97;&#x63;&#x2e;&#105;&#x6c;</a>
 */</li>
 </ul>
 <section playground>
@@ -80,9 +80,9 @@
         <a class="download-button" href="selectq.js" download>Download</a>
     </div>
     <div class="editor">/**
-* @author Yoav Bar-Anan <baranany@bgu.ac.il>
+ * @author Yoav Bar-Anan &lt;baranany@bgu.ac.il&gt;
  */
-define(['questAPI'], function(Quest){
+define([&quot;questAPI&quot;], function(Quest){
 	var API = new Quest();
 
 
@@ -94,58 +94,58 @@ define(['questAPI'], function(Quest){
 			numbered: false,
 			questions :
 			{
-				type:'selectOne',
-				stem:'Select a questionnaire',
-				name:'selectq',
+				type:&quot;selectOne&quot;,
+				stem:&quot;Select a questionnaire&quot;,
+				name:&quot;selectq&quot;,
 				autoSubmit:true,
 				answers : [
 					{
-						text: 'Basic scale with agreement items',
-						value : 'basicScale'
+						text: &quot;Basic scale with agreement items&quot;,
+						value : &quot;basicScale&quot;
 					},
 					{
-						text: 'Rate images',
-						value : 'rateimages'
+						text: &quot;Rate images&quot;,
+						value : &quot;rateimages&quot;
 					},
 					{
-						text: 'Rate images (and set their height)',
-						value : 'rateimagessizes'
+						text: &quot;Rate images (and set their height)&quot;,
+						value : &quot;rateimagessizes&quot;
 					},
 					{
-						text: 'Show horizontal scale',
-						value : 'buttons'
+						text: &quot;Show horizontal scale&quot;,
+						value : &quot;buttons&quot;
 					},
 					{
-						text: 'Show horizontal scale (advanced code)',
-						value : 'buttonsadvanced'
+						text: &quot;Show horizontal scale (advanced code)&quot;,
+						value : &quot;buttonsadvanced&quot;
 					},
 					{
-						text: 'Show horizontal scale (all questions in one page)',
-						value : 'buttonsonepage'
+						text: &quot;Show horizontal scale (all questions in one page)&quot;,
+						value : &quot;buttonsonepage&quot;
 					},
 					{
-						text: 'Use slider',
-						value : 'slider'
+						text: &quot;Use slider&quot;,
+						value : &quot;slider&quot;
 					},
 					{
-						text: 'Use grid',
-						value : 'grid'
+						text: &quot;Use grid&quot;,
+						value : &quot;grid&quot;
 					},
 					{
-						text: "Use participant's response in another question",
-						value : 'userprevresp'
+						text: "Use participant&quot;s response in another question",
+						value : &quot;userprevresp&quot;
 					},
 					{
-						text: "Select a question according to the participant's response",
-						value : 'dependency'
+						text: "Select a question according to the participant&quot;s response",
+						value : &quot;dependency&quot;
 					},
 					{
 						text: "Open ended question (short responses)",
-						value : 'openended'
+						value : &quot;openended&quot;
 					},
 					{
 						text: "Open ended question (long responses)",
-						value : 'openendedlong'
+						value : &quot;openendedlong&quot;
 					}
 				]
 			}
@@ -153,7 +153,7 @@ define(['questAPI'], function(Quest){
 	]);
 
 	/**
-	Return the script to piquest's god, or something of that sort.
+	Return the script to piquest&quot;s god, or something of that sort.
 	**/
 	return API.script;
 });

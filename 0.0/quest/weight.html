@@ -78,7 +78,7 @@
         <a class="download-button" href="weight.js" download>Download</a>
     </div>
     <div class="editor">//
-//The weight questionnaire is a solid example of how we create a fairly complex questionnaire.
+// The weight questionnaire is a solid example of how we create a fairly complex questionnaire.
 // It is heavily commented so that you can follow everything that goes on.
 // After reading the documentation feel free to download the file and modify it according to your needs.
 //
@@ -86,7 +86,7 @@
 //
 // The opening section of each script is always more or less the same.
 // We create the wrapper for the script (`define`), and create a new instance of a questionnaire.
-define(['questAPI'], function(Quest){
+define([&quot;questAPI&quot;], function(Quest){
 
   var API = new Quest();
 
@@ -95,8 +95,8 @@ define(['questAPI'], function(Quest){
   // The first thing we do in this script is create prototypes of the pages and questions that we will use.
   // Many times (usually?), questionnaires use similar settings to describe the **pages** and **questions** in their studies.
   // piQuest provides a system that allows us to prototype them so that our script may be shorter and easier to maintain
-  // (it's better to make a change in one place and have it affect all your questions than having to go through each question and change it individually).
-  // It's worth while to mention that it is not strictly necessary to use prototypes and inheritance,
+  // (it&quot;s better to make a change in one place and have it affect all your questions than having to go through each question and change it individually).
+  // It&quot;s worth while to mention that it is not strictly necessary to use prototypes and inheritance,
   // you can create your pages and questions from scratch from within the [sequence](API.html#sequence).
   //
   // The prototyping system uses `API.addPagesSet` and `API.addQuestionsSet` in order to create sets of prototypical pages/questions,
@@ -107,20 +107,20 @@ define(['questAPI'], function(Quest){
 
   // #### Page prototype
   // Here we create a prototype for the [pages](API.html#pages) in our group.
-  // The prototype belongs to a group that we arbitrarily call 'basicPage', we will later use this name in order to inherit this page.
+  // The prototype belongs to a group that we arbitrarily call &quot;basicPage&quot;, we will later use this name in order to inherit this page.
   // We will be using auto submit within the questions, so we disable the submit button for all pages (`noSubmit`).
   // And finally we add a progress bar that will track the location of the participants within the questionnaire (`progressBar`).
 
   /**
    * Page prototype
    */
-  API.addPagesSet('basicPage',{
+  API.addPagesSet(&quot;basicPage&quot;,{
     noSubmit:true,
-    progressBar: '<%= pagesMeta.number %> out of 15'
+    progressBar: &quot;&lt;%= pagesMeta.number %&gt; out of 15&quot;
   });
 
   // Note the use of templates within the progress bar.
-  // Templates are strings that have the `<%= %>` delimiters, they allow you to access environmental variables,
+  // Templates are strings that have the `&lt;%= %&gt;` delimiters, they allow you to access environmental variables,
   // in this case we access the `pagesMeta` variable and get the current page number.
   // You can use templates anywhere you like within piQuest.
   // Both [templates](API.html#templates) and [environmental variables](API.html#variables) are fully documented within the API.
@@ -128,9 +128,9 @@ define(['questAPI'], function(Quest){
 
   // #### Question prototypes
   //
-  // We are going to use two types of [questions](API.html#questions) throughout this questionnaire, and we'll create a prototype for each of them.
+  // We are going to use two types of [questions](API.html#questions) throughout this questionnaire, and we&quot;ll create a prototype for each of them.
   //
-  // The first question type is a simple [multiple choice input](API.html#selectone-selectmulti) (`type: 'selelctOne'`).
+  // The first question type is a simple [multiple choice input](API.html#selectone-selectmulti) (`type: &quot;selelctOne&quot;`).
   // We set it to `autoSubmit` thus making the submit button redundant (autoSumit means that double clicking a response submits the page).
   // Then we request `numericValues` so that the player logs the responses to questions as numbers instead of plain text.
   // And finally we activate `help` for each of the questions and set the `helpText` for it.
@@ -139,21 +139,21 @@ define(['questAPI'], function(Quest){
   /**
    * Question prototypes
    */
-  API.addQuestionsSet('basicSelect',{
-    type: 'selectOne',
+  API.addQuestionsSet(&quot;basicSelect&quot;,{
+    type: &quot;selectOne&quot;,
     autoSubmit:true,
     numericValues:true,
-    help: '<%= pagesMeta.number < 3 %>', // show the help message only for the first three pages
-    helpText: 'Selecting an answer once colors it blue.<br/>You can change your answer by selecting another option.<br/>To confirm, click the selected (blue) button a second time.'
+    help: &quot;&lt;%= pagesMeta.number &lt; 3 %&gt;&quot;, // show the help message only for the first three pages
+    helpText: &quot;Selecting an answer once colors it blue.&lt;br/&gt;You can change your answer by selecting another option.&lt;br/&gt;To confirm, click the selected (blue) button a second time.&quot;
   });
 
   // The second question is a another selectOne input. This time we use the multiButtons style.
   // This is useful for questions with very many answers. Note the use of `minWidth` here, this allows us to set the width of the buttons, thus making sure they line up symmetrically.
 
-  API.addQuestionsSet('basicDropdown',{
-    type: 'selectOne',
-    style: 'multiButtons',
-    minWidth: '150px',
+  API.addQuestionsSet(&quot;basicDropdown&quot;,{
+    type: &quot;selectOne&quot;,
+    style: &quot;multiButtons&quot;,
+    minWidth: &quot;150px&quot;,
     autoSubmit:true,
     numericValues:true
   });
@@ -184,228 +184,228 @@ define(['questAPI'], function(Quest){
     // so that each page inherits the `noSubmit` that we set into the *basicPage* prototype.
 
     {
-      inherit : 'basicPage',
+      inherit : &quot;basicPage&quot;,
       questions : [{
-        inherit : 'basicSelect',
-        name: 'weightpref',
-        stem: 'Which statement best describes you?',
+        inherit : &quot;basicSelect&quot;,
+        name: &quot;weightpref&quot;,
+        stem: &quot;Which statement best describes you?&quot;,
         answers: [
-          'I strongly prefer Thin People to Fat People.',
-          'I moderately prefer Thin People to Fat People.',
-          'I slightly prefer Thin People to Fat People.',
-          'I like Thin People and Fat People equally.',
-          'I slightly prefer Fat People to Thin People.',
-          'I moderately prefer Fat People to Thin People.',
-          'I strongly prefer Fat People to Thin People.'
+          &quot;I strongly prefer Thin People to Fat People.&quot;,
+          &quot;I moderately prefer Thin People to Fat People.&quot;,
+          &quot;I slightly prefer Thin People to Fat People.&quot;,
+          &quot;I like Thin People and Fat People equally.&quot;,
+          &quot;I slightly prefer Fat People to Thin People.&quot;,
+          &quot;I moderately prefer Fat People to Thin People.&quot;,
+          &quot;I strongly prefer Fat People to Thin People.&quot;
         ]
       }]
     },
     {
-      inherit : 'basicPage',
+      inherit : &quot;basicPage&quot;,
       questions : [{
-        inherit : 'basicSelect',
-        name: 'tempfat',
-        stem: 'How warm or cold do you feel towards <b>fat people</b>?',
+        inherit : &quot;basicSelect&quot;,
+        name: &quot;tempfat&quot;,
+        stem: &quot;How warm or cold do you feel towards &lt;b&gt;fat people&lt;/b&gt;?&quot;,
         answers: [
-          'Extremely warm',
-          'Very warm',
-          'Moderately warm',
-          'Somewhat warm',
-          'Slightly warm',
-          'Neither warm nor cold',
-          'Slightly cold',
-          'Somewhat cold',
-          'Moderately cold',
-          'Very cold',
-          'Extremely cold'
+          &quot;Extremely warm&quot;,
+          &quot;Very warm&quot;,
+          &quot;Moderately warm&quot;,
+          &quot;Somewhat warm&quot;,
+          &quot;Slightly warm&quot;,
+          &quot;Neither warm nor cold&quot;,
+          &quot;Slightly cold&quot;,
+          &quot;Somewhat cold&quot;,
+          &quot;Moderately cold&quot;,
+          &quot;Very cold&quot;,
+          &quot;Extremely cold&quot;
         ]
       }]
     },
     {
-      inherit : 'basicPage',
+      inherit : &quot;basicPage&quot;,
       questions : [{
-        inherit : 'basicSelect',
-        name: 'tempthin',
-        stem: 'How warm or cold do you feel towards <b>thin people</b>?',
+        inherit : &quot;basicSelect&quot;,
+        name: &quot;tempthin&quot;,
+        stem: &quot;How warm or cold do you feel towards &lt;b&gt;thin people&lt;/b&gt;?&quot;,
         answers: [
-          'Extremely warm',
-          'Very warm',
-          'Moderately warm',
-          'Somewhat warm',
-          'Slightly warm',
-          'Neither warm nor cold',
-          'Slightly cold',
-          'Somewhat cold',
-          'Moderately cold',
-          'Very cold',
-          'Extremely cold'
+          &quot;Extremely warm&quot;,
+          &quot;Very warm&quot;,
+          &quot;Moderately warm&quot;,
+          &quot;Somewhat warm&quot;,
+          &quot;Slightly warm&quot;,
+          &quot;Neither warm nor cold&quot;,
+          &quot;Slightly cold&quot;,
+          &quot;Somewhat cold&quot;,
+          &quot;Moderately cold&quot;,
+          &quot;Very cold&quot;,
+          &quot;Extremely cold&quot;
         ]
       }]
     },
     {
-      inherit : 'basicPage',
+      inherit : &quot;basicPage&quot;,
       questions : [{
-        inherit : 'basicDropdown',
-        name: 'myheight',
-        stem: 'Please indicate your height by selecting the most accurate option.',
+        inherit : &quot;basicDropdown&quot;,
+        name: &quot;myheight&quot;,
+        stem: &quot;Please indicate your height by selecting the most accurate option.&quot;,
         answers: [
-          '3 ft 0 in :: 91 cm',
-          '3 ft 1 in :: 94 cm',
-          '3 ft 2 in :: 97 cm',
-          '3 ft 3 in :: 99 cm',
-          '3 ft 4 in :: 102 cm',
-          '3 ft 5 in :: 104 cm',
-          '3 ft 6 in :: 107 cm',
-          '3 ft 7 in :: 109 cm',
-          '3 ft 8 in :: 112 cm',
-          '3 ft 9 in :: 114 cm',
-          '3 ft 10 in :: 117 cm',
-          '3 ft 11 in :: 119 cm',
-          '4 ft 0 in :: 122 cm',
-          '4 ft 1 in :: 124 cm',
-          '4 ft 2 in :: 127 cm',
-          '4 ft 3 in :: 130 cm',
-          '4 ft 4 in :: 132 cm',
-          '4 ft 5 in :: 135 cm',
-          '4 ft 6 in :: 137 cm',
-          '4 ft 7 in :: 140 cm',
-          '4 ft 8 in :: 142 cm',
-          '4 ft 9 in :: 145 cm',
-          '4 ft 10 in :: 147 cm',
-          '4 ft 11 in :: 150 cm',
-          '5 ft 0 in :: 152 cm',
-          '5 ft 1 in :: 155 cm',
-          '5 ft 2 in :: 157 cm',
-          '5 ft 3 in :: 160 cm',
-          '5 ft 4 in :: 163 cm',
-          '5 ft 5 in :: 165 cm',
-          '5 ft 6 in :: 168 cm',
-          '5 ft 7 in :: 170 cm',
-          '5 ft 8 in :: 173 cm',
-          '5 ft 9 in :: 175 cm',
-          '5 ft 10 in :: 178 cm',
-          '5 ft 11 in :: 180 cm',
-          '6 ft 0 in :: 183 cm',
-          '6 ft 1 in :: 185 cm',
-          '6 ft 2 in :: 188 cm',
-          '6 ft 3 in :: 191 cm',
-          '6 ft 4 in :: 193 cm',
-          '6 ft 5 in :: 196 cm',
-          '6 ft 6 in :: 198 cm',
-          '6 ft 7 in :: 201 cm',
-          '6 ft 8 in :: 203 cm',
-          '6 ft 9 in :: 206 cm',
-          '6 ft 10 in :: 208 cm',
-          '6 ft 11 in :: 211 cm',
-          '7 ft 0 in :: 213 cm',
-          '7 ft 1 in :: 216 cm',
-          '7 ft 2 in :: 218 cm',
-          '7 ft 3 in :: 221 cm',
-          '7 ft 4 in :: 224 cm',
-          '7 ft 5 in :: 226 cm',
-          '7 ft 6 in :: 229 cm',
-          '7 ft 7 in :: 231 cm',
-          '7 ft 8 in :: 234 cm',
-          '7 ft 9 in :: 236 cm',
-          '7 ft 10 in :: 239 cm',
-          '7 ft 11 in :: 241 cm',
-          '8 ft 0 in :: 244 cm',
-          '8 ft 1 in :: 246 cm',
-          '8 ft 2 in :: 249 cm',
-          '8 ft 3 in :: 251 cm',
-          '8 ft 4 in :: 254 cm',
-          '8 ft 5 in :: 257 cm',
-          '8 ft 6 in:: 259 cm'
+          &quot;3 ft 0 in :: 91 cm&quot;,
+          &quot;3 ft 1 in :: 94 cm&quot;,
+          &quot;3 ft 2 in :: 97 cm&quot;,
+          &quot;3 ft 3 in :: 99 cm&quot;,
+          &quot;3 ft 4 in :: 102 cm&quot;,
+          &quot;3 ft 5 in :: 104 cm&quot;,
+          &quot;3 ft 6 in :: 107 cm&quot;,
+          &quot;3 ft 7 in :: 109 cm&quot;,
+          &quot;3 ft 8 in :: 112 cm&quot;,
+          &quot;3 ft 9 in :: 114 cm&quot;,
+          &quot;3 ft 10 in :: 117 cm&quot;,
+          &quot;3 ft 11 in :: 119 cm&quot;,
+          &quot;4 ft 0 in :: 122 cm&quot;,
+          &quot;4 ft 1 in :: 124 cm&quot;,
+          &quot;4 ft 2 in :: 127 cm&quot;,
+          &quot;4 ft 3 in :: 130 cm&quot;,
+          &quot;4 ft 4 in :: 132 cm&quot;,
+          &quot;4 ft 5 in :: 135 cm&quot;,
+          &quot;4 ft 6 in :: 137 cm&quot;,
+          &quot;4 ft 7 in :: 140 cm&quot;,
+          &quot;4 ft 8 in :: 142 cm&quot;,
+          &quot;4 ft 9 in :: 145 cm&quot;,
+          &quot;4 ft 10 in :: 147 cm&quot;,
+          &quot;4 ft 11 in :: 150 cm&quot;,
+          &quot;5 ft 0 in :: 152 cm&quot;,
+          &quot;5 ft 1 in :: 155 cm&quot;,
+          &quot;5 ft 2 in :: 157 cm&quot;,
+          &quot;5 ft 3 in :: 160 cm&quot;,
+          &quot;5 ft 4 in :: 163 cm&quot;,
+          &quot;5 ft 5 in :: 165 cm&quot;,
+          &quot;5 ft 6 in :: 168 cm&quot;,
+          &quot;5 ft 7 in :: 170 cm&quot;,
+          &quot;5 ft 8 in :: 173 cm&quot;,
+          &quot;5 ft 9 in :: 175 cm&quot;,
+          &quot;5 ft 10 in :: 178 cm&quot;,
+          &quot;5 ft 11 in :: 180 cm&quot;,
+          &quot;6 ft 0 in :: 183 cm&quot;,
+          &quot;6 ft 1 in :: 185 cm&quot;,
+          &quot;6 ft 2 in :: 188 cm&quot;,
+          &quot;6 ft 3 in :: 191 cm&quot;,
+          &quot;6 ft 4 in :: 193 cm&quot;,
+          &quot;6 ft 5 in :: 196 cm&quot;,
+          &quot;6 ft 6 in :: 198 cm&quot;,
+          &quot;6 ft 7 in :: 201 cm&quot;,
+          &quot;6 ft 8 in :: 203 cm&quot;,
+          &quot;6 ft 9 in :: 206 cm&quot;,
+          &quot;6 ft 10 in :: 208 cm&quot;,
+          &quot;6 ft 11 in :: 211 cm&quot;,
+          &quot;7 ft 0 in :: 213 cm&quot;,
+          &quot;7 ft 1 in :: 216 cm&quot;,
+          &quot;7 ft 2 in :: 218 cm&quot;,
+          &quot;7 ft 3 in :: 221 cm&quot;,
+          &quot;7 ft 4 in :: 224 cm&quot;,
+          &quot;7 ft 5 in :: 226 cm&quot;,
+          &quot;7 ft 6 in :: 229 cm&quot;,
+          &quot;7 ft 7 in :: 231 cm&quot;,
+          &quot;7 ft 8 in :: 234 cm&quot;,
+          &quot;7 ft 9 in :: 236 cm&quot;,
+          &quot;7 ft 10 in :: 239 cm&quot;,
+          &quot;7 ft 11 in :: 241 cm&quot;,
+          &quot;8 ft 0 in :: 244 cm&quot;,
+          &quot;8 ft 1 in :: 246 cm&quot;,
+          &quot;8 ft 2 in :: 249 cm&quot;,
+          &quot;8 ft 3 in :: 251 cm&quot;,
+          &quot;8 ft 4 in :: 254 cm&quot;,
+          &quot;8 ft 5 in :: 257 cm&quot;,
+          &quot;8 ft 6 in:: 259 cm&quot;
         ]
       }]
     },
     {
-      inherit : 'basicPage',
+      inherit : &quot;basicPage&quot;,
       questions : [{
-        inherit : 'basicDropdown',
-        name: 'myweight',
-        stem: 'Please indicate your weight by selecting the most accurate option.',
+        inherit : &quot;basicDropdown&quot;,
+        name: &quot;myweight&quot;,
+        stem: &quot;Please indicate your weight by selecting the most accurate option.&quot;,
         answers: [
-          '50 lb :: 23 kg',
-          '55 lb :: 25 kg',
-          '60 lb :: 27 kg',
-          '65 lb :: 30 kg',
-          '70 lb :: 32 kg',
-          '75 lb :: 34 kg',
-          '80 lb :: 36 kg',
-          '85 lb :: 39 kg',
-          '90 lb :: 41 kg',
-          '95 lb :: 43 kg',
-          '100 lb :: 45 kg',
-          '105 lb :: 48 kg',
-          '110 lb :: 50 kg',
-          '115 lb :: 52 kg',
-          '120 lb :: 55 kg',
-          '125 lb :: 57 kg',
-          '130 lb :: 59 kg',
-          '135 lb :: 61 kg',
-          '140 lb :: 64 kg',
-          '145 lb :: 66 kg',
-          '150 lb :: 68 kg',
-          '155 lb :: 70 kg',
-          '160 lb :: 73 kg',
-          '165 lb :: 75 kg',
-          '170 lb :: 77 kg',
-          '175 lb :: 80 kg',
-          '180 lb :: 82 kg',
-          '185 lb :: 84 kg',
-          '190 lb :: 86 kg',
-          '195 lb :: 89 kg',
-          '200 lb :: 91 kg',
-          '205 lb :: 93 kg',
-          '210 lb :: 95 kg',
-          '215 lb :: 98 kg',
-          '220 lb :: 100 kg',
-          '225 lb :: 102 kg',
-          '230 lb :: 105 kg',
-          '235 lb :: 107 kg',
-          '240 lb :: 109 kg',
-          '245 lb :: 111 kg',
-          '250 lb :: 114 kg',
-          '255 lb :: 116 kg',
-          '260 lb :: 118 kg',
-          '265 lb :: 120 kg',
-          '270 lb :: 123 kg',
-          '275 lb :: 125 kg',
-          '280 lb :: 127 kg',
-          '285 lb :: 130 kg',
-          '290 lb :: 132 kg',
-          '295 lb :: 134 kg',
-          '300 lb :: 136 kg',
-          '305 lb :: 139 kg',
-          '310 lb :: 141 kg',
-          '315 lb :: 143 kg',
-          '320 lb :: 145 kg',
-          '325 lb :: 148 kg',
-          '330 lb :: 150 kg',
-          '335 lb :: 152 kg',
-          '340 lb :: 155 kg',
-          '345 lb :: 157 kg',
-          '350 lb :: 159 kg',
-          '355 lb :: 161 kg',
-          '360 lb :: 164 kg',
-          '365 lb :: 166 kg',
-          '370 lb :: 168 kg',
-          '375 lb :: 170 kg',
-          '380 lb :: 173 kg',
-          '385 lb :: 175 kg',
-          '390 lb :: 177 kg',
-          '395 lb :: 180 kg',
-          '400 lb :: 182 kg',
-          '405 lb :: 184 kg',
-          '410 lb :: 186 kg',
-          '415 lb :: 189 kg',
-          '420 lb :: 191 kg',
-          '425 lb :: 193 kg',
-          '430 lb :: 195 kg',
-          '435 lb :: 198 kg',
-          '440 lb :: 200 kg',
-          '>440 lb :: >200kg'
+          &quot;50 lb :: 23 kg&quot;,
+          &quot;55 lb :: 25 kg&quot;,
+          &quot;60 lb :: 27 kg&quot;,
+          &quot;65 lb :: 30 kg&quot;,
+          &quot;70 lb :: 32 kg&quot;,
+          &quot;75 lb :: 34 kg&quot;,
+          &quot;80 lb :: 36 kg&quot;,
+          &quot;85 lb :: 39 kg&quot;,
+          &quot;90 lb :: 41 kg&quot;,
+          &quot;95 lb :: 43 kg&quot;,
+          &quot;100 lb :: 45 kg&quot;,
+          &quot;105 lb :: 48 kg&quot;,
+          &quot;110 lb :: 50 kg&quot;,
+          &quot;115 lb :: 52 kg&quot;,
+          &quot;120 lb :: 55 kg&quot;,
+          &quot;125 lb :: 57 kg&quot;,
+          &quot;130 lb :: 59 kg&quot;,
+          &quot;135 lb :: 61 kg&quot;,
+          &quot;140 lb :: 64 kg&quot;,
+          &quot;145 lb :: 66 kg&quot;,
+          &quot;150 lb :: 68 kg&quot;,
+          &quot;155 lb :: 70 kg&quot;,
+          &quot;160 lb :: 73 kg&quot;,
+          &quot;165 lb :: 75 kg&quot;,
+          &quot;170 lb :: 77 kg&quot;,
+          &quot;175 lb :: 80 kg&quot;,
+          &quot;180 lb :: 82 kg&quot;,
+          &quot;185 lb :: 84 kg&quot;,
+          &quot;190 lb :: 86 kg&quot;,
+          &quot;195 lb :: 89 kg&quot;,
+          &quot;200 lb :: 91 kg&quot;,
+          &quot;205 lb :: 93 kg&quot;,
+          &quot;210 lb :: 95 kg&quot;,
+          &quot;215 lb :: 98 kg&quot;,
+          &quot;220 lb :: 100 kg&quot;,
+          &quot;225 lb :: 102 kg&quot;,
+          &quot;230 lb :: 105 kg&quot;,
+          &quot;235 lb :: 107 kg&quot;,
+          &quot;240 lb :: 109 kg&quot;,
+          &quot;245 lb :: 111 kg&quot;,
+          &quot;250 lb :: 114 kg&quot;,
+          &quot;255 lb :: 116 kg&quot;,
+          &quot;260 lb :: 118 kg&quot;,
+          &quot;265 lb :: 120 kg&quot;,
+          &quot;270 lb :: 123 kg&quot;,
+          &quot;275 lb :: 125 kg&quot;,
+          &quot;280 lb :: 127 kg&quot;,
+          &quot;285 lb :: 130 kg&quot;,
+          &quot;290 lb :: 132 kg&quot;,
+          &quot;295 lb :: 134 kg&quot;,
+          &quot;300 lb :: 136 kg&quot;,
+          &quot;305 lb :: 139 kg&quot;,
+          &quot;310 lb :: 141 kg&quot;,
+          &quot;315 lb :: 143 kg&quot;,
+          &quot;320 lb :: 145 kg&quot;,
+          &quot;325 lb :: 148 kg&quot;,
+          &quot;330 lb :: 150 kg&quot;,
+          &quot;335 lb :: 152 kg&quot;,
+          &quot;340 lb :: 155 kg&quot;,
+          &quot;345 lb :: 157 kg&quot;,
+          &quot;350 lb :: 159 kg&quot;,
+          &quot;355 lb :: 161 kg&quot;,
+          &quot;360 lb :: 164 kg&quot;,
+          &quot;365 lb :: 166 kg&quot;,
+          &quot;370 lb :: 168 kg&quot;,
+          &quot;375 lb :: 170 kg&quot;,
+          &quot;380 lb :: 173 kg&quot;,
+          &quot;385 lb :: 175 kg&quot;,
+          &quot;390 lb :: 177 kg&quot;,
+          &quot;395 lb :: 180 kg&quot;,
+          &quot;400 lb :: 182 kg&quot;,
+          &quot;405 lb :: 184 kg&quot;,
+          &quot;410 lb :: 186 kg&quot;,
+          &quot;415 lb :: 189 kg&quot;,
+          &quot;420 lb :: 191 kg&quot;,
+          &quot;425 lb :: 193 kg&quot;,
+          &quot;430 lb :: 195 kg&quot;,
+          &quot;435 lb :: 198 kg&quot;,
+          &quot;440 lb :: 200 kg&quot;,
+          &quot;&gt;440 lb :: &gt;200kg&quot;
         ]
       }]
     }, // end personal segment
@@ -424,123 +424,123 @@ define(['questAPI'], function(Quest){
     //
     // ```javascript
     // var mixer = {
-    //  mixer : 'random', // the type of mixer that we should use
+    //  mixer : &quot;random&quot;, // the type of mixer that we should use
     //  data : [] // the subsequence to which we apply the mixer
     // }
     // ```
     //
-    // In this case we wrap the pages that with general questions within the `data` property of a `type:'random'` mixer.
+    // In this case we wrap the pages that with general questions within the `data` property of a `type:&quot;random&quot;` mixer.
 
     {
-      mixer: 'random',
+      mixer: &quot;random&quot;,
       data:[
         {
-          inherit : 'basicPage',
+          inherit : &quot;basicPage&quot;,
           questions : [{
-            inherit : 'basicSelect',
-            name: 'mostpref',
-            stem: 'Do most people prefer fat people or thin people?',
+            inherit : &quot;basicSelect&quot;,
+            name: &quot;mostpref&quot;,
+            stem: &quot;Do most people prefer fat people or thin people?&quot;,
             answers: [
-              'Most people strongly prefer Fat People to Thin People','Most people somewhat prefer Fat People to Thin People','Most people slightly prefer Fat People to Thin People','Most people like Fat People and Thin People equally ','Most people slightly prefer Thin People to Fat People', 'Most people somewhat prefer Thin People to Fat People','Most people strongly prefer Thin People to Fat People'
+              &quot;Most people strongly prefer Fat People to Thin People&quot;,&quot;Most people somewhat prefer Fat People to Thin People&quot;,&quot;Most people slightly prefer Fat People to Thin People&quot;,&quot;Most people like Fat People and Thin People equally &quot;,&quot;Most people slightly prefer Thin People to Fat People&quot;, &quot;Most people somewhat prefer Thin People to Fat People&quot;,&quot;Most people strongly prefer Thin People to Fat People&quot;
             ]
           }]
         },
         {
-          inherit : 'basicPage',
+          inherit : &quot;basicPage&quot;,
           questions : [{
-            inherit : 'basicSelect',
-            name: 'controlyou',
-            stem: 'How much control do you have over your weight?',
+            inherit : &quot;basicSelect&quot;,
+            name: &quot;controlyou&quot;,
+            stem: &quot;How much control do you have over your weight?&quot;,
             answers: [
-              'Complete control','A lot of control','Some control ','A little control',   'No control'
+              &quot;Complete control&quot;,&quot;A lot of control&quot;,&quot;Some control &quot;,&quot;A little control&quot;,   &quot;No control&quot;
             ]
           }]
         },
         {
-          inherit : 'basicPage',
+          inherit : &quot;basicPage&quot;,
           questions : [{
-            inherit : 'basicSelect',
-            name: 'controlother',
-            stem: 'How much control do people have over their weight?',
+            inherit : &quot;basicSelect&quot;,
+            name: &quot;controlother&quot;,
+            stem: &quot;How much control do people have over their weight?&quot;,
             answers: [
-              'Complete control','A lot of control','Some control ','A little control',   'No control'
+              &quot;Complete control&quot;,&quot;A lot of control&quot;,&quot;Some control &quot;,&quot;A little control&quot;,   &quot;No control&quot;
             ]
           }]
         },
         {
-          inherit : 'basicPage',
+          inherit : &quot;basicPage&quot;,
           questions : [{
-            inherit : 'basicSelect',
-            name: 'iam',
-            stem: 'Currently, I am:',
+            inherit : &quot;basicSelect&quot;,
+            name: &quot;iam&quot;,
+            stem: &quot;Currently, I am:&quot;,
             answers: [
-              'Very underweight','Moderately underweight',    'Slightly underweight','Neither underweight nor overweight','Slightly overweight','Moderately overweight','Very overweight'
+              &quot;Very underweight&quot;,&quot;Moderately underweight&quot;,    &quot;Slightly underweight&quot;,&quot;Neither underweight nor overweight&quot;,&quot;Slightly overweight&quot;,&quot;Moderately overweight&quot;,&quot;Very overweight&quot;
             ]
           }]
         },
         {
-          inherit : 'basicPage',
+          inherit : &quot;basicPage&quot;,
           questions : [{
-            inherit : 'basicSelect',
-            name: 'othersay',
-            stem: 'Other people would say that I am:',
+            inherit : &quot;basicSelect&quot;,
+            name: &quot;othersay&quot;,
+            stem: &quot;Other people would say that I am:&quot;,
             answers: [
-              'Very underweight','Moderately underweight',    'Slightly underweight','Neither underweight nor overweight','Slightly overweight','Moderately overweight','Very overweight'
+              &quot;Very underweight&quot;,&quot;Moderately underweight&quot;,    &quot;Slightly underweight&quot;,&quot;Neither underweight nor overweight&quot;,&quot;Slightly overweight&quot;,&quot;Moderately overweight&quot;,&quot;Very overweight&quot;
             ]
           }]
         },
         {
-          inherit : 'basicPage',
+          inherit : &quot;basicPage&quot;,
           questions : [{
-            inherit : 'basicSelect',
-            name: 'comptomost',
-            stem: 'Compared to most people I interact with, I am:',
+            inherit : &quot;basicSelect&quot;,
+            name: &quot;comptomost&quot;,
+            stem: &quot;Compared to most people I interact with, I am:&quot;,
             answers: [
-              'Much thinner','Moderately thinner','Slightly thinner','About the same','Slightly fatter','Moderately fatter','Much fatter'
+              &quot;Much thinner&quot;,&quot;Moderately thinner&quot;,&quot;Slightly thinner&quot;,&quot;About the same&quot;,&quot;Slightly fatter&quot;,&quot;Moderately fatter&quot;,&quot;Much fatter&quot;
             ]
           }]
         },
         {
-          inherit : 'basicPage',
+          inherit : &quot;basicPage&quot;,
           questions : [{
-            inherit : 'basicSelect',
-            name: 'important',
-            stem: 'How important is your weight to your sense of who you are?',
+            inherit : &quot;basicSelect&quot;,
+            name: &quot;important&quot;,
+            stem: &quot;How important is your weight to your sense of who you are?&quot;,
             answers: [
-              'Not at all important','Slightly important','Moderately important','Very important','Extremely important'
+              &quot;Not at all important&quot;,&quot;Slightly important&quot;,&quot;Moderately important&quot;,&quot;Very important&quot;,&quot;Extremely important&quot;
             ]
           }]
         },
         {
-          inherit : 'basicPage',
+          inherit : &quot;basicPage&quot;,
           questions : [{
-            inherit : 'basicSelect',
-            name: 'idfat',
-            stem: 'How much do you feel similar to people who are fat?',
+            inherit : &quot;basicSelect&quot;,
+            name: &quot;idfat&quot;,
+            stem: &quot;How much do you feel similar to people who are fat?&quot;,
             answers: [
-              'Not at all similar','Somewhat similar','Moderately similar','Very similar','Extremely similar'
+              &quot;Not at all similar&quot;,&quot;Somewhat similar&quot;,&quot;Moderately similar&quot;,&quot;Very similar&quot;,&quot;Extremely similar&quot;
             ]
           }]
         },
         {
-          inherit : 'basicPage',
+          inherit : &quot;basicPage&quot;,
           questions : [{
-            inherit : 'basicSelect',
-            name: 'idthin',
-            stem: 'How much do you feel similar to people who are thin?',
+            inherit : &quot;basicSelect&quot;,
+            name: &quot;idthin&quot;,
+            stem: &quot;How much do you feel similar to people who are thin?&quot;,
             answers: [
-              'Not at all similar','Somewhat similar','Moderately similar','Very similar','Extremely similar'
+              &quot;Not at all similar&quot;,&quot;Somewhat similar&quot;,&quot;Moderately similar&quot;,&quot;Very similar&quot;,&quot;Extremely similar&quot;
             ]
           }]
         },
         {
-          inherit : 'basicPage',
+          inherit : &quot;basicPage&quot;,
           questions : [{
-            inherit : 'basicSelect',
-            name: 'easytolose',
-            stem: 'How easy or difficult would it be for you to lose 5 to 10 pounds if you wanted to?',
+            inherit : &quot;basicSelect&quot;,
+            name: &quot;easytolose&quot;,
+            stem: &quot;How easy or difficult would it be for you to lose 5 to 10 pounds if you wanted to?&quot;,
             answers: [
-              'Very easy','Moderately easy','Somewhat easy','Somewhat difficult','Moderately difficult','Very difficult'
+              &quot;Very easy&quot;,&quot;Moderately easy&quot;,&quot;Somewhat easy&quot;,&quot;Somewhat difficult&quot;,&quot;Moderately difficult&quot;,&quot;Very difficult&quot;
             ]
           }]
         }

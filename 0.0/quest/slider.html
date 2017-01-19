@@ -72,60 +72,60 @@
         <a class="activate-button">Activate</a>
         <a class="download-button" href="slider.js" download>Download</a>
     </div>
-    <div class="editor">define(['questAPI'],function(Quest){
+    <div class="editor">define([&quot;questAPI&quot;], function(Quest){
 	var API = new Quest();
 
 	// ### Questions
-	API.addQuestionsSet('basicSlider',
+	API.addQuestionsSet(&quot;basicSlider&quot;,
 	{
-		type: 'slider',
+		type: &quot;slider&quot;,
 		steps:201, min: -100, max:100,
 		hidePips:true,
 		//showTicks:true,
 		highlight:true,
 		required:true,
-		maxWidth:'800px',
+		maxWidth:&quot;800px&quot;,
 		errorMsg: {
-			required: "Please select an answer, or click 'decline to answer'"
+			required: "Please select an answer, or click &quot;decline to answer&quot;"
 		},
-		leftLabelCss : {color:'#8b2500','font-size':'1.5em'},
-		rightLabelCss: {color:'#8b2500','font-size':'1.5em'},
-		help: '<%= pagesMeta.number < 3 %>',
-		helpText: 'Click on the gray line to indicate your judgment. After clicking the line, you can slide the circle to choose the exact judgment.',
-		labels : ['Extremely negative', 'Neutral', 'Extreme positive']
+		leftLabelCss : {color:&quot;#8b2500&quot;,&quot;font-size&quot;:&quot;1.5em&quot;},
+		rightLabelCss: {color:&quot;#8b2500&quot;,&quot;font-size&quot;:&quot;1.5em&quot;},
+		help: &quot;&lt;%= pagesMeta.number &lt; 3 %&gt;&quot;,
+		helpText: &quot;Click on the gray line to indicate your judgment. After clicking the line, you can slide the circle to choose the exact judgment.&quot;,
+		labels : [&quot;Extremely negative&quot;, &quot;Neutral&quot;, &quot;Extreme positive&quot;]
 	});
 
-	API.addQuestionsSet('people',
+	API.addQuestionsSet(&quot;people&quot;,
 	[
 		{
-			inherit : 'basicSlider',
-			name : 'Obama',
-			stem : 'How positive or negative are your feelings toward Barack Obama?'
+			inherit : &quot;basicSlider&quot;,
+			name : &quot;Obama&quot;,
+			stem : &quot;How positive or negative are your feelings toward Barack Obama?&quot;
 		},
 		{
-			inherit : 'basicSlider',
-			name : 'Beyonce',
-			stem : 'How positive or negative are your feelings toward Beyonce Knowles?'
+			inherit : &quot;basicSlider&quot;,
+			name : &quot;Beyonce&quot;,
+			stem : &quot;How positive or negative are your feelings toward Beyonce Knowles?&quot;
 		},
 		{
-			inherit : 'basicSlider',
-			name : 'Colbert',
-			stem : 'How positive or negative are your feelings toward Stephen Colbert?'
+			inherit : &quot;basicSlider&quot;,
+			name : &quot;Colbert&quot;,
+			stem : &quot;How positive or negative are your feelings toward Stephen Colbert?&quot;
 		},
 		{
-			inherit : 'basicSlider',
-			name : 'Letterman',
-			stem : 'How positive or negative are your feelings toward David Letterman?'
+			inherit : &quot;basicSlider&quot;,
+			name : &quot;Letterman&quot;,
+			stem : &quot;How positive or negative are your feelings toward David Letterman?&quot;
 		}
 	]);
 
 	// ### Pages
-	API.addPagesSet('basicPage',
+	API.addPagesSet(&quot;basicPage&quot;,
 	{
-		progressBar: '<%= pagesMeta.number %> out of 4',
-		header: 'How positive or negative are your feelings toward the animal presented below?',
-		headerStyle : {'font-size':'1em'},
-		questions : {inherit:{set:'people', type:'exRandom'}}, //One question in the page, selected randomly (exhaustive)
+		progressBar: &quot;&lt;%= pagesMeta.number %&gt; out of 4&quot;,
+		header: &quot;How positive or negative are your feelings toward the animal presented below?&quot;,
+		headerStyle : {&quot;font-size&quot;:&quot;1em&quot;},
+		questions : {inherit:{set:&quot;people&quot;, type:&quot;exRandom&quot;}}, //One question in the page, selected randomly (exhaustive)
 		v1style:2,
 		decline:true,
 		numbered: false
@@ -135,17 +135,17 @@
 	API.addSequence(
 	[
 		{
-			mixer : 'repeat',
+			mixer : &quot;repeat&quot;,
 			times : 4,
 			data :
 			[
-				{inherit : 'basicPage'}
+				{inherit : &quot;basicPage&quot;}
 			]
 		}
 	]);
 
 	/**
-	Return the script to piquest's god, or something of that sort.
+	Return the script to piquest&quot;s god, or something of that sort.
 	**/
 	return API.script;
 });

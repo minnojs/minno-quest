@@ -71,31 +71,31 @@
         <a class="activate-button">Activate</a>
         <a class="download-button" href="mixerChoose.js" download>Download</a>
     </div>
-    <div class="editor">//Choose a random subgroup of elements from the sub-sequence.
+    <div class="editor">// Choose a random subgroup of elements from the sub-sequence.
 // By default chooses one. The `n` property allows to set how many to choose.
-define(['managerAPI'], function(Manager){
+define([&quot;managerAPI&quot;], function(Manager){
 
   var API = new Manager();
 
   API.addSequence([
     {
-      mixer:'choose', // declare the mixer
+      mixer:&quot;choose&quot;, // declare the mixer
       n:2, // choose two of the follwoing elements
       data:[ // a list of tasks to bhoose from
         {
-          type:'message',
-          keys: ' ',
-          template: 'Task 1'
+          type:&quot;message&quot;,
+          keys: &quot; &quot;,
+          template: &quot;Task 1&quot;
         },
         {
-          type:'message',
-          keys: ' ',
-          template: 'Task 2'
+          type:&quot;message&quot;,
+          keys: &quot; &quot;,
+          template: &quot;Task 2&quot;
         },
         {
-          type:'message',
-          keys: ' ',
-          template: 'Task 3'
+          type:&quot;message&quot;,
+          keys: &quot; &quot;,
+          template: &quot;Task 3&quot;
         }
       ]
     }

@@ -72,34 +72,34 @@
         <a class="activate-button">Activate</a>
         <a class="download-button" href="usingImages.js" download>Download</a>
     </div>
-    <div class="editor">define(['questAPI'],function(Quest){
+    <div class="editor">define([&quot;questAPI&quot;], function(Quest){
 	var API = new Quest();
 
 	// This is just a trick you can use in order to simplify the use of images;
 	// set the baseUrl into your current object, and use templates in order to inject them into your questions.
 	API.addCurrent({
-		baseURL: '../../images/'
+		baseURL: &quot;../../images/&quot;
 	});
 
 	// ### Questions
 	// Create the general structure of our questions
-	API.addQuestionsSet('basicSelect', {
-		type: 'selectOne',
+	API.addQuestionsSet(&quot;basicSelect&quot;, {
+		type: &quot;selectOne&quot;,
 		autoSubmit:true,
 		numericValues:true,
-		help: '<%= pagesMeta.number < 3 %>',
-		helpText: 'Selecting an answer once colors it blue.<br/>' +
-			'You can change your answer by selecting another option.<br/>' +
-			'To confirm, click the selected (blue) button a second time.'
+		help: &quot;&lt;%= pagesMeta.number &lt; 3 %&gt;&quot;,
+		helpText: &quot;Selecting an answer once colors it blue.&lt;br/&gt;&quot; +
+			&quot;You can change your answer by selecting another option.&lt;br/&gt;&quot; +
+			&quot;To confirm, click the selected (blue) button a second time.&quot;
 	});
 
 	// ### Pages
 	// Create the generic pages template:
 	// * `decline`: allow participants to decline answering
 	// * `noSubmit`: do not display the submit button (we rely on `autoSubmit` for submitting)
-	API.addPagesSet('basicPage', {
-		progressBar: '<%= pagesMeta.number %> out of 3',
-		headerStyle : {'font-size':'1.2em'},
+	API.addPagesSet(&quot;basicPage&quot;, {
+		progressBar: &quot;&lt;%= pagesMeta.number %&gt; out of 3&quot;,
+		headerStyle : {&quot;font-size&quot;:&quot;1.2em&quot;},
 		decline:true,
 		noSubmit:true
 	});
@@ -111,35 +111,35 @@
 	API.addSequence(
 	[
 		{
-			mixer : 'random',
+			mixer : &quot;random&quot;,
 			data :[
 				{
-					inherit: 'basicPage',
-					header: 'How much do you like this man?',
+					inherit: &quot;basicPage&quot;,
+					header: &quot;How much do you like this man?&quot;,
 					questions: {
-						inherit: 'basicSelect',
-						name: 'like',
-						stem :  '<h4>Chris</h4><img class="img-responsive" src="<%=current.baseURL%>face1.jpg">',
+						inherit: &quot;basicSelect&quot;,
+						name: &quot;like&quot;,
+						stem :  &quot;&lt;h4&gt;Chris&lt;/h4&gt;&lt;img class="img-responsive" src="&lt;%=current.baseURL%&gt;face1.jpg"&gt;&quot;,
 						answers: ["Dislike extremely", "Dislike moderately", "Dislike slightly","Neither like or dislike", "Like slightly", "Like moderately", "Like extremely"]
 					}
 				},
 				{
-					inherit: 'basicPage',
-					header: 'How friendly do you think that this man is?',
+					inherit: &quot;basicPage&quot;,
+					header: &quot;How friendly do you think that this man is?&quot;,
 					questions: {
-						inherit: 'basicSelect',
-						name: 'friendly',
-						stem :  '<h4>Chris</h4><img class="img-responsive" src="<%=current.baseURL%>face1.jpg">',
+						inherit: &quot;basicSelect&quot;,
+						name: &quot;friendly&quot;,
+						stem :  &quot;&lt;h4&gt;Chris&lt;/h4&gt;&lt;img class="img-responsive" src="&lt;%=current.baseURL%&gt;face1.jpg"&gt;&quot;,
 						answers: ["Extremely unfriendly", "Moderately unfriendly", "Slightly unfriendly","Neither friendly nor unfriendly", "Slightly friendly", "Moderately friendly", "Extremely friendly"]
 					}
 				},
 				{
-					inherit: 'basicPage',
-					header: 'How trustworthy do you think that this man is?',
+					inherit: &quot;basicPage&quot;,
+					header: &quot;How trustworthy do you think that this man is?&quot;,
 					questions: {
-						inherit: 'basicSelect',
-						name: 'trustworthy',
-						stem :  '<h4>Chris</h4><img class="img-responsive" src="<%=current.baseURL%>face1.jpg">',
+						inherit: &quot;basicSelect&quot;,
+						name: &quot;trustworthy&quot;,
+						stem :  &quot;&lt;h4&gt;Chris&lt;/h4&gt;&lt;img class="img-responsive" src="&lt;%=current.baseURL%&gt;face1.jpg"&gt;&quot;,
 						answers: ["Extremely untrustworthy", "Moderately untrustworthy", "Slightly untrustworthy","Neither trustworthy nor untrustworthy", "Slightly trustworthy", "Moderately trustworthy", "Extremely trustworthy"]
 					}
 				}
@@ -147,7 +147,7 @@
 		}
 	]);
 
-	// Return the script to piquest's god, or something of that sort.
+	// Return the script to piquest&quot;s god, or something of that sort.
 	return API.script;
 });</div>
 </section>

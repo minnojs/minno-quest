@@ -76,7 +76,7 @@
         <a class="activate-button">Activate</a>
         <a class="download-button" href="helloworld.js" download>Download</a>
     </div>
-    <div class="editor">//### Opening section
+    <div class="editor">// ### Opening section
 //
 // This script is a companion for the [introduction turorial](introduction.html).
 // Refer there to get a deeper explanation of what is going on.
@@ -84,7 +84,7 @@
 // The opening section of each script is always more or less the same.
 // We create the wrapper for the script (`define`), and create a new instance of a questionnaire.
 
-define(['questAPI'], function(Quest){
+define([&quot;questAPI&quot;], function(Quest){
     var API = new Quest();
 
     // ### The sequence
@@ -95,19 +95,19 @@ define(['questAPI'], function(Quest){
     API.addSequence([
         // Settings for the page environment
         { // page begins
-            header: 'Hello world!',
+            header: &quot;Hello world!&quot;,
             decline: true,
-            declineText: 'I prefer to keep this information to myself',
+            declineText: &quot;I prefer to keep this information to myself&quot;,
             questions: [
                 { // question begins
-                    type: 'selectOne',
-                    stem: 'When you say good morning, what do you mean?',
+                    type: &quot;selectOne&quot;,
+                    stem: &quot;When you say good morning, what do you mean?&quot;,
                     answers: [
-                        'Do you wish me a good morning',
-                        'Or mean that it is a good morning whether I want it or not',
-                        'Or that you feel good this morning',
-                        'Or that it is a morning to be good on',
-                        'All of them at once'
+                        &quot;Do you wish me a good morning&quot;,
+                        &quot;Or mean that it is a good morning whether I want it or not&quot;,
+                        &quot;Or that you feel good this morning&quot;,
+                        &quot;Or that it is a morning to be good on&quot;,
+                        &quot;All of them at once&quot;
                     ]
                 } // question ends
             ]

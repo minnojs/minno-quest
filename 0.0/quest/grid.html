@@ -72,64 +72,64 @@
         <a class="activate-button">Activate</a>
         <a class="download-button" href="grid.js" download>Download</a>
     </div>
-    <div class="editor">define(['questAPI'],function(Quest){
+    <div class="editor">define([&quot;questAPI&quot;], function(Quest){
 	var API = new Quest();
 
 	// ### Questions
 	// Create the template
-	API.addQuestionsSet('basicGrid',
+	API.addQuestionsSet(&quot;basicGrid&quot;,
 	{
-		type: 'grid',
+		type: &quot;grid&quot;,
 		cellLabels:true,
 		rowStemHide: true,
-		checkboxType : 'colorMark',
+		checkboxType : &quot;colorMark&quot;,
 		required : true,
 		errorMsg: {
 			required: "Please select an answer."
 		},
 		columnStemHide: true,
 		maxWidth:420,
-		name : '<%=questionsData.name%>',
+		name : &quot;&lt;%=questionsData.name%&gt;&quot;,
 		columns: [
-			{type:'text', textProperty:'left', css : {width:'13.5%'}},
-			{stem:'1', css : {width:'7%'}},
-			{stem:'2', css : {width:'7%'}},
-			{stem:'3', css : {width:'7%'}},
-			{stem:'4', css : {width:'7%'}},
-			{stem:'5', css : {width:'7%'}},
-			{stem:'6', css : {width:'7%'}},
-			{stem:'7', css : {width:'7%'}},
-			{stem:'8', css : {width:'7%'}},
-			{stem:'9', css : {width:'7%'}},
-			{type:'text', textProperty:'right', css : {width:'13.5%'}}
+			{type:&quot;text&quot;, textProperty:&quot;left&quot;, css : {width:&quot;13.5%&quot;}},
+			{stem:&quot;1&quot;, css : {width:&quot;7%&quot;}},
+			{stem:&quot;2&quot;, css : {width:&quot;7%&quot;}},
+			{stem:&quot;3&quot;, css : {width:&quot;7%&quot;}},
+			{stem:&quot;4&quot;, css : {width:&quot;7%&quot;}},
+			{stem:&quot;5&quot;, css : {width:&quot;7%&quot;}},
+			{stem:&quot;6&quot;, css : {width:&quot;7%&quot;}},
+			{stem:&quot;7&quot;, css : {width:&quot;7%&quot;}},
+			{stem:&quot;8&quot;, css : {width:&quot;7%&quot;}},
+			{stem:&quot;9&quot;, css : {width:&quot;7%&quot;}},
+			{type:&quot;text&quot;, textProperty:&quot;right&quot;, css : {width:&quot;13.5%&quot;}}
 		],
 		rows: [
-			{left:'Unlikeable', right:'Likeable', name:'<%=questionsData.name%>.likeable'},
-			{left:'Untrustworthy', right:'Trustworthy', name:'<%=questionsData.name%>.trustworthy'},
-			{left:'Unfriendly', right:'Friendly', name:'<%=questionsData.name%>.friendly'}
+			{left:&quot;Unlikeable&quot;, right:&quot;Likeable&quot;, name:&quot;&lt;%=questionsData.name%&gt;.likeable&quot;},
+			{left:&quot;Untrustworthy&quot;, right:&quot;Trustworthy&quot;, name:&quot;&lt;%=questionsData.name%&gt;.trustworthy&quot;},
+			{left:&quot;Unfriendly&quot;, right:&quot;Friendly&quot;, name:&quot;&lt;%=questionsData.name%&gt;.friendly&quot;}
 		]
 	});
 
 	// create the specific question instances instances
-	API.addQuestionsSet('gridQuestions',
+	API.addQuestionsSet(&quot;gridQuestions&quot;,
 	[
 		{
-			inherit : 'basicGrid',
-			data : {name : 'Barack'},
-			stem: '<br/>Please rate Barack Obama on the following traits<br/><br/>'
+			inherit : &quot;basicGrid&quot;,
+			data : {name : &quot;Barack&quot;},
+			stem: &quot;&lt;br/&gt;Please rate Barack Obama on the following traits&lt;br/&gt;&lt;br/&gt;&quot;
 		},
 		{
-			inherit : 'basicGrid',
-			data : {name : 'Beyonce'},
-			stem: '<br/><br/>Please rate Beyonce Knowles on the following traits<br/>'
+			inherit : &quot;basicGrid&quot;,
+			data : {name : &quot;Beyonce&quot;},
+			stem: &quot;&lt;br/&gt;&lt;br/&gt;Please rate Beyonce Knowles on the following traits&lt;br/&gt;&quot;
 		}
 	]);
 
 	// ### Pages
-	API.addPagesSet('basicPage',
+	API.addPagesSet(&quot;basicPage&quot;,
 	{
-		progressBar: 'Page <%= pagesMeta.number %> out of 2',
-		questions : {inherit:{set:'gridQuestions', type:'exRandom'}},
+		progressBar: &quot;Page &lt;%= pagesMeta.number %&gt; out of 2&quot;,
+		questions : {inherit:{set:&quot;gridQuestions&quot;, type:&quot;exRandom&quot;}},
 		v1style:2,
 		decline:true,
 		numbered: false
@@ -139,17 +139,17 @@
 	API.addSequence(
 	[
 		{
-			mixer : 'repeat',
+			mixer : &quot;repeat&quot;,
 			times : 2,
 			data :
 			[
-				{inherit : 'basicPage'}
+				{inherit : &quot;basicPage&quot;}
 			]
 		}
 	]);
 
 	/**
-	Return the script to piquest's god, or something of that sort.
+	Return the script to piquest&quot;s god, or something of that sort.
 	**/
 	return API.script;
 });

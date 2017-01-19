@@ -80,33 +80,33 @@
         <a class="activate-button">Activate</a>
         <a class="download-button" href="inheritanceSeed.js" download>Download</a>
     </div>
-    <div class="editor">//The inheritance systems uses seeds to keep track of consecutive calls to the different types of inheritance.
+    <div class="editor">// The inheritance systems uses seeds to keep track of consecutive calls to the different types of inheritance.
 // If you want to have parallel groups of inheritance to the same set, you can use seeds.
 // This examples shows how to reset the `sequential` type, it works for `exRandom` as well...
 // The options here are pretty endless, you should look into the documentation in order to get a better understanding of how this feature works.
-define(['managerAPI'], function(Manager){
+define([&quot;managerAPI&quot;], function(Manager){
 
   var API = new Manager();
 
-  API.addTasksSet('default', [
+  API.addTasksSet(&quot;default&quot;, [
   	{
-  		type:'message',
-  		keys: ' '
+  		type:&quot;message&quot;,
+  		keys: &quot; &quot;
   	}
   ]);
 
-  API.addTasksSet('tasks',[
-    {inherit:'default', template:'Task 1'},
-    {inherit:'default', template:'Task 2'},
-    {inherit:'default', template:'Task 3'}
+  API.addTasksSet(&quot;tasks&quot;,[
+    {inherit:&quot;default&quot;, template:&quot;Task 1&quot;},
+    {inherit:&quot;default&quot;, template:&quot;Task 2&quot;},
+    {inherit:&quot;default&quot;, template:&quot;Task 3&quot;}
   ]);
 
   API.addSequence([
-    {inherit:{set:'tasks', type:'sequential', seed: 'block1'}},
-    {inherit:{set:'tasks', type:'sequential', seed: 'block1'}},
-    {inherit:{set:'tasks', type:'sequential', seed: 'block2'}},
-    {inherit:{set:'tasks', type:'sequential', seed: 'block2'}},
-    {inherit:{set:'tasks', type:'sequential', seed: 'block2'}}
+    {inherit:{set:&quot;tasks&quot;, type:&quot;sequential&quot;, seed: &quot;block1&quot;}},
+    {inherit:{set:&quot;tasks&quot;, type:&quot;sequential&quot;, seed: &quot;block1&quot;}},
+    {inherit:{set:&quot;tasks&quot;, type:&quot;sequential&quot;, seed: &quot;block2&quot;}},
+    {inherit:{set:&quot;tasks&quot;, type:&quot;sequential&quot;, seed: &quot;block2&quot;}},
+    {inherit:{set:&quot;tasks&quot;, type:&quot;sequential&quot;, seed: &quot;block2&quot;}}
   ]);
 
   return API.script;
