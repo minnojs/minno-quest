@@ -8,7 +8,7 @@
   },
   "minno": {
       "activeVersions": ["0.0", "0.1"],
-      "pipVersion": "0.3"
+      "timeVersion": "0.3"
   },
   "description": "Project implicit Questionnaires",
   "devDependencies": {
