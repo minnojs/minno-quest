@@ -71,8 +71,6 @@
 </ul>
 </li>
 </ul>
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 <ul>
 <li><a href="#introduction">Introduction</a><ul>
 <li><a href="#syntax">Syntax</a></li>
@@ -99,7 +97,6 @@
 </ul>
 </li>
 </ul>
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 <h3><a name="introduction" class="header-link" href="#introduction"><span></span></a>Introduction</h3><p>Mixers allow you to control the flow of your sequences within the PI tasks.
 In particular they allow you to repeat, randomize and even branch sections of your sequence according to <a href="./variables.html">environmental variables</a>.</p>
 <h4><a name="syntax" class="header-link" href="#syntax"><span></span></a>Syntax</h4><p>Each one of the PI tasks is composed of a sequence of elements that is presented sequentially.
@@ -462,41 +459,53 @@ It uses the sub-sequence that is returned from the <code>fn</code> function.
 <code>fn</code> must return an array of elements.</p>
 <p><code>fn</code> has two arguments available: the mixer object itself, and the mixer context (as defined <a href="./variables.html">here</a>).
 You can either use them to create your elments or create elements arbitrarily.</p>
-<p>``js
-{
+<pre><code class="lang-javascript">{
     mixer: &#39;custom&#39;,
     prop: &#39;Custom property&#39;
     fn: function(obj, context){
         return [elem1, elem2]
     }
-}</p>
-<pre><code>### Conditions
-The conditional mixers ([`branch`](#branch) &amp; [`multiBranch`](#multibranch)) allow you to change the content of your sequence depending on [environmental variables](./variables.html). 
-This is done by settings `conditions`.
-A condition is a statement that is evaluated either as `true` or `false`.
+}
+</code></pre>
+<h3><a name="conditions" class="header-link" href="#conditions"><span></span></a>Conditions</h3><p>The conditional mixers (<a href="#branch"><code>branch</code></a> &amp; <a href="#multibranch"><code>multiBranch</code></a>) allow you to change the content of your sequence depending on <a href="./variables.html">environmental variables</a>. 
+This is done by settings <code>conditions</code>.
+A condition is a statement that is evaluated either as <code>true</code> or <code>false</code>.
 We choose the branch we advance to according to the result.
 You can think of each condition as an equation that compares two values.
-Conditions are each represented by an object as follows:
-
-Property        | Description
---------------- | -------------------
-compare         | The left side of the equation.
-to              | The right side of the equation.
-operator        | The type of comparison to do (defaults to &#39;equals&#39;. Read more about operators [here](#operators)).
-
-The values set into `compare` and `to` can be set either as plain values or as references to environmental variables:
-When you want to reference an environmental variable, you use text with dots: `global.var`, `questions.q1.response`
-(questions.q1.response` will retrieve the value of the response for q1 from the questions object).
-
-The following condition object `compare&#39;s **global.var** `to` **current.otherVar** and checks if they are equal.
-It is equivalent to the following equation: `global.myVar === current.myOtherVar`.
-
-```javascript
-var cond = {
+Conditions are each represented by an object as follows:</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>compare</td>
+<td>The left side of the equation.</td>
+</tr>
+<tr>
+<td>to</td>
+<td>The right side of the equation.</td>
+</tr>
+<tr>
+<td>operator</td>
+<td>The type of comparison to do (defaults to &#39;equals&#39;. Read more about operators <a href="#operators">here</a>).</td>
+</tr>
+</tbody>
+</table>
+<p>The values set into <code>compare</code> and <code>to</code> can be set either as plain values or as references to environmental variables:
+When you want to reference an environmental variable, you use text with dots: <code>global.var</code>, <code>questions.q1.response</code>
+(questions.q1.response` will retrieve the value of the response for q1 from the questions object).</p>
+<p>The following condition object compare&#39;s <strong>global.var</strong> <code>to</code> <strong>current.otherVar</strong> and checks if they are equal.
+It is equivalent to the following equation: <code>global.myVar === current.myOtherVar</code>.</p>
+<pre><code class="lang-javascript">var cond = {
     compare: &#39;global.myVar&#39;,
     to: &#39;current.myOtherVar&#39;
 }
-</code></pre><p>Here are some examples of comparing variables with plain values:</p>
+</code></pre>
+<p>Here are some examples of comparing variables with plain values:</p>
 <pre><code class="lang-javascript">//Compares the variable time to the value 12
 var cond1 = {
     compare: &#39;global.time&#39;,
