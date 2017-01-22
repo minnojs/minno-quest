@@ -474,7 +474,7 @@ It uses the sub-sequence that is returned from the `fn` function.
 `fn` has two arguments available: the mixer object itself, and the mixer context (as defined [here](./variables.html)).
 You can either use them to create your elments or create elements arbitrarily.
 
-``js
+```javascript
 {
     mixer: 'custom',
     prop: 'Custom property'
@@ -483,6 +483,7 @@ You can either use them to create your elments or create elements arbitrarily.
     }
 }
 ```
+
 ### Conditions
 The conditional mixers ([`branch`](#branch) & [`multiBranch`](#multibranch)) allow you to change the content of your sequence depending on [environmental variables](./variables.html). 
 This is done by settings `conditions`.
@@ -501,7 +502,7 @@ The values set into `compare` and `to` can be set either as plain values or as r
 When you want to reference an environmental variable, you use text with dots: `global.var`, `questions.q1.response`
 (questions.q1.response` will retrieve the value of the response for q1 from the questions object).
 
-The following condition object `compare's **global.var** `to` **current.otherVar** and checks if they are equal.
+The following condition object compare's **global.var** `to` **current.otherVar** and checks if they are equal.
 It is equivalent to the following equation: `global.myVar === current.myOtherVar`.
 
 ```javascript
