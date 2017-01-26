@@ -19,6 +19,20 @@
 					<a href="/minno-time/0.3/time/overview.html">miTime</a>
 				</nav>
 				<nav>
+                    <div id="search-box">
+                        <script>
+                            (function() {
+                                var cx = '002953266509769041597:smg5beek-iu';
+                                var gcse = document.createElement('script');
+                                gcse.type = 'text/javascript';
+                                gcse.async = true;
+                                gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+                                var s = document.getElementsByTagName('script')[0];
+                                s.parentNode.insertBefore(gcse, s);
+                            })();
+                        </script>
+                        <gcse:searchbox-only></gcse:searchbox-only>
+                    </div>
                     <select id="version-select"><option value="0.0" >v0.0</option>,<option value="0.1" selected>v0.1</option></select>
 					<a href="https://github.com/minnojs">Github</a>
 				</nav>
@@ -153,7 +167,7 @@ The reason for this is that when processing elements the sequencer first resolve
 Simply put, <code>sets</code> are lists (arrays) of elements, with a name.
 They are used both as a name for an element to inherit, and as a way to group several elements together.</p>
 <p><code>sets</code> are defined using the <code>add&amp;lt;elementType&gt;Sets</code> functions defined in the <a href="../basic/API.html">API</a>.
-Each element type has its own function (for example, <code>addQuestionsSets</code> for piQuest).</p>
+Each element type has its own function (for example, <code>addQuestionsSets</code> for miQuest).</p>
 <pre><code class="lang-javascript">API.addQuestionsSet(&#39;likert&#39;, [
     {type: &#39;selectOne&#39;, numericValues: true}
 ]);
@@ -196,7 +210,7 @@ The exception to this rule is the <code>data</code> objects which we merge (agai
 }
 </code></pre>
 <p>By default, inheritance ignores the properties that the child already has.
-Sometimes, you have proprties of the child that you&#39;d like to extend instead of just keeping as is (for example: a list of stimuli in PIP).
+Sometimes, you have proprties of the child that you&#39;d like to extend instead of just keeping as is (for example: a list of stimuli in miTime).
 In order to do this, you can set an array of property names to the <code>merge</code> property.
 Any property that appears in this array will be extended instead of skipped.</p>
 <p>This can look something like this:</p>

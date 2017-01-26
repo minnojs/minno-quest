@@ -1,6 +1,6 @@
 define(['managerAPI'], function(Manager){
 
-	// This code is responsible for styling the piQuest tasks as panels (like piMessage)
+	// This code is responsible for styling the miQuest tasks as panels (like piMessage)
 	// Don't touch unless you know what you're doing
 	var css = '[pi-quest]{background-color: #fff;border: 1px solid transparent;border-radius: 4px;box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);margin-bottom: 20px;border-color: #bce8f1;padding:15px;}';
 	window.angular.element(document).find('head').prepend('<style type="text/css">@charset "UTF-8";' + css + '</style>');

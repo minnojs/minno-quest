@@ -19,6 +19,20 @@
 					<a href="/minno-time/0.3/time/overview.html">miTime</a>
 				</nav>
 				<nav>
+                    <div id="search-box">
+                        <script>
+                            (function() {
+                                var cx = '002953266509769041597:smg5beek-iu';
+                                var gcse = document.createElement('script');
+                                gcse.type = 'text/javascript';
+                                gcse.async = true;
+                                gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+                                var s = document.getElementsByTagName('script')[0];
+                                s.parentNode.insertBefore(gcse, s);
+                            })();
+                        </script>
+                        <gcse:searchbox-only></gcse:searchbox-only>
+                    </div>
                     <select id="version-select"><option value="0.0" selected>v0.0</option>,<option value="0.1" >v0.1</option></select>
 					<a href="https://github.com/minnojs">Github</a>
 				</nav>
@@ -74,7 +88,7 @@
     </div>
     <div class="editor">define([&quot;managerAPI&quot;], function(Manager){
 
-	// This code is responsible for styling the piQuest tasks as panels (like piMessage)
+	// This code is responsible for styling the miQuest tasks as panels (like piMessage)
 	// Don&quot;t touch unless you know what you&quot;re doing
 	var css = &quot;[pi-quest]{background-color: #fff;border: 1px solid transparent;border-radius: 4px;box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);margin-bottom: 20px;border-color: #bce8f1;padding:15px;}&quot;;
 	window.angular.element(document).find(&quot;head&quot;).prepend(&quot;&lt;style type="text/css"&gt;@charset "UTF-8";&quot; + css + &quot;&lt;/style&gt;&quot;);

@@ -19,6 +19,20 @@
 					<a href="/minno-time/0.3/time/overview.html">miTime</a>
 				</nav>
 				<nav>
+                    <div id="search-box">
+                        <script>
+                            (function() {
+                                var cx = '002953266509769041597:smg5beek-iu';
+                                var gcse = document.createElement('script');
+                                gcse.type = 'text/javascript';
+                                gcse.async = true;
+                                gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+                                var s = document.getElementsByTagName('script')[0];
+                                s.parentNode.insertBefore(gcse, s);
+                            })();
+                        </script>
+                        <gcse:searchbox-only></gcse:searchbox-only>
+                    </div>
                     <select id="version-select"><option value="0.0" >v0.0</option>,<option value="0.1" selected>v0.1</option></select>
 					<a href="https://github.com/minnojs">Github</a>
 				</nav>
@@ -100,7 +114,7 @@
 <h3><a name="introduction" class="header-link" href="#introduction"><span></span></a>Introduction</h3><p>Mixers allow you to control the flow of your sequences within the PI tasks.
 In particular they allow you to repeat, randomize and even branch sections of your sequence according to <a href="./variables.html">environmental variables</a>.</p>
 <h4><a name="syntax" class="header-link" href="#syntax"><span></span></a>Syntax</h4><p>Each one of the PI tasks is composed of a sequence of elements that is presented sequentially.
-For example, the sequence in piManager is composed of elements that each represent a task.
+For example, the sequence in miManager is composed of elements that each represent a task.
 These sequences are created using the <code>API.addSequence</code> method in your script.
 Mixers are inserted into the sequence the same way that regular elements are. 
 Each mixer represents a sub-sequence that is to be manipulated and then inserted in its place.</p>
@@ -177,9 +191,9 @@ The order within the four objects is randomized, so that <code>elem1</code> alwa
 <h4><a name="real-time-remix" class="header-link" href="#real-time-remix"><span></span></a>Real time (remix)</h4><p>By default each mixer is processed only once, when it is first encountered during the sequence. 
 There are only two conditions for when this is relevant.
 The first is when your task allows moving back to previous elements; in that case the mixer will keep the mixer elements as they where previously evaluated.
-The second condition is when you have a branch that you want to react to live changes (at this time this is relevant only for piQuest answers).</p>
+The second condition is when you have a branch that you want to react to live changes (at this time this is relevant only for miQuest answers).</p>
 <p>If you want a mixer to react to changes in the environment you need to set <code>remix=true</code>.</p>
-<p>The following snippet uses <code>remix</code> to show a second question depending on the response of the first one (in piQuest).</p>
+<p>The following snippet uses <code>remix</code> to show a second question depending on the response of the first one (in miQuest).</p>
 <pre><code class="lang-javascript">var page = {
     questions: [
         // First question

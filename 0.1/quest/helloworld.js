@@ -11,7 +11,7 @@ define(['questAPI'], function(Quest){
 
     // ### The sequence
     // The most important part of every questionnaire is the sequence.
-    // This is where you tell piQuest how to interact with the participants.
+    // This is where you tell miQuest how to interact with the participants.
     // In our case we want to simply present a single page with a single question so we get something like this:
 
     API.addSequence([

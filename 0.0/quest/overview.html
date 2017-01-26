@@ -19,6 +19,20 @@
 					<a href="/minno-time/0.3/time/overview.html">miTime</a>
 				</nav>
 				<nav>
+                    <div id="search-box">
+                        <script>
+                            (function() {
+                                var cx = '002953266509769041597:smg5beek-iu';
+                                var gcse = document.createElement('script');
+                                gcse.type = 'text/javascript';
+                                gcse.async = true;
+                                gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+                                var s = document.getElementsByTagName('script')[0];
+                                s.parentNode.insertBefore(gcse, s);
+                            })();
+                        </script>
+                        <gcse:searchbox-only></gcse:searchbox-only>
+                    </div>
                     <select id="version-select"><option value="0.0" selected>v0.0</option>,<option value="0.1" >v0.1</option></select>
 					<a href="https://github.com/minnojs">Github</a>
 				</nav>
@@ -71,7 +85,7 @@
 </ul>
 </li>
 </ul>
-<p>piQuest is written in JavaScript and is built to be extremely versatile and customizable. The scripts are written as JavaScript objects. This format allows writing simple and straightforward scripts using a constrained scripting language. The format also allows advanced users to easily create complex and dynamic scripts using in-line JavaScript.</p>
+<p>miQuest is written in JavaScript and is built to be extremely versatile and customizable. The scripts are written as JavaScript objects. This format allows writing simple and straightforward scripts using a constrained scripting language. The format also allows advanced users to easily create complex and dynamic scripts using in-line JavaScript.</p>
 <h3><a name="central-concepts" class="header-link" href="#central-concepts"><span></span></a>Central concepts</h3><p>The player treats each questionnaire a <strong>sequence</strong> of <strong>pages</strong>. Each page may have one or more <strong>questions</strong>.</p>
 <p>The pages are set into a sequence and presented sequentially. This is essentially all you need to know in order to start writing questionnaires.</p>
 <p>The sequence supports <strong><em>mixers</em></strong> that allow randomizing the order of the pages (or questions) that you create, and other features often needed when creating the sequence of a questionnaire. The questionnaire also supports an <em>inheritance</em> system, that allows abstracting questionnaires and makes them shorter, simpler, more dynamic, and most important, reusable.</p>

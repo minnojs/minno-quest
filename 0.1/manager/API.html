@@ -19,6 +19,20 @@
 					<a href="/minno-time/0.3/time/overview.html">miTime</a>
 				</nav>
 				<nav>
+                    <div id="search-box">
+                        <script>
+                            (function() {
+                                var cx = '002953266509769041597:smg5beek-iu';
+                                var gcse = document.createElement('script');
+                                gcse.type = 'text/javascript';
+                                gcse.async = true;
+                                gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+                                var s = document.getElementsByTagName('script')[0];
+                                s.parentNode.insertBefore(gcse, s);
+                            })();
+                        </script>
+                        <gcse:searchbox-only></gcse:searchbox-only>
+                    </div>
                     <select id="version-select"><option value="0.0" >v0.0</option>,<option value="0.1" selected>v0.1</option></select>
 					<a href="https://github.com/minnojs">Github</a>
 				</nav>
@@ -72,7 +86,7 @@
 </ul>
 </li>
 </ul>
-<p>The piManager is responsible for managing several piTasks sequentially. It uses the same API used throughout Minno tasks.</p>
+<p>The miManager is responsible for managing several piTasks sequentially. It uses the same API used throughout Minno tasks.</p>
 <h3><a name="settings" class="header-link" href="#settings"><span></span></a>Settings</h3><p>Settings allow you to control the generic way that the player works. Change the settings using the <code>addSettings</code> function. The first argument to the function is always the name of the setting, the second argument is the setting values. In case the setting is an object, subsequent objects will extend each other so that settings may be progressively added.
 All the functions within settings are invoked using angular. This means that you have access to any service you like, as well as some specific assets. <a href="https://docs.angularjs.org/api/auto/service/$injector">In order to access the services</a> simply use arguments with the appropriate name. For instance, this is how you would access <code>$rootScope</code>:</p>
 <pre><code class="lang-javascript">function onEnd($rootScope){
@@ -169,7 +183,7 @@ All the functions within settings are invoked using angular. This means that you
 <h3><a name="skin" class="header-link" href="#skin"><span></span></a>Skin</h3><p>Add a skin to your project. Skins change the way that your tasks look. Currently the only skins that we support are <code>simple</code> and <code>demo</code>.</p>
 <pre><code class="lang-javascript">API.addSettings(&#39;skin&#39;, &#39;demo&#39;);
 </code></pre>
-<h3><a name="tasks" class="header-link" href="#tasks"><span></span></a>Tasks</h3><p>The basic unit in piManager is the <strong>task</strong>. The manager currently supports several types of tasks; <code>quest</code>, <code>message</code> and <code>post</code>. You should just cue them into the sequence (you can use mixers to your hearts content as well).</p>
+<h3><a name="tasks" class="header-link" href="#tasks"><span></span></a>Tasks</h3><p>The basic unit in miManager is the <strong>task</strong>. The manager currently supports several types of tasks; <code>quest</code>, <code>message</code> and <code>post</code>. You should just cue them into the sequence (you can use mixers to your hearts content as well).</p>
 <table>
 <thead>
 <tr>
@@ -278,15 +292,15 @@ All the functions within settings are invoked using angular. This means that you
 </tr>
 </tbody>
 </table>
-<h3><a name="inheritance" class="header-link" href="#inheritance"><span></span></a>Inheritance</h3><p>piManager uses the same inheritance system used by piQuest. It has one type of set: the task set. In order to create task sets use <code>addTasksSet(set, list)</code>.</p>
-<h3><a name="custom-tasks" class="header-link" href="#custom-tasks"><span></span></a>Custom tasks</h3><p>The piManager allows the creation of custom tasks. The format is fairly simple though you probably need at least some experience with programing for it. </p>
-<h4><a name="plugging-in" class="header-link" href="#plugging-in"><span></span></a>Plugging in</h4><p>piManager manages the task sequence for you as well as loading the task script (if needed). There are several ways to plug a new task into piManager, the all involve passing the activator function to the manager in various ways.</p>
+<h3><a name="inheritance" class="header-link" href="#inheritance"><span></span></a>Inheritance</h3><p>miManager uses the same inheritance system used by miQuest. It has one type of set: the task set. In order to create task sets use <code>addTasksSet(set, list)</code>.</p>
+<h3><a name="custom-tasks" class="header-link" href="#custom-tasks"><span></span></a>Custom tasks</h3><p>The miManager allows the creation of custom tasks. The format is fairly simple though you probably need at least some experience with programing for it. </p>
+<h4><a name="plugging-in" class="header-link" href="#plugging-in"><span></span></a>Plugging in</h4><p>miManager manages the task sequence for you as well as loading the task script (if needed). There are several ways to plug a new task into miManager, the all involve passing the activator function to the manager in various ways.</p>
 <ol>
 <li>You can pass the activator function as a script.</li>
 <li>You can pass it as the play property of the script object ().</li>
 <li>You can set it into the <code>taskActivateProvider</code> using <code>taskActivateProvider.set(taskName, activatorFunction)</code> during the configuration stage of the angular flow (This is worth the trouble mainly if you intend to use this task many times).</li>
 </ol>
-<h4><a name="activator-function" class="header-link" href="#activator-function"><span></span></a>Activator function</h4><p>The activator function is the function that is responsible for the activation of your task as well as for the communication with piManager.</p>
+<h4><a name="activator-function" class="header-link" href="#activator-function"><span></span></a>Activator function</h4><p>The activator function is the function that is responsible for the activation of your task as well as for the communication with miManager.</p>
 <p>It should:</p>
 <ul>
 <li>Run your task (just do whatever you like).</li>
@@ -317,7 +331,7 @@ All the functions within settings are invoked using angular. This means that you
 </tr>
 <tr>
 <td>task</td>
-<td>The piManager element that defined this task.</td>
+<td>The miManager element that defined this task.</td>
 </tr>
 <tr>
 <td>script</td>

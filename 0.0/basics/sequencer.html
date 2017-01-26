@@ -19,6 +19,20 @@
 					<a href="/minno-time/0.3/time/overview.html">miTime</a>
 				</nav>
 				<nav>
+                    <div id="search-box">
+                        <script>
+                            (function() {
+                                var cx = '002953266509769041597:smg5beek-iu';
+                                var gcse = document.createElement('script');
+                                gcse.type = 'text/javascript';
+                                gcse.async = true;
+                                gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+                                var s = document.getElementsByTagName('script')[0];
+                                s.parentNode.insertBefore(gcse, s);
+                            })();
+                        </script>
+                        <gcse:searchbox-only></gcse:searchbox-only>
+                    </div>
                     <select id="version-select"><option value="0.0" selected>v0.0</option>,<option value="0.1" >v0.1</option></select>
 					<a href="https://github.com/minnojs">Github</a>
 				</nav>
@@ -87,11 +101,11 @@
 </li>
 </ul>
 <h3><a name="overview" class="header-link" href="#overview"><span></span></a>Overview</h3><p>All PI tasks use the same framework to manage their elements. Its purpose is to allow dynamic creation and management of your elements. It has three critical components: The sequence mixer, inheritance and templating.</p>
-<p>Each PI task is composed of a series of elements sequentially activated and presented to the users (these are trials for piPlayer, pages for piQuest and tasks for piManager). The sequence <a href="#mixer"><strong>mixer</strong></a> is responsible for the order of the elements presented to the users, it is capable of randomization as well as various other manipulations on the structure of the sequence.</p>
+<p>Each PI task is composed of a series of elements sequentially activated and presented to the users (these are trials for miTime, pages for miQuest and tasks for miManager). The sequence <a href="#mixer"><strong>mixer</strong></a> is responsible for the order of the elements presented to the users, it is capable of randomization as well as various other manipulations on the structure of the sequence.</p>
 <p>Each element may be based upon other elements. This allows us to create simpler scripts as well as add a level of randomization to our tasks. In order to base an element on other elements we use the <a href="#inheritance">inheritance</a> system.</p>
 <p>All tasks use a system of global as well as local variables that can be used to customize elements (as well as some other things). You can put the <a href="#variables">variables</a> at your service using <a href="#templates">templates</a> that allow you to have your settings dynamically depend on the environmental variables.</p>
 <p>We will start by reviewing the sequence and mixers. And then get into inheritance, variables and templates.</p>
-<h3><a name="mixer" class="header-link" href="#mixer"><span></span></a>Mixer</h3><p>The mixer is responsible for managing sequences of elements within the PI tasks, it is capable of repeating, randomizing and even changing the list according to <a href="#variables">environmental variables</a>. You may use it within the sequence or within some of the lists within pi tasks (such as piQuest questions arrays).</p>
+<h3><a name="mixer" class="header-link" href="#mixer"><span></span></a>Mixer</h3><p>The mixer is responsible for managing sequences of elements within the PI tasks, it is capable of repeating, randomizing and even changing the list according to <a href="#variables">environmental variables</a>. You may use it within the sequence or within some of the lists within pi tasks (such as miQuest questions arrays).</p>
 <p>The mixer allows wrapping a sub sequence in an object that allows you to manipulate the way in which it appears. You may insert such an object at any place within a sequence and it will be replaced by the appropriate objects.</p>
 <p>The basic structure of a mixer object is:</p>
 <pre><code class="lang-javascript">{
@@ -340,7 +354,7 @@ var cond2 = {
 </tr>
 </tbody>
 </table>
-<p>In piQuest and piManager, you may want to debug conditions by <a href="#debugging">activating the DEBUG <code>conditions</code> setting</a>. When activated, then any condition that is evaluated will be logged to the console.</p>
+<p>In miQuest and miManager, you may want to debug conditions by <a href="#debugging">activating the DEBUG <code>conditions</code> setting</a>. When activated, then any condition that is evaluated will be logged to the console.</p>
 <p>Advanced users may want to replace the whole condition object with a custom function that returns true or false. The context for the function is an object holding the <em>global</em>, <em>current</em> and <em>questions</em> objects.</p>
 <pre><code class="lang-javascript">function cond(){
     var global = this.global; // get the global from the context
@@ -449,7 +463,7 @@ The task object is there for you to change. You can extend it to your hearts con
     variable: [1,2,3]
 })
 </code></pre>
-<p>Tasks add any data that they log into their task object. For instance, piQuest maintains a <code>current.questions</code> object that holds the responses for all questions.</p>
+<p>Tasks add any data that they log into their task object. For instance, miQuest maintains a <code>current.questions</code> object that holds the responses for all questions.</p>
 <h4><a name="local-variables" class="header-link" href="#local-variables"><span></span></a>Local Variables</h4><p>In addition to these environmental variables, you have access to two types of local variables; <em>Data</em> and <em>Meta</em> . They are each available within the mixer/templates with specific names tied to their type. The naming convention for these variables is <code>&lt;elementName&gt;Data</code> and <code>&lt;elementName&gt;Meta</code>. For example, for tasks they appear as <code>tasksData</code> and <code>tasksMeta</code>. </p>
 <p>The elementNames for the various tasks are as follows:</p>
 <table>
@@ -462,12 +476,12 @@ The task object is there for you to change. You can extend it to your hearts con
 </thead>
 <tbody>
 <tr>
-<td>piManager</td>
+<td>miManager</td>
 <td>tasks</td>
 <td>tasksData, tasksMeta</td>
 </tr>
 <tr>
-<td>piQuest</td>
+<td>miQuest</td>
 <td>pages</td>
 <td>pagesData, pagesMeta</td>
 </tr>
@@ -477,7 +491,7 @@ The task object is there for you to change. You can extend it to your hearts con
 <td>questionsData, questionsMeta</td>
 </tr>
 <tr>
-<td>piPlayer</td>
+<td>miTime</td>
 <td>trial</td>
 <td>trialData, trialMeta</td>
 </tr>
@@ -517,7 +531,7 @@ The task object is there for you to change. You can extend it to your hearts con
 <p>This behavior is often used for the abstraction of tasks; having the behavior of multiple elements defined at a single location. The other typical use, is for different types of randomizations.</p>
 <p>We will first cover the creation of prototype sets from which we can inherit. Then we will go over the actual inheritance behavior.</p>
 <h4><a name="sets" class="header-link" href="#sets"><span></span></a>Sets</h4><p>Each element in the PI tasks can inherit its attributes from an element set.</p>
-<p>The element sets are defined using the <code>addSet</code> functions defined in the <a href="API.html">API</a>. Each element type has its own function (for example, <code>addQuestionsSets</code> for piQuest).</p>
+<p>The element sets are defined using the <code>addSet</code> functions defined in the <a href="API.html">API</a>. Each element type has its own function (for example, <code>addQuestionsSets</code> for miQuest).</p>
 <p>Each set holds an array of elements that can later be referred to as prototypes for new elements.</p>
 <pre><code class="lang-javascript">API.addQuestionsSet(&#39;likert&#39;, [
     {type: &#39;selectOne&#39;, numericValues: true}

@@ -19,6 +19,20 @@
 					<a href="/minno-time/0.3/time/overview.html">miTime</a>
 				</nav>
 				<nav>
+                    <div id="search-box">
+                        <script>
+                            (function() {
+                                var cx = '002953266509769041597:smg5beek-iu';
+                                var gcse = document.createElement('script');
+                                gcse.type = 'text/javascript';
+                                gcse.async = true;
+                                gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+                                var s = document.getElementsByTagName('script')[0];
+                                s.parentNode.insertBefore(gcse, s);
+                            })();
+                        </script>
+                        <gcse:searchbox-only></gcse:searchbox-only>
+                    </div>
                     <select id="version-select"><option value="0.0" selected>v0.0</option>,<option value="0.1" >v0.1</option></select>
 					<a href="https://github.com/minnojs">Github</a>
 				</nav>
@@ -87,7 +101,7 @@
 </code></pre>
 <h3><a name="the-sequence" class="header-link" href="#the-sequence"><span></span></a>The sequence</h3><p>Tasks can be seen a series of frames. Each frame includes some type of interaction with the user. It may be a questionnaire page, a time sensitive trial or even a simple message - depends which type of task you are using. Each of the interaction frames is described by a single object (that may include sub objects that represent sub frames...). You can learn all about the properties that the objects use to describe their tasks in each of their individual API documentation sections.</p>
 <p>In order to register an object with the task we need to add it to the <code>sequence</code>. The sequence is an array of objects that get activate sequentially when the task is activated.</p>
-<p>We&#39;ll use piQuest for this example, where each object represents a page with an array of questions:</p>
+<p>We&#39;ll use miQuest for this example, where each object represents a page with an array of questions:</p>
 <pre><code class="lang-javascript">API.addSequence([
     // page 1
     {
@@ -101,7 +115,7 @@
     }
 ]);
 </code></pre>
-<p>This will tell piQuest to first activate page 1 and then activate page 2. The sequence works in a similar way for all of our tasks, just add in objects and they&#39;ll be activated one after another.</p>
+<p>This will tell miQuest to first activate page 1 and then activate page 2. The sequence works in a similar way for all of our tasks, just add in objects and they&#39;ll be activated one after another.</p>
 <p>Of course a simple sequential sequence is rarely what you&#39;ll need. All sequences support some powerful tools for enriching the way your sequence works. These are described in detail in the <a href="sequencer.html">sequencer section</a>, here we&#39;ll only touch on some basic randomization (using the mixer) and abstraction (using inheritance). </p>
 <h3><a name="basic-randomization" class="header-link" href="#basic-randomization"><span></span></a>Basic Randomization</h3><p>All sequences support a special type of object called a mixer. A mixer holds several regular objects and control the way they are activated. A mixer can reorder the objects, chose among them and even skip them. To illustrate how a mixer works, let&#39;s learn more about the mixer used for randomization.</p>
 <p>The randomization mixer has the following structure:</p>

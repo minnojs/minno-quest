@@ -19,6 +19,20 @@
 					<a href="/minno-time/0.3/time/overview.html">miTime</a>
 				</nav>
 				<nav>
+                    <div id="search-box">
+                        <script>
+                            (function() {
+                                var cx = '002953266509769041597:smg5beek-iu';
+                                var gcse = document.createElement('script');
+                                gcse.type = 'text/javascript';
+                                gcse.async = true;
+                                gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+                                var s = document.getElementsByTagName('script')[0];
+                                s.parentNode.insertBefore(gcse, s);
+                            })();
+                        </script>
+                        <gcse:searchbox-only></gcse:searchbox-only>
+                    </div>
                     <select id="version-select"><option value="0.0" >v0.0</option>,<option value="0.1" selected>v0.1</option></select>
 					<a href="https://github.com/minnojs">Github</a>
 				</nav>
@@ -80,11 +94,11 @@
 It has three critical components: The mixer, templating and inheritance.</p>
 <p>Throughout the sequencer documentation we will use <a href="../manager/messages.html">messages</a> as examples because they are the simplest element type.</p>
 <h3><a name="mixers" class="header-link" href="#mixers"><span></span></a>Mixers</h3><p>Each PI task is composed of a series of elements which are presented to the users sequentially 
-(i.e. trials for piPlayer, pages for piQuest and tasks for piManager). 
+(i.e. trials for miTime, pages for miQuest and tasks for miManager). 
 The sequence <a href="./mixer.html"><strong>mixer</strong></a> is responsible for the order  that these elements are presented to the users. 
 It allows you to randomize the order of your elements.
 It also allows you to repeat a task multiple times and randomly assign participants to experimental conditions.</p>
-<p>For example, the following mixer randomizes the order of two tasks in <em>piManager</em>:</p>
+<p>For example, the following mixer randomizes the order of two tasks in <em>miManager</em>:</p>
 <pre><code class="lang-javascript">API.addSequence([
     {
         mixer: &#39;randomize&#39;,

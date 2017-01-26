@@ -19,6 +19,20 @@
 					<a href="/minno-time/0.3/time/overview.html">miTime</a>
 				</nav>
 				<nav>
+                    <div id="search-box">
+                        <script>
+                            (function() {
+                                var cx = '002953266509769041597:smg5beek-iu';
+                                var gcse = document.createElement('script');
+                                gcse.type = 'text/javascript';
+                                gcse.async = true;
+                                gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+                                var s = document.getElementsByTagName('script')[0];
+                                s.parentNode.insertBefore(gcse, s);
+                            })();
+                        </script>
+                        <gcse:searchbox-only></gcse:searchbox-only>
+                    </div>
                     <select id="version-select"><option value="0.0" >v0.0</option>,<option value="0.1" selected>v0.1</option></select>
 					<a href="https://github.com/minnojs">Github</a>
 				</nav>
@@ -123,11 +137,11 @@ where <code>&lt;taskName&gt;</code> stands for the <a href="../manager/API.html#
 </thead>
 <tbody>
 <tr>
-<td>PIP</td>
+<td>miTime</td>
 <td>The task object holds all trial logs: <code>current.logs</code>.</td>
 </tr>
 <tr>
-<td>piQuest</td>
+<td>miQuest</td>
 <td>The task object holds all questions: <code>current.questions</code>.</td>
 </tr>
 </tbody>
@@ -170,12 +184,12 @@ For example, for tasks they appear as <code>tasksData</code> and <code>tasksMeta
 </thead>
 <tbody>
 <tr>
-<td>piManager</td>
+<td>miManager</td>
 <td>tasks</td>
 <td>tasksData, tasksMeta</td>
 </tr>
 <tr>
-<td>piQuest</td>
+<td>miQuest</td>
 <td>pages</td>
 <td>pagesData, pagesMeta</td>
 </tr>
@@ -185,7 +199,7 @@ For example, for tasks they appear as <code>tasksData</code> and <code>tasksMeta
 <td>questionsData, questionsMeta</td>
 </tr>
 <tr>
-<td>piPlayer</td>
+<td>miTime</td>
 <td>trial</td>
 <td>trialData, trialMeta</td>
 </tr>

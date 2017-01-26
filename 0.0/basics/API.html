@@ -19,6 +19,20 @@
 					<a href="/minno-time/0.3/time/overview.html">miTime</a>
 				</nav>
 				<nav>
+                    <div id="search-box">
+                        <script>
+                            (function() {
+                                var cx = '002953266509769041597:smg5beek-iu';
+                                var gcse = document.createElement('script');
+                                gcse.type = 'text/javascript';
+                                gcse.async = true;
+                                gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+                                var s = document.getElementsByTagName('script')[0];
+                                s.parentNode.insertBefore(gcse, s);
+                            })();
+                        </script>
+                        <gcse:searchbox-only></gcse:searchbox-only>
+                    </div>
                     <select id="version-select"><option value="0.0" selected>v0.0</option>,<option value="0.1" >v0.1</option></select>
 					<a href="https://github.com/minnojs">Github</a>
 				</nav>
@@ -97,7 +111,7 @@
 <tr>
 <td>name</td>
 <td>String</td>
-<td>The name of this task. If used as part of piManager, this setting may be overided by the manager task object.</td>
+<td>The name of this task. If used as part of miManager, this setting may be overided by the manager task object.</td>
 </tr>
 </tbody>
 </table>
@@ -201,12 +215,12 @@
 </thead>
 <tbody>
 <tr>
-<td>piManager</td>
+<td>miManager</td>
 <td>tasks</td>
 <td>addTasksSet</td>
 </tr>
 <tr>
-<td>piQuest</td>
+<td>miQuest</td>
 <td>pages</td>
 <td>addPagesSet</td>
 </tr>
@@ -216,7 +230,7 @@
 <td>addQuestionsSet</td>
 </tr>
 <tr>
-<td>piPlayer</td>
+<td>miTime</td>
 <td>trial</td>
 <td>addTrialSet</td>
 </tr>
