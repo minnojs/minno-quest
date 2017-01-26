@@ -21,7 +21,7 @@
 
 All PI tasks use the same framework to manage their elements. Its purpose is to allow dynamic creation and management of your elements. It has three critical components: The sequence mixer, inheritance and templating.
 
-Each PI task is composed of a series of elements sequentially activated and presented to the users (these are trials for piPlayer, pages for piQuest and tasks for piManager). The sequence [**mixer**](#mixer) is responsible for the order of the elements presented to the users, it is capable of randomization as well as various other manipulations on the structure of the sequence.
+Each PI task is composed of a series of elements sequentially activated and presented to the users (these are trials for miTime, pages for miQuest and tasks for miManager). The sequence [**mixer**](#mixer) is responsible for the order of the elements presented to the users, it is capable of randomization as well as various other manipulations on the structure of the sequence.
 
 Each element may be based upon other elements. This allows us to create simpler scripts as well as add a level of randomization to our tasks. In order to base an element on other elements we use the [inheritance](#inheritance) system.
 
@@ -31,7 +31,7 @@ We will start by reviewing the sequence and mixers. And then get into inheritanc
 
 ### Mixer
 
-The mixer is responsible for managing sequences of elements within the PI tasks, it is capable of repeating, randomizing and even changing the list according to [environmental variables](#variables). You may use it within the sequence or within some of the lists within pi tasks (such as piQuest questions arrays).
+The mixer is responsible for managing sequences of elements within the PI tasks, it is capable of repeating, randomizing and even changing the list according to [environmental variables](#variables). You may use it within the sequence or within some of the lists within pi tasks (such as miQuest questions arrays).
 
 The mixer allows wrapping a sub sequence in an object that allows you to manipulate the way in which it appears. You may insert such an object at any place within a sequence and it will be replaced by the appropriate objects.
 
@@ -298,7 +298,7 @@ compare         | The left side of the equation.
 to              | The right side of the equation.
 operator        | The type of comparison to do (read more about operators [here](#operators)).
 
-In piQuest and piManager, you may want to debug conditions by [activating the DEBUG `conditions` setting](#debugging). When activated, then any condition that is evaluated will be logged to the console.
+In miQuest and miManager, you may want to debug conditions by [activating the DEBUG `conditions` setting](#debugging). When activated, then any condition that is evaluated will be logged to the console.
 
 Advanced users may want to replace the whole condition object with a custom function that returns true or false. The context for the function is an object holding the *global*, *current* and *questions* objects.
 
@@ -396,7 +396,7 @@ API.addCurrent({
 })
 ```
 
-Tasks add any data that they log into their task object. For instance, piQuest maintains a `current.questions` object that holds the responses for all questions.
+Tasks add any data that they log into their task object. For instance, miQuest maintains a `current.questions` object that holds the responses for all questions.
 
 #### Local Variables
 In addition to these environmental variables, you have access to two types of local variables; *Data* and *Meta* . They are each available within the mixer/templates with specific names tied to their type. The naming convention for these variables is `<elementName>Data` and `<elementName>Meta`. For example, for tasks they appear as `tasksData` and `tasksMeta`. 
@@ -405,10 +405,10 @@ The elementNames for the various tasks are as follows:
 
 Task        | elementName | Object names
 ----------- | ----------- | ------------
-piManager   | tasks       | tasksData, tasksMeta
-piQuest     | pages       | pagesData, pagesMeta
+miManager   | tasks       | tasksData, tasksMeta
+miQuest     | pages       | pagesData, pagesMeta
             | questions   | questionsData, questionsMeta
-piPlayer    | trial       | trialData, trialMeta
+miTime    | trial       | trialData, trialMeta
             | stimulus    | stimulusData, stimulusMeta
             | media       | mediaData, mediaMeta
 
@@ -432,7 +432,7 @@ We will first cover the creation of prototype sets from which we can inherit. Th
 #### Sets
 Each element in the PI tasks can inherit its attributes from an element set.
 
-The element sets are defined using the `addSet` functions defined in the [API](API.html). Each element type has its own function (for example, `addQuestionsSets` for piQuest).
+The element sets are defined using the `addSet` functions defined in the [API](API.html). Each element type has its own function (for example, `addQuestionsSets` for miQuest).
 
 Each set holds an array of elements that can later be referred to as prototypes for new elements.
 

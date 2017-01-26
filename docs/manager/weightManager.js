@@ -1,5 +1,5 @@
 //
-// The weight manager is a basic example of how we user piManager.
+// The weight manager is a basic example of how we user miManager.
 // It is heavily commented so that you can follow everything that goes on.
 // After reading the documentation feel free to download the file and modify it according to your needs.
 //
@@ -14,7 +14,7 @@ define(['managerAPI'], function(Manager){
   // ### The sequence
   // The most important part of every manager script is the sequence.
   // This is where you tell it how to interact with the participants.
-  // In our case we want to simply present a single instruction page, and then activate a piQuest questionnaire.
+  // In our case we want to simply present a single instruction page, and then activate a miQuest questionnaire.
   API.addSequence([
     // #### Instructions
     // This is a message task. It is used to give instructions to the user.
@@ -45,7 +45,7 @@ define(['managerAPI'], function(Manager){
         '<div style="text-align:center; padding: 1em">&middot; Project Implicit &middot;</div>'
     },
     // #### Weight Questionnaire
-    // This is a piQuest task. In this case it is the central task of this experiment.
+    // This is a miQuest task. In this case it is the central task of this experiment.
     // The questionnaire is loaded from a file (you can see it right [here](../quest/weightDocco.html)).
     {
       type: 'quest',

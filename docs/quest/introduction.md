@@ -6,7 +6,7 @@
 
 ### Structure
 
-The first step learning to use piQuest is getting to know the structure of a piQuest script. The scripts are written in javascript, although all you really need to know is how to use our very specific API (this means that if you're in to that sort of thing, you can write any javascript that you like...).
+The first step learning to use miQuest is getting to know the structure of a miQuest script. The scripts are written in javascript, although all you really need to know is how to use our very specific API (this means that if you're in to that sort of thing, you can write any javascript that you like...).
 
 Each script is wrapped within a [`define`](http://requirejs.org/docs/whyamd.html#amd) statement. At the beginning you create the API object, and at the end you return the script that you have created. This basic structure stays more or less constant across any script that you create. In other words: you can always just copy paste this portion of the script and get on with building your questionnaire:
 
@@ -51,7 +51,7 @@ define(['questAPI'], function(Quest){
 Before we jump into learning how each of these functions work, let us take a look at the basic building block of the questionnaire; pages and questions.
 
 ### Pages & questions
-The basic building blocks within piQuest are **pages** and **questions**.
+The basic building blocks within miQuest are **pages** and **questions**.
 
 A page is an object that describes one screen within your questionnaire. If your questionnaire presents all of its questions in one screen, it will probably have only one page. The properties within a page manage how the question(s) is(are) displayed and how the participants interact with it (e.g., select an answer and then click a submit button).
 
@@ -88,7 +88,7 @@ We will put the page and question together in a moment, but first let us get bac
 
 ### Thats it
 
-The most important part of every questionnaire is the sequence. This is where you tell piQuest how to interact with the participants. In our case we want to simply present a single page with a single question so we get something like this:
+The most important part of every questionnaire is the sequence. This is where you tell miQuest how to interact with the participants. In our case we want to simply present a single page with a single question so we get something like this:
 
 ```javascript
 define(['questAPI'], function(Quest){
