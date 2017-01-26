@@ -15,7 +15,7 @@ define(['questAPI'], function(Quest){
   //
   // The first thing we do in this script is create prototypes of the pages and questions that we will use.
   // Many times (usually?), questionnaires use similar settings to describe the **pages** and **questions** in their studies.
-  // piQuest provides a system that allows us to prototype them so that our script may be shorter and easier to maintain
+  // miQuest provides a system that allows us to prototype them so that our script may be shorter and easier to maintain
   // (it's better to make a change in one place and have it affect all your questions than having to go through each question and change it individually).
   // It's worth while to mention that it is not strictly necessary to use prototypes and inheritance,
   // you can create your pages and questions from scratch from within the [sequence](API.html#sequence).
@@ -43,7 +43,7 @@ define(['questAPI'], function(Quest){
   // Note the use of templates within the progress bar.
   // Templates are strings that have the `<%= %>` delimiters, they allow you to access environmental variables,
   // in this case we access the `pagesMeta` variable and get the current page number.
-  // You can use templates anywhere you like within piQuest.
+  // You can use templates anywhere you like within miQuest.
   // Both [templates](API.html#templates) and [environmental variables](API.html#variables) are fully documented within the API.
 
 
@@ -82,7 +82,7 @@ define(['questAPI'], function(Quest){
   // ### The Sequence
   //
   // The sequence is an ordered list of all the pages that you want to present.
-  // This is where you tell piQuest how to interact with the participants.
+  // This is where you tell miQuest how to interact with the participants.
   // The sequence is created using the `API.addSequence` function which takes a single array of pages.
   //
   // This questionnaire has several demographic/personal questions that appear at the beginning in a constant order.

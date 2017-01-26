@@ -1,6 +1,6 @@
 # Overview
 
-piManager is a player intent on presenting a series of tasks to the users. It uses the same overall API used throught the project implicit tasks.
+miManager is a player intent on presenting a series of tasks to the users. It uses the same overall API used throught the project implicit tasks.
 
 It is written in JavaScript and is built to be extremely versatile and customizable. The scripts are written as JavaScript objects. This format allows writing simple and straightforward scripts using a constrained scripting language. The format also allows advanced users to easily create complex and dynamic scripts using in-line JavaScript.
 
@@ -12,4 +12,4 @@ Within the sequence you can use several tools in order to control the flow of yo
 
 ### Tasks
 
-There are four types of tasks built into piManager [piQuest](../quest/overview.html), [piPlayer](/PIPlayer/0.3/tutorials/overview.html), [messages](messages.html) and [post](post.html). You can run new tasks in several ways (see the [API](API.html#tasks)).
+There are four types of tasks built into miManager [miQuest](../quest/overview.html), [miTime](/mino-time/0.3/tutorials/overview.html), [messages](messages.html) and [post](post.html). You can run new tasks in several ways (see the [API](API.html#tasks)).

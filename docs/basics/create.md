@@ -43,7 +43,7 @@ Tasks can be seen a series of frames. Each frame includes some type of interacti
 
 In order to register an object with the task we need to add it to the `sequence`. The sequence is an array of objects that get activate sequentially when the task is activated.
 
-We'll use piQuest for this example, where each object represents a page with an array of questions:
+We'll use miQuest for this example, where each object represents a page with an array of questions:
 
 ```javascript
 API.addSequence([
@@ -60,7 +60,7 @@ API.addSequence([
 ]);
 ```
 
-This will tell piQuest to first activate page 1 and then activate page 2. The sequence works in a similar way for all of our tasks, just add in objects and they'll be activated one after another.
+This will tell miQuest to first activate page 1 and then activate page 2. The sequence works in a similar way for all of our tasks, just add in objects and they'll be activated one after another.
 
 Of course a simple sequential sequence is rarely what you'll need. All sequences support some powerful tools for enriching the way your sequence works. These are described in detail in the [sequencer section](sequencer.html), here we'll only touch on some basic randomization (using the mixer) and abstraction (using inheritance). 
 

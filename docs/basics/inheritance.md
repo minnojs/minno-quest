@@ -75,7 +75,7 @@ Simply put, `sets` are lists (arrays) of elements, with a name.
 They are used both as a name for an element to inherit, and as a way to group several elements together.
 
 `sets` are defined using the `add<elementType>Sets` functions defined in the [API](../basic/API.html).
-Each element type has its own function (for example, `addQuestionsSets` for piQuest).
+Each element type has its own function (for example, `addQuestionsSets` for miQuest).
 
 ```javascript
 API.addQuestionsSet('likert', [
@@ -126,7 +126,7 @@ Follow this pseudo code:
 ```
 
 By default, inheritance ignores the properties that the child already has.
-Sometimes, you have proprties of the child that you'd like to extend instead of just keeping as is (for example: a list of stimuli in PIP).
+Sometimes, you have proprties of the child that you'd like to extend instead of just keeping as is (for example: a list of stimuli in miTime).
 In order to do this, you can set an array of property names to the `merge` property.
 Any property that appears in this array will be extended instead of skipped.
 

@@ -8,7 +8,7 @@ The tasks we use are created in a simplified Javascript environment.
 So we first introduce some very basic [Javascript](javascript.html) to get you started.
 
 Structurally, each task is composed of frames (each defined using Javascript).
-For instance, the basic frame for piQuest (our questionnaires component) is the page, which holds several sub-frames: the questions.
+For instance, the basic frame for miQuest (our questionnaires component) is the page, which holds several sub-frames: the questions.
 Each page or question is represented by an object (defined with Javascript).
 The programming of a task involves setting the properties of these objects (e.g., set the wording of your question into a question object).
 The properties of these objects are discussed in the API section of each of their respective documentation sites.

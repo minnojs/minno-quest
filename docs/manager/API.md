@@ -20,7 +20,7 @@
     - [Custom Task Example](#custom-task-example)
 - [Project Implicit Build](#project-implicit-build)
 
-The piManager is responsible for managing several piTasks sequentially. It uses the same API used throughout Minno tasks.
+The miManager is responsible for managing several piTasks sequentially. It uses the same API used throughout Minno tasks.
 
 ### Settings
 Settings allow you to control the generic way that the player works. Change the settings using the `addSettings` function. The first argument to the function is always the name of the setting, the second argument is the setting values. In case the setting is an object, subsequent objects will extend each other so that settings may be progressively added.
@@ -114,7 +114,7 @@ API.addSettings('skin', 'demo');
 ```
 
 ### Tasks
-The basic unit in piManager is the **task**. The manager currently supports several types of tasks; `quest`, `message` and `post`. You should just cue them into the sequence (you can use mixers to your hearts content as well).
+The basic unit in miManager is the **task**. The manager currently supports several types of tasks; `quest`, `message` and `post`. You should just cue them into the sequence (you can use mixers to your hearts content as well).
 
 Property    | Description
 ----------- | -------------
@@ -150,20 +150,20 @@ path            | A path within the global to the object that you want to send. 
 data            | A raw object to be posted to the server. You may use templates in order to construct it.
 
 ### Inheritance
-piManager uses the same inheritance system used by piQuest. It has one type of set: the task set. In order to create task sets use `addTasksSet(set, list)`.
+miManager uses the same inheritance system used by miQuest. It has one type of set: the task set. In order to create task sets use `addTasksSet(set, list)`.
 
 ### Custom tasks
-The piManager allows the creation of custom tasks. The format is fairly simple though you probably need at least some experience with programing for it. 
+The miManager allows the creation of custom tasks. The format is fairly simple though you probably need at least some experience with programing for it. 
 
 #### Plugging in
-piManager manages the task sequence for you as well as loading the task script (if needed). There are several ways to plug a new task into piManager, the all involve passing the activator function to the manager in various ways.
+miManager manages the task sequence for you as well as loading the task script (if needed). There are several ways to plug a new task into miManager, the all involve passing the activator function to the manager in various ways.
 
 1. You can pass the activator function as a script.
 2. You can pass it as the play property of the script object ().
 3. You can set it into the `taskActivateProvider` using `taskActivateProvider.set(taskName, activatorFunction)` during the configuration stage of the angular flow (This is worth the trouble mainly if you intend to use this task many times).
 
 #### Activator function
-The activator function is the function that is responsible for the activation of your task as well as for the communication with piManager.
+The activator function is the function that is responsible for the activation of your task as well as for the communication with miManager.
 
 It should:
 * Run your task (just do whatever you like).
@@ -179,7 +179,7 @@ Service         | Description
 done            | A function that lets the manager know that the task has finished.
 props           | An object with all sorts of useful tools.
 $scope          | The task scope.
-task            | The piManager element that defined this task.
+task            | The miManager element that defined this task.
 script          | The task script (as defined in task.script or loaded from task.scriptUrl).
 $element        | The tasks DOM Node wrapped in jqLite or jQuery.
 global          | The global object

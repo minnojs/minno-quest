@@ -620,7 +620,7 @@ This property allows you to control the display of logs inside the browser, if i
 
 ## Data
 ### Logs
-piQuest keeps record of user responses using plain js objects. These objects are kept locally (see #variables) and sent to the server (see [logger](#logger) setting).
+miQuest keeps record of user responses using plain js objects. These objects are kept locally (see #variables) and sent to the server (see [logger](#logger) setting).
 
 Following are the properties of the logged object:
 

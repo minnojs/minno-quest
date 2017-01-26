@@ -70,8 +70,8 @@ For your convenience, here is a table describing some of the data available with
 
 Task    | Description
 ------- | -----------
-PIP     | The task object holds all trial logs: `current.logs`.
-piQuest | The task object holds all questions: `current.questions`.
+miTime     | The task object holds all trial logs: `current.logs`.
+miQuest | The task object holds all questions: `current.questions`.
 
 ### Local Variables (local & meta)
 The variables that we've discussed so far are relevant for whole tasks or even whole studies.
@@ -96,9 +96,9 @@ The elementNames for the various tasks are as follows:
 
 Task        | elementName | Object names
 ----------- | ----------- | ------------
-piManager   | tasks       | tasksData, tasksMeta
-piQuest     | pages       | pagesData, pagesMeta
+miManager   | tasks       | tasksData, tasksMeta
+miQuest     | pages       | pagesData, pagesMeta
             | questions   | questionsData, questionsMeta
-piPlayer    | trial       | trialData, trialMeta
+miTime    | trial       | trialData, trialMeta
             | stimulus    | stimulusData, stimulusMeta
             | media       | mediaData, mediaMeta

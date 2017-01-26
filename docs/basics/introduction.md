@@ -18,12 +18,12 @@ Throughout the sequencer documentation we will use [messages](../manager/message
 ### Mixers
 
 Each PI task is composed of a series of elements which are presented to the users sequentially 
-(i.e. trials for piPlayer, pages for piQuest and tasks for piManager). 
+(i.e. trials for miTime, pages for miQuest and tasks for miManager). 
 The sequence [**mixer**](./mixer.html) is responsible for the order  that these elements are presented to the users. 
 It allows you to randomize the order of your elements.
 It also allows you to repeat a task multiple times and randomly assign participants to experimental conditions.
 
-For example, the following mixer randomizes the order of two tasks in *piManager*:
+For example, the following mixer randomizes the order of two tasks in *miManager*:
 
 ```javascript
 API.addSequence([

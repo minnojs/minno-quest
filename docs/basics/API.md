@@ -20,7 +20,7 @@
 
 Argument    | Type  | Description
 ----------- | ----  | -----------
-name        | String| The name of this task. If used as part of piManager, this setting may be overided by the manager task object.
+name        | String| The name of this task. If used as part of miManager, this setting may be overided by the manager task object.
 
 ##### returns:
 (*Object*) this `API`
@@ -82,10 +82,10 @@ setsObject  | String            | An object where each property name is a setNam
 
 Task        | setName     | Function Name
 ----------- | ----------- | ------------
-piManager   | tasks       | addTasksSet
-piQuest     | pages       | addPagesSet
+miManager   | tasks       | addTasksSet
+miQuest     | pages       | addPagesSet
             | questions   | addQuestionsSet
-piPlayer    | trial       | addTrialSet
+miTime    | trial       | addTrialSet
             | stimulus    | addStimulusSet
             | media       | addMediaSet
 

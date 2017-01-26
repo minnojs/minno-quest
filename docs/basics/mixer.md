@@ -31,7 +31,7 @@ In particular they allow you to repeat, randomize and even branch sections of yo
 
 #### Syntax
 Each one of the PI tasks is composed of a sequence of elements that is presented sequentially.
-For example, the sequence in piManager is composed of elements that each represent a task.
+For example, the sequence in miManager is composed of elements that each represent a task.
 These sequences are created using the `API.addSequence` method in your script.
 Mixers are inserted into the sequence the same way that regular elements are. 
 Each mixer represents a sub-sequence that is to be manipulated and then inserted in its place.
@@ -124,11 +124,11 @@ API.addSequence([
 By default each mixer is processed only once, when it is first encountered during the sequence. 
 There are only two conditions for when this is relevant.
 The first is when your task allows moving back to previous elements; in that case the mixer will keep the mixer elements as they where previously evaluated.
-The second condition is when you have a branch that you want to react to live changes (at this time this is relevant only for piQuest answers).
+The second condition is when you have a branch that you want to react to live changes (at this time this is relevant only for miQuest answers).
 
 If you want a mixer to react to changes in the environment you need to set `remix=true`.
 
-The following snippet uses `remix` to show a second question depending on the response of the first one (in piQuest).
+The following snippet uses `remix` to show a second question depending on the response of the first one (in miQuest).
 
 ```javascript
 var page = {
