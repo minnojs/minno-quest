@@ -1,6 +1,3 @@
-/**
- * @author Yoav Bar-Anan <baranany@bgu.ac.il>
- */
 define(['questAPI'], function(Quest){
 	var API = new Quest();
 

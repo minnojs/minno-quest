@@ -9,7 +9,7 @@
 	- [Text & Textarea](#text-&-textarea)
 	- [textNumber](#textnumber)
 	- [dropdown](#dropdown)
-	- [selectOne & selectMulti](#selectone-selectmulti)
+	- [selectOne & selectMulti](#selectone-&-selectmulti)
 	- [grid](#grid)
 	- [multGrid](#multigrid)
 	- [slider](#slider)
@@ -96,7 +96,7 @@ Here are the types of questions PIQuest currently supports:
 - [Text & Textarea](#text-&-textarea)
 - [textNumber](#textnumber)
 - [dropdown](#dropdown)
-- [selectOne & selectMulti](#selectone-selectmulti)
+- [selectOne & selectMulti](#selectone-&-selectmulti)
 - [grid](#grid)
 - [slider](#slider)
     
