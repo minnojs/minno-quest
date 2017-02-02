@@ -83,20 +83,12 @@
 </ul>
 </li>
 </ul>
-<p>/**</p>
-<ul>
-<li>@author Yoav Bar-Anan <a href="&#109;&#x61;&#105;&#x6c;&#116;&#x6f;&#x3a;&#98;&#x61;&#114;&#x61;&#110;&#x61;&#x6e;&#x79;&#x40;&#98;&#x67;&#x75;&#x2e;&#97;&#99;&#x2e;&#105;&#x6c;">&#98;&#x61;&#114;&#x61;&#110;&#x61;&#x6e;&#x79;&#x40;&#98;&#x67;&#x75;&#x2e;&#97;&#99;&#x2e;&#105;&#x6c;</a>
-*/</li>
-</ul>
 <section playground>
     <div class="buttons">
         <a class="activate-button">Activate</a>
         <a class="download-button" href="buttonsOnePage.js" download>Download</a>
     </div>
-    <div class="editor">/**
- * @author Yoav Bar-Anan &lt;baranany@bgu.ac.il&gt;
- */
-define([&quot;questAPI&quot;], function(Quest){
+    <div class="editor">define([&quot;questAPI&quot;], function(Quest){
 	var API = new Quest();
 
 	// ### Questions
@@ -173,7 +165,8 @@ define([&quot;questAPI&quot;], function(Quest){
 	Return the script to piquest&quot;s god, or something of that sort.
 	**/
 	return API.script;
-});</div>
+});
+</div>
 </section>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js" integrity="sha256-xrr4HH5eSY+cFz4SH7ja/LaAi9qcEdjMpeMP49/iOLs=" crossorigin="anonymous"></script>
 <script src="../assets/playground.js"></script>
