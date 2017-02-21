@@ -77,7 +77,7 @@
 //
 // The opening section of each script is always more or less the same.
 // We create the wrapper for the script (`define`), and create a new instance of a manager.
-define([&quot;managerAPI&quot;], function(Manager){
+define([&apos;managerAPI&apos;], function(Manager){
 
   var API = new Manager();
 
@@ -91,32 +91,32 @@ define([&quot;managerAPI&quot;], function(Manager){
     // You can use [this site](http://v4e.thewikies.com/) to create appropriate templates
     // Note that the video url is set within the data attributes
     {
-      type: &quot;message&quot;,
+      type: &apos;message&apos;,
 
       data: {
         // The video url (as mp4!)
-        videoUrl: &quot;http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4&quot;,
+        videoUrl: &apos;http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4&apos;,
         // An image to use as a poster until the video plays
-        imageUrl: &quot;http://sandbox.thewikies.com/vfe-generator/images/big-buck-bunny_poster.jpg&quot;
+        imageUrl: &apos;http://sandbox.thewikies.com/vfe-generator/images/big-buck-bunny_poster.jpg&apos;
       },
 
       // We create the video template itself
       template: [
-        &quot;&lt;div class="text-center"&gt;&quot;,
-        &quot; &lt;video controls="controls" autoplay="autoplay" poster="&lt;%= tasksData.imageUrl %&gt;" width="640" height="360" style="margin:auto"&gt;&quot;,
-        &quot;   &lt;source src="&lt;%= tasksData.videoUrl %&gt;" type="video/mp4"/&gt;&quot;,
-        &quot;   &lt;object type="application/x-shockwave-flash" data="http://flashfox.googlecode.com/svn/trunk/flashfox.swf" width="640" height="360"&gt;&quot;,
-        &quot;     &lt;param name="movie" value="http://flashfox.googlecode.com/svn/trunk/flashfox.swf" /&gt;&quot;,
-        &quot;     &lt;param name="allowFullScreen" value="true" /&gt;&quot;,
-        &quot;     &lt;param name="wmode" value="transparent" /&gt;&quot;,
-        &quot;     &lt;param name="flashVars" value="autoplay=true&amp;controls=true&amp;poster=&lt;%= tasksData.imageUrl %&gt;&amp;src=&lt;%= tasksData.videoUrl %&gt;" /&gt;&quot;,
-        &quot;   &lt;/object&gt;&quot;,
-        &quot; &lt;/video&gt;&quot;,
-        &quot;&lt;/div&gt;&quot;,
-        &quot;&lt;div class="text-center proceed" style="margin: 30px auto 10px;"&gt;&quot;,
-        &quot; &lt;button pi-message-done type="button" class="btn btn-primary"&gt;Click Here to Proceed&lt;/button&gt;&quot;,
-        &quot;&lt;/div&gt;&quot;
-      ].join(&quot;\n&quot;)
+        &apos;&lt;div class=&quot;text-center&quot;&gt;&apos;,
+        &apos; &lt;video controls=&quot;controls&quot; autoplay=&quot;autoplay&quot; poster=&quot;&lt;%= tasksData.imageUrl %&gt;&quot; width=&quot;640&quot; height=&quot;360&quot; style=&quot;margin:auto&quot;&gt;&apos;,
+        &apos;   &lt;source src=&quot;&lt;%= tasksData.videoUrl %&gt;&quot; type=&quot;video/mp4&quot;/&gt;&apos;,
+        &apos;   &lt;object type=&quot;application/x-shockwave-flash&quot; data=&quot;http://flashfox.googlecode.com/svn/trunk/flashfox.swf&quot; width=&quot;640&quot; height=&quot;360&quot;&gt;&apos;,
+        &apos;     &lt;param name=&quot;movie&quot; value=&quot;http://flashfox.googlecode.com/svn/trunk/flashfox.swf&quot; /&gt;&apos;,
+        &apos;     &lt;param name=&quot;allowFullScreen&quot; value=&quot;true&quot; /&gt;&apos;,
+        &apos;     &lt;param name=&quot;wmode&quot; value=&quot;transparent&quot; /&gt;&apos;,
+        &apos;     &lt;param name=&quot;flashVars&quot; value=&quot;autoplay=true&amp;controls=true&amp;poster=&lt;%= tasksData.imageUrl %&gt;&amp;src=&lt;%= tasksData.videoUrl %&gt;&quot; /&gt;&apos;,
+        &apos;   &lt;/object&gt;&apos;,
+        &apos; &lt;/video&gt;&apos;,
+        &apos;&lt;/div&gt;&apos;,
+        &apos;&lt;div class=&quot;text-center proceed&quot; style=&quot;margin: 30px auto 10px;&quot;&gt;&apos;,
+        &apos; &lt;button pi-message-done type=&quot;button&quot; class=&quot;btn btn-primary&quot;&gt;Click Here to Proceed&lt;/button&gt;&apos;,
+        &apos;&lt;/div&gt;&apos;
+      ].join(&apos;\n&apos;)
     },
 
 
@@ -124,42 +124,42 @@ define([&quot;managerAPI&quot;], function(Manager){
     // This message is identical to the previous one,
     // only now we use a trick to defer the presentation of the proceed button until the video completes
     {
-      type: &quot;message&quot;,
+      type: &apos;message&apos;,
 
       data: {
         // The video url (as mp4!)
-        videoUrl: &quot;http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4&quot;,
+        videoUrl: &apos;http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4&apos;,
         // An image to use as a poster until the video plays
-        imageUrl: &quot;http://sandbox.thewikies.com/vfe-generator/images/big-buck-bunny_poster.jpg&quot;
+        imageUrl: &apos;http://sandbox.thewikies.com/vfe-generator/images/big-buck-bunny_poster.jpg&apos;
       },
 
       // We create the video template itself
       template: [
-        &quot;&lt;div class="text-center"&gt;&quot;,
-        &quot; &lt;video controls="controls" autoplay="autoplay" poster="&lt;%= tasksData.imageUrl %&gt;" width="640" height="360" style="margin:auto"&gt;&quot;,
-        &quot;   &lt;source src="&lt;%= tasksData.videoUrl %&gt;" type="video/mp4"/&gt;&quot;,
-        &quot;   &lt;object type="application/x-shockwave-flash" data="http://flashfox.googlecode.com/svn/trunk/flashfox.swf" width="640" height="360"&gt;&quot;,
-        &quot;     &lt;param name="movie" value="http://flashfox.googlecode.com/svn/trunk/flashfox.swf" /&gt;&quot;,
-        &quot;     &lt;param name="allowFullScreen" value="true" /&gt;&quot;,
-        &quot;     &lt;param name="wmode" value="transparent" /&gt;&quot;,
-        &quot;     &lt;param name="flashVars" value="autoplay=true&amp;controls=true&amp;poster=&lt;%= tasksData.imageUrl %&gt;&amp;src=&lt;%= tasksData.videoUrl %&gt;" /&gt;&quot;,
-        &quot;   &lt;/object&gt;&quot;,
-        &quot; &lt;/video&gt;&quot;,
-        &quot;&lt;/div&gt;&quot;,
-        &quot;&lt;div class="text-center proceed" style="margin: 30px auto 10px;"&gt;&quot;,
-        &quot; &lt;button pi-message-done type="button" class="btn btn-primary"&gt;Click Here to Proceed&lt;/button&gt;&quot;,
-        &quot;&lt;/div&gt;&quot;
-      ].join(&quot;\n&quot;),
+        &apos;&lt;div class=&quot;text-center&quot;&gt;&apos;,
+        &apos; &lt;video controls=&quot;controls&quot; autoplay=&quot;autoplay&quot; poster=&quot;&lt;%= tasksData.imageUrl %&gt;&quot; width=&quot;640&quot; height=&quot;360&quot; style=&quot;margin:auto&quot;&gt;&apos;,
+        &apos;   &lt;source src=&quot;&lt;%= tasksData.videoUrl %&gt;&quot; type=&quot;video/mp4&quot;/&gt;&apos;,
+        &apos;   &lt;object type=&quot;application/x-shockwave-flash&quot; data=&quot;http://flashfox.googlecode.com/svn/trunk/flashfox.swf&quot; width=&quot;640&quot; height=&quot;360&quot;&gt;&apos;,
+        &apos;     &lt;param name=&quot;movie&quot; value=&quot;http://flashfox.googlecode.com/svn/trunk/flashfox.swf&quot; /&gt;&apos;,
+        &apos;     &lt;param name=&quot;allowFullScreen&quot; value=&quot;true&quot; /&gt;&apos;,
+        &apos;     &lt;param name=&quot;wmode&quot; value=&quot;transparent&quot; /&gt;&apos;,
+        &apos;     &lt;param name=&quot;flashVars&quot; value=&quot;autoplay=true&amp;controls=true&amp;poster=&lt;%= tasksData.imageUrl %&gt;&amp;src=&lt;%= tasksData.videoUrl %&gt;&quot; /&gt;&apos;,
+        &apos;   &lt;/object&gt;&apos;,
+        &apos; &lt;/video&gt;&apos;,
+        &apos;&lt;/div&gt;&apos;,
+        &apos;&lt;div class=&quot;text-center proceed&quot; style=&quot;margin: 30px auto 10px;&quot;&gt;&apos;,
+        &apos; &lt;button pi-message-done type=&quot;button&quot; class=&quot;btn btn-primary&quot;&gt;Click Here to Proceed&lt;/button&gt;&apos;,
+        &apos;&lt;/div&gt;&apos;
+      ].join(&apos;\n&apos;),
 
 
       // This is where the magic happens. as soon as the page is loaded
       // We hide The proceed button, and show it only after 60 seconds when the video is supposed to end.
       // (Note that in certain situations the button may be displayed before the video finishes playing. This is because the timing is absolute and not dependant on the video actually finishing)
       load: function(){
-        var proceed = document.querySelectorAll(&quot;.proceed&quot;)[0];
-        proceed.style.visibility = &quot;hidden&quot;;
+        var proceed = document.querySelectorAll(&apos;.proceed&apos;)[0];
+        proceed.style.visibility = &apos;hidden&apos;;
         setTimeout(function(){
-          proceed.style.visibility = &quot;&quot;;
+          proceed.style.visibility = &apos;&apos;;
         }, 60 * 1000); // after 10 seconds
       }
 

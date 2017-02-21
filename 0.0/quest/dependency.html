@@ -86,49 +86,49 @@
         <a class="activate-button">Activate</a>
         <a class="download-button" href="dependency.js" download>Download</a>
     </div>
-    <div class="editor">define([&quot;questAPI&quot;], function(Quest){
+    <div class="editor">define([&apos;questAPI&apos;], function(Quest){
 	var API = new Quest();
 
 	// ### Questions
-	API.addQuestionsSet(&quot;basicSelect&quot;,
+	API.addQuestionsSet(&apos;basicSelect&apos;,
 	{
-		type: &quot;selectOne&quot;,
+		type: &apos;selectOne&apos;,
 		autoSubmit:true,
 		numericValues:true,
 		required:true,
 		errorMsg: {
-			required: "Please select an answer, or click &quot;decline to answer&quot;"
+			required: &quot;Please select an answer, or click &apos;decline to answer&apos;&quot;
 		},
-		help: &quot;&lt;%= pagesMeta.number &lt; 3 %&gt;&quot;,
-		helpText: &quot;Selecting an answer once colors it blue.&lt;br/&gt;You can change your answer by selecting another option.&lt;br/&gt;To confirm, click the selected (blue) button a second time.&quot;
+		help: &apos;&lt;%= pagesMeta.number &lt; 3 %&gt;&apos;,
+		helpText: &apos;Selecting an answer once colors it blue.&lt;br/&gt;You can change your answer by selecting another option.&lt;br/&gt;To confirm, click the selected (blue) button a second time.&apos;
 	});
 
 	API.addQuestionsSet({
 		funnyChoice: [{
-			inherit: &quot;basicSelect&quot;,
-			name:&quot;moreFunny&quot;,
-			stem:&quot;On avarage, who do you think are funnier, women or men?&quot;,
-			answers : [&quot;Men&quot;, &quot;Women&quot;]
+			inherit: &apos;basicSelect&apos;,
+			name:&apos;moreFunny&apos;,
+			stem:&apos;On avarage, who do you think are funnier, women or men?&apos;,
+			answers : [&apos;Men&apos;, &apos;Women&apos;]
 		}],
 		funnyMen: [{
-			inherit: &quot;basicSelect&quot;,
-			name:&quot;menMore&quot;,
-			stem:&quot;How much funnier do you think that men are in comparison to women?&quot;,
-			answers : [&quot;Extremely funneir&quot;, &quot;Moderately funnier&quot;, &quot;Slightly funnier&quot;]
+			inherit: &apos;basicSelect&apos;,
+			name:&apos;menMore&apos;,
+			stem:&apos;How much funnier do you think that men are in comparison to women?&apos;,
+			answers : [&apos;Extremely funneir&apos;, &apos;Moderately funnier&apos;, &apos;Slightly funnier&apos;]
 		}],
 		funnyWomen: [{
-			inherit: &quot;basicSelect&quot;,
-			name:&quot;womenMore&quot;,
-			stem:&quot;How much funnier do you think that women are in comparison to men?&quot;,
-			answers : [&quot;Extremely funneir&quot;, &quot;Moderately funnier&quot;, &quot;Slightly funnier&quot;]
+			inherit: &apos;basicSelect&apos;,
+			name:&apos;womenMore&apos;,
+			stem:&apos;How much funnier do you think that women are in comparison to men?&apos;,
+			answers : [&apos;Extremely funneir&apos;, &apos;Moderately funnier&apos;, &apos;Slightly funnier&apos;]
 		}]
 	});
 
 	// ### Pages
-	API.addPagesSet(&quot;basicPage&quot;,
+	API.addPagesSet(&apos;basicPage&apos;,
 	{
-		progressBar: &quot;&lt;%= pagesMeta.number %&gt; out of 2&quot;,
-		headerStyle : {&quot;font-size&quot;:&quot;1em&quot;},
+		progressBar: &apos;&lt;%= pagesMeta.number %&gt; out of 2&apos;,
+		headerStyle : {&apos;font-size&apos;:&apos;1em&apos;},
 		v1style:2,
 		decline:true,
 		numbered: false
@@ -138,26 +138,26 @@
 	API.addSequence(
 	[
 		//Present the first question
-		{inherit :&quot;basicPage&quot;, questions:{inherit:&quot;funnyChoice&quot;}},
+		{inherit :&apos;basicPage&apos;, questions:{inherit:&apos;funnyChoice&apos;}},
 
 		//Select one of the two possible questions, based on the response to the previous question.
 		{
-			mixer : &quot;multiBranch&quot;,
+			mixer : &apos;multiBranch&apos;,
 			branches: [
 				{
 					conditions: [
-						{compare: &quot;current.questions.moreFunny.response&quot;, to: 1}
+						{compare: &apos;current.questions.moreFunny.response&apos;, to: 1}
 					],
 					data: [
-						{inherit :&quot;basicPage&quot;, questions:{inherit:&quot;funnyMen&quot;}}
+						{inherit :&apos;basicPage&apos;, questions:{inherit:&apos;funnyMen&apos;}}
 					]
 				},
 				{
 					conditions: [
-						{compare: &quot;current.questions.moreFunny.response&quot;, to: 2}
+						{compare: &apos;current.questions.moreFunny.response&apos;, to: 2}
 					],
 					data: [
-						{inherit :&quot;basicPage&quot;, questions:{inherit:&quot;funnyWomen&quot;}}
+						{inherit :&apos;basicPage&apos;, questions:{inherit:&apos;funnyWomen&apos;}}
 					]
 				}
 			]
@@ -165,7 +165,7 @@
 	]);
 
 	/**
-	Return the script to piquest&quot;s god, or something of that sort.
+	Return the script to piquest&apos;s god, or something of that sort.
 	**/
 	return API.script;
 });

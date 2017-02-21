@@ -89,20 +89,20 @@
     <div class="editor">// You can use data set within the objects you are using from within templates.
 // Check the documentation for the task you are using to know how the data object is called from within the template
 // (the standard structure for the name is {{object type}}Data, so that tasks become tasksData).
-define([&quot;managerAPI&quot;], function(Manager){
+define([&apos;managerAPI&apos;], function(Manager){
 
   var API = new Manager();
 
-  API.addTasksSet(&quot;default&quot;, [
+  API.addTasksSet(&apos;default&apos;, [
   	{
-  		type:&quot;message&quot;,
-  		keys: &quot; &quot;,
-      data: {condition:&quot;using data in templates&quot;}
+  		type:&apos;message&apos;,
+  		keys: &apos; &apos;,
+      data: {condition:&apos;using data in templates&apos;}
   	}
   ]);
 
   API.addSequence([
-    {inherit:&quot;default&quot;,template:&quot;We are in the "&lt;%= tasksData.condition %&gt;" condition.&quot;}
+    {inherit:&apos;default&apos;,template:&apos;We are in the &quot;&lt;%= tasksData.condition %&gt;&quot; condition.&apos;}
   ]);
 
   return API.script;

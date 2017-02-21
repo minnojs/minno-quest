@@ -88,64 +88,64 @@
         <a class="activate-button">Activate</a>
         <a class="download-button" href="gridExample.js" download>Download</a>
     </div>
-    <div class="editor">define([&quot;questAPI&quot;], function(Quest){
+    <div class="editor">define([&apos;questAPI&apos;], function(Quest){
 	var API = new Quest();
 
 	// ### Questions
 	// Create the template
-	API.addQuestionsSet(&quot;basicGrid&quot;,
+	API.addQuestionsSet(&apos;basicGrid&apos;,
 	{
-		type: &quot;grid&quot;,
+		type: &apos;grid&apos;,
 		cellLabels:true,
 		rowStemHide: true,
-		checkboxType : &quot;colorMark&quot;,
+		checkboxType : &apos;colorMark&apos;,
 		required : true,
 		errorMsg: {
-			required: "Please select an answer."
+			required: &quot;Please select an answer.&quot;
 		},
 		columnStemHide: true,
 		maxWidth:420,
-		name : &quot;&lt;%=questionsData.name%&gt;&quot;,
+		name : &apos;&lt;%=questionsData.name%&gt;&apos;,
 		columns: [
-			{type:&quot;text&quot;, textProperty:&quot;left&quot;, css : {width:&quot;13.5%&quot;}},
-			{stem:&quot;1&quot;, css : {width:&quot;7%&quot;}},
-			{stem:&quot;2&quot;, css : {width:&quot;7%&quot;}},
-			{stem:&quot;3&quot;, css : {width:&quot;7%&quot;}},
-			{stem:&quot;4&quot;, css : {width:&quot;7%&quot;}},
-			{stem:&quot;5&quot;, css : {width:&quot;7%&quot;}},
-			{stem:&quot;6&quot;, css : {width:&quot;7%&quot;}},
-			{stem:&quot;7&quot;, css : {width:&quot;7%&quot;}},
-			{stem:&quot;8&quot;, css : {width:&quot;7%&quot;}},
-			{stem:&quot;9&quot;, css : {width:&quot;7%&quot;}},
-			{type:&quot;text&quot;, textProperty:&quot;right&quot;, css : {width:&quot;13.5%&quot;}}
+			{type:&apos;text&apos;, textProperty:&apos;left&apos;, css : {width:&apos;13.5%&apos;}},
+			{stem:&apos;1&apos;, css : {width:&apos;7%&apos;}},
+			{stem:&apos;2&apos;, css : {width:&apos;7%&apos;}},
+			{stem:&apos;3&apos;, css : {width:&apos;7%&apos;}},
+			{stem:&apos;4&apos;, css : {width:&apos;7%&apos;}},
+			{stem:&apos;5&apos;, css : {width:&apos;7%&apos;}},
+			{stem:&apos;6&apos;, css : {width:&apos;7%&apos;}},
+			{stem:&apos;7&apos;, css : {width:&apos;7%&apos;}},
+			{stem:&apos;8&apos;, css : {width:&apos;7%&apos;}},
+			{stem:&apos;9&apos;, css : {width:&apos;7%&apos;}},
+			{type:&apos;text&apos;, textProperty:&apos;right&apos;, css : {width:&apos;13.5%&apos;}}
 		],
 		rows: [
-			{left:&quot;Unlikeable&quot;, right:&quot;Likeable&quot;, name:&quot;&lt;%=questionsData.name%&gt;.likeable&quot;},
-			{left:&quot;Untrustworthy&quot;, right:&quot;Trustworthy&quot;, name:&quot;&lt;%=questionsData.name%&gt;.trustworthy&quot;},
-			{left:&quot;Unfriendly&quot;, right:&quot;Friendly&quot;, name:&quot;&lt;%=questionsData.name%&gt;.friendly&quot;}
+			{left:&apos;Unlikeable&apos;, right:&apos;Likeable&apos;, name:&apos;&lt;%=questionsData.name%&gt;.likeable&apos;},
+			{left:&apos;Untrustworthy&apos;, right:&apos;Trustworthy&apos;, name:&apos;&lt;%=questionsData.name%&gt;.trustworthy&apos;},
+			{left:&apos;Unfriendly&apos;, right:&apos;Friendly&apos;, name:&apos;&lt;%=questionsData.name%&gt;.friendly&apos;}
 		]
 	});
 
 	// create the specific question instances instances
-	API.addQuestionsSet(&quot;gridQuestions&quot;,
+	API.addQuestionsSet(&apos;gridQuestions&apos;,
 	[
 		{
-			inherit : &quot;basicGrid&quot;,
-			data : {name : &quot;Barack&quot;},
-			stem: &quot;&lt;br/&gt;Please rate Barack Obama on the following traits&lt;br/&gt;&lt;br/&gt;&quot;
+			inherit : &apos;basicGrid&apos;,
+			data : {name : &apos;Barack&apos;},
+			stem: &apos;&lt;br/&gt;Please rate Barack Obama on the following traits&lt;br/&gt;&lt;br/&gt;&apos;
 		},
 		{
-			inherit : &quot;basicGrid&quot;,
-			data : {name : &quot;Beyonce&quot;},
-			stem: &quot;&lt;br/&gt;&lt;br/&gt;Please rate Beyonce Knowles on the following traits&lt;br/&gt;&quot;
+			inherit : &apos;basicGrid&apos;,
+			data : {name : &apos;Beyonce&apos;},
+			stem: &apos;&lt;br/&gt;&lt;br/&gt;Please rate Beyonce Knowles on the following traits&lt;br/&gt;&apos;
 		}
 	]);
 
 	// ### Pages
-	API.addPagesSet(&quot;basicPage&quot;,
+	API.addPagesSet(&apos;basicPage&apos;,
 	{
-		progressBar: &quot;Page &lt;%= pagesMeta.number %&gt; out of 2&quot;,
-		questions : {inherit:{set:&quot;gridQuestions&quot;, type:&quot;exRandom&quot;}},
+		progressBar: &apos;Page &lt;%= pagesMeta.number %&gt; out of 2&apos;,
+		questions : {inherit:{set:&apos;gridQuestions&apos;, type:&apos;exRandom&apos;}},
 		v1style:2,
 		decline:true,
 		numbered: false
@@ -155,17 +155,17 @@
 	API.addSequence(
 	[
 		{
-			mixer : &quot;repeat&quot;,
+			mixer : &apos;repeat&apos;,
 			times : 2,
 			data :
 			[
-				{inherit : &quot;basicPage&quot;}
+				{inherit : &apos;basicPage&apos;}
 			]
 		}
 	]);
 
 	/**
-	Return the script to piquest&quot;s god, or something of that sort.
+	Return the script to piquest&apos;s god, or something of that sort.
 	**/
 	return API.script;
 });

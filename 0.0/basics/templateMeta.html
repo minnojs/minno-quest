@@ -87,29 +87,29 @@
         <a class="activate-button">Activate</a>
         <a class="download-button" href="templateMeta.js" download>Download</a>
     </div>
-    <div class="editor">// Each object has a special object called "meta" that has information regarding the relative location of the object within the sequence.
+    <div class="editor">// Each object has a special object called &quot;meta&quot; that has information regarding the relative location of the object within the sequence.
 // Check the documentation for the task you are using to know how the meta object is called from within the template.
 // (the standard structure for the name is {{object type}}Meta, so that tasks meta become tasksMeta).
 //
 // The meta objects has two properties `number` and `outOf`.
 
-define([&quot;managerAPI&quot;], function(Manager){
+define([&apos;managerAPI&apos;], function(Manager){
 
   var API = new Manager();
 
-  API.addTasksSet(&quot;default&quot;, [
+  API.addTasksSet(&apos;default&apos;, [
   	{
-  		type:&quot;message&quot;,
-  		keys: &quot; &quot;,
-      template: &quot;Task number &lt;%= tasksMeta.number %&gt; out of &lt;%= tasksMeta.outOf %&gt;.&quot;
+  		type:&apos;message&apos;,
+  		keys: &apos; &apos;,
+      template: &apos;Task number &lt;%= tasksMeta.number %&gt; out of &lt;%= tasksMeta.outOf %&gt;.&apos;
   	}
   ]);
 
   API.addSequence([
-    {inherit:&quot;default&quot;},
-    {inherit:&quot;default&quot;},
-    {inherit:&quot;default&quot;},
-    {inherit:&quot;default&quot;}
+    {inherit:&apos;default&apos;},
+    {inherit:&apos;default&apos;},
+    {inherit:&apos;default&apos;},
+    {inherit:&apos;default&apos;}
   ]);
 
   return API.script;

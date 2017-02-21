@@ -94,29 +94,29 @@
     </div>
     <div class="editor">// Choose a random subgroup of elements from the sub-sequence.
 // By default chooses one. The `n` property allows to set how many to choose.
-define([&quot;managerAPI&quot;], function(Manager){
+define([&apos;managerAPI&apos;], function(Manager){
 
   var API = new Manager();
 
   API.addSequence([
     {
-      mixer:&quot;choose&quot;, // declare the mixer
+      mixer:&apos;choose&apos;, // declare the mixer
       n:2, // choose two of the follwoing elements
       data:[ // a list of tasks to bhoose from
         {
-          type:&quot;message&quot;,
-          keys: &quot; &quot;,
-          template: &quot;Task 1&quot;
+          type:&apos;message&apos;,
+          keys: &apos; &apos;,
+          template: &apos;Task 1&apos;
         },
         {
-          type:&quot;message&quot;,
-          keys: &quot; &quot;,
-          template: &quot;Task 2&quot;
+          type:&apos;message&apos;,
+          keys: &apos; &apos;,
+          template: &apos;Task 2&apos;
         },
         {
-          type:&quot;message&quot;,
-          keys: &quot; &quot;,
-          template: &quot;Task 3&quot;
+          type:&apos;message&apos;,
+          keys: &apos; &apos;,
+          template: &apos;Task 3&apos;
         }
       ]
     }

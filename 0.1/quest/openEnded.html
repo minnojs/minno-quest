@@ -88,38 +88,38 @@
         <a class="activate-button">Activate</a>
         <a class="download-button" href="openEnded.js" download>Download</a>
     </div>
-    <div class="editor">define([&quot;questAPI&quot;], function(Quest){
+    <div class="editor">define([&apos;questAPI&apos;], function(Quest){
 	var API = new Quest();
 
 	// ### Questions
 	API.addQuestionsSet(
 	{
 		email1 : [{
-			type: &quot;text&quot;,
-			name:&quot;email1&quot;,
-			stem: &quot;Please leave your email address&quot;,
+			type: &apos;text&apos;,
+			name:&apos;email1&apos;,
+			stem: &apos;Please leave your email address&apos;,
 			required: true,
 			errorMsg: {
-				required: "Are you sure you don&quot;t want to leave your email? Click Decline to Answer to skip without a response"
+				required: &quot;Are you sure you don&apos;t want to leave your email? Click Decline to Answer to skip without a response&quot;
 			}
 
 		}],
 		email2 : [{
-			type: &quot;text&quot;,
-			name:&quot;email2&quot;,
-			stem: &quot;Please confirm your email address&quot;,
+			type: &apos;text&apos;,
+			name:&apos;email2&apos;,
+			stem: &apos;Please confirm your email address&apos;,
 			required: true,
 			errorMsg: {
-				required: "Are you sure you don&quot;t want to confirm your email address? Click Decline to Answer to skip without a response"
+				required: &quot;Are you sure you don&apos;t want to confirm your email address? Click Decline to Answer to skip without a response&quot;
 			}
 		}]
 	});
 
 
 	// ### Pages
-	API.addPagesSet(&quot;basicPage&quot;,
+	API.addPagesSet(&apos;basicPage&apos;,
 	{
-		progressBar: &quot;&lt;%= pagesMeta.number %&gt; out of 2&quot;,
+		progressBar: &apos;&lt;%= pagesMeta.number %&gt; out of 2&apos;,
 		v1style:2,
 		decline:true,
 		numbered: false
@@ -129,17 +129,17 @@
 	API.addSequence(
 	[
 		{
-			inherit : &quot;basicPage&quot;,
-			questions : [{inherit:&quot;email1&quot;}]
+			inherit : &apos;basicPage&apos;,
+			questions : [{inherit:&apos;email1&apos;}]
 		},
 		{
-			inherit : &quot;basicPage&quot;,
-			questions : [{inherit:&quot;email2&quot;}]
+			inherit : &apos;basicPage&apos;,
+			questions : [{inherit:&apos;email2&apos;}]
 		}
 	]);
 
 	/**
-	Return the script to piquest&quot;s god, or something of that sort.
+	Return the script to piquest&apos;s god, or something of that sort.
 	**/
 	return API.script;
 });

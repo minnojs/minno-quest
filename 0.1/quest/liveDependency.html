@@ -88,40 +88,40 @@
         <a class="activate-button">Activate</a>
         <a class="download-button" href="liveDependency.js" download>Download</a>
     </div>
-    <div class="editor">define([&quot;questAPI&quot;], function(Quest){
+    <div class="editor">define([&apos;questAPI&apos;], function(Quest){
 	var API = new Quest();
 
 	// ### Questions
-	API.addQuestionsSet(&quot;basicSelect&quot;,
+	API.addQuestionsSet(&apos;basicSelect&apos;,
 	{
-		type: &quot;selectOne&quot;,
+		type: &apos;selectOne&apos;,
 		autoSubmit:true,
 		numericValues:true,
 		required:true,
 		errorMsg: {
-			required: "Please select an answer, or click &quot;decline to answer&quot;"
+			required: &quot;Please select an answer, or click &apos;decline to answer&apos;&quot;
 		}
 	});
 
 	API.addQuestionsSet({
 		base: [{
-			inherit: &quot;basicSelect&quot;,
-			name:&quot;base&quot;,
-			stem:&quot;Please select&quot;,
-			answers : [&quot;Men&quot;, &quot;Women&quot;, &quot;Other&quot;]
+			inherit: &apos;basicSelect&apos;,
+			name:&apos;base&apos;,
+			stem:&apos;Please select&apos;,
+			answers : [&apos;Men&apos;, &apos;Women&apos;, &apos;Other&apos;]
 		}],
 		open: [{
-			type: &quot;text&quot;,
-			name:&quot;other&quot;,
-			stem:&quot;How do you mean other?&quot;
+			type: &apos;text&apos;,
+			name:&apos;other&apos;,
+			stem:&apos;How do you mean other?&apos;
 		}]
 	});
 
 	// ### Pages
-	API.addPagesSet(&quot;basicPage&quot;,
+	API.addPagesSet(&apos;basicPage&apos;,
 	{
-		progressBar: &quot;&lt;%= pagesMeta.number %&gt; out of 3&quot;,
-		headerStyle : {&quot;font-size&quot;:&quot;1em&quot;},
+		progressBar: &apos;&lt;%= pagesMeta.number %&gt; out of 3&apos;,
+		headerStyle : {&apos;font-size&apos;:&apos;1em&apos;},
 		v1style:2,
 		decline:true,
 		numbered: false
@@ -131,26 +131,26 @@
 	API.addSequence(
 	[
 		{
-			inherit :&quot;basicPage&quot;,
+			inherit :&apos;basicPage&apos;,
 			questions:[
 				// always show this question
-				{inherit:&quot;base&quot;},
-				// this question should be shown only if "other was selected"
+				{inherit:&apos;base&apos;},
+				// this question should be shown only if &quot;other was selected&quot;
 				{
 					remix: true, // remix:true is neccessary so that the mixer is re-evaluated each time that the responses change
-					mixer:&quot;branch&quot;,
+					mixer:&apos;branch&apos;,
 		            conditions: [
-						{compare: 3, to: &quot;current.questions.base.response&quot;}
+						{compare: 3, to: &apos;current.questions.base.response&apos;}
 					],
 					data: [
-						{inherit:&quot;open&quot;}
+						{inherit:&apos;open&apos;}
 					]
 				}
 			]}
 	]);
 
 	/**
-	Return the script to piquest&quot;s god, or something of that sort.
+	Return the script to piquest&apos;s god, or something of that sort.
 	**/
 	return API.script;
 });

@@ -88,43 +88,43 @@
         <a class="activate-button">Activate</a>
         <a class="download-button" href="openEndedLong.js" download>Download</a>
     </div>
-    <div class="editor">define([&quot;questAPI&quot;], function(Quest){
+    <div class="editor">define([&apos;questAPI&apos;], function(Quest){
 	var API = new Quest();
 
 	// ### Questions
 	API.addQuestionsSet(
 	{
 		vacation : [{
-			type: &quot;textarea&quot;,
-			name:&quot;vacation&quot;,
-			stem: &quot;Please briefly describe your dream vacation&quot;,
+			type: &apos;textarea&apos;,
+			name:&apos;vacation&apos;,
+			stem: &apos;Please briefly describe your dream vacation&apos;,
 			rows:4,
 			maxlength:350,
 			maxlengthLimit:true,
 			required: true,
 			errorMsg: {
-				required: "Are you sure you don&quot;t want to describe your dream vacation? Click Decline to Answer to skip without a response"
+				required: &quot;Are you sure you don&apos;t want to describe your dream vacation? Click Decline to Answer to skip without a response&quot;
 			}
 		}],
 		mondays : [{
-			type: &quot;textarea&quot;,
-			name:&quot;mondays&quot;,
-			stem: &quot;Please explain why you do not like Mondays&quot;,
+			type: &apos;textarea&apos;,
+			name:&apos;mondays&apos;,
+			stem: &apos;Please explain why you do not like Mondays&apos;,
 			rows:4,
 			maxlength:350,
 			maxlengthLimit:true,
 			required: true,
 			errorMsg: {
-				required: "Are you sure you don&quot;t want to tell us why you don&quot;t like Mondays? Click Decline to Answer to skip without a response"
+				required: &quot;Are you sure you don&apos;t want to tell us why you don&apos;t like Mondays? Click Decline to Answer to skip without a response&quot;
 			}
 		}]
 	});
 
 
 	// ### Pages
-	API.addPagesSet(&quot;basicPage&quot;,
+	API.addPagesSet(&apos;basicPage&apos;,
 	{
-		progressBar: &quot;&lt;%= pagesMeta.number %&gt; out of 2&quot;,
+		progressBar: &apos;&lt;%= pagesMeta.number %&gt; out of 2&apos;,
 		v1style:2,
 		decline:true,
 		numbered: false
@@ -134,23 +134,23 @@
 	API.addSequence(
 	[
 		{
-			mixer:&quot;random&quot;,
+			mixer:&apos;random&apos;,
 			data :
 			[
 				{
-					inherit : &quot;basicPage&quot;,
-					questions : [{inherit:&quot;vacation&quot;}]
+					inherit : &apos;basicPage&apos;,
+					questions : [{inherit:&apos;vacation&apos;}]
 				},
 				{
-					inherit : &quot;basicPage&quot;,
-					questions : [{inherit:&quot;mondays&quot;}]
+					inherit : &apos;basicPage&apos;,
+					questions : [{inherit:&apos;mondays&apos;}]
 				}
 			]
 		}
 	]);
 
 	/**
-	Return the script to piquest&quot;s god, or something of that sort.
+	Return the script to piquest&apos;s god, or something of that sort.
 	**/
 	return API.script;
 });

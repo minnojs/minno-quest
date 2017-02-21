@@ -85,22 +85,22 @@
         <a class="download-button" href="templateGlobal.js" download>Download</a>
     </div>
     <div class="editor">// You can use data set within the global (or for that matter current) object from within templates.
-define([&quot;managerAPI&quot;], function(Manager){
+define([&apos;managerAPI&apos;], function(Manager){
 
   var API = new Manager();
 
   // Set a global flag that we can test against
-  API.addGlobal({condition:&quot;using global in templates&quot;});
+  API.addGlobal({condition:&apos;using global in templates&apos;});
 
-  API.addTasksSet(&quot;default&quot;, [
+  API.addTasksSet(&apos;default&apos;, [
   	{
-  		type:&quot;message&quot;,
-  		keys: &quot; &quot;
+  		type:&apos;message&apos;,
+  		keys: &apos; &apos;
   	}
   ]);
 
   API.addSequence([
-    {inherit:&quot;default&quot;,template:&quot;We are in the "&lt;%= global.condition %&gt;" condition.&quot;}
+    {inherit:&apos;default&apos;,template:&apos;We are in the &quot;&lt;%= global.condition %&gt;&quot; condition.&apos;}
   ]);
 
   return API.script;

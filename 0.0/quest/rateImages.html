@@ -86,56 +86,56 @@
         <a class="activate-button">Activate</a>
         <a class="download-button" href="rateImages.js" download>Download</a>
     </div>
-    <div class="editor">define([&quot;questAPI&quot;], function(Quest){
+    <div class="editor">define([&apos;questAPI&apos;], function(Quest){
 	var API = new Quest();
 
 	// ### Setup
 	// Set the baseURL for use within images
-	API.addCurrent({baseURL:&quot;../../images/&quot;});
+	API.addCurrent({baseURL:&apos;../../images/&apos;});
 
 
 	// ### Questions
-	API.addQuestionsSet(&quot;basicSelect&quot;,
+	API.addQuestionsSet(&apos;basicSelect&apos;,
 	{
-		type: &quot;selectOne&quot;,
+		type: &apos;selectOne&apos;,
 		autoSubmit:true,
 		numericValues:true,
 		required:true,
-		name: &quot;&lt;%=questionsData.imageName%&gt;&quot;,
-		stem: &quot;&lt;image src="&lt;%=current.baseURL%&gt;&lt;%=questionsData.imageName%&gt;.jpg"&gt;&lt;/image&gt;&quot;,
-		answers : [&quot;Extremely negative&quot;, &quot;Moderately negative&quot;, &quot;Slightly negative&quot;, &quot;Neutral&quot;, &quot;Slightly positive&quot;, &quot;Moderately positive&quot;, &quot;Extremely positive&quot;],
-		help: &quot;&lt;%= pagesMeta.number &lt; 3 %&gt;&quot;,
-		helpText: &quot;Selecting an answer once colors it blue.&lt;br/&gt;You can change your answer by selecting another option.&lt;br/&gt;To confirm, click the selected (blue) button a second time.&quot;
+		name: &apos;&lt;%=questionsData.imageName%&gt;&apos;,
+		stem: &apos;&lt;image src=&quot;&lt;%=current.baseURL%&gt;&lt;%=questionsData.imageName%&gt;.jpg&quot;&gt;&lt;/image&gt;&apos;,
+		answers : [&apos;Extremely negative&apos;, &apos;Moderately negative&apos;, &apos;Slightly negative&apos;, &apos;Neutral&apos;, &apos;Slightly positive&apos;, &apos;Moderately positive&apos;, &apos;Extremely positive&apos;],
+		help: &apos;&lt;%= pagesMeta.number &lt; 3 %&gt;&apos;,
+		helpText: &apos;Selecting an answer once colors it blue.&lt;br/&gt;You can change your answer by selecting another option.&lt;br/&gt;To confirm, click the selected (blue) button a second time.&apos;
 	});
 
 
-	API.addQuestionsSet(&quot;animals&quot;,
+	API.addQuestionsSet(&apos;animals&apos;,
 	[
 		{
-			inherit : &quot;basicSelect&quot;,
-			data : {imageName : &quot;bunny&quot;}
+			inherit : &apos;basicSelect&apos;,
+			data : {imageName : &apos;bunny&apos;}
 		},
 		{
-			inherit : &quot;basicSelect&quot;,
-			data : {imageName : &quot;seal&quot;}
+			inherit : &apos;basicSelect&apos;,
+			data : {imageName : &apos;seal&apos;}
 		},
 		{
-			inherit : &quot;basicSelect&quot;,
-			data : {imageName : &quot;shark&quot;}
+			inherit : &apos;basicSelect&apos;,
+			data : {imageName : &apos;shark&apos;}
 		},
 		{
-			inherit : &quot;basicSelect&quot;,
-			data : {imageName : &quot;snake&quot;}
+			inherit : &apos;basicSelect&apos;,
+			data : {imageName : &apos;snake&apos;}
 		}
 	]);
 
 	// ### Pages
-	API.addPagesSet(&quot;basicPage&quot;,
+	API.addPagesSet(&apos;basicPage&apos;,
 	{
-		progressBar: &quot;&lt;%= pagesMeta.number %&gt; out of 4&quot;,
-		header: &quot;How positive or negative are your feelings toward the animal presented below?&quot;,
-		headerStyle : {&quot;font-size&quot;:&quot;1em&quot;},
-		questions : {inherit:{set:&quot;animals&quot;, type:&quot;exRandom&quot;}},
+		progressBar: &apos;&lt;%= pagesMeta.number %&gt; out of 4&apos;,
+		header: &apos;How positive or negative are your feelings toward the animal presented below?&apos;,
+		headerStyle : {&apos;font-size&apos;:&apos;1em&apos;},
+		questions : {inherit:{set:&apos;animals&apos;, type:&apos;exRandom&apos;}},
 		v1style:2,
 		decline:true,
 		numbered: false
@@ -145,17 +145,17 @@
 	API.addSequence(
 	[
 		{
-			mixer : &quot;repeat&quot;,
+			mixer : &apos;repeat&apos;,
 			times : 4,
 			data :
 			[
-				{inherit : &quot;basicPage&quot;}
+				{inherit : &apos;basicPage&apos;}
 			]
 		}
 	]);
 
 	/**
-	Return the script to piquest&quot;s god, or something of that sort.
+	Return the script to piquest&apos;s god, or something of that sort.
 	**/
 	return API.script;
 });</div>

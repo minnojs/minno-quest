@@ -86,111 +86,111 @@
         <a class="activate-button">Activate</a>
         <a class="download-button" href="nfc.js" download>Download</a>
     </div>
-    <div class="editor">define([&quot;questAPI&quot;], function(Quest){
+    <div class="editor">define([&apos;questAPI&apos;], function(Quest){
 	var API = new Quest();
 
 	// ### Questions
-	API.addQuestionsSet(&quot;basicSelect&quot;,
+	API.addQuestionsSet(&apos;basicSelect&apos;,
 	{
-		type: &quot;selectOne&quot;,
+		type: &apos;selectOne&apos;,
 		autoSubmit:true,
 		numericValues:true,
 		required:true,
 		errorMsg: {
-			required: "Please select an answer, or click &quot;decline to answer&quot;"
+			required: &quot;Please select an answer, or click &apos;decline to answer&apos;&quot;
 		},
-		answers : [&quot;Strongly disagree&quot;, &quot;Moderately disagree&quot;, &quot;Slightly disagree&quot;, &quot;Neutral&quot;, &quot;Slightly agree&quot;, &quot;Moderately agree&quot;, &quot;Strongly agree&quot;],
-		help: &quot;&lt;%= pagesMeta.number &lt; 3 %&gt;&quot;,
-		helpText: &quot;Selecting an answer once colors it blue.&lt;br/&gt;You can change your answer by selecting another option.&lt;br/&gt;To confirm, click the selected (blue) button a second time.&quot;
+		answers : [&apos;Strongly disagree&apos;, &apos;Moderately disagree&apos;, &apos;Slightly disagree&apos;, &apos;Neutral&apos;, &apos;Slightly agree&apos;, &apos;Moderately agree&apos;, &apos;Strongly agree&apos;],
+		help: &apos;&lt;%= pagesMeta.number &lt; 3 %&gt;&apos;,
+		helpText: &apos;Selecting an answer once colors it blue.&lt;br/&gt;You can change your answer by selecting another option.&lt;br/&gt;To confirm, click the selected (blue) button a second time.&apos;
 	});
 
 	//Define the question texts.
-	API.addQuestionsSet(&quot;nfc&quot;,
+	API.addQuestionsSet(&apos;nfc&apos;,
 	[
 		{
-			inherit : &quot;basicSelect&quot;,
-			name : &quot;nfc_c1&quot;,
-			stem : "I do not usually consult many different opinions before forming my own view."
+			inherit : &apos;basicSelect&apos;,
+			name : &apos;nfc_c1&apos;,
+			stem : &quot;I do not usually consult many different opinions before forming my own view.&quot;
 		},
 		{
-			inherit : &quot;basicSelect&quot;,
-			name : &quot;nfc_c2&quot;,
-			stem : "I feel irritated when one person disagrees with what everyone else in a group believes."
+			inherit : &apos;basicSelect&apos;,
+			name : &apos;nfc_c2&apos;,
+			stem : &quot;I feel irritated when one person disagrees with what everyone else in a group believes.&quot;
 		},
 		{
-			inherit : &quot;basicSelect&quot;,
-			name : &quot;nfc_d1&quot;,
-			stem : "When I have made a decision, I feel relieved."
+			inherit : &apos;basicSelect&apos;,
+			name : &apos;nfc_d1&apos;,
+			stem : &quot;When I have made a decision, I feel relieved.&quot;
 		},
 		{
-			inherit : &quot;basicSelect&quot;,
-			name : &quot;nfc_a1&quot;,
-			stem : "I feel uncomfortable when I don’t understand the reason why an event occurred in my life."
+			inherit : &apos;basicSelect&apos;,
+			name : &apos;nfc_a1&apos;,
+			stem : &quot;I feel uncomfortable when I don’t understand the reason why an event occurred in my life.&quot;
 		},
 		{
-			inherit : &quot;basicSelect&quot;,
-			name : &quot;nfc_d2&quot;,
-			stem : "When I am confronted with a problem, I’m dying to reach a solution very quickly."
+			inherit : &apos;basicSelect&apos;,
+			name : &apos;nfc_d2&apos;,
+			stem : &quot;When I am confronted with a problem, I’m dying to reach a solution very quickly.&quot;
 		},
 		{
-			inherit : &quot;basicSelect&quot;,
-			name : &quot;nfc_d3&quot;,
-			stem : "I would quickly become impatient and irritated if I would not find a solution to a problem immediately."
+			inherit : &apos;basicSelect&apos;,
+			name : &apos;nfc_d3&apos;,
+			stem : &quot;I would quickly become impatient and irritated if I would not find a solution to a problem immediately.&quot;
 		},
 		{
-			inherit : &quot;basicSelect&quot;,
-			name : &quot;nfc_c3&quot;,
-			stem : "I dislike questions which could be answered in many different ways."
+			inherit : &apos;basicSelect&apos;,
+			name : &apos;nfc_c3&apos;,
+			stem : &quot;I dislike questions which could be answered in many different ways.&quot;
 		},
 		{
-			inherit : &quot;basicSelect&quot;,
-			name : &quot;nfc_a2&quot;,
-			stem : "I dislike it when a person’s statement could mean many different things."
+			inherit : &apos;basicSelect&apos;,
+			name : &apos;nfc_a2&apos;,
+			stem : &quot;I dislike it when a person’s statement could mean many different things.&quot;
 		},
 		{
-			inherit : &quot;basicSelect&quot;,
-			name : &quot;nfc_p1&quot;,
-			stem : "I don’t like to be with people who are capable of unexpected actions."
+			inherit : &apos;basicSelect&apos;,
+			name : &apos;nfc_p1&apos;,
+			stem : &quot;I don’t like to be with people who are capable of unexpected actions.&quot;
 		},
 		{
-			inherit : &quot;basicSelect&quot;,
-			name : &quot;nfc_a3&quot;,
-			stem : "I don’t like situations that are uncertain."
+			inherit : &apos;basicSelect&apos;,
+			name : &apos;nfc_a3&apos;,
+			stem : &quot;I don’t like situations that are uncertain.&quot;
 		},
 		{
-			inherit : &quot;basicSelect&quot;,
-			name : &quot;nfc_o1&quot;,
-			stem : "I find that establishing a consistent routine enables me to enjoy life more."
+			inherit : &apos;basicSelect&apos;,
+			name : &apos;nfc_o1&apos;,
+			stem : &quot;I find that establishing a consistent routine enables me to enjoy life more.&quot;
 		},
 		{
-			inherit : &quot;basicSelect&quot;,
-			name : &quot;nfc_o2&quot;,
-			stem : "I find that a well ordered life with regular hours suits my temperament."
+			inherit : &apos;basicSelect&apos;,
+			name : &apos;nfc_o2&apos;,
+			stem : &quot;I find that a well ordered life with regular hours suits my temperament.&quot;
 		},
 		{
-			inherit : &quot;basicSelect&quot;,
-			name : &quot;nfc_p2&quot;,
-			stem : "I don’t like to go into a situation without knowing what I can expect from it."
+			inherit : &apos;basicSelect&apos;,
+			name : &apos;nfc_p2&apos;,
+			stem : &quot;I don’t like to go into a situation without knowing what I can expect from it.&quot;
 		},
 		{
-			inherit : &quot;basicSelect&quot;,
-			name : &quot;nfc_p3&quot;,
-			stem : "I dislike unpredictable situations."
+			inherit : &apos;basicSelect&apos;,
+			name : &apos;nfc_p3&apos;,
+			stem : &quot;I dislike unpredictable situations.&quot;
 		},
 		{
-			inherit : &quot;basicSelect&quot;,
-			name : &quot;nfc_o3&quot;,
-			stem : "I enjoy having a clear and structured mode of life."
+			inherit : &apos;basicSelect&apos;,
+			name : &apos;nfc_o3&apos;,
+			stem : &quot;I enjoy having a clear and structured mode of life.&quot;
 		}
 	]);
 
 	// ### Pages
-	API.addPagesSet(&quot;basicPage&quot;,
+	API.addPagesSet(&apos;basicPage&apos;,
 	{
-		progressBar: &quot;&lt;%= pagesMeta.number %&gt; out of 16&quot;,
-		header: &quot;Please rate your agreement with the following statement&quot;,
-		headerStyle : {&quot;font-size&quot;:&quot;1em&quot;},
-		questions : {inherit:{set:&quot;nfc&quot;, type:&quot;exRandom&quot;}}, //One question in the page, selected randomly (exhaustive)
+		progressBar: &apos;&lt;%= pagesMeta.number %&gt; out of 16&apos;,
+		header: &apos;Please rate your agreement with the following statement&apos;,
+		headerStyle : {&apos;font-size&apos;:&apos;1em&apos;},
+		questions : {inherit:{set:&apos;nfc&apos;, type:&apos;exRandom&apos;}}, //One question in the page, selected randomly (exhaustive)
 		v1style:2,
 		decline:true,
 		numbered: false
@@ -201,17 +201,17 @@
 	[
 		//Inherit the page 16 times. The page will inherit the nfc questions 16 times, thus presenting all 16 statements in random order.
 		{
-			mixer : &quot;repeat&quot;,
+			mixer : &apos;repeat&apos;,
 			times : 16,
 			data :
 			[
-				{inherit : &quot;basicPage&quot;}
+				{inherit : &apos;basicPage&apos;}
 			]
 		}
 	]);
 
 	/**
-	Return the script to piquest&quot;s god, or something of that sort.
+	Return the script to piquest&apos;s god, or something of that sort.
 	**/
 	return API.script;
 });

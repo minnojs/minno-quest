@@ -96,19 +96,19 @@
 // In this caase, we require the user to respond to the question, and set a custom error message.
 //
 // Full documentation is right [here](../quest/API.html#text-textarea).
-define([&quot;questAPI&quot;], function(Quest){
+define([&apos;questAPI&apos;], function(Quest){
     var API = new Quest();
 
     API.addSequence([
         { // page begins
-            header: &quot;Text questions&quot;,
+            header: &apos;Text questions&apos;,
             questions: [
                 { // question begins
-                    type: &quot;text&quot;,
-                    stem: &quot;When you say good morning, what do you mean?&quot;,
+                    type: &apos;text&apos;,
+                    stem: &apos;When you say good morning, what do you mean?&apos;,
                     required: true,
                     errorMsg: {
-                        required: &quot;This question is truly important to us, please take your time to answer.&quot;
+                        required: &apos;This question is truly important to us, please take your time to answer.&apos;
                     }
 
                 } // question ends

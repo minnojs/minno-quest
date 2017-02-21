@@ -94,39 +94,39 @@
 // It allows you to create a series of multiple choice questions.
 //
 // Full documentation is right [here](../quest/API.html#grid).
-define([&quot;questAPI&quot;], function(Quest){
+define([&apos;questAPI&apos;], function(Quest){
     var API = new Quest();
 
     API.addSequence([
         { // page begins
-            header: &quot;Grid questions simple&quot;,
+            header: &apos;Grid questions simple&apos;,
             questions: [
                 {
-                    type: &quot;grid&quot;,
-                    stem: &quot;What sort of things do you like?&quot;,
-                    columns: [&quot;Strongly agree&quot; , &quot;agree&quot; , &quot;don\&quot;t know&quot; , &quot;disagree&quot; , &quot;Strongly disagree&quot;],
-                    rows: [&quot;I like grids&quot;, &quot;I like bannanas too&quot;]
+                    type: &apos;grid&apos;,
+                    stem: &apos;What sort of things do you like?&apos;,
+                    columns: [&apos;Strongly agree&apos; , &apos;agree&apos; , &apos;don\&apos;t know&apos; , &apos;disagree&apos; , &apos;Strongly disagree&apos;],
+                    rows: [&apos;I like grids&apos;, &apos;I like bannanas too&apos;]
                 }
             ]
         }, // page ends
         { // page begins
-            header: &quot;Grid questions advanced&quot;,
+            header: &apos;Grid questions advanced&apos;,
             questions: [
                 {
-                    type: &quot;grid&quot;,
-                    name:&quot;grid&quot;,
+                    type: &apos;grid&apos;,
+                    name:&apos;grid&apos;,
                     columns: [
-                        &quot;Strongly agree&quot;,
-                        &quot;agree&quot;,
-                        &quot;don\&quot;t know&quot;,
-                        &quot;disagree&quot;,
-                        &quot;Strongly disagree&quot;,
-                        {stem:&quot;Decline to answer&quot;, value:&quot;n/a&quot;, noReverse:true}
+                        &apos;Strongly agree&apos;,
+                        &apos;agree&apos;,
+                        &apos;don\&apos;t know&apos;,
+                        &apos;disagree&apos;,
+                        &apos;Strongly disagree&apos;,
+                        {stem:&apos;Decline to answer&apos;, value:&apos;n/a&apos;, noReverse:true}
                     ],
                     rows: [
-                        {stem:&quot;I like grids&quot;,name:&quot;likeGrids&quot;},
+                        {stem:&apos;I like grids&apos;,name:&apos;likeGrids&apos;},
                         // This questions scores will be reversed so that the sum of scores is meaningful
-                        {stem:&quot;I hate bananas&quot;, name:&quot;likeBananas&quot;, reverse:true}
+                        {stem:&apos;I hate bananas&apos;, name:&apos;likeBananas&apos;, reverse:true}
                     ]
                 }
             ]

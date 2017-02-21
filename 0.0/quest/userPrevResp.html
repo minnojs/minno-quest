@@ -86,50 +86,50 @@
         <a class="activate-button">Activate</a>
         <a class="download-button" href="userPrevResp.js" download>Download</a>
     </div>
-    <div class="editor">define([&quot;questAPI&quot;], function(Quest){
+    <div class="editor">define([&apos;questAPI&apos;], function(Quest){
 	var API = new Quest();
 
 	/**
 	 * Questions
 	 **/
-	API.addQuestionsSet(&quot;basicSelect&quot;,
+	API.addQuestionsSet(&apos;basicSelect&apos;,
 	{
-		type: &quot;selectOne&quot;,
+		type: &apos;selectOne&apos;,
 		autoSubmit:true,
 		numericValues:true,
 		required:true,
 		errorMsg: {
-			required: "Please select an answer, or click &quot;decline to answer&quot;"
+			required: &quot;Please select an answer, or click &apos;decline to answer&apos;&quot;
 		},
-		help: &quot;&lt;%= pagesMeta.number &lt; 3 %&gt;&quot;,
-		helpText: &quot;Selecting an answer once colors it blue.&lt;br/&gt;You can change your answer by selecting another option.&lt;br/&gt;To confirm, click the selected (blue) button a second time.&quot;
+		help: &apos;&lt;%= pagesMeta.number &lt; 3 %&gt;&apos;,
+		helpText: &apos;Selecting an answer once colors it blue.&lt;br/&gt;You can change your answer by selecting another option.&lt;br/&gt;To confirm, click the selected (blue) button a second time.&apos;
 	});
 
 	//Set the value of each response, to use it in the next question.
-	API.addQuestionsSet(&quot;selectGroup&quot;, [{
-		inherit: &quot;basicSelect&quot;,
-		name:&quot;selectGroup&quot;,
-		stem:&quot;Please choose, who would you prefer to rate now?&quot;,
+	API.addQuestionsSet(&apos;selectGroup&apos;, [{
+		inherit: &apos;basicSelect&apos;,
+		name:&apos;selectGroup&apos;,
+		stem:&apos;Please choose, who would you prefer to rate now?&apos;,
 		answers : [
-			{text:&quot;Black people&quot;, value:&quot;Black people&quot;},
-			{text:&quot;White people&quot;, value:&quot;White people&quot;}
+			{text:&apos;Black people&apos;, value:&apos;Black people&apos;},
+			{text:&apos;White people&apos;, value:&apos;White people&apos;}
 		]
 	}]);
 
 	//The name of the group in this question is the response from the previous question.
-	API.addQuestionsSet(&quot;groupLike&quot;, [{
-		inherit: &quot;basicSelect&quot;,
-		name:&quot;groupLike&quot;,
-		stem:&quot;How much do you like &lt;%=current.questions.selectGroup.response%&gt;?&quot;,
-		answers : [&quot;Extremely dislike&quot;, &quot;Moderately dislike&quot;, &quot;Slightly disklike&quot;, &quot;Slightly like&quot;, &quot;Moderaltey like&quot;, &quot;Extremely like&quot;]
+	API.addQuestionsSet(&apos;groupLike&apos;, [{
+		inherit: &apos;basicSelect&apos;,
+		name:&apos;groupLike&apos;,
+		stem:&apos;How much do you like &lt;%=current.questions.selectGroup.response%&gt;?&apos;,
+		answers : [&apos;Extremely dislike&apos;, &apos;Moderately dislike&apos;, &apos;Slightly disklike&apos;, &apos;Slightly like&apos;, &apos;Moderaltey like&apos;, &apos;Extremely like&apos;]
 	}]);
 
 
 	// ### Pages
-	API.addPagesSet(&quot;basicPage&quot;,
+	API.addPagesSet(&apos;basicPage&apos;,
 	{
-		progressBar: &quot;&lt;%= pagesMeta.number %&gt; out of 2&quot;,
-		headerStyle : {&quot;font-size&quot;:&quot;1em&quot;},
+		progressBar: &apos;&lt;%= pagesMeta.number %&gt; out of 2&apos;,
+		headerStyle : {&apos;font-size&apos;:&apos;1em&apos;},
 		v1style:2,
 		decline:true,
 		numbered: false
@@ -138,12 +138,12 @@
 	// ### Sequence
 	API.addSequence(
 	[
-		{inherit :&quot;basicPage&quot;, questions:{inherit:&quot;selectGroup&quot;}},
-		{inherit :&quot;basicPage&quot;, questions:{inherit:&quot;groupLike&quot;}}
+		{inherit :&apos;basicPage&apos;, questions:{inherit:&apos;selectGroup&apos;}},
+		{inherit :&apos;basicPage&apos;, questions:{inherit:&apos;groupLike&apos;}}
 	]);
 
 	/**
-	Return the script to piquest&quot;s god, or something of that sort.
+	Return the script to piquest&apos;s god, or something of that sort.
 	**/
 	return API.script;
 });

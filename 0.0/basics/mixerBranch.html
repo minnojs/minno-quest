@@ -85,31 +85,31 @@
         <a class="download-button" href="mixerBranch.js" download>Download</a>
     </div>
     <div class="editor">// Conditionally activate specific sub sequences.
-define([&quot;managerAPI&quot;], function(Manager){
+define([&apos;managerAPI&apos;], function(Manager){
 
   var API = new Manager();
 
   // Set a global flag that we can test against
-  API.addGlobal({condition:&quot;cond1&quot;});
+  API.addGlobal({condition:&apos;cond1&apos;});
 
   API.addSequence([
     {
-      mixer: &quot;branch&quot;,
+      mixer: &apos;branch&apos;,
       conditions: [
-        {compare: &quot;global.condition&quot;, to: &quot;cond1&quot;}
+        {compare: &apos;global.condition&apos;, to: &apos;cond1&apos;}
       ],
       data: [
         {
-          type:&quot;message&quot;,
-          keys: &quot; &quot;,
-          template: &quot;Task 1: will be displayed&quot;
+          type:&apos;message&apos;,
+          keys: &apos; &apos;,
+          template: &apos;Task 1: will be displayed&apos;
         }
       ],
       elseData: [
         {
-          type:&quot;message&quot;,
-          keys: &quot; &quot;,
-          template: &quot;Task 2: will not be displayed&quot;
+          type:&apos;message&apos;,
+          keys: &apos; &apos;,
+          template: &apos;Task 2: will not be displayed&apos;
         }
       ]
     }

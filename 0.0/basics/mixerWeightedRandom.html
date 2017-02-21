@@ -93,24 +93,24 @@
 // so that any branching mixers will be branched according to the environment as it is when the random mixer is reached.
 // If you want to delay the branching until it is reached, simply wrap it within a `wrapper` mixer.
 
-define([&quot;managerAPI&quot;], function(Manager){
+define([&apos;managerAPI&apos;], function(Manager){
 
   var API = new Manager();
 
   API.addSequence([
     {
-      mixer:&quot;weightedRandom&quot;, // declare the mixer
+      mixer:&apos;weightedRandom&apos;, // declare the mixer
       weights: [0.2, 0.8], // weights by whitch to randomize
       data:[ // a list of tasks to randomize
         {
-          type:&quot;message&quot;,
-          keys: &quot; &quot;,
-          template: &quot;Task 1 (20% of the time)&quot;
+          type:&apos;message&apos;,
+          keys: &apos; &apos;,
+          template: &apos;Task 1 (20% of the time)&apos;
         },
         {
-          type:&quot;message&quot;,
-          keys: &quot; &quot;,
-          template: &quot;Task 2 (80% of the time)&quot;
+          type:&apos;message&apos;,
+          keys: &apos; &apos;,
+          template: &apos;Task 2 (80% of the time)&apos;
         }
       ]
     }

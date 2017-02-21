@@ -89,27 +89,27 @@
     <div class="editor">// Sometimes you need to handpick a specific object out of a set.
 // `byData` allows you to do that by matching the `data` properties of the inherit object and the objects within the set.
 // Note, that if there are multiple fits to your data object, a random object will be picked from among them.
-define([&quot;managerAPI&quot;], function(Manager){
+define([&apos;managerAPI&apos;], function(Manager){
 
   var API = new Manager();
 
-  API.addTasksSet(&quot;default&quot;, [
+  API.addTasksSet(&apos;default&apos;, [
   	{
-  		type:&quot;message&quot;,
-  		keys: &quot; &quot;
+  		type:&apos;message&apos;,
+  		keys: &apos; &apos;
   	}
   ]);
 
-  API.addTasksSet(&quot;tasks&quot;,[
-    {inherit:&quot;default&quot;, template:&quot;Task 1&quot;, data:{num:1}},
-    {inherit:&quot;default&quot;, template:&quot;Task 2&quot;, data:{num:2}},
-    {inherit:&quot;default&quot;, template:&quot;Task 3&quot;, data:{num:3}}
+  API.addTasksSet(&apos;tasks&apos;,[
+    {inherit:&apos;default&apos;, template:&apos;Task 1&apos;, data:{num:1}},
+    {inherit:&apos;default&apos;, template:&apos;Task 2&apos;, data:{num:2}},
+    {inherit:&apos;default&apos;, template:&apos;Task 3&apos;, data:{num:3}}
   ]);
 
   API.addSequence([
-    {inherit:{set:&quot;tasks&quot;, type:&quot;byData&quot;, data:{num:2}}},
-    {inherit:{set:&quot;tasks&quot;, type:&quot;byData&quot;, data:{num:1}}},
-    {inherit:{set:&quot;tasks&quot;, type:&quot;byData&quot;, data:{num:3}}}
+    {inherit:{set:&apos;tasks&apos;, type:&apos;byData&apos;, data:{num:2}}},
+    {inherit:{set:&apos;tasks&apos;, type:&apos;byData&apos;, data:{num:1}}},
+    {inherit:{set:&apos;tasks&apos;, type:&apos;byData&apos;, data:{num:3}}}
   ]);
 
   return API.script;

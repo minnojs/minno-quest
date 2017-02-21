@@ -98,18 +98,18 @@
 // Note the use of minWidth in order to keep all buttons on the same line.
 //
 // Full documentation is right [here](../quest/API.html#selectone-selectmulti).
-define([&quot;questAPI&quot;], function(Quest){
+define([&apos;questAPI&apos;], function(Quest){
     var API = new Quest();
 
     API.addSequence([
         { // page begins
-            header: &quot;Select questions&quot;,
+            header: &apos;Select questions&apos;,
             questions: [
                 { // question begins
-                    type: &quot;selectMulti&quot;,
-                    stem: &quot;On which days last week did you have breakfast?:&quot;,
-                    style: &quot;multiButtons&quot;,
-                    minWidth: &quot;13%&quot;,
+                    type: &apos;selectMulti&apos;,
+                    stem: &apos;On which days last week did you have breakfast?:&apos;,
+                    style: &apos;multiButtons&apos;,
+                    minWidth: &apos;13%&apos;,
                     answers: [
                         1,2,3,4,5,6,7
                     ]

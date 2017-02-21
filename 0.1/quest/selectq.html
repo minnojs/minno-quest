@@ -88,7 +88,7 @@
         <a class="activate-button">Activate</a>
         <a class="download-button" href="selectq.js" download>Download</a>
     </div>
-    <div class="editor">define([&quot;questAPI&quot;], function(Quest){
+    <div class="editor">define([&apos;questAPI&apos;], function(Quest){
 	var API = new Quest();
 
 
@@ -100,58 +100,58 @@
 			numbered: false,
 			questions :
 			{
-				type:&quot;selectOne&quot;,
-				stem:&quot;Select a questionnaire&quot;,
-				name:&quot;selectq&quot;,
+				type:&apos;selectOne&apos;,
+				stem:&apos;Select a questionnaire&apos;,
+				name:&apos;selectq&apos;,
 				autoSubmit:true,
 				answers : [
 					{
-						text: &quot;Basic scale with agreement items&quot;,
-						value : &quot;basicScale&quot;
+						text: &apos;Basic scale with agreement items&apos;,
+						value : &apos;basicScale&apos;
 					},
 					{
-						text: &quot;Rate images&quot;,
-						value : &quot;rateimages&quot;
+						text: &apos;Rate images&apos;,
+						value : &apos;rateimages&apos;
 					},
 					{
-						text: &quot;Rate images (and set their height)&quot;,
-						value : &quot;rateimagessizes&quot;
+						text: &apos;Rate images (and set their height)&apos;,
+						value : &apos;rateimagessizes&apos;
 					},
 					{
-						text: &quot;Show horizontal scale&quot;,
-						value : &quot;buttons&quot;
+						text: &apos;Show horizontal scale&apos;,
+						value : &apos;buttons&apos;
 					},
 					{
-						text: &quot;Show horizontal scale (advanced code)&quot;,
-						value : &quot;buttonsadvanced&quot;
+						text: &apos;Show horizontal scale (advanced code)&apos;,
+						value : &apos;buttonsadvanced&apos;
 					},
 					{
-						text: &quot;Show horizontal scale (all questions in one page)&quot;,
-						value : &quot;buttonsonepage&quot;
+						text: &apos;Show horizontal scale (all questions in one page)&apos;,
+						value : &apos;buttonsonepage&apos;
 					},
 					{
-						text: &quot;Use slider&quot;,
-						value : &quot;slider&quot;
+						text: &apos;Use slider&apos;,
+						value : &apos;slider&apos;
 					},
 					{
-						text: &quot;Use grid&quot;,
-						value : &quot;grid&quot;
+						text: &apos;Use grid&apos;,
+						value : &apos;grid&apos;
 					},
 					{
-						text: "Use participant&quot;s response in another question",
-						value : &quot;userprevresp&quot;
+						text: &quot;Use participant&apos;s response in another question&quot;,
+						value : &apos;userprevresp&apos;
 					},
 					{
-						text: "Select a question according to the participant&quot;s response",
-						value : &quot;dependency&quot;
+						text: &quot;Select a question according to the participant&apos;s response&quot;,
+						value : &apos;dependency&apos;
 					},
 					{
-						text: "Open ended question (short responses)",
-						value : &quot;openended&quot;
+						text: &quot;Open ended question (short responses)&quot;,
+						value : &apos;openended&apos;
 					},
 					{
-						text: "Open ended question (long responses)",
-						value : &quot;openendedlong&quot;
+						text: &quot;Open ended question (long responses)&quot;,
+						value : &apos;openendedlong&apos;
 					}
 				]
 			}
@@ -159,7 +159,7 @@
 	]);
 
 	/**
-	Return the script to piquest&quot;s god, or something of that sort.
+	Return the script to piquest&apos;s god, or something of that sort.
 	**/
 	return API.script;
 });

@@ -78,7 +78,7 @@
 //
 // The opening section of each script is always more or less the same.
 // We create the wrapper for the script (`define`), and create a new instance of a manager.
-define([&quot;managerAPI&quot;], function(Manager){
+define([&apos;managerAPI&apos;], function(Manager){
 
   var API = new Manager();
 
@@ -91,36 +91,36 @@ define([&quot;managerAPI&quot;], function(Manager){
     // This is a message task. It is used to give instructions to the user.
     //
     // The task type is defined using the `type` property.
-    // Setting `keys` to &quot;&amp;nbsp;&amp;nbsp;&quot; allows using the space button in order to proceed.
+    // Setting `keys` to &apos;&amp;nbsp;&amp;nbsp;&apos; allows using the space button in order to proceed.
     // We use `template` to insert a plain html template to the task.
     // Usually it is more convenient to use `templateUrl` and get the html out of a separate file, we chose this method here in order to keep the script concise.
     {
-      type: &quot;message&quot;,
-      keys: &quot; &quot;,
+      type: &apos;message&apos;,
+      keys: &apos; &apos;,
       template:
-        &quot;&lt;div class="panel panel-info" style="margin-top:1em"&gt;&quot; +
+        &apos;&lt;div class=&quot;panel panel-info&quot; style=&quot;margin-top:1em&quot;&gt;&apos; +
 
-          &quot;&lt;div class="panel-heading"&gt;&quot; +
-            &quot;&lt;h1 class="panel-title" style="font-size:2em"&gt;Welcome&lt;/h1&gt;&quot; +
-          &quot;&lt;/div&gt;&quot; +
+          &apos;&lt;div class=&quot;panel-heading&quot;&gt;&apos; +
+            &apos;&lt;h1 class=&quot;panel-title&quot; style=&quot;font-size:2em&quot;&gt;Welcome&lt;/h1&gt;&apos; +
+          &apos;&lt;/div&gt;&apos; +
 
-          &quot;&lt;div class="panel-body"&gt;&quot; +
-            &quot;&lt;p&gt;You are about to take a questionnaire that has to do with your perception of personal weight.&lt;/p&gt;&quot; +
-            &quot;&lt;p&gt;Please take your time and answer to the best of your ability. In case there is no answer that fits you exactly, pick the closest answer possible.&lt;/p&gt;&quot; +
-            &quot;&lt;div style="max-width: 50%; margin: 30px auto 10px;" class="well"&gt;&quot; +
-              &quot;&lt;button pi-message-done type="button" class="btn btn-primary btn-block"&gt;Click Here or press the space button to Proceed&lt;/button&gt;&quot; +
-            &quot;&lt;/div&gt;&quot; +
-          &quot;&lt;/div&gt;&quot; +
+          &apos;&lt;div class=&quot;panel-body&quot;&gt;&apos; +
+            &apos;&lt;p&gt;You are about to take a questionnaire that has to do with your perception of personal weight.&lt;/p&gt;&apos; +
+            &apos;&lt;p&gt;Please take your time and answer to the best of your ability. In case there is no answer that fits you exactly, pick the closest answer possible.&lt;/p&gt;&apos; +
+            &apos;&lt;div style=&quot;max-width: 50%; margin: 30px auto 10px;&quot; class=&quot;well&quot;&gt;&apos; +
+              &apos;&lt;button pi-message-done type=&quot;button&quot; class=&quot;btn btn-primary btn-block&quot;&gt;Click Here or press the space button to Proceed&lt;/button&gt;&apos; +
+            &apos;&lt;/div&gt;&apos; +
+          &apos;&lt;/div&gt;&apos; +
 
-        &quot;&lt;/div&gt;&quot;
+        &apos;&lt;/div&gt;&apos;
     },
     // #### Weight Questionnaire
     // This is a miQuest task. In this case it is the central task of this experiment.
     // The questionnaire is loaded from a file (you can see it right [here](../quest/weightDocco.html)).
     {
-      type: &quot;quest&quot;,
-      name: &quot;weightQuest&quot;,
-      scriptUrl: &quot;../../quest/weight.js&quot;
+      type: &apos;quest&apos;,
+      name: &apos;weightQuest&apos;,
+      scriptUrl: &apos;../../quest/weight.js&apos;
     }
 
     // Now, we just close the sequence.

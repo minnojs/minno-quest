@@ -88,163 +88,163 @@
         <a class="activate-button">Activate</a>
         <a class="download-button" href="mgr.js" download>Download</a>
     </div>
-    <div class="editor">define([&quot;managerAPI&quot;], function(Manager){
+    <div class="editor">define([&apos;managerAPI&apos;], function(Manager){
 
 	// This code is responsible for styling the miQuest tasks as panels (like piMessage)
-	// Don&quot;t touch unless you know what you&quot;re doing
-	var css = &quot;[pi-quest]{background-color: #fff;border: 1px solid transparent;border-radius: 4px;box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);margin-bottom: 20px;border-color: #bce8f1;padding:15px;}&quot;;
-	window.angular.element(document).find(&quot;head&quot;).prepend(&quot;&lt;style type="text/css"&gt;@charset "UTF-8";&quot; + css + &quot;&lt;/style&gt;&quot;);
+	// Don&apos;t touch unless you know what you&apos;re doing
+	var css = &apos;[pi-quest]{background-color: #fff;border: 1px solid transparent;border-radius: 4px;box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);margin-bottom: 20px;border-color: #bce8f1;padding:15px;}&apos;;
+	window.angular.element(document).find(&apos;head&apos;).prepend(&apos;&lt;style type=&quot;text/css&quot;&gt;@charset &quot;UTF-8&quot;;&apos; + css + &apos;&lt;/style&gt;&apos;);
 
 	var API = new Manager();
 
-	API.addSettings(&quot;skip&quot;,true);
+	API.addSettings(&apos;skip&apos;,true);
 	
-	API.setName(&quot;mgr&quot;);
+	API.setName(&apos;mgr&apos;);
 
 	/**********
 	***Define all the tasks in advance.
 	**********/	
 	API.addTasksSet({
 		instructions: 
-			[{type:&quot;message&quot;, buttonText:&quot;Continue&quot;}], 
+			[{type:&apos;message&apos;, buttonText:&apos;Continue&apos;}], 
 		
 		consent : [{ 
-			inherit:&quot;instructions&quot;, name:&quot;consent&quot;, templateUrl: &quot;consent.jst&quot;, title:&quot;Consent&quot;, 
-			piTemplate:true, header:&quot;Consent Agreement: Implicit Social Cognition on the Internet&quot;
+			inherit:&apos;instructions&apos;, name:&apos;consent&apos;, templateUrl: &apos;consent.jst&apos;, title:&apos;Consent&apos;, 
+			piTemplate:true, header:&apos;Consent Agreement: Implicit Social Cognition on the Internet&apos;
 		}], 
 		
 		realstart : [{
-			inherit:&quot;instructions&quot;, name:&quot;realstart&quot;, templateUrl: &quot;intro.jst&quot;, title:&quot;Introduction&quot;,
-			piTemplate:true, header:&quot;Welcome&quot;
+			inherit:&apos;instructions&apos;, name:&apos;realstart&apos;, templateUrl: &apos;intro.jst&apos;, title:&apos;Introduction&apos;,
+			piTemplate:true, header:&apos;Welcome&apos;
 		}], 
 		
 		selectq : [{
-			type: &quot;quest&quot;, name: &quot;selectq&quot;, scriptUrl: &quot;selectq.js&quot;
+			type: &apos;quest&apos;, name: &apos;selectq&apos;, scriptUrl: &apos;selectq.js&apos;
 		}],
 
 		instnfc : [{
-			inherit:&quot;instructions&quot;, name:&quot;instnfc&quot;, templateUrl: &quot;instnfc.jst&quot;, title:&quot;Questionnaire&quot;,
-			piTemplate:true, header:&quot;Instructions&quot;
+			inherit:&apos;instructions&apos;, name:&apos;instnfc&apos;, templateUrl: &apos;instnfc.jst&apos;, title:&apos;Questionnaire&apos;,
+			piTemplate:true, header:&apos;Instructions&apos;
 		}], 
 		nfc : [{
-			type: &quot;quest&quot;, name: &quot;nfc&quot;, scriptUrl: &quot;nfc.js&quot;
+			type: &apos;quest&apos;, name: &apos;nfc&apos;, scriptUrl: &apos;nfc.js&apos;
 		}],
 
 
 		userprevresp : [{
-			type: &quot;quest&quot;, name: &quot;userprevresp&quot;, scriptUrl: &quot;userprevresp.js&quot;
+			type: &apos;quest&apos;, name: &apos;userprevresp&apos;, scriptUrl: &apos;userprevresp.js&apos;
 		}],
 
 		dependency : [{
-			type: &quot;quest&quot;, name: &quot;dependency&quot;, scriptUrl: &quot;dependency.js&quot;
+			type: &apos;quest&apos;, name: &apos;dependency&apos;, scriptUrl: &apos;dependency.js&apos;
 		}],
 		
 		openended : [{
-			type: &quot;quest&quot;, name: &quot;openended&quot;, scriptUrl: &quot;openended.js&quot;
+			type: &apos;quest&apos;, name: &apos;openended&apos;, scriptUrl: &apos;openended.js&apos;
 		}],
 		openendedlong : [{
-			type: &quot;quest&quot;, name: &quot;openendedlong&quot;, scriptUrl: &quot;openendedlong.js&quot;
+			type: &apos;quest&apos;, name: &apos;openendedlong&apos;, scriptUrl: &apos;openendedlong.js&apos;
 		}],
 
 		instgrid : [{
-			inherit:&quot;instructions&quot;, name:&quot;instgrid&quot;, templateUrl: &quot;instgrid.jst&quot;, title:&quot;Questionnaire&quot;,
-			piTemplate:true, header:&quot;Instructions&quot;
+			inherit:&apos;instructions&apos;, name:&apos;instgrid&apos;, templateUrl: &apos;instgrid.jst&apos;, title:&apos;Questionnaire&apos;,
+			piTemplate:true, header:&apos;Instructions&apos;
 		}], 
 		grid : [{
-			type: &quot;quest&quot;, name: &quot;grid&quot;, scriptUrl: &quot;grid.js&quot;
+			type: &apos;quest&apos;, name: &apos;grid&apos;, scriptUrl: &apos;grid.js&apos;
 		}],
 
 		slider : [{
-			type: &quot;quest&quot;, name: &quot;slider&quot;, scriptUrl: &quot;slider.js&quot;
+			type: &apos;quest&apos;, name: &apos;slider&apos;, scriptUrl: &apos;slider.js&apos;
 		}],
 		buttons : [{
-			type: &quot;quest&quot;, name: &quot;buttons&quot;, scriptUrl: &quot;buttons.js&quot;
+			type: &apos;quest&apos;, name: &apos;buttons&apos;, scriptUrl: &apos;buttons.js&apos;
 		}],
 		buttonsadvanced : [{
-			type: &quot;quest&quot;, name: &quot;buttonsadvanced&quot;, scriptUrl: &quot;buttonsadvanced.js&quot;
+			type: &apos;quest&apos;, name: &apos;buttonsadvanced&apos;, scriptUrl: &apos;buttonsadvanced.js&apos;
 		}],
 		buttonsonepage : [{
-			type: &quot;quest&quot;, name: &quot;buttonsonepage&quot;, scriptUrl: &quot;buttonsonepage.js&quot;
+			type: &apos;quest&apos;, name: &apos;buttonsonepage&apos;, scriptUrl: &apos;buttonsonepage.js&apos;
 		}],
 
 		instimages : [{
-			inherit:&quot;instructions&quot;, name:&quot;instimages&quot;, templateUrl: &quot;instimages.jst&quot;, title:&quot;Image Rating&quot;,
-			piTemplate:true, header:&quot;Instructions&quot;
+			inherit:&apos;instructions&apos;, name:&apos;instimages&apos;, templateUrl: &apos;instimages.jst&apos;, title:&apos;Image Rating&apos;,
+			piTemplate:true, header:&apos;Instructions&apos;
 		}], 
 		rateimages : [{
-			type: &quot;quest&quot;, name: &quot;rateimages&quot;, scriptUrl: &quot;rateimages.js&quot;
+			type: &apos;quest&apos;, name: &apos;rateimages&apos;, scriptUrl: &apos;rateimages.js&apos;
 		}],
 		rateimagessizes : [{
-			type: &quot;quest&quot;, name: &quot;rateimagessizes&quot;, scriptUrl: &quot;rateimagessizes.js&quot;
+			type: &apos;quest&apos;, name: &apos;rateimagessizes&apos;, scriptUrl: &apos;rateimagessizes.js&apos;
 		}]
 	});
 
 	
 
 	API.addSequence([
-		{inherit:&quot;consent&quot;},
-		{inherit:&quot;realstart&quot;},
-		{inherit:&quot;selectq&quot;},
+		{inherit:&apos;consent&apos;},
+		{inherit:&apos;realstart&apos;},
+		{inherit:&apos;selectq&apos;},
 		
-		//Select one questionnaire, based on the user&quot;s response in selectq.
+		//Select one questionnaire, based on the user&apos;s response in selectq.
 		{
-			mixer : &quot;multiBranch&quot;,
+			mixer : &apos;multiBranch&apos;,
 			branches : 
 			[
 				{
-					conditions : [{compare:&quot;global.selectq.questions.selectq.response&quot;, to:&quot;basicScale&quot;}],
-					data : [{inherit:&quot;instnfc&quot;}, {inherit:&quot;nfc&quot;}]
+					conditions : [{compare:&apos;global.selectq.questions.selectq.response&apos;, to:&apos;basicScale&apos;}],
+					data : [{inherit:&apos;instnfc&apos;}, {inherit:&apos;nfc&apos;}]
 				},
 				{
-					conditions : [{compare:&quot;global.selectq.questions.selectq.response&quot;, to:&quot;rateimages&quot;}],
-					data : [{inherit:&quot;instimages&quot;}, {inherit:&quot;rateimages&quot;}]
+					conditions : [{compare:&apos;global.selectq.questions.selectq.response&apos;, to:&apos;rateimages&apos;}],
+					data : [{inherit:&apos;instimages&apos;}, {inherit:&apos;rateimages&apos;}]
 				},
 				{
-					conditions : [{compare:&quot;global.selectq.questions.selectq.response&quot;, to:&quot;rateimagessizes&quot;}],
-					data : [{inherit:&quot;instimages&quot;}, {inherit:&quot;rateimagessizes&quot;}]
+					conditions : [{compare:&apos;global.selectq.questions.selectq.response&apos;, to:&apos;rateimagessizes&apos;}],
+					data : [{inherit:&apos;instimages&apos;}, {inherit:&apos;rateimagessizes&apos;}]
 				},
 				{
-					conditions : [{compare:&quot;global.selectq.questions.selectq.response&quot;, to:&quot;buttons&quot;}],
-					data : [{inherit:&quot;instgrid&quot;}, {inherit:&quot;buttons&quot;}]
+					conditions : [{compare:&apos;global.selectq.questions.selectq.response&apos;, to:&apos;buttons&apos;}],
+					data : [{inherit:&apos;instgrid&apos;}, {inherit:&apos;buttons&apos;}]
 				},
 				{
-					conditions : [{compare:&quot;global.selectq.questions.selectq.response&quot;, to:&quot;buttonsadvanced&quot;}],
-					data : [{inherit:&quot;instgrid&quot;}, {inherit:&quot;buttonsadvanced&quot;}]
+					conditions : [{compare:&apos;global.selectq.questions.selectq.response&apos;, to:&apos;buttonsadvanced&apos;}],
+					data : [{inherit:&apos;instgrid&apos;}, {inherit:&apos;buttonsadvanced&apos;}]
 				},
 				{
-					conditions : [{compare:&quot;global.selectq.questions.selectq.response&quot;, to:&quot;buttonsonepage&quot;}],
-					data : [{inherit:&quot;instgrid&quot;}, {inherit:&quot;buttonsonepage&quot;}]
+					conditions : [{compare:&apos;global.selectq.questions.selectq.response&apos;, to:&apos;buttonsonepage&apos;}],
+					data : [{inherit:&apos;instgrid&apos;}, {inherit:&apos;buttonsonepage&apos;}]
 				},
 				{
-					conditions : [{compare:&quot;global.selectq.questions.selectq.response&quot;, to:&quot;slider&quot;}],
-					data : [{inherit:&quot;instgrid&quot;}, {inherit:&quot;slider&quot;}]
+					conditions : [{compare:&apos;global.selectq.questions.selectq.response&apos;, to:&apos;slider&apos;}],
+					data : [{inherit:&apos;instgrid&apos;}, {inherit:&apos;slider&apos;}]
 				},
 				{
-					conditions : [{compare:&quot;global.selectq.questions.selectq.response&quot;, to:&quot;grid&quot;}],
-					data : [{inherit:&quot;instgrid&quot;}, {inherit:&quot;grid&quot;}]
+					conditions : [{compare:&apos;global.selectq.questions.selectq.response&apos;, to:&apos;grid&apos;}],
+					data : [{inherit:&apos;instgrid&apos;}, {inherit:&apos;grid&apos;}]
 				},
 				{
-					conditions : [{compare:&quot;global.selectq.questions.selectq.response&quot;, to:&quot;userprevresp&quot;}],
-					data : [{inherit:&quot;userprevresp&quot;}]
+					conditions : [{compare:&apos;global.selectq.questions.selectq.response&apos;, to:&apos;userprevresp&apos;}],
+					data : [{inherit:&apos;userprevresp&apos;}]
 				},
 				{
-					conditions : [{compare:&quot;global.selectq.questions.selectq.response&quot;, to:&quot;dependency&quot;}],
-					data : [{inherit:&quot;dependency&quot;}]
+					conditions : [{compare:&apos;global.selectq.questions.selectq.response&apos;, to:&apos;dependency&apos;}],
+					data : [{inherit:&apos;dependency&apos;}]
 				},
 				{
-					conditions : [{compare:&quot;global.selectq.questions.selectq.response&quot;, to:&quot;openended&quot;}],
-					data : [{inherit:&quot;openended&quot;}]
+					conditions : [{compare:&apos;global.selectq.questions.selectq.response&apos;, to:&apos;openended&apos;}],
+					data : [{inherit:&apos;openended&apos;}]
 				},
 				{
-					conditions : [{compare:&quot;global.selectq.questions.selectq.response&quot;, to:&quot;openendedlong&quot;}],
-					data : [{inherit:&quot;openendedlong&quot;}]
+					conditions : [{compare:&apos;global.selectq.questions.selectq.response&apos;, to:&apos;openendedlong&apos;}],
+					data : [{inherit:&apos;openendedlong&apos;}]
 				}
 			]
 		},
 		
 		{			
-			inherit:&quot;instructions&quot;, name:&quot;end&quot;, title:&quot;THE END&quot;, 
-			piTemplate:true, header:&quot;THE END&quot;,  template: &quot;&lt;div&gt;&lt;br/&gt;You chose &lt;%=global.selectq.questions.selectq.response%&gt;, and now we are DONE.&lt;/div&gt;&quot;
+			inherit:&apos;instructions&apos;, name:&apos;end&apos;, title:&apos;THE END&apos;, 
+			piTemplate:true, header:&apos;THE END&apos;,  template: &apos;&lt;div&gt;&lt;br/&gt;You chose &lt;%=global.selectq.questions.selectq.response%&gt;, and now we are DONE.&lt;/div&gt;&apos;
 		}
 	]);
 

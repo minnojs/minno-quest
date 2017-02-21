@@ -86,60 +86,60 @@
         <a class="activate-button">Activate</a>
         <a class="download-button" href="slider.js" download>Download</a>
     </div>
-    <div class="editor">define([&quot;questAPI&quot;], function(Quest){
+    <div class="editor">define([&apos;questAPI&apos;], function(Quest){
 	var API = new Quest();
 
 	// ### Questions
-	API.addQuestionsSet(&quot;basicSlider&quot;,
+	API.addQuestionsSet(&apos;basicSlider&apos;,
 	{
-		type: &quot;slider&quot;,
+		type: &apos;slider&apos;,
 		steps:201, min: -100, max:100,
 		hidePips:true,
 		//showTicks:true,
 		highlight:true,
 		required:true,
-		maxWidth:&quot;800px&quot;,
+		maxWidth:&apos;800px&apos;,
 		errorMsg: {
-			required: "Please select an answer, or click &quot;decline to answer&quot;"
+			required: &quot;Please select an answer, or click &apos;decline to answer&apos;&quot;
 		},
-		leftLabelCss : {color:&quot;#8b2500&quot;,&quot;font-size&quot;:&quot;1.5em&quot;},
-		rightLabelCss: {color:&quot;#8b2500&quot;,&quot;font-size&quot;:&quot;1.5em&quot;},
-		help: &quot;&lt;%= pagesMeta.number &lt; 3 %&gt;&quot;,
-		helpText: &quot;Click on the gray line to indicate your judgment. After clicking the line, you can slide the circle to choose the exact judgment.&quot;,
-		labels : [&quot;Extremely negative&quot;, &quot;Neutral&quot;, &quot;Extreme positive&quot;]
+		leftLabelCss : {color:&apos;#8b2500&apos;,&apos;font-size&apos;:&apos;1.5em&apos;},
+		rightLabelCss: {color:&apos;#8b2500&apos;,&apos;font-size&apos;:&apos;1.5em&apos;},
+		help: &apos;&lt;%= pagesMeta.number &lt; 3 %&gt;&apos;,
+		helpText: &apos;Click on the gray line to indicate your judgment. After clicking the line, you can slide the circle to choose the exact judgment.&apos;,
+		labels : [&apos;Extremely negative&apos;, &apos;Neutral&apos;, &apos;Extreme positive&apos;]
 	});
 
-	API.addQuestionsSet(&quot;people&quot;,
+	API.addQuestionsSet(&apos;people&apos;,
 	[
 		{
-			inherit : &quot;basicSlider&quot;,
-			name : &quot;Obama&quot;,
-			stem : &quot;How positive or negative are your feelings toward Barack Obama?&quot;
+			inherit : &apos;basicSlider&apos;,
+			name : &apos;Obama&apos;,
+			stem : &apos;How positive or negative are your feelings toward Barack Obama?&apos;
 		},
 		{
-			inherit : &quot;basicSlider&quot;,
-			name : &quot;Beyonce&quot;,
-			stem : &quot;How positive or negative are your feelings toward Beyonce Knowles?&quot;
+			inherit : &apos;basicSlider&apos;,
+			name : &apos;Beyonce&apos;,
+			stem : &apos;How positive or negative are your feelings toward Beyonce Knowles?&apos;
 		},
 		{
-			inherit : &quot;basicSlider&quot;,
-			name : &quot;Colbert&quot;,
-			stem : &quot;How positive or negative are your feelings toward Stephen Colbert?&quot;
+			inherit : &apos;basicSlider&apos;,
+			name : &apos;Colbert&apos;,
+			stem : &apos;How positive or negative are your feelings toward Stephen Colbert?&apos;
 		},
 		{
-			inherit : &quot;basicSlider&quot;,
-			name : &quot;Letterman&quot;,
-			stem : &quot;How positive or negative are your feelings toward David Letterman?&quot;
+			inherit : &apos;basicSlider&apos;,
+			name : &apos;Letterman&apos;,
+			stem : &apos;How positive or negative are your feelings toward David Letterman?&apos;
 		}
 	]);
 
 	// ### Pages
-	API.addPagesSet(&quot;basicPage&quot;,
+	API.addPagesSet(&apos;basicPage&apos;,
 	{
-		progressBar: &quot;&lt;%= pagesMeta.number %&gt; out of 4&quot;,
-		header: &quot;How positive or negative are your feelings toward the animal presented below?&quot;,
-		headerStyle : {&quot;font-size&quot;:&quot;1em&quot;},
-		questions : {inherit:{set:&quot;people&quot;, type:&quot;exRandom&quot;}}, //One question in the page, selected randomly (exhaustive)
+		progressBar: &apos;&lt;%= pagesMeta.number %&gt; out of 4&apos;,
+		header: &apos;How positive or negative are your feelings toward the animal presented below?&apos;,
+		headerStyle : {&apos;font-size&apos;:&apos;1em&apos;},
+		questions : {inherit:{set:&apos;people&apos;, type:&apos;exRandom&apos;}}, //One question in the page, selected randomly (exhaustive)
 		v1style:2,
 		decline:true,
 		numbered: false
@@ -149,17 +149,17 @@
 	API.addSequence(
 	[
 		{
-			mixer : &quot;repeat&quot;,
+			mixer : &apos;repeat&apos;,
 			times : 4,
 			data :
 			[
-				{inherit : &quot;basicPage&quot;}
+				{inherit : &apos;basicPage&apos;}
 			]
 		}
 	]);
 
 	/**
-	Return the script to piquest&quot;s god, or something of that sort.
+	Return the script to piquest&apos;s god, or something of that sort.
 	**/
 	return API.script;
 });

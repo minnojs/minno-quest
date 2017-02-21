@@ -93,24 +93,24 @@
 // so that any branching mixers will be branched according to the environment as it is when the mixer is reached.
 // If you want to delay the branching until it is reached, simply wrap it within a `wrapper` mixer.
 
-define([&quot;managerAPI&quot;], function(Manager){
+define([&apos;managerAPI&apos;], function(Manager){
 
   var API = new Manager();
 
   API.addSequence([
     {
-      mixer:&quot;repeat&quot;, // declare the mixer
+      mixer:&apos;repeat&apos;, // declare the mixer
       times: 3, // how many times to repeat these tasks
       data:[ // a list of tasks to repeat
         {
-          type:&quot;message&quot;,
-          keys: &quot; &quot;,
-          template: &quot;Task 1&quot;
+          type:&apos;message&apos;,
+          keys: &apos; &apos;,
+          template: &apos;Task 1&apos;
         },
         {
-          type:&quot;message&quot;,
-          keys: &quot; &quot;,
-          template: &quot;Task 2&quot;
+          type:&apos;message&apos;,
+          keys: &apos; &apos;,
+          template: &apos;Task 2&apos;
         }
       ]
     }

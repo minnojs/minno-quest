@@ -94,27 +94,27 @@
     </div>
     <div class="editor">// When a set has several objects you may want to inherit a random object out of that set.
 // Note that you are not guaranteed that items will not be repeated when you randomly inherit (if that is what you want, use Exclusive Random: `exRandom`).
-define([&quot;managerAPI&quot;], function(Manager){
+define([&apos;managerAPI&apos;], function(Manager){
 
   var API = new Manager();
 
-  API.addTasksSet(&quot;default&quot;, [
+  API.addTasksSet(&apos;default&apos;, [
   	{
-  		type:&quot;message&quot;,
-  		keys: &quot; &quot;
+  		type:&apos;message&apos;,
+  		keys: &apos; &apos;
   	}
   ]);
 
-  API.addTasksSet(&quot;tasks&quot;,[
-    {inherit:&quot;default&quot;, template:&quot;Task 1&quot;},
-    {inherit:&quot;default&quot;, template:&quot;Task 2&quot;},
-    {inherit:&quot;default&quot;, template:&quot;Task 3&quot;}
+  API.addTasksSet(&apos;tasks&apos;,[
+    {inherit:&apos;default&apos;, template:&apos;Task 1&apos;},
+    {inherit:&apos;default&apos;, template:&apos;Task 2&apos;},
+    {inherit:&apos;default&apos;, template:&apos;Task 3&apos;}
   ]);
 
   API.addSequence([
-    {inherit:&quot;tasks&quot;}, // this is a shortcut that is equivalent to the full inherit random object.
-    {inherit:{set:&quot;tasks&quot;, type:&quot;random&quot;}},
-    {inherit:{set:&quot;tasks&quot;, type:&quot;random&quot;}}
+    {inherit:&apos;tasks&apos;}, // this is a shortcut that is equivalent to the full inherit random object.
+    {inherit:{set:&apos;tasks&apos;, type:&apos;random&apos;}},
+    {inherit:{set:&apos;tasks&apos;, type:&apos;random&apos;}}
   ]);
 
   return API.script;

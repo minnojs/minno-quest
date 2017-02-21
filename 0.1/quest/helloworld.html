@@ -100,7 +100,7 @@
 // The opening section of each script is always more or less the same.
 // We create the wrapper for the script (`define`), and create a new instance of a questionnaire.
 
-define([&quot;questAPI&quot;], function(Quest){
+define([&apos;questAPI&apos;], function(Quest){
     var API = new Quest();
 
     // ### The sequence
@@ -111,19 +111,19 @@ define([&quot;questAPI&quot;], function(Quest){
     API.addSequence([
         // Settings for the page environment
         { // page begins
-            header: &quot;Hello world!&quot;,
+            header: &apos;Hello world!&apos;,
             decline: true,
-            declineText: &quot;I prefer to keep this information to myself&quot;,
+            declineText: &apos;I prefer to keep this information to myself&apos;,
             questions: [
                 { // question begins
-                    type: &quot;selectOne&quot;,
-                    stem: &quot;When you say good morning, what do you mean?&quot;,
+                    type: &apos;selectOne&apos;,
+                    stem: &apos;When you say good morning, what do you mean?&apos;,
                     answers: [
-                        &quot;Do you wish me a good morning&quot;,
-                        &quot;Or mean that it is a good morning whether I want it or not&quot;,
-                        &quot;Or that you feel good this morning&quot;,
-                        &quot;Or that it is a morning to be good on&quot;,
-                        &quot;All of them at once&quot;
+                        &apos;Do you wish me a good morning&apos;,
+                        &apos;Or mean that it is a good morning whether I want it or not&apos;,
+                        &apos;Or that you feel good this morning&apos;,
+                        &apos;Or that it is a morning to be good on&apos;,
+                        &apos;All of them at once&apos;
                     ]
                 } // question ends
             ]

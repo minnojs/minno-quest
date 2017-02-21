@@ -96,20 +96,20 @@
 // It allows you to create a slider that allows the user to pick a response along a preassigned range.
 //
 // Full documentation is right [here](../quest/API.html#slider).
-define([&quot;questAPI&quot;], function(Quest){
+define([&apos;questAPI&apos;], function(Quest){
     var API = new Quest();
 
     API.addSequence([
         { // page begins
-            header: &quot;Slider questions&quot;,
+            header: &apos;Slider questions&apos;,
             questions: [
                 {
-                    type: &quot;slider&quot;,
-                    stem: &quot;Sliders are exremely useful.&quot;,
+                    type: &apos;slider&apos;,
+                    stem: &apos;Sliders are exremely useful.&apos;,
                     min:1,
                     max:7,
                     steps:7,
-                    labels: [&quot;Strongly Agree&quot;, &quot;Neutral&quot;, &quot;Strongly Disagree&quot;]
+                    labels: [&apos;Strongly Agree&apos;, &apos;Neutral&apos;, &apos;Strongly Disagree&apos;]
                 }
             ]
         } // page ends

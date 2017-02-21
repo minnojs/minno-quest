@@ -88,66 +88,66 @@
         <a class="activate-button">Activate</a>
         <a class="download-button" href="buttonsOnePage.js" download>Download</a>
     </div>
-    <div class="editor">define([&quot;questAPI&quot;], function(Quest){
+    <div class="editor">define([&apos;questAPI&apos;], function(Quest){
 	var API = new Quest();
 
 	// ### Questions
-	API.addQuestionsSet(&quot;basicSelect&quot;,
+	API.addQuestionsSet(&apos;basicSelect&apos;,
 	{
-		type: &quot;selectOne&quot;,
+		type: &apos;selectOne&apos;,
 		autoSubmit:false,
 		numericValues:true,
 		required:false,
-		style:&quot;multiButtons&quot;,
+		style:&apos;multiButtons&apos;,
 		answers : [
-			&quot;1 - Extremely negative&quot;,
-			&quot;2&quot;,
-			&quot;3&quot;,
-			&quot;4&quot;,
-			&quot;5&quot;,
-			&quot;6&quot;,
-			&quot;7&quot;,
-			&quot;8&quot;,
-			&quot;9 - Extremely positive&quot;
+			&apos;1 - Extremely negative&apos;,
+			&apos;2&apos;,
+			&apos;3&apos;,
+			&apos;4&apos;,
+			&apos;5&apos;,
+			&apos;6&apos;,
+			&apos;7&apos;,
+			&apos;8&apos;,
+			&apos;9 - Extremely positive&apos;
 		]
 	});
 
-	API.addQuestionsSet(&quot;people&quot;,
+	API.addQuestionsSet(&apos;people&apos;,
 	[
 		{
-			inherit : &quot;basicSelect&quot;,
-			name : &quot;Obama&quot;,
-			stem : &quot;Barack Obama&quot;
+			inherit : &apos;basicSelect&apos;,
+			name : &apos;Obama&apos;,
+			stem : &apos;Barack Obama&apos;
 		},
 		{
-			inherit : &quot;basicSelect&quot;,
-			name : &quot;Beyonce&quot;,
-			stem : &quot;Beyonce Knowles&quot;
+			inherit : &apos;basicSelect&apos;,
+			name : &apos;Beyonce&apos;,
+			stem : &apos;Beyonce Knowles&apos;
 		},
 		{
-			inherit : &quot;basicSelect&quot;,
-			name : &quot;Colbert&quot;,
-			stem : &quot;Stephen Colbert&quot;
+			inherit : &apos;basicSelect&apos;,
+			name : &apos;Colbert&apos;,
+			stem : &apos;Stephen Colbert&apos;
 		},
 		{
-			inherit : &quot;basicSelect&quot;,
-			name : &quot;Letterman&quot;,
-			stem : &quot;David Letterman&quot;
+			inherit : &apos;basicSelect&apos;,
+			name : &apos;Letterman&apos;,
+			stem : &apos;David Letterman&apos;
 		}
 	]);
 
 	// ### Pages
 	// Shows all four questions, but the order is random.
-	API.addPagesSet(&quot;basicPage&quot;,
+	API.addPagesSet(&apos;basicPage&apos;,
 	{
-		progressBar: &quot;&lt;%= pagesMeta.number %&gt; out of 4&quot;,
-		header: &quot;How positive or negative are your feelings toward the people listed below?&quot;,
-		headerStyle : {&quot;font-size&quot;:&quot;1em&quot;},
+		progressBar: &apos;&lt;%= pagesMeta.number %&gt; out of 4&apos;,
+		header: &apos;How positive or negative are your feelings toward the people listed below?&apos;,
+		headerStyle : {&apos;font-size&apos;:&apos;1em&apos;},
 		questions : {
-			mixer : &quot;repeat&quot;,
+			mixer : &apos;repeat&apos;,
 			times : 4,
 			data : [
-				{inherit:{set:&quot;people&quot;, type:&quot;exRandom&quot;}}
+				{inherit:{set:&apos;people&apos;, type:&apos;exRandom&apos;}}
 			]
 		},
 		v1style:2,
@@ -158,11 +158,11 @@
 	// ### Sequence
 	API.addSequence(
 	[
-		{inherit : &quot;basicPage&quot;}
+		{inherit : &apos;basicPage&apos;}
 	]);
 
 	/**
-	Return the script to piquest&quot;s god, or something of that sort.
+	Return the script to piquest&apos;s god, or something of that sort.
 	**/
 	return API.script;
 });
