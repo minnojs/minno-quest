@@ -1,3 +1,19 @@
+<a name"0.1.11"></a>
+### 0.1.11 (2017-03-09)
+
+
+#### Bug Fixes
+
+* **gendocs:** install using npm ([b49b511c](https://github.com/ProjectImplicit/PIquest/commit/b49b511c))
+* **sequencer:** merge objects now overides parent values ([a0852877](https://github.com/ProjectImplicit/PIquest/commit/a0852877))
+
+
+#### Features
+
+* **PI:** messages.isTouch ([ac4f6ada](https://github.com/ProjectImplicit/PIquest/commit/ac4f6ada))
+* **docs:** move docs to main dir ([df70d623](https://github.com/ProjectImplicit/PIquest/commit/df70d623))
+
+
 <a name"0.1.10"></a>
 ### 0.1.10 (2017-01-05)
 
