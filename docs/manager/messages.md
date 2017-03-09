@@ -83,6 +83,7 @@ footer          | Footer text.
 buttonText      | Text for the proceed button (Defaults to: Click Here or press the space button to Proceed).
 buttonHide      | Do not display the button at all (use this as a final page or for messages that use only the `keys` advance method).
 demo            | If piTemplate is set to 'debrief', this property set to `true` will activate the demo version of the debrief.
+isTouch         | In the debriefing page, if demo is set to true, use the url for touch studies.
 noDonate        | (true or false) Do not show the donate button.
 
 The project implicit template supports a debrief template activated by setting `piTemplate` to 'debrief'. If it is activated, there are two additional functions exposed from within the template.
