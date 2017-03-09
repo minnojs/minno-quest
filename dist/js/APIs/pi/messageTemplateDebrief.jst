@@ -47,7 +47,7 @@
             <% } %>
 
 			<% if (task.demo) { %>
-				<a href="/implicit/selectatest.html " class="btn btn-default">Take another test</a>
+				<a href="<%= task.isTouch ? '/implicit/selectatouchtest.html' : '/implicit/selectatest.html;%>" class="btn btn-default">Take another test</a>
 			<% } else { %>
 				<a href="/implicit/Assign" class="btn btn-default">Start next study</a>
 			<% } %>

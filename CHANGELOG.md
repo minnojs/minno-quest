@@ -1,3 +1,20 @@
+<a name"0.0.105"></a>
+### 0.0.105 (2017-03-09)
+
+
+#### Bug Fixes
+
+* **gendocs:** corrected pip version ([0971c405](https://github.com/ProjectImplicit/PIquest/commit/0971c405))
+* **selectOne:** focused buttons now have the corect color ([2913d040](https://github.com/ProjectImplicit/PIquest/commit/2913d040))
+* **sequencer:** merge objects now overides parent values ([8310838b](https://github.com/ProjectImplicit/PIquest/commit/8310838b))
+
+
+#### Features
+
+* **PI:** messages.isTouch ([7332c294](https://github.com/ProjectImplicit/PIquest/commit/7332c294))
+* **docs:** move docs to master ([bc986e93](https://github.com/ProjectImplicit/PIquest/commit/bc986e93))
+
+
 <a name"0.0.104"></a>
 ### 0.0.104 (2016-11-15)
 
