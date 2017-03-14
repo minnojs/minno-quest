@@ -1,3 +1,12 @@
+<a name"0.0.106"></a>
+### 0.0.106 (2017-03-14)
+
+
+#### Bug Fixes
+
+* **PI:** debrief error ([5b819534](https://github.com/ProjectImplicit/PIquest/commit/5b819534))
+
+
 <a name"0.0.105"></a>
 ### 0.0.105 (2017-03-09)
 
