@@ -1,3 +1,12 @@
+<a name"0.1.12"></a>
+### 0.1.12 (2017-03-14)
+
+
+#### Bug Fixes
+
+* **PI:** debrief error ([85a789a0](https://github.com/ProjectImplicit/PIquest/commit/85a789a0))
+
+
 <a name"0.1.11"></a>
 ### 0.1.11 (2017-03-09)
 
