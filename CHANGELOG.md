@@ -1,3 +1,12 @@
+<a name"0.0.107"></a>
+### 0.0.107 (2017-03-16)
+
+
+#### Bug Fixes
+
+* **PI:** showFeedback works correctly event if current is still set ([5b54fe43](https://github.com/ProjectImplicit/PIquest/commit/5b54fe43))
+
+
 <a name"0.0.106"></a>
 ### 0.0.106 (2017-03-14)
 
