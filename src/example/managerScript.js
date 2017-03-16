@@ -34,15 +34,17 @@ define(['managerAPI'], function(Manager){
 
 	API.addSequence([
 		{
-			script:function(done, managerBeforeUnload){
+			script:function(done, managerBeforeUnload, global){
 				managerBeforeUnload.deactivate();
-				done();}
+				done();
+                global.current = global.iat =  {feedback:'bam!'};
+            }
 		},
-		{
-			type:'quest',
-			name: 'first',
-			scriptUrl: 'questScript1.js'
-		},
+        {
+            type:'message',
+            piTemplate:'debrief',
+            template: '<%= showFeedback() %>'
+        },
         //{ type: 'quest', name: 'dotWidth', scriptUrl: '/test/dotwidth.js' },
         {
 			type: 'pip',

@@ -164,13 +164,13 @@ define(function(require){
 			exclude: []
 		});
 
+        if (!_.isArray(options.exclude)) { throw Error('showFeedback: Exclude must be an array'); }
+
 		var feedback = _(global)
 			.filter(function(task,taskName){
-				if (!_.isArray(options.exclude)) { throw Error('Exclude must be an array'); }
-				// make sure task is an object
-				// make sure feedback is defined
-				// make sure this task is not excluded
-				return _.isPlainObject(task) && !_.isUndefined(task[options.property]) && (_.indexOf(options.exclude,taskName) === -1);
+				var hasProperty =  _.isPlainObject(task) && !_.isUndefined(task[options.property]);
+                var notExcluded = (_.indexOf(options.exclude,taskName) === -1) && (taskName !== 'current');
+                return hasProperty && notExcluded;
 			})
 			.mapValues(function(task){
 				return options.pre + task[options.property] + options.post;
