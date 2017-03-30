@@ -1,3 +1,12 @@
+<a name"0.1.14"></a>
+### 0.1.14 (2017-03-30)
+
+
+#### Features
+
+* **perf:** data encode spinner, remove double requirejs ([cf12ab7d](https://github.com/ProjectImplicit/PIquest/commit/cf12ab7d))
+
+
 <a name"0.1.13"></a>
 ### 0.1.13 (2017-03-16)
 
