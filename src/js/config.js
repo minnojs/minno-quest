@@ -4,9 +4,7 @@ define(function(){
     // just make sure console is available
     // It prevents stuff from breaking
     var noop = function(){};
-    window.console || (window.console = {});
-    window.console.log || (window.console.log = noop);
-    window.console.warn || (window.console.warn = noop);
+    if (!window.console) window.console = {log:noop,info:noop,error:noop};
 
     require.config({
         // in order to catch IE errors
