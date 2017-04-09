@@ -3,12 +3,12 @@ define(function(require){
 	var _ = require('underscore');
 	var module = angular.module('pi.utils',[]);
 
-	module.service('piPreloader', require('./preloaderService'));
-	module.config(['$provide', function($provide){
-		$provide.decorator('piPreloader', require('./preloaderDecorator'));
-	}]);
+	// module.service('piPreloader', require('./preloaderService'));
+	// module.config(['$provide', function($provide){
+		// $provide.decorator('piPreloader', require('./preloaderDecorator'));
+	// }]);
 
-
+    module.value('piPreloadImages', require('./preloadImages'));
 
 	/**
 	 * Wrapper for angular invoke.
@@ -38,4 +38,29 @@ define(function(require){
 	}]);
 
 	return module;
+
+    /**
+     * preloadFn :: (data, cb) => SideEffect
+     * images :: [url]
+     **/
+    function preload(preloadFn, images){
+        var current = 0;
+        // start four load recursions so that we have max 4 preloaded in parralel
+        next();
+        next();
+        next();
+        next();
+
+        function next(){
+            if (current < images.length) preloadFn(images[current++], next);
+        }
+    }
+
+    function preloadImg(url, cb){
+        var img = new Image();	// create img object
+        img.onload = cb;
+        img.onerror = cb;
+        img.src = url;
+    }
+
 });

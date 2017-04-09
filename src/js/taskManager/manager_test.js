@@ -27,6 +27,8 @@ define(['require','./managerModule'], function(require){
 				$provide.value('managerCanvas', jasmine.createSpy('canvas').andCallFake(function(){
 					return (canvasOff = jasmine.createSpy('canvasOff'));
 				}));
+
+                $provide.value('piPreloadImages', jasmine.createSpy('preload'));
 			}));
 
 			beforeEach(inject(function($rootScope, managerService){
@@ -46,12 +48,10 @@ define(['require','./managerModule'], function(require){
 				expect(manager.sequence).toEqual(jasmine.any(managerSequence));
 			}));
 
-			it('should preload images', inject(function(piPreloader, managerService){
-				spyOn(piPreloader,'loadArr');
+			it('should preload images', inject(function(piPreloadImages, managerService){
 				var images = [1,2,3];
 				manager = managerService($scope, {settings:{preloadImages:images}});
-				expect(piPreloader.loadArr).toHaveBeenCalledWith('image',images);
-
+				expect(piPreloadImages).toHaveBeenCalledWith(images);
 			}));
 
 			it('should set title if it exists', inject(function($document,managerService){

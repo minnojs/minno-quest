@@ -103,7 +103,7 @@ define(function(require){
 		function setup($scope, settings){
 			var canvas = $injector.get('managerCanvas');
 			var $document = $injector.get('$document');
-			var preloader = $injector.get('piPreloader');
+			var preloadImages = $injector.get('piPreloadImages');
 			var beforeUnload = $injector.get('managerBeforeUnload');
 			var injectStyle = $injector.get('managerInjectStyle');
 			var rootElement = $injector.get('$rootElement');
@@ -122,7 +122,7 @@ define(function(require){
 			$scope.$on('$destroy', stylesOff);
 
 			// preload images
-			preloader.loadArr('image',settings.preloadImages || []);
+            preloadImages(settings.preloadImages || []);
 
 			// activate titles
 			if (settings.title){
@@ -133,7 +133,5 @@ define(function(require){
 		}
 	}
 
-
 	return managerService;
-
 });

@@ -2,6 +2,8 @@ define(['managerAPI'], function(Manager){
 
 	var API = new Manager();
 	API.addSettings('skin', '');
+    var images = Array(30).fill('http://placehold.it/120x120&text=image').map((v,i)=>v+i);
+	API.addSettings('preloadImages', images);
 
     API.addSettings('injectStyle', [
         '[pi-player] {position:fixed;left:0; right:0;}',
@@ -40,11 +42,6 @@ define(['managerAPI'], function(Manager){
                 global.current = global.iat =  {feedback:'bam!'};
             }
 		},
-        {
-            type:'message',
-            piTemplate:'debrief',
-            template: '<%= showFeedback() %>'
-        },
         //{ type: 'quest', name: 'dotWidth', scriptUrl: '/test/dotwidth.js' },
         {
 			type: 'pip',
