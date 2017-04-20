@@ -4941,13 +4941,13 @@ button.close {
     z-index: 99998;
     background: black;
     opacity: 0.3; }
-.default-skin [piq-page] .page-buttons .page-submit {
+.default-skin [piq-page] .page-buttons .page-submit, .demo-skin [piq-page] .page-buttons .page-submit {
   padding: 10px 0;
   font-size: 1.6em;
   line-height: 1.3333333;
   border-radius: 6px;
   width: 30%; }
-.default-skin [piq-page] .page-buttons .page-decline, .default-skin [piq-page] .page-buttons .page-prev {
+.default-skin [piq-page] .page-buttons .page-decline, .default-skin [piq-page] .page-buttons .page-prev, .demo-skin [piq-page] .page-buttons .page-decline, .demo-skin [piq-page] .page-buttons .page-prev {
   position: absolute;
   right: 15px;
   margin: 8px 0; }
