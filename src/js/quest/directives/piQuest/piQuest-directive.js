@@ -24,7 +24,7 @@ define(function (require) {
 		this.task = task;
 		this.timerSetup = timerSetup;
 
-		current.questions = {};
+		current.questions || (current.questions = {});
 
 		// create default context
 		defaultContext = {
