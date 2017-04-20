@@ -1,5 +1,5 @@
 // This is the default skin, we separatae it into a skin of its own so that some unusual effects can be easily separated out...
-.default-skin [piq-page] .page-buttons {
+.default-skin [piq-page] .page-buttons , .demo-skin [piq-page] .page-buttons {
 	.page-submit {
 		padding: 10px 0;
 		font-size: 1.6em;
