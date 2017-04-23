@@ -115,7 +115,7 @@ define(function(require){
                 document.body.insertBefore(message, document.body.firstChild);
             }
 
-            throw new Error('Failed to update server ("/implicit/PiManager/")');
+            throw new Error('Failed to update server');
         }
 	}
 

@@ -75,7 +75,7 @@ define(function(require){
 			});
 
 			// if activator returns a function use it to clean up the task
-			_.isFunction(destroy) && def.promise['finally'](destroy);
+			if (_.isFunction(destroy)) def.promise['finally'](destroy);
 
 			return def;
 		}
