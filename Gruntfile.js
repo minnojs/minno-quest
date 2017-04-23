@@ -80,22 +80,6 @@ module.exports = function (grunt) {
 			}
 		},
 
-		// Make sure code styles are up to par and there are no obvious mistakes
-		jshint: {
-			options: {
-				jshintrc: '.jshintrc',
-				reporter: require('jshint-stylish')
-			},
-			all: [
-				'Gruntfile.js',
-				'<%= settings.app %>/js/{,*/}*.js',
-				'!<%= settings.app %>/js/{,*/}*_test.js'
-			],
-			test: {
-				src: '<%= settings.app %>/js/{,*/}*_test.js'
-			}
-		},
-
 		// Empties folders to start fresh
 		clean: {
 			dist: {
@@ -227,7 +211,6 @@ module.exports = function (grunt) {
 	});
 
 	grunt.registerTask('default', [
-		//'newer:jshint',
 		'test'
 	]);
 };
