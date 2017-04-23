@@ -1,6 +1,6 @@
 {
   "name": "PIQuest",
-  "version": "0.0.107",
+  "version": "0.0.108",
   "license": "Apache-2.0",
   "scripts": {
     "test": "grunt test --sauce --report",
@@ -19,8 +19,11 @@
     "url": "https://github.com/ProjectImplicit/PIquest"
   },
   "minno": {
-      "activeVersions": ["0.0", "0.1"],
-      "timeVersion": "0.3"
+    "activeVersions": [
+      "0.0",
+      "0.1"
+    ],
+    "timeVersion": "0.3"
   },
   "description": "Project implicit Questionnaires",
   "devDependencies": {
