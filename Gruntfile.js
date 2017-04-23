@@ -14,30 +14,16 @@ module.exports = function (grunt) {
 	// Load grunt tasks automatically
 	require('load-grunt-tasks')(grunt);
 
-	// Time how long tasks take. Can help when optimizing build times
-	require('time-grunt')(grunt);
-
 	// Define the configuration for all the tasks
 	grunt.initConfig({
 
 		// get package information
 		pkg: grunt.file.readJSON('package.json'),
 
-		bump: {
-			// https://github.com/vojtajina/grunt-bump
-			options: {
-				files:			['package.json'],
-				commitMessage:	'chore: release v%VERSION%',
-				updateConfigs:	['pkg'],
-				commitFiles:	['package.json','CHANGELOG.md', 'dist/**/*', 'src/styles/main.css*'],
-				push: false
-			}
-		},
-
 		// Project settings
 		settings: {
 			// configurable paths
-			app: require('./bower.json').appPath || 'src',
+			app: 'src',
 			dist: 'dist',
 			banner: {
 				compact: '/*! <%= pkg.name %> <%= pkg.version %> (Custom Build) | <%= pkg.license %> */',
@@ -57,38 +43,6 @@ module.exports = function (grunt) {
 					' * See the License for the specific language governing permissions and\n' +
 					' * limitations under the License.\n' +
 					' */\n'
-			}
-		},
-
-		// Watches files for changes and runs tasks based on the changed files
-		watch: {
-			js: {
-				files: ['<%= settings.app %>/js/**/*.js'],
-				tasks: ['newer:jshint:all'],
-				options: {
-					livereload: true
-				}
-			},
-			jsTest: {
-				files: ['<%= settings.app %>/js/**/*_test.js'],
-				tasks: ['karma', 'newer:jshint:test']
-			},
-			styles: {
-				files: ['<%= settings.app %>/styles/{,*/}*.css'],
-				tasks: ['newer:copy:styles', 'autoprefixer']
-			},
-			gruntfile: {
-				files: ['Gruntfile.js']
-			},
-			livereload: {
-				options: {
-					livereload: '<%= connect.options.livereload %>'
-				},
-				files: [
-					'<%= settings.app %>/{,*/}*.html',
-					'.tmp/styles/{,*/}*.css',
-					'<%= settings.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
-				]
 			}
 		},
 
@@ -129,8 +83,7 @@ module.exports = function (grunt) {
 		// Make sure code styles are up to par and there are no obvious mistakes
 		jshint: {
 			options: {
-				jshintrc: '.jshintrc',
-				reporter: require('jshint-stylish')
+				jshintrc: '.jshintrc'
 			},
 			all: [
 				'Gruntfile.js',
@@ -155,13 +108,6 @@ module.exports = function (grunt) {
 				}]
 			},
 			server: '.tmp'
-		},
-
-		// Replace Google CDN references
-		cdnify: {
-			dist: {
-				html: ['<%= settings.dist %>/*.html']
-			}
 		},
 
 		// Copies remaining files to places other tasks can use
@@ -194,19 +140,6 @@ module.exports = function (grunt) {
 				dest: '.tmp/styles/',
 				src: '{,*/}*.css'
 			}
-		},
-
-		// Run some tasks in parallel to speed up the build process
-		concurrent: {
-			server: [
-				'copy:styles'
-			],
-			test: [
-				'copy:styles'
-			],
-			dist: [
-				'copy:styles'
-			]
 		},
 
 		// Test settings
@@ -247,82 +180,6 @@ module.exports = function (grunt) {
 			all: {
 				'pre-commit': 'default'
 			}
-		},
-
-		requirejs: {
-			compile:{
-				options : {
-					// Creates a dist folder with optimized js
-					dir: "dist",
-					appDir: '<%= settings.app %>',
-					baseUrl: 'js',
-					removeCombined: true,
-					generateSourceMaps: true,
-				    preserveLicenseComments: false,
-					optimize: 'uglify2',
-					// optimize:'none', // toggle this for fast optimized debuging
-					skipDirOptimize: true,
-
-					// Tells Require.js to look at main.js for all shim and path configurations
-					mainConfigFile: ['<%= settings.app %>/js/config.js'],
-
-					fileExclusionRegExp: /(\.scss|\.md|_test\.js)$|^example/,
-					paths: {
-						// Libs
-						jquery: 'empty:'
-					},
-
-					packages:[
-						{
-							name: 'pipScorer',
-							location: '../../bower_components/PIPlayer/src/js/extensions/dscore',
-							main: 'Scorer'
-						}
-					],
-
-					modules: [
-						{
-							name: 'bootstrap',
-							include: ['app','pipScorer', 'pipAPI','questAPI','managerAPI'],
-							override: {
-								map: {
-									'*': {
-										pipAPI: 'APIs/pipAPI',
-										questAPI: 'APIs/questAPI',
-										managerAPI: 'APIs/managerAPI'
-									}
-								}
-							}
-						},
-						{
-							name: 'pibootstrap',
-							include: ['app','pipScorer', 'pipAPI','questAPI','managerAPI'],
-							override: {
-								map: {
-									'*': {
-										pipAPI: 'APIs/PIpipAPI',
-										questAPI: 'APIs/PIquestAPI',
-										managerAPI: 'APIs/PImanagerAPI'
-									}
-								}
-							}
-						}
-					]
-				}
-			}
-		},
-
-		sass: {
-			options: {
-				includePaths: ['bower_components/bootstrap-sass-official/assets/stylesheets/', 'bower_components/'],
-				sourceMap: true,
-				outputStyle: 'compressed'
-
-			},
-			dist: {
-				files: {'src/styles/main.css':'src/styles/main.scss'}
-
-			}
 		}
 	});
 
@@ -334,24 +191,15 @@ module.exports = function (grunt) {
 
 		grunt.task.run([
 			'clean:server',
-			'concurrent:server',
+            'copy:styles',
 			'connect:livereload',
 			'watch:jsTest'
 		]);
 	});
 
-	grunt.registerTask('version', 'Advancing version', function(type){
-		grunt.task.run([
-			"bump:" + (type || 'patch') + ":bump-only",
-			'build',
-			'changelog',
-			'bump-commit'
-		]);
-	});
-
 	grunt.registerTask('test', [
 		'clean:server',
-		'concurrent:test',
+        'copy:styles',
 		'connect:test',
 		'karma:unit'
 	]);
@@ -359,7 +207,7 @@ module.exports = function (grunt) {
 	grunt.registerTask('test','Running tests', function(){
 		var tasks = [
 			'clean:server',
-			'concurrent:test',
+            'copy:styles',
 			'connect:test',
 			'karma:unit'
 		];
@@ -377,13 +225,5 @@ module.exports = function (grunt) {
 		grunt.task.run(tasks);
 	});
 
-	grunt.registerTask('build', [
-		'sass',
-		'requirejs'
-	]);
-
-	grunt.registerTask('default', [
-		//'newer:jshint',
-		'test'
-	]);
+	grunt.registerTask('default', [ 'test' ]);
 };
