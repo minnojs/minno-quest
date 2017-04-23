@@ -94,7 +94,7 @@ if(randomStudy!=null)
 
 	<body id="pi-app">
         <% if (org.uva.Implicit.IS_PRODUCTION == "false") {%>
-            <div id="dev-message" class="alert alert-success alert-dismissible" style="position:fixed;z-index:999;">
+            <div id="dev-message" class="alert alert-success alert-dismissible" style="position:fixed;bottom:0;padding:5px 30px 5px 5px;z-index:999;">
                 <button id="dismiss-message" type="button" class="close">
                     <span>&times;</span>
                 </button>
