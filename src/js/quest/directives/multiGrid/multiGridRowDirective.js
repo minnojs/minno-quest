@@ -74,7 +74,7 @@ define(function (require) {
                     function fitsPattern(column, index){
                         var val = value[index];
                         if (column.type !== 'input' || !column.pattern) return true;
-                        if (_.isRegExp(val) || _.isString(val)){
+                        if (_.isNumber(val) || _.isString(val)){
                             return (new RegExp(column.pattern)).test(val);
                         } 
                         else return false;
