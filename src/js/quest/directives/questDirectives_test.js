@@ -47,9 +47,12 @@ define(['angular','./questDirectivesModule'], function(angular){
 		});
 
 		it('should log a unique serial number for each question', inject(function($rootScope){
-			$rootScope.current.questions = {a:{}, b:{}};
 			compile({name:123});
-			expect(scope.ctrl.log.serial).toBe(2);
+			expect(log.serial).toBe(0);
+            delete scope.current.logObj; // remove old log so that a new one is created
+
+			compile({name:234});
+			expect(log.serial).toBe(1);
 		}));
 
 		describe(': initialize log', function(){

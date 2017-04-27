@@ -20,7 +20,7 @@ define(function (require) {
 				scope.model = ngModel;
                 scope.columns = scope.$parent.columns
                     .map(function(column, index){
-                        return _.get(scope, 'row.overwrite[' + index + ']') || column;
+                        return _.get(scope, 'row.overwrite[' + index + ']',column) ;
                     })
                     .map(function setType(column){
                         column.hasOwnProperty('type') || (column.type = 'checkbox');

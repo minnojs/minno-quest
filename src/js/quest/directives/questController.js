@@ -6,8 +6,8 @@
 define(function(require){
 	var _ = require('underscore');
 
-	questController.$inject = ['$scope', 'timerStopper', '$parse', '$attrs','piConsole', 'piInvoke', '$rootScope'];
-	function questController($scope, Stopper, $parse, $attr, piConsole, invoke, $rootScope){
+	questController.$inject = ['$scope', 'timerStopper', '$parse', '$attrs','piConsole', 'piInvoke', '$rootScope','questGuid'];
+	function questController($scope, Stopper, $parse, $attr, piConsole, invoke, $rootScope,guid){
 		var self = this;
 		var log;
 		var data;
@@ -71,7 +71,7 @@ define(function(require){
 				log = {};
 				ngModelGet.assign($scope.$parent, log);
 			} else {
-				piConsole(['question']).warn('This question has already been in use: "' + log.name + '"');
+                piConsole(['question']).warn('This question has already been in use: "' + log.name + '"');
 			}
 
 			if (!data.name){
@@ -84,11 +84,7 @@ define(function(require){
 			_.defaults(log,{
 				name: data.name,
 				response: dfltValue,
-				// @TODO: this is a bit fragile and primitive.
-				// besides, who says this is where "current" will be...
-				// we should probably create a unique ID service of some sort...
-				// maybe just grab it off of rootscope
-				serial: _.size($rootScope.current && $rootScope.current.questions)
+				serial: guid()
 			});
 
 			$scope.response = ngModel.$viewValue = log.response;

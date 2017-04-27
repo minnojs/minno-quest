@@ -13,6 +13,7 @@ define(function(require){
 	]);
 
 	module.controller('questController', require('./questController'));
+	module.factory('questGuid', require('./guid'));
 	module.directive('piQuest', require('./piQuest/piQuest-directive'));
 	module.directive('piqPage', require('./piQuest/piqPage-directive'));
 	module.directive('questWrapper', require('./wrapper/wrapper-directive'));
