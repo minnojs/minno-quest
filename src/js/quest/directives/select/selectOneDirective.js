@@ -102,7 +102,7 @@ define(function (require) {
 						return;
 					}
 
-					var isActive = angular.element(e.target).hasClass(buttonConfig.activeClass);
+					var isActive = angular.element(e.currentTarget).hasClass(buttonConfig.activeClass);
 
 					if (isActive){
 						// this whole function happens within a digest cycle, so we don't need to $apply
