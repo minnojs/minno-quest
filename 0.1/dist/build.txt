@@ -31,6 +31,7 @@ text!utils/modal/modal.html
 js/utils/modal/modalService.js
 js/utils/modal/modalModule.js
 js/quest/directives/questController.js
+js/quest/directives/guid.js
 text!quest/directives/piQuest/piQuest.html
 js/quest/directives/piQuest/piQuest-directive.js
 text!quest/directives/piQuest/piqPage.html
@@ -158,6 +159,7 @@ text!utils/modal/modal.html
 js/utils/modal/modalService.js
 js/utils/modal/modalModule.js
 js/quest/directives/questController.js
+js/quest/directives/guid.js
 text!quest/directives/piQuest/piQuest.html
 js/quest/directives/piQuest/piQuest-directive.js
 text!quest/directives/piQuest/piqPage.html

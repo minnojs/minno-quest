@@ -1,34 +1,43 @@
 {
   "name": "PIQuest",
-  "version": "0.0.104",
+  "version": "0.0.110",
   "license": "Apache-2.0",
+  "scripts": {
+    "test": "grunt test --sauce --report",
+    "gendocs": "minno-gendocs docs pages",
+    "localtest": "grunt test",
+    "start": "grunt serve",
+    "postinstall": "./node_modules/grunt-cli/bin/grunt githooks",
+    "css": "node-sass src/styles/main.scss --output src/styles --include-path=bower_components/bootstrap-sass-official/assets/stylesheets/ --include-path=bower_components --source-map=true",
+    "css:watch": "node-sass --watch=src/styles/*.scss src/styles/main.scss --output src/styles --include-path=bower_components/bootstrap-sass-official/assets/stylesheets/ --include-path=bower_components --source-map=true",
+    "requirejs": "r.js -o requirejs.build.js",
+    "build": "npm run css && npm run requirejs",
+    "version": "npm run build && git add -A dist"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/ProjectImplicit/PIquest"
   },
   "minno": {
-      "activeVersions": ["0.0", "0.1"],
-      "timeVersion": "0.3"
+    "activeVersions": [
+      "0.0",
+      "0.1"
+    ],
+    "timeVersion": "0.3"
   },
   "description": "Project implicit Questionnaires",
   "devDependencies": {
     "grunt": "~0.4.1",
-    "grunt-bump": "0.0.14",
     "grunt-cli": "^0.1.13",
-    "grunt-concurrent": "~0.4.1",
     "grunt-contrib-clean": "~0.5.0",
     "grunt-contrib-concat": "~0.3.0",
     "grunt-contrib-connect": "~0.5.0",
     "grunt-contrib-copy": "~0.4.1",
     "grunt-contrib-jshint": "~0.7.1",
-    "grunt-contrib-requirejs": "~0.4.1",
     "grunt-contrib-watch": "~0.5.2",
     "grunt-conventional-changelog": "^1.1.0",
     "grunt-githooks": "^0.3.1",
     "grunt-karma": "^0.8.2",
-    "grunt-newer": "~0.5.4",
-    "grunt-sass": "^1.0.0",
-    "jshint-stylish": "~0.1.3",
     "karma": "^0.12.16",
     "karma-chrome-launcher": "^0.1.2",
     "karma-firefox-launcher": "^0.1.4",
@@ -39,19 +48,10 @@
     "karma-spec-reporter": "0.0.12",
     "load-grunt-tasks": "~0.2.0",
     "requirejs": "^2.1.17",
-    "time-grunt": "~0.2.1"
+    "node-sass": "^3.4.2",
+    "minno-gendocs": "^1.0.0"
   },
   "engines": {
     "node": ">=0.4.11"
-  },
-  "scripts": {
-    "test": "grunt test --sauce --report",
-    "localtest": "grunt test",
-    "start": "grunt serve",
-    "postinstall": "./node_modules/grunt-cli/bin/grunt githooks",
-    "gendocs": "minno-gendocs docs pages"
-  },
-  "dependencies": {
-    "minno-gendocs": "^1.0.0"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "PIQuest",
-  "version": "0.1.17",
+  "version": "0.1.21",
   "license": "Apache-2.0",
   "scripts": {
     "test": "grunt test --sauce --report",
@@ -12,7 +12,7 @@
     "css:watch": "node-sass --watch=src/styles/*.scss src/styles/main.scss --output src/styles --include-path=bower_components/bootstrap-sass-official/assets/stylesheets/ --include-path=bower_components --source-map=true",
     "requirejs": "r.js -o requirejs.build.js",
     "build": "npm run css && npm run requirejs",
-    "version": "npm run build && git add -A dist && git add -A src/main.css*"
+    "version": "npm run build && git add -A dist && git add -A src/styles/main.css*"
   },
   "minno": {
     "activeVersions": [
@@ -33,7 +33,6 @@
     "grunt-contrib-concat": "~0.3.0",
     "grunt-contrib-connect": "~0.5.0",
     "grunt-contrib-copy": "~0.4.1",
-    "grunt-contrib-jshint": "~0.7.1",
     "grunt-contrib-watch": "~0.5.2",
     "grunt-conventional-changelog": "^1.1.0",
     "grunt-githooks": "^0.3.1",
