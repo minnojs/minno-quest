@@ -52,7 +52,7 @@
 <li><a href="#title">title</a></li>
 <li><a href="#preloadimages">preloadImages</a></li>
 <li><a href="#skip">skip</a></li>
-<li><a href="#skin">Skin</a></li>
+<li><a href="#skin">skin</a></li>
 </ul>
 </li>
 <li><a href="#tasks">Tasks</a><ul>
@@ -68,7 +68,11 @@
 <li><a href="#custom-task-example">Custom Task Example</a></li>
 </ul>
 </li>
-<li><a href="#project-implicit-build">Project Implicit Build</a></li>
+<li><a href="#project-implicit-build">Project Implicit Build</a><ul>
+<li><a href="#logger">logger</a></li>
+<li><a href="#mturk">mTurk</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="playground.html">Playground</a></li>
@@ -377,7 +381,13 @@ define(function(){
 <p>In order to use it all you have to do is point the task to the correct url:</p>
 <pre><code class="lang-javascript">var taskElement = {scriptUrl:&#39;path/to/script&#39;};
 </code></pre>
-<h3><a name="project-implicit-build" class="header-link" href="#project-implicit-build"><span></span></a>Project Implicit Build</h3><p>The project implicit build has a feature for integration with mTurk.
+<h3><a name="project-implicit-build" class="header-link" href="#project-implicit-build"><span></span></a>Project Implicit Build</h3><h4><a name="logger" class="header-link" href="#logger"><span></span></a>logger</h4><p>The project implicit build logs the movement from each task to the next.
+By default advancement is logged to <code>/implicit/PiManager</code>, if you want to change the default behaviour you should change settings.logger.url.</p>
+<pre><code class="lang-javascript">API.addSettings(&#39;logger&#39;, {
+    url: &#39;/my/url&#39;
+});
+</code></pre>
+<h4><a name="mturk" class="header-link" href="#mturk"><span></span></a>mTurk</h4><p>The project implicit build has a feature for integration with mTurk.
 All you have to do is add The following code to your project, replacing the <code>&lt;id#&gt;</code> tags with the appropriate data of course.
 The player will redirect the users back to mTurk immediately after the final task in the manager (as defined by the <code>last</code> property).
 Setting the <code>isProduction</code> property allows you to switch between the development and production urls for mTurk.</p>

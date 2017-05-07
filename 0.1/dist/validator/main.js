@@ -2,44 +2,44 @@
 define(function(){
 
 	//http://code.angularjs.org/1.2.1/docs/guide/bootstrap#overview_deferred-bootstrap
-	window.name = 'NG_DEFER_BOOTSTRAP!';
+    window.name = 'NG_DEFER_BOOTSTRAP!';
 
-	require.config({
+    require.config({
 		// in order to catch IE errors
-		enforceDefine: true,
-		paths: {
+        enforceDefine: true,
+        paths: {
 			// libs
-			underscore: "../../bower_components/lodash-compat/lodash.min",
-			angular: '../../bower_components/angular/angular',
-			text: '../../bower_components/requirejs-text/text',
-			jquery: '../../bower_components/jquery/dist/jquery.min'
-		},
-		packages: [
+            underscore: '../../bower_components/lodash-compat/lodash.min',
+            angular: '../../bower_components/angular/angular',
+            text: '../../bower_components/requirejs-text/text',
+            jquery: '../../bower_components/jquery/dist/jquery.min'
+        },
+        packages: [
 			{name: 'pipAPI', location:'../js/APIs', main:'PIpipAPI'},
 			{name: 'questAPI', location:'../js/APIs', main:'PIquestAPI'},
 			{name: 'managerAPI', location:'../js/APIs', main:'PImanagerAPI'},
-			{
-				name: 'pipScorer',
-				location: '../../bower_components/PIPlayer/dist/js/extensions/dscore',
-				main: 'Scorer'
-			}
+            {
+                name: 'pipScorer',
+                location: '../../bower_components/PIPlayer/dist/js/extensions/dscore',
+                main: 'Scorer'
+            }
 
-		],
+        ],
 
-		shim: {
-			angular : {exports : 'angular'}
-		},
+        shim: {
+            angular : {exports : 'angular'}
+        },
 
-		deps: [
+        deps: [
 			// The APIs are preloaded into the app so we don't have to set them as dependencies here
-			'angular', 'underscore','text'
-		]
-	});
+            'angular', 'underscore','text'
+        ]
+    });
 
-	require(['angular','app','validator'], function(angular, app, validator) {
-		angular.element().ready(function() {
-			setTimeout(function(){angular.resumeBootstrap([app.name]);},0);
-		});
-	});
+    require(['angular','app','validator'], function(angular, app, validator) {
+        angular.element().ready(function() {
+            setTimeout(function(){angular.resumeBootstrap([app.name]);},0);
+        });
+    });
 
 });
