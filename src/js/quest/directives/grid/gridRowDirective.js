@@ -1,18 +1,19 @@
 define(function (require) {
-	function gridRowDirective(){
-		return {
-			replace: true,
-			template: require('text!./gridRow.html'),
-			require: ['ngModel'],
-			controller: 'questController',
-			controllerAs: 'ctrl',
-			scope: {
-				row: '=questGridRow',
-				data: '=questGridData'
-			},
-			link: function(scope, element, attr, ctrls) {
-				var ngModel = ctrls[0];
-				var ctrl = scope.ctrl;
+    var _ = require('underscore');
+    function gridRowDirective(){
+        return {
+            replace: true,
+            template: require('text!./gridRow.html'),
+            require: ['ngModel'],
+            controller: 'questController',
+            controllerAs: 'ctrl',
+            scope: {
+                row: '=questGridRow',
+                data: '=questGridData'
+            },
+            link: function(scope, element, attr, ctrls) {
+                var ngModel = ctrls[0];
+                var ctrl = scope.ctrl;
                 var columns = scope.columns = scope.$parent.columns
                     .map(function(column, index){
                         return _.get(scope, 'row.overwrite[' + index + ']') || column;
@@ -31,15 +32,15 @@ define(function (require) {
 
                         return column;
                     });
-                
+
                 // set values
-                columns  
+                columns
                     .filter(function hasValue(column){return column.type != 'text';})
                     .forEach(function setValue(column, index){
                         column.hasOwnProperty('value') || (column.value = index+1);
-                    })
+                    });
 
-				// setReverseValues
+                // setReverseValues
                 columns
                     .filter(function(column){return !column.noReverse;}) // ignore columns that shouldn't be reveresed
                     .filter(function hasValue(column){return column.type != 'text';})
@@ -47,19 +48,19 @@ define(function (require) {
                         column.reverseValue = columns[columns.length - index - 1].value; // set the value from the mirroring column
                     });
 
-				scope.model = ngModel;
+                scope.model = ngModel;
 
-				// keep row updated with response so that we can watch it from the grid directive
-				scope.$watch('response', function(newVal){
-					scope.row.$response = newVal;
-				});
+                // keep row updated with response so that we can watch it from the grid directive
+                scope.$watch('response', function(newVal){
+                    scope.row.$response = newVal;
+                });
 
-				ctrl.registerModel(ngModel, {
-					data: scope.row
-				});
-			}
-		};
-	}
+                ctrl.registerModel(ngModel, {
+                    data: scope.row
+                });
+            }
+        };
+    }
 
-	return gridRowDirective;
+    return gridRowDirective;
 });

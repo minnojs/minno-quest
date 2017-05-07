@@ -1,9 +1,9 @@
 define(function(require){
 
-	var angular = require('angular');
-	var module = angular.module('pi.canvas',[]);
+    var angular = require('angular');
+    var module = angular.module('pi.canvas',[]);
 
-	module.service('managerCanvas', require('./managerCanvasService'));
+    module.service('managerCanvas', require('./managerCanvasService'));
 
-	return module;
+    return module;
 });

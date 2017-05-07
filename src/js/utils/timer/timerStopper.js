@@ -4,19 +4,19 @@
 
 define(function(){
 
-	stopperProvider.$inject = ['timerNow'];
-	function stopperProvider(now){
-		function Stopper(){
-			this.startTime = now();
-		}
+    stopperProvider.$inject = ['timerNow'];
+    function stopperProvider(now){
+        function Stopper(){
+            this.startTime = now();
+        }
 
-		Stopper.prototype.now = function(){
-			return now() - this.startTime;
-		};
+        Stopper.prototype.now = function(){
+            return now() - this.startTime;
+        };
 
-		return Stopper;
-	}
+        return Stopper;
+    }
 
-	return stopperProvider;
+    return stopperProvider;
 
 });

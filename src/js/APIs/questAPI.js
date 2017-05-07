@@ -1,8 +1,8 @@
 define(function(require){
-	var api = require('./APIConstructor');
+    var api = require('./APIConstructor');
 
-	return api({
-		type: 'quest',
-		sets: ['pages', 'questions']
-	});
+    return api({
+        type: 'quest',
+        sets: ['pages', 'questions']
+    });
 });

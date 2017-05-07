@@ -3,22 +3,22 @@
  */
 define(function (require) {
 	// get template
-	var template = require('text!./spinner.html');
+    var template = require('text!./spinner.html');
 
-	directive.$inject = [];
-	function directive(){
-		return {
-			transclude: true,
-			replace: true,
-			template:template,
-			require: [],
+    directive.$inject = [];
+    function directive(){
+        return {
+            transclude: true,
+            replace: true,
+            template:template,
+            require: [],
 			// controller: '',
 			// controllerAs: 'ctrl',
-			scope:{
-				spinner: '=piSpinner'
-			}
-		};
-	}
+            scope:{
+                spinner: '=piSpinner'
+            }
+        };
+    }
 
-	return directive;
+    return directive;
 });

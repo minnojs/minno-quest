@@ -4,11 +4,12 @@
  *	Calling it should suffice to activate the whole piquest stuff.
  */
 define(function(require){
+    
+    var angular = require('angular');
+    var module = angular.module('piQuest', [
+        require('quest/directives/questDirectivesModule').name,
+        require('quest/task/questTaskModule').name
+    ]);
 
-	var module = angular.module('piQuest', [
-		require('quest/directives/questDirectivesModule').name,
-		require('quest/task/questTaskModule').name
-	]);
-
-	return module;
+    return module;
 });

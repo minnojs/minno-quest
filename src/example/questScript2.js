@@ -1,54 +1,54 @@
 define(['questAPI'], function(Quest){
 
-	var API = new Quest();
+    var API = new Quest();
 
-	API.addSettings('DEBUG', {
-		tags: []
+    API.addSettings('DEBUG', {
+        tags: []
 		//hideConsole: true, // default false : whether to display console
 		//level: 'none' // ERROR > WARN > INFO > DEBUG || [E, W...] || warningsOnly: Error && WARNING
 
-	});
+    });
 
-	API.addSettings('logger', {
-		pulse: 2,
-		url: '/implicit/PiQuest'
-	});
+    API.addSettings('logger', {
+        pulse: 2,
+        url: '/implicit/PiQuest'
+    });
 
-	API.addSettings('onEnd', function(){
-		console.log('onEnd script2');
-	});
+    API.addSettings('onEnd', function(){
+        console.log('onEnd script2');
+    });
 
-	API.addSequence([
-		{
-			prevText: '123',
-			prev:true,
-			progressBar: '<%= pagesMeta.number %> out of <%= pagesMeta.outOf%>',
-			header: 'Yoo hoo we are on!!!!!!!',
+    API.addSequence([
+        {
+            prevText: '123',
+            prev:true,
+            progressBar: '<%= pagesMeta.number %> out of <%= pagesMeta.outOf%>',
+            header: 'Yoo hoo we are on!!!!!!!',
 
-			questions: [
-				{
-					name: 'myName',
-					stem: "What is your name? (try yba!)",
-					autoSubmit: true
-				},
-				{
-					mixer:'branch',
-					remix:true,
-					conditions:[{compare: 'questions.myName.response',to:'yba', DEBUG:false}],
-					data:[
-						{
-							stem: 'how are you?',
-							name: 'secondary',
-							type: 'dropdown',
-							autoSubmit: true,
-							dflt:'good',
-							answers: ['good','bad','ugly'],
-							errorMsg: {correct:"That may not be correct... say good!"}
-						}
-					]
-				}
-			]
-		},
+            questions: [
+                {
+                    name: 'myName',
+                    stem: 'What is your name? (try yba!)',
+                    autoSubmit: true
+                },
+                {
+                    mixer:'branch',
+                    remix:true,
+                    conditions:[{compare: 'questions.myName.response',to:'yba', DEBUG:false}],
+                    data:[
+                        {
+                            stem: 'how are you?',
+                            name: 'secondary',
+                            type: 'dropdown',
+                            autoSubmit: true,
+                            dflt:'good',
+                            answers: ['good','bad','ugly'],
+                            errorMsg: {correct:'That may not be correct... say good!'}
+                        }
+                    ]
+                }
+            ]
+        },
 /*
 		{
 			prevText: '123',
@@ -180,7 +180,7 @@ define(['questAPI'], function(Quest){
 			]
 		}
 */
-	]);
+    ]);
 
-	return API.script;
+    return API.script;
 });

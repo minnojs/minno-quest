@@ -6,7 +6,6 @@
     "test": "grunt test --sauce --report",
     "gendocs": "minno-gendocs docs pages",
     "localtest": "grunt test",
-    "start": "grunt serve",
     "postinstall": "./node_modules/grunt-cli/bin/grunt githooks",
     "css": "node-sass src/styles/main.scss --output src/styles --include-path=bower_components/bootstrap-sass-official/assets/stylesheets/ --include-path=bower_components --source-map=true",
     "css:watch": "node-sass --watch=src/styles/*.scss src/styles/main.scss --output src/styles --include-path=bower_components/bootstrap-sass-official/assets/stylesheets/ --include-path=bower_components --source-map=true",

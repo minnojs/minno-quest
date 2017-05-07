@@ -2,22 +2,22 @@ define(function (require) {
 
     var _ = require('underscore');
 
-	function gridRowDirective(){
-		return {
-			replace: true,
-			template: require('text!./multiGridRow.html'),
-			require: ['ngModel'],
-			controller: 'questController',
-			controllerAs: 'ctrl',
-			scope: {
-				row: '=questMultiGridRow',
-				data: '=questMultiGridData'
-			},
-			link: function(scope, element, attr, ctrls) {
-				var ngModel = ctrls[0];
-				var ctrl = scope.ctrl;
+    function gridRowDirective(){
+        return {
+            replace: true,
+            template: require('text!./multiGridRow.html'),
+            require: ['ngModel'],
+            controller: 'questController',
+            controllerAs: 'ctrl',
+            scope: {
+                row: '=questMultiGridRow',
+                data: '=questMultiGridData'
+            },
+            link: function(scope, element, attr, ctrls) {
+                var ngModel = ctrls[0];
+                var ctrl = scope.ctrl;
 
-				scope.model = ngModel;
+                scope.model = ngModel;
                 scope.columns = scope.$parent.columns
                     .map(function(column, index){
                         return _.get(scope, 'row.overwrite[' + index + ']',column) ;
@@ -37,21 +37,21 @@ define(function (require) {
                         return column;
                     });
 
-				ctrl.registerModel(ngModel, {
-					data: scope.row,
+                ctrl.registerModel(ngModel, {
+                    data: scope.row,
                     dflt: (scope.columns || []).map(mapDefault)
-				});
+                });
 
                 // setup validation
                 ngModel.$parsers.unshift(requiredValidator);
                 ngModel.$parsers.unshift(patternValidator);
                 requiredValidator(ngModel.$viewValue);
-                scope.$watchCollection('response', function(value){ngModel.$setViewValue(value.slice())}); // reset response so that parsers trigger
+                scope.$watchCollection('response', function(value){ngModel.$setViewValue(value.slice());}); // reset response so that parsers trigger
                 
-				function requiredValidator(value){
+                function requiredValidator(value){
                     var isValid = scope.columns.every(isFull);
-					ngModel.$setValidity('required', isValid);
-					return value;
+                    ngModel.$setValidity('required', isValid);
+                    return value;
 
                     function isFull(column, index){
                         var val = value[index];
@@ -62,14 +62,14 @@ define(function (require) {
                             case 'input': return val !== '';
                             case 'dropdown': return !isNaN(val) && val !== null;
                             default: return val;
-                        };
+                        }
                     }
-				}
+                }
 
                 function patternValidator(value){
                     var isValid = scope.columns.every(fitsPattern);
-					ngModel.$setValidity('pattern', isValid);
-					return value;
+                    ngModel.$setValidity('pattern', isValid);
+                    return value;
 
                     function fitsPattern(column, index){
                         var val = value[index];
@@ -80,11 +80,11 @@ define(function (require) {
                         else return false;
                     }
                 }
-			}
-		};
-	}
+            }
+        };
+    }
 
-	return gridRowDirective;
+    return gridRowDirective;
 
     function mapDefault(column){
         if (typeof column === 'string') return false;

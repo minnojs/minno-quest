@@ -4,34 +4,34 @@
  * each $console is prototyped on `consolePrototype`
  */
 define(function(require){
-	var _ = require('underscore');
+    var _ = require('underscore');
 
-	consoleProvider.$inject = ['piConsolePrototype'];
+    consoleProvider.$inject = ['piConsolePrototype'];
 
-	function consoleProvider(consolePrototype){
+    function consoleProvider(consolePrototype){
 
 		// decorate Console with a simple settings manager
-		Console.setSettings = consoleSetSettings;
+        Console.setSettings = consoleSetSettings;
 
-		return Console;
+        return Console;
 
-		function Console(tags, force){
-			var $console = _.create(consolePrototype);
+        function Console(tags, force){
+            var $console = _.create(consolePrototype);
 
-			_.extend($console, {
-				tags: _.isArray(tags) ? tags : [tags], // make sure tags is an array
-				force: !!force
-			});
+            _.extend($console, {
+                tags: _.isArray(tags) ? tags : [tags], // make sure tags is an array
+                force: !!force
+            });
 
-			return $console;
-		}
+            return $console;
+        }
 
 		// a mehtod of console
-		function consoleSetSettings (settings) {
-			consolePrototype.settings = settings;
-		}
+        function consoleSetSettings (settings) {
+            consolePrototype.settings = settings;
+        }
 
-	}
+    }
 
-	return consoleProvider;
+    return consoleProvider;
 });

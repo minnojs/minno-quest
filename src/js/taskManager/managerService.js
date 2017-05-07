@@ -1,8 +1,8 @@
 define(function(require){
-	var _ = require('underscore');
+    var _ = require('underscore');
 
-	managerService.$inject = ['$rootScope', '$q', 'managerSequence', 'managerTaskLoad', '$injector'];
-	function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector){
+    managerService.$inject = ['$rootScope', '$q', 'managerSequence', 'managerTaskLoad', '$injector'];
+    function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector){
 
 		/**
 		 * This is the constructor for the manager object.
@@ -19,119 +19,119 @@ define(function(require){
 		 * @param  {Object} script The manager script to be parsed
 		 * @return {Object}
 		 */
-		function manager($scope, script){
-			var self = this;
-			var settings = script.settings || {};
+        function manager($scope, script){
+            var self = this;
+            var settings = script.settings || {};
 
 			// make sure this works without a new statement
-			if (!(this instanceof manager)){
+            if (!(this instanceof manager)){
 				// jshint newcap:false
-				return new manager($scope,script);
+                return new manager($scope,script);
 				// jshint newcap:true
-			}
+            }
 
-			this.$scope = $scope;
-			this.script = script;
+            this.$scope = $scope;
+            this.script = script;
 
 			// create sequence
-			this.sequence = new ManagerSequence(script);
+            this.sequence = new ManagerSequence(script);
 
 			// activate all setup stuff
-			setup($scope, settings);
+            setup($scope, settings);
 
-			$scope.$on('manager:next', function(event, target){
-				target || (target = {type:'next'});
-				switch (target.type){
-					case 'current':
-						self.load(target);
-						break;
-					case 'prev':
-						self.prev(target);
-						break;
-					case 'next':
+            $scope.$on('manager:next', function(event, target){
+                target || (target = {type:'next'});
+                switch (target.type){
+                    case 'current':
+                        self.load(target);
+                        break;
+                    case 'prev':
+                        self.prev(target);
+                        break;
+                    case 'next':
 						/* fall through */
-					default:
-						self.next(target);
-				}
-			});
-			$scope.$on('manager:prev', function(){self.prev();});
+                    default:
+                        self.next(target);
+                }
+            });
+            $scope.$on('manager:prev', function(){self.prev();});
 
-		}
+        }
 
-		_.extend(manager.prototype, {
-			next: function(target){
-				this.sequence.next();
-				this.load(target);
-			},
+        _.extend(manager.prototype, {
+            next: function(target){
+                this.sequence.next();
+                this.load(target);
+            },
 
-			prev: function(target){
-				this.sequence.prev();
-				this.load(target);
-			},
+            prev: function(target){
+                this.sequence.prev();
+                this.load(target);
+            },
 
-			current: function(){
+            current: function(){
 				// taskLoad sets the loaded script into $script
-				return this.sequence.current();
-			},
+                return this.sequence.current();
+            },
 
-			load: function(target){
-				var task = this.current();
-				var $scope = this.$scope;
-				var loadOptions = {
-					baseUrl: this.baseUrl,
-					bustCache: target && target.bustCache
-				};
+            load: function(target){
+                var task = this.current();
+                var $scope = this.$scope;
+                var loadOptions = {
+                    baseUrl: this.baseUrl,
+                    bustCache: target && target.bustCache
+                };
 
-				if (task){
-					taskLoad(task, loadOptions).then(function(){
-						$scope.$emit('manager:loaded');
-					});
-				} else {
+                if (task){
+                    taskLoad(task, loadOptions).then(function(){
+                        $scope.$emit('manager:loaded');
+                    });
+                } else {
 					// let the directive deal with the end of the sequence
-					$scope.$emit('manager:loaded');
-				}
-			},
+                    $scope.$emit('manager:loaded');
+                }
+            },
 
-			setBaseUrl: function(baseUrl){
-				this.baseUrl = baseUrl;
-			}
-		});
+            setBaseUrl: function(baseUrl){
+                this.baseUrl = baseUrl;
+            }
+        });
 
-		return manager;
+        return manager;
 
 		// just to separate the activation of all the settings: KISS
-		function setup($scope, settings){
-			var canvas = $injector.get('managerCanvas');
-			var $document = $injector.get('$document');
-			var preloadImages = $injector.get('piPreloadImages');
-			var beforeUnload = $injector.get('managerBeforeUnload');
-			var injectStyle = $injector.get('managerInjectStyle');
-			var rootElement = $injector.get('$rootElement');
-			var canvasOff, stylesOff, skinClass = settings.skin || 'default';
+        function setup($scope, settings){
+            var canvas = $injector.get('managerCanvas');
+            var $document = $injector.get('$document');
+            var preloadImages = $injector.get('piPreloadImages');
+            var beforeUnload = $injector.get('managerBeforeUnload');
+            var injectStyle = $injector.get('managerInjectStyle');
+            var rootElement = $injector.get('$rootElement');
+            var canvasOff, stylesOff, skinClass = settings.skin || 'default';
 
 			// prevent accidental browsing away
-			beforeUnload.activate();
-			$scope.$on('$destroy', beforeUnload.deactivate);
+            beforeUnload.activate();
+            $scope.$on('$destroy', beforeUnload.deactivate);
 
 			// activate canvas
-			canvasOff = canvas(settings.canvas);
-			$scope.$on('$destroy', canvasOff);
+            canvasOff = canvas(settings.canvas);
+            $scope.$on('$destroy', canvasOff);
 
 			// inject styles
-			stylesOff = injectStyle(settings.injectStyle);
-			$scope.$on('$destroy', stylesOff);
+            stylesOff = injectStyle(settings.injectStyle);
+            $scope.$on('$destroy', stylesOff);
 
 			// preload images
             preloadImages(settings.preloadImages || []);
 
 			// activate titles
-			if (settings.title){
-				$document[0].title = settings.title;
-			}
+            if (settings.title){
+                $document[0].title = settings.title;
+            }
 
-			rootElement.addClass(skinClass + '-skin');
-		}
-	}
+            rootElement.addClass(skinClass + '-skin');
+        }
+    }
 
-	return managerService;
+    return managerService;
 });

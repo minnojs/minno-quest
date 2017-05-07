@@ -1,43 +1,43 @@
 define(function(require){
 
-	var _ = require('underscore');
+    var _ = require('underscore');
 
-	selectMixerProvider.$inject = ['randomizeShuffle', 'mixerRecursive'];
-	function selectMixerProvider(shuffle, mixer){
+    selectMixerProvider.$inject = ['randomizeShuffle', 'mixerRecursive'];
+    function selectMixerProvider(shuffle, mixer){
 
-		function selectMixer(answersArr, options){
-			var answers = mixer(answersArr);
+        function selectMixer(answersArr, options){
+            var answers = mixer(answersArr);
 
 			// inject values
-			answers = _.map(answers, function(answer, index){
+            answers = _.map(answers, function(answer, index){
 
-				if (!_.isPlainObject(answer)){
-					answer = {text:answer};
-				}
+                if (!_.isPlainObject(answer)){
+                    answer = {text:answer};
+                }
 
-				if (_.isUndefined(answer.value)){
-					answer.value = options.numericValues ? index + 1 : answer.text;
-				}
-				return answer;
-			});
+                if (_.isUndefined(answer.value)){
+                    answer.value = options.numericValues ? index + 1 : answer.text;
+                }
+                return answer;
+            });
 
-			if (options.reverse){
-				answers = _(answers).reverse().value();
-			}
+            if (options.reverse){
+                answers = _(answers).reverse().value();
+            }
 
-			if (options.randomize){
-				answers = shuffle(answers);
-			}
+            if (options.randomize){
+                answers = shuffle(answers);
+            }
 
-			_.each(answers, function(answer,index){
-				answer.order = index;
-			});
+            _.each(answers, function(answer,index){
+                answer.order = index;
+            });
 
-			return answers;
-		}
+            return answers;
+        }
 
-		return selectMixer;
-	}
+        return selectMixer;
+    }
 
-	return selectMixerProvider;
+    return selectMixerProvider;
 });

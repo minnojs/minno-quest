@@ -1,36 +1,36 @@
 define(function (require) {
 
     var _ = require('underscore');
-	var angular = require('angular');
+    var angular = require('angular');
     var dragula = require('dragula');
-	var template = require('text!./rank.html');
+    var template = require('text!./rank.html');
 
-	directive.$inject = ['$compile'];
-	function directive($compile){
-		return {
-			replace: true,
-			require: ['ngModel'],
-			controller: 'questController',
-			controllerAs: 'ctrl',
+    directive.$inject = ['$compile'];
+    function directive(){
+        return {
+            replace: true,
+            require: ['ngModel'],
+            controller: 'questController',
+            controllerAs: 'ctrl',
             template: template,
-			scope:{
-				data: '=questData'
-			},
-			link: function(scope, element, attr, ctrls) {
-				var ngModel = ctrls[0];
-				var ctrl = scope.ctrl;
-				var data = scope.data;
+            scope:{
+                data: '=questData'
+            },
+            link: function(scope, element, attr, ctrls) {
+                var ngModel = ctrls[0];
+                var ctrl = scope.ctrl;
+                var data = scope.data;
                 var range = _.isArray(data.list) && data.list.length ? _.range(1, data.list.length +1) : [];
 
                 // Setup the model
                 // ***************
-				ctrl.registerModel(ngModel, {
+                ctrl.registerModel(ngModel, {
                     dflt: _.get(data,'randomize', true) ? _.shuffle(range) : range
-				});
+                });
 
                 ngModel.$isEmpty = function(value){
                     return _.isEqual(value, _.range(1, list.length +1));
-                }
+                };
 
                 // Expose the list
                 // ***************
@@ -43,7 +43,7 @@ define(function (require) {
                 });
 
                 // view --> model
-                scope.$watchCollection('list', function(newValue, oldValue){
+                scope.$watchCollection('list', function(){
                     scope.response = _.pluck(list, 'id');
                 });
 
@@ -53,25 +53,25 @@ define(function (require) {
                     scope.$watch('$parent.response', function(){
                         scope.$evalAsync('selected = row.order');
                     });
-                }
+                };
 
                 // Actions
                 // *******
                 scope.reset = function(){
                     list = scope.list = _.sortBy(list, 'id');
-                }
+                };
 
                 scope.move = function(fromIndex, toIndex){
                     arraymove(list, fromIndex, toIndex);
                     updateOrder(list);
-                }
+                };
 
                 /**
                  * Drag and drop
                  **/
 
                 var dragIndex, dropIndex;
-                drake = dragula({
+                var drake = dragula({
                     // a container needs the dragula-container attr and to be in the current question
                     isContainer: function(el){
                         return el.hasAttribute('dragula-container') && element[0].contains(el);
@@ -82,7 +82,7 @@ define(function (require) {
                     dragIndex = domIndexOf(dragElm, source);
                 });
 
-                drake.on('drop', function(dropElm, target, source){
+                drake.on('drop', function(dropElm, target){
                     dropIndex = domIndexOf(dropElm, target);
                     scope.move(dragIndex, dropIndex);
                     scope.$digest();
@@ -94,17 +94,17 @@ define(function (require) {
                     return Array.prototype.indexOf.call(angular.element(parent).children(), child);
                 }
 
-				/**
-				 * Required
-				 * Since we don't control the ngModel element any more we need to manually create a required validation
-				 * we don't implement $observe since in our case required is static
-				 */
+                /**
+                 * Required
+                 * Since we don't control the ngModel element any more we need to manually create a required validation
+                 * we don't implement $observe since in our case required is static
+                 */
 
-				if (data.required){
-					ngModel.$formatters.push(requiredValidator);
-					ngModel.$parsers.unshift(requiredValidator);
-					requiredValidator(scope.response); // check validity at the begining - without need for change...
-				}
+                if (data.required){
+                    ngModel.$formatters.push(requiredValidator);
+                    ngModel.$parsers.unshift(requiredValidator);
+                    requiredValidator(scope.response); // check validity at the begining - without need for change...
+                }
 
                 function updateOrder(list){
                     list.forEach(function(value, index){value.order = index;});
@@ -116,19 +116,19 @@ define(function (require) {
                     arr.splice(toIndex, 0, element);
                 }
 
-				function requiredValidator(value){
-					var ctrl = ngModel;
-					if (ctrl.$isEmpty(value)) {
-						ctrl.$setValidity('required', false);
-						return;
-					} else {
-						ctrl.$setValidity('required', true);
-						return value;
-					}
-				}
-			}
-		};
-	}
+                function requiredValidator(value){
+                    var ctrl = ngModel;
+                    if (ctrl.$isEmpty(value)) {
+                        ctrl.$setValidity('required', false);
+                        return;
+                    } else {
+                        ctrl.$setValidity('required', true);
+                        return value;
+                    }
+                }
+            }
+        };
+    }
 
-	return directive;
+    return directive;
 });

@@ -1,20 +1,20 @@
 define(['questAPI'], function(Quest){
-	var API = new Quest();
-	API.addSequence(
-	[
+    var API = new Quest();
+    API.addSequence(
+        [
 	    {
-            progressBar: '<%= pagesMeta.number %> out of 10',
-            questions : {
+                progressBar: '<%= pagesMeta.number %> out of 10',
+                questions : {
         		type: 'selectOne',
         		style:'multiButtons',
         		errorMsg: {
-        			required: "Please select an answer, or click 'decline to answer'"
+        			required: 'Please select an answer, or click \'decline to answer\''
         		},
         		name:'item1',
 		        stem : 'On the whole, I am satisfied with myself.',
         		answers : ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree']
-            }
+                }
     	}
-	]);
-	return API.script;
+        ]);
+    return API.script;
 });

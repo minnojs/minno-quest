@@ -17,127 +17,127 @@
  *
   */
 define(function(require){
-	var _ = require('underscore');
+    var _ = require('underscore');
 
-	loggerProvider.$inject = ['$http','$q', 'piConsole'];
-	function loggerProvider($http, $q, piConsole){
-		var self = this;
+    loggerProvider.$inject = ['$http','$q', 'piConsole'];
+    function loggerProvider($http, $q, piConsole){
+        var self = this;
 
-		function Logger(dfltLogFn){
-			this.pending = [];
-			this.sent = [];
-			this.settings = {};
-			this.meta = {};
-			this.suppress = false; // don't suppress send
-			this.dfltLogFn = dfltLogFn || function(a){return a;};
-		}
+        function Logger(dfltLogFn){
+            this.pending = [];
+            this.sent = [];
+            this.settings = {};
+            this.meta = {};
+            this.suppress = false; // don't suppress send
+            this.dfltLogFn = dfltLogFn || function(a){return a;};
+        }
 
-		_.extend(Logger.prototype, {
-			log: function(){
-				var settings = this.settings;
-				var logObj = (settings.logFn || this.dfltLogFn).apply(settings, arguments);
+        _.extend(Logger.prototype, {
+            log: function(){
+                var settings = this.settings;
+                var logObj = (settings.logFn || this.dfltLogFn).apply(settings, arguments);
 
-				if (!_.isEmpty(this.meta) && !_.isPlainObject(logObj)){
-					piConsole(['logger']).debug(logObj);
-					throw new Error('Logger: in order to use "meta" the log must be an object.');
-				}
+                if (!_.isEmpty(this.meta) && !_.isPlainObject(logObj)){
+                    piConsole(['logger']).debug(logObj);
+                    throw new Error('Logger: in order to use "meta" the log must be an object.');
+                }
 
-				_.extend(logObj, this.meta);
+                _.extend(logObj, this.meta);
 
 				// if debug, then log this object
-				piConsole(['logger']).debug('Logged: ', logObj);
+                piConsole(['logger']).debug('Logged: ', logObj);
 
-				this.pending.push(logObj);
-				self.logCounter++;
-				if (settings.pulse && !this.suppress && this.pending.length >= settings.pulse){
-					this.send();
-				}
-			},
+                this.pending.push(logObj);
+                self.logCounter++;
+                if (settings.pulse && !this.suppress && this.pending.length >= settings.pulse){
+                    this.send();
+                }
+            },
 
-			send: function(){
-				var i;
-				var settings = this.settings;
-				var sendData = this.pending;
-				var def = $q.defer();
+            send: function(){
+                var i;
+                var settings = this.settings;
+                var sendData = this.pending;
+                var def = $q.defer();
 
 				// if there are no records to send...
-				if (sendData.length === 0){
-					def.resolve();
-					return def.promise;
-				}
+                if (sendData.length === 0){
+                    def.resolve();
+                    return def.promise;
+                }
 
-				if (_.isUndefined(settings.url)){
-					piConsole('logger').warn('The logger url is not set.');
-					def.resolve();
-					return def.promise;
-				}
+                if (_.isUndefined(settings.url)){
+                    piConsole('logger').warn('The logger url is not set.');
+                    def.resolve();
+                    return def.promise;
+                }
 
 				// empty the pending stack
-				this.pending = [];
+                this.pending = [];
 
-				$http.post(settings.url, sendData).then(success, error);
+                $http.post(settings.url, sendData).then(success, error);
 
 				// move everything pending to the sent stack
-				for (i = 0; i<sendData.length; i++){
-					this.sent.push(sendData[i]);
-				}
+                for (i = 0; i<sendData.length; i++){
+                    this.sent.push(sendData[i]);
+                }
 
-				return def.promise;
+                return def.promise;
 
-				function success(){
-					return def.resolve();
-				}
+                function success(){
+                    return def.resolve();
+                }
 
-				function error(){
+                function error(){
 					// try again
-					return $http.post(settings.url, sendData).then(success, function(){
-						piConsole(['logger']).error('Failed to send data, it seems the backend is not responding. (sending to: "' + settings.url +'")');
+                    return $http.post(settings.url, sendData).then(success, function(){
+                        piConsole(['logger']).error('Failed to send data, it seems the backend is not responding. (sending to: "' + settings.url +'")');
                         var promise = _.result(settings, 'error');
                         if (promise && _.isFunction(promise.then)) {
                             return promise.then(def.resolve, def.reject);
                         } else {
                             return def.reject();
                         }
-					});
-				}
-			},
+                    });
+                }
+            },
 
 			/**
 			 * suppress pulse
 			 * sets suppress to `suppress`, or to true by default.
 			 */
-			suppressPulse: function (suppress) {
-				this.suppress = _.isUndefined(suppress) ? true : suppress;
-			},
+            suppressPulse: function (suppress) {
+                this.suppress = _.isUndefined(suppress) ? true : suppress;
+            },
 
-			getCount: function(){
-				return self.logCounter;
-			},
+            getCount: function(){
+                return self.logCounter;
+            },
 
-			setSettings: function(settings){
-				if (arguments.length === 0){
-					return this.settings;
-				}
+            setSettings: function(settings){
+                if (arguments.length === 0){
+                    return this.settings;
+                }
 
 				// inherit settings both from settings obj, and the global settings
-				this.settings = _.defaults({}, settings, self.settings);
+                this.settings = _.defaults({}, settings, self.settings);
 
-				if (!_.isUndefined(settings.meta) && !_.isPlainObject(settings.meta)){
-					throw new Error('Logger: "meta" must be an object.');
-				}
+                if (!_.isUndefined(settings.meta) && !_.isPlainObject(settings.meta)){
+                    throw new Error('Logger: "meta" must be an object.');
+                }
 
 				// inherit meta settings
-				this.meta = _.defaults({}, settings.meta, self.meta);
-			}
-		});
+                this.meta = _.defaults({}, settings.meta, self.meta);
+            }
+        });
 
-		return Logger;
-	}
+        return Logger;
+    }
 
-	return function(){
-		this.$get = loggerProvider;
-		this.settings = {};
-		this.meta = {};
-		this.logCounter = 0;
-	};
+    return function(){
+        this.$get = loggerProvider;
+        this.settings = {};
+        this.meta = {};
+        this.logCounter = 0;
+    };
 });
