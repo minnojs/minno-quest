@@ -96,7 +96,7 @@ define(function(require){
                 }
 
                 function proceed(){
-                    var locals = {prevTask: prevTask, currentTask: currentTask};
+                    var locals = {prevTask: prevTask, currentTask: currentTask, managerSettings: $scope.settings};
                     $qSequence([
                         $scope.settings.onPreTask,
                         _.get(prevTask,'post'),

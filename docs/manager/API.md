@@ -8,7 +8,7 @@
     - [title](#title)
     - [preloadImages](#preloadimages)
     - [skip](#skip)
-    - [Skin](#skin)
+    - [skin](#skin)
 - [Tasks](#tasks)
     - [Quest](#quest)
     - [Message](#message)
@@ -19,6 +19,8 @@
     - [Activator function](#activator-function)
     - [Custom Task Example](#custom-task-example)
 - [Project Implicit Build](#project-implicit-build)
+    - [logger](#logger)
+    - [mTurk](#mturk)
 
 The miManager is responsible for managing several piTasks sequentially. It uses the same API used throughout Minno tasks.
 
@@ -219,6 +221,18 @@ var taskElement = {scriptUrl:'path/to/script'};
 ```
 
 ### Project Implicit Build
+
+#### logger
+The project implicit build logs the movement from each task to the next.
+By default advancement is logged to `/implicit/PiManager`, if you want to change the default behaviour you should change settings.logger.url.
+
+```javascript
+API.addSettings('logger', {
+    url: '/my/url'
+});
+```
+
+#### mTurk
 The project implicit build has a feature for integration with mTurk.
 All you have to do is add The following code to your project, replacing the `<id#>` tags with the appropriate data of course.
 The player will redirect the users back to mTurk immediately after the final task in the manager (as defined by the `last` property).

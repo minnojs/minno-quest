@@ -23,7 +23,7 @@ define(function(require){
     _.extend(API.prototype, Constructor.prototype);
 
     // annotate onPreTask
-    onPreTask.$inject = ['currentTask', '$http','$rootScope','managerBeforeUnload','templateDefaultContext'];
+    onPreTask.$inject = ['currentTask', '$http','$rootScope','managerBeforeUnload','templateDefaultContext', 'managerSettings'];
 
     return API;
 
@@ -36,7 +36,7 @@ define(function(require){
      * @param  {Object} $http       The $http service
      * @return {Promise}            Resolved when server responds
      */
-    function onPreTask(currentTask, $http, $rootScope, beforeUnload, templateDefaultContext){
+    function onPreTask(currentTask, $http, $rootScope, beforeUnload, templateDefaultContext,managerSettings){
         var global = $rootScope.global;
         var context = {};
         var data = _.assign({}, global.$meta, {taskName: currentTask.name || 'namelessTask', taskNumber: currentTask.$meta.number, taskURL:currentTask.scriptUrl || currentTask.templateUrl});
@@ -83,7 +83,7 @@ define(function(require){
 
         if (currentTask.last && global.$mTurk){
             var $mTurk = global.$mTurk;
-            var url = $mTurk.isProduction ?  'http://www.mturk.com/mturk/externalSubmit' : 'https://workersandbox.mturk.com/mturk/externalSubmit';
+            var mturkUrl = $mTurk.isProduction ?  'http://www.mturk.com/mturk/externalSubmit' : 'https://workersandbox.mturk.com/mturk/externalSubmit';
             var onPost = currentTask.post || _.noop;
 
 
@@ -93,7 +93,7 @@ define(function(require){
 
             currentTask.post = function(){
                 onPost.apply(this, arguments);
-                postRedirect(url,_.omit($mTurk,'isProduction'));
+                postRedirect(mturkUrl,_.omit($mTurk,'isProduction'));
             };
         }
 
@@ -103,7 +103,9 @@ define(function(require){
             meta.subtaskURL = currentTask.scriptUrl || currentTask.templateUrl;
         }
 
-        return $http.post('/implicit/PiManager', data)['catch'](error);
+        var posturl = _.get(managerSettings, 'logger.url', '/implicit/PiManager');
+
+        return $http.post(posturl, data)['catch'](error);
 
         function error(){
             var reportNoConnection = currentTask.reportNoConnection;
