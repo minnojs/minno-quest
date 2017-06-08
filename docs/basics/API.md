@@ -1,18 +1,18 @@
 # API
 
 - [Task creation](#task-creation)
-    - [setName(name)](#setname-name-)
-    - [addSettings(name, setting)](#addsettings-name-setting-)
-    - [addSequence(sequence)](#addsequence-sequence-)
-    - [addSet(setName, setArray)](#addset-setname-setarray-)
+    - [setName(name)](#setname-name)
+    - [addSettings(name, setting)](#addsettings-name-setting)
+    - [addSequence(sequence)](#addsequence-sequence)
+    - [addSet(setName, setArray)](#addset-setname-setarray)
 - [Environmental variables](#environmental-variables)
-    - [addGlobal(obj)](#addglobal-obj-)
-    - [getGlobal()](#getglobal-)
-    - [addCurrent(obj)](#addcurrent-obj-)
-    - [getCurrent()](#getcurrent-)
+    - [addGlobal(obj)](#addglobal-obj)
+    - [getGlobal()](#getglobal)
+    - [addCurrent(obj)](#addcurrent-obj)
+    - [getCurrent()](#getcurrent)
 - [Convenience methods](#convenience-methods)
-    - [post(url, object)](#post-url-object-)
-    - [shuffle(collection)](#shuffle-collection-)
+    - [post(url, object)](#post-url-object)
+    - [shuffle(collection)](#shuffle-collection)
 
 ### Task creation
 
