@@ -31,9 +31,7 @@ define(function(require){
             $compile($el)($scope);
 
 			// clean up piQuest
-            $el.controller('piQuest').task.promise['finally'](function(){
-                done();
-            });
+            $el.controller('piQuest').task.promise['finally'](done);
 
             return function questDestroy(){
                 $el.scope().$destroy();
@@ -106,6 +104,8 @@ define(function(require){
         activatePIP.$inject = ['done', '$element', 'task', 'script'];
         function activatePIP(done, $canvas, task, script){
             var $el, req;
+            var newVersion = task.version > 0.3;
+            var pipSink;
 
 			// load PIP
             req = requirejs.config({
@@ -121,7 +121,7 @@ define(function(require){
                     backbone: ['//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min', '../../bower_components/backbone/backbone']
                 },
 
-                deps: ['jquery', 'backbone', 'underscore']
+                deps: newVersion ? ['underscore', 'utils/polyfills'] : ['jquery', 'backbone', 'underscore']
             });
 
 			// update script name
@@ -133,12 +133,17 @@ define(function(require){
 
             req(['activatePIP'], function(activate){
                 $el.removeClass('pi-spinner');
-                activate(script, done);
+                if (newVersion) {
+                    pipSink = activate($el[0], script);
+                    pipSink.end.map(done);
+                }
+                else activate(script, done);
             });
 
             return function destroyPIP(){
                 $el.remove();
-                req(['app/task/main_view'], function(main){
+                if (newVersion) pipSink.end(true);
+                else req(['app/task/main_view'], function(main){
                     main.deferred.resolve();
                     main.destroy();
                 });

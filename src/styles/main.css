@@ -5678,6 +5678,52 @@ button.close {
   text-align: center;
   overflow: hidden; }
 
+.minno-canvas {
+  height: 400px;
+  width: 500px;
+  position: relative;
+  border: 5px solid white;
+  margin: auto;
+  margin-top: 10px;
+  -webkit-text-size-adjust: none;
+  -webkit-touch-callout: none;
+  /* disable callout, image save panel */
+  -webkit-tap-highlight-color: transparent;
+  /* "turn off" link highlight */
+  /* disable cut copy paste */
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none; }
+
+.minno-stimulus {
+  position: absolute;
+  text-align: center;
+  overflow: hidden;
+  opacity: 0; }
+
+.minno-stimulus-visible {
+  opacity: 1; }
+
+.minno-progress {
+  background-color: #20201F;
+  border-radius: 20px;
+  /* (heightOfInnerDiv / 2) + padding */
+  padding: 4px;
+  position: relative;
+  top: 50%;
+  width: 80%;
+  margin-left: 10%;
+  margin-top: -12px; }
+
+.minno-progress-bar {
+  background-color: #807b7a;
+  width: 48%;
+  /* Adjust with JavaScript */
+  height: 16px;
+  border-radius: 10px; }
+
 .gu-mirror {
   position: fixed !important;
   margin: 0 !important;

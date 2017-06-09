@@ -42,12 +42,12 @@ define(['managerAPI'], function(Manager){
                 global.current = global.iat =  {feedback:'bam!'};
             }
 		},
-        //{ type: 'quest', name: 'dotWidth', scriptUrl: '/test/dotwidth.js' },
+        //{ type: 'quest', name: 'dotWidth', scriptUrl: 'questScript1.js' },
         {
 			type: 'pip',
 			name: 'iat',
 			version: '123',
-			scriptUrl: '/test/dotprobe3.js'
+			scriptUrl: '/test/helloPlay.js'
 		},
         {
             mixer: 'branch',
