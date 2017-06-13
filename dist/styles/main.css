@@ -4880,9 +4880,9 @@ button.close {
   position: absolute;
   text-align: center;
   overflow: hidden;
-  opacity: 0; }
+  visibility: hidden; }
 .minno-stimulus-visible {
-  opacity: 1; }
+  visibility: visible; }
 .minno-progress {
   background-color: #20201F;
   border-radius: 20px;
