@@ -46,7 +46,7 @@ define(function(require){
 	 */
     function play(done, $canvas, script, task){
         var $el, req, baseUrl ,version = task.version || this.version;
-        var pipSink, newVersion = version;
+        var pipSink, newVersion = version > 0.3;
 
         if (task.type !== 'pip') throw new Error('Expected task.type to be "pip" but found: "' + task.type + '".');
         if (!version) throw new Error('Version not defined for pip task: ' + (task.name || script.name));
@@ -67,7 +67,7 @@ define(function(require){
                 backbone: ['//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min', baseUrl+'/bower_components/backbone/backbone']
             },
 
-            deps: newVersion ? ['underscore', 'utils/polyfills'] : ['jquery', 'backbone', 'underscore']
+            deps: newVersion ? ['underscore'] : ['jquery', 'backbone', 'underscore']
         });
 
         // update script name

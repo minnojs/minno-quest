@@ -46,8 +46,8 @@ define(['managerAPI'], function(Manager){
         {
 			type: 'pip',
 			name: 'iat',
-			version: '123',
-			scriptUrl: '/test/lrn.js'
+			version: '0',
+			scriptUrl: '/test/helloPlay.js'
 		},
         {
             mixer: 'branch',

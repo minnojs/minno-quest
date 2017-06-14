@@ -121,7 +121,7 @@ define(function(require){
                     backbone: ['//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min', '../../bower_components/backbone/backbone']
                 },
 
-                deps: newVersion ? ['underscore', 'utils/polyfills'] : ['jquery', 'backbone', 'underscore']
+                deps: newVersion ? ['underscore'] : ['jquery', 'backbone', 'underscore']
             });
 
 			// update script name
