@@ -14,6 +14,7 @@
     - [post(url, object)](#posturl-object)
     - [shuffle(collection)](#shufflecollection)
     
+
 ### Task creation
 
 #### setName(name)
