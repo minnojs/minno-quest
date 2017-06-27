@@ -20,6 +20,7 @@
   - [multiBranch](#multibranch)
 - [Conditions](#conditions)
   - [Operators](#operators)
+  - [Negation](#negation)
   - [Aggregation](#aggregation)
   - [Debugging](#debugging)
 
@@ -559,7 +560,12 @@ exactly             | Checks if *compare* is exactly equal to *to* (uses ===)
 greaterThan         | *compare* > *to*
 greaterThanOrEquals | *compare* >= *to*
 in                  | *compare* is in the Array *to*;
+isTruthy            | *compare* == true
 function(){}        | This operator allows you to use a custom function of the form: `function(compareValue, toValue, context){return {Boolean}}`. The context is an object holding the *global*, *current* and *questions* objects.
+
+#### Negation
+If you want to check for inequality (or make sure that a value is *not* in an array and so on, you can use the `negate` property.
+`negate` makes the mixer use the oposite value for that condition - true values become false and vice versa.
 
 #### Aggregation
 Sometimes you will want a branch to be activated only if more than one condition is true, or in some other complex specific condition.
