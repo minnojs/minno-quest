@@ -1,9 +1,5 @@
 # Mixers
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
-
 - [Introduction](#introduction)
   - [Syntax](#syntax)
   - [Nesting](#nesting)
@@ -23,8 +19,6 @@
   - [Negation](#negation)
   - [Aggregation](#aggregation)
   - [Debugging](#debugging)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ### Introduction
 Mixers allow you to control the flow of your sequences within the PI tasks.
@@ -566,6 +560,14 @@ function(){}        | This operator allows you to use a custom function of the f
 #### Negation
 If you want to check for inequality (or make sure that a value is *not* in an array and so on, you can use the `negate` property.
 `negate` makes the mixer use the oposite value for that condition - true values become false and vice versa.
+
+```javascript
+var cond = {
+    compare:'global.flag',
+    to:'current.flag',
+    negate:true
+};
+```
 
 #### Aggregation
 Sometimes you will want a branch to be activated only if more than one condition is true, or in some other complex specific condition.
