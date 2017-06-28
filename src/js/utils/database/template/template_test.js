@@ -57,7 +57,7 @@ define(['./templateModule'], function(){
             expect(res.arr[0]).toBe('432');
         });
 
-        it('should not expand objects in options.exclude', function(){
+        it('should not expand objects in options.skip', function(){
             var obj = {arr:['<%= page.test %>'], obj:{a:'<%= dunk %>'}};
             var res = template(obj, {skip:['arr','obj']});
             expect(res.obj.a).not.toBe('234');

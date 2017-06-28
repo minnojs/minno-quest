@@ -1,44 +1,37 @@
 define(function(require){
     var _ = require('underscore');
 
-    templateObjProvider.$inject = ['$filter'];
-    function templateObjProvider($filter){
-        var filter = $filter('template');
+    templateObjProvider.$inject = ['templateDefaultContext'];
+    function templateObjProvider(templateDefaultContext){
 
         function templateObj(obj, context, options){
-            options || (options = {});
+            var skip = _.get(options, 'skip', []);
             var result = {};
-            var skip = options.skip || [];
+            var key;
+            var ctx = _.assign({}, context, templateDefaultContext);
 
-            _.forEach(obj, function(value,key,obj){
-                if (!_.includes(skip, key)){
-                    result[key] = expand(value, context);
-                } else {
-                    result[key] = obj[key];
-                }
-            });
+            for (key in obj){
+                result[key] = (skip.indexOf(key) == -1) ? expand(obj[key]) : obj[key];
+            }
 
             return result;
+
+            function expand(value){
+                if (_.isString(value)) return template(value, ctx);
+                if (_.isArray(value)) return value.map(expand);
+                if (_.isPlainObject(value)) return _.mapValues(value, expand);
+                return value;
+            }
+
+            function template(input){
+                // if there is no template just return the string
+                if (!~input.indexOf('<%')) return input;
+                return _.template(input)(context);
+            }
         }
 
         return templateObj;
 
-        function expand(value, context){
-
-            if (_.isString(value)){
-                return filter(value, context);
-            }
-
-            if (_.isArray(value)){
-                return _.map(value, _.bind(expand, null, _, context));
-            }
-
-            if (_.isPlainObject(value)){
-                return _.mapValues(value, _.bind(expand, null, _, context));
-            }
-
-            return value;
-        }
 
     }
 
