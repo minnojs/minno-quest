@@ -38,11 +38,9 @@
 
 	</body>
 
-	<script src="../bower_components/requirejs/require.js"></script>
+	<script src="js/pibootstrap.js"></script>
 	<script type="text/javascript">
         var pipUrl = '../../../minno-time/0.3/dist/js';
-
-		require.config({ baseUrl: 'js' });
 
 		window.activate = function(taskMap){
             var contents, i, element = document.getElementById('task'), type = taskType(taskMap);
@@ -60,28 +58,26 @@
                 eval(contents);
             }
 
-			require(['bootstrap'], function(){
-				require(['task'], function(script){
-					script.settings || (script.settings = {});
-					script.settings.onEnd = window.close;
-					script.settings.hooks = {endTask:window.close.bind(window)};
+            require(['task'], function(script){
+                script.settings || (script.settings = {});
+                script.settings.onEnd = window.close;
+                script.settings.hooks = {endTask:window.close.bind(window)};
 
-                    var oldPreTask = script.settings.onPreTask;
-                    script.settings.onPreTask = preTask;
-                    
-					require(['angular','app'], function(angular, app) {
-						angular.element(document).ready(function() {
-							angular.bootstrap(element, [app.name]);
-						});
-					});
+                var oldPreTask = script.settings.onPreTask;
+                script.settings.onPreTask = preTask;
 
-                    preTask.$inject = ['currentTask'];
-                    function preTask(task){
-                        if (task.type === 'pip') task.baseUrl = pipUrl;
-                        if (oldPreTask) oldPreTask.apply(this, arguments);
-                    }
-				});
-			});
+                require(['angular','app'], function(angular, app) {
+                    angular.element(document).ready(function() {
+                        angular.bootstrap(element, [app.name]);
+                    });
+                });
+
+                preTask.$inject = oldPreTask.$inject;
+                function preTask(task){
+                    if (task.type === 'pip') task.baseUrl = pipUrl;
+                    if (oldPreTask) oldPreTask.apply(this, arguments);
+                }
+            });
 
             function taskType(taskMap){
                 if (typeof taskMap !== 'string') return 'manager';
@@ -92,6 +88,6 @@
                 if (matches) return matches[1];
                 throw new Error('Unknown player type');
             }
-		};
-	</script>
+        };
+    </script>
 </html>
