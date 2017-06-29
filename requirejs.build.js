@@ -3,7 +3,7 @@
 ({
     // Creates a dist folder with optimized js
     logLevel: 2, // WARN
-    dir: "dist",
+    dir: 'dist',
     appDir: 'src',
     baseUrl: 'js',
     removeCombined: true,
@@ -33,7 +33,8 @@
     modules: [
         {
             name: 'bootstrap',
-            include: ['app','pipScorer', 'pipAPI','questAPI','managerAPI'],
+            insertRequire: ['bootstrap'],
+            include: ['app','pipScorer', 'pipAPI','questAPI','managerAPI', '../../bower_components/requirejs/require'],
             override: {
                 map: {
                     '*': {
@@ -46,7 +47,8 @@
         },
         {
             name: 'pibootstrap',
-            include: ['app','pipScorer', 'pipAPI','questAPI','managerAPI'],
+            insertRequire: ['pibootstrap'],
+            include: ['app','pipScorer', 'pipAPI','questAPI','managerAPI', '../../bower_components/requirejs/require'],
             override: {
                 map: {
                     '*': {
@@ -58,4 +60,4 @@
             }
         }
     ]
-})
+});
