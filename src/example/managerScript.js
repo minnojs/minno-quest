@@ -1,5 +1,4 @@
 define(['managerAPI'], function(Manager){
-
 	var API = new Manager();
 	API.addSettings('skin', '');
     var images = Array(30).fill('http://placehold.it/120x120&text=image').map((v,i)=>v+i);
@@ -42,7 +41,7 @@ define(['managerAPI'], function(Manager){
                 global.current = global.iat =  {feedback:'bam!'};
             }
 		},
-        //{ type: 'quest', name: 'dotWidth', scriptUrl: 'questScript1.js' },
+        { type: 'quest', name: 'dotWidth', scriptUrl: 'questScript1.js' },
         {
 			type: 'pip',
 			name: 'iat',

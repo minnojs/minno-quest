@@ -5,6 +5,7 @@ styles/main.css
 
 js/bootstrap.js
 ----------------
+js/../../bower_components/requirejs/require.js
 /home/eladzlot/public_html/quest/bower_components/angular/angular.min.js
 /home/eladzlot/public_html/quest/bower_components/angular-animate/angular-animate.min.js
 /home/eladzlot/public_html/quest/bower_components/lodash-compat/lodash.min.js
@@ -133,6 +134,7 @@ js/APIs/managerAPI.js
 
 js/pibootstrap.js
 ----------------
+js/../../bower_components/requirejs/require.js
 /home/eladzlot/public_html/quest/bower_components/angular/angular.min.js
 /home/eladzlot/public_html/quest/bower_components/angular-animate/angular-animate.min.js
 /home/eladzlot/public_html/quest/bower_components/lodash-compat/lodash.min.js
