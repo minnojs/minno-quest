@@ -51,7 +51,34 @@
 </li>
 <li>Sequencer<ul>
 <li><a href="introduction.html">Introduction</a></li>
-<li><strong><a href="mixer.html">Mixer</a></strong></li>
+<li><strong><a href="mixer.html">Mixer</a></strong><ul>
+<li><a href="#introduction">Introduction</a><ul>
+<li><a href="#syntax">Syntax</a></li>
+<li><a href="#nesting">Nesting</a></li>
+<li><a href="#real-time-remix">Real time (remix)</a></li>
+<li><a href="#sequence-evaluation-wrapper">Sequence evaluation (wrapper)</a></li>
+</ul>
+</li>
+<li><a href="#mixer-types">Mixer types</a><ul>
+<li><a href="#repeat">repeat</a></li>
+<li><a href="#random">random</a></li>
+<li><a href="#choose">choose</a></li>
+<li><a href="#weightedchoose">weightedChoose</a></li>
+<li><a href="#weightedrandom">weightedRandom</a></li>
+<li><a href="#wrapper">wrapper</a></li>
+<li><a href="#branch">branch</a></li>
+<li><a href="#multibranch">multiBranch</a></li>
+</ul>
+</li>
+<li><a href="#conditions">Conditions</a><ul>
+<li><a href="#operators">Operators</a></li>
+<li><a href="#negation">Negation</a></li>
+<li><a href="#aggregation">Aggregation</a></li>
+<li><a href="#debugging">Debugging</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li><a href="templates.html">Templates</a></li>
 <li><a href="variables.html">Variables</a></li>
 <li><a href="inheritance.html">Inheritance</a></li>
@@ -82,32 +109,6 @@
 <li><a href="templateGlobal.html">Global</a></li>
 <li><a href="templateData.html">Data</a></li>
 <li><a href="templateMeta.html">Meta</a></li>
-</ul>
-</li>
-</ul>
-<ul>
-<li><a href="#introduction">Introduction</a><ul>
-<li><a href="#syntax">Syntax</a></li>
-<li><a href="#nesting">Nesting</a></li>
-<li><a href="#real-time-remix">Real time (remix)</a></li>
-<li><a href="#sequence-evaluation-wrapper">Sequence evaluation (wrapper)</a></li>
-</ul>
-</li>
-<li><a href="#mixer-types">Mixer types</a><ul>
-<li><a href="#repeat">repeat</a></li>
-<li><a href="#random">random</a></li>
-<li><a href="#choose">choose</a></li>
-<li><a href="#weightedchoose">weightedChoose</a></li>
-<li><a href="#weightedrandom">weightedRandom</a></li>
-<li><a href="#wrapper">wrapper</a></li>
-<li><a href="#branch">branch</a></li>
-<li><a href="#multibranch">multiBranch</a></li>
-</ul>
-</li>
-<li><a href="#conditions">Conditions</a><ul>
-<li><a href="#operators">Operators</a></li>
-<li><a href="#aggregation">Aggregation</a></li>
-<li><a href="#debugging">Debugging</a></li>
 </ul>
 </li>
 </ul>
@@ -577,11 +578,23 @@ The context (<code>this</code>) for the function is an object holding the <em>gl
 <td><em>compare</em> is in the Array <em>to</em>;</td>
 </tr>
 <tr>
+<td>isTruthy</td>
+<td><em>compare</em> == true</td>
+</tr>
+<tr>
 <td>function(){}</td>
 <td>This operator allows you to use a custom function of the form: <code>function(compareValue, toValue, context){return {Boolean}}</code>. The context is an object holding the <em>global</em>, <em>current</em> and <em>questions</em> objects.</td>
 </tr>
 </tbody>
 </table>
+<h4><a name="negation" class="header-link" href="#negation"><span></span></a>Negation</h4><p>If you want to check for inequality (or make sure that a value is <em>not</em> in an array and so on, you can use the <code>negate</code> property.
+<code>negate</code> makes the mixer use the oposite value for that condition - true values become false and vice versa.</p>
+<pre><code class="lang-javascript">var cond = {
+    compare:&#39;global.flag&#39;,
+    to:&#39;current.flag&#39;,
+    negate:true
+};
+</code></pre>
 <h4><a name="aggregation" class="header-link" href="#aggregation"><span></span></a>Aggregation</h4><p>Sometimes you will want a branch to be activated only if more than one condition is true, or in some other complex specific condition.
 For cases like this, the mixer supports aggregation.
 The mixer supports applying logical operations on conditions in the following way:</p>
