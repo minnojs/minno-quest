@@ -53,6 +53,7 @@
 <li><a href="#preloadimages">preloadImages</a></li>
 <li><a href="#skip">skip</a></li>
 <li><a href="#skin">skin</a></li>
+<li><a href="#logger">logger</a></li>
 </ul>
 </li>
 <li><a href="#tasks">Tasks</a><ul>
@@ -69,7 +70,7 @@
 </ul>
 </li>
 <li><a href="#project-implicit-build">Project Implicit Build</a><ul>
-<li><a href="#logger">logger</a></li>
+<li><a href="#loggerurl">logger.url</a></li>
 <li><a href="#mturk">mTurk</a></li>
 </ul>
 </li>
@@ -184,9 +185,19 @@ All the functions within settings are invoked using angular. This means that you
 <h4><a name="skip" class="header-link" href="#skip"><span></span></a>skip</h4><p>Whether to activate the skip and refresh option. If activated, clicking <code>ctrl r</code> reloads the current task (this feature may not be supported on older browsers), clicking <code>escape</code> and then the right or left arrows skips to the next or previous tasks.</p>
 <pre><code class="lang-javascript">API.addSettings(&#39;skip&#39;, true);
 </code></pre>
-<h3><a name="skin" class="header-link" href="#skin"><span></span></a>Skin</h3><p>Add a skin to your project. Skins change the way that your tasks look. Currently the only skins that we support are <code>simple</code> and <code>demo</code>.</p>
+<h4><a name="skin" class="header-link" href="#skin"><span></span></a>skin</h4><p>Add a skin to your project. Skins change the way that your tasks look. Currently the only skins that we support are <code>simple</code> and <code>demo</code>.</p>
 <pre><code class="lang-javascript">API.addSettings(&#39;skin&#39;, &#39;demo&#39;);
 </code></pre>
+<h4><a name="logger" class="header-link" href="#logger"><span></span></a>logger</h4><p>The logger allows control of manager level logging activities.</p>
+<p>You may set <code>logger.postCsv</code> in order to post a csv with the results of all of your tasks at the end of the manager.
+Each log will be logged to a separate row.
+Each property will have a separate column.
+Each row has a unique column called taskName that holds the appropriate task name.</p>
+<pre><code class="lang-javascript">API.addSettings(&#39;logger&#39;, {
+    postCsv: &#39;/url/to/csv/saver/&#39;
+});
+</code></pre>
+<p>When using this setting, make sure you do not set <code>logger.url</code> in your individual tasks, or else they will post individually in addition to your csv post.</p>
 <h3><a name="tasks" class="header-link" href="#tasks"><span></span></a>Tasks</h3><p>The basic unit in miManager is the <strong>task</strong>. The manager currently supports several types of tasks; <code>quest</code>, <code>message</code> and <code>post</code>. You should just cue them into the sequence (you can use mixers to your hearts content as well).</p>
 <table>
 <thead>
@@ -381,7 +392,7 @@ define(function(){
 <p>In order to use it all you have to do is point the task to the correct url:</p>
 <pre><code class="lang-javascript">var taskElement = {scriptUrl:&#39;path/to/script&#39;};
 </code></pre>
-<h3><a name="project-implicit-build" class="header-link" href="#project-implicit-build"><span></span></a>Project Implicit Build</h3><h4><a name="logger" class="header-link" href="#logger"><span></span></a>logger</h4><p>The project implicit build logs the movement from each task to the next.
+<h3><a name="project-implicit-build" class="header-link" href="#project-implicit-build"><span></span></a>Project Implicit Build</h3><h4><a name="loggerurl" class="header-link" href="#loggerurl"><span></span></a>logger.url</h4><p>The project implicit build logs the movement from each task to the next.
 By default advancement is logged to <code>/implicit/PiManager</code>, if you want to change the default behaviour you should change settings.logger.url.</p>
 <pre><code class="lang-javascript">API.addSettings(&#39;logger&#39;, {
     url: &#39;/my/url&#39;

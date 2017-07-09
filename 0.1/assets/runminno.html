@@ -72,7 +72,7 @@
                     });
                 });
 
-                preTask.$inject = oldPreTask.$inject;
+                preTask.$inject = ['currentTask'];
                 function preTask(task){
                     if (task.type === 'pip') task.baseUrl = pipUrl;
                     if (oldPreTask) oldPreTask.apply(this, arguments);

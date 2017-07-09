@@ -739,7 +739,7 @@ Both types of questions support the following properties.</p>
 </tr>
 <tr>
 <td>cellLabels</td>
-<td>Show the column label with the grid cells.</td>
+<td>(true or false) Wether to show the column label within the grid cells.</td>
 </tr>
 </tbody>
 </table>
@@ -778,13 +778,33 @@ Both types of questions support the following properties.</p>
 </tr>
 </tbody>
 </table>
-<p>There are several column types at your disposal, 
-Type        | Description
------------ | -----------
-checkbox    | The default is &quot;checkbox&quot;.
-text        | Display text of you choice (use the <code>textProperty</code> property to set the row property that will be used as the text).  For example <code>{type: &#39;text&#39;, textProperty:&#39;rightStem&#39;}</code> will use the <code>rightStem</code> property of each row as the text content.
-dropdown    | Display a dropdown input. Use the <code>answers</code> property to set the options for the dropdown. For example <code>{type:&#39;text&#39;, answers: [&#39;Male&#39;, &#39;Female&#39;]}&#39;. See the [dropdown](#dropdown) question for more</code>answers` options.
-input       | Display a text input. Note that users can input responses that may be confused with other responses (if a user inputs a 1 it may be confused with a selection of a checkbox in the first column).</p>
+<p>There are several column types at your disposal, </p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>checkbox</td>
+<td>The default is &quot;checkbox&quot;.</td>
+</tr>
+<tr>
+<td>text</td>
+<td>Display text of you choice (use the <code>textProperty</code> property to set the row property that will be used as the text).  For example <code>{type: &#39;text&#39;, textProperty:&#39;rightStem&#39;}</code> will use the <code>rightStem</code> property of each row as the text content.</td>
+</tr>
+<tr>
+<td>dropdown</td>
+<td>Display a dropdown input. Use the <code>answers</code> property to set the options for the dropdown. For example <code>{type:&#39;text&#39;, answers: [&#39;Male&#39;, &#39;Female&#39;]}&#39;. See the [dropdown](#dropdown) question for more</code>answers` options.</td>
+</tr>
+<tr>
+<td>input</td>
+<td>Display a text input. Note that users can input responses that may be confused with other responses (if a user inputs a 1 it may be confused with a selection of a checkbox in the first column).</td>
+</tr>
+</tbody>
+</table>
 <h5><a name="gridrows" class="header-link" href="#gridrows"><span></span></a>grid.rows</h5><p>If you set a string instead of a row object it will be treated as if you set only the stem and all other values will be set by default.</p>
 <table>
 <thead>

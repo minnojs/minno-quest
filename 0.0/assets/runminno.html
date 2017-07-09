@@ -72,7 +72,11 @@
                     });
                 });
 
+<<<<<<< 173e6010866385ca85539a15fa55820a420b4c49
                 preTask.$inject = oldPreTask.$inject;
+=======
+                preTask.$inject = ['currentTask'];
+>>>>>>> chore(upgrade): v0.1.28
                 function preTask(task){
                     if (task.type === 'pip') task.baseUrl = pipUrl;
                     if (oldPreTask) oldPreTask.apply(this, arguments);
