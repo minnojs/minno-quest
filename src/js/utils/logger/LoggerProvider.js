@@ -19,9 +19,12 @@
 define(function(require){
     var _ = require('underscore');
 
-    loggerProvider.$inject = ['$http','$q', 'piConsole'];
-    function loggerProvider($http, $q, piConsole){
+    loggerProvider.$inject = ['$http','$q', 'piConsole','$rootScope'];
+    function loggerProvider($http, $q, piConsole,$rootScope){
         var self = this;
+        var global = $rootScope.global;
+        var logs = [];
+        _.set(global, 'current.logs', logs);
 
         function Logger(dfltLogFn){
             this.pending = [];
@@ -41,17 +44,16 @@ define(function(require){
                     piConsole(['logger']).debug(logObj);
                     throw new Error('Logger: in order to use "meta" the log must be an object.');
                 }
-
                 _.extend(logObj, this.meta);
+                
+                logs.push(logObj);
 
 				// if debug, then log this object
                 piConsole(['logger']).debug('Logged: ', logObj);
 
                 this.pending.push(logObj);
                 self.logCounter++;
-                if (settings.pulse && !this.suppress && this.pending.length >= settings.pulse){
-                    this.send();
-                }
+                if (settings.pulse && !this.suppress && this.pending.length >= settings.pulse) this.send();
             },
 
             send: function(){
@@ -66,8 +68,8 @@ define(function(require){
                     return def.promise;
                 }
 
-                if (_.isUndefined(settings.url)){
-                    piConsole('logger').warn('The logger url is not set.');
+                // is undefined or null
+                if (settings.url == null){
                     def.resolve();
                     return def.promise;
                 }
@@ -115,9 +117,7 @@ define(function(require){
             },
 
             setSettings: function(settings){
-                if (arguments.length === 0){
-                    return this.settings;
-                }
+                if (arguments.length === 0) return this.settings;
 
 				// inherit settings both from settings obj, and the global settings
                 this.settings = _.defaults({}, settings, self.settings);

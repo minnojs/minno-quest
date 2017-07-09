@@ -1,5 +1,6 @@
 define(function(require){
     var _ = require('underscore');
+    var managerToCsv = require('./managerToCsv');
 
     managerService.$inject = ['$rootScope', '$q', 'managerSequence', 'managerTaskLoad', '$injector'];
     function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector){
@@ -107,7 +108,9 @@ define(function(require){
             var beforeUnload = $injector.get('managerBeforeUnload');
             var injectStyle = $injector.get('managerInjectStyle');
             var rootElement = $injector.get('$rootElement');
+            var $http = $injector.get('$http');
             var canvasOff, stylesOff, skinClass = settings.skin || 'default';
+
 
 			// prevent accidental browsing away
             beforeUnload.activate();
@@ -125,9 +128,13 @@ define(function(require){
             preloadImages(settings.preloadImages || []);
 
 			// activate titles
-            if (settings.title){
-                $document[0].title = settings.title;
-            }
+            if (settings.title) $document[0].title = settings.title;
+
+
+            if (_.get(settings, 'logger.postCsv', false)) $scope.$on('$destroy', function(){
+                var csv = managerToCsv($rootScope.global);
+                $http.post(settings.logger.postCsv, csv);
+            });
 
             rootElement.addClass(skinClass + '-skin');
         }

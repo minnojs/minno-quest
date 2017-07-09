@@ -9,6 +9,7 @@
     - [preloadImages](#preloadimages)
     - [skip](#skip)
     - [skin](#skin)
+    - [logger](#logger)
 - [Tasks](#tasks)
     - [Quest](#quest)
     - [Message](#message)
@@ -19,7 +20,7 @@
     - [Activator function](#activator-function)
     - [Custom Task Example](#custom-task-example)
 - [Project Implicit Build](#project-implicit-build)
-    - [logger](#logger)
+    - [logger.url](#loggerurl)
     - [mTurk](#mturk)
 
 The miManager is responsible for managing several piTasks sequentially. It uses the same API used throughout Minno tasks.
@@ -108,12 +109,28 @@ Whether to activate the skip and refresh option. If activated, clicking `ctrl r`
 API.addSettings('skip', true);
 ```
 
-### Skin
+#### skin
 Add a skin to your project. Skins change the way that your tasks look. Currently the only skins that we support are `simple` and `demo`.
 
 ```javascript
 API.addSettings('skin', 'demo');
 ```
+
+#### logger
+The logger allows control of manager level logging activities.
+
+You may set `logger.postCsv` in order to post a csv with the results of all of your tasks at the end of the manager.
+Each log will be logged to a separate row.
+Each property will have a separate column.
+Each row has a unique column called taskName that holds the appropriate task name.
+
+```javascript
+API.addSettings('logger', {
+    postCsv: '/url/to/csv/saver/'
+});
+```
+
+When using this setting, make sure you do not set `logger.url` in your individual tasks, or else they will post individually in addition to your csv post.
 
 ### Tasks
 The basic unit in miManager is the **task**. The manager currently supports several types of tasks; `quest`, `message` and `post`. You should just cue them into the sequence (you can use mixers to your hearts content as well).
@@ -222,7 +239,7 @@ var taskElement = {scriptUrl:'path/to/script'};
 
 ### Project Implicit Build
 
-#### logger
+#### logger.url
 The project implicit build logs the movement from each task to the next.
 By default advancement is logged to `/implicit/PiManager`, if you want to change the default behaviour you should change settings.logger.url.
 
