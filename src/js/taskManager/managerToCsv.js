@@ -16,7 +16,7 @@ define(function(require){
     }
 
     function harvestTask(taskName, task){
-        if (_.isPlainObject(task) && Array.isArray(task.logs)) return task.logs.map(addTaskName);
+        if (taskName !== 'current' && _.isPlainObject(task) && Array.isArray(task.logs)) return task.logs.map(addTaskName);
         return [];
         
         function addTaskName(obj){ obj.taskName = taskName; return obj; }

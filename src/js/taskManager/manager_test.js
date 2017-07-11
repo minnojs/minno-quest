@@ -60,7 +60,7 @@ define(['require','./managerModule'], function(require){
                 expect($document[0].title).toBe('test123');
             }));
 
-            iit('should postCsv is active', inject(function($http,managerService){
+            it('should postCsv is active', inject(function($http,managerService){
                 var global = $scope.global;
                 var expected = [
                     'taskName,a,b,c,d,e',
