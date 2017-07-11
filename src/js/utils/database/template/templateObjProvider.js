@@ -17,7 +17,7 @@ define(function(require){
             return result;
 
             function expand(value){
-                if (_.isString(value)) return template(value, ctx);
+                if (_.isString(value)) return template(value);
                 if (_.isArray(value)) return value.map(expand);
                 if (_.isPlainObject(value)) return _.mapValues(value, expand);
                 return value;
@@ -26,15 +26,12 @@ define(function(require){
             function template(input){
                 // if there is no template just return the string
                 if (!~input.indexOf('<%')) return input;
-                return _.template(input)(context);
+                return _.template(input)(ctx);
             }
         }
 
         return templateObj;
-
-
     }
-
 
     return templateObjProvider;
 });
