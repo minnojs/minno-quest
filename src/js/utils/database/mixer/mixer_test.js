@@ -496,6 +496,7 @@ define(['underscore','./mixerModule', '../randomize/randomizeModuleMock'],functi
 
                 it('should support "equals"', function(){
                     expect(mc({compare:2,to:2})).toBeTruthy();
+                    expect(mc({compare:2,to:2,operator:'equals'})).toBeTruthy();
                 });
 
                 it('should support "negate"', function(){
@@ -522,6 +523,26 @@ define(['underscore','./mixerModule', '../randomize/randomizeModuleMock'],functi
                     expect(mc({compare:1,to:[2],operator:'greaterThanOrEqual'})).not.toBeTruthy();
                 });
 
+                it('should support lesserThan', function(){
+                    expect(mc({compare:2,to:2,operator:'lesserThan'})).not.toBeTruthy();
+                    expect(mc({compare:2,to:1,operator:'lesserThan'})).not.toBeTruthy();
+                    expect(mc({compare:1,to:2,operator:'lesserThan'})).toBeTruthy();
+
+                    expect(mc({compare:1,to:'ymu',operator:'lesserThan'})).not.toBeTruthy();
+                    expect(mc({compare:1,to:[],operator:'lesserThan'})).not.toBeTruthy();
+                    expect(mc({compare:1,to:[2],operator:'lesserThan'})).not.toBeTruthy();
+                });
+
+                it('should support lesserThanOrEqual', function(){
+                    expect(mc({compare:2,to:2,operator:'lesserThanOrEqual'})).toBeTruthy();
+                    expect(mc({compare:2,to:1,operator:'lesserThanOrEqual'})).not.toBeTruthy();
+                    expect(mc({compare:1,to:2,operator:'lesserThanOrEqual'})).toBeTruthy();
+
+                    expect(mc({compare:1,to:'ymu',operator:'lesserThanOrEqual'})).not.toBeTruthy();
+                    expect(mc({compare:1,to:[],operator:'lesserThanOrEqual'})).not.toBeTruthy();
+                    expect(mc({compare:1,to:[2],operator:'lesserThanOrEqual'})).not.toBeTruthy();
+                });
+
                 it('should support exactly', function(){
                     var obj = {};
                     expect(mc({compare:obj, to:obj, operator:'exactly'})).toBeTruthy();
@@ -533,6 +554,12 @@ define(['underscore','./mixerModule', '../randomize/randomizeModuleMock'],functi
                     expect(mc({compare:4, to:[1,2,3], operator:'in'})).not.toBeTruthy();
 
                     expect(mc({compare:4, to: 234, operator:'in'})).not.toBeTruthy();
+                });
+
+                it('should throw if operator is not recognized', function(){
+                    expect(function(){
+                        mc({operator:'unknown'});
+                    }).toThrow();
                 });
             });
 

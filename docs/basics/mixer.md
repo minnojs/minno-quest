@@ -553,6 +553,8 @@ equals              | This is the default operator. It checks if *compare* is eq
 exactly             | Checks if *compare* is exactly equal to *to* (uses ===)
 greaterThan         | *compare* > *to*
 greaterThanOrEquals | *compare* >= *to*
+lesserThan          | *compare* < *to*
+lesserThanOrEquals  | *compare* <= *to*
 in                  | *compare* is in the Array *to*;
 isTruthy            | *compare* == true
 function(){}        | This operator allows you to use a custom function of the form: `function(compareValue, toValue, context){return {Boolean}}`. The context is an object holding the *global*, *current* and *questions* objects.

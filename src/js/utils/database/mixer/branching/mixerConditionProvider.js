@@ -8,6 +8,10 @@ define(function(require){
             greaterThan: forceNumeric(_.gt),
             gte: forceNumeric(_.gte),
             greaterThanOrEqual: forceNumeric(_.gte),
+            lt: forceNumeric(_.lt),
+            lesserThan: forceNumeric(_.lt),
+            lte: forceNumeric(_.lte),
+            lesserThanOrEqual: forceNumeric(_.lte),
             equals: _.eq,
             'in': _.rearg(_.contains,1,0), // effectively reverse
             contains: _.rearg(_.contains,1,0), // effectively reverse
@@ -37,7 +41,9 @@ define(function(require){
             if (_.isFunction(condition)) return condition;
             if (!_.has(condition, 'operator')) return _.has(condition,'to') ? _.eq : isTruthy;
             if (_.isFunction(operator)) return operator;
-            return operatorHash[operator];
+            if (_.isFunction(operatorHash[operator])) return operatorHash[operator];
+            throw new Error('operator not found for condition: ' + JSON.stringify(condition));
+
         }
 
         function isTruthy(left){ return !!left; }
