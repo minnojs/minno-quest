@@ -105,7 +105,7 @@ if(randomStudy!=null)
             </div>
             <script>
                 document.getElementById('dismiss-message').addEventListener('click', function(event){
-                    document.body.removeChild(event.target.parentElement.parentElement);
+                    document.body.removeChild(document.getElementById('dev-message'));
                 });
             </script>
         <% } %>
