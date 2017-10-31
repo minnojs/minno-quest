@@ -33,6 +33,5 @@ nbproject
 
 # Folders to ignore
 node_modules
-bower_components/underscore
-dist/build.txt
+dist
 pages

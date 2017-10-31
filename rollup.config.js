@@ -1,0 +1,50 @@
+/* eslint env:"node" */
+
+import resolve from 'rollup-plugin-node-resolve';
+import commonjs from 'rollup-plugin-commonjs';
+import uglify from 'rollup-plugin-uglify';
+import string from 'rollup-plugin-string';
+import legacy from 'rollup-plugin-legacy';
+
+// add argument --production to uglify + index.js
+const production = process.argv.slice(2).some(v => v === '--production');
+
+const output = {
+    file: 'dist/minno.js',
+    format: 'iife', 
+    name: 'minnoQuest'
+};
+
+const piOutput = {
+    file: 'dist/pi-minno.js',
+    format: 'iife', 
+    name: 'minnoQuest'
+};
+
+const config = {
+    sourcemap:true,
+    plugins: [
+        legacy({
+            './node_modules/angular/angular.js':'angular',
+            './node_modules/requirejs/require.js':{define:'define',require:'require',requirejs:'requirejs'},
+            './node_modules/angular-animate/angular-animate.js':'contains' // just force an export
+        }),
+        resolve(),
+        string({include:['**/*.html', '**/*.jst']}),
+        commonjs(),
+        production && uglify() // minify, but only in production
+    ],
+    onwarn: function ( message ) {
+        if ( /requirejs/.test( message ) ) return;
+        console.error( message );
+    },
+    //external:['angular'],
+    globals: {
+        angular: 'angular'
+    }
+};
+
+export default [
+    production && Object.assign({}, config, {input:'src/index.js', output:output}),
+    Object.assign({}, config, {input:'src/pi-index.js', output:piOutput})
+].filter(v=>v);
