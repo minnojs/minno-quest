@@ -30,6 +30,7 @@
     "karma-jasmine": "^1.1.0",
     "karma-phantomjs-launcher": "^1.0.4",
     "karma-rollup-preprocessor": "^5.0.1",
+    "minno-gendocs": "^1.0.3",
     "node-sass": "^3.4.2",
     "rollup": "^0.50.0",
     "rollup-plugin-commonjs": "^8.2.1",

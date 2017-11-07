@@ -11,6 +11,7 @@ import angular from 'angular';
 import _ from 'lodash';
 import taskActivateProvider from './taskActivateProvider';
 import taskDirective from './taskDirective';
+import time from 'minno-time';
 
 export default module;
 
@@ -167,4 +168,31 @@ module.config(['taskActivateProvider', function(activateProvider){
     }
 
     activateProvider.set('pip', activatePIP);
+}]);
+
+/**
+ * minno-time activator
+ **/
+module.config(['taskActivateProvider', function(activateProvider){
+    activateTime.$inject = ['done', '$element', 'task', 'script'];
+    function activateTime(done, $canvas, task, script){
+        var $el;
+        var pipSink;
+
+        // update script name
+        task.name && (script.name = task.name);
+
+        $canvas.append('<div pi-player></div>');
+        $el = $canvas.contents();
+
+        pipSink = time($el[0], script);
+        pipSink.end.map(done);
+
+        return function destroyPIP(){
+            $el.remove();
+            pipSink.end(true);
+        };
+    }
+
+    activateProvider.set('time', activateTime);
 }]);

@@ -1,6 +1,7 @@
 import Constructor from './timeAPI';
 import _ from 'lodash';
 import decorator from './PIAPIdecorator';
+import time from 'minno-time';
 
 export default API;
 
@@ -48,7 +49,22 @@ function play(done, $canvas, script, task){
     var $el, req, baseUrl ,version = task.version || this.version;
     var pipSink, newVersion = version > 0.3;
 
-    if (task.type !== 'pip') throw new Error('Expected task.type to be "pip" but found: "' + task.type + '".');
+    if (task.type === 'time') {
+        // update script name
+        task.name && (script.name = task.name);
+
+        $canvas.append('<div pi-player></div>');
+        $el = $canvas.contents();
+
+        pipSink = time($el[0], script);
+        pipSink.end.map(done);
+
+        return function destroyPIP(){
+            $el.remove();
+            pipSink.end(true);
+        };
+    }
+
     if (!version) throw new Error('Version not defined for pip task: ' + (task.name || script.name));
 
     baseUrl = this.buildBaseUrl(version);
