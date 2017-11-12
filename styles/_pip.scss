@@ -49,6 +49,9 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+
+    display: -ms-grid;
+    -ms-grid-columns: max-content;
 }
 
 .minno-stimulus {
@@ -56,6 +59,8 @@
 	text-align:center;
 	overflow: hidden;
     visibility: hidden;
+    width:fit-content;
+
 }
 
 .minno-stimulus-visible {visibility:visible;}

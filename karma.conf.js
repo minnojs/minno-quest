@@ -37,6 +37,7 @@ module.exports = function(config) {
 			plugins: [
                 require('rollup-plugin-legacy')({
                     './node_modules/angular/angular.js':'angular',
+                    './node_modules/requirejs/require.js':{define:'define',require:'require',requirejs:'requirejs'},
                     './node_modules/angular-animate/angular-animate.js':'contains' // just force an export
                 }),
                 require('rollup-plugin-string')({include:['**/*.html', '**/*.jst']}),
@@ -47,6 +48,10 @@ module.exports = function(config) {
             name: 'minno',          // Required for 'iife' format.
             sourcemap: 'inline',    // Sensible for testing.
             external: ['angular'],
+            onwarn: function ( message ) {
+                if ( /requirejs/.test( message ) ) return;
+                console.error( message );
+            },
             globals: {
                 lodash: '_',
                 angular: 'angular',

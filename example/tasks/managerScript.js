@@ -1,6 +1,5 @@
 define(['managerAPI'], function(Manager){
     var API = new Manager();
-    var images = Array(30).fill('http://placehold.it/120x120&text=image').map((v,i)=>v+i);
     API.addSettings('skin', '');
     //API.addSettings('preloadImages', images);
 
@@ -31,7 +30,7 @@ define(['managerAPI'], function(Manager){
     ]);
 
     API.addSettings('onEnd', function(){console.log('onEnd');});
-    API.addSettings('skip', true);
+    //API.addSettings('skip', true);
 
     API.addSequence([
         {
@@ -45,7 +44,7 @@ define(['managerAPI'], function(Manager){
             type: 'time',
             name: 'iat',
             version: '110',
-            scriptUrl: '/test/helloPlay.js'
+            scriptUrl: '/test/center.js'
         },
         { type: 'quest', name: 'dotWidth', scriptUrl: 'questScript1.js' },
         {

@@ -29,7 +29,7 @@ app.config(['$provide',function($provide) {
 }]);
 
 angular.element(document).ready(function() {
-    var el = document.getElementById('pi-app');
+    var el = document.getElementById('minno-app');
     if (el) activate(el);
 });
 
