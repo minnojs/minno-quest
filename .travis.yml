@@ -1,12 +1,2 @@
 language: node_js
-node_js:
-  - '4.2'
-sudo: false
-env:
-  global:
-  - SAUCE_USERNAME: project_implicit
-  - secure: "IUXvzHpfLuz2yBIXSyJqdG7poFe5aL7LBl2lStwoRGPXFUdhXPujpvqZnJWQ+zufCNFOaalx/vorNzDzgM4gZ2e88X0p3zhYoT/3iq0VuXL+dSWKE7OM4Krxd6Z+oHXzS456UG3Xi35cWLQxP6pP287ND+vRcG1MVaZ+IVyseuA="
-
-before_install:
-  - 'npm install -g bower grunt-cli'
-  - 'bower install'
+node_js: 6
