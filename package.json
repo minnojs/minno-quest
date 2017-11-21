@@ -50,7 +50,7 @@
     "dragula": "^3.7.2",
     "lodash": "^3.10.1",
     "minno-sequencer": "github:minnojs/minno-sequencer",
-    "minno-time": "file:../pip",
+    "minno-time": "github:minnojs/minno-time#0.5",
     "requirejs": "^2.3.5",
     "utils": "file:src/utils"
   }
