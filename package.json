@@ -8,7 +8,7 @@
     "css": "node-sass styles/main.scss --output dist --include-path=node_modules/bootstrap-sass/assets/stylesheets/ --include-path=node_modules --source-map=true",
     "rollup": "./node_modules/rollup/bin/rollup -c -w",
     "build": "npm run css && ./node_modules/rollup/bin/rollup -c --production",
-    "version": "npm run build && git add -A dist && git add -A src/styles/main.css*"
+    "version": "npm run build && git add -A dist"
   },
   "minno": {
     "activeVersions": [

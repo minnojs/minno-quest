@@ -20,14 +20,10 @@ define('angular', _.constant(angular));
 
 export default activate;
 
-var noop = function(){};
-if (!window.console) window.console = {log:noop,info:noop,error:noop};
-
 angular.element(document).ready(function() {
     var el = document.getElementById('minno-app');
     if (el) activate(el);
 });
-
 
 function activate(el){
     angular.bootstrap(el, [app.name]);
