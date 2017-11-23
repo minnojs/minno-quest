@@ -1,6 +1,6 @@
 {
   "name": "PIQuest",
-  "version": "0.1.29",
+  "version": "0.2.0",
   "license": "Apache-2.0",
   "scripts": {
     "test": "karma start",
