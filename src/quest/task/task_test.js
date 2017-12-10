@@ -11,15 +11,7 @@ describe('QuestTask',function(){
 
     // stubout constructors
     beforeEach(module('task', 'logger','database', function($provide) {
-        $provide.value('Logger', jasmine.createSpy('Logger').and.callFake(function(){
-            this.send = sendSpy;
-            this.log = logSpy;
-            this.suppressPulse = jasmine.createSpy('suppressPulse');
-            this.setSettings = jasmine.createSpy('setSettings');
-        }));
-        $provide.value('Database', function(){
-            this.createColl = createSpy;
-        });
+        $provide.value('Database', function(){ this.createColl = createSpy; });
         $provide.value('taskParse',parseSpy);
         $provide.value('QuestSequence',function(){
             this.next = function(){return this;};
@@ -51,7 +43,8 @@ describe('QuestTask',function(){
             }
         };
         task = new QuestTask(script);
-        expect(task.logger.setSettings).toHaveBeenCalledWith(script.settings.logger);
+        expect(task.logger._state).toBeTruthy();
+        expect(task.$logSource._state).toBeTruthy();
     }));
 
     it('should call settings.onEnd at the end of the task (if there is no endObject)', inject(function(QuestTask, $rootScope){
@@ -69,57 +62,15 @@ describe('QuestTask',function(){
         nextSpy.and.returnValue('nextObj');
     }));
 
-    it('should log anything left at the end of the task', inject(function($rootScope){
-        $rootScope.current.questions = {1:{test:1}, 2:{test:2, $logged:true}};
-        nextSpy.and.returnValue(undefined);
-        task.current();
-        $rootScope.$apply();
-        var q1 = $rootScope.current.questions[1];
-        expect(task.logger.log.calls.count()).toBe(1);
-        expect(task.logger.log).toHaveBeenCalledWith(q1,{}, undefined);
-        expect(q1.$logged).toBeTruthy();
-    }));
-
-    it('should `send` anything left at the end of the task', inject(function($rootScope){
-        nextSpy.and.returnValue(null);
-        task.current();
-        $rootScope.$apply();
-        expect(sendSpy).toHaveBeenCalled();
-        expect(task.logger.suppressPulse).toHaveBeenCalled(); // prevent breaking the final send into pulses
-        nextSpy.and.returnValue('nextObj');
-    }));
-
-    it('should call `onEnd` only after `send` is called', inject(function(QuestTask, $rootScope, $q){
-        var def = $q.defer();
-        var script = {
-            sequence:[],
-            settings: {
-                onEnd:jasmine.createSpy('onEnd').and.callFake(function(){
-                    expect(sendSpy).toHaveBeenCalled();
-                })
-            }
-        };
-        task = new QuestTask(script);
-        nextSpy.and.returnValue(undefined);
-        sendSpy.and.returnValue(def.promise);
-        task.current();
-        $rootScope.$apply();
-        expect(sendSpy).toHaveBeenCalled();
-        expect(script.settings.onEnd).not.toHaveBeenCalled();
-        def.resolve();
-        $rootScope.$apply();
-        expect(script.settings.onEnd).toHaveBeenCalled();
-        nextSpy.and.returnValue('nextObj');
-        sendSpy.and.returnValue(undefined);
-    }));
-
     it('should call the parser', inject(function(Database){
         expect(parseSpy).toHaveBeenCalledWith(script, jasmine.any(Database));
     }));
 
     it('should log user responses', function(){
-        var logObj = 'logContent';
-        task.log(logObj);
+        var logSpy = jasmine.createSpy('logSpy');
+        var logObj = ['logContent','more'];
+        task.$logSource.map(logSpy);
+        task.log.apply(task, logObj);
         expect(logSpy).toHaveBeenCalledWith(logObj);
     });
 });

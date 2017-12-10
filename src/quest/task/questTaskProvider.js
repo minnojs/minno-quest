@@ -1,4 +1,5 @@
 import angular from 'angular';
+import stream from 'mithril-stream';
 import _ from 'lodash';
 
 TaskProvider.$inject = ['$q','Database','Logger','QuestSequence','taskParse', 'dfltQuestLogger', '$rootScope'];
@@ -10,36 +11,23 @@ function TaskProvider($q, Database, Logger, QuestSequence, parse, dfltQuestLogge
         // save script for later use...
         this.script = script;
         this.db = new Database();
-        this.logger = new Logger(dfltQuestLogger);
-        this.logger.setSettings(settings.logger || {});
+        this.$logSource = stream();
+        this.logger = new Logger(this.$logSource, settings.logger || {}, dfltQuestLogger);
         this.q = $q.defer();
 
-        if (!_.isArray(script.sequence)){
-            throw new Error('Task: no sequence was defined');
-        }
+        if (!_.isArray(script.sequence)) throw new Error('Task: no sequence was defined');
 
         this.sequence = new QuestSequence(script.sequence, this.db);
 
         this.promise = this.q.promise
             .then(function(){
-            // check if there are unlogged questions and log them
-                self.logger.suppressPulse(); // this is the end of the task, we want to post all the logs at once.
+                // check if there are unlogged questions and log them
                 _.each($rootScope.current.questions, function(quest){
-                    if(quest.$logged){
-                        return true;
-                    }
-
-                    /**
-                 * logs to server
-                 * @param {Object} log : the actual data regarding this log
-                 * @param {Object} pageData : General inforamtion about this page
-                 * @param {Object} global : The global object
-                 */
+                    if(quest.$logged){ return true; }
                     self.log(quest, {}, $rootScope.global);
                     quest.$logged = true;
                 });
-                self.logger.suppressPulse(false); // turn suppress off
-                return self.logger.send();
+                self.logger.end(true);
             })['finally'](settings.onEnd || angular.noop); // end only after logging has finished (regardless of success)
 
         parse(script, this.db);
@@ -47,7 +35,7 @@ function TaskProvider($q, Database, Logger, QuestSequence, parse, dfltQuestLogge
 
     _.extend(Task.prototype, {
         log: function(){
-            this.logger.log.apply(this.logger, arguments);
+            this.$logSource.call(null, [].slice.call(arguments));
         },
         current: function(){
             var nextObj = this.sequence.current();
