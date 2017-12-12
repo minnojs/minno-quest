@@ -2,15 +2,13 @@ import './questTaskModule';
 
 describe('QuestTask',function(){
     var task;
-    var sendSpy = jasmine.createSpy('send');
-    var logSpy = jasmine.createSpy('log');
     var createSpy = jasmine.createSpy('create');
     var parseSpy = jasmine.createSpy('parse');
     var nextSpy = jasmine.createSpy('next').and.returnValue('nextObj');
     var script = {sequence:[]};
 
     // stubout constructors
-    beforeEach(module('task', 'logger','database', function($provide) {
+    beforeEach(module('task', 'database', function($provide) {
         $provide.value('Database', function(){ this.createColl = createSpy; });
         $provide.value('taskParse',parseSpy);
         $provide.value('QuestSequence',function(){
