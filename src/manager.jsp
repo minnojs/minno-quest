@@ -56,7 +56,7 @@ if(randomStudy!=null)
                      sessionId: '<%=sessionId%>',
                      datagroup: '<%=datagroup%>',
                      studyUrl: '<%=studyUrl%>',
-                     rulesUrl: '<%=rulesUrl%>'
+                     rulesUrl: '<%=rulesUrl%>',
                      app: 'manager'
 				}
 
