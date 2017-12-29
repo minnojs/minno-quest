@@ -11,6 +11,7 @@ angular.module('questDirectives').animation('.test', function(){});
 describe('piQuest', function(){
     var taskSpyObj, script, TaskSpy;
 
+
     function compile(){
         element = jqLite('<div pi-quest></div>');
         scope.script = script;

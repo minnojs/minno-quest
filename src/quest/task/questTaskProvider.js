@@ -1,4 +1,3 @@
-import angular from 'angular';
 import stream from 'mithril-stream';
 import _ from 'lodash';
 
@@ -29,7 +28,7 @@ function TaskProvider($q, Database, Logger, QuestSequence, parse, dfltQuestLogge
                     quest.$logged = true;
                 });
                 self.logger.end(true);
-            })['finally'](settings.onEnd || angular.noop); // end only after logging has finished (regardless of success)
+            })['finally'](settings.onEnd || _.noop); // end only after logging has finished (regardless of success)
 
         parse(script, this.db);
     }
@@ -48,11 +47,7 @@ function TaskProvider($q, Database, Logger, QuestSequence, parse, dfltQuestLogge
         },
         current: function(){
             var nextObj = this.sequence.current();
-
-            if (!nextObj){
-                this.end();
-            }
-
+            if (!nextObj) this.end();
             return nextObj;
         },
         next: function(){

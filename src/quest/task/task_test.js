@@ -19,7 +19,8 @@ describe('QuestTask',function(){
     }));
 
     beforeEach(inject(function(QuestTask, $rootScope){
-        $rootScope.current = {questions:{}};
+        $rootScope.global = {};
+        $rootScope.global.current = $rootScope.current = {questions:{}};
         task = new QuestTask(script);
     }));
 
@@ -48,9 +49,7 @@ describe('QuestTask',function(){
     it('should call settings.onEnd at the end of the task (if there is no endObject)', inject(function(QuestTask, $rootScope){
         var script = {
             sequence:[],
-            settings: {
-                onEnd:jasmine.createSpy('onEnd')
-            }
+            settings: { onEnd:jasmine.createSpy('onEnd') }
         };
         task = new QuestTask(script);
         nextSpy.and.returnValue(undefined);
