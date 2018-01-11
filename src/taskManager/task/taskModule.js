@@ -152,14 +152,14 @@ module.config(['taskActivateProvider', function(activateProvider){
             $el.removeClass('pi-spinner');
             if (newVersion) {
                 pipSink = activate($el[0], script);
-                pipSink.end.map(done);
+                pipSink.onEnd(done);
             }
             else activate(script, done);
         });
 
         return function destroyPIP(){
             $el.remove();
-            if (newVersion) pipSink.end(true);
+            if (newVersion) pipSink.end();
             else req(['app/task/main_view'], function(main){
                 main.deferred.resolve();
                 main.destroy();
@@ -186,11 +186,11 @@ module.config(['taskActivateProvider', function(activateProvider){
         $el = $canvas.contents();
 
         pipSink = time($el[0], script);
-        pipSink.end.map(done);
+        pipSink.onEnd(done);
 
         return function destroyPIP(){
             $el.remove();
-            pipSink.end(true);
+            pipSink.end();
         };
     }
 

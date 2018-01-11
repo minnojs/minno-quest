@@ -46,16 +46,10 @@ function APIconstructor(options){
 
         // settings
         addSettings: function(name, settingsObj){
-            var settings;
+            if (!_.isString(name)) throw new Error('The first argument to API.addSettings must be a string');
 
-
-
-            if (_.isPlainObject(settingsObj)){
-                settings = this.settings[name] = this.settings[name] || {};
-                _.extend(settings, settingsObj);
-            } else {
-                this.settings[name] = settingsObj;
-            }
+            if (_.isPlainObject(settingsObj)) this.settings[name] = _.extend(this.settings[name] || {}, settingsObj);
+            else this.settings[name] = settingsObj;
 
             return this;
         },
@@ -70,9 +64,7 @@ function APIconstructor(options){
         },
 
         addGlobal: function(obj){
-            if (!_.isPlainObject(obj)){
-                throw new Error('global must be an object');
-            }
+            if (!_.isPlainObject(obj)) throw new Error('global must be an object');
             return _.merge(global, obj);
         },
 
@@ -81,9 +73,7 @@ function APIconstructor(options){
         },
 
         addCurrent: function(obj){
-            if (!_.isPlainObject(obj)){
-                throw new Error('current must be an object');
-            }
+            if (!_.isPlainObject(obj)) throw new Error('current must be an object');
             return _.merge(this.script.current, obj);
         },
 
@@ -103,7 +93,6 @@ function APIconstructor(options){
 
         // name, response, taskName, taskNumber
         post: function(url, obj){
-            // just so we can use this in standalone PIP
             var $injector = angular.injector(['ng']);
 
             return $injector.invoke(['$http', function($http){
@@ -111,9 +100,7 @@ function APIconstructor(options){
             }]);
         },
 
-        shuffle: function(collection){
-            return _.shuffle(collection);
-        }
+        shuffle: _.shuffle.bind(_)
     });
 
     return API;
@@ -143,40 +130,35 @@ function add_set(type){
      *
      */
     function setSetter(set, setArr){
-
         // get the sets we want to extend (or create them)
         var targetSets = this.script[type + 'Sets'] || (this.script[type + 'Sets'] = []);
         var list;
 
+        if (_.isUndefined(set)) throw new Error('There is an undefined "' + type + 'Set".');
+
+        if (_.isArray(set)) list = set;
+        if (_.isString(set)) list = addSet(set, arrayWrap(setArr));
         if (_.isPlainObject(set)) {
-            list = _(set)
-                // for each set of elements
-                .map(function(value, key){
-                    // add the set name to each key
-                    _.each(value, function(v){v.set = key;});
-                    return value; // return the set
-                })
-                .flatten() // flatten all sets to a single array
-                .value();
-        }
-
-        if (_.isArray(set)){
-            list = set;
-        }
-
-        if (_.isString(set)){
-            list = _.isArray(setArr) ? setArr : [setArr];
-            list = _.map(list, function(value){
-                value.set = set;
-                return value;
+            list = _.map(set, function(arr, setName){
+                return addSet(setName, arrayWrap(arr));
             });
-
+            list = _.flatten(list); 
         }
+
+        validateList(list);
 
         // merge the list into the targetSet
         targetSets.push.apply(targetSets, list);
     }
 
+    function addSet(setName, arr){ return arr.map(function(el){ return _.set(el, 'set', setName); }); }
+    function arrayWrap(arr){ return _.isArray(arr) ? arr : [arr]; }
+
+    function validateList(list){
+        if (_.isUndefined(list)) throw new Error('Error parsing "' + type + 'Set": Unknown set type.');
+        if (list.every(function(el){ return _.has(el, 'set'); })) return;
+        throw new Error('All elements must be defined and belong to a set (error parsing "' + type + 'Set")');
+    }
+
     return setSetter;
 }
-

@@ -48,7 +48,8 @@ function taskLoadService($q, managerGetScript, $console){
             task.$template = promises.template;
             return task;
         }, function(e){
-            $console('load').error('Failed to load task script - make sure that your URLs are all correct and that your script does not have any errors.', e);
+            $console('load').error('Failed to load task script - make sure that your URLs are all correct and that your script does not have any errors.');
+            throw e;
         });
 
         return promise;

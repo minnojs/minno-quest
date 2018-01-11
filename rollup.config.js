@@ -5,6 +5,8 @@ import commonjs from 'rollup-plugin-commonjs';
 import uglify from 'rollup-plugin-uglify';
 import string from 'rollup-plugin-string';
 import legacy from 'rollup-plugin-legacy';
+import postcss from 'rollup-plugin-postcss';
+import cssnano from 'cssnano';
 
 // add argument --production to uglify + index.js
 const production = process.argv.slice(2).some(v => v === '--production');
@@ -24,6 +26,7 @@ const piOutput = {
 const config = {
     sourcemap:true,
     plugins: [
+        postcss({plugins:[cssnano()]}),
         legacy({
             './node_modules/angular/angular.js':'angular',
             './node_modules/requirejs/require.js':{define:'define',require:'require',requirejs:'requirejs'},
