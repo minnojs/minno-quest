@@ -50479,14 +50479,14 @@ lodash.extend(API$1.prototype, api$1.prototype);
 API$1.prototype.setVersion = function setVersion(ver){this.script.version = ver;};
 
 // annotate the play function
-play.$inject = ['done', '$element', 'script', 'task'];
+play.$inject = ['done', '$element', 'script', 'task', 'piConsole'];
 
 
 /**
  * The activator function for pip
  * (anotated up in the main code)
  */
-function play(done, $canvas, script, task){
+function play(done, $canvas, script, task, $console){
     var $el, req, baseUrl ,version = task.version || this.version;
     var pipSink, newVersion = version > 0.3;
 
@@ -50499,6 +50499,9 @@ function play(done, $canvas, script, task){
 
         pipSink = activate$2($el[0], script);
         pipSink.onEnd(done);
+        pipSink.$messages.map(function(log){
+            if (log.type == 'error') $console('time').error(log.message, log.error.message);
+        });
 
         return function destroyPIP(){
             $el.remove();
@@ -58254,8 +58257,8 @@ module$15.config(['taskActivateProvider', function(activateProvider){
  * minno-time activator
  **/
 module$15.config(['taskActivateProvider', function(activateProvider){
-    activateTime.$inject = ['done', '$element', 'task', 'script'];
-    function activateTime(done, $canvas, task, script){
+    activateTime.$inject = ['done', '$element', 'task', 'script', 'piConsole'];
+    function activateTime(done, $canvas, task, script, $console){
         var $el;
         var pipSink;
 
@@ -58267,6 +58270,9 @@ module$15.config(['taskActivateProvider', function(activateProvider){
 
         pipSink = activate$2($el[0], script);
         pipSink.onEnd(done);
+        pipSink.$messages.map(function(log){
+            if (log.type == 'error') $console('time').error(log.message, log.error.message);
+        });
 
         return function destroyPIP(){
             $el.remove();
@@ -61019,9 +61025,7 @@ function directive$16($rootScope){
 
             function remove(log){
                 var index = lodash.indexOf(logs, log);
-                if (index > -1) {
-                    logs.splice(index, 1);
-                }
+                if (index > -1) logs.splice(index, 1);
             }
         }
     };

@@ -174,8 +174,8 @@ module.config(['taskActivateProvider', function(activateProvider){
  * minno-time activator
  **/
 module.config(['taskActivateProvider', function(activateProvider){
-    activateTime.$inject = ['done', '$element', 'task', 'script'];
-    function activateTime(done, $canvas, task, script){
+    activateTime.$inject = ['done', '$element', 'task', 'script', 'piConsole'];
+    function activateTime(done, $canvas, task, script, $console){
         var $el;
         var pipSink;
 
@@ -187,6 +187,9 @@ module.config(['taskActivateProvider', function(activateProvider){
 
         pipSink = time($el[0], script);
         pipSink.onEnd(done);
+        pipSink.$messages.map(function(log){
+            if (log.type == 'error') $console('time').error(log.message, log.error.message);
+        });
 
         return function destroyPIP(){
             $el.remove();

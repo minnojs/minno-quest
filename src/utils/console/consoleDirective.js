@@ -20,9 +20,7 @@ function directive($rootScope){
 
             function remove(log){
                 var index = _.indexOf(logs, log);
-                if (index > -1) {
-                    logs.splice(index, 1);
-                }
+                if (index > -1) logs.splice(index, 1);
             }
         }
     };
