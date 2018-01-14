@@ -40,10 +40,7 @@ define(['managerAPI'], function(Manager){
                 global.current = global.iat =  {feedback:'bam!'};
             }
         },
-        {
-            type:'time',
-            scriptUrl: '/test/maintask.js'
-        },
+        //{ type:'time', scriptUrl: '/test/maintask.js' },
         { type: 'quest', name: 'dotWidth', scriptUrl: 'questScript1.js' },
         {
             mixer: 'branch',

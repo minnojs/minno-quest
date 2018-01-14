@@ -1,45 +1,67 @@
 import angular from 'angular';
-import consoleProvider from './consoleProvider';
-import consolePrototypeProvider from './consolePrototypeProvider';
-import consoleDirective from './consoleDirective';
+import _ from 'lodash';
+import stream from 'mithril-stream';
+import template from './console.html';
 
 export default module;
 
 var module = angular.module('piConsole',[]);
 
-module.service('piConsole', consoleProvider);
-module.service('piConsolePrototype', consolePrototypeProvider);
-module.directive('piConsole', consoleDirective);
+module.factory('piConsole', piConsoleFactory);
 
-module.filter('stringify', function(){
-    return stringify;
-});
+piConsoleFactory.$inject = ['$log'];
+function piConsoleFactory($log){
+    var piConsole = stream();
+    piConsole.map(function(log){ $log[log.type](log.message); });
+    piConsole.map(function(log){return log.type === 'error' ? log : stream.HALT;}).map(displayLogs());
+    return piConsole;
+}
 
-function stringify(value, pretty) {
-    if (value == null) { // null || undefined
-        return '<i class="text-muted">undefined</i>';
+function displayLogs(){
+    var panelClasses = {error:'panel-danger', warn:'panel-warning', info:'panel-info', debug:'panel-success',log:'panel-success'};
+    var container = document.querySelector('[pi-console]');
+    var compiledTemplate = _.template(template);
+
+    if (!container) return _.noop;
+
+    container.addEventListener('click',function(e){
+        if (e.target.classList.contains('close')) container.removeChild(e.target.parentNode.parentNode);
+        if (e.target.classList.contains('panel-heading')) e.target.parentNode.classList.toggle('noshow');
+        if (e.target === container) container.classList.toggle('noshow');
+    });
+
+    return createLog;
+    
+    function createLog(log){
+        var el = document.createElement('div');
+        el.classList.add('panel');
+        el.classList.add('noshow');
+        el.classList.add(panelClasses[log.type]);
+        el.innerHTML = compiledTemplate({log:log, syntaxHighlight:syntaxHighlight});
+        container.insertBefore(el, container.firstChild || null);
     }
-    if (value === '') {
-        return '<i class="text-muted">an empty string</i>';
-    }
+}
 
-    switch (typeof value) {
-        case 'string':
-            break;
-        case 'number':
-            value = '' + value;
-            break;
-        case 'object':
-            // display the error message not the full thing...
-            if (value instanceof Error){
-                value = value.message;
-                break;
+function syntaxHighlight(json) {    
+    var _string = 'color:green',
+        _number = 'color:darkorange',
+        _boolean = 'color:blue',
+        _null = 'color:magenta',
+        _key = 'color:red';
+        
+    json = JSON.stringify(json, null, 2);
+    json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+        var style = _number;
+        if (/^"/.test(match)) {
+            if (/:$/.test(match)) {
+                style = _key;
+            } else {
+                style = _string;
             }
-            /* fall through */
-        default:
-            // @TODO: implement this: http://stackoverflow.com/questions/4810841/how-can-i-pretty-print-json-using-javascript
-            value = '<a href="javascript:void(0)">' + angular.toJson(value, !!pretty) + '</a>';
-    }
-
-    return value;
+        } 
+        else if (/true|false/.test(match)) style = _boolean;
+        else if (/null/.test(match)) style = _null;
+        return '<span style="' + style + '">' + match + '</span>';
+    });
 }

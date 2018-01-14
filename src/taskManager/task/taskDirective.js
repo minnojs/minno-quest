@@ -38,13 +38,14 @@ function directive(activateTask, canvas, $document, $window, $rootScope, piConso
             }
 
             /**
-                 * Setup current object
-                 */
+             * Setup current object
+             */
             $rootScope.current = piGlobal.current = script.current || {};
             if (taskName){
-                if (piGlobal[taskName]){
-                    piConsole(['task']).warn('This taskName has already been in use: "' + taskName + '"');
-                }
+                if (piGlobal[taskName]) piConsole({
+                    tags:['task'],
+                    warn:'This taskName has already been in use: "' + taskName + '"'
+                });
                 // extend current script with the piGlobal object
                 _.extend($rootScope.current, piGlobal[taskName] || {});
                 // set the current object back into the global

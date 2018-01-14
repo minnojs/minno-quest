@@ -72,13 +72,19 @@ function questController($scope, Stopper, $parse, $attr, piConsole, invoke, $roo
         if (_.isUndefined(log)){
             log = {};
             ngModelGet.assign($scope.$parent, log);
-        } else {
-            piConsole(['question']).warn('This question has already been in use: "' + log.name + '"');
-        }
+        } else piConsole({
+            type:'warn',
+            message:'This question has already been in use: "' + log.name + '"',
+            context: log,
+            tags:['question']
+        });
 
-        if (!data.name){
-            piConsole(['question']).warn('There is a question without a name! I\'d tell you what it is, but it has no name!');
-        }
+        if (!data.name) piConsole({
+            type:'warn',
+            message:'There is a question without a name! I\'d tell you what it is, but it has no name!',
+            tags:['question'],
+            context: data
+        });
 
         // expose all the stuff...
         self.log = ngModel.$modelValue = log;

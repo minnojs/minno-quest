@@ -20,16 +20,24 @@ function directive($compile, $rootScope, $document, $console){
                 tasksData: _.get(script, 'data', {})
             };
 
-            if (script.$template == null){
-                $console('message').error('missing template for message', script.name || script.inherit);
-            }
+            if (script.$template == null) $console({
+                tags:'message',
+                type:'error',
+                message:'missing template for message',
+                context: script
+            });
 
             // try to render template
             try {
                 template = _.template(script.$template)(context);
             } catch(e){
                 template = script.$template;
-                $console('message').error('failed to render template', e);
+                $console({
+                    tags:'message',
+                    type:'error',
+                    message:'failed to render template',
+                    error:e
+                });
             }
 
             _.extend($scope, context);

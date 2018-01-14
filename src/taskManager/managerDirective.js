@@ -52,7 +52,12 @@ function managerControler($scope, ManagerService, managerLoad, piConsole){
         }
 
         function error(e){
-            piConsole('manager').error('Failed to load ' + taskSource, e);
+            piConsole({
+                type:'error',
+                message:'Failed to load ' + taskSource,
+                tags:['manager'],
+                error:e
+            });
         }
     }
 }
@@ -89,7 +94,12 @@ function directive($q, $injector,piConsole){
 
                 // get loaded task
                 currentTask = thisCtrl.manager.current();
-                piConsole('manager').debug('Manager:currentTask', currentTask);
+                piConsole({
+                    tags:['manager'],
+                    type:'debug',
+                    message:'Manager:currentTask', 
+                    context: currentTask
+                });
 
                 // procced or and manager
                 currentTask ? proceed() : done();
@@ -153,7 +163,12 @@ function directive($q, $injector,piConsole){
                     })
                     .reduce(function(promise, fn){
                         return promise.then(fn, function(e){
-                            piConsole('manager').error('There was an error in the task sequence. ',e);
+                            piConsole({
+                                type:'error',
+                                message:'There was an error in the task sequence.',
+                                tags:['manager'],
+                                error:e
+                            });
                         });
                     }, promise);
             }

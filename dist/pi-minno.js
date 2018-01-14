@@ -50038,7 +50038,7 @@ function interactions$1(trial){
     try {
         validateInteractions(interactions);
     } catch(error){
-        trial.$messages({type:'error', message: 'trial.interactions error', error:error});
+        trial.$messages({type:'error', message: 'trial.interactions error', error:error, context:trial._source});
         throw error;
     }
     return eventMap;
@@ -50499,9 +50499,7 @@ function play(done, $canvas, script, task, $console){
 
         pipSink = activate$2($el[0], script);
         pipSink.onEnd(done);
-        pipSink.$messages.map(function(log){
-            if (log.type == 'error') $console('time').error(log.message, log.error.message);
-        });
+        pipSink.$messages.map($console);
 
         return function destroyPIP(){
             $el.remove();
@@ -54555,7 +54553,8 @@ function parseProvider(piConsole){
 
         script.settings || (script.settings = {});
 
-        piConsole.setSettings(script.settings.DEBUG || {});
+        // @TODO: find a way to apply this to piConsole
+        piConsole.settings = script.settings.DEBUG || {};
     }
 
     return parse;
@@ -55117,13 +55116,19 @@ function questController$1($scope, Stopper, $parse, $attr, piConsole, invoke, $r
         if (lodash.isUndefined(log)){
             log = {};
             ngModelGet.assign($scope.$parent, log);
-        } else {
-            piConsole(['question']).warn('This question has already been in use: "' + log.name + '"');
-        }
+        } else piConsole({
+            type:'warn',
+            message:'This question has already been in use: "' + log.name + '"',
+            context: log,
+            tags:['question']
+        });
 
-        if (!data.name){
-            piConsole(['question']).warn('There is a question without a name! I\'d tell you what it is, but it has no name!');
-        }
+        if (!data.name) piConsole({
+            type:'warn',
+            message:'There is a question without a name! I\'d tell you what it is, but it has no name!',
+            tags:['question'],
+            context: data
+        });
 
         // expose all the stuff...
         self.log = ngModel.$modelValue = log;
@@ -55375,10 +55380,11 @@ function directive$2($compile, $animate, $injector, piConsole){
 
                 lodash.each(animations, function(animation){
                     // Make sure that this animation exists
-                    if (!$injector.has('.' + animation + '-animation')){
-                        piConsole(['page','animation']).error('Unknown animation type: "' + animation + '"');
-                    }
-
+                    if (!$injector.has('.' + animation + '-animation')) piConsole({
+                        type:'error',
+                        message: 'Unknown animation type: "' + animation + '"',
+                        tags:['page','animation']
+                    });
                 });
 
                 element.addClass(animationsStr);
@@ -57678,15 +57684,19 @@ function toRegexFilter($console){
     function toRegex(value) {
         var err;
 
-        if (lodash.isUndefined(value)){
-            return /(?:)/;
-        }
+        if (lodash.isUndefined(value)) return /(?:)/;
 
         if (lodash.isRegExp(value) || lodash.isString(value)){
             return new RegExp(value);
         } else {
             err = new Error('Question pattern is not a valid regular expression');
-            $console('text').error(err, value);
+            $console({
+                tags:'text',
+                type:'error',
+                message: 'pattern',
+                error: err, 
+                context: value
+            });
             throw err;
         }
     }
@@ -57821,16 +57831,24 @@ function directive$10($compile, $rootScope, $document, $console){
                 tasksData: lodash.get(script, 'data', {})
             };
 
-            if (script.$template == null){
-                $console('message').error('missing template for message', script.name || script.inherit);
-            }
+            if (script.$template == null) $console({
+                tags:'message',
+                type:'error',
+                message:'missing template for message',
+                context: script
+            });
 
             // try to render template
             try {
                 template = lodash.template(script.$template)(context);
             } catch(e){
                 template = script.$template;
-                $console('message').error('failed to render template', e);
+                $console({
+                    tags:'message',
+                    type:'error',
+                    message:'failed to render template',
+                    error:e
+                });
             }
 
             lodash.extend($scope, context);
@@ -58011,13 +58029,14 @@ function directive$12(activateTask, canvas, $document, $window, $rootScope, piCo
             }
 
             /**
-                 * Setup current object
-                 */
+             * Setup current object
+             */
             $rootScope.current = piGlobal.current = script.current || {};
             if (taskName){
-                if (piGlobal[taskName]){
-                    piConsole(['task']).warn('This taskName has already been in use: "' + taskName + '"');
-                }
+                if (piGlobal[taskName]) piConsole({
+                    tags:['task'],
+                    warn:'This taskName has already been in use: "' + taskName + '"'
+                });
                 // extend current script with the piGlobal object
                 lodash.extend($rootScope.current, piGlobal[taskName] || {});
                 // set the current object back into the global
@@ -58270,9 +58289,7 @@ module$15.config(['taskActivateProvider', function(activateProvider){
 
         pipSink = activate$2($el[0], script);
         pipSink.onEnd(done);
-        pipSink.$messages.map(function(log){
-            if (log.type == 'error') $console('time').error(log.message, log.error.message);
-        });
+        pipSink.$messages.map($console);
 
         return function destroyPIP(){
             $el.remove();
@@ -58820,14 +58837,15 @@ function taskLoadService($q, managerGetScript, $console){
         // make sure that the script is defined
         // and if not throw an appropriate error
             .then(function(script){
-                var e;
-                if (lodash.isUndefined(script)){
-                    e = new Error('Task ' + url + ' failed or has not been found. Make sure that you returned the script and that your script does not have any errors');
-                    $console('task').error(e);
-                    throw e;
-                }
-
-                return script;
+                if (!lodash.isUndefined(script)) return script;
+                var e = new Error('Could not load task ' + url);
+                $console({
+                    tags:'task',
+                    type:'error',
+                    message: 'Make sure that you returned the script and that your script does not have any errors',
+                    error:e
+                });
+                throw e;
             });
     }
 
@@ -58855,7 +58873,12 @@ function taskLoadService($q, managerGetScript, $console){
             task.$template = promises.template;
             return task;
         }, function(e){
-            $console('load').error('Failed to load task script - make sure that your URLs are all correct and that your script does not have any errors.');
+            $console({
+                tags:'load',
+                type:'error',
+                message:'Failed to load task script - make sure that your URLs are all correct and that your script does not have any errors.',
+                context:task
+            });
             throw e;
         });
 
@@ -58962,7 +58985,12 @@ function managerControler($scope, ManagerService, managerLoad, piConsole){
         }
 
         function error(e){
-            piConsole('manager').error('Failed to load ' + taskSource, e);
+            piConsole({
+                type:'error',
+                message:'Failed to load ' + taskSource,
+                tags:['manager'],
+                error:e
+            });
         }
     }
 }
@@ -58999,7 +59027,12 @@ function directive$14($q, $injector,piConsole){
 
                 // get loaded task
                 currentTask = thisCtrl.manager.current();
-                piConsole('manager').debug('Manager:currentTask', currentTask);
+                piConsole({
+                    tags:['manager'],
+                    type:'debug',
+                    message:'Manager:currentTask', 
+                    context: currentTask
+                });
 
                 // procced or and manager
                 currentTask ? proceed() : done();
@@ -59063,7 +59096,12 @@ function directive$14($q, $injector,piConsole){
                     })
                     .reduce(function(promise, fn){
                         return promise.then(fn, function(e){
-                            piConsole('manager').error('There was an error in the task sequence. ',e);
+                            piConsole({
+                                type:'error',
+                                message:'There was an error in the task sequence.',
+                                tags:['manager'],
+                                error:e
+                            });
                         });
                     }, promise);
             }
@@ -60860,214 +60898,67 @@ module$18.animation('.drop-in', dropInAnimation);
 module$18.animation('.fade', fadeAnimation);
 module$18.animation('.slide', slideAnimation);
 
-/**
- * A factory for $console
- *
- * each $console is prototyped on `consolePrototype`
- */
-
-consoleProvider$4.$inject = ['piConsolePrototype'];
-
-function consoleProvider$4(consolePrototype){
-
-    // decorate Console with a simple settings manager
-    Console.setSettings = consoleSetSettings;
-
-    return Console;
-
-    function Console(tags, force){
-        var $console = lodash.create(consolePrototype);
-
-        lodash.extend($console, {
-            tags: lodash.isArray(tags) ? tags : [tags], // make sure tags is an array
-            force: !!force
-        });
-
-        return $console;
-    }
-
-    // a mehtod of console
-    function consoleSetSettings (settings) {
-        consolePrototype.settings = settings;
-    }
-
-}
-
-/**
- * This is our $console object.
- * It is a bit weird as it is supposed to work in concert with the consoleProvider.
- *
- * it depends on `tags` {Array} and `force` {Boolean} to be set externaly.
- *
- * {
- * 		log: logFn
- * 		info: infoFn
- * 		shouldLog: fn that test whether as specific level should be logged
- * 		settings: settingsObj ==> to be set from piConsole
- * 		tags: ['tag1'] // to be compared to settings.tags ==> to be set from piConsole
- * 		force: false // ignore tags and level ==> to be set from piConsole
- * }
- */
-
-
-var LOGFUNCTIONS$2 = ['log', 'info', 'warn', 'error', 'debug'];
-var LEVELS$2 = {none:9, error:1, warn:2, info:3, log:4, debug:4};
-
-consolePrototypeProvider$4.$inject = ['$log', '$rootScope'];
-function consolePrototypeProvider$4 ($log, $rootScope) {
-    /**
-     * Create the prototype for the instances of piConsole
-     */
-    var consolePrototype = {};
-
-    // add logging function
-    lodash.each(LOGFUNCTIONS$2, function(level){
-        consolePrototype[level] = createLog(level);
-    });
-
-    // default settings
-    consolePrototype.settings = {};
-
-    // the function that checks if this instance
-    consolePrototype.shouldLog = shouldLog;
-
-    // if we want the individual functions to be seperable sometime...
-    //_.bindAll(consolePrototype);
-
-    return consolePrototype;
-
-    /**
-     * This function is a method of the consolePrototype.
-     * It accesses the global settings, and the definitions set by Console and returns whether we should log
-     *
-     * @param  {String} level 	The level of logging we are testing
-     * @return {Boolean}		Whether to log this or not
-     */
-    function shouldLog(level){
-        var targetLevel = this.settings.level || 'warn'; // levels set to show
-        var targetTags = this.settings.tags || 'all'; // tags set to show
-        var tags = this.tags;
-        var force = this.force;
-
-        if (force){
-            return true;
-        }
-
-        // check if this level should *not* be logged
-        if (!~lodash.indexOf(LOGFUNCTIONS$2, targetLevel)){
-            this.settings.level = 'error';
-            this.error('Unknow DEBUG level: "' + targetLevel + '". The valid levels are debug>info>warn>error>none');
-            return false;
-        }
-
-        if (LEVELS$2[level] > LEVELS$2[targetLevel]){
-            return false;
-        }
-
-        // check if these tags should be logged (fit targetTags)
-        if (targetTags !== 'all' && !lodash.intersection(tags, lodash.isArray(targetTags) ? targetTags : [targetTags]).length){
-            return false;
-        }
-
-        // if we were not regected, this should be logged
-        return true;
-    }
-
-    /**
-     * Builds the log functions for consolePrototype
-     * @param  {String} level 	Level name
-     * @return {Function}       A logging function
-     */
-    function createLog (level) {
-        return function(){
-            var settings = this.settings;
-            var i, args = [];
-
-            if (this.shouldLog(level)){
-                // get arguments (so that we don't leak the arguments object)
-                for (i=0; i < arguments.length; i++){args[i] = arguments[i];}
-
-                // do the actual logging
-                $log[level].apply(null, args);
-
-                if (settings.hideConsole){return;}
-
-                // broadcast to the piConsole directive
-                $rootScope.$emit('console:log',{
-                    time: new Date(),
-                    type: level,
-                    args: args,
-                    tags: this.tags
-                });
-
-            }
-        };
-    }
-}
-
-var template$12 = "<div>\n\t<div\n\t\tng-repeat=\"log in logs | orderBy:'time':true\"\n\t\tclass=\"alert\"\n\t\tng-class=\"{\n\t\t\t'alert-warning':log.type == 'warn',\n\t\t\t'alert-danger':log.type == 'error',\n\t\t\t'alert-info':log.type == 'info',\n\t\t\t'alert-success':log.type == 'log',\n\t\t\t'alert-success':log.type == 'debug'\n\n\t\t}\"\n\t\trole=\"alert\"\n\t>\n\t\t<button ng-click=\"remove(log)\" type=\"button\" class=\"close\" data-dismiss=\"alert\"><span aria-hidden=\"true\">&times;</span><span class=\"sr-only\">Close</span></button>\n\t\t<strong>{{ log.type | uppercase}}:</strong> <i class=\"text-danger\">{{log.time | date : 'HH:mm:ss:sss'}}</i> - <strong>{{log.tags.join(' ')}}</strong>:</br>\n\t\t<span\n\t\t\tng-repeat=\"arg in log.args track by $index\"\n\t\t\tng-click=\"pre = !pre\"\n\t\t\tng-class=\"{pre:pre}\"\n\t\t\tng-bind-html=\"arg | stringify:pre\"\n\t\t></span>\n\n\t</div>\n</div>";
-
-// This is the only way to get a non js file relatively
-directive$16.$inject = ['$rootScope'];
-function directive$16($rootScope){
-    return {
-        replace: true,
-        template:template$12,
-        link: function(scope) {
-            var logs = scope.logs = [];
-
-            scope.remove = remove;
-            scope.reverse = true;
-
-            $rootScope.$on('console:log', function(scope, log){
-                logs.push(log);
-            });
-
-            function remove(log){
-                var index = lodash.indexOf(logs, log);
-                if (index > -1) logs.splice(index, 1);
-            }
-        }
-    };
-}
+var template$12 = "<div class=\"panel-heading\">\n    <strong><%= log.message %>:</strong> \n    <button type=\"button\" class=\"close\">&times;</button>\n\n    <% if (log.context) { %>\n        <div><%= log.error.message %></div>\n    <% } %>\n</div>\n\n<% if (log.context) { %>\n    <div class=\"panel-body\">\n        <strong>Context:</strong>\n        <pre><%= syntaxHighlight(log.context) %></pre>\n    </div>\n<% } %>\n\n<% if (log.rows) { %>\n    <ul class=\"list-group\">\n        <% for (var i=0; i<log.rows.length; i++) { %>\n        <li class=\"list-group-item\"><%= syntaxHighlight(log.rows[i]) %></li>\n        <% } %>\n    </ul>\n<% } %>\n";
 
 var module$19 = angular.module('piConsole',[]);
 
-module$19.service('piConsole', consoleProvider$4);
-module$19.service('piConsolePrototype', consolePrototypeProvider$4);
-module$19.directive('piConsole', directive$16);
+module$19.factory('piConsole', piConsoleFactory);
 
-module$19.filter('stringify', function(){
-    return stringify$2;
-});
+piConsoleFactory.$inject = ['$log'];
+function piConsoleFactory($log){
+    var piConsole = stream$2();
+    piConsole.map(function(log){ $log[log.type](log.message); });
+    piConsole.map(function(log){return log.type === 'error' ? log : stream$2.HALT;}).map(displayLogs());
+    return piConsole;
+}
 
-function stringify$2(value, pretty) {
-    if (value == null) { // null || undefined
-        return '<i class="text-muted">undefined</i>';
+function displayLogs(){
+    var panelClasses = {error:'panel-danger', warn:'panel-warning', info:'panel-info', debug:'panel-success',log:'panel-success'};
+    var container = document.querySelector('[pi-console]');
+    var compiledTemplate = lodash.template(template$12);
+
+    if (!container) return lodash.noop;
+
+    container.addEventListener('click',function(e){
+        if (e.target.classList.contains('close')) container.removeChild(e.target.parentNode.parentNode);
+        if (e.target.classList.contains('panel-heading')) e.target.parentNode.classList.toggle('noshow');
+        if (e.target === container) container.classList.toggle('noshow');
+    });
+
+    return createLog;
+    
+    function createLog(log){
+        var el = document.createElement('div');
+        el.classList.add('panel');
+        el.classList.add('noshow');
+        el.classList.add(panelClasses[log.type]);
+        el.innerHTML = compiledTemplate({log:log, syntaxHighlight:syntaxHighlight});
+        container.insertBefore(el, container.firstChild || null);
     }
-    if (value === '') {
-        return '<i class="text-muted">an empty string</i>';
-    }
+}
 
-    switch (typeof value) {
-        case 'string':
-            break;
-        case 'number':
-            value = '' + value;
-            break;
-        case 'object':
-            // display the error message not the full thing...
-            if (value instanceof Error){
-                value = value.message;
-                break;
+function syntaxHighlight(json) {    
+    var _string = 'color:green',
+        _number = 'color:darkorange',
+        _boolean = 'color:blue',
+        _null = 'color:magenta',
+        _key = 'color:red';
+        
+    json = JSON.stringify(json, null, 2);
+    json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+        var style = _number;
+        if (/^"/.test(match)) {
+            if (/:$/.test(match)) {
+                style = _key;
+            } else {
+                style = _string;
             }
-            /* fall through */
-        default:
-            // @TODO: implement this: http://stackoverflow.com/questions/4810841/how-can-i-pretty-print-json-using-javascript
-            value = '<a href="javascript:void(0)">' + angular.toJson(value, !!pretty) + '</a>';
-    }
-
-    return value;
+        } 
+        else if (/true|false/.test(match)) style = _boolean;
+        else if (/null/.test(match)) style = _null;
+        return '<span style="' + style + '">' + match + '</span>';
+    });
 }
 
 /**

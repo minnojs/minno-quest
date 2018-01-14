@@ -58,9 +58,7 @@ function play(done, $canvas, script, task, $console){
 
         pipSink = time($el[0], script);
         pipSink.onEnd(done);
-        pipSink.$messages.map(function(log){
-            if (log.type == 'error') $console('time').error(log.message, log.error.message);
-        });
+        pipSink.$messages.map($console);
 
         return function destroyPIP(){
             $el.remove();

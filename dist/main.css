@@ -6086,12 +6086,35 @@ button.close {
       border-color: #ccc; }
 
 [pi-console] {
-  margin: 20px 0px; }
-  [pi-console] .pre a {
-    white-space: pre;
-    text-decoration: none; }
-  [pi-console] .alert span {
-    margin-right: 5px; }
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 30%;
+  background: white;
+  overflow-y: scroll; }
+  [pi-console] .panel .panel-heading {
+    cursor: pointer; }
+  [pi-console] .panel.noshow .panel-body {
+    display: none; }
+  [pi-console]:before {
+    content: " --- Console --- ";
+    font-weight: bold;
+    display: inline-block;
+    width: 100%;
+    text-align: center; }
+  [pi-console]:empty {
+    display: none; }
+  [pi-console].noshow {
+    width: auto;
+    overflow-y: auto; }
+    [pi-console].noshow * {
+      display: none; }
+    [pi-console].noshow:before {
+      width: auto;
+      background: white;
+      content: "Console >";
+      position: fixed; }
 
 [pi-quest] .form-group > label {
   font-size: 1.2em;

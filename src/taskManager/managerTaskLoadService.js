@@ -13,14 +13,15 @@ function taskLoadService($q, managerGetScript, $console){
         // make sure that the script is defined
         // and if not throw an appropriate error
             .then(function(script){
-                var e;
-                if (_.isUndefined(script)){
-                    e = new Error('Task ' + url + ' failed or has not been found. Make sure that you returned the script and that your script does not have any errors');
-                    $console('task').error(e);
-                    throw e;
-                }
-
-                return script;
+                if (!_.isUndefined(script)) return script;
+                var e = new Error('Could not load task ' + url);
+                $console({
+                    tags:'task',
+                    type:'error',
+                    message: 'Make sure that you returned the script and that your script does not have any errors',
+                    error:e
+                });
+                throw e;
             });
     }
 
@@ -48,7 +49,12 @@ function taskLoadService($q, managerGetScript, $console){
             task.$template = promises.template;
             return task;
         }, function(e){
-            $console('load').error('Failed to load task script - make sure that your URLs are all correct and that your script does not have any errors.');
+            $console({
+                tags:'load',
+                type:'error',
+                message:'Failed to load task script - make sure that your URLs are all correct and that your script does not have any errors.',
+                context:task
+            });
             throw e;
         });
 

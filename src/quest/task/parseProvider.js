@@ -9,7 +9,8 @@ function parseProvider(piConsole){
 
         script.settings || (script.settings = {});
 
-        piConsole.setSettings(script.settings.DEBUG || {});
+        // @TODO: find a way to apply this to piConsole
+        piConsole.settings = script.settings.DEBUG || {};
     }
 
     return parse;

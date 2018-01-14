@@ -4,6 +4,7 @@ import manager from './APIs/managerAPI';
 import time from './APIs/timeAPI';
 import quest from './APIs/questAPI';
 import {define} from 'requirejs/require';
+import 'text';
 import app from './app';
 
 var noop = function(){};

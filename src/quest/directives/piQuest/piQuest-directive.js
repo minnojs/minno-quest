@@ -177,10 +177,11 @@ function directive($compile, $animate, $injector, piConsole){
 
                 _.each(animations, function(animation){
                     // Make sure that this animation exists
-                    if (!$injector.has('.' + animation + '-animation')){
-                        piConsole(['page','animation']).error('Unknown animation type: "' + animation + '"');
-                    }
-
+                    if (!$injector.has('.' + animation + '-animation')) piConsole({
+                        type:'error',
+                        message: 'Unknown animation type: "' + animation + '"',
+                        tags:['page','animation']
+                    });
                 });
 
                 element.addClass(animationsStr);

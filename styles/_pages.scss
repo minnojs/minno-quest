@@ -36,15 +36,37 @@
 }
 
 [pi-console] {
-	margin: 20px 0px;
+    position: fixed;
+    left:0;
+    top:0;
+    height:100%;
+    width: 30%;
+    background:white;
+    overflow-y:scroll;
 
-	.pre a{
-		white-space: pre;
-		text-decoration:none
-	}
+    .panel .panel-heading {cursor:pointer;}
+    .panel.noshow .panel-body {display:none;}
 
-	.alert span {
-		margin-right:5px;
-	}
+    &:before {
+        content: " --- Console --- ";
+        font-weight: bold;
+        display:inline-block;
+        width: 100%;
+        text-align:center;
+    }
+
+    &:empty {display:none;}
+
+    &.noshow {
+        width: auto;
+        overflow-y:auto;
+        * {display:none}
+        &:before { 
+            width: auto;
+            background:white;
+            content: "Console >"; 
+            position:fixed; 
+        }
+    }
+
 }
-
