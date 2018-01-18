@@ -188,16 +188,6 @@ All the functions within settings are invoked using angular. This means that you
 <h4><a name="skin" class="header-link" href="#skin"><span></span></a>skin</h4><p>Add a skin to your project. Skins change the way that your tasks look. Currently the only skins that we support are <code>simple</code> and <code>demo</code>.</p>
 <pre><code class="lang-javascript">API.addSettings(&#39;skin&#39;, &#39;demo&#39;);
 </code></pre>
-<h4><a name="logger" class="header-link" href="#logger"><span></span></a>logger</h4><p>The logger allows control of manager level logging activities.</p>
-<p>You may set <code>logger.postCsv</code> in order to post a csv with the results of all of your tasks at the end of the manager.
-Each log will be logged to a separate row.
-Each property will have a separate column.
-Each row has a unique column called taskName that holds the appropriate task name.</p>
-<pre><code class="lang-javascript">API.addSettings(&#39;logger&#39;, {
-    postCsv: &#39;/url/to/csv/saver/&#39;
-});
-</code></pre>
-<p>When using this setting, make sure you do not set <code>logger.url</code> in your individual tasks, or else they will post individually in addition to your csv post.</p>
 <h3><a name="tasks" class="header-link" href="#tasks"><span></span></a>Tasks</h3><p>The basic unit in miManager is the <strong>task</strong>. The manager currently supports several types of tasks; <code>quest</code>, <code>message</code> and <code>post</code>. You should just cue them into the sequence (you can use mixers to your hearts content as well).</p>
 <table>
 <thead>
@@ -245,7 +235,7 @@ Each row has a unique column called taskName that holds the appropriate task nam
 </tr>
 </tbody>
 </table>
-<h4><a name="quest" class="header-link" href="#quest"><span></span></a>Quest</h4><table>
+<h4><a name="quest" class="header-link" href="#quest"><span></span></a>quest</h4><table>
 <thead>
 <tr>
 <th>Property</th>
@@ -263,7 +253,7 @@ Each row has a unique column called taskName that holds the appropriate task nam
 </tr>
 </tbody>
 </table>
-<h4><a name="message" class="header-link" href="#message"><span></span></a>Message</h4><table>
+<h4><a name="message" class="header-link" href="#message"><span></span></a>message</h4><table>
 <thead>
 <tr>
 <th>Property</th>
@@ -307,6 +297,28 @@ Each row has a unique column called taskName that holds the appropriate task nam
 </tr>
 </tbody>
 </table>
+<h4><a name="postcsv" class="header-link" href="#postcsv"><span></span></a>postCsv</h4><p>This task posts all data gathered by your study as a csv to a given url.</p>
+<p>Each log will be logged to a separate row.
+Each property will have a separate column.
+Each row has a unique column called taskName that holds the appropriate task name.</p>
+<table>
+<thead>
+<tr>
+<th>property</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>url</td>
+<td>The url we intend to post to.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="lang-javascript">{type:&#39;postCsv&#39;, url:&#39;csv.php&#39;}
+</code></pre>
+<p>When using this setting, make sure set <code>logger.url</code> to <code>null</code> in your individual tasks, or else they will attempt to post individually in addition to your csv post.</p>
+<p>You may want to use this task in conjection with the csv <a href="https://github.com/minnojs/simple-minno-server">simple server</a>.</p>
 <h3><a name="inheritance" class="header-link" href="#inheritance"><span></span></a>Inheritance</h3><p>miManager uses the same inheritance system used by miQuest. It has one type of set: the task set. In order to create task sets use <code>addTasksSet(set, list)</code>.</p>
 <h3><a name="custom-tasks" class="header-link" href="#custom-tasks"><span></span></a>Custom tasks</h3><p>The miManager allows the creation of custom tasks. The format is fairly simple though you probably need at least some experience with programing for it. </p>
 <h4><a name="plugging-in" class="header-link" href="#plugging-in"><span></span></a>Plugging in</h4><p>miManager manages the task sequence for you as well as loading the task script (if needed). There are several ways to plug a new task into miManager, the all involve passing the activator function to the manager in various ways.</p>
