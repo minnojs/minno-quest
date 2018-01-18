@@ -42,6 +42,7 @@ define(['managerAPI'], function(Manager){
             }
 		},
         { type: 'quest', name: 'dotWidth', scriptUrl: 'questScript1.js' },
+        { type: 'postCsv', url: 'csv.php' }, 
         {
 			type: 'pip',
 			name: 'iat',

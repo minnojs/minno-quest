@@ -9,6 +9,7 @@ define(function(require){
     var angular = require('angular');
     var module = angular.module('pi.task',[]);
     var _ = require('underscore');
+    var managerToCsv = require('./managerToCsv');
 
     module.provider('taskActivate', require('./taskActivateProvider'));
     module.directive('piTask', require('./taskDirective'));
@@ -75,13 +76,30 @@ define(function(require){
             var data = task.path ? _.get(global, task.path) : task.data;
 
             $http
-				.post(task.url, data, {timeout: canceler.promise})
-				.then(done,done);
+                .post(task.url, data, {timeout: canceler.promise})
+                .then(done,done);
 
             return canceler.resolve;
         }
 
         activateProvider.set('post', activatePost);
+    }]);
+
+    module.config(['taskActivateProvider', function(activateProvider){
+        activatePostCsv.$inject = ['done', 'task', '$http','$q', '$rootScope'];
+        function activatePostCsv(done, task, $http, $q, $rootScope){
+            var canceler = $q.defer(); // http://stackoverflow.com/questions/13928057/how-to-cancel-an-http-request-in-angularjs
+            var global = $rootScope.global;
+            var csv = managerToCsv(global);
+
+            $http
+                .post(task.url, csv, {timeout: canceler.promise})
+                .then(done,done);
+
+            return canceler.resolve;
+        }
+
+        activateProvider.set('postCsv', activatePostCsv);
     }]);
 
     module.config(['taskActivateProvider', function(activateProvider){

@@ -116,22 +116,6 @@ Add a skin to your project. Skins change the way that your tasks look. Currently
 API.addSettings('skin', 'demo');
 ```
 
-#### logger
-The logger allows control of manager level logging activities.
-
-You may set `logger.postCsv` in order to post a csv with the results of all of your tasks at the end of the manager.
-Each log will be logged to a separate row.
-Each property will have a separate column.
-Each row has a unique column called taskName that holds the appropriate task name.
-
-```javascript
-API.addSettings('logger', {
-    postCsv: '/url/to/csv/saver/'
-});
-```
-
-When using this setting, make sure you do not set `logger.url` in your individual tasks, or else they will post individually in addition to your csv post.
-
 ### Tasks
 The basic unit in miManager is the **task**. The manager currently supports several types of tasks; `quest`, `message` and `post`. You should just cue them into the sequence (you can use mixers to your hearts content as well).
 
@@ -147,14 +131,14 @@ title       | A string to be used as the page title (the name displayed on the t
 preText	    | A template to be expanded before the task
 postText    | A template to be expanded after the task
 
-#### Quest
+#### quest
 
 Property    | Description
 ----------- | -------------
 script      | The actual script object for the quest task.
 scriptUrl   | The url for the quest script.
 
-#### Message
+#### message
 Property    | Description
 ----------- | -------------
 template    | the actual html to display as a string.
@@ -167,6 +151,25 @@ property        | description
 url             | The url we intend to post to.
 path            | A path within the global to the object that you want to send. For example: `"iat.feedback"` will post the object `feedback` from `global.iat`.
 data            | A raw object to be posted to the server. You may use templates in order to construct it.
+
+#### postCsv
+This task posts all data gathered by your study as a csv to a given url.
+
+Each log will be logged to a separate row.
+Each property will have a separate column.
+Each row has a unique column called taskName that holds the appropriate task name.
+
+property        | description
+--------------- | ------------
+url             | The url we intend to post to.
+
+```javascript
+{type:'postCsv', url:'csv.php'}
+```
+
+When using this setting, make sure set `logger.url` to `null` in your individual tasks, or else they will attempt to post individually in addition to your csv post.
+
+You may want to use this task in conjection with the csv [simple server](https://github.com/minnojs/simple-minno-server).
 
 ### Inheritance
 miManager uses the same inheritance system used by miQuest. It has one type of set: the task set. In order to create task sets use `addTasksSet(set, list)`.

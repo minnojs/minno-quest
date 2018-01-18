@@ -1,6 +1,5 @@
 define(function(require){
     var _ = require('underscore');
-    var managerToCsv = require('./managerToCsv');
 
     managerService.$inject = ['$rootScope', '$q', 'managerSequence', 'managerTaskLoad', '$injector'];
     function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector){
@@ -24,20 +23,16 @@ define(function(require){
             var self = this;
             var settings = script.settings || {};
 
-			// make sure this works without a new statement
-            if (!(this instanceof manager)){
-				// jshint newcap:false
-                return new manager($scope,script);
-				// jshint newcap:true
-            }
+            // make sure this works without a new statement
+            if (!(this instanceof manager)) return new manager($scope,script);
 
             this.$scope = $scope;
             this.script = script;
 
-			// create sequence
+            // create sequence
             this.sequence = new ManagerSequence(script);
 
-			// activate all setup stuff
+            // activate all setup stuff
             setup($scope, settings);
 
             $scope.$on('manager:next', function(event, target){
@@ -50,7 +45,7 @@ define(function(require){
                         self.prev(target);
                         break;
                     case 'next':
-						/* fall through */
+                        /* fall through */
                     default:
                         self.next(target);
                 }
@@ -100,7 +95,7 @@ define(function(require){
 
         return manager;
 
-		// just to separate the activation of all the settings: KISS
+        // just to separate the activation of all the settings: KISS
         function setup($scope, settings){
             var canvas = $injector.get('managerCanvas');
             var $document = $injector.get('$document');
@@ -108,33 +103,25 @@ define(function(require){
             var beforeUnload = $injector.get('managerBeforeUnload');
             var injectStyle = $injector.get('managerInjectStyle');
             var rootElement = $injector.get('$rootElement');
-            var $http = $injector.get('$http');
             var canvasOff, stylesOff, skinClass = settings.skin || 'default';
 
-
-			// prevent accidental browsing away
+            // prevent accidental browsing away
             beforeUnload.activate();
             $scope.$on('$destroy', beforeUnload.deactivate);
 
-			// activate canvas
+            // activate canvas
             canvasOff = canvas(settings.canvas);
             $scope.$on('$destroy', canvasOff);
 
-			// inject styles
+            // inject styles
             stylesOff = injectStyle(settings.injectStyle);
             $scope.$on('$destroy', stylesOff);
 
-			// preload images
+            // preload images
             preloadImages(settings.preloadImages || []);
 
-			// activate titles
+            // activate titles
             if (settings.title) $document[0].title = settings.title;
-
-
-            if (_.get(settings, 'logger.postCsv', false)) $scope.$on('$destroy', function(){
-                var csv = managerToCsv($rootScope.global);
-                $http.post(settings.logger.postCsv, csv);
-            });
 
             rootElement.addClass(skinClass + '-skin');
         }
