@@ -12,6 +12,7 @@ import _ from 'lodash';
 import taskActivateProvider from './taskActivateProvider';
 import taskDirective from './taskDirective';
 import time from 'minno-time';
+import managerToCsv from './managerToCsv';
 
 export default module;
 
@@ -95,6 +96,23 @@ module.config(['taskActivateProvider', function(activateProvider){
     }
 
     activateProvider.set('post', activatePost);
+}]);
+
+module.config(['taskActivateProvider', function(activateProvider){
+    activatePostCsv.$inject = ['done', 'task', '$http','$q', '$rootScope'];
+    function activatePostCsv(done, task, $http, $q, $rootScope){
+        var canceler = $q.defer(); // http://stackoverflow.com/questions/13928057/how-to-cancel-an-http-request-in-angularjs
+        var global = $rootScope.global;
+        var csv = managerToCsv(global);
+
+        $http
+            .post(task.url, csv, {timeout: canceler.promise})
+            .then(done,done);
+
+        return canceler.resolve;
+    }
+
+    activateProvider.set('postCsv', activatePostCsv);
 }]);
 
 /**

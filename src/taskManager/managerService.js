@@ -1,6 +1,4 @@
-
 import _ from 'lodash';
-import managerToCsv from './managerToCsv';
 
 managerService.$inject = ['$rootScope', '$q', 'managerSequence', 'managerTaskLoad', '$injector'];
 function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector){
@@ -108,9 +106,7 @@ function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector){
         var beforeUnload = $injector.get('managerBeforeUnload');
         var injectStyle = $injector.get('managerInjectStyle');
         var rootElement = $injector.get('$rootElement');
-        var $http = $injector.get('$http');
         var canvasOff, stylesOff, skinClass = settings.skin || 'default';
-
 
         // prevent accidental browsing away
         beforeUnload.activate();
@@ -129,12 +125,6 @@ function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector){
 
         // activate titles
         if (settings.title) $document[0].title = settings.title;
-
-
-        if (_.get(settings, 'logger.postCsv', false)) $scope.$on('$destroy', function(){
-            var csv = managerToCsv($rootScope.global);
-            $http.post(settings.logger.postCsv, csv);
-        });
 
         rootElement.addClass(skinClass + '-skin');
     }
