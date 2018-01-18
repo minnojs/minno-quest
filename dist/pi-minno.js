@@ -34467,6 +34467,11 @@ function APIconstructor(options){
             return this.script;
         },
 
+        save: function(){
+            // eslint-disable-next-line no-console
+            console.info('API.save was called with', arguments, 'but is not supported by this version of MinnoJS');
+        },
+
         // name, response, taskName, taskNumber
         post: function(url, obj){
             var $injector = angular.injector(['ng']);
@@ -50579,6 +50584,664 @@ APIdecorator(API$2);
 // create API functions
 lodash.extend(API$2.prototype, Constructor$2.prototype);
 
+/**
+ * Essentialy a defaults object for the scorer
+ */
+function ComputeD(){
+    lodash.extend(this, {
+        dataArray : {}, //The data array or structure the PIP will provide
+        AnalyzedVar : 'latency', //The main variable used for the score computation. Usually will be the latency.
+        ErrorVar : 'error', //The variable that indicates whether there was an error in the response
+        condVar:'',  //The name of the variable that will store the variables
+        cond1VarValues: [], //An array with the values of the condVar that will comprise of condition 1 in the comparison
+        cond2VarValues: [], //An array with the values of the condVar that will comprise of condition 2 in the comparison
+        parcelVar : '',
+        parcelValue : [],
+        fastRT : 300, //Below this reaction time, the latency is considered extremely fast.
+        maxFastTrialsRate : 0.1, //Above this % of extremely fast responses within a condition, the participant is considered too fast.
+        minRT : 400, //Below this latency
+        maxRT : 10000, //above this
+        maxErrorParcelRate: 0.4,
+        errorLatency : {use:'latency', penalty:600, useForSTD:true},
+        postSettings : {}
+    });
+}
+
+lodash.extend(ComputeD.prototype, {
+    setComputeObject: function(obj){
+        lodash.extend(this,obj);
+    },
+
+    setDataArray: function(){
+        // use the real global in order to preven problems with dependencies
+        var global = window.piGlobal;
+
+        this.dataArray = global.current.logs;
+    }
+});
+
+var messages = {
+    MessageDef:[],
+    manyErrors: 'There were too many errors made to determine a result.',
+    tooFast: 'There were too many fast trials to determine a result.',
+    notEnough: 'There were not enough trials to determine a result.'
+};
+
+function Message(){
+    // setup default local messages
+    this.messages = lodash.extend({}, messages);
+}
+
+lodash.extend(Message.prototype, {
+
+    /**
+     * Setup custom local messages
+     * @param {Object} Obj 	messages object
+     */
+    setMsgObject: function(Obj){
+        lodash.extend(this.messages,Obj);
+    },
+
+    getScoreMsg: function(score){
+
+        var array = this.messages.MessageDef;
+
+        if (!array || !array.length){
+            throw new Error('You must define a "MessageDef" array.');
+        }
+
+        var scoreNum = parseFloat(score);
+        var cut = null;
+        var msg = null;
+        var rightMsg = 'error: msg was not set';
+        var set = false;
+
+        // @TODO repleace this whole section with a "_.find()" or something.
+        lodash.each(array, function(val) {
+            cut = parseFloat(val.cut);
+            msg = val.message;
+            if (scoreNum<=cut && !set){
+                rightMsg = msg;
+                set = true;
+            }
+        });
+
+        if (!set){
+            var length = array.length;
+            var obj = array[length-1];
+            rightMsg = obj.message;
+        }
+
+        return rightMsg;
+    },
+
+    getMessage: function getMessage(type){
+        return this.messages[type];
+    }
+});
+
+function ParcelMng$1(msgMan){
+    this.parcelArray = []; // Holds parcel array
+    this.scoreData = {}; // Holds score and error message
+    this.msgMan = msgMan;
+}
+
+lodash.extend(ParcelMng$1.prototype, {
+
+    /*  Method: Void Init
+    Input: Uses logs from API
+    Output: Sets parcelArray with array of type parcel
+    Description: Init goes over the log and creates an array of object of type Parcel according to
+    the parcelValue array in computeD. Each parcel object holds relevant information regarding the
+    parcel including an array of trials with the relevant parcel name.
+    */
+    Init: function(compute){
+        var parcelMng = this;
+        var msgMan = this.msgMan;
+        // use the real global in order to prevent problems with dependencies
+        var global = window.piGlobal;
+
+        var data = global.current.logs;
+        parcelMng.parcelArray = [];
+        parcelMng.scoreData = {};
+        parcelMng.msgMan = msgMan;
+
+        // get settings
+        var AnalyzedVar = compute.AnalyzedVar;
+        var error = compute.ErrorVar;
+        var parcelVar = compute.parcelVar;
+        var parcels = compute.parcelValue;
+        var min = compute.minRT;
+        var max = compute.maxRT;
+        var fastRT= compute.fastRT;
+
+        // set counters
+        var totalScoredTrials = 0;
+        var trialsUnder = 0;
+        var totalTrials=0;
+        var totalErrorTrials =0;
+        var maxFastTrialsRate = parseFloat(compute.maxFastTrialsRate);
+
+
+        if (typeof parcels == 'undefined' || parcels.length === 0){
+            totalTrials =0;
+            totalScoredTrials=0;
+            trialsUnder=0;
+            totalErrorTrials=0;
+            var p = {};
+            p.name = 'general';
+            p.trialIData = [];
+            lodash.each (data, function (value) {// loop per object in logger
+                if (value[AnalyzedVar]>=min && value[AnalyzedVar]<=max){
+                    totalTrials++;
+                    if (value.data[error] == 1) {
+                        totalErrorTrials++;
+                    }
+                    //p.trialIData.push(value);//push all data
+                    //totalScoredTrials++;
+                    if (parcelMng.validate(p,value,compute)) {
+                        totalScoredTrials++;
+                    }
+                }else {
+                    if (value[AnalyzedVar]<= fastRT) {
+                        trialsUnder++;
+                    }
+                }
+            });
+            parcelMng.checkErrors(totalTrials,totalErrorTrials,compute);
+            parcelMng.parcelArray[0] = p;
+        } else {
+            lodash.each (parcels, function(parcelName,index) {// per parcel from parcelValue
+                //set variables calculated per parcel
+                totalTrials =0;
+                totalScoredTrials=0;
+                trialsUnder=0;
+                totalErrorTrials=0;
+                var p = {};
+                p.name = parcelName;
+                p.trialIData = [];
+                ///////////////////////////////////
+                lodash.each (data, function (value) {//loop per object in logger
+                    var trialParcelName = value.data[parcelVar];
+
+                    // if this trial belongs to parcel
+                    if (trialParcelName == parcelName){
+                        if (value[AnalyzedVar]>=min && value[AnalyzedVar]<=max){
+                            totalTrials++;
+                            if (value.data[error] == 1) {
+                                totalErrorTrials++;
+                            }
+                            //p.trialIData.push(value);//push all data
+                            //totalScoredTrials++;
+                            if (parcelMng.validate(p,value,compute)) {
+                                totalScoredTrials++;
+                            }
+                        }else {
+                            if (value[AnalyzedVar]<= fastRT) {
+                                trialsUnder++;
+                            }
+                        }
+
+                    }
+
+                });
+                parcelMng.checkErrors(totalTrials,totalErrorTrials,compute);//apply maxErrorParcelRate logic
+                parcelMng.parcelArray[index] = p;
+            });
+        }
+        if ( (trialsUnder/totalScoredTrials) > maxFastTrialsRate){
+            parcelMng.scoreData.errorMessage = this.msgMan.getMessage('tooFast');
+
+        }
+
+    },
+
+    /*
+       private
+Method: Void checkErrors
+Input: totalTrials,totalErrorTrials and compute object.
+Output: Sets scoreData with error message if relevant.
+Description: Helper method to check for errors according to maxErrorParcelRate from compute object.
+sets an error message in scoreData.
+
+*/
+    checkErrors: function(totalTrials,totalErrorTrials,compute){
+
+        var maxErrorParcelRate = compute.maxErrorParcelRate;
+        if (totalErrorTrials/totalTrials > maxErrorParcelRate){
+            this.scoreData.errorMessage = this.msgMan.getMessage('manyErrors');
+
+        }
+
+    },
+
+    /* Function: Void validate.
+Input: parcel object, trial object from the log and the compute object.
+Output: Pushes the trial to the parcel based on information from errorLatency. Returns true/false.
+Description: Helper method to apply errorLatency logic. If set to 'latency' trials witch are error
+would be added to the parcel trial array. if set to false trials that are error would not be added,
+if set to panelty error trials will be added and later panelized.
+
+*/
+
+    validate: function(p,value,compute){
+        var errorLatency = compute.errorLatency;
+        var error = compute.ErrorVar;
+        var data = value.data;
+
+
+        if (errorLatency.use =='latency'){
+            p.trialIData.push(value);
+            return true;
+        }else{
+            if (errorLatency.use =='false'){
+                if(data[error]=='1'){
+                    return false;
+                }else{
+                    p.trialIData.push(value);
+                    return true;
+                }
+            }
+            if(errorLatency.use =='penalty'){
+                p.trialIData.push(value);
+                return true;
+            }
+        }
+    },
+
+    /*  Function: Void addPenalty.
+Input: parcel object and the compute object.
+Output: adds penalty to latency of trials
+Description: Helper method to add average and penalty to error trials
+if errorLatency is set to 'penalty'. Should be called after avgAll.
+
+*/
+
+    addPenalty: function(p,compute){
+        var errorLatency = compute.errorLatency;
+        var parcelMng = this;
+
+
+        if (errorLatency.use == 'penalty'){
+
+            var penalty = parseFloat(errorLatency.penalty);
+            var ErrorVar = compute.ErrorVar;
+            var AnalyzedVar = compute.AnalyzedVar;
+            var condVar = compute.condVar;
+            var cond1 = compute.cond1VarValues;
+            var cond2 = compute.cond2VarValues;
+            var trialIData = p.trialIData;
+            var avg1 = p.avgCon1;
+            var avg2 = p.avgCon2;
+
+
+            lodash.each (trialIData, function (value) {
+                var data = value.data;
+                var error = data[ErrorVar];
+                var dataCond = data[condVar];
+                var diff1 = parcelMng.checkArray(dataCond,cond1);
+                var diff2 = parcelMng.checkArray(dataCond,cond2);
+
+                if (error=='1'){
+                    if (diff1){
+                        value[AnalyzedVar] += avg1+ penalty;
+                    }else{
+                        if (diff2){
+                            value[AnalyzedVar] += avg2+ penalty;
+                        }
+                    }
+
+                }
+            });
+
+        }
+    },
+
+    /*  Function: Void avgAll.
+Input: compute object.
+Output: setting avgCon1 and avgCon2
+Description: Loop over the parcels and Set average for condition 1 trials and for condition 2 trials.
+
+*/
+
+    avgAll: function(compute){
+        var parcelMng = this;
+        lodash.each(parcelMng.parcelArray, function (value) {
+            parcelMng.avgParcel(value,compute);
+        });
+    },
+
+
+    /*
+       private
+Function: Void avgParcel.
+Input: compute object, parcel.
+Output: setting avgCon1 and avgCon2 in parcel.
+Description: Set average for condition 1 trials and for condition 2 trials in the parcel.
+
+*/
+
+    avgParcel: function(p,compute){
+        var parcelMng = this;
+        var trialIData = p.trialIData;
+        var condVar = compute.condVar;
+        var cond1 = compute.cond1VarValues;
+        var cond2 = compute.cond2VarValues;
+        var AnalyzedVar = compute.AnalyzedVar;
+        var avgCon1 = 0;
+        var avgCon2 = 0;
+        var avgBoth = 0;
+        var numCond1 = 0;
+        var numCond2 = 0;
+        var numBoth = 0;
+
+        lodash.each (trialIData, function (value) {
+
+            var AnVar = value[AnalyzedVar];
+            var data = value.data;
+            avgBoth += AnVar;
+            numBoth ++;
+            //var diff1 = ( _(data[condVar]).difference(cond1) );
+            //var diff2 = ( _(data[condVar]).difference(cond2) );
+            var dataCond = data[condVar];
+            var diff1 = parcelMng.checkArray(dataCond,cond1);
+            var diff2 = parcelMng.checkArray(dataCond,cond2);
+
+            if (diff1) {
+                numCond1++;
+                avgCon1 += AnVar;
+            } else {
+                if (diff2){
+                    numCond2++;
+                    avgCon2 += AnVar;
+                }
+            }
+
+        });
+        if (numCond1 <= 2 || numCond2 <= 2){
+            parcelMng.scoreData.errorMessage = this.msgMan.getMessage('notEnough');
+        }
+        if (numCond1 !== 0) {
+            avgCon1 = avgCon1/numCond1;
+        }
+        if (numCond2 !== 0) {
+            avgCon2 = avgCon2/numCond2;
+        }
+        p.avgCon1 = avgCon1;
+        p.avgCon2 = avgCon2;
+        p.diff = p.avgCon1 - p.avgCon2;
+        if (numBoth !== 0) {
+            p.avgBoth = avgBoth/numBoth;
+        }
+        parcelMng.addPenalty(p,compute);
+    },
+
+    /*  Function: Void checkArray.
+Input: the condition from the trial and an array of condition from computeD object.
+Output: return true if condition is in the array.
+Description: Helper function that returns true if condition is in the array or false otherwise.
+
+*/
+
+    checkArray: function(conFromData,con){
+        for(var i=0; i<con.length; i++){
+            var condition = con[i];
+            if (condition == conFromData ){
+                return true;
+            }
+        }
+
+        return false;
+    },
+
+    /*  Function: Void varianceAll.
+Input: compute object, parcel.
+Output: variance variable in parcel.
+Description: Loop over the parcels and set the variance variable.
+
+*/
+
+    varianceAll: function(compute){
+        var parcelMng = this;
+        lodash.each (parcelMng.parcelArray, function (value) {
+            parcelMng.varianceParcel(value,compute);
+        });
+    },
+
+    /*  Function: Void varianceParcel.
+Input: compute object, parcel.
+Output: setting variance variable in parcel.
+Description: goes over the trials of the parcel and calculate variance.
+
+*/
+    varianceParcel: function(p,compute){
+        var parcelMng = this;
+        var AnalyzedVar = compute.AnalyzedVar;
+        var trialIData = p.trialIData;
+        var cond1 = compute.cond1VarValues;
+        var cond2 = compute.cond2VarValues;
+        var condVar = compute.condVar;
+        var avg = p.avgBoth;
+        var d = 0;
+        var x2 = 0;
+        var pooledCond1 = [];
+        var pooledCond2 = [];
+        var pooledData = [];
+        var errorLatency = compute.errorLatency;
+        var useForSTD = errorLatency.useForSTD;
+
+
+        lodash.each (trialIData, function (value) {//pool to one array
+            var data = value.data;
+            var AnVar = value[AnalyzedVar];
+            var ErrorVar = compute.ErrorVar;
+            var error = data[ErrorVar];
+            var dataCond = data[condVar];
+            var diff1 = parcelMng.checkArray(dataCond,cond1);
+            var diff2 = parcelMng.checkArray(dataCond,cond2);
+            //var diff1 = ( _(data[condVar]).difference(cond1) );
+            //var diff2 = ( _(data[condVar]).difference(cond2) );
+            if (diff1) {
+                if (useForSTD){
+                    pooledCond1.push(AnVar);
+                }
+                else{
+                    if (error=='0') {
+                        pooledCond1.push(AnVar);
+                    }
+                }
+            }
+            else {
+                if (diff2){
+                    if (useForSTD){
+                        pooledCond2.push(AnVar);
+                    }
+                    else{
+                        if (error=='0') {
+                            pooledCond1.push(AnVar);
+                        }
+                    }
+
+                }
+            }
+
+
+        });
+
+        pooledData = pooledCond1.concat(pooledCond2);
+        lodash.each (pooledData, function (value) {//pool to one array
+            var AnVar = value;
+            d = AnVar-avg;
+            x2 += d*d;
+
+        });
+        p.variance = x2/(pooledData.length-1);
+    },
+
+
+    /*  Function: Void scoreAll.
+Input: compute object.
+Output: score variable in scoreData object
+Description: Average the scores from all parcels set score in scoreData object.
+
+*/
+    scoreAll: function(compute){
+        var parcelMng = this;
+        var dAvg = 0;
+        lodash.each (parcelMng.parcelArray, function (value) {
+            parcelMng.scoreParcel(value,compute);
+            dAvg +=  value.score;
+        });
+        var score = (dAvg/(parcelMng.parcelArray.length));
+        parcelMng.scoreData.score = score.toFixed(2);
+
+    },
+
+    /*
+       private
+Function: Void scoreParcel.
+Input: compute object, parcel.
+Output: score variable in parcel
+Description: Calculate the score for the parcel.
+
+*/
+    scoreParcel: function(p){
+        var parcelMng = this;
+        var sd = Math.sqrt(p.variance);
+        if (sd === 0){
+            parcelMng.scoreData.errorMessage = this.msgMan.getMessage('notEnough');
+            p.score = p.diff;
+        } else {
+            p.score = p.diff/sd;
+        }
+    }
+
+});
+
+function Scorer(){
+    this.computeData = new ComputeD();
+    this.msgMan = new Message();
+    this.parcelMng = new ParcelMng$1(this.msgMan);
+}
+
+lodash.extend(Scorer.prototype, {
+
+    /**
+     * Set settings for computeD or msgMan
+     * @param {String} type 'compute' or 'message' - the type of settingsObj to set
+     * @param {Object} Obj  The settings object itself
+     */
+    addSettings: function(type,Obj){
+        switch (type){
+            case 'compute':
+                this.computeData.setComputeObject(Obj);
+                break;
+            case 'message':
+                this.msgMan.setMsgObject(Obj);
+                break;
+            default:
+                throw new Error('SCORER:addSettings: unknow "type" ' + type);
+        }
+    },
+
+    /**
+     * Calculate the score
+     * @return {Object} an object that holds the score and an error message
+     */
+
+    computeD: function(){
+        var computeData = this.computeData;
+        var parcelMng = this.parcelMng;
+
+        computeData.setDataArray();
+
+        parcelMng.Init(computeData);
+        parcelMng.avgAll(computeData);
+
+        parcelMng.varianceAll(computeData);
+        parcelMng.scoreAll(computeData);
+
+        var scoreObj = parcelMng.scoreData;
+
+        if (scoreObj.errorMessage === undefined || scoreObj.errorMessage === null){
+            return {
+                FBMsg : this.getFBMsg(scoreObj.score),
+                DScore : scoreObj.score,
+                error: false
+            };
+        }else{
+            return {
+                FBMsg : scoreObj.errorMessage,
+                DScore : '',
+                error: true
+            };
+        }
+    },
+
+    /**
+     * Post the score and message to the server
+     * @param  {[type]} score    [description]
+     * @param  {[type]} msg      [description]
+     * @param  {String} scoreKey The key with which to send the score data
+     * @param  {String} msgKey   The key with which to send the msg data
+     * @return {promise}         A promise that is resolved with the post
+     */
+    postToServer: function(score,msg,scoreKey,msgKey){
+        var postSettings = this.computeData.postSettings || {};
+        var url = postSettings.url;
+        var data = {};
+
+        if (!scoreKey) {
+            scoreKey = postSettings.score;
+        }
+
+        if (!msgKey) {
+            msgKey = postSettings.msg;
+        }
+
+        // create post object
+        data[scoreKey] = score;
+        data[msgKey] = msg;
+
+        return post$2(url,data);
+    },
+
+    /**
+     * Blindly post all "data" to the server
+     * @param  {Object} data Arbitrary data to be sent to the server
+     * @return {promise}      A promise that is resolved with the post
+     */
+    dynamicPost: function(data){
+        var postSettings = this.computeData.postSettings || {};
+        var url = postSettings.url;
+
+        return post$2(url,data);
+    },
+
+    // get message according to user input
+    getFBMsg: function(DScore){
+        var msg = this.msgMan.getScoreMsg(DScore);
+        return msg;
+    }
+});
+
+function post$2(url, data){
+    return new Promise(function(resolve, reject){
+        var request = new XMLHttpRequest();
+        request.open('POST',url, true);
+        request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+
+        request.onreadystatechange = function() {
+            if (this.readyState === 4) {
+                if (this.status >= 200 && this.status < 400) resolve(this.responseText);
+                else reject(new Error('Failed posting to: ' + url));
+            }
+        };
+
+        request.send(JSON.stringify(data));
+    });
+}
+
 /** vim: et:ts=4:sw=4:sts=4
  * @license RequireJS 2.3.5 Copyright jQuery Foundation and other contributors.
  * Released under MIT license, https://github.com/requirejs/requirejs/blob/master/LICENSE
@@ -54568,7 +55231,7 @@ function dfltQuestLogger(log, pageData, global){
     return logObj;
 }
 
-function post$3(url, data){
+function post$4(url, data){
     return new Promise(function(resolve, reject){
         var request = new XMLHttpRequest();
         request.open('POST',url, true);
@@ -54616,8 +55279,8 @@ function poster$3($logs, settings){
         var serialize = settings.serialize || (settings.newServelet ? buildPost$1 : buildPostOld$1);
         var serializedPost = serialize(logs, settings.metaData);
 
-        return post$3(url,serializedPost)
-            .catch(function retry(){ return post$3(url, serializedPost); })
+        return post$4(url,serializedPost)
+            .catch(function retry(){ return post$4(url, serializedPost); })
             .catch(settings.error || lodash.noop);
     }
 
@@ -58109,6 +58772,79 @@ function directive$12(activateTask, canvas, $document, $window, $rootScope, piCo
     };
 }
 
+function harvest(global){
+    var logs = getLogs(global);
+    var matrix = createMatrix(logs);
+    return toCsv(matrix);
+}
+
+/*
+     * Harvest Logs from global
+     */
+function getLogs(global){
+    return lodash.reduce(global, reducer, []);
+    function reducer(results, task, taskName){ return results.concat(harvestTask(taskName, task)); }
+}
+
+function harvestTask(taskName, task){
+    if (taskName !== 'current' && lodash.isPlainObject(task) && Array.isArray(task.logs)) return task.logs.map(addTaskName);
+    return [];
+        
+    function addTaskName(obj){ obj.taskName = taskName; return obj; }
+}
+
+/*
+     * Transform Logs into matrix
+     */
+function createMatrix(logs){
+    var getIndex = GetIndex();
+    var rows = logs.map(toRows);
+    var headers = getIndex();
+        
+    rows.forEach(normalizeLength(headers.length));
+
+    return [headers].concat(rows);
+
+    function toRows(log){
+        var row = [];
+        lodash.forEach(log, extractValues);
+        return row;
+
+        function extractValues(value, key){ row[getIndex(key)] = typeof value === 'object' ? JSON.stringify(value) : value; }
+    }
+
+    function normalizeLength(maxLength){
+        return function(arr){ arr.length = maxLength; };
+    }
+}
+
+function GetIndex(){
+    var hash = {taskName:0};
+    var index = 1;
+    return getIndex;
+
+    function getIndex(key){
+        if (!arguments.length) return lodash.keys(hash);
+        if (key in hash) return hash[key];
+        return hash[key] = index++;
+    }
+}
+
+/*
+     * Csv encoder
+     * https://www.ietf.org/rfc/rfc4180.txt
+     * toCSv :: [[String]] -> String
+     */
+
+var quotableRgx = /(\n|,|")/;
+function toCsv(matrice){ return matrice.map(buildRow).join('\n'); }
+function buildRow(arr){ return arr.map(normalize).join(','); }
+function normalize(val){
+    // wrap in double quotes and escape inner double quotes
+    if (quotableRgx.test(val)) return '"' + val.replace(/"/g, '""') + '"';
+    return val;
+}
+
 /**
  * The module responsible for the single task.
  * It knows how to load a task and activate it.
@@ -58197,6 +58933,23 @@ module$15.config(['taskActivateProvider', function(activateProvider){
     }
 
     activateProvider.set('post', activatePost);
+}]);
+
+module$15.config(['taskActivateProvider', function(activateProvider){
+    activatePostCsv.$inject = ['done', 'task', '$http','$q', '$rootScope'];
+    function activatePostCsv(done, task, $http, $q, $rootScope){
+        var canceler = $q.defer(); // http://stackoverflow.com/questions/13928057/how-to-cancel-an-http-request-in-angularjs
+        var global = $rootScope.global;
+        var csv = harvest(global);
+
+        $http
+            .post(task.url, csv, {timeout: canceler.promise})
+            .then(done,done);
+
+        return canceler.resolve;
+    }
+
+    activateProvider.set('postCsv', activatePostCsv);
 }]);
 
 /**
@@ -58518,79 +59271,6 @@ var module$17 = angular.module('piHelperDirective', []);
 module$17.directive('piSwap', swapDirective);
 module$17.directive('piSpinner', directive$13);
 
-function harvest(global){
-    var logs = getLogs(global);
-    var matrix = createMatrix(logs);
-    return toCsv(matrix);
-}
-
-/*
-     * Harvest Logs from global
-     */
-function getLogs(global){
-    return lodash.reduce(global, reducer, []);
-    function reducer(results, task, taskName){ return results.concat(harvestTask(taskName, task)); }
-}
-
-function harvestTask(taskName, task){
-    if (taskName !== 'current' && lodash.isPlainObject(task) && Array.isArray(task.logs)) return task.logs.map(addTaskName);
-    return [];
-        
-    function addTaskName(obj){ obj.taskName = taskName; return obj; }
-}
-
-/*
-     * Transform Logs into matrix
-     */
-function createMatrix(logs){
-    var getIndex = GetIndex();
-    var rows = logs.map(toRows);
-    var headers = getIndex();
-        
-    rows.forEach(normalizeLength(headers.length));
-
-    return [headers].concat(rows);
-
-    function toRows(log){
-        var row = [];
-        lodash.forEach(log, extractValues);
-        return row;
-
-        function extractValues(value, key){ row[getIndex(key)] = typeof value === 'object' ? JSON.stringify(value) : value; }
-    }
-
-    function normalizeLength(maxLength){
-        return function(arr){ arr.length = maxLength; };
-    }
-}
-
-function GetIndex(){
-    var hash = {taskName:0};
-    var index = 1;
-    return getIndex;
-
-    function getIndex(key){
-        if (!arguments.length) return lodash.keys(hash);
-        if (key in hash) return hash[key];
-        return hash[key] = index++;
-    }
-}
-
-/*
-     * Csv encoder
-     * https://www.ietf.org/rfc/rfc4180.txt
-     * toCSv :: [[String]] -> String
-     */
-
-var quotableRgx = /(\n|,|")/;
-function toCsv(matrice){ return matrice.map(buildRow).join('\n'); }
-function buildRow(arr){ return arr.map(normalize).join(','); }
-function normalize(val){
-    // wrap in double quotes and escape inner double quotes
-    if (quotableRgx.test(val)) return '"' + val.replace(/"/g, '""') + '"';
-    return val;
-}
-
 managerService.$inject = ['$rootScope', '$q', 'managerSequence', 'managerTaskLoad', '$injector'];
 function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector){
 
@@ -58697,9 +59377,7 @@ function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector){
         var beforeUnload = $injector.get('managerBeforeUnload');
         var injectStyle = $injector.get('managerInjectStyle');
         var rootElement = $injector.get('$rootElement');
-        var $http = $injector.get('$http');
         var canvasOff, stylesOff, skinClass = settings.skin || 'default';
-
 
         // prevent accidental browsing away
         beforeUnload.activate();
@@ -58718,12 +59396,6 @@ function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector){
 
         // activate titles
         if (settings.title) $document[0].title = settings.title;
-
-
-        if (lodash.get(settings, 'logger.postCsv', false)) $scope.$on('$destroy', function(){
-            var csv = harvest($rootScope.global);
-            $http.post(settings.logger.postCsv, csv);
-        });
 
         rootElement.addClass(skinClass + '-skin');
     }
@@ -61087,6 +61759,8 @@ define('questAPI', lodash.constant(API$2));
 define('lodash', lodash.constant(lodash));
 define('underscore', lodash.constant(lodash));
 define('angular', lodash.constant(angular));
+define('pipScorer', lodash.constant(Scorer));
+define('dscore', lodash.constant(Scorer));
 
 // integrate with erroception
 app$1.config(['$provide',function($provide) {

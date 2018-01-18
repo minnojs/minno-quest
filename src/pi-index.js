@@ -3,6 +3,7 @@ import _ from 'lodash';
 import manager from './APIs/PImanagerAPI';
 import time from './APIs/PItimeAPI';
 import quest from './APIs/PIquestAPI';
+import dscore from './utils/dscore/Scorer';
 import {define} from 'requirejs/require';
 import app from './app';
 
@@ -17,6 +18,8 @@ define('questAPI', _.constant(quest));
 define('lodash', _.constant(_));
 define('underscore', _.constant(_));
 define('angular', _.constant(angular));
+define('pipScorer', _.constant(dscore));
+define('dscore', _.constant(dscore));
 
 // integrate with erroception
 app.config(['$provide',function($provide) {

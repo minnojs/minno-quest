@@ -3,6 +3,7 @@ import _ from 'lodash';
 import manager from './APIs/managerAPI';
 import time from './APIs/timeAPI';
 import quest from './APIs/questAPI';
+import dscore from './dscore/Scorer';
 import {define} from 'requirejs/require';
 import 'text';
 import app from './app';
@@ -18,6 +19,8 @@ define('questAPI', _.constant(quest));
 define('lodash', _.constant(_));
 define('underscore', _.constant(_));
 define('angular', _.constant(angular));
+define('pipScorer', _.constant(dscore));
+define('dscore', _.constant(dscore));
 
 export default activate;
 
