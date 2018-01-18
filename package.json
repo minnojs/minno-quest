@@ -54,7 +54,6 @@
     "minno-time": "github:minnojs/minno-time#0.5",
     "mithril-stream": "^1.1.0",
     "requirejs": "^2.3.5",
-    "text": "github:requirejs/text",
     "utils": "file:src/utils"
   }
 }

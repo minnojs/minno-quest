@@ -48778,6 +48778,8 @@ function setupVars(script){
 var srcStack = [];				// an array holding all our sources
 var defStack = [];				// an array holding all the deferreds
 var stackDone = 0;				// the number of sources we have completed downloading
+var getText = lodash$1.memoize(getXhr);
+
 var loader = {
     // loads a single source
     load: load,
@@ -48793,33 +48795,11 @@ var loader = {
 
 // load a single source
 function load(src, type){
-    var promise;
-    type = type || 'image';
     // the source was already loaded
     if (srcStack.indexOf(src) !== -1) return false;
 
     // if we haven't loaded this yet
-    switch (type) {
-        case 'template':
-            promise = new Promise(function(resolve, reject){
-                // @TODO: get rid of requirejs dependency
-                requirejs(['text!' + src], resolve, function(){
-                    reject(new Error('Template not found: ' + src));
-                });
-            });
-            break;
-        case 'image':
-            /* falls through */
-        default :
-            promise = new Promise(function(resolve, reject){
-                var el = document.createElement('img');
-                el.onload = function(){resolve(el);};
-                el.onerror = function(){reject(new Error('Image not found: ' + el.src ));};
-                el.src = src;
-                
-            });
-            break;
-    }
+    var promise = type == 'template' ? getText(src) : getImage(src);
 
     promise
         .then(function(){stackDone++;})
@@ -48832,6 +48812,29 @@ function load(src, type){
     srcStack.push(src);
 
     return promise;
+}
+
+function getImage(url){
+    return  new Promise(function(resolve, reject){
+        var el = document.createElement('img');
+        el.onload = function(){resolve(el);};
+        el.onerror = function(){reject(new Error('Image not found: ' + url ));};
+        el.src = url;
+        
+    });
+}
+function getXhr(url){
+    return new Promise(function(resolve, reject){
+        var request = new XMLHttpRequest();
+        request.open('GET',url, true);
+        request.onreadystatechange = function() {
+            if (this.readyState === 4) {
+                if (this.status >= 200 && this.status < 400) resolve(this.responseText);
+                else reject(new Error('Template not found:' + url));
+            }
+        };
+        request.send();
+    });
 }
 
 /*
@@ -59468,29 +59471,43 @@ function managerLoadService($q, getScript){
     return managerLoadScript;
 }
 
-getScriptProvider.$inject = ['$q'];
-function getScriptProvider($q){
+function getScriptProvider(){
+    var getText = lodash.memoize(getXhr);
 
-    // @TODO: separate the parsing into a different module (make this a dependency)
     function getScript(url, options){
-        options || (options = {});
-        var def = $q.defer(), target = '';
+        if (!options) options = {};
+        var target = buildUrl(url, options);
+        return options.isText ? getText(target) : getRequire(target);
+    }
 
-        // if url doesn't starts with / or has : then add baseUrl
-        /^\/|:/.test(url) || (target += options.baseUrl ? options.baseUrl + '/' : '');
+    function buildUrl(url, options){
+        var target = '';
 
+        if (options.baseUrl && !/^\/|:/.test(url)) target += options.baseUrl + '/'; // if url doesn't start with / or has : 
         target += url;
+        if (options.bustCache) target += '?bust=' + +new Date();
+        
+        return target;
+    }
 
-        options.isText && (target = '' + target);
-        options.bustCache && (target += '?bust=' + (new Date()).getTime());
-
-        require([target], function(script){
-            def.resolve(script);
-        }, function(err){
-            def.reject(err);
+    function getRequire(url){
+        return new Promise(function(resolve, reject){
+            require([url], resolve, reject);
         });
+    }
 
-        return def.promise;
+    function getXhr(url){
+        return new Promise(function(resolve, reject){
+            var request = new XMLHttpRequest();
+            request.open('GET',url, true);
+            request.onreadystatechange = function() {
+                if (this.readyState === 4) {
+                    if (this.status >= 200 && this.status < 400) resolve(this.responseText);
+                    else reject(new Error('Failed posting to: ' + url));
+                }
+            };
+            request.send();
+        });
     }
 
     return getScript;

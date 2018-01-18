@@ -1,29 +1,44 @@
+import _ from 'lodash';
 import {require} from 'requirejs/require.js';
 export default getScriptProvider;
 
-getScriptProvider.$inject = ['$q'];
-function getScriptProvider($q){
+function getScriptProvider(){
+    var getText = _.memoize(getXhr);
 
-    // @TODO: separate the parsing into a different module (make this a dependency)
     function getScript(url, options){
-        options || (options = {});
-        var def = $q.defer(), target = '';
+        if (!options) options = {};
+        var target = buildUrl(url, options);
+        return options.isText ? getText(target) : getRequire(target);
+    }
 
-        // if url doesn't starts with / or has : then add baseUrl
-        /^\/|:/.test(url) || (target += options.baseUrl ? options.baseUrl + '/' : '');
+    function buildUrl(url, options){
+        var target = '';
 
+        if (options.baseUrl && !/^\/|:/.test(url)) target += options.baseUrl + '/'; // if url doesn't start with / or has : 
         target += url;
+        if (options.bustCache) target += '?bust=' + +new Date();
+        
+        return target;
+    }
 
-        options.isText && (target = '' + target);
-        options.bustCache && (target += '?bust=' + (new Date()).getTime());
-
-        require([target], function(script){
-            def.resolve(script);
-        }, function(err){
-            def.reject(err);
+    function getRequire(url){
+        return new Promise(function(resolve, reject){
+            require([url], resolve, reject);
         });
+    }
 
-        return def.promise;
+    function getXhr(url){
+        return new Promise(function(resolve, reject){
+            var request = new XMLHttpRequest();
+            request.open('GET',url, true);
+            request.onreadystatechange = function() {
+                if (this.readyState === 4) {
+                    if (this.status >= 200 && this.status < 400) resolve(this.responseText);
+                    else reject(new Error('Failed posting to: ' + url));
+                }
+            };
+            request.send();
+        });
     }
 
     return getScript;
