@@ -91,6 +91,11 @@ function APIconstructor(options){
             return this.script;
         },
 
+        save: function(){
+            // eslint-disable-next-line no-console
+            console.info('API.save was called with', arguments, 'but is not supported by this version of MinnoJS');
+        },
+
         // name, response, taskName, taskNumber
         post: function(url, obj){
             var $injector = angular.injector(['ng']);
