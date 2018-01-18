@@ -47,8 +47,6 @@ define(function(require){
             addSettings: function(name, settingsObj){
                 var settings;
 
-
-
                 if (_.isPlainObject(settingsObj)){
                     settings = this.settings[name] = this.settings[name] || {};
                     _.extend(settings, settingsObj);
@@ -80,9 +78,7 @@ define(function(require){
             },
 
             addCurrent: function(obj){
-                if (!_.isPlainObject(obj)){
-                    throw new Error('current must be an object');
-                }
+                if (!_.isPlainObject(obj)) throw new Error('current must be an object');
                 return _.merge(this.script.current, obj);
             },
 
@@ -100,26 +96,27 @@ define(function(require){
                 return this.script;
             },
 
+            save: function(){
+                // eslint-disable-next-line no-console
+                console.info('API.save was called with', arguments, 'but is not supported by this version of MinnoJS');
+            },
+
             // name, response, taskName, taskNumber
             post: function(url, obj){
                 // just so we can use this in standalone PIP
-                if (require.defined('jquery')){
-                    return require('jquery' + '').ajax({
-                        type: 'POST',
-                        url: url,
-                        data: JSON.stringify(obj),
-                        contentType: 'application/json; charset=utf-8',
-                        dataType: 'json'
-                    });
+                if (require.defined('jquery')) return require('jquery' + '').ajax({
+                    type: 'POST',
+                    url: url,
+                    data: JSON.stringify(obj),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json'
+                });
 
-                    //.post(url, JSON.stringify(obj));
-                } else {
-                    var $injector = angular.injector(['ng']);
+                var $injector = angular.injector(['ng']);
 
-                    return $injector.invoke(['$http', function($http){
-                        return $http.post(url, obj);
-                    }]);
-                }
+                return $injector.invoke(['$http', function($http){
+                    return $http.post(url, obj);
+                }]);
             },
 
             shuffle: function(collection){
@@ -172,9 +169,7 @@ define(function(require){
                 .value();
             }
 
-            if (_.isArray(set)){
-                list = set;
-            }
+            if (_.isArray(set)) list = set;
 
             if (_.isString(set)){
                 list = _.isArray(setArr) ? setArr : [setArr];
@@ -182,7 +177,6 @@ define(function(require){
                     value.set = set;
                     return value;
                 });
-
             }
 
             // merge the list into the targetSet
