@@ -23,7 +23,7 @@ decorator(API);
 _.extend(API.prototype, Constructor.prototype);
 
 // annotate onPreTask
-onPreTask.$inject = ['currentTask', '$http','$rootScope','managerBeforeUnload','templateDefaultContext', 'managerSettings'];
+onPreTask.$inject = ['currentTask', '$http','$rootScope','managerBeforeUnload','templateDefaultContext', 'managerSettings', 'piConsole'];
 
 /**
  * Before each task,
@@ -34,7 +34,7 @@ onPreTask.$inject = ['currentTask', '$http','$rootScope','managerBeforeUnload','
  * @param  {Object} $http       The $http service
  * @return {Promise}            Resolved when server responds
  */
-function onPreTask(currentTask, $http, $rootScope, beforeUnload, templateDefaultContext,managerSettings){
+function onPreTask(currentTask, $http, $rootScope, beforeUnload, templateDefaultContext,managerSettings, piConsole){
     var global = $rootScope.global;
     var context = {};
     var data = _.assign({}, global.$meta, {taskName: currentTask.name || 'namelessTask', taskNumber: currentTask.$meta.number, taskURL:currentTask.scriptUrl || currentTask.templateUrl});
@@ -86,7 +86,9 @@ function onPreTask(currentTask, $http, $rootScope, beforeUnload, templateDefault
 
 
         if (!_.every(['assignmentId','hitId','workerId'], function(prop){return _.has($mTurk, prop);})){
-            throw new Error ('$mTurk is missing a crucial property (assignmentId,hitId,workerId)');
+            var e = new Error ('$mTurk is missing a crucial property (assignmentId,hitId,workerId)');
+            piConsole({type:'error', error: e, message: 'mTurk Error'});
+            throw e;
         }
 
         currentTask.post = function(){
@@ -106,6 +108,7 @@ function onPreTask(currentTask, $http, $rootScope, beforeUnload, templateDefault
     return $http.post(posturl, data)['catch'](error);
 
     function error(){
+        var e =  new Error('Failed to update server');
         var reportNoConnection = currentTask.reportNoConnection;
         if (reportNoConnection){
             var message = document.createElement('div');
@@ -114,7 +117,8 @@ function onPreTask(currentTask, $http, $rootScope, beforeUnload, templateDefault
             document.body.insertBefore(message, document.body.firstChild);
         }
 
-        throw new Error('Failed to update server');
+        piConsole({type:'error', error:e, message: 'PI failed to update server'});
+        throw e;
     }
 }
 

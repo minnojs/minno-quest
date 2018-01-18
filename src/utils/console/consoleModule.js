@@ -13,34 +13,42 @@ piConsoleFactory.$inject = ['$log'];
 function piConsoleFactory($log){
     var piConsole = stream();
     piConsole.map(function(log){ $log[log.type](log.message); });
-    piConsole.map(function(log){return log.type === 'error' ? log : stream.HALT;}).map(displayLogs());
-    return piConsole;
-}
+    piConsole.map(filterLogs).map(displayLogs());
+    return window.DEBUG ? piConsole : _.noop;
 
-function displayLogs(){
-    var panelClasses = {error:'panel-danger', warn:'panel-warning', info:'panel-info', debug:'panel-success',log:'panel-success'};
-    var container = document.querySelector('[pi-console]');
-    var compiledTemplate = _.template(template);
+    function filterLogs(log){
+        var settings = piConsole.settings || {};
+        if (settings.hideConsole) return stream.HALT;
+        if (settings.verbose || log.type === 'error') return log;
+        return stream.HALT;
+    }
 
-    if (!container) return _.noop;
+    function displayLogs(){
+        var panelClasses = {error:'panel-danger', warn:'panel-warning', info:'panel-info', debug:'panel-success',log:'panel-success'};
+        var container = document.querySelector('[pi-console]');
+        var compiledTemplate = _.template(template);
 
-    container.addEventListener('click',function(e){
-        if (e.target.classList.contains('close')) container.removeChild(e.target.parentNode.parentNode);
-        if (e.target.classList.contains('panel-heading')) e.target.parentNode.classList.toggle('noshow');
-        if (e.target === container) container.classList.toggle('noshow');
-    });
+        if (!container) return _.noop;
 
-    return createLog;
-    
-    function createLog(log){
-        var el = document.createElement('div');
-        el.classList.add('panel');
-        el.classList.add('noshow');
-        el.classList.add(panelClasses[log.type]);
-        el.innerHTML = compiledTemplate({log:log, syntaxHighlight:syntaxHighlight});
-        container.insertBefore(el, container.firstChild || null);
+        container.addEventListener('click',function(e){
+            if (e.target.classList.contains('close')) container.removeChild(e.target.parentNode.parentNode);
+            if (e.target.classList.contains('panel-heading')) e.target.parentNode.classList.toggle('noshow');
+            if (e.target === container) container.classList.toggle('noshow');
+        });
+
+        return createLog;
+
+        function createLog(log){
+            var el = document.createElement('div');
+            el.classList.add('panel');
+            el.classList.add('noshow');
+            el.classList.add(panelClasses[log.type]);
+            el.innerHTML = compiledTemplate({log:log, syntaxHighlight:syntaxHighlight});
+            container.insertBefore(el, container.firstChild || null);
+        }
     }
 }
+
 
 function syntaxHighlight(json) {    
     var _string = 'color:green',

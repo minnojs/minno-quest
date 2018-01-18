@@ -34607,7 +34607,7 @@ APIdecorator(API);
 lodash.extend(API.prototype, Constructor.prototype);
 
 // annotate onPreTask
-onPreTask.$inject = ['currentTask', '$http','$rootScope','managerBeforeUnload','templateDefaultContext', 'managerSettings'];
+onPreTask.$inject = ['currentTask', '$http','$rootScope','managerBeforeUnload','templateDefaultContext', 'managerSettings', 'piConsole'];
 
 /**
  * Before each task,
@@ -34618,7 +34618,7 @@ onPreTask.$inject = ['currentTask', '$http','$rootScope','managerBeforeUnload','
  * @param  {Object} $http       The $http service
  * @return {Promise}            Resolved when server responds
  */
-function onPreTask(currentTask, $http, $rootScope, beforeUnload, templateDefaultContext,managerSettings){
+function onPreTask(currentTask, $http, $rootScope, beforeUnload, templateDefaultContext,managerSettings, piConsole){
     var global = $rootScope.global;
     var context = {};
     var data = lodash.assign({}, global.$meta, {taskName: currentTask.name || 'namelessTask', taskNumber: currentTask.$meta.number, taskURL:currentTask.scriptUrl || currentTask.templateUrl});
@@ -34670,7 +34670,9 @@ function onPreTask(currentTask, $http, $rootScope, beforeUnload, templateDefault
 
 
         if (!lodash.every(['assignmentId','hitId','workerId'], function(prop){return lodash.has($mTurk, prop);})){
-            throw new Error ('$mTurk is missing a crucial property (assignmentId,hitId,workerId)');
+            var e = new Error ('$mTurk is missing a crucial property (assignmentId,hitId,workerId)');
+            piConsole({type:'error', error: e, message: 'mTurk Error'});
+            throw e;
         }
 
         currentTask.post = function(){
@@ -34690,6 +34692,7 @@ function onPreTask(currentTask, $http, $rootScope, beforeUnload, templateDefault
     return $http.post(posturl, data)['catch'](error);
 
     function error(){
+        var e =  new Error('Failed to update server');
         var reportNoConnection = currentTask.reportNoConnection;
         if (reportNoConnection){
             var message = document.createElement('div');
@@ -34698,7 +34701,8 @@ function onPreTask(currentTask, $http, $rootScope, beforeUnload, templateDefault
             document.body.insertBefore(message, document.body.firstChild);
         }
 
-        throw new Error('Failed to update server');
+        piConsole({type:'error', error:e, message: 'PI failed to update server'});
+        throw e;
     }
 }
 
@@ -61587,7 +61591,7 @@ module$18.animation('.drop-in', dropInAnimation);
 module$18.animation('.fade', fadeAnimation);
 module$18.animation('.slide', slideAnimation);
 
-var template$12 = "<div class=\"panel-heading\">\n    <strong><%= log.message %>:</strong> \n    <button type=\"button\" class=\"close\">&times;</button>\n\n    <% if (log.context) { %>\n        <div><%= log.error.message %></div>\n    <% } %>\n</div>\n\n<% if (log.context) { %>\n    <div class=\"panel-body\">\n        <strong>Context:</strong>\n        <pre><%= syntaxHighlight(log.context) %></pre>\n    </div>\n<% } %>\n\n<% if (log.rows) { %>\n    <ul class=\"list-group\">\n        <% for (var i=0; i<log.rows.length; i++) { %>\n        <li class=\"list-group-item\"><%= syntaxHighlight(log.rows[i]) %></li>\n        <% } %>\n    </ul>\n<% } %>\n";
+var template$12 = "<div class=\"panel-heading\">\n    <strong><%= log.message %>:</strong> \n    <button type=\"button\" class=\"close\">&times;</button>\n\n    <% if (log.error) { %>\n        <div><%= log.error.message %></div>\n    <% } %>\n</div>\n\n<% if (log.context) { %>\n    <div class=\"panel-body\">\n        <strong>Context:</strong>\n        <pre><%= syntaxHighlight(log.context) %></pre>\n    </div>\n<% } %>\n\n<% if (log.rows) { %>\n    <ul class=\"list-group\">\n        <% for (var i=0; i<log.rows.length; i++) { %>\n        <li class=\"list-group-item\"><%= syntaxHighlight(log.rows[i]) %></li>\n        <% } %>\n    </ul>\n<% } %>\n";
 
 var module$19 = angular.module('piConsole',[]);
 
@@ -61597,34 +61601,42 @@ piConsoleFactory.$inject = ['$log'];
 function piConsoleFactory($log){
     var piConsole = stream$2();
     piConsole.map(function(log){ $log[log.type](log.message); });
-    piConsole.map(function(log){return log.type === 'error' ? log : stream$2.HALT;}).map(displayLogs());
-    return piConsole;
-}
+    piConsole.map(filterLogs).map(displayLogs());
+    return window.DEBUG ? piConsole : lodash.noop;
 
-function displayLogs(){
-    var panelClasses = {error:'panel-danger', warn:'panel-warning', info:'panel-info', debug:'panel-success',log:'panel-success'};
-    var container = document.querySelector('[pi-console]');
-    var compiledTemplate = lodash.template(template$12);
+    function filterLogs(log){
+        var settings = piConsole.settings || {};
+        if (settings.hideConsole) return stream$2.HALT;
+        if (settings.verbose || log.type === 'error') return log;
+        return stream$2.HALT;
+    }
 
-    if (!container) return lodash.noop;
+    function displayLogs(){
+        var panelClasses = {error:'panel-danger', warn:'panel-warning', info:'panel-info', debug:'panel-success',log:'panel-success'};
+        var container = document.querySelector('[pi-console]');
+        var compiledTemplate = lodash.template(template$12);
 
-    container.addEventListener('click',function(e){
-        if (e.target.classList.contains('close')) container.removeChild(e.target.parentNode.parentNode);
-        if (e.target.classList.contains('panel-heading')) e.target.parentNode.classList.toggle('noshow');
-        if (e.target === container) container.classList.toggle('noshow');
-    });
+        if (!container) return lodash.noop;
 
-    return createLog;
-    
-    function createLog(log){
-        var el = document.createElement('div');
-        el.classList.add('panel');
-        el.classList.add('noshow');
-        el.classList.add(panelClasses[log.type]);
-        el.innerHTML = compiledTemplate({log:log, syntaxHighlight:syntaxHighlight});
-        container.insertBefore(el, container.firstChild || null);
+        container.addEventListener('click',function(e){
+            if (e.target.classList.contains('close')) container.removeChild(e.target.parentNode.parentNode);
+            if (e.target.classList.contains('panel-heading')) e.target.parentNode.classList.toggle('noshow');
+            if (e.target === container) container.classList.toggle('noshow');
+        });
+
+        return createLog;
+
+        function createLog(log){
+            var el = document.createElement('div');
+            el.classList.add('panel');
+            el.classList.add('noshow');
+            el.classList.add(panelClasses[log.type]);
+            el.innerHTML = compiledTemplate({log:log, syntaxHighlight:syntaxHighlight});
+            container.insertBefore(el, container.firstChild || null);
+        }
     }
 }
+
 
 function syntaxHighlight(json) {    
     var _string = 'color:green',

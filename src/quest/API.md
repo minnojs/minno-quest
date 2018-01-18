@@ -591,30 +591,8 @@ message 		| (String or Object) Display a message at the end the timer duration. 
 #### Debugging
 PIQuest can supply some extra information regarding its inner workings, all you have to do is set the DEBUG setting property like so:
 
-```js
-// Log everything
-API.addSettings('DEBUG', {
-	level: 'warn', // log errors and warnings
-	tags: ['page','animation'], // Log page and animation related messages
-	hideConsole: true 
-});
-```
-
-**tags**:
-Logs are broken down into subjects by tags. The tags property allows you to insert an array of tags that you want to be logged. If you want all tags to printed you may use the string `'all'` instead of an array (this is also the default).
-
-The tags currently available are as follows: `page`, `question`, `conditions` and `animate`.
-
-**level**:
-The player has several levels of logging, by default it logs only `error` level logs. When you want to debug you should probably use `info` or `warn`. The precedence of logging levels is as follows: error>warn>info>debug. Each logging level includes any levels higher than itself.
-
-level 	| Description
------ 	| -----------
-none 	| Do not log any messages
-error 	| Log messages that warn that something in the script is broken (this is the default level, and you should probably leave at least this level active).
-warn 	| Log warning messages that something smells fishy, these are not necessarily errors, but you might want to check them out.
-info 	| Log General useful information.
-debug 	| Just spill everything out.
+**verbose**
+Set this to true if you want to see all logs and not only errors.
 
 **hideConsole**:
 This property allows you to control the display of logs inside the browser, if it is set to `true` then the logs will only be printed into your console.
