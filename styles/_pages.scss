@@ -46,7 +46,7 @@
     opacity:0.8;
 
     .panel .panel-heading {cursor:pointer;}
-    .panel.noshow .panel-body {display:none;}
+    .panel.noshow .panel-body, .panel.noshow .list-group {display:none;}
 
     &:before {
         content: " --- Console --- ";

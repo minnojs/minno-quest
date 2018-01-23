@@ -6096,7 +6096,7 @@ button.close {
   opacity: 0.8; }
   [pi-console] .panel .panel-heading {
     cursor: pointer; }
-  [pi-console] .panel.noshow .panel-body {
+  [pi-console] .panel.noshow .panel-body, [pi-console] .panel.noshow .list-group {
     display: none; }
   [pi-console]:before {
     content: " --- Console --- ";

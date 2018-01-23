@@ -1,5 +1,6 @@
 import angular from 'angular';
 import _ from 'lodash';
+import sequencer from 'minno-sequencer';
 import manager from './APIs/PImanagerAPI';
 import time from './APIs/PItimeAPI';
 import quest from './APIs/PIquestAPI';
@@ -7,14 +8,12 @@ import dscore from './utils/dscore/Scorer';
 import {define} from 'requirejs/require';
 import app from './app';
 
-var noop = function(){};
-if (!window.console) window.console = {log:noop,info:noop,error:noop};
-
 // setup amd loader with common packages
 define('managerAPI', _.constant(manager));
 define('timeAPI', _.constant(time));
 define('pipAPI', _.constant(time));
 define('questAPI', _.constant(quest));
+define('minno-sequencer', _.constant(sequencer));
 define('lodash', _.constant(_));
 define('underscore', _.constant(_));
 define('angular', _.constant(angular));

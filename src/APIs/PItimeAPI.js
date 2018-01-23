@@ -2,6 +2,7 @@ import Constructor from './timeAPI';
 import _ from 'lodash';
 import decorator from './PIAPIdecorator';
 import time from 'minno-time';
+import {require as requirejs} from 'requirejs/require';
 
 export default API;
 
@@ -66,6 +67,27 @@ function play(done, $canvas, script, task, $console){
         };
     }
 
+    if (version > 0.4) {
+        // update script name
+        task.name && (script.name = task.name);
+
+        $canvas.append('<div pi-player></div>');
+        $el = $canvas.contents();
+        $el.addClass('pi-spinner');
+
+        requirejs([ this.buildBaseUrl(version) + 'dist/time.js'], function(time){
+            pipSink = time($el[0], script);
+            pipSink.onEnd(done);
+            pipSink.$messages.map($console);
+            $el.removeClass('pi-spinner');
+        });
+
+        return function destroyPIP(){
+            $el.remove();
+            pipSink && pipSink.end();
+        };
+    }
+
     if (!version) throw new Error('Version not defined for pip task: ' + (task.name || script.name));
 
     baseUrl = this.buildBaseUrl(version);
@@ -84,7 +106,7 @@ function play(done, $canvas, script, task, $console){
             backbone: ['//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min', baseUrl+'/bower_components/backbone/backbone']
         },
 
-        deps: newVersion ? ['underscore'] : ['jquery', 'backbone', 'underscore']
+        deps: ['jquery', 'backbone', 'underscore']
     });
 
     // update script name
@@ -94,14 +116,9 @@ function play(done, $canvas, script, task, $console){
     $el = $canvas.contents();
     $el.addClass('pi-spinner');
 
-
     req(['activatePIP'], function(activate){
         $el.removeClass('pi-spinner');
-        if (newVersion) {
-            pipSink = activate($el[0], script);
-            pipSink.onEnd(done);
-        }
-        else activate(script, done);
+        activate(script, done);
     });
 
     return function destroyPIP(){

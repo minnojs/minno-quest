@@ -16,8 +16,11 @@
 
 <% if (log.rows) { %>
     <ul class="list-group">
-        <% for (var i=0; i<log.rows.length; i++) { %>
-        <li class="list-group-item"><%= syntaxHighlight(log.rows[i]) %></li>
+        <% var rows = log.rows.map(function(r){ return [].concat(r); }); %>
+        <% for (var i=0;i<rows.length;i++) { %>
+        <li class="list-group-item">
+            <%= rows[i].map(syntaxHighlight).join('&nbsp;') %>
+        </li>
         <% } %>
     </ul>
 <% } %>

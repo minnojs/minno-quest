@@ -136,11 +136,31 @@ module.config(['taskActivateProvider', function(activateProvider){
  * minno-time activator
  **/
 module.config(['taskActivateProvider', function(activateProvider){
-    activatePIP.$inject = ['done', '$element', 'task', 'script'];
-    function activatePIP(done, $canvas, task, script){
+    activatePIP.$inject = ['done', '$element', 'task', 'script', 'piConsole'];
+    function activatePIP(done, $canvas, task, script, piConsole){
         var $el, req;
-        var newVersion = task.version > 0.3;
         var pipSink;
+
+        if (task.version > 0.4) {
+            // update script name
+            task.name && (script.name = task.name);
+
+            $canvas.append('<div pi-player></div>');
+            $el = $canvas.contents();
+            $el.addClass('pi-spinner');
+
+            requirejs([ task.baseUrl + 'dist/time.js'], function(time){
+                pipSink = time($el[0], script);
+                pipSink.onEnd(done);
+                pipSink.$messages.map(piConsole);
+                $el.removeClass('pi-spinner');
+            });
+
+            return function destroyPIP(){
+                $el.remove();
+                pipSink && pipSink.end();
+            };
+        }
 
         // load PIP
         req = requirejs.config({
@@ -156,7 +176,7 @@ module.config(['taskActivateProvider', function(activateProvider){
                 backbone: ['//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min', '../../bower_components/backbone/backbone']
             },
 
-            deps: newVersion ? ['underscore'] : ['jquery', 'backbone', 'underscore']
+            deps: ['jquery', 'backbone', 'underscore']
         });
 
         // update script name
@@ -168,17 +188,12 @@ module.config(['taskActivateProvider', function(activateProvider){
 
         req(['activatePIP'], function(activate){
             $el.removeClass('pi-spinner');
-            if (newVersion) {
-                pipSink = activate($el[0], script);
-                pipSink.onEnd(done);
-            }
-            else activate(script, done);
+            activate(script, done);
         });
 
         return function destroyPIP(){
             $el.remove();
-            if (newVersion) pipSink.end();
-            else req(['app/task/main_view'], function(main){
+            req(['app/task/main_view'], function(main){
                 main.deferred.resolve();
                 main.destroy();
             });
@@ -193,7 +208,7 @@ module.config(['taskActivateProvider', function(activateProvider){
  **/
 module.config(['taskActivateProvider', function(activateProvider){
     activateTime.$inject = ['done', '$element', 'task', 'script', 'piConsole'];
-    function activateTime(done, $canvas, task, script, $console){
+    function activateTime(done, $canvas, task, script, piConsole){
         var $el;
         var pipSink;
 
@@ -205,7 +220,7 @@ module.config(['taskActivateProvider', function(activateProvider){
 
         pipSink = time($el[0], script);
         pipSink.onEnd(done);
-        pipSink.$messages.map($console);
+        pipSink.$messages.map(piConsole);
 
         return function destroyPIP(){
             $el.remove();

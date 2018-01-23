@@ -34379,6 +34379,1076 @@ var lodash = createCommonjsModule(function (module, exports) {
 }.call(commonjsGlobal));
 });
 
+var minnoSequencer = createCommonjsModule(function (module, exports) {
+(function (global, factory) {
+	module.exports = factory(lodash);
+}(commonjsGlobal, (function (_) { _ = _ && _.hasOwnProperty('default') ? _['default'] : _;
+
+/**
+ * A function that maps a mixer object into a sequence.
+ *
+ * The basic structure of such an obect is:
+ * {
+ *		mixer: 'functionType',
+ *		remix : false,
+ *		data: [task1, task2]
+ *	}
+ *
+ * The results of the mix are set into `$parsed` within the original mixer object.
+ * if remix is true $parsed is returned instead of recomputing
+ *
+ * @param {Object} [obj] [a mixer object]
+ * @returns {Array} [An array of mixed objects]
+ */
+
+mixProvider.$inject = ['randomizeShuffle', 'randomizeRandom'];
+function mixProvider(shuffle, random){
+
+    function mix(obj){
+        var mixerName = obj.mixer;
+
+        // if this isn't a mixer
+        // make sure we catch mixers that are set with undefined by accident...
+        if (!(_.isPlainObject(obj) && 'mixer' in obj)){
+            return [obj];
+        }
+
+        if (_.isUndefined(mix.mixers[mixerName])){
+            throw new Error('Mixer: unknow mixer type = ' + mixerName);
+        }
+
+        if (!obj.remix && obj.$parsed) {
+            return obj.$parsed;
+        }
+
+        obj.$parsed = mix.mixers[mixerName].apply(null, arguments);
+
+        if (!_.isArray(obj.$parsed)) {
+            throw new Error('Mixer: mixers must return an array (mixer: ' + mixerName + ')');
+        }
+
+        return obj.$parsed;
+    }
+
+    function deepMixer(sequence, context){
+        return _.reduce(sequence, function(arr,value){
+
+            if (_.isPlainObject(value) && 'mixer' in value && value.mixer != 'wrapper' && !value.wrapper){
+                var seq = deepMixer(mix(value, context), context);
+                return arr.concat(seq);
+            } else {
+                return arr.concat([value]);
+            }
+        }, []);
+    }
+
+
+    mix.mixers = {
+        wrapper : function(obj){
+            return obj.data;
+        },
+
+        repeat: function(obj){
+            var sequence = obj.data || [];
+            var result = [], i;
+            for (i=0; i < obj.times; i++){
+                result = result.concat(_.clone(sequence,true));
+            }
+            return result;
+        },
+
+        // randomize any elements
+        random: function(obj, context){
+            var sequence = obj.data ? deepMixer(obj.data, context) : [];
+            return shuffle(sequence);
+        },
+
+        choose: function(obj, context){
+            var sequence = obj.data ? deepMixer(obj.data, context) : [];
+            return _.take(shuffle(sequence), obj.n ? obj.n : 1);
+        },
+
+        custom: function(obj, context){
+            return _.isFunction(obj.fn) ? obj.fn(obj, context) : [];
+        },
+
+        weightedRandom: weightedChoose,
+        weightedChoose: weightedChoose
+
+    };
+
+
+    return mix;
+
+    function weightedChoose(obj, context){
+        var sequence = obj.data ? deepMixer(obj.data, context) : [];
+        var i;
+        var n = obj.n || 1;
+        var result = [];
+        var total_weight = _.reduce(obj.weights,function (prev, cur) {
+            return prev + cur;
+        });
+
+        for (i = 0; i < n; i++){
+            result.push(generate());
+        }
+
+        return result;
+
+        function generate(){
+            var i;
+            var random_num = random() * total_weight; // cutoff - when we reach this sum - we've reached the desired weight
+            var weight_sum = 0;
+
+            for (i = 0; i < sequence.length; i++) {
+                weight_sum += obj.weights[i];
+                weight_sum = +weight_sum.toFixed(3);
+
+                if (random_num <= weight_sum) {
+                    return obj.data[i];
+                }
+            }
+
+            throw new Error('Mixer: something went wrong with weightedRandom');
+        }
+    }
+
+}
+
+mixerDotNotationProvider$1.$inject = ['dotNotation'];
+function mixerDotNotationProvider$1(dotNotation){
+
+    function mixerDotNotation(chain, obj){
+
+        var escapeSeparatorRegex= /[^/]\./;
+
+        if (!_.isString(chain)) return chain;
+
+        // We do not have a non escaped dot: we treat this as a string
+        if (!escapeSeparatorRegex.test(chain)) return chain.replace('/.','.');
+
+        return dotNotation(chain, obj);
+    }
+
+    return mixerDotNotation;
+}
+
+mixerConditionProvider$1.$inject = ['mixerDotNotation'];
+function mixerConditionProvider$1(dotNotation){
+    var operatorHash = {
+        gt: forceNumeric(_.gt),
+        greaterThan: forceNumeric(_.gt),
+        gte: forceNumeric(_.gte),
+        greaterThanOrEqual: forceNumeric(_.gte),
+        equals: _.eq,
+        'in': _.rearg(_.contains,1,0), // effectively reverse
+        contains: _.rearg(_.contains,1,0), // effectively reverse
+        exactly: exactly,
+        isTruthy: isTruthy
+    };
+
+    function mixerCondition(condition, context){
+        var operator = getOperator(condition);
+        var left = dotNotation(condition.compare,context);
+        var right = dotNotation(condition.to,context);
+
+        if (condition.DEBUG && console) console.info('Condition: ', left, condition.operator || 'equals', right, condition); // eslint-disable-line no-console 
+
+        return condition.negate
+            ? !operator.apply(context,[left, right, context])
+            : operator.apply(context,[left, right, context]);
+    }
+
+    return mixerCondition;
+
+
+    // extract the operator function from the condition
+    function getOperator(condition){
+        var operator = condition.operator;
+        if (_.isFunction(condition)) return condition;
+        if (!_.has(condition, 'operator')) return _.has(condition,'to') ? _.eq : isTruthy;
+        if (_.isFunction(operator)) return operator;
+        return operatorHash[operator];
+    }
+
+    function isTruthy(left){ return !!left; }
+    function exactly(left,right){ return left === right;}
+    function forceNumeric(cb){ return function(left,right){ return [left,right].every(_.isNumber) ? cb(left,right) : false; }; } 
+
+}
+
+evaluateProvider.$inject = ['mixerCondition'];
+function evaluateProvider(condition){
+    /**
+     * Checks if a conditions set is true
+     * @param  {Array} conditions [an array of conditions]
+     * @param  {Object} context   [A context for the condition checker]
+     * @return {Boolean}          [Are these conditions true]
+     */
+
+    function evaluate(conditions,context){
+        // make && the default
+        _.isArray(conditions) && (conditions = {and:conditions});
+
+        function test(cond){return evaluate(cond,context);}
+
+        // && objects
+        if (conditions.and){
+            return _.every(conditions.and, test);
+        }
+        if (conditions.nand){
+            return !_.every(conditions.nand, test);
+        }
+
+        // || objects
+        if (conditions.or){
+            return _.some(conditions.or, test);
+        }
+        if (conditions.nor){
+            return !_.some(conditions.nor, test);
+        }
+
+        return condition(conditions, context);
+    }
+
+    return evaluate;
+}
+
+/**
+ * Registers the branching mixers with the mixer
+ * @return {function}         [mixer decorator]
+ */
+
+mixerBranchingDecorator$1.$inject = ['$delegate','mixerEvaluate','mixerDefaultContext'];
+function mixerBranchingDecorator$1(mix, evaluate, mixerDefaultContext){
+
+    mix.mixers.branch = branch;
+    mix.mixers.multiBranch = multiBranch;
+
+    return mix;
+
+    /**
+     * Branching mixer
+     * @return {Array}         [A data array with objects to continue with]
+     */
+    function branch(obj, context){
+        context = _.extend(context || {}, mixerDefaultContext);
+        return evaluate(obj.conditions, context) ? obj.data || [] : obj.elseData || [];
+    }
+
+    /**
+     * multiBranch mixer
+     * @return {Array}         [A data array with objects to continue with]
+     */
+    function multiBranch(obj, context){
+        context = _.extend(context || {}, mixerDefaultContext);
+        var row;
+
+        row = _.find(obj.branches, function(branch){
+            return evaluate(branch.conditions, context);
+        });
+
+        if (row) {
+            return row.data || [];
+        }
+
+        return obj.elseData || [];
+    }
+}
+
+mixerSequenceProvider$1.$inject = ['mixer'];
+function mixerSequenceProvider$1(mix){
+
+    /**
+     * MixerSequence takes an mixer array and allows browsing back and forth within it
+     * @param {Array} arr [a mixer array]
+     */
+    function MixerSequence(arr){
+        this.sequence = arr;
+        this.stack = [];
+        this.add(arr);
+        this.pointer = 0;
+    }
+
+    _.extend(MixerSequence.prototype, {
+        /**
+         * Add sequence to mixer
+         * @param {[type]} arr     Sequence
+         * @param {[type]} reverse Whether to start from begining or end
+         */
+        add: function(arr, reverse){
+            this.stack.push({pointer:reverse ? arr.length : -1,sequence:arr});
+        },
+
+        proceed: function(direction, context){
+            // get last subSequence
+            var subSequence = this.stack[this.stack.length-1];
+            var isNext = (direction === 'next');
+
+            // if we ran out of sequence
+            // add the original sequence back in
+            if (!subSequence) {
+                throw new Error ('mixerSequence: subSequence not found');
+            }
+
+            subSequence.pointer += isNext ? 1 : -1;
+
+            var el = subSequence.sequence[subSequence.pointer];
+
+            // if we ran out of elements, go to previous level (unless we are on the root sequence)
+            if (_.isUndefined(el) && this.stack.length > 1){
+                this.stack.pop();
+                return this.proceed.call(this,direction,context);
+            }
+
+            // if element is a mixer, mix it
+            if (el && el.mixer){
+                this.add(mix(el,context), !isNext);
+                return this.proceed.call(this,direction,context);
+            }
+
+            // regular element or undefined (end of sequence)
+            return this;
+        },
+
+        next: function(context){
+            this.pointer++;
+            return this.proceed.call(this, 'next',context);
+        },
+
+        prev: function(context){
+            this.pointer--;
+            return this.proceed.call(this, 'prev',context);
+        },
+
+        /**
+         * Return current element
+         * should **never** return a mixer - supposed to abstract them away
+         * @return {[type]} undefined or element
+         */
+        current:function(){
+            // get last subSequence
+            var subSequence = this.stack[this.stack.length-1];
+
+            if (!subSequence) {
+                throw new Error ('mixerSequence: subSequence not found');
+            }
+
+            var el = subSequence.sequence[subSequence.pointer];
+
+            if (!el){
+                return undefined;
+            }
+
+            // extend element with meta data
+            el.$meta = this.meta();
+
+            return el;
+        },
+
+        meta: function(){
+            return {
+                number: this.pointer,
+
+                // sum of sequence length, minus one (the mixer) for each level of stack except the last
+                outOf:  _.reduce(this.stack, function(memo,sub){return memo + sub.sequence.length-1;},0)+1
+            };
+        }
+
+    });
+
+    return MixerSequence;
+}
+
+function dotNotation$1(chain, obj){
+
+    if (_.isUndefined(chain)) return;
+    if (_.isString(chain)) chain = chain.split('.');
+
+    // @TODO maybe lodash _.get?
+    return chain.reduce(function(result, link){
+
+        if (_.isPlainObject(result) || _.isArray(result)){
+            return result[link];
+        }
+
+        return undefined;
+
+    }, obj);
+}
+
+var mixer = mixProvider(
+    _.shuffle, // randomizeShuffle
+    Math.random // randomizeRandom
+);
+
+var mixerDotNotation = mixerDotNotationProvider$1(dotNotation$1);
+var mixerCondition = mixerConditionProvider$1(
+    mixerDotNotation,
+    piConsole$1
+);
+
+var mixerEvaluate = evaluateProvider(mixerCondition);
+
+var mixerDefaultContext = {};
+
+mixerBranchingDecorator$1(
+    mixer,
+    mixerEvaluate,
+    mixerDefaultContext
+);
+
+var MixerSequence = mixerSequenceProvider$1(mixer);
+
+function piConsole$1(){
+    return console;
+}
+
+templateObjProvider$1.$inject = ['templateDefaultContext'];
+function templateObjProvider$1(templateDefaultContext){
+
+    function templateObj(obj, context, options){
+        var skip = _.get(options, 'skip', []);
+        var result = {};
+        var key;
+        var ctx = _.assign({}, context, templateDefaultContext);
+
+        for (key in obj){
+            result[key] = (skip.indexOf(key) == -1) ? expand(obj[key]) : obj[key];
+        }
+
+        return result;
+
+        function expand(value){
+            if (_.isString(value)) return template(value);
+            if (_.isArray(value)) return value.map(expand);
+            if (_.isPlainObject(value)) return _.mapValues(value, expand);
+            return value;
+        }
+
+        function template(input){
+            // if there is no template just return the string
+            if (!~input.indexOf('<%')) return input;
+            return _.template(input)(ctx);
+        }
+    }
+
+    return templateObj;
+}
+
+var templateObj = templateObjProvider$1({});
+
+/*
+ * The constructor for an Array wrapper
+ */
+
+function collectionService(){
+
+    function Collection (arr) {
+        if (arr instanceof Collection) {
+            return arr;
+        }
+
+        // Make sure we are creating this array out of a valid argument
+        if (!_.isUndefined(arr) && !_.isArray(arr) && !(arr instanceof Collection)) {
+            throw new Error('Collections can only be constructed from arrays');
+        }
+
+        this.collection = arr || [];
+        this.length = this.collection.length;
+
+        // pointer to the current location within the array
+        // we start with -1 so that the initial next points to the begining of the array
+        this.pointer = -1;
+    }
+
+    _.extend(Collection.prototype,{
+
+        first : function first(){
+            this.pointer = 0;
+            return this.collection[this.pointer];
+        },
+
+        last : function last(){
+            this.pointer = this.collection.length - 1;
+            return this.collection[this.pointer];
+        },
+
+        end : function end(){
+            this.pointer = this.collection.length;
+            return undefined;
+        },
+
+        current : function(){
+            return this.collection[this.pointer];
+        },
+
+        next : function(){
+            return this.collection[++this.pointer];
+        },
+
+        previous : function(){
+            return this.collection[--this.pointer];
+        },
+
+        // add list of items to the collection
+        add : function(list){
+            // dont allow adding nothing
+            if (!arguments.length) {
+                return this;
+            }
+
+            // make sure list is as an array
+            list = _.isArray(list) ? list : [list];
+            this.collection = this.collection.concat(list);
+
+            this.length = this.collection.length;
+
+            return this;
+        },
+
+        // return the item at index
+        at: function(index){
+            return this.collection[index];
+        }
+    });
+
+
+    // Stuff we took out of bootstrap that can augment the collection
+    // **************************************************************
+    var methods = ['where','filter'];
+    var slice = Array.prototype.slice;
+
+    // Mix in each Underscore method as a proxy to `Collection#models`.
+    _.each(methods, function(method) {
+        Collection.prototype[method] = function() {
+            var args = slice.call(arguments);
+            args.unshift(this.collection);
+            var coll = _[method].apply(_,args);
+            return new Collection(coll);
+        };
+    });
+
+    return Collection;
+}
+
+// @TODO: repeat currently repeats only the last element, we need repeat = 'set' or something in order to prevent re-randomizing of exRandom...
+
+RandomizerProvider.$inject = ['randomizeInt', 'randomizeRange', 'Collection'];
+function RandomizerProvider(randomizeInt, randomizeRange, Collection){
+
+    function Randomizer(){
+        this._cache = {
+            random : {},
+            exRandom : {},
+            sequential : {}
+        };
+    }
+
+    _.extend(Randomizer.prototype, {
+        random: random,
+        exRandom: exRandom,
+        sequential: sequential
+    });
+
+    return Randomizer;
+
+    function random(length, seed, repeat){
+        var cache  = this._cache.random;
+
+        if (repeat && !_.isUndefined(cache[seed])) {
+            return cache[seed];
+        }
+
+        // save result in cache
+        cache[seed] = randomizeInt(length);
+
+        return cache[seed];
+    }
+
+    function sequential(length, seed, repeat){
+        var cache = this._cache.sequential;
+        var coll = cache[seed];
+        var result;
+
+        // if needed create collection and set it in seed
+        if (_.isUndefined(coll)){
+            coll = cache[seed] = new Collection(_.range(length));
+            return coll.first();
+        }
+
+        if (coll.length !== length){
+            throw new Error('This seed  ('+ seed +') points to a collection with the wrong length, you can only use a seed for sets of the same length');
+        }
+
+        // if this is a repeated element:
+        if (repeat) {
+            return coll.current();
+        }
+
+        // if we've reached the end
+        result = coll.next();
+
+        // if we've reached the end of the collection (next)
+        if (_.isUndefined(result)){
+            return coll.first();
+        } else {
+            return result;
+        }
+    }
+
+    function exRandom(length, seed, repeat){
+        var cache = this._cache.exRandom;
+        var coll = cache[seed];
+        var result;
+
+        // if needed create collection and set it in seed
+        if (_.isUndefined(coll)){
+            coll = cache[seed] = new Collection(randomizeRange(length));
+            return coll.first();
+        }
+
+        if (coll.length !== length){
+            throw new Error('This seed  ('+ seed +') points to a collection with the wrong length, you can only use a seed for sets of the same length');
+        }
+
+        // if this is a repeated element:
+        if (repeat) {
+            return coll.current();
+        }
+
+        // if we've reached the end
+        result = coll.next();
+
+        // if we've reached the end of the collection (next)
+        // we should re-randomize
+        if (_.isUndefined(result)){
+            coll = cache[seed] = new Collection(randomizeRange(length));
+            return coll.first();
+        } else {
+            return result;
+        }
+    }
+
+}
+
+/*
+ *	The store is a collection of collection devided into namespaces.
+ *	You can think of every namespace/collection as a table.
+ */
+storeProvider$1.$inject = ['Collection'];
+function storeProvider$1(Collection){
+
+    function Store(){
+        this.store = {};
+    }
+
+    _.extend(Store.prototype, {
+        create: function create(nameSpace){
+            if (this.store[nameSpace]){
+                throw new Error('The name space ' + nameSpace + ' already exists');
+            }
+            this.store[nameSpace] = new Collection();
+            this.store[nameSpace].namespace = nameSpace;
+        },
+
+        read: function read(nameSpace){
+            if (!this.store[nameSpace]){
+                throw new Error('The name space ' + nameSpace + ' does not exist');
+            }
+            return this.store[nameSpace];
+        },
+
+        update: function update(nameSpace, data){
+            var coll = this.read(nameSpace);
+            coll.add(data);
+        },
+
+        del: function del(nameSpace){
+            this.store[nameSpace] = undefined;
+        }
+    });
+
+    return Store;
+}
+
+SequenceProvider.$inject = ['MixerSequence'];
+function SequenceProvider(MixerSequence){
+
+    /**
+     * Sequence Constructor:
+     * Manage the progression of a sequence, including parsing (mixing, inheritance and templating).
+     * @param  {String  } namespace [pages or questions (the type of db.Store)]
+     * @param  {Array   } arr       [a sequence to manage]
+     * @param  {Database} db        [the db itself]
+     */
+
+    function Sequence(namespace, arr,db){
+        this.namespace = namespace;
+        this.mixerSequence = new MixerSequence(arr);
+        this.db = db;
+    }
+
+    _.extend(Sequence.prototype, {
+        // only mix
+        next: function(context){
+            this.mixerSequence.next(context);
+            return this;
+        },
+
+        // anti mix
+        prev: function(context){
+            this.mixerSequence.prev(context);
+            return this;
+        },
+
+        /**
+         * Return the element currently in focus.
+         * It always returns either an element or undefined (mixers are abstrcted away)
+         * @param  {[type]} context [description]
+         * @return {[type]}         [description]
+         */
+        current: function(context, options){
+            context || (context = {});
+            // must returned an element or undefined
+            var obj = this.mixerSequence.current(context);
+
+            // in case this is the end of the sequence
+            if (!obj){
+                return obj;
+            }
+
+            return this.db.inflate(this.namespace, obj, context, options);
+        },
+
+        /**
+         * Returns an array of elements, created by proceeding through the whole sequence.
+         * @return {[type]} [description]
+         */
+        all: function(context, options){
+            var sequence = [];
+
+            var el = this.next().current(context, options);
+            while (el){
+                sequence.push(el);
+                el = this.next().current(context, options);
+            }
+
+            return sequence;
+        }
+    });
+
+    return Sequence;
+}
+
+DatabaseProvider.$inject = ['DatabaseStore', 'DatabaseRandomizer', 'databaseInflate', 'templateObj', 'databaseSequence'];
+function DatabaseProvider(Store, Randomizer, inflate, templateObj, DatabaseSequence){
+
+    function Database(){
+        this.store = new Store();
+        this.randomizer = new Randomizer();
+    }
+
+    _.extend(Database.prototype, {
+        createColl: function(namespace){
+            this.store.create(namespace);
+        },
+
+        getColl: function(namespace){
+            return this.store.read(namespace);
+        },
+
+        add: function(namespace, query){
+            var coll = this.store.read(namespace);
+            coll.add(query);
+        },
+
+        inflate: function(namespace, query, context, options){
+            var coll = this.getColl(namespace);
+            var result;
+
+            try {
+                // inherit
+                if (!query.$inflated || query.reinflate) {
+                    query.$inflated = inflate(query, coll, this.randomizer);
+                    query.$templated = null; // we have to retemplate after querying, who know what new templates we got here...
+                }
+
+                // template
+                if (!query.$templated || query.$inflated.regenerateTemplate){
+                    context[namespace + 'Meta'] = query.$meta;
+                    context[namespace + 'Data'] = templateObj(query.$inflated.data || {}, context, options); // make sure we support
+                    query.$templated = templateObj(query.$inflated, context, options);
+                }
+
+                result = query.$templated;
+            } catch(err) {
+                if (this.onError) this.onError(err);
+                throw err;
+            }
+
+            // set flags
+            if (context.global && result.addGlobal) _.extend(context.global, result.addGlobal);
+
+            if (context.current && result.addCurrent) _.extend(context.current, result.addCurrent);
+
+            return query.$templated;
+        },
+
+        sequence: function(namespace, arr){
+            if (!_.isArray(arr)){
+                throw new Error('Sequence must be an array.');
+            }
+            return new DatabaseSequence(namespace, arr, this);
+        }
+    });
+
+    return Database;
+}
+
+queryProvider$1.$inject = ['Collection'];
+function queryProvider$1(Collection){
+
+    function queryFn(query, collection, randomizer){
+        var coll = new Collection(collection);
+
+        // shortcuts:
+        // ****************************
+
+        if (_.isFunction(query)) return query(collection);
+
+        if (_.isString(query) || _.isNumber(query)) query = {set:query, type:'random'};
+
+        // filter by set
+        // ****************************
+        if (query.set) coll = coll.where({set:query.set});
+
+        // filter by data
+        // ****************************
+        if (_.isString(query.data)){
+            coll = coll.filter(function(q){
+                return q.handle === query.data || (q.data && q.data.handle === query.data);
+            });
+        }
+
+        if (_.isPlainObject(query.data)) coll = coll.where({data:query.data});
+
+        if (_.isFunction(query.data)) coll = coll.filter(query.data);
+
+        // pick by type
+        // ****************************
+
+        // the default seed is namespace specific just to minimize the situations where seeds clash across namespaces
+        var seed = query.seed || ('$' + collection.namespace + query.set);
+        var length = coll.length;
+        var repeat = query.repeat;
+        var at;
+
+        switch (query.type){
+            case undefined:
+            case 'byData':
+            case 'random':
+                at = randomizer.random(length,seed,repeat);
+                break;
+            case 'exRandom':
+                at = randomizer.exRandom(length,seed,repeat);
+                break;
+            case 'sequential':
+                at = randomizer.sequential(length,seed,repeat);
+                break;
+            case 'first':
+                at = 0;
+                break;
+            case 'last':
+                at = length-1;
+                break;
+            default:
+                throw new Error('Unknow query type: ' + query.type);
+        }
+
+        if (_.isUndefined(coll.at(at))) throw new Error('Query failed, object (' + JSON.stringify(query) +	') not found. If you are trying to apply a template, you should know that they are not supported for inheritance.');
+
+        return coll.at(at);
+    }
+
+    return queryFn;
+}
+
+/*
+ * inflates an object
+ * this function is responsible for inheritance
+ *
+ * function inflate(source,coll, randomizer, recursive, counter)
+ * @param source: the object to inflate
+ * @param coll: a collection to inherit from
+ * @param randomizer: a randomizer object for the query
+ * @param recursive: private use only, is this inside the recursion (true) or top level (false)
+ * @param depth: private use only, a counter for the depth of the recursion
+ */
+inflateProvider$1.$inject = ['databaseQuery','$rootScope'];
+function inflateProvider$1(query, $rootScope){
+
+    function customize(source){
+        // check for a custom function and run it if it exists
+        if (_.isFunction(source.customize)){
+            source.customize.apply(source, [source, $rootScope.global]);
+        }
+        return source;
+    }
+
+    // @param source - object to inflate
+    // @param type - trial stimulus or media
+    // @param recursive - whether this is a recursive call or not
+    function inflate(source, coll, randomizer, recursive, depth){
+
+        // protection against infinte loops
+        // ***********************************
+        depth = recursive ? --depth : 10;
+
+        if (!depth) throw new Error('Inheritance loop too deep, you can only inherit up to 10 levels down');
+
+        if (!_.isPlainObject(source)) throw new Error('You are trying to inflate a non object (' + JSON.stringify(source) + ')');
+
+        var parent;
+        var child = _.cloneDeep(source);
+        var inheritObj = child.inherit;
+
+        /*
+         * no inheritance
+         */
+
+        if (!child.inherit) {
+            if (!recursive) customize(child); // customize only on the last call (non recursive)
+            return child;
+        }
+
+        /*
+         * get parent
+         */
+        parent = query(inheritObj, coll, randomizer);
+
+        // if inherit target was not found
+        if (!parent) throw new Error('Query failed, object (' + JSON.stringify(inheritObj) +	') not found.');
+
+        // inflate parent (recursively)
+        parent = inflate(
+            parent,
+            coll,
+            randomizer,
+            true,
+            depth
+        );
+
+        // extending the child
+        // ***********************************
+        if (inheritObj.merge && !_.isArray(inheritObj.merge)){
+            throw new Error('Inheritance error: inherit.merge must be an array.');
+        }
+
+        // start inflating child (we have to extend selectively...)
+        _.each(parent, function(value, key){
+            var childProp, parentProp;
+            // if this key is not set yet, copy it out of the parent
+            if (!(key in child)){
+                child[key] = _.isFunction(value) ? value : _.cloneDeep(value);
+                return;
+            }
+
+            // if we have a merge array,
+            if (_.indexOf(inheritObj.merge, key) != -1){
+                childProp = child[key];
+                parentProp = value;
+
+                if (_.isArray(childProp)){
+                    if (!_.isArray(parentProp)){
+                        throw new Error('Inheritance error: You tried merging an array with an non array (for "' + key + '")');
+                    }
+                    child[key] = childProp.concat(parentProp);
+                }
+
+                if (_.isPlainObject(childProp)){
+                    if (!_.isPlainObject(parentProp)){
+                        throw new Error('Inheritance error: You tried merging an object with an non object (for "' + key + '")');
+                    }
+                    child[key] = _.extend({},parentProp,childProp);
+                }
+
+            }
+        });
+
+        // we want to extend the childs data even if it already exists
+        // its ok to shallow extend here (because by definition parent was created for this inflation)
+        if (parent.data){
+            child.data = _.extend(parent.data, child.data || {});
+        }
+
+        // Personal customization functions - only if this is the last iteration of inflate
+        // This way the customize function gets called only once.
+        !recursive && customize(child);
+
+        // return inflated trial
+        return child;
+    }
+
+    return inflate;
+}
+
+var global = window.piGlobal;
+
+var collection = collectionService();
+
+var DatabaseRandomizer = RandomizerProvider(
+    randomInt,// randomize int
+    randomArr,// randomize range
+    collection
+);
+
+var databaseQuery = queryProvider$1(
+    collection,
+    piConsole
+);
+
+var databaseInflate = inflateProvider$1(
+    databaseQuery,
+    {global: global}, // rootscope
+    piConsole
+);
+
+var DatabaseStore = storeProvider$1(
+    collection
+);
+
+var databaseSequence = SequenceProvider(
+    MixerSequence
+);
+
+
+var Database = DatabaseProvider(
+    DatabaseStore,
+    DatabaseRandomizer,
+    databaseInflate,
+    templateObj,
+    databaseSequence
+);
+
+function randomArr(length){
+    return _.shuffle(_.range(length));
+}
+
+function randomInt(length){
+    return Math.floor(Math.random()*length);
+}
+
+function piConsole(){
+    return console;
+}
+
+return Database;
+
+})));
+//# sourceMappingURL=minno-sequencer.js.map
+});
+
 window.piGlobal || (window.piGlobal = {});
 
 var global$1 = window.piGlobal;
@@ -47272,7 +48342,7 @@ function global$2(){
     return glob;
 }
 
-var minnoSequencer = createCommonjsModule(function (module, exports) {
+var minnoSequencer$1 = createCommonjsModule(function (module, exports) {
 (function (global, factory) {
 	module.exports = factory(lodash$1);
 }(commonjsGlobal, (function (_) { _ = _ && _.hasOwnProperty('default') ? _['default'] : _;
@@ -48397,7 +49467,7 @@ function where(direction, properties, context, sequence){
 
 // load dependancies
 function createDB$1(script){
-    var db = new minnoSequencer();
+    var db = new minnoSequencer$1();
     db.createColl('trial');
     db.createColl('stimulus');
     db.createColl('media');
@@ -50456,797 +51526,6 @@ function activate$2(canvas, script){
     preloadPhase$1(canvas, script).then(playSink.start);
 
     return playSink;
-}
-
-var isDev = /^(localhost|127.0.0.1)/.test(location.host);
-
-/**
- * Constructor for PIPlayer script creator
- * @return {Object}		Script creator
- */
-function API$1(name){
-    api$1.call(this, name);
-
-    var settings = this.settings;
-    var script = this.script;
-
-    settings.logger = {
-        pulse: 20,
-        url : '/implicit/PiPlayerApplet'
-    };
-
-    // the activation function
-    script.play = play;
-
-    // the url builder for play
-    script.buildBaseUrl = buildBaseUrl;
-
-    if (isDev && !script.version) script.version = 999;
-}
-
-APIdecorator(API$1);
-
-// create API functions
-lodash.extend(API$1.prototype, api$1.prototype);
-API$1.prototype.setVersion = function setVersion(ver){this.script.version = ver;};
-
-// annotate the play function
-play.$inject = ['done', '$element', 'script', 'task', 'piConsole'];
-
-
-/**
- * The activator function for pip
- * (anotated up in the main code)
- */
-function play(done, $canvas, script, task, $console){
-    var $el, req, baseUrl ,version = task.version || this.version;
-    var pipSink, newVersion = version > 0.3;
-
-    if (task.type === 'time') {
-        // update script name
-        task.name && (script.name = task.name);
-
-        $canvas.append('<div pi-player></div>');
-        $el = $canvas.contents();
-
-        pipSink = activate$2($el[0], script);
-        pipSink.onEnd(done);
-        pipSink.$messages.map($console);
-
-        return function destroyPIP(){
-            $el.remove();
-            pipSink.end();
-        };
-    }
-
-    if (!version) throw new Error('Version not defined for pip task: ' + (task.name || script.name));
-
-    baseUrl = this.buildBaseUrl(version);
-
-    // load PIP
-    req = requirejs.config({
-        context: lodash.uniqueId(),
-        baseUrl: baseUrl+ (isDev ? 'src/js' : '/dist/js/'), // can't use packages yet as urls in pip aren't relative...
-        paths: {
-            //plugins
-            text: ['//cdnjs.cloudflare.com/ajax/libs/require-text/2.0.3/text.min', baseUrl+'/bower_components/requirejs-text/text'],
-
-            // Core Libraries
-            jquery: ['//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min',baseUrl+'/bower_components/jquery/dist/jquery.min'],
-            underscore: ['//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min',baseUrl+'/bower_components/lodash-compat/lodash.min'],
-            backbone: ['//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min', baseUrl+'/bower_components/backbone/backbone']
-        },
-
-        deps: newVersion ? ['underscore'] : ['jquery', 'backbone', 'underscore']
-    });
-
-    // update script name
-    task.name && (script.name = task.name);
-
-    $canvas.append('<div pi-player></div>');
-    $el = $canvas.contents();
-    $el.addClass('pi-spinner');
-
-
-    req(['activatePIP'], function(activate){
-        $el.removeClass('pi-spinner');
-        if (newVersion) {
-            pipSink = activate($el[0], script);
-            pipSink.onEnd(done);
-        }
-        else activate(script, done);
-    });
-
-    return function destroyPIP(){
-        $el.remove();
-        if (newVersion) pipSink.end();
-        else req(['app/task/main_view'], function(main){
-            main.deferred.resolve();
-            main.destroy();
-        });
-    };
-}
-
-/**
- * Build BaseUrl from version
- * @param  {string} version pip version
- * @return {string}         baseUrl
- */
-function buildBaseUrl(version){
-    return isDev ? '/pip/' : '/implicit/common/all/js/pip/'+version;
-}
-
-var Constructor$2 = APIconstructor({
-    type: 'quest',
-    sets: ['pages', 'questions']
-});
-
-function API$2(){
-    Constructor$2.call(this);
-    lodash.set(this, 'settings.logger.url', '/implicit/PiQuest');
-}
-
-APIdecorator(API$2);
-
-// create API functions
-lodash.extend(API$2.prototype, Constructor$2.prototype);
-
-/**
- * Essentialy a defaults object for the scorer
- */
-function ComputeD(){
-    lodash.extend(this, {
-        dataArray : {}, //The data array or structure the PIP will provide
-        AnalyzedVar : 'latency', //The main variable used for the score computation. Usually will be the latency.
-        ErrorVar : 'error', //The variable that indicates whether there was an error in the response
-        condVar:'',  //The name of the variable that will store the variables
-        cond1VarValues: [], //An array with the values of the condVar that will comprise of condition 1 in the comparison
-        cond2VarValues: [], //An array with the values of the condVar that will comprise of condition 2 in the comparison
-        parcelVar : '',
-        parcelValue : [],
-        fastRT : 300, //Below this reaction time, the latency is considered extremely fast.
-        maxFastTrialsRate : 0.1, //Above this % of extremely fast responses within a condition, the participant is considered too fast.
-        minRT : 400, //Below this latency
-        maxRT : 10000, //above this
-        maxErrorParcelRate: 0.4,
-        errorLatency : {use:'latency', penalty:600, useForSTD:true},
-        postSettings : {}
-    });
-}
-
-lodash.extend(ComputeD.prototype, {
-    setComputeObject: function(obj){
-        lodash.extend(this,obj);
-    },
-
-    setDataArray: function(){
-        // use the real global in order to preven problems with dependencies
-        var global = window.piGlobal;
-
-        this.dataArray = global.current.logs;
-    }
-});
-
-var messages = {
-    MessageDef:[],
-    manyErrors: 'There were too many errors made to determine a result.',
-    tooFast: 'There were too many fast trials to determine a result.',
-    notEnough: 'There were not enough trials to determine a result.'
-};
-
-function Message(){
-    // setup default local messages
-    this.messages = lodash.extend({}, messages);
-}
-
-lodash.extend(Message.prototype, {
-
-    /**
-     * Setup custom local messages
-     * @param {Object} Obj 	messages object
-     */
-    setMsgObject: function(Obj){
-        lodash.extend(this.messages,Obj);
-    },
-
-    getScoreMsg: function(score){
-
-        var array = this.messages.MessageDef;
-
-        if (!array || !array.length){
-            throw new Error('You must define a "MessageDef" array.');
-        }
-
-        var scoreNum = parseFloat(score);
-        var cut = null;
-        var msg = null;
-        var rightMsg = 'error: msg was not set';
-        var set = false;
-
-        // @TODO repleace this whole section with a "_.find()" or something.
-        lodash.each(array, function(val) {
-            cut = parseFloat(val.cut);
-            msg = val.message;
-            if (scoreNum<=cut && !set){
-                rightMsg = msg;
-                set = true;
-            }
-        });
-
-        if (!set){
-            var length = array.length;
-            var obj = array[length-1];
-            rightMsg = obj.message;
-        }
-
-        return rightMsg;
-    },
-
-    getMessage: function getMessage(type){
-        return this.messages[type];
-    }
-});
-
-function ParcelMng$1(msgMan){
-    this.parcelArray = []; // Holds parcel array
-    this.scoreData = {}; // Holds score and error message
-    this.msgMan = msgMan;
-}
-
-lodash.extend(ParcelMng$1.prototype, {
-
-    /*  Method: Void Init
-    Input: Uses logs from API
-    Output: Sets parcelArray with array of type parcel
-    Description: Init goes over the log and creates an array of object of type Parcel according to
-    the parcelValue array in computeD. Each parcel object holds relevant information regarding the
-    parcel including an array of trials with the relevant parcel name.
-    */
-    Init: function(compute){
-        var parcelMng = this;
-        var msgMan = this.msgMan;
-        // use the real global in order to prevent problems with dependencies
-        var global = window.piGlobal;
-
-        var data = global.current.logs;
-        parcelMng.parcelArray = [];
-        parcelMng.scoreData = {};
-        parcelMng.msgMan = msgMan;
-
-        // get settings
-        var AnalyzedVar = compute.AnalyzedVar;
-        var error = compute.ErrorVar;
-        var parcelVar = compute.parcelVar;
-        var parcels = compute.parcelValue;
-        var min = compute.minRT;
-        var max = compute.maxRT;
-        var fastRT= compute.fastRT;
-
-        // set counters
-        var totalScoredTrials = 0;
-        var trialsUnder = 0;
-        var totalTrials=0;
-        var totalErrorTrials =0;
-        var maxFastTrialsRate = parseFloat(compute.maxFastTrialsRate);
-
-
-        if (typeof parcels == 'undefined' || parcels.length === 0){
-            totalTrials =0;
-            totalScoredTrials=0;
-            trialsUnder=0;
-            totalErrorTrials=0;
-            var p = {};
-            p.name = 'general';
-            p.trialIData = [];
-            lodash.each (data, function (value) {// loop per object in logger
-                if (value[AnalyzedVar]>=min && value[AnalyzedVar]<=max){
-                    totalTrials++;
-                    if (value.data[error] == 1) {
-                        totalErrorTrials++;
-                    }
-                    //p.trialIData.push(value);//push all data
-                    //totalScoredTrials++;
-                    if (parcelMng.validate(p,value,compute)) {
-                        totalScoredTrials++;
-                    }
-                }else {
-                    if (value[AnalyzedVar]<= fastRT) {
-                        trialsUnder++;
-                    }
-                }
-            });
-            parcelMng.checkErrors(totalTrials,totalErrorTrials,compute);
-            parcelMng.parcelArray[0] = p;
-        } else {
-            lodash.each (parcels, function(parcelName,index) {// per parcel from parcelValue
-                //set variables calculated per parcel
-                totalTrials =0;
-                totalScoredTrials=0;
-                trialsUnder=0;
-                totalErrorTrials=0;
-                var p = {};
-                p.name = parcelName;
-                p.trialIData = [];
-                ///////////////////////////////////
-                lodash.each (data, function (value) {//loop per object in logger
-                    var trialParcelName = value.data[parcelVar];
-
-                    // if this trial belongs to parcel
-                    if (trialParcelName == parcelName){
-                        if (value[AnalyzedVar]>=min && value[AnalyzedVar]<=max){
-                            totalTrials++;
-                            if (value.data[error] == 1) {
-                                totalErrorTrials++;
-                            }
-                            //p.trialIData.push(value);//push all data
-                            //totalScoredTrials++;
-                            if (parcelMng.validate(p,value,compute)) {
-                                totalScoredTrials++;
-                            }
-                        }else {
-                            if (value[AnalyzedVar]<= fastRT) {
-                                trialsUnder++;
-                            }
-                        }
-
-                    }
-
-                });
-                parcelMng.checkErrors(totalTrials,totalErrorTrials,compute);//apply maxErrorParcelRate logic
-                parcelMng.parcelArray[index] = p;
-            });
-        }
-        if ( (trialsUnder/totalScoredTrials) > maxFastTrialsRate){
-            parcelMng.scoreData.errorMessage = this.msgMan.getMessage('tooFast');
-
-        }
-
-    },
-
-    /*
-       private
-Method: Void checkErrors
-Input: totalTrials,totalErrorTrials and compute object.
-Output: Sets scoreData with error message if relevant.
-Description: Helper method to check for errors according to maxErrorParcelRate from compute object.
-sets an error message in scoreData.
-
-*/
-    checkErrors: function(totalTrials,totalErrorTrials,compute){
-
-        var maxErrorParcelRate = compute.maxErrorParcelRate;
-        if (totalErrorTrials/totalTrials > maxErrorParcelRate){
-            this.scoreData.errorMessage = this.msgMan.getMessage('manyErrors');
-
-        }
-
-    },
-
-    /* Function: Void validate.
-Input: parcel object, trial object from the log and the compute object.
-Output: Pushes the trial to the parcel based on information from errorLatency. Returns true/false.
-Description: Helper method to apply errorLatency logic. If set to 'latency' trials witch are error
-would be added to the parcel trial array. if set to false trials that are error would not be added,
-if set to panelty error trials will be added and later panelized.
-
-*/
-
-    validate: function(p,value,compute){
-        var errorLatency = compute.errorLatency;
-        var error = compute.ErrorVar;
-        var data = value.data;
-
-
-        if (errorLatency.use =='latency'){
-            p.trialIData.push(value);
-            return true;
-        }else{
-            if (errorLatency.use =='false'){
-                if(data[error]=='1'){
-                    return false;
-                }else{
-                    p.trialIData.push(value);
-                    return true;
-                }
-            }
-            if(errorLatency.use =='penalty'){
-                p.trialIData.push(value);
-                return true;
-            }
-        }
-    },
-
-    /*  Function: Void addPenalty.
-Input: parcel object and the compute object.
-Output: adds penalty to latency of trials
-Description: Helper method to add average and penalty to error trials
-if errorLatency is set to 'penalty'. Should be called after avgAll.
-
-*/
-
-    addPenalty: function(p,compute){
-        var errorLatency = compute.errorLatency;
-        var parcelMng = this;
-
-
-        if (errorLatency.use == 'penalty'){
-
-            var penalty = parseFloat(errorLatency.penalty);
-            var ErrorVar = compute.ErrorVar;
-            var AnalyzedVar = compute.AnalyzedVar;
-            var condVar = compute.condVar;
-            var cond1 = compute.cond1VarValues;
-            var cond2 = compute.cond2VarValues;
-            var trialIData = p.trialIData;
-            var avg1 = p.avgCon1;
-            var avg2 = p.avgCon2;
-
-
-            lodash.each (trialIData, function (value) {
-                var data = value.data;
-                var error = data[ErrorVar];
-                var dataCond = data[condVar];
-                var diff1 = parcelMng.checkArray(dataCond,cond1);
-                var diff2 = parcelMng.checkArray(dataCond,cond2);
-
-                if (error=='1'){
-                    if (diff1){
-                        value[AnalyzedVar] += avg1+ penalty;
-                    }else{
-                        if (diff2){
-                            value[AnalyzedVar] += avg2+ penalty;
-                        }
-                    }
-
-                }
-            });
-
-        }
-    },
-
-    /*  Function: Void avgAll.
-Input: compute object.
-Output: setting avgCon1 and avgCon2
-Description: Loop over the parcels and Set average for condition 1 trials and for condition 2 trials.
-
-*/
-
-    avgAll: function(compute){
-        var parcelMng = this;
-        lodash.each(parcelMng.parcelArray, function (value) {
-            parcelMng.avgParcel(value,compute);
-        });
-    },
-
-
-    /*
-       private
-Function: Void avgParcel.
-Input: compute object, parcel.
-Output: setting avgCon1 and avgCon2 in parcel.
-Description: Set average for condition 1 trials and for condition 2 trials in the parcel.
-
-*/
-
-    avgParcel: function(p,compute){
-        var parcelMng = this;
-        var trialIData = p.trialIData;
-        var condVar = compute.condVar;
-        var cond1 = compute.cond1VarValues;
-        var cond2 = compute.cond2VarValues;
-        var AnalyzedVar = compute.AnalyzedVar;
-        var avgCon1 = 0;
-        var avgCon2 = 0;
-        var avgBoth = 0;
-        var numCond1 = 0;
-        var numCond2 = 0;
-        var numBoth = 0;
-
-        lodash.each (trialIData, function (value) {
-
-            var AnVar = value[AnalyzedVar];
-            var data = value.data;
-            avgBoth += AnVar;
-            numBoth ++;
-            //var diff1 = ( _(data[condVar]).difference(cond1) );
-            //var diff2 = ( _(data[condVar]).difference(cond2) );
-            var dataCond = data[condVar];
-            var diff1 = parcelMng.checkArray(dataCond,cond1);
-            var diff2 = parcelMng.checkArray(dataCond,cond2);
-
-            if (diff1) {
-                numCond1++;
-                avgCon1 += AnVar;
-            } else {
-                if (diff2){
-                    numCond2++;
-                    avgCon2 += AnVar;
-                }
-            }
-
-        });
-        if (numCond1 <= 2 || numCond2 <= 2){
-            parcelMng.scoreData.errorMessage = this.msgMan.getMessage('notEnough');
-        }
-        if (numCond1 !== 0) {
-            avgCon1 = avgCon1/numCond1;
-        }
-        if (numCond2 !== 0) {
-            avgCon2 = avgCon2/numCond2;
-        }
-        p.avgCon1 = avgCon1;
-        p.avgCon2 = avgCon2;
-        p.diff = p.avgCon1 - p.avgCon2;
-        if (numBoth !== 0) {
-            p.avgBoth = avgBoth/numBoth;
-        }
-        parcelMng.addPenalty(p,compute);
-    },
-
-    /*  Function: Void checkArray.
-Input: the condition from the trial and an array of condition from computeD object.
-Output: return true if condition is in the array.
-Description: Helper function that returns true if condition is in the array or false otherwise.
-
-*/
-
-    checkArray: function(conFromData,con){
-        for(var i=0; i<con.length; i++){
-            var condition = con[i];
-            if (condition == conFromData ){
-                return true;
-            }
-        }
-
-        return false;
-    },
-
-    /*  Function: Void varianceAll.
-Input: compute object, parcel.
-Output: variance variable in parcel.
-Description: Loop over the parcels and set the variance variable.
-
-*/
-
-    varianceAll: function(compute){
-        var parcelMng = this;
-        lodash.each (parcelMng.parcelArray, function (value) {
-            parcelMng.varianceParcel(value,compute);
-        });
-    },
-
-    /*  Function: Void varianceParcel.
-Input: compute object, parcel.
-Output: setting variance variable in parcel.
-Description: goes over the trials of the parcel and calculate variance.
-
-*/
-    varianceParcel: function(p,compute){
-        var parcelMng = this;
-        var AnalyzedVar = compute.AnalyzedVar;
-        var trialIData = p.trialIData;
-        var cond1 = compute.cond1VarValues;
-        var cond2 = compute.cond2VarValues;
-        var condVar = compute.condVar;
-        var avg = p.avgBoth;
-        var d = 0;
-        var x2 = 0;
-        var pooledCond1 = [];
-        var pooledCond2 = [];
-        var pooledData = [];
-        var errorLatency = compute.errorLatency;
-        var useForSTD = errorLatency.useForSTD;
-
-
-        lodash.each (trialIData, function (value) {//pool to one array
-            var data = value.data;
-            var AnVar = value[AnalyzedVar];
-            var ErrorVar = compute.ErrorVar;
-            var error = data[ErrorVar];
-            var dataCond = data[condVar];
-            var diff1 = parcelMng.checkArray(dataCond,cond1);
-            var diff2 = parcelMng.checkArray(dataCond,cond2);
-            //var diff1 = ( _(data[condVar]).difference(cond1) );
-            //var diff2 = ( _(data[condVar]).difference(cond2) );
-            if (diff1) {
-                if (useForSTD){
-                    pooledCond1.push(AnVar);
-                }
-                else{
-                    if (error=='0') {
-                        pooledCond1.push(AnVar);
-                    }
-                }
-            }
-            else {
-                if (diff2){
-                    if (useForSTD){
-                        pooledCond2.push(AnVar);
-                    }
-                    else{
-                        if (error=='0') {
-                            pooledCond1.push(AnVar);
-                        }
-                    }
-
-                }
-            }
-
-
-        });
-
-        pooledData = pooledCond1.concat(pooledCond2);
-        lodash.each (pooledData, function (value) {//pool to one array
-            var AnVar = value;
-            d = AnVar-avg;
-            x2 += d*d;
-
-        });
-        p.variance = x2/(pooledData.length-1);
-    },
-
-
-    /*  Function: Void scoreAll.
-Input: compute object.
-Output: score variable in scoreData object
-Description: Average the scores from all parcels set score in scoreData object.
-
-*/
-    scoreAll: function(compute){
-        var parcelMng = this;
-        var dAvg = 0;
-        lodash.each (parcelMng.parcelArray, function (value) {
-            parcelMng.scoreParcel(value,compute);
-            dAvg +=  value.score;
-        });
-        var score = (dAvg/(parcelMng.parcelArray.length));
-        parcelMng.scoreData.score = score.toFixed(2);
-
-    },
-
-    /*
-       private
-Function: Void scoreParcel.
-Input: compute object, parcel.
-Output: score variable in parcel
-Description: Calculate the score for the parcel.
-
-*/
-    scoreParcel: function(p){
-        var parcelMng = this;
-        var sd = Math.sqrt(p.variance);
-        if (sd === 0){
-            parcelMng.scoreData.errorMessage = this.msgMan.getMessage('notEnough');
-            p.score = p.diff;
-        } else {
-            p.score = p.diff/sd;
-        }
-    }
-
-});
-
-function Scorer(){
-    this.computeData = new ComputeD();
-    this.msgMan = new Message();
-    this.parcelMng = new ParcelMng$1(this.msgMan);
-}
-
-lodash.extend(Scorer.prototype, {
-
-    /**
-     * Set settings for computeD or msgMan
-     * @param {String} type 'compute' or 'message' - the type of settingsObj to set
-     * @param {Object} Obj  The settings object itself
-     */
-    addSettings: function(type,Obj){
-        switch (type){
-            case 'compute':
-                this.computeData.setComputeObject(Obj);
-                break;
-            case 'message':
-                this.msgMan.setMsgObject(Obj);
-                break;
-            default:
-                throw new Error('SCORER:addSettings: unknow "type" ' + type);
-        }
-    },
-
-    /**
-     * Calculate the score
-     * @return {Object} an object that holds the score and an error message
-     */
-
-    computeD: function(){
-        var computeData = this.computeData;
-        var parcelMng = this.parcelMng;
-
-        computeData.setDataArray();
-
-        parcelMng.Init(computeData);
-        parcelMng.avgAll(computeData);
-
-        parcelMng.varianceAll(computeData);
-        parcelMng.scoreAll(computeData);
-
-        var scoreObj = parcelMng.scoreData;
-
-        if (scoreObj.errorMessage === undefined || scoreObj.errorMessage === null){
-            return {
-                FBMsg : this.getFBMsg(scoreObj.score),
-                DScore : scoreObj.score,
-                error: false
-            };
-        }else{
-            return {
-                FBMsg : scoreObj.errorMessage,
-                DScore : '',
-                error: true
-            };
-        }
-    },
-
-    /**
-     * Post the score and message to the server
-     * @param  {[type]} score    [description]
-     * @param  {[type]} msg      [description]
-     * @param  {String} scoreKey The key with which to send the score data
-     * @param  {String} msgKey   The key with which to send the msg data
-     * @return {promise}         A promise that is resolved with the post
-     */
-    postToServer: function(score,msg,scoreKey,msgKey){
-        var postSettings = this.computeData.postSettings || {};
-        var url = postSettings.url;
-        var data = {};
-
-        if (!scoreKey) {
-            scoreKey = postSettings.score;
-        }
-
-        if (!msgKey) {
-            msgKey = postSettings.msg;
-        }
-
-        // create post object
-        data[scoreKey] = score;
-        data[msgKey] = msg;
-
-        return post$2(url,data);
-    },
-
-    /**
-     * Blindly post all "data" to the server
-     * @param  {Object} data Arbitrary data to be sent to the server
-     * @return {promise}      A promise that is resolved with the post
-     */
-    dynamicPost: function(data){
-        var postSettings = this.computeData.postSettings || {};
-        var url = postSettings.url;
-
-        return post$2(url,data);
-    },
-
-    // get message according to user input
-    getFBMsg: function(DScore){
-        var msg = this.msgMan.getScoreMsg(DScore);
-        return msg;
-    }
-});
-
-function post$2(url, data){
-    return new Promise(function(resolve, reject){
-        var request = new XMLHttpRequest();
-        request.open('POST',url, true);
-        request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-
-        request.onreadystatechange = function() {
-            if (this.readyState === 4) {
-                if (this.status >= 200 && this.status < 400) resolve(this.responseText);
-                else reject(new Error('Failed posting to: ' + url));
-            }
-        };
-
-        request.send(JSON.stringify(data));
-    });
 }
 
 /** vim: et:ts=4:sw=4:sts=4
@@ -53396,6 +53675,813 @@ var define;
     //Set up with config info.
     req(cfg);
 }(undefined, (typeof setTimeout === 'undefined' ? undefined : setTimeout)));
+
+var isDev = /^(localhost|127.0.0.1)/.test(location.host);
+
+/**
+ * Constructor for PIPlayer script creator
+ * @return {Object}		Script creator
+ */
+function API$1(name){
+    api$1.call(this, name);
+
+    var settings = this.settings;
+    var script = this.script;
+
+    settings.logger = {
+        pulse: 20,
+        url : '/implicit/PiPlayerApplet'
+    };
+
+    // the activation function
+    script.play = play;
+
+    // the url builder for play
+    script.buildBaseUrl = buildBaseUrl;
+
+    if (isDev && !script.version) script.version = 999;
+}
+
+APIdecorator(API$1);
+
+// create API functions
+lodash.extend(API$1.prototype, api$1.prototype);
+API$1.prototype.setVersion = function setVersion(ver){this.script.version = ver;};
+
+// annotate the play function
+play.$inject = ['done', '$element', 'script', 'task', 'piConsole'];
+
+
+/**
+ * The activator function for pip
+ * (anotated up in the main code)
+ */
+function play(done, $canvas, script, task, $console){
+    var $el, req, baseUrl ,version = task.version || this.version;
+    var pipSink, newVersion = version > 0.3;
+
+    if (task.type === 'time') {
+        // update script name
+        task.name && (script.name = task.name);
+
+        $canvas.append('<div pi-player></div>');
+        $el = $canvas.contents();
+
+        pipSink = activate$2($el[0], script);
+        pipSink.onEnd(done);
+        pipSink.$messages.map($console);
+
+        return function destroyPIP(){
+            $el.remove();
+            pipSink.end();
+        };
+    }
+
+    if (version > 0.4) {
+        // update script name
+        task.name && (script.name = task.name);
+
+        $canvas.append('<div pi-player></div>');
+        $el = $canvas.contents();
+        $el.addClass('pi-spinner');
+
+        require([ this.buildBaseUrl(version) + 'dist/time.js'], function(time){
+            pipSink = time($el[0], script);
+            pipSink.onEnd(done);
+            pipSink.$messages.map($console);
+            $el.removeClass('pi-spinner');
+        });
+
+        return function destroyPIP(){
+            $el.remove();
+            pipSink && pipSink.end();
+        };
+    }
+
+    if (!version) throw new Error('Version not defined for pip task: ' + (task.name || script.name));
+
+    baseUrl = this.buildBaseUrl(version);
+
+    // load PIP
+    req = require.config({
+        context: lodash.uniqueId(),
+        baseUrl: baseUrl+ (isDev ? 'src/js' : '/dist/js/'), // can't use packages yet as urls in pip aren't relative...
+        paths: {
+            //plugins
+            text: ['//cdnjs.cloudflare.com/ajax/libs/require-text/2.0.3/text.min', baseUrl+'/bower_components/requirejs-text/text'],
+
+            // Core Libraries
+            jquery: ['//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min',baseUrl+'/bower_components/jquery/dist/jquery.min'],
+            underscore: ['//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min',baseUrl+'/bower_components/lodash-compat/lodash.min'],
+            backbone: ['//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min', baseUrl+'/bower_components/backbone/backbone']
+        },
+
+        deps: ['jquery', 'backbone', 'underscore']
+    });
+
+    // update script name
+    task.name && (script.name = task.name);
+
+    $canvas.append('<div pi-player></div>');
+    $el = $canvas.contents();
+    $el.addClass('pi-spinner');
+
+    req(['activatePIP'], function(activate){
+        $el.removeClass('pi-spinner');
+        activate(script, done);
+    });
+
+    return function destroyPIP(){
+        $el.remove();
+        if (newVersion) pipSink.end();
+        else req(['app/task/main_view'], function(main){
+            main.deferred.resolve();
+            main.destroy();
+        });
+    };
+}
+
+/**
+ * Build BaseUrl from version
+ * @param  {string} version pip version
+ * @return {string}         baseUrl
+ */
+function buildBaseUrl(version){
+    return isDev ? '/pip/' : '/implicit/common/all/js/pip/'+version;
+}
+
+var Constructor$2 = APIconstructor({
+    type: 'quest',
+    sets: ['pages', 'questions']
+});
+
+function API$2(){
+    Constructor$2.call(this);
+    lodash.set(this, 'settings.logger.url', '/implicit/PiQuest');
+}
+
+APIdecorator(API$2);
+
+// create API functions
+lodash.extend(API$2.prototype, Constructor$2.prototype);
+
+/**
+ * Essentialy a defaults object for the scorer
+ */
+function ComputeD(){
+    lodash.extend(this, {
+        dataArray : {}, //The data array or structure the PIP will provide
+        AnalyzedVar : 'latency', //The main variable used for the score computation. Usually will be the latency.
+        ErrorVar : 'error', //The variable that indicates whether there was an error in the response
+        condVar:'',  //The name of the variable that will store the variables
+        cond1VarValues: [], //An array with the values of the condVar that will comprise of condition 1 in the comparison
+        cond2VarValues: [], //An array with the values of the condVar that will comprise of condition 2 in the comparison
+        parcelVar : '',
+        parcelValue : [],
+        fastRT : 300, //Below this reaction time, the latency is considered extremely fast.
+        maxFastTrialsRate : 0.1, //Above this % of extremely fast responses within a condition, the participant is considered too fast.
+        minRT : 400, //Below this latency
+        maxRT : 10000, //above this
+        maxErrorParcelRate: 0.4,
+        errorLatency : {use:'latency', penalty:600, useForSTD:true},
+        postSettings : {}
+    });
+}
+
+lodash.extend(ComputeD.prototype, {
+    setComputeObject: function(obj){
+        lodash.extend(this,obj);
+    },
+
+    setDataArray: function(){
+        // use the real global in order to preven problems with dependencies
+        var global = window.piGlobal;
+
+        this.dataArray = global.current.logs;
+    }
+});
+
+var messages = {
+    MessageDef:[],
+    manyErrors: 'There were too many errors made to determine a result.',
+    tooFast: 'There were too many fast trials to determine a result.',
+    notEnough: 'There were not enough trials to determine a result.'
+};
+
+function Message(){
+    // setup default local messages
+    this.messages = lodash.extend({}, messages);
+}
+
+lodash.extend(Message.prototype, {
+
+    /**
+     * Setup custom local messages
+     * @param {Object} Obj 	messages object
+     */
+    setMsgObject: function(Obj){
+        lodash.extend(this.messages,Obj);
+    },
+
+    getScoreMsg: function(score){
+
+        var array = this.messages.MessageDef;
+
+        if (!array || !array.length){
+            throw new Error('You must define a "MessageDef" array.');
+        }
+
+        var scoreNum = parseFloat(score);
+        var cut = null;
+        var msg = null;
+        var rightMsg = 'error: msg was not set';
+        var set = false;
+
+        // @TODO repleace this whole section with a "_.find()" or something.
+        lodash.each(array, function(val) {
+            cut = parseFloat(val.cut);
+            msg = val.message;
+            if (scoreNum<=cut && !set){
+                rightMsg = msg;
+                set = true;
+            }
+        });
+
+        if (!set){
+            var length = array.length;
+            var obj = array[length-1];
+            rightMsg = obj.message;
+        }
+
+        return rightMsg;
+    },
+
+    getMessage: function getMessage(type){
+        return this.messages[type];
+    }
+});
+
+function ParcelMng$1(msgMan){
+    this.parcelArray = []; // Holds parcel array
+    this.scoreData = {}; // Holds score and error message
+    this.msgMan = msgMan;
+}
+
+lodash.extend(ParcelMng$1.prototype, {
+
+    /*  Method: Void Init
+    Input: Uses logs from API
+    Output: Sets parcelArray with array of type parcel
+    Description: Init goes over the log and creates an array of object of type Parcel according to
+    the parcelValue array in computeD. Each parcel object holds relevant information regarding the
+    parcel including an array of trials with the relevant parcel name.
+    */
+    Init: function(compute){
+        var parcelMng = this;
+        var msgMan = this.msgMan;
+        // use the real global in order to prevent problems with dependencies
+        var global = window.piGlobal;
+
+        var data = global.current.logs;
+        parcelMng.parcelArray = [];
+        parcelMng.scoreData = {};
+        parcelMng.msgMan = msgMan;
+
+        // get settings
+        var AnalyzedVar = compute.AnalyzedVar;
+        var error = compute.ErrorVar;
+        var parcelVar = compute.parcelVar;
+        var parcels = compute.parcelValue;
+        var min = compute.minRT;
+        var max = compute.maxRT;
+        var fastRT= compute.fastRT;
+
+        // set counters
+        var totalScoredTrials = 0;
+        var trialsUnder = 0;
+        var totalTrials=0;
+        var totalErrorTrials =0;
+        var maxFastTrialsRate = parseFloat(compute.maxFastTrialsRate);
+
+
+        if (typeof parcels == 'undefined' || parcels.length === 0){
+            totalTrials =0;
+            totalScoredTrials=0;
+            trialsUnder=0;
+            totalErrorTrials=0;
+            var p = {};
+            p.name = 'general';
+            p.trialIData = [];
+            lodash.each (data, function (value) {// loop per object in logger
+                if (value[AnalyzedVar]>=min && value[AnalyzedVar]<=max){
+                    totalTrials++;
+                    if (value.data[error] == 1) {
+                        totalErrorTrials++;
+                    }
+                    //p.trialIData.push(value);//push all data
+                    //totalScoredTrials++;
+                    if (parcelMng.validate(p,value,compute)) {
+                        totalScoredTrials++;
+                    }
+                }else {
+                    if (value[AnalyzedVar]<= fastRT) {
+                        trialsUnder++;
+                    }
+                }
+            });
+            parcelMng.checkErrors(totalTrials,totalErrorTrials,compute);
+            parcelMng.parcelArray[0] = p;
+        } else {
+            lodash.each (parcels, function(parcelName,index) {// per parcel from parcelValue
+                //set variables calculated per parcel
+                totalTrials =0;
+                totalScoredTrials=0;
+                trialsUnder=0;
+                totalErrorTrials=0;
+                var p = {};
+                p.name = parcelName;
+                p.trialIData = [];
+                ///////////////////////////////////
+                lodash.each (data, function (value) {//loop per object in logger
+                    var trialParcelName = value.data[parcelVar];
+
+                    // if this trial belongs to parcel
+                    if (trialParcelName == parcelName){
+                        if (value[AnalyzedVar]>=min && value[AnalyzedVar]<=max){
+                            totalTrials++;
+                            if (value.data[error] == 1) {
+                                totalErrorTrials++;
+                            }
+                            //p.trialIData.push(value);//push all data
+                            //totalScoredTrials++;
+                            if (parcelMng.validate(p,value,compute)) {
+                                totalScoredTrials++;
+                            }
+                        }else {
+                            if (value[AnalyzedVar]<= fastRT) {
+                                trialsUnder++;
+                            }
+                        }
+
+                    }
+
+                });
+                parcelMng.checkErrors(totalTrials,totalErrorTrials,compute);//apply maxErrorParcelRate logic
+                parcelMng.parcelArray[index] = p;
+            });
+        }
+        if ( (trialsUnder/totalScoredTrials) > maxFastTrialsRate){
+            parcelMng.scoreData.errorMessage = this.msgMan.getMessage('tooFast');
+
+        }
+
+    },
+
+    /*
+       private
+Method: Void checkErrors
+Input: totalTrials,totalErrorTrials and compute object.
+Output: Sets scoreData with error message if relevant.
+Description: Helper method to check for errors according to maxErrorParcelRate from compute object.
+sets an error message in scoreData.
+
+*/
+    checkErrors: function(totalTrials,totalErrorTrials,compute){
+
+        var maxErrorParcelRate = compute.maxErrorParcelRate;
+        if (totalErrorTrials/totalTrials > maxErrorParcelRate){
+            this.scoreData.errorMessage = this.msgMan.getMessage('manyErrors');
+
+        }
+
+    },
+
+    /* Function: Void validate.
+Input: parcel object, trial object from the log and the compute object.
+Output: Pushes the trial to the parcel based on information from errorLatency. Returns true/false.
+Description: Helper method to apply errorLatency logic. If set to 'latency' trials witch are error
+would be added to the parcel trial array. if set to false trials that are error would not be added,
+if set to panelty error trials will be added and later panelized.
+
+*/
+
+    validate: function(p,value,compute){
+        var errorLatency = compute.errorLatency;
+        var error = compute.ErrorVar;
+        var data = value.data;
+
+
+        if (errorLatency.use =='latency'){
+            p.trialIData.push(value);
+            return true;
+        }else{
+            if (errorLatency.use =='false'){
+                if(data[error]=='1'){
+                    return false;
+                }else{
+                    p.trialIData.push(value);
+                    return true;
+                }
+            }
+            if(errorLatency.use =='penalty'){
+                p.trialIData.push(value);
+                return true;
+            }
+        }
+    },
+
+    /*  Function: Void addPenalty.
+Input: parcel object and the compute object.
+Output: adds penalty to latency of trials
+Description: Helper method to add average and penalty to error trials
+if errorLatency is set to 'penalty'. Should be called after avgAll.
+
+*/
+
+    addPenalty: function(p,compute){
+        var errorLatency = compute.errorLatency;
+        var parcelMng = this;
+
+
+        if (errorLatency.use == 'penalty'){
+
+            var penalty = parseFloat(errorLatency.penalty);
+            var ErrorVar = compute.ErrorVar;
+            var AnalyzedVar = compute.AnalyzedVar;
+            var condVar = compute.condVar;
+            var cond1 = compute.cond1VarValues;
+            var cond2 = compute.cond2VarValues;
+            var trialIData = p.trialIData;
+            var avg1 = p.avgCon1;
+            var avg2 = p.avgCon2;
+
+
+            lodash.each (trialIData, function (value) {
+                var data = value.data;
+                var error = data[ErrorVar];
+                var dataCond = data[condVar];
+                var diff1 = parcelMng.checkArray(dataCond,cond1);
+                var diff2 = parcelMng.checkArray(dataCond,cond2);
+
+                if (error=='1'){
+                    if (diff1){
+                        value[AnalyzedVar] += avg1+ penalty;
+                    }else{
+                        if (diff2){
+                            value[AnalyzedVar] += avg2+ penalty;
+                        }
+                    }
+
+                }
+            });
+
+        }
+    },
+
+    /*  Function: Void avgAll.
+Input: compute object.
+Output: setting avgCon1 and avgCon2
+Description: Loop over the parcels and Set average for condition 1 trials and for condition 2 trials.
+
+*/
+
+    avgAll: function(compute){
+        var parcelMng = this;
+        lodash.each(parcelMng.parcelArray, function (value) {
+            parcelMng.avgParcel(value,compute);
+        });
+    },
+
+
+    /*
+       private
+Function: Void avgParcel.
+Input: compute object, parcel.
+Output: setting avgCon1 and avgCon2 in parcel.
+Description: Set average for condition 1 trials and for condition 2 trials in the parcel.
+
+*/
+
+    avgParcel: function(p,compute){
+        var parcelMng = this;
+        var trialIData = p.trialIData;
+        var condVar = compute.condVar;
+        var cond1 = compute.cond1VarValues;
+        var cond2 = compute.cond2VarValues;
+        var AnalyzedVar = compute.AnalyzedVar;
+        var avgCon1 = 0;
+        var avgCon2 = 0;
+        var avgBoth = 0;
+        var numCond1 = 0;
+        var numCond2 = 0;
+        var numBoth = 0;
+
+        lodash.each (trialIData, function (value) {
+
+            var AnVar = value[AnalyzedVar];
+            var data = value.data;
+            avgBoth += AnVar;
+            numBoth ++;
+            //var diff1 = ( _(data[condVar]).difference(cond1) );
+            //var diff2 = ( _(data[condVar]).difference(cond2) );
+            var dataCond = data[condVar];
+            var diff1 = parcelMng.checkArray(dataCond,cond1);
+            var diff2 = parcelMng.checkArray(dataCond,cond2);
+
+            if (diff1) {
+                numCond1++;
+                avgCon1 += AnVar;
+            } else {
+                if (diff2){
+                    numCond2++;
+                    avgCon2 += AnVar;
+                }
+            }
+
+        });
+        if (numCond1 <= 2 || numCond2 <= 2){
+            parcelMng.scoreData.errorMessage = this.msgMan.getMessage('notEnough');
+        }
+        if (numCond1 !== 0) {
+            avgCon1 = avgCon1/numCond1;
+        }
+        if (numCond2 !== 0) {
+            avgCon2 = avgCon2/numCond2;
+        }
+        p.avgCon1 = avgCon1;
+        p.avgCon2 = avgCon2;
+        p.diff = p.avgCon1 - p.avgCon2;
+        if (numBoth !== 0) {
+            p.avgBoth = avgBoth/numBoth;
+        }
+        parcelMng.addPenalty(p,compute);
+    },
+
+    /*  Function: Void checkArray.
+Input: the condition from the trial and an array of condition from computeD object.
+Output: return true if condition is in the array.
+Description: Helper function that returns true if condition is in the array or false otherwise.
+
+*/
+
+    checkArray: function(conFromData,con){
+        for(var i=0; i<con.length; i++){
+            var condition = con[i];
+            if (condition == conFromData ){
+                return true;
+            }
+        }
+
+        return false;
+    },
+
+    /*  Function: Void varianceAll.
+Input: compute object, parcel.
+Output: variance variable in parcel.
+Description: Loop over the parcels and set the variance variable.
+
+*/
+
+    varianceAll: function(compute){
+        var parcelMng = this;
+        lodash.each (parcelMng.parcelArray, function (value) {
+            parcelMng.varianceParcel(value,compute);
+        });
+    },
+
+    /*  Function: Void varianceParcel.
+Input: compute object, parcel.
+Output: setting variance variable in parcel.
+Description: goes over the trials of the parcel and calculate variance.
+
+*/
+    varianceParcel: function(p,compute){
+        var parcelMng = this;
+        var AnalyzedVar = compute.AnalyzedVar;
+        var trialIData = p.trialIData;
+        var cond1 = compute.cond1VarValues;
+        var cond2 = compute.cond2VarValues;
+        var condVar = compute.condVar;
+        var avg = p.avgBoth;
+        var d = 0;
+        var x2 = 0;
+        var pooledCond1 = [];
+        var pooledCond2 = [];
+        var pooledData = [];
+        var errorLatency = compute.errorLatency;
+        var useForSTD = errorLatency.useForSTD;
+
+
+        lodash.each (trialIData, function (value) {//pool to one array
+            var data = value.data;
+            var AnVar = value[AnalyzedVar];
+            var ErrorVar = compute.ErrorVar;
+            var error = data[ErrorVar];
+            var dataCond = data[condVar];
+            var diff1 = parcelMng.checkArray(dataCond,cond1);
+            var diff2 = parcelMng.checkArray(dataCond,cond2);
+            //var diff1 = ( _(data[condVar]).difference(cond1) );
+            //var diff2 = ( _(data[condVar]).difference(cond2) );
+            if (diff1) {
+                if (useForSTD){
+                    pooledCond1.push(AnVar);
+                }
+                else{
+                    if (error=='0') {
+                        pooledCond1.push(AnVar);
+                    }
+                }
+            }
+            else {
+                if (diff2){
+                    if (useForSTD){
+                        pooledCond2.push(AnVar);
+                    }
+                    else{
+                        if (error=='0') {
+                            pooledCond1.push(AnVar);
+                        }
+                    }
+
+                }
+            }
+
+
+        });
+
+        pooledData = pooledCond1.concat(pooledCond2);
+        lodash.each (pooledData, function (value) {//pool to one array
+            var AnVar = value;
+            d = AnVar-avg;
+            x2 += d*d;
+
+        });
+        p.variance = x2/(pooledData.length-1);
+    },
+
+
+    /*  Function: Void scoreAll.
+Input: compute object.
+Output: score variable in scoreData object
+Description: Average the scores from all parcels set score in scoreData object.
+
+*/
+    scoreAll: function(compute){
+        var parcelMng = this;
+        var dAvg = 0;
+        lodash.each (parcelMng.parcelArray, function (value) {
+            parcelMng.scoreParcel(value,compute);
+            dAvg +=  value.score;
+        });
+        var score = (dAvg/(parcelMng.parcelArray.length));
+        parcelMng.scoreData.score = score.toFixed(2);
+
+    },
+
+    /*
+       private
+Function: Void scoreParcel.
+Input: compute object, parcel.
+Output: score variable in parcel
+Description: Calculate the score for the parcel.
+
+*/
+    scoreParcel: function(p){
+        var parcelMng = this;
+        var sd = Math.sqrt(p.variance);
+        if (sd === 0){
+            parcelMng.scoreData.errorMessage = this.msgMan.getMessage('notEnough');
+            p.score = p.diff;
+        } else {
+            p.score = p.diff/sd;
+        }
+    }
+
+});
+
+function Scorer(){
+    this.computeData = new ComputeD();
+    this.msgMan = new Message();
+    this.parcelMng = new ParcelMng$1(this.msgMan);
+}
+
+lodash.extend(Scorer.prototype, {
+
+    /**
+     * Set settings for computeD or msgMan
+     * @param {String} type 'compute' or 'message' - the type of settingsObj to set
+     * @param {Object} Obj  The settings object itself
+     */
+    addSettings: function(type,Obj){
+        switch (type){
+            case 'compute':
+                this.computeData.setComputeObject(Obj);
+                break;
+            case 'message':
+                this.msgMan.setMsgObject(Obj);
+                break;
+            default:
+                throw new Error('SCORER:addSettings: unknow "type" ' + type);
+        }
+    },
+
+    /**
+     * Calculate the score
+     * @return {Object} an object that holds the score and an error message
+     */
+
+    computeD: function(){
+        var computeData = this.computeData;
+        var parcelMng = this.parcelMng;
+
+        computeData.setDataArray();
+
+        parcelMng.Init(computeData);
+        parcelMng.avgAll(computeData);
+
+        parcelMng.varianceAll(computeData);
+        parcelMng.scoreAll(computeData);
+
+        var scoreObj = parcelMng.scoreData;
+
+        if (scoreObj.errorMessage === undefined || scoreObj.errorMessage === null){
+            return {
+                FBMsg : this.getFBMsg(scoreObj.score),
+                DScore : scoreObj.score,
+                error: false
+            };
+        }else{
+            return {
+                FBMsg : scoreObj.errorMessage,
+                DScore : '',
+                error: true
+            };
+        }
+    },
+
+    /**
+     * Post the score and message to the server
+     * @param  {[type]} score    [description]
+     * @param  {[type]} msg      [description]
+     * @param  {String} scoreKey The key with which to send the score data
+     * @param  {String} msgKey   The key with which to send the msg data
+     * @return {promise}         A promise that is resolved with the post
+     */
+    postToServer: function(score,msg,scoreKey,msgKey){
+        var postSettings = this.computeData.postSettings || {};
+        var url = postSettings.url;
+        var data = {};
+
+        if (!scoreKey) {
+            scoreKey = postSettings.score;
+        }
+
+        if (!msgKey) {
+            msgKey = postSettings.msg;
+        }
+
+        // create post object
+        data[scoreKey] = score;
+        data[msgKey] = msg;
+
+        return post$2(url,data);
+    },
+
+    /**
+     * Blindly post all "data" to the server
+     * @param  {Object} data Arbitrary data to be sent to the server
+     * @return {promise}      A promise that is resolved with the post
+     */
+    dynamicPost: function(data){
+        var postSettings = this.computeData.postSettings || {};
+        var url = postSettings.url;
+
+        return post$2(url,data);
+    },
+
+    // get message according to user input
+    getFBMsg: function(DScore){
+        var msg = this.msgMan.getScoreMsg(DScore);
+        return msg;
+    }
+});
+
+function post$2(url, data){
+    return new Promise(function(resolve, reject){
+        var request = new XMLHttpRequest();
+        request.open('POST',url, true);
+        request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+
+        request.onreadystatechange = function() {
+            if (this.readyState === 4) {
+                if (this.status >= 200 && this.status < 400) resolve(this.responseText);
+                else reject(new Error('Failed posting to: ' + url));
+            }
+        };
+
+        request.send(JSON.stringify(data));
+    });
+}
 
 /**
  * An assortment of useful randomization functions.
@@ -58976,11 +60062,31 @@ module$15.config(['taskActivateProvider', function(activateProvider){
  * minno-time activator
  **/
 module$15.config(['taskActivateProvider', function(activateProvider){
-    activatePIP.$inject = ['done', '$element', 'task', 'script'];
-    function activatePIP(done, $canvas, task, script){
+    activatePIP.$inject = ['done', '$element', 'task', 'script', 'piConsole'];
+    function activatePIP(done, $canvas, task, script, piConsole){
         var $el, req;
-        var newVersion = task.version > 0.3;
         var pipSink;
+
+        if (task.version > 0.4) {
+            // update script name
+            task.name && (script.name = task.name);
+
+            $canvas.append('<div pi-player></div>');
+            $el = $canvas.contents();
+            $el.addClass('pi-spinner');
+
+            requirejs$1([ task.baseUrl + 'dist/time.js'], function(time){
+                pipSink = time($el[0], script);
+                pipSink.onEnd(done);
+                pipSink.$messages.map(piConsole);
+                $el.removeClass('pi-spinner');
+            });
+
+            return function destroyPIP(){
+                $el.remove();
+                pipSink && pipSink.end();
+            };
+        }
 
         // load PIP
         req = requirejs$1.config({
@@ -58996,7 +60102,7 @@ module$15.config(['taskActivateProvider', function(activateProvider){
                 backbone: ['//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min', '../../bower_components/backbone/backbone']
             },
 
-            deps: newVersion ? ['underscore'] : ['jquery', 'backbone', 'underscore']
+            deps: ['jquery', 'backbone', 'underscore']
         });
 
         // update script name
@@ -59008,17 +60114,12 @@ module$15.config(['taskActivateProvider', function(activateProvider){
 
         req(['activatePIP'], function(activate){
             $el.removeClass('pi-spinner');
-            if (newVersion) {
-                pipSink = activate($el[0], script);
-                pipSink.onEnd(done);
-            }
-            else activate(script, done);
+            activate(script, done);
         });
 
         return function destroyPIP(){
             $el.remove();
-            if (newVersion) pipSink.end();
-            else req(['app/task/main_view'], function(main){
+            req(['app/task/main_view'], function(main){
                 main.deferred.resolve();
                 main.destroy();
             });
@@ -59033,7 +60134,7 @@ module$15.config(['taskActivateProvider', function(activateProvider){
  **/
 module$15.config(['taskActivateProvider', function(activateProvider){
     activateTime.$inject = ['done', '$element', 'task', 'script', 'piConsole'];
-    function activateTime(done, $canvas, task, script, $console){
+    function activateTime(done, $canvas, task, script, piConsole){
         var $el;
         var pipSink;
 
@@ -59045,7 +60146,7 @@ module$15.config(['taskActivateProvider', function(activateProvider){
 
         pipSink = activate$2($el[0], script);
         pipSink.onEnd(done);
-        pipSink.$messages.map($console);
+        pipSink.$messages.map(piConsole);
 
         return function destroyPIP(){
             $el.remove();
@@ -61591,7 +62692,7 @@ module$18.animation('.drop-in', dropInAnimation);
 module$18.animation('.fade', fadeAnimation);
 module$18.animation('.slide', slideAnimation);
 
-var template$12 = "<div class=\"panel-heading\">\n    <strong><%= log.message %>:</strong> \n    <button type=\"button\" class=\"close\">&times;</button>\n\n    <% if (log.error) { %>\n        <div><%= log.error.message %></div>\n    <% } %>\n</div>\n\n<% if (log.context) { %>\n    <div class=\"panel-body\">\n        <strong>Context:</strong>\n        <pre><%= syntaxHighlight(log.context) %></pre>\n    </div>\n<% } %>\n\n<% if (log.rows) { %>\n    <ul class=\"list-group\">\n        <% for (var i=0; i<log.rows.length; i++) { %>\n        <li class=\"list-group-item\"><%= syntaxHighlight(log.rows[i]) %></li>\n        <% } %>\n    </ul>\n<% } %>\n";
+var template$12 = "<div class=\"panel-heading\">\n    <strong><%= log.message %>:</strong> \n    <button type=\"button\" class=\"close\">&times;</button>\n\n    <% if (log.error) { %>\n        <div><%= log.error.message %></div>\n    <% } %>\n</div>\n\n<% if (log.context) { %>\n    <div class=\"panel-body\">\n        <strong>Context:</strong>\n        <pre><%= syntaxHighlight(log.context) %></pre>\n    </div>\n<% } %>\n\n<% if (log.rows) { %>\n    <ul class=\"list-group\">\n        <% var rows = log.rows.map(function(r){ return [].concat(r); }); %>\n        <% for (var i=0;i<rows.length;i++) { %>\n        <li class=\"list-group-item\">\n            <%= rows[i].map(syntaxHighlight).join('&nbsp;') %>\n        </li>\n        <% } %>\n    </ul>\n<% } %>\n";
 
 var module$19 = angular.module('piConsole',[]);
 
@@ -61787,14 +62888,11 @@ app$1.config(['$provide', function($provide) {
 
 }]);
 
-var noop = function(){};
-if (!window.console) window.console = {log:noop,info:noop,error:noop};
-
-// setup amd loader with common packages
 define('managerAPI', lodash.constant(API));
 define('timeAPI', lodash.constant(API$1));
 define('pipAPI', lodash.constant(API$1));
 define('questAPI', lodash.constant(API$2));
+define('minno-sequencer', lodash.constant(minnoSequencer));
 define('lodash', lodash.constant(lodash));
 define('underscore', lodash.constant(lodash));
 define('angular', lodash.constant(angular));
