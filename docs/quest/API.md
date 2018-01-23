@@ -18,7 +18,6 @@
 	- [onEnd](#onend)
 	- [logger](#logger)
 	- [timer](#timer)
-	- [Debugging](#debugging)
 - [Data](#data)
 	- [Logs](#logs)
 	- [Variables](#variables)
@@ -115,7 +114,9 @@ helpText		| (text) The question help text. (Some questions have default help tex
 lognow 			| (true or false) Whether to log this questions when the page is submitted. This option is useful when you know that the question will not be accessed any more. It allows you to use the `pulse` option from the [logger](#logger) to send questions as they are being answered instead of sending only at the end of the task. (default: false)
 errorMsg		| (Object: {}) This object has a property for each validation type. Setting the appropriate type changes the validation message. For instance setting the `required` property will change the validation message for instances where no response was given.
 
-You may want to debug questions by [activating the `question` DEBUG setting](#debugging). You will then be warned in the console if a question name is reused (note: sometimes a question is supposed to be reused, if this warning pops up just make sure the use case is correct).
+You may want to debug questions by setting the [debug level in the manager](../manager/API.md#debug) to `verbose`.
+You will then be warned in the console if a question name is reused 
+(note: sometimes a question is supposed to be reused, if this warning pops up just make sure the use case is correct).
 
 #### Hooks
 
@@ -561,8 +562,6 @@ Within the player, each question (as defined by unique question name) may be log
 
 If you want a question not to be logged at all, simply do not give it a name.
 
-You may want to debug the logger by [activating the DEBUG `logger` setting](#debugging). When activated, it prints each logged object into the console.
-
 #### Timer
 The questionnaire timer allows you to constrain the time that users have to answer the whole questionnaire.
 
@@ -586,41 +585,8 @@ direction 		| ("up" or "down") Whether to use a countdown or to count up ("down"
 removeOnEnd 	| (true or false) Whether to remove the visual timer when the countdown ends (if you don't auto proceed when the timer ends. ).		
 message 		| (String or Object) Display a message at the end the timer duration. You can imput a simple string here. If you want finer control over the content of the message you can use the an object with the following properties: `header`: the header text for the message (defaults to "Timer Done"). `body`: the body of the message. `button`: the close button (defaults to "close").
 
-
-
-
-#### Debugging
-PIQuest can supply some extra information regarding its inner workings, all you have to do is set the DEBUG setting property like so:
-
-```javascript
-// Log everything
-API.addSettings('DEBUG', {
-	level: 'warn', // log errors and warnings
-	tags: ['page','animation'], // Log page and animation related messages
-	hideConsole: true 
-});
-```
-
-**tags**:
-Logs are broken down into subjects by tags. The tags property allows you to insert an array of tags that you want to be logged. If you want all tags to printed you may use the string `'all'` instead of an array (this is also the default).
-
-The tags currently available are as follows: `page`, `question`, `conditions` and `animate`.
-
-**level**:
-The player has several levels of logging, by default it logs only `error` level logs. When you want to debug you should probably use `info` or `warn`. The precedence of logging levels is as follows: error>warn>info>debug. Each logging level includes any levels higher than itself.
-
-level 	| Description
------ 	| -----------
-none 	| Do not log any messages
-error 	| Log messages that warn that something in the script is broken (this is the default level, and you should probably leave at least this level active).
-warn 	| Log warning messages that something smells fishy, these are not necessarily errors, but you might want to check them out.
-info 	| Log General useful information.
-debug 	| Just spill everything out.
-
-**hideConsole**:
-This property allows you to control the display of logs inside the browser, if it is set to `true` then the logs will only be printed into your console.
-
 ## Data
+
 ### Logs
 miQuest keeps record of user responses using plain js objects. These objects are kept locally (see #variables) and sent to the server (see [logger](#logger) setting).
 

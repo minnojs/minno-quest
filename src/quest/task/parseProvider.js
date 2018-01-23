@@ -1,5 +1,4 @@
-parseProvider.$inject = ['piConsole'];
-function parseProvider(piConsole){
+function parseProvider(){
     function parse(script, db){
         db.createColl('pages');
         db.createColl('questions');
@@ -8,9 +7,6 @@ function parseProvider(piConsole){
         db.add('questions', script.questionsSets || []);
 
         script.settings || (script.settings = {});
-
-        // @TODO: find a way to apply this to piConsole
-        piConsole.settings = script.settings.DEBUG || {};
     }
 
     return parse;
