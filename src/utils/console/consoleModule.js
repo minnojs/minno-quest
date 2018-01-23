@@ -19,7 +19,7 @@ function piConsoleFactory($log){
     function filterLogs(log){
         var level = _.get(piConsole, 'settings.level', 'error');
 
-        if (level === 'error' && log.type === 'error') return log;
+        if (level === 'error') return log.type === 'error' ? log : stream.HALT;
         if (level === 'verbose') return log;
         if (level === 'none') return stream.HALT;
         
