@@ -149,7 +149,7 @@ module.config(['taskActivateProvider', function(activateProvider){
             $el = $canvas.contents();
             $el.addClass('pi-spinner');
 
-            requirejs([ task.baseUrl + 'dist/time.js'], function(time){
+            requirejs([ task.baseUrl + '/dist/time.js'], function(time){
                 pipSink = time($el[0], script);
                 pipSink.onEnd(done);
                 pipSink.$messages.map(piConsole);

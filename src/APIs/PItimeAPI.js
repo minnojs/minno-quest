@@ -41,12 +41,11 @@ API.prototype.setVersion = function setVersion(ver){this.script.version = ver;};
 // annotate the play function
 play.$inject = ['done', '$element', 'script', 'task', 'piConsole'];
 
-
 /**
  * The activator function for pip
  * (anotated up in the main code)
  */
-function play(done, $canvas, script, task, $console){
+function play(done, $canvas, script, task, piConsole){
     var $el, req, baseUrl ,version = task.version || this.version;
     var pipSink, newVersion = version > 0.3;
 
@@ -59,7 +58,7 @@ function play(done, $canvas, script, task, $console){
 
         pipSink = time($el[0], script);
         pipSink.onEnd(done);
-        pipSink.$messages.map($console);
+        pipSink.$messages.map(piConsole);
 
         return function destroyPIP(){
             $el.remove();
@@ -75,10 +74,10 @@ function play(done, $canvas, script, task, $console){
         $el = $canvas.contents();
         $el.addClass('pi-spinner');
 
-        requirejs([ this.buildBaseUrl(version) + 'dist/time.js'], function(time){
+        requirejs([ this.buildBaseUrl(version) + '/dist/time.js'], function(time){
             pipSink = time($el[0], script);
             pipSink.onEnd(done);
-            pipSink.$messages.map($console);
+            pipSink.$messages.map(piConsole);
             $el.removeClass('pi-spinner');
         });
 
