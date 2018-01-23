@@ -10,6 +10,7 @@
     - [skip](#skip)
     - [skin](#skin)
     - [logger](#logger)
+    - [DEBUG](#debug)
 - [Tasks](#tasks)
     - [Quest](#quest)
     - [Message](#message)
@@ -131,6 +132,25 @@ API.addSettings('logger', {
 ```
 
 When using this setting, make sure you do not set `logger.url` in your individual tasks, or else they will post individually in addition to your csv post.
+
+#### DEBUG
+The `DEBUG` settings allows you to control the debug messages produced by the player.
+In the development environment (when `window.global` is set to `true`) you have access to a development console.
+The console will hold messages describing the process of your studies.
+By default, only error messages will be displayed.
+
+You can hide the console by clicking its background.
+You can usually expand entries by clicking on them, many times this will show you the context for your error.
+
+Property    | Description
+----------- | -------------
+level       | (string) Controls level of logs displayed, the possible levels are described in the table below.
+
+level       | Description
+----------- | -----------
+error       | The default level: display only errors
+verbose     | Display all logs
+none        | do not display any logs at all
 
 ### Tasks
 The basic unit in miManager is the **task**. The manager currently supports several types of tasks; `quest`, `message` and `post`. You should just cue them into the sequence (you can use mixers to your hearts content as well).

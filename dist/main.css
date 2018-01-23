@@ -6092,7 +6092,8 @@ button.close {
   height: 100%;
   width: 30%;
   background: white;
-  overflow-y: scroll; }
+  overflow-y: scroll;
+  opacity: 0.8; }
   [pi-console] .panel .panel-heading {
     cursor: pointer; }
   [pi-console] .panel.noshow .panel-body {

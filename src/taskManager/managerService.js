@@ -107,6 +107,7 @@ function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector){
         var injectStyle = $injector.get('managerInjectStyle');
         var rootElement = $injector.get('$rootElement');
         var canvasOff, stylesOff, skinClass = settings.skin || 'default';
+        var piConsole = $injector.get('piConsole');
 
         // prevent accidental browsing away
         beforeUnload.activate();
@@ -127,6 +128,9 @@ function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector){
         if (settings.title) $document[0].title = settings.title;
 
         rootElement.addClass(skinClass + '-skin');
+
+        // connect piConsole to settings
+        piConsole.settings = settings.DEBUG || {};
     }
 }
 

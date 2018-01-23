@@ -7,6 +7,7 @@ define(['managerAPI'], function(Manager){
         '[pi-player] {position:fixed;left:0; right:0;}',
         '.minno-canvas { margin-top: auto; background:lightblue;}',
     ].join(''));
+    API.addSettings('DEBUG', {level:'verbose'});
 
     API.addGlobal({
         $mTurk:{assignmentId:0,hitId:0,workerId:0},

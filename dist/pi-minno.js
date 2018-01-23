@@ -55212,8 +55212,7 @@ function TaskProvider($q, Database, Logger, QuestSequence, parse, dfltQuestLogge
     return Task;
 }
 
-parseProvider.$inject = ['piConsole'];
-function parseProvider(piConsole){
+function parseProvider(){
     function parse(script, db){
         db.createColl('pages');
         db.createColl('questions');
@@ -55222,9 +55221,6 @@ function parseProvider(piConsole){
         db.add('questions', script.questionsSets || []);
 
         script.settings || (script.settings = {});
-
-        // @TODO: find a way to apply this to piConsole
-        piConsole.settings = script.settings.DEBUG || {};
     }
 
     return parse;
@@ -59385,6 +59381,7 @@ function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector){
         var injectStyle = $injector.get('managerInjectStyle');
         var rootElement = $injector.get('$rootElement');
         var canvasOff, stylesOff, skinClass = settings.skin || 'default';
+        var piConsole = $injector.get('piConsole');
 
         // prevent accidental browsing away
         beforeUnload.activate();
@@ -59405,6 +59402,9 @@ function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector){
         if (settings.title) $document[0].title = settings.title;
 
         rootElement.addClass(skinClass + '-skin');
+
+        // connect piConsole to settings
+        piConsole.settings = settings.DEBUG || {};
     }
 }
 
@@ -61605,10 +61605,13 @@ function piConsoleFactory($log){
     return window.DEBUG ? piConsole : lodash.noop;
 
     function filterLogs(log){
-        var settings = piConsole.settings || {};
-        if (settings.hideConsole) return stream$2.HALT;
-        if (settings.verbose || log.type === 'error') return log;
-        return stream$2.HALT;
+        var level = lodash.get(piConsole, 'settings.level', 'error');
+
+        if (level === 'error' && log.type === 'error') return log;
+        if (level === 'verbose') return log;
+        if (level === 'none') return stream$2.HALT;
+        
+        return {type:'error', error: new Error('Unknown log level: ' + level), message: 'Error in debug settings'};
     }
 
     function displayLogs(){
@@ -61619,12 +61622,19 @@ function piConsoleFactory($log){
         if (!container) return lodash.noop;
 
         container.addEventListener('click',function(e){
-            if (e.target.classList.contains('close')) container.removeChild(e.target.parentNode.parentNode);
-            if (e.target.classList.contains('panel-heading')) e.target.parentNode.classList.toggle('noshow');
             if (e.target === container) container.classList.toggle('noshow');
+            if (e.target.classList.contains('close')) container.removeChild(e.target.parentNode.parentNode);
+            hideRow(e.target);
         });
 
         return createLog;
+
+        // hide row when heading is clicked 
+        function hideRow(target){
+            if (target == container) return false;
+            if (target.classList.contains('panel-heading')) return target.parentNode.classList.toggle('noshow');
+            hideRow(target.parentNode);
+        }
 
         function createLog(log){
             var el = document.createElement('div');

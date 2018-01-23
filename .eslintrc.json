@@ -19,6 +19,12 @@
 
     "overrides": [
         {
+            "files": [ "example/**/*.js" ],
+            "env": {
+                "amd": true
+            }
+        },
+        {
             "files": [ "src/**/*_test.js" ],
             "globals": {
                 "module": true,
