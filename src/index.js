@@ -3,7 +3,7 @@ import _ from 'lodash';
 import manager from './APIs/managerAPI';
 import time from './APIs/timeAPI';
 import quest from './APIs/questAPI';
-import dscore from './dscore/Scorer';
+import dscore from './utils/dscore/Scorer';
 import {define} from 'requirejs/require';
 import app from './app';
 
