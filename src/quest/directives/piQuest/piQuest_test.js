@@ -108,13 +108,6 @@ describe('piQuest', function(){
                 scope.$emit('quest:newPage');
                 expect(element.children()).toHaveClass('test');
             });
-
-            it('should $log.error for unknown animation', inject(function($log){
-                compile();
-                taskSpyObj.current.and.returnValue({animate:'fake'});
-                scope.$emit('quest:newPage');
-                expect($log.error.logs.length).toBe(1);
-            }));
         });
 
 

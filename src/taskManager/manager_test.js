@@ -60,24 +60,6 @@ describe('manager', function(){
             expect($document[0].title).toBe('test123');
         }));
 
-        it('should postCsv is active', inject(function($http,managerService){
-            var global = $scope.global;
-            var expected = [
-                'taskName,a,b,c,d,e',
-                'task1,1,2,,,',
-                'task1,,,3,"""4""",',
-                'task2,,,,,"5\n6"'
-            ].join('\n');
-
-            global.task1 = {logs:[{a:1,b:2},{c:3,d:'"4"'}]};
-            global.task2 = {logs:[{e:'5\n6'}]};
-
-            spyOn($http,'post');
-            manager = managerService($scope, {settings:{logger:{postCsv:'postUrl'}}});
-            $scope.$destroy();
-            expect($http.post).toHaveBeenCalledWith('postUrl', expected);
-        }));
-
         it('should activate canvas', inject(function(managerCanvas){
             expect(managerCanvas).toHaveBeenCalled();
         }));
@@ -452,47 +434,6 @@ describe('manager', function(){
                 expect(spy).toHaveBeenCalledWith(jasmine.any(Object), args);
             });
         });
-    });
-
-    describe('getScript', function(){
-        var url = /* require.toUrl('.') + */ '/test/script1.js';
-        var p, get;
-
-        beforeEach(inject(function(managerGetScript){
-            get = managerGetScript;
-        }));
-
-        it('should return a promise', function(){
-            p = get(url);
-            expect(p.then).toBeDefined();
-        });
-
-        // couldn't manage to test this...
-        // it('should resolve when a file was found', function(){
-        // 	var done = false;
-        // 	var success = jasmine.createSpy('success');
-        // 	var error = jasmine.createSpy('error');
-        // 	p = get(url)
-        // 	p.then(success,error);
-        // 	p['finally'](function(){done = true;})
-
-        // 	waitsFor(function(){
-        // 		$rootScope.$digest();
-        // 		return done;
-        // 	});
-
-        // 	runs(function(){
-        // 		expect(success).toHaveBeenCalledWith({a:1});
-        // 		expect(error).not.toHaveBeenCalled();
-        // 	});
-        // });
-
-        //it('should reject when a file was not found');
-        //it('should return the file contents that we requested', function(){	});
-
-        // it('should support base_url', function(){
-        // 	// not just yet it isn't needed...
-        // });
     });
 
     describe('managerLoad', function(){

@@ -35,6 +35,7 @@ module.exports = function(config) {
 
 		rollupPreprocessor: {
 			plugins: [
+                require('rollup-plugin-postcss')(),
                 require('rollup-plugin-legacy')({
                     './node_modules/angular/angular.js':'angular',
                     './node_modules/requirejs/require.js':{define:'define',require:'require',requirejs:'requirejs'},
