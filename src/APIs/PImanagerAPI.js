@@ -17,10 +17,9 @@ function API(){
     this.settings.onPreTask = onPreTask;
 }
 
-decorator(API);
-
 // create API functions
 _.extend(API.prototype, Constructor.prototype);
+decorator(API);
 
 // annotate onPreTask
 onPreTask.$inject = ['currentTask', '$http','$rootScope','managerBeforeUnload','templateDefaultContext', 'managerSettings', 'piConsole'];

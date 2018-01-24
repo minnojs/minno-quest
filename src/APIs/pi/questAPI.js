@@ -16,7 +16,6 @@ function API(){
     };
 }
 
-decorator(API);
-
 // create API functions
 _.extend(API.prototype, Constructor.prototype);
+decorator(API);

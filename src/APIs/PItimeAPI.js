@@ -32,11 +32,10 @@ function API(name){
     if (isDev && !script.version) script.version = 999;
 }
 
-decorator(API);
-
 // create API functions
 _.extend(API.prototype, Constructor.prototype);
 API.prototype.setVersion = function setVersion(ver){this.script.version = ver;};
+decorator(API);
 
 // annotate the play function
 play.$inject = ['done', '$element', 'script', 'task', 'piConsole'];

@@ -13,7 +13,6 @@ function API(){
     _.set(this, 'settings.logger.url', '/implicit/PiQuest');
 }
 
-decorator(API);
-
 // create API functions
 _.extend(API.prototype, Constructor.prototype);
+decorator(API);
