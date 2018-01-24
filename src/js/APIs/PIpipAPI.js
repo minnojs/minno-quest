@@ -29,10 +29,10 @@ define(function(require){
         if (isDev && !script.version) script.version = 999;
     }
 
-    decorator(API);
-
 	// create API functions
     _.extend(API.prototype, Constructor.prototype);
+    decorator(API);
+
     API.prototype.setVersion = function setVersion(ver){this.script.version = ver;};
 
 	// annotate the play function

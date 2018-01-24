@@ -4,7 +4,7 @@ define(function(require){
     var decorator = require('./PIAPIdecorator');
     var _ = require('underscore');
 
-	/**
+    /**
 	 * Constructor for PIPlayer script creator
 	 * @return {Object}		Script creator
 	 */
@@ -16,10 +16,9 @@ define(function(require){
         };
     }
 
-    decorator(API);
-
-	// create API functions
+    // create API functions
     _.extend(API.prototype, Constructor.prototype);
+    decorator(API);
 
     return API;
 });
