@@ -135,22 +135,20 @@ When using this setting, make sure you do not set `logger.url` in your individua
 
 #### DEBUG
 The `DEBUG` settings allows you to control the debug messages produced by the player.
-In the development environment (when `window.global` is set to `true`) you have access to a development console.
+In the development environment (when `window.DEBUG` is set to `true`) you have access to a development console.
 The console will hold messages describing the process of your studies.
-By default, only error messages will be displayed.
 
-You can hide the console by clicking its background.
-You can usually expand entries by clicking on them, many times this will show you the context for your error.
+At the top of the console window you will see a dropdown that allows you to select the level of logging you would like to see.
+For example, you may want to be alerted only of errors, or of every possible activity of the player.
+In addition you have a button that allows you to close and open the console.
 
 Property    | Description
 ----------- | -------------
-level       | (string) Controls level of logs displayed, the possible levels are described in the table below.
+hideConsole | (true or false) hide console activity
 
-level       | Description
------------ | -----------
-error       | The default level: display only errors
-verbose     | Display all logs
-none        | do not display any logs at all
+```javascript
+API.addSettings('DEBUG', { hideConsole: true});
+```
 
 ### Tasks
 The basic unit in miManager is the **task**. The manager currently supports several types of tasks; `quest`, `message` and `post`. You should just cue them into the sequence (you can use mixers to your hearts content as well).

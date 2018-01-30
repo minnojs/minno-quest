@@ -37,6 +37,7 @@ var Console = {
         }, [state.$show, $messages]);
 
         window.addEventListener('message', function receiveMessage(event){
+            if (event.data.type === 'kill-console') m.mount(root, null);
             $messages(event.data);
             m.redraw();
         },false);
