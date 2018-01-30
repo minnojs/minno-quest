@@ -1462,7 +1462,8 @@ var root = document.createElement('div');
 document.body.appendChild(root);
 
 var levelMap = {error:1,warn:2,info:3,debug:4,log:5};
-var panelClasses = {error:'panel-danger', warn:'panel-warning', info:'panel-info', debug:'panel-success',log:'panel-success'};
+var panelClasses = {1:'panel-danger', 2:'panel-warning', 3:'panel-info', 4:'panel-success',5:'panel-success'};
+var labelClasses = {1:'label-danger', 2:'label-warning', 3:'label-info', 4:'label-success',5:'label-success'};
 var SHOW_STORAGE_KEY = 'minno-console-show';
 var LEVEL_STORAGE_KEY = 'minno-console-level';
 
@@ -1507,12 +1508,11 @@ var Console = {
         var show = state.$show();
         var level = state.$level();
 
-        var unseenLength = state.unseen.filter(levelFilter).length;
         return mithril('.minno-console', {class: show ? '' : 'minno-console-hide'}, [
             mithril('.input-group', [
                 mithril('span.input-group-addon', [
                     'Console',
-                    !!unseenLength && mithril('span.label.label-warning',{style:'margin-left:5px;'}, unseenLength)
+                    unseenCounter()
                 ]),
                 state.$show() && mithril('select.form-control', {title: 'Select log level',onchange:mithril.withAttr('value', state.$level), value:state.level}, [
                     mithril('option', {value:1, selected:level==1}, 'Error'),
@@ -1530,8 +1530,14 @@ var Console = {
 
         function toggleShow(){ state.$show(!show); }
         function levelFilter(log){ return level >= (levelMap[log.type] || 5);}
+        function unseenCounter(){
+            var unseenLength = state.unseen.filter(levelFilter).length;
+            var maxLevel = state.unseen.reduce(function(acc,log){ return Math.min(levelMap[log.type] || 5, acc); }, 5);
+            return !!unseenLength && mithril('span.label',{class:labelClasses[maxLevel], style:'margin-left:5px;'}, unseenLength);
+        }
     }
 };
+
 
 var consoleRow = {
     hide:false,
@@ -1539,7 +1545,7 @@ var consoleRow = {
     view: function(vnode){
         var row = vnode.attrs;
         var state = vnode.state;
-        return !state.hide && mithril('.panel', {class: panelClasses[row.type] }, [
+        return !state.hide && mithril('.panel', {class: panelClasses[levelMap[row.type] || 5] }, [
             mithril('.panel-heading', [
                 mithril('strong', row.message),
                 row.error ? ' ' + row.error.message : '',
