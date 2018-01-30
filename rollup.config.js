@@ -23,6 +23,12 @@ const piOutput = {
     name: 'minnoQuest'
 };
 
+const debugConsole = {
+    file: 'dist/minno-debug.js',
+    format: 'iife', 
+    name: 'minnoDebug'
+}
+
 const config = {
     sourcemap:true,
     plugins: [
@@ -49,5 +55,6 @@ const config = {
 
 export default [
     production && Object.assign({}, config, {input:'src/index.js', output:output}),
-    Object.assign({}, config, {input:'src/pi-index.js', output:piOutput})
+    Object.assign({}, config, {input:'src/pi-index.js', output:piOutput}),
+    Object.assign({}, config, {input:'src/debug-console/index.js', output:debugConsole})
 ].filter(v=>v);

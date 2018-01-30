@@ -1,0 +1,21 @@
+.minno-console {
+    position: fixed;
+    left:0;
+    top:0;
+    height:100%;
+    width: 30%;
+    min-width:300px;
+    background:white;
+    opacity:0.8;
+}
+.minno-console-logs {
+    height: calc(100% - 34px);
+    overflow-y:scroll;
+}
+.minno-console.minno-console-hide{
+    width: -moz-min-content;    /* Firefox */
+    width: -webkit-min-content; /* Chrome */
+    min-width:auto;
+    height:auto;
+}
+.minno-console:hover{opacity:0.95}
