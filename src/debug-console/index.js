@@ -14,7 +14,7 @@ var LEVEL_STORAGE_KEY = 'minno-console-level';
 // init local storage
 if (!localStorage.getItem(LEVEL_STORAGE_KEY)) {
     localStorage.setItem(LEVEL_STORAGE_KEY, 1);
-    localStorage.setItem(SHOW_STORAGE_KEY, true);
+    localStorage.setItem(SHOW_STORAGE_KEY, false);
 }
 
 var Console = {
