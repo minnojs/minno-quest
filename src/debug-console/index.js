@@ -7,25 +7,43 @@ document.body.appendChild(root);
 
 var levelMap = {error:1,warn:2,info:3,debug:4,log:5};
 var panelClasses = {error:'panel-danger', warn:'panel-warning', info:'panel-info', debug:'panel-success',log:'panel-success'};
+var SHOW_STORAGE_KEY = 'minno-console-show';
+var LEVEL_STORAGE_KEY = 'minno-console-level';
+
+// init local storage
+if (!localStorage.getItem(LEVEL_STORAGE_KEY)) {
+    localStorage.setItem(LEVEL_STORAGE_KEY, 1);
+    localStorage.setItem(SHOW_STORAGE_KEY, true);
+}
 
 var Console = {
     oninit: function(vnode){
         var state = vnode.state;
         var $messages = stream();
-        var $show = state.$show = stream(true);
         var unseen = state.unseen = [];
-        state.$level = stream(1);
+
+        state.$show = stream(localStorage.getItem(SHOW_STORAGE_KEY) === 'true');
+        state.$level = stream(localStorage.getItem(LEVEL_STORAGE_KEY));
+
+        // update local storage
+        state.$show.map(updateStorage(SHOW_STORAGE_KEY)); 
+        state.$level.map(updateStorage(LEVEL_STORAGE_KEY)); 
+
         state.$logs = stream.scan(function(acc,val){ acc.push(val); return acc;}, [], $messages);
         state.$unseenLogs = stream.combine(function(show, messages, changed){
             if (changed.indexOf(messages)>-1) unseen.push(messages());
             if (show()) unseen.length = 0;
             return unseen;
-        }, [$show, $messages]);
+        }, [state.$show, $messages]);
 
         window.addEventListener('message', function receiveMessage(event){
             $messages(event.data);
             m.redraw();
         },false);
+
+        function updateStorage(key){
+            return function(val){ localStorage.setItem(key,val); };
+        }
     },
     view: function(vnode){
         var state = vnode.state;
