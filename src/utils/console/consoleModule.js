@@ -14,7 +14,7 @@ function piConsoleFactory($log){
     function piConsole(log){
         if (_.get(piConsole,'settings.hideConsole', false)) return window.postMessage({type:'kill-console'},'*');
 
-        $log[log.type](log.message); 
+        $log[log.type] && $log[log.type](log.message); 
         window.postMessage(noramlizeMessage(log),'*');
     }
 

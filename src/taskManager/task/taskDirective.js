@@ -43,8 +43,9 @@ function directive(activateTask, canvas, $document, $window, $rootScope, piConso
             $rootScope.current = piGlobal.current = script.current || {};
             if (taskName){
                 if (piGlobal[taskName]) piConsole({
+                    type:'warn',
                     tags:['task'],
-                    warn:'This taskName has already been in use: "' + taskName + '"'
+                    message:'This taskName has already been in use: "' + taskName + '"'
                 });
                 // extend current script with the piGlobal object
                 _.extend($rootScope.current, piGlobal[taskName] || {});
