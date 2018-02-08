@@ -77,9 +77,14 @@ define(function(require){
 
             $http
                 .post(task.url, data, {timeout: canceler.promise})
-                .then(done,done);
+                .then(done,fail);
 
             return canceler.resolve;
+
+            function fail(response){
+                done(); // continue with the task
+                throw new Error('Post error("'+task.url+'"): ' + response.statusText); // but shout about the failure
+            }
         }
 
         activateProvider.set('post', activatePost);
