@@ -34379,11 +34379,6 @@ var lodash = createCommonjsModule(function (module, exports) {
 }.call(commonjsGlobal));
 });
 
-var minnoSequencer = createCommonjsModule(function (module, exports) {
-(function (global, factory) {
-	module.exports = factory(lodash);
-}(commonjsGlobal, (function (_) { _ = _ && _.hasOwnProperty('default') ? _['default'] : _;
-
 /**
  * A function that maps a mixer object into a sequence.
  *
@@ -34409,11 +34404,11 @@ function mixProvider(shuffle, random){
 
         // if this isn't a mixer
         // make sure we catch mixers that are set with undefined by accident...
-        if (!(_.isPlainObject(obj) && 'mixer' in obj)){
+        if (!(lodash.isPlainObject(obj) && 'mixer' in obj)){
             return [obj];
         }
 
-        if (_.isUndefined(mix.mixers[mixerName])){
+        if (lodash.isUndefined(mix.mixers[mixerName])){
             throw new Error('Mixer: unknow mixer type = ' + mixerName);
         }
 
@@ -34423,7 +34418,7 @@ function mixProvider(shuffle, random){
 
         obj.$parsed = mix.mixers[mixerName].apply(null, arguments);
 
-        if (!_.isArray(obj.$parsed)) {
+        if (!lodash.isArray(obj.$parsed)) {
             throw new Error('Mixer: mixers must return an array (mixer: ' + mixerName + ')');
         }
 
@@ -34431,9 +34426,9 @@ function mixProvider(shuffle, random){
     }
 
     function deepMixer(sequence, context){
-        return _.reduce(sequence, function(arr,value){
+        return lodash.reduce(sequence, function(arr,value){
 
-            if (_.isPlainObject(value) && 'mixer' in value && value.mixer != 'wrapper' && !value.wrapper){
+            if (lodash.isPlainObject(value) && 'mixer' in value && value.mixer != 'wrapper' && !value.wrapper){
                 var seq = deepMixer(mix(value, context), context);
                 return arr.concat(seq);
             } else {
@@ -34452,7 +34447,7 @@ function mixProvider(shuffle, random){
             var sequence = obj.data || [];
             var result = [], i;
             for (i=0; i < obj.times; i++){
-                result = result.concat(_.clone(sequence,true));
+                result = result.concat(lodash.clone(sequence,true));
             }
             return result;
         },
@@ -34465,11 +34460,11 @@ function mixProvider(shuffle, random){
 
         choose: function(obj, context){
             var sequence = obj.data ? deepMixer(obj.data, context) : [];
-            return _.take(shuffle(sequence), obj.n ? obj.n : 1);
+            return lodash.take(shuffle(sequence), obj.n ? obj.n : 1);
         },
 
         custom: function(obj, context){
-            return _.isFunction(obj.fn) ? obj.fn(obj, context) : [];
+            return lodash.isFunction(obj.fn) ? obj.fn(obj, context) : [];
         },
 
         weightedRandom: weightedChoose,
@@ -34485,7 +34480,7 @@ function mixProvider(shuffle, random){
         var i;
         var n = obj.n || 1;
         var result = [];
-        var total_weight = _.reduce(obj.weights,function (prev, cur) {
+        var total_weight = lodash.reduce(obj.weights,function (prev, cur) {
             return prev + cur;
         });
 
@@ -34522,7 +34517,7 @@ function mixerDotNotationProvider$1(dotNotation){
 
         var escapeSeparatorRegex= /[^/]\./;
 
-        if (!_.isString(chain)) return chain;
+        if (!lodash.isString(chain)) return chain;
 
         // We do not have a non escaped dot: we treat this as a string
         if (!escapeSeparatorRegex.test(chain)) return chain.replace('/.','.');
@@ -34533,16 +34528,16 @@ function mixerDotNotationProvider$1(dotNotation){
     return mixerDotNotation;
 }
 
-mixerConditionProvider$1.$inject = ['mixerDotNotation'];
-function mixerConditionProvider$1(dotNotation){
+mixerConditionProvider$1.$inject = ['mixerDotNotation','piConsole'];
+function mixerConditionProvider$1(dotNotation,piConsole){
     var operatorHash = {
-        gt: forceNumeric(_.gt),
-        greaterThan: forceNumeric(_.gt),
-        gte: forceNumeric(_.gte),
-        greaterThanOrEqual: forceNumeric(_.gte),
-        equals: _.eq,
-        'in': _.rearg(_.contains,1,0), // effectively reverse
-        contains: _.rearg(_.contains,1,0), // effectively reverse
+        gt: forceNumeric(lodash.gt),
+        greaterThan: forceNumeric(lodash.gt),
+        gte: forceNumeric(lodash.gte),
+        greaterThanOrEqual: forceNumeric(lodash.gte),
+        equals: lodash.eq,
+        'in': lodash.rearg(lodash.contains,1,0), // effectively reverse
+        contains: lodash.rearg(lodash.contains,1,0), // effectively reverse
         exactly: exactly,
         isTruthy: isTruthy
     };
@@ -34552,7 +34547,16 @@ function mixerConditionProvider$1(dotNotation){
         var left = dotNotation(condition.compare,context);
         var right = dotNotation(condition.to,context);
 
-        if (condition.DEBUG && console) console.info('Condition: ', left, condition.operator || 'equals', right, condition); // eslint-disable-line no-console 
+        if (condition.DEBUG) piConsole({
+            type:'info',
+            message:'Condition info',
+            rows: [
+                ['Left: ', left], 
+                ['Operator: ', condition.operator || 'equals'],
+                ['Right: ', right]
+            ],
+            context: condition,
+        });
 
         return condition.negate
             ? !operator.apply(context,[left, right, context])
@@ -34565,15 +34569,15 @@ function mixerConditionProvider$1(dotNotation){
     // extract the operator function from the condition
     function getOperator(condition){
         var operator = condition.operator;
-        if (_.isFunction(condition)) return condition;
-        if (!_.has(condition, 'operator')) return _.has(condition,'to') ? _.eq : isTruthy;
-        if (_.isFunction(operator)) return operator;
+        if (lodash.isFunction(condition)) return condition;
+        if (!lodash.has(condition, 'operator')) return lodash.has(condition,'to') ? lodash.eq : isTruthy;
+        if (lodash.isFunction(operator)) return operator;
         return operatorHash[operator];
     }
 
     function isTruthy(left){ return !!left; }
     function exactly(left,right){ return left === right;}
-    function forceNumeric(cb){ return function(left,right){ return [left,right].every(_.isNumber) ? cb(left,right) : false; }; } 
+    function forceNumeric(cb){ return function(left,right){ return [left,right].every(lodash.isNumber) ? cb(left,right) : false; }; } 
 
 }
 
@@ -34588,24 +34592,24 @@ function evaluateProvider(condition){
 
     function evaluate(conditions,context){
         // make && the default
-        _.isArray(conditions) && (conditions = {and:conditions});
+        lodash.isArray(conditions) && (conditions = {and:conditions});
 
         function test(cond){return evaluate(cond,context);}
 
         // && objects
         if (conditions.and){
-            return _.every(conditions.and, test);
+            return lodash.every(conditions.and, test);
         }
         if (conditions.nand){
-            return !_.every(conditions.nand, test);
+            return !lodash.every(conditions.nand, test);
         }
 
         // || objects
         if (conditions.or){
-            return _.some(conditions.or, test);
+            return lodash.some(conditions.or, test);
         }
         if (conditions.nor){
-            return !_.some(conditions.nor, test);
+            return !lodash.some(conditions.nor, test);
         }
 
         return condition(conditions, context);
@@ -34632,7 +34636,7 @@ function mixerBranchingDecorator$1(mix, evaluate, mixerDefaultContext){
      * @return {Array}         [A data array with objects to continue with]
      */
     function branch(obj, context){
-        context = _.extend(context || {}, mixerDefaultContext);
+        context = lodash.extend(context || {}, mixerDefaultContext);
         return evaluate(obj.conditions, context) ? obj.data || [] : obj.elseData || [];
     }
 
@@ -34641,10 +34645,10 @@ function mixerBranchingDecorator$1(mix, evaluate, mixerDefaultContext){
      * @return {Array}         [A data array with objects to continue with]
      */
     function multiBranch(obj, context){
-        context = _.extend(context || {}, mixerDefaultContext);
+        context = lodash.extend(context || {}, mixerDefaultContext);
         var row;
 
-        row = _.find(obj.branches, function(branch){
+        row = lodash.find(obj.branches, function(branch){
             return evaluate(branch.conditions, context);
         });
 
@@ -34670,7 +34674,7 @@ function mixerSequenceProvider$1(mix){
         this.pointer = 0;
     }
 
-    _.extend(MixerSequence.prototype, {
+    lodash.extend(MixerSequence.prototype, {
         /**
          * Add sequence to mixer
          * @param {[type]} arr     Sequence
@@ -34696,7 +34700,7 @@ function mixerSequenceProvider$1(mix){
             var el = subSequence.sequence[subSequence.pointer];
 
             // if we ran out of elements, go to previous level (unless we are on the root sequence)
-            if (_.isUndefined(el) && this.stack.length > 1){
+            if (lodash.isUndefined(el) && this.stack.length > 1){
                 this.stack.pop();
                 return this.proceed.call(this,direction,context);
             }
@@ -34751,7 +34755,7 @@ function mixerSequenceProvider$1(mix){
                 number: this.pointer,
 
                 // sum of sequence length, minus one (the mixer) for each level of stack except the last
-                outOf:  _.reduce(this.stack, function(memo,sub){return memo + sub.sequence.length-1;},0)+1
+                outOf:  lodash.reduce(this.stack, function(memo,sub){return memo + sub.sequence.length-1;},0)+1
             };
         }
 
@@ -34762,13 +34766,13 @@ function mixerSequenceProvider$1(mix){
 
 function dotNotation$1(chain, obj){
 
-    if (_.isUndefined(chain)) return;
-    if (_.isString(chain)) chain = chain.split('.');
+    if (lodash.isUndefined(chain)) return;
+    if (lodash.isString(chain)) chain = chain.split('.');
 
     // @TODO maybe lodash _.get?
     return chain.reduce(function(result, link){
 
-        if (_.isPlainObject(result) || _.isArray(result)){
+        if (lodash.isPlainObject(result) || lodash.isArray(result)){
             return result[link];
         }
 
@@ -34777,8 +34781,29 @@ function dotNotation$1(chain, obj){
     }, obj);
 }
 
+piConsoleFactory.$inject = ['$log'];
+function piConsoleFactory($log){
+    return window.DEBUG ? piConsole : lodash.noop;
+
+    function piConsole(log){
+        if (lodash.get(piConsole,'settings.hideConsole', false)) return window.postMessage({type:'kill-console'},'*');
+
+        $log[log.type] && $log[log.type](log.message); 
+        window.postMessage(noramlizeMessage(log),'*');
+    }
+
+    function noramlizeMessage(obj){
+        return lodash.cloneDeep(obj, normalize);
+        function normalize(val){
+            if (lodash.isFunction(val)) return val.toString();
+            if (lodash.isError(val)) return {name:val.name, message:val.message, stack:val.stack};
+        }
+    }
+}
+
+var piConsole$1 = piConsoleFactory(console);
 var mixer = mixProvider(
-    _.shuffle, // randomizeShuffle
+    lodash.shuffle, // randomizeShuffle
     Math.random // randomizeRandom
 );
 
@@ -34800,18 +34825,14 @@ mixerBranchingDecorator$1(
 
 var MixerSequence = mixerSequenceProvider$1(mixer);
 
-function piConsole$1(){
-    return console;
-}
-
 templateObjProvider$1.$inject = ['templateDefaultContext'];
 function templateObjProvider$1(templateDefaultContext){
 
     function templateObj(obj, context, options){
-        var skip = _.get(options, 'skip', []);
+        var skip = lodash.get(options, 'skip', []);
         var result = {};
         var key;
-        var ctx = _.assign({}, context, templateDefaultContext);
+        var ctx = lodash.assign({}, context, templateDefaultContext);
 
         for (key in obj){
             result[key] = (skip.indexOf(key) == -1) ? expand(obj[key]) : obj[key];
@@ -34820,16 +34841,16 @@ function templateObjProvider$1(templateDefaultContext){
         return result;
 
         function expand(value){
-            if (_.isString(value)) return template(value);
-            if (_.isArray(value)) return value.map(expand);
-            if (_.isPlainObject(value)) return _.mapValues(value, expand);
+            if (lodash.isString(value)) return template(value);
+            if (lodash.isArray(value)) return value.map(expand);
+            if (lodash.isPlainObject(value)) return lodash.mapValues(value, expand);
             return value;
         }
 
         function template(input){
             // if there is no template just return the string
             if (!~input.indexOf('<%')) return input;
-            return _.template(input)(ctx);
+            return lodash.template(input)(ctx);
         }
     }
 
@@ -34850,7 +34871,7 @@ function collectionService(){
         }
 
         // Make sure we are creating this array out of a valid argument
-        if (!_.isUndefined(arr) && !_.isArray(arr) && !(arr instanceof Collection)) {
+        if (!lodash.isUndefined(arr) && !lodash.isArray(arr) && !(arr instanceof Collection)) {
             throw new Error('Collections can only be constructed from arrays');
         }
 
@@ -34862,7 +34883,7 @@ function collectionService(){
         this.pointer = -1;
     }
 
-    _.extend(Collection.prototype,{
+    lodash.extend(Collection.prototype,{
 
         first : function first(){
             this.pointer = 0;
@@ -34899,7 +34920,7 @@ function collectionService(){
             }
 
             // make sure list is as an array
-            list = _.isArray(list) ? list : [list];
+            list = lodash.isArray(list) ? list : [list];
             this.collection = this.collection.concat(list);
 
             this.length = this.collection.length;
@@ -34920,11 +34941,11 @@ function collectionService(){
     var slice = Array.prototype.slice;
 
     // Mix in each Underscore method as a proxy to `Collection#models`.
-    _.each(methods, function(method) {
+    lodash.each(methods, function(method) {
         Collection.prototype[method] = function() {
             var args = slice.call(arguments);
             args.unshift(this.collection);
-            var coll = _[method].apply(_,args);
+            var coll = lodash[method].apply(lodash,args);
             return new Collection(coll);
         };
     });
@@ -34945,7 +34966,7 @@ function RandomizerProvider(randomizeInt, randomizeRange, Collection){
         };
     }
 
-    _.extend(Randomizer.prototype, {
+    lodash.extend(Randomizer.prototype, {
         random: random,
         exRandom: exRandom,
         sequential: sequential
@@ -34956,7 +34977,7 @@ function RandomizerProvider(randomizeInt, randomizeRange, Collection){
     function random(length, seed, repeat){
         var cache  = this._cache.random;
 
-        if (repeat && !_.isUndefined(cache[seed])) {
+        if (repeat && !lodash.isUndefined(cache[seed])) {
             return cache[seed];
         }
 
@@ -34972,8 +34993,8 @@ function RandomizerProvider(randomizeInt, randomizeRange, Collection){
         var result;
 
         // if needed create collection and set it in seed
-        if (_.isUndefined(coll)){
-            coll = cache[seed] = new Collection(_.range(length));
+        if (lodash.isUndefined(coll)){
+            coll = cache[seed] = new Collection(lodash.range(length));
             return coll.first();
         }
 
@@ -34990,7 +35011,7 @@ function RandomizerProvider(randomizeInt, randomizeRange, Collection){
         result = coll.next();
 
         // if we've reached the end of the collection (next)
-        if (_.isUndefined(result)){
+        if (lodash.isUndefined(result)){
             return coll.first();
         } else {
             return result;
@@ -35003,7 +35024,7 @@ function RandomizerProvider(randomizeInt, randomizeRange, Collection){
         var result;
 
         // if needed create collection and set it in seed
-        if (_.isUndefined(coll)){
+        if (lodash.isUndefined(coll)){
             coll = cache[seed] = new Collection(randomizeRange(length));
             return coll.first();
         }
@@ -35022,7 +35043,7 @@ function RandomizerProvider(randomizeInt, randomizeRange, Collection){
 
         // if we've reached the end of the collection (next)
         // we should re-randomize
-        if (_.isUndefined(result)){
+        if (lodash.isUndefined(result)){
             coll = cache[seed] = new Collection(randomizeRange(length));
             return coll.first();
         } else {
@@ -35043,7 +35064,7 @@ function storeProvider$1(Collection){
         this.store = {};
     }
 
-    _.extend(Store.prototype, {
+    lodash.extend(Store.prototype, {
         create: function create(nameSpace){
             if (this.store[nameSpace]){
                 throw new Error('The name space ' + nameSpace + ' already exists');
@@ -35089,7 +35110,7 @@ function SequenceProvider(MixerSequence){
         this.db = db;
     }
 
-    _.extend(Sequence.prototype, {
+    lodash.extend(Sequence.prototype, {
         // only mix
         next: function(context){
             this.mixerSequence.next(context);
@@ -35141,15 +35162,15 @@ function SequenceProvider(MixerSequence){
     return Sequence;
 }
 
-DatabaseProvider.$inject = ['DatabaseStore', 'DatabaseRandomizer', 'databaseInflate', 'templateObj', 'databaseSequence'];
-function DatabaseProvider(Store, Randomizer, inflate, templateObj, DatabaseSequence){
+DatabaseProvider.$inject = ['DatabaseStore', 'DatabaseRandomizer', 'databaseInflate', 'templateObj', 'databaseSequence','piConsole'];
+function DatabaseProvider(Store, Randomizer, inflate, templateObj, DatabaseSequence, piConsole){
 
     function Database(){
         this.store = new Store();
         this.randomizer = new Randomizer();
     }
 
-    _.extend(Database.prototype, {
+    lodash.extend(Database.prototype, {
         createColl: function(namespace){
             this.store.create(namespace);
         },
@@ -35167,36 +35188,53 @@ function DatabaseProvider(Store, Randomizer, inflate, templateObj, DatabaseSeque
             var coll = this.getColl(namespace);
             var result;
 
+            // inherit
             try {
-                // inherit
                 if (!query.$inflated || query.reinflate) {
                     query.$inflated = inflate(query, coll, this.randomizer);
                     query.$templated = null; // we have to retemplate after querying, who know what new templates we got here...
                 }
+            } catch(err) {
+                piConsole({
+                    type:'error',
+                    message: 'Failed to inherit',
+                    error:err,
+                    context: query
+                });
+                if (this.onError) this.onError(err);
+                throw err;
+            }
 
-                // template
+            // template
+            try {
                 if (!query.$templated || query.$inflated.regenerateTemplate){
                     context[namespace + 'Meta'] = query.$meta;
                     context[namespace + 'Data'] = templateObj(query.$inflated.data || {}, context, options); // make sure we support
                     query.$templated = templateObj(query.$inflated, context, options);
                 }
-
-                result = query.$templated;
             } catch(err) {
+                piConsole({
+                    type:'error',
+                    message: 'Failed to apply template',
+                    error:err,
+                    context: query.$inflated
+                });
                 if (this.onError) this.onError(err);
                 throw err;
             }
 
+            result = query.$templated;
+
             // set flags
-            if (context.global && result.addGlobal) _.extend(context.global, result.addGlobal);
+            if (context.global && result.addGlobal) lodash.extend(context.global, result.addGlobal);
 
-            if (context.current && result.addCurrent) _.extend(context.current, result.addCurrent);
+            if (context.current && result.addCurrent) lodash.extend(context.current, result.addCurrent);
 
-            return query.$templated;
+            return result;
         },
 
         sequence: function(namespace, arr){
-            if (!_.isArray(arr)){
+            if (!lodash.isArray(arr)){
                 throw new Error('Sequence must be an array.');
             }
             return new DatabaseSequence(namespace, arr, this);
@@ -35215,9 +35253,9 @@ function queryProvider$1(Collection){
         // shortcuts:
         // ****************************
 
-        if (_.isFunction(query)) return query(collection);
+        if (lodash.isFunction(query)) return query(collection);
 
-        if (_.isString(query) || _.isNumber(query)) query = {set:query, type:'random'};
+        if (lodash.isString(query) || lodash.isNumber(query)) query = {set:query, type:'random'};
 
         // filter by set
         // ****************************
@@ -35225,15 +35263,15 @@ function queryProvider$1(Collection){
 
         // filter by data
         // ****************************
-        if (_.isString(query.data)){
+        if (lodash.isString(query.data)){
             coll = coll.filter(function(q){
                 return q.handle === query.data || (q.data && q.data.handle === query.data);
             });
         }
 
-        if (_.isPlainObject(query.data)) coll = coll.where({data:query.data});
+        if (lodash.isPlainObject(query.data)) coll = coll.where({data:query.data});
 
-        if (_.isFunction(query.data)) coll = coll.filter(query.data);
+        if (lodash.isFunction(query.data)) coll = coll.filter(query.data);
 
         // pick by type
         // ****************************
@@ -35266,7 +35304,7 @@ function queryProvider$1(Collection){
                 throw new Error('Unknow query type: ' + query.type);
         }
 
-        if (_.isUndefined(coll.at(at))) throw new Error('Query failed, object (' + JSON.stringify(query) +	') not found. If you are trying to apply a template, you should know that they are not supported for inheritance.');
+        if (lodash.isUndefined(coll.at(at))) throw new Error('Query failed, object (' + JSON.stringify(query) +	') not found. If you are trying to apply a template, you should know that they are not supported for inheritance.');
 
         return coll.at(at);
     }
@@ -35290,7 +35328,7 @@ function inflateProvider$1(query, $rootScope){
 
     function customize(source){
         // check for a custom function and run it if it exists
-        if (_.isFunction(source.customize)){
+        if (lodash.isFunction(source.customize)){
             source.customize.apply(source, [source, $rootScope.global]);
         }
         return source;
@@ -35307,10 +35345,10 @@ function inflateProvider$1(query, $rootScope){
 
         if (!depth) throw new Error('Inheritance loop too deep, you can only inherit up to 10 levels down');
 
-        if (!_.isPlainObject(source)) throw new Error('You are trying to inflate a non object (' + JSON.stringify(source) + ')');
+        if (!lodash.isPlainObject(source)) throw new Error('You are trying to inflate a non object (' + JSON.stringify(source) + ')');
 
         var parent;
-        var child = _.cloneDeep(source);
+        var child = lodash.cloneDeep(source);
         var inheritObj = child.inherit;
 
         /*
@@ -35341,36 +35379,36 @@ function inflateProvider$1(query, $rootScope){
 
         // extending the child
         // ***********************************
-        if (inheritObj.merge && !_.isArray(inheritObj.merge)){
+        if (inheritObj.merge && !lodash.isArray(inheritObj.merge)){
             throw new Error('Inheritance error: inherit.merge must be an array.');
         }
 
         // start inflating child (we have to extend selectively...)
-        _.each(parent, function(value, key){
+        lodash.each(parent, function(value, key){
             var childProp, parentProp;
             // if this key is not set yet, copy it out of the parent
             if (!(key in child)){
-                child[key] = _.isFunction(value) ? value : _.cloneDeep(value);
+                child[key] = lodash.isFunction(value) ? value : lodash.cloneDeep(value);
                 return;
             }
 
             // if we have a merge array,
-            if (_.indexOf(inheritObj.merge, key) != -1){
+            if (lodash.indexOf(inheritObj.merge, key) != -1){
                 childProp = child[key];
                 parentProp = value;
 
-                if (_.isArray(childProp)){
-                    if (!_.isArray(parentProp)){
+                if (lodash.isArray(childProp)){
+                    if (!lodash.isArray(parentProp)){
                         throw new Error('Inheritance error: You tried merging an array with an non array (for "' + key + '")');
                     }
                     child[key] = childProp.concat(parentProp);
                 }
 
-                if (_.isPlainObject(childProp)){
-                    if (!_.isPlainObject(parentProp)){
+                if (lodash.isPlainObject(childProp)){
+                    if (!lodash.isPlainObject(parentProp)){
                         throw new Error('Inheritance error: You tried merging an object with an non object (for "' + key + '")');
                     }
-                    child[key] = _.extend({},parentProp,childProp);
+                    child[key] = lodash.extend({},parentProp,childProp);
                 }
 
             }
@@ -35379,7 +35417,7 @@ function inflateProvider$1(query, $rootScope){
         // we want to extend the childs data even if it already exists
         // its ok to shallow extend here (because by definition parent was created for this inflation)
         if (parent.data){
-            child.data = _.extend(parent.data, child.data || {});
+            child.data = lodash.extend(parent.data, child.data || {});
         }
 
         // Personal customization functions - only if this is the last iteration of inflate
@@ -35393,8 +35431,9 @@ function inflateProvider$1(query, $rootScope){
     return inflate;
 }
 
-var global = window.piGlobal;
+var global$1 = window.piGlobal;
 
+var piConsole = piConsoleFactory(console);
 var collection = collectionService();
 
 var DatabaseRandomizer = RandomizerProvider(
@@ -35410,7 +35449,7 @@ var databaseQuery = queryProvider$1(
 
 var databaseInflate = inflateProvider$1(
     databaseQuery,
-    {global: global}, // rootscope
+    {global: global$1}, // rootscope
     piConsole
 );
 
@@ -35422,36 +35461,26 @@ var databaseSequence = SequenceProvider(
     MixerSequence
 );
 
-
 var Database = DatabaseProvider(
     DatabaseStore,
     DatabaseRandomizer,
     databaseInflate,
     templateObj,
-    databaseSequence
+    databaseSequence,
+    piConsole
 );
 
 function randomArr(length){
-    return _.shuffle(_.range(length));
+    return lodash.shuffle(lodash.range(length));
 }
 
 function randomInt(length){
     return Math.floor(Math.random()*length);
 }
 
-function piConsole(){
-    return console;
-}
-
-return Database;
-
-})));
-
-});
-
 window.piGlobal || (window.piGlobal = {});
 
-var global$1 = window.piGlobal;
+var global$2 = window.piGlobal;
 
 /**
  * Create a new API
@@ -35511,11 +35540,11 @@ function APIconstructor(options){
 
         addGlobal: function(obj){
             if (!lodash.isPlainObject(obj)) throw new Error('global must be an object');
-            return lodash.merge(global$1, obj);
+            return lodash.merge(global$2, obj);
         },
 
         getGlobal: function(){
-            return global$1;
+            return global$2;
         },
 
         addCurrent: function(obj){
@@ -48362,14 +48391,9 @@ var lodash$1 = createCommonjsModule(function (module, exports) {
 // initiate piGloabl
 var glob = window.piGlobal || (window.piGlobal = {});
 
-function global$2(){
+function global$3(){
     return glob;
 }
-
-var minnoSequencer$1 = createCommonjsModule(function (module, exports) {
-(function (global, factory) {
-	module.exports = factory(lodash$1);
-}(commonjsGlobal, (function (_) { _ = _ && _.hasOwnProperty('default') ? _['default'] : _;
 
 /**
  * A function that maps a mixer object into a sequence.
@@ -48388,19 +48412,19 @@ var minnoSequencer$1 = createCommonjsModule(function (module, exports) {
  * @returns {Array} [An array of mixed objects]
  */
 
-mixProvider.$inject = ['randomizeShuffle', 'randomizeRandom'];
-function mixProvider(shuffle, random){
+mixProvider$1.$inject = ['randomizeShuffle', 'randomizeRandom'];
+function mixProvider$1(shuffle, random){
 
     function mix(obj){
         var mixerName = obj.mixer;
 
         // if this isn't a mixer
         // make sure we catch mixers that are set with undefined by accident...
-        if (!(_.isPlainObject(obj) && 'mixer' in obj)){
+        if (!(lodash$1.isPlainObject(obj) && 'mixer' in obj)){
             return [obj];
         }
 
-        if (_.isUndefined(mix.mixers[mixerName])){
+        if (lodash$1.isUndefined(mix.mixers[mixerName])){
             throw new Error('Mixer: unknow mixer type = ' + mixerName);
         }
 
@@ -48410,7 +48434,7 @@ function mixProvider(shuffle, random){
 
         obj.$parsed = mix.mixers[mixerName].apply(null, arguments);
 
-        if (!_.isArray(obj.$parsed)) {
+        if (!lodash$1.isArray(obj.$parsed)) {
             throw new Error('Mixer: mixers must return an array (mixer: ' + mixerName + ')');
         }
 
@@ -48418,9 +48442,9 @@ function mixProvider(shuffle, random){
     }
 
     function deepMixer(sequence, context){
-        return _.reduce(sequence, function(arr,value){
+        return lodash$1.reduce(sequence, function(arr,value){
 
-            if (_.isPlainObject(value) && 'mixer' in value && value.mixer != 'wrapper' && !value.wrapper){
+            if (lodash$1.isPlainObject(value) && 'mixer' in value && value.mixer != 'wrapper' && !value.wrapper){
                 var seq = deepMixer(mix(value, context), context);
                 return arr.concat(seq);
             } else {
@@ -48439,7 +48463,7 @@ function mixProvider(shuffle, random){
             var sequence = obj.data || [];
             var result = [], i;
             for (i=0; i < obj.times; i++){
-                result = result.concat(_.clone(sequence,true));
+                result = result.concat(lodash$1.clone(sequence,true));
             }
             return result;
         },
@@ -48452,11 +48476,11 @@ function mixProvider(shuffle, random){
 
         choose: function(obj, context){
             var sequence = obj.data ? deepMixer(obj.data, context) : [];
-            return _.take(shuffle(sequence), obj.n ? obj.n : 1);
+            return lodash$1.take(shuffle(sequence), obj.n ? obj.n : 1);
         },
 
         custom: function(obj, context){
-            return _.isFunction(obj.fn) ? obj.fn(obj, context) : [];
+            return lodash$1.isFunction(obj.fn) ? obj.fn(obj, context) : [];
         },
 
         weightedRandom: weightedChoose,
@@ -48472,7 +48496,7 @@ function mixProvider(shuffle, random){
         var i;
         var n = obj.n || 1;
         var result = [];
-        var total_weight = _.reduce(obj.weights,function (prev, cur) {
+        var total_weight = lodash$1.reduce(obj.weights,function (prev, cur) {
             return prev + cur;
         });
 
@@ -48502,14 +48526,14 @@ function mixProvider(shuffle, random){
 
 }
 
-mixerDotNotationProvider$1.$inject = ['dotNotation'];
-function mixerDotNotationProvider$1(dotNotation){
+mixerDotNotationProvider$3.$inject = ['dotNotation'];
+function mixerDotNotationProvider$3(dotNotation){
 
     function mixerDotNotation(chain, obj){
 
         var escapeSeparatorRegex= /[^/]\./;
 
-        if (!_.isString(chain)) return chain;
+        if (!lodash$1.isString(chain)) return chain;
 
         // We do not have a non escaped dot: we treat this as a string
         if (!escapeSeparatorRegex.test(chain)) return chain.replace('/.','.');
@@ -48520,16 +48544,16 @@ function mixerDotNotationProvider$1(dotNotation){
     return mixerDotNotation;
 }
 
-mixerConditionProvider$1.$inject = ['mixerDotNotation'];
-function mixerConditionProvider$1(dotNotation){
+mixerConditionProvider$3.$inject = ['mixerDotNotation','piConsole'];
+function mixerConditionProvider$3(dotNotation,piConsole){
     var operatorHash = {
-        gt: forceNumeric(_.gt),
-        greaterThan: forceNumeric(_.gt),
-        gte: forceNumeric(_.gte),
-        greaterThanOrEqual: forceNumeric(_.gte),
-        equals: _.eq,
-        'in': _.rearg(_.contains,1,0), // effectively reverse
-        contains: _.rearg(_.contains,1,0), // effectively reverse
+        gt: forceNumeric(lodash$1.gt),
+        greaterThan: forceNumeric(lodash$1.gt),
+        gte: forceNumeric(lodash$1.gte),
+        greaterThanOrEqual: forceNumeric(lodash$1.gte),
+        equals: lodash$1.eq,
+        'in': lodash$1.rearg(lodash$1.contains,1,0), // effectively reverse
+        contains: lodash$1.rearg(lodash$1.contains,1,0), // effectively reverse
         exactly: exactly,
         isTruthy: isTruthy
     };
@@ -48539,7 +48563,16 @@ function mixerConditionProvider$1(dotNotation){
         var left = dotNotation(condition.compare,context);
         var right = dotNotation(condition.to,context);
 
-        if (condition.DEBUG && console) console.info('Condition: ', left, condition.operator || 'equals', right, condition); // eslint-disable-line no-console 
+        if (condition.DEBUG) piConsole({
+            type:'info',
+            message:'Condition info',
+            rows: [
+                ['Left: ', left], 
+                ['Operator: ', condition.operator || 'equals'],
+                ['Right: ', right]
+            ],
+            context: condition,
+        });
 
         return condition.negate
             ? !operator.apply(context,[left, right, context])
@@ -48552,20 +48585,20 @@ function mixerConditionProvider$1(dotNotation){
     // extract the operator function from the condition
     function getOperator(condition){
         var operator = condition.operator;
-        if (_.isFunction(condition)) return condition;
-        if (!_.has(condition, 'operator')) return _.has(condition,'to') ? _.eq : isTruthy;
-        if (_.isFunction(operator)) return operator;
+        if (lodash$1.isFunction(condition)) return condition;
+        if (!lodash$1.has(condition, 'operator')) return lodash$1.has(condition,'to') ? lodash$1.eq : isTruthy;
+        if (lodash$1.isFunction(operator)) return operator;
         return operatorHash[operator];
     }
 
     function isTruthy(left){ return !!left; }
     function exactly(left,right){ return left === right;}
-    function forceNumeric(cb){ return function(left,right){ return [left,right].every(_.isNumber) ? cb(left,right) : false; }; } 
+    function forceNumeric(cb){ return function(left,right){ return [left,right].every(lodash$1.isNumber) ? cb(left,right) : false; }; } 
 
 }
 
-evaluateProvider.$inject = ['mixerCondition'];
-function evaluateProvider(condition){
+evaluateProvider$1.$inject = ['mixerCondition'];
+function evaluateProvider$1(condition){
     /**
      * Checks if a conditions set is true
      * @param  {Array} conditions [an array of conditions]
@@ -48575,24 +48608,24 @@ function evaluateProvider(condition){
 
     function evaluate(conditions,context){
         // make && the default
-        _.isArray(conditions) && (conditions = {and:conditions});
+        lodash$1.isArray(conditions) && (conditions = {and:conditions});
 
         function test(cond){return evaluate(cond,context);}
 
         // && objects
         if (conditions.and){
-            return _.every(conditions.and, test);
+            return lodash$1.every(conditions.and, test);
         }
         if (conditions.nand){
-            return !_.every(conditions.nand, test);
+            return !lodash$1.every(conditions.nand, test);
         }
 
         // || objects
         if (conditions.or){
-            return _.some(conditions.or, test);
+            return lodash$1.some(conditions.or, test);
         }
         if (conditions.nor){
-            return !_.some(conditions.nor, test);
+            return !lodash$1.some(conditions.nor, test);
         }
 
         return condition(conditions, context);
@@ -48606,8 +48639,8 @@ function evaluateProvider(condition){
  * @return {function}         [mixer decorator]
  */
 
-mixerBranchingDecorator$1.$inject = ['$delegate','mixerEvaluate','mixerDefaultContext'];
-function mixerBranchingDecorator$1(mix, evaluate, mixerDefaultContext){
+mixerBranchingDecorator$3.$inject = ['$delegate','mixerEvaluate','mixerDefaultContext'];
+function mixerBranchingDecorator$3(mix, evaluate, mixerDefaultContext){
 
     mix.mixers.branch = branch;
     mix.mixers.multiBranch = multiBranch;
@@ -48619,7 +48652,7 @@ function mixerBranchingDecorator$1(mix, evaluate, mixerDefaultContext){
      * @return {Array}         [A data array with objects to continue with]
      */
     function branch(obj, context){
-        context = _.extend(context || {}, mixerDefaultContext);
+        context = lodash$1.extend(context || {}, mixerDefaultContext);
         return evaluate(obj.conditions, context) ? obj.data || [] : obj.elseData || [];
     }
 
@@ -48628,10 +48661,10 @@ function mixerBranchingDecorator$1(mix, evaluate, mixerDefaultContext){
      * @return {Array}         [A data array with objects to continue with]
      */
     function multiBranch(obj, context){
-        context = _.extend(context || {}, mixerDefaultContext);
+        context = lodash$1.extend(context || {}, mixerDefaultContext);
         var row;
 
-        row = _.find(obj.branches, function(branch){
+        row = lodash$1.find(obj.branches, function(branch){
             return evaluate(branch.conditions, context);
         });
 
@@ -48643,8 +48676,8 @@ function mixerBranchingDecorator$1(mix, evaluate, mixerDefaultContext){
     }
 }
 
-mixerSequenceProvider$1.$inject = ['mixer'];
-function mixerSequenceProvider$1(mix){
+mixerSequenceProvider$3.$inject = ['mixer'];
+function mixerSequenceProvider$3(mix){
 
     /**
      * MixerSequence takes an mixer array and allows browsing back and forth within it
@@ -48657,7 +48690,7 @@ function mixerSequenceProvider$1(mix){
         this.pointer = 0;
     }
 
-    _.extend(MixerSequence.prototype, {
+    lodash$1.extend(MixerSequence.prototype, {
         /**
          * Add sequence to mixer
          * @param {[type]} arr     Sequence
@@ -48683,7 +48716,7 @@ function mixerSequenceProvider$1(mix){
             var el = subSequence.sequence[subSequence.pointer];
 
             // if we ran out of elements, go to previous level (unless we are on the root sequence)
-            if (_.isUndefined(el) && this.stack.length > 1){
+            if (lodash$1.isUndefined(el) && this.stack.length > 1){
                 this.stack.pop();
                 return this.proceed.call(this,direction,context);
             }
@@ -48738,7 +48771,7 @@ function mixerSequenceProvider$1(mix){
                 number: this.pointer,
 
                 // sum of sequence length, minus one (the mixer) for each level of stack except the last
-                outOf:  _.reduce(this.stack, function(memo,sub){return memo + sub.sequence.length-1;},0)+1
+                outOf:  lodash$1.reduce(this.stack, function(memo,sub){return memo + sub.sequence.length-1;},0)+1
             };
         }
 
@@ -48747,15 +48780,15 @@ function mixerSequenceProvider$1(mix){
     return MixerSequence;
 }
 
-function dotNotation$1(chain, obj){
+function dotNotation$3(chain, obj){
 
-    if (_.isUndefined(chain)) return;
-    if (_.isString(chain)) chain = chain.split('.');
+    if (lodash$1.isUndefined(chain)) return;
+    if (lodash$1.isString(chain)) chain = chain.split('.');
 
     // @TODO maybe lodash _.get?
     return chain.reduce(function(result, link){
 
-        if (_.isPlainObject(result) || _.isArray(result)){
+        if (lodash$1.isPlainObject(result) || lodash$1.isArray(result)){
             return result[link];
         }
 
@@ -48764,41 +48797,58 @@ function dotNotation$1(chain, obj){
     }, obj);
 }
 
-var mixer = mixProvider(
-    _.shuffle, // randomizeShuffle
+piConsoleFactory$2.$inject = ['$log'];
+function piConsoleFactory$2($log){
+    return window.DEBUG ? piConsole : lodash$1.noop;
+
+    function piConsole(log){
+        if (lodash$1.get(piConsole,'settings.hideConsole', false)) return window.postMessage({type:'kill-console'},'*');
+
+        $log[log.type] && $log[log.type](log.message); 
+        window.postMessage(noramlizeMessage(log),'*');
+    }
+
+    function noramlizeMessage(obj){
+        return lodash$1.cloneDeep(obj, normalize);
+        function normalize(val){
+            if (lodash$1.isFunction(val)) return val.toString();
+            if (lodash$1.isError(val)) return {name:val.name, message:val.message, stack:val.stack};
+        }
+    }
+}
+
+var piConsole$4 = piConsoleFactory$2(console);
+var mixer$2 = mixProvider$1(
+    lodash$1.shuffle, // randomizeShuffle
     Math.random // randomizeRandom
 );
 
-var mixerDotNotation = mixerDotNotationProvider$1(dotNotation$1);
-var mixerCondition = mixerConditionProvider$1(
-    mixerDotNotation,
-    piConsole$1
+var mixerDotNotation$1 = mixerDotNotationProvider$3(dotNotation$3);
+var mixerCondition$1 = mixerConditionProvider$3(
+    mixerDotNotation$1,
+    piConsole$4
 );
 
-var mixerEvaluate = evaluateProvider(mixerCondition);
+var mixerEvaluate$1 = evaluateProvider$1(mixerCondition$1);
 
-var mixerDefaultContext = {};
+var mixerDefaultContext$1 = {};
 
-mixerBranchingDecorator$1(
-    mixer,
-    mixerEvaluate,
-    mixerDefaultContext
+mixerBranchingDecorator$3(
+    mixer$2,
+    mixerEvaluate$1,
+    mixerDefaultContext$1
 );
 
-var MixerSequence = mixerSequenceProvider$1(mixer);
+var MixerSequence$1 = mixerSequenceProvider$3(mixer$2);
 
-function piConsole$1(){
-    return console;
-}
-
-templateObjProvider$1.$inject = ['templateDefaultContext'];
-function templateObjProvider$1(templateDefaultContext){
+templateObjProvider$3.$inject = ['templateDefaultContext'];
+function templateObjProvider$3(templateDefaultContext){
 
     function templateObj(obj, context, options){
-        var skip = _.get(options, 'skip', []);
+        var skip = lodash$1.get(options, 'skip', []);
         var result = {};
         var key;
-        var ctx = _.assign({}, context, templateDefaultContext);
+        var ctx = lodash$1.assign({}, context, templateDefaultContext);
 
         for (key in obj){
             result[key] = (skip.indexOf(key) == -1) ? expand(obj[key]) : obj[key];
@@ -48807,29 +48857,29 @@ function templateObjProvider$1(templateDefaultContext){
         return result;
 
         function expand(value){
-            if (_.isString(value)) return template(value);
-            if (_.isArray(value)) return value.map(expand);
-            if (_.isPlainObject(value)) return _.mapValues(value, expand);
+            if (lodash$1.isString(value)) return template(value);
+            if (lodash$1.isArray(value)) return value.map(expand);
+            if (lodash$1.isPlainObject(value)) return lodash$1.mapValues(value, expand);
             return value;
         }
 
         function template(input){
             // if there is no template just return the string
             if (!~input.indexOf('<%')) return input;
-            return _.template(input)(ctx);
+            return lodash$1.template(input)(ctx);
         }
     }
 
     return templateObj;
 }
 
-var templateObj = templateObjProvider$1({});
+var templateObj$1 = templateObjProvider$3({});
 
 /*
  * The constructor for an Array wrapper
  */
 
-function collectionService(){
+function collectionService$1(){
 
     function Collection (arr) {
         if (arr instanceof Collection) {
@@ -48837,7 +48887,7 @@ function collectionService(){
         }
 
         // Make sure we are creating this array out of a valid argument
-        if (!_.isUndefined(arr) && !_.isArray(arr) && !(arr instanceof Collection)) {
+        if (!lodash$1.isUndefined(arr) && !lodash$1.isArray(arr) && !(arr instanceof Collection)) {
             throw new Error('Collections can only be constructed from arrays');
         }
 
@@ -48849,7 +48899,7 @@ function collectionService(){
         this.pointer = -1;
     }
 
-    _.extend(Collection.prototype,{
+    lodash$1.extend(Collection.prototype,{
 
         first : function first(){
             this.pointer = 0;
@@ -48886,7 +48936,7 @@ function collectionService(){
             }
 
             // make sure list is as an array
-            list = _.isArray(list) ? list : [list];
+            list = lodash$1.isArray(list) ? list : [list];
             this.collection = this.collection.concat(list);
 
             this.length = this.collection.length;
@@ -48907,11 +48957,11 @@ function collectionService(){
     var slice = Array.prototype.slice;
 
     // Mix in each Underscore method as a proxy to `Collection#models`.
-    _.each(methods, function(method) {
+    lodash$1.each(methods, function(method) {
         Collection.prototype[method] = function() {
             var args = slice.call(arguments);
             args.unshift(this.collection);
-            var coll = _[method].apply(_,args);
+            var coll = lodash$1[method].apply(lodash$1,args);
             return new Collection(coll);
         };
     });
@@ -48921,8 +48971,8 @@ function collectionService(){
 
 // @TODO: repeat currently repeats only the last element, we need repeat = 'set' or something in order to prevent re-randomizing of exRandom...
 
-RandomizerProvider.$inject = ['randomizeInt', 'randomizeRange', 'Collection'];
-function RandomizerProvider(randomizeInt, randomizeRange, Collection){
+RandomizerProvider$1.$inject = ['randomizeInt', 'randomizeRange', 'Collection'];
+function RandomizerProvider$1(randomizeInt, randomizeRange, Collection){
 
     function Randomizer(){
         this._cache = {
@@ -48932,7 +48982,7 @@ function RandomizerProvider(randomizeInt, randomizeRange, Collection){
         };
     }
 
-    _.extend(Randomizer.prototype, {
+    lodash$1.extend(Randomizer.prototype, {
         random: random,
         exRandom: exRandom,
         sequential: sequential
@@ -48943,7 +48993,7 @@ function RandomizerProvider(randomizeInt, randomizeRange, Collection){
     function random(length, seed, repeat){
         var cache  = this._cache.random;
 
-        if (repeat && !_.isUndefined(cache[seed])) {
+        if (repeat && !lodash$1.isUndefined(cache[seed])) {
             return cache[seed];
         }
 
@@ -48959,8 +49009,8 @@ function RandomizerProvider(randomizeInt, randomizeRange, Collection){
         var result;
 
         // if needed create collection and set it in seed
-        if (_.isUndefined(coll)){
-            coll = cache[seed] = new Collection(_.range(length));
+        if (lodash$1.isUndefined(coll)){
+            coll = cache[seed] = new Collection(lodash$1.range(length));
             return coll.first();
         }
 
@@ -48977,7 +49027,7 @@ function RandomizerProvider(randomizeInt, randomizeRange, Collection){
         result = coll.next();
 
         // if we've reached the end of the collection (next)
-        if (_.isUndefined(result)){
+        if (lodash$1.isUndefined(result)){
             return coll.first();
         } else {
             return result;
@@ -48990,7 +49040,7 @@ function RandomizerProvider(randomizeInt, randomizeRange, Collection){
         var result;
 
         // if needed create collection and set it in seed
-        if (_.isUndefined(coll)){
+        if (lodash$1.isUndefined(coll)){
             coll = cache[seed] = new Collection(randomizeRange(length));
             return coll.first();
         }
@@ -49009,7 +49059,7 @@ function RandomizerProvider(randomizeInt, randomizeRange, Collection){
 
         // if we've reached the end of the collection (next)
         // we should re-randomize
-        if (_.isUndefined(result)){
+        if (lodash$1.isUndefined(result)){
             coll = cache[seed] = new Collection(randomizeRange(length));
             return coll.first();
         } else {
@@ -49023,14 +49073,14 @@ function RandomizerProvider(randomizeInt, randomizeRange, Collection){
  *	The store is a collection of collection devided into namespaces.
  *	You can think of every namespace/collection as a table.
  */
-storeProvider$1.$inject = ['Collection'];
-function storeProvider$1(Collection){
+storeProvider$3.$inject = ['Collection'];
+function storeProvider$3(Collection){
 
     function Store(){
         this.store = {};
     }
 
-    _.extend(Store.prototype, {
+    lodash$1.extend(Store.prototype, {
         create: function create(nameSpace){
             if (this.store[nameSpace]){
                 throw new Error('The name space ' + nameSpace + ' already exists');
@@ -49059,8 +49109,8 @@ function storeProvider$1(Collection){
     return Store;
 }
 
-SequenceProvider.$inject = ['MixerSequence'];
-function SequenceProvider(MixerSequence){
+SequenceProvider$1.$inject = ['MixerSequence'];
+function SequenceProvider$1(MixerSequence){
 
     /**
      * Sequence Constructor:
@@ -49076,7 +49126,7 @@ function SequenceProvider(MixerSequence){
         this.db = db;
     }
 
-    _.extend(Sequence.prototype, {
+    lodash$1.extend(Sequence.prototype, {
         // only mix
         next: function(context){
             this.mixerSequence.next(context);
@@ -49128,15 +49178,15 @@ function SequenceProvider(MixerSequence){
     return Sequence;
 }
 
-DatabaseProvider.$inject = ['DatabaseStore', 'DatabaseRandomizer', 'databaseInflate', 'templateObj', 'databaseSequence'];
-function DatabaseProvider(Store, Randomizer, inflate, templateObj, DatabaseSequence){
+DatabaseProvider$1.$inject = ['DatabaseStore', 'DatabaseRandomizer', 'databaseInflate', 'templateObj', 'databaseSequence','piConsole'];
+function DatabaseProvider$1(Store, Randomizer, inflate, templateObj, DatabaseSequence, piConsole){
 
     function Database(){
         this.store = new Store();
         this.randomizer = new Randomizer();
     }
 
-    _.extend(Database.prototype, {
+    lodash$1.extend(Database.prototype, {
         createColl: function(namespace){
             this.store.create(namespace);
         },
@@ -49154,36 +49204,53 @@ function DatabaseProvider(Store, Randomizer, inflate, templateObj, DatabaseSeque
             var coll = this.getColl(namespace);
             var result;
 
+            // inherit
             try {
-                // inherit
                 if (!query.$inflated || query.reinflate) {
                     query.$inflated = inflate(query, coll, this.randomizer);
                     query.$templated = null; // we have to retemplate after querying, who know what new templates we got here...
                 }
+            } catch(err) {
+                piConsole({
+                    type:'error',
+                    message: 'Failed to inherit',
+                    error:err,
+                    context: query
+                });
+                if (this.onError) this.onError(err);
+                throw err;
+            }
 
-                // template
+            // template
+            try {
                 if (!query.$templated || query.$inflated.regenerateTemplate){
                     context[namespace + 'Meta'] = query.$meta;
                     context[namespace + 'Data'] = templateObj(query.$inflated.data || {}, context, options); // make sure we support
                     query.$templated = templateObj(query.$inflated, context, options);
                 }
-
-                result = query.$templated;
             } catch(err) {
+                piConsole({
+                    type:'error',
+                    message: 'Failed to apply template',
+                    error:err,
+                    context: query.$inflated
+                });
                 if (this.onError) this.onError(err);
                 throw err;
             }
 
+            result = query.$templated;
+
             // set flags
-            if (context.global && result.addGlobal) _.extend(context.global, result.addGlobal);
+            if (context.global && result.addGlobal) lodash$1.extend(context.global, result.addGlobal);
 
-            if (context.current && result.addCurrent) _.extend(context.current, result.addCurrent);
+            if (context.current && result.addCurrent) lodash$1.extend(context.current, result.addCurrent);
 
-            return query.$templated;
+            return result;
         },
 
         sequence: function(namespace, arr){
-            if (!_.isArray(arr)){
+            if (!lodash$1.isArray(arr)){
                 throw new Error('Sequence must be an array.');
             }
             return new DatabaseSequence(namespace, arr, this);
@@ -49193,8 +49260,8 @@ function DatabaseProvider(Store, Randomizer, inflate, templateObj, DatabaseSeque
     return Database;
 }
 
-queryProvider$1.$inject = ['Collection'];
-function queryProvider$1(Collection){
+queryProvider$3.$inject = ['Collection'];
+function queryProvider$3(Collection){
 
     function queryFn(query, collection, randomizer){
         var coll = new Collection(collection);
@@ -49202,9 +49269,9 @@ function queryProvider$1(Collection){
         // shortcuts:
         // ****************************
 
-        if (_.isFunction(query)) return query(collection);
+        if (lodash$1.isFunction(query)) return query(collection);
 
-        if (_.isString(query) || _.isNumber(query)) query = {set:query, type:'random'};
+        if (lodash$1.isString(query) || lodash$1.isNumber(query)) query = {set:query, type:'random'};
 
         // filter by set
         // ****************************
@@ -49212,15 +49279,15 @@ function queryProvider$1(Collection){
 
         // filter by data
         // ****************************
-        if (_.isString(query.data)){
+        if (lodash$1.isString(query.data)){
             coll = coll.filter(function(q){
                 return q.handle === query.data || (q.data && q.data.handle === query.data);
             });
         }
 
-        if (_.isPlainObject(query.data)) coll = coll.where({data:query.data});
+        if (lodash$1.isPlainObject(query.data)) coll = coll.where({data:query.data});
 
-        if (_.isFunction(query.data)) coll = coll.filter(query.data);
+        if (lodash$1.isFunction(query.data)) coll = coll.filter(query.data);
 
         // pick by type
         // ****************************
@@ -49253,7 +49320,7 @@ function queryProvider$1(Collection){
                 throw new Error('Unknow query type: ' + query.type);
         }
 
-        if (_.isUndefined(coll.at(at))) throw new Error('Query failed, object (' + JSON.stringify(query) +	') not found. If you are trying to apply a template, you should know that they are not supported for inheritance.');
+        if (lodash$1.isUndefined(coll.at(at))) throw new Error('Query failed, object (' + JSON.stringify(query) +	') not found. If you are trying to apply a template, you should know that they are not supported for inheritance.');
 
         return coll.at(at);
     }
@@ -49272,12 +49339,12 @@ function queryProvider$1(Collection){
  * @param recursive: private use only, is this inside the recursion (true) or top level (false)
  * @param depth: private use only, a counter for the depth of the recursion
  */
-inflateProvider$1.$inject = ['databaseQuery','$rootScope'];
-function inflateProvider$1(query, $rootScope){
+inflateProvider$3.$inject = ['databaseQuery','$rootScope'];
+function inflateProvider$3(query, $rootScope){
 
     function customize(source){
         // check for a custom function and run it if it exists
-        if (_.isFunction(source.customize)){
+        if (lodash$1.isFunction(source.customize)){
             source.customize.apply(source, [source, $rootScope.global]);
         }
         return source;
@@ -49294,10 +49361,10 @@ function inflateProvider$1(query, $rootScope){
 
         if (!depth) throw new Error('Inheritance loop too deep, you can only inherit up to 10 levels down');
 
-        if (!_.isPlainObject(source)) throw new Error('You are trying to inflate a non object (' + JSON.stringify(source) + ')');
+        if (!lodash$1.isPlainObject(source)) throw new Error('You are trying to inflate a non object (' + JSON.stringify(source) + ')');
 
         var parent;
-        var child = _.cloneDeep(source);
+        var child = lodash$1.cloneDeep(source);
         var inheritObj = child.inherit;
 
         /*
@@ -49328,36 +49395,36 @@ function inflateProvider$1(query, $rootScope){
 
         // extending the child
         // ***********************************
-        if (inheritObj.merge && !_.isArray(inheritObj.merge)){
+        if (inheritObj.merge && !lodash$1.isArray(inheritObj.merge)){
             throw new Error('Inheritance error: inherit.merge must be an array.');
         }
 
         // start inflating child (we have to extend selectively...)
-        _.each(parent, function(value, key){
+        lodash$1.each(parent, function(value, key){
             var childProp, parentProp;
             // if this key is not set yet, copy it out of the parent
             if (!(key in child)){
-                child[key] = _.isFunction(value) ? value : _.cloneDeep(value);
+                child[key] = lodash$1.isFunction(value) ? value : lodash$1.cloneDeep(value);
                 return;
             }
 
             // if we have a merge array,
-            if (_.indexOf(inheritObj.merge, key) != -1){
+            if (lodash$1.indexOf(inheritObj.merge, key) != -1){
                 childProp = child[key];
                 parentProp = value;
 
-                if (_.isArray(childProp)){
-                    if (!_.isArray(parentProp)){
+                if (lodash$1.isArray(childProp)){
+                    if (!lodash$1.isArray(parentProp)){
                         throw new Error('Inheritance error: You tried merging an array with an non array (for "' + key + '")');
                     }
                     child[key] = childProp.concat(parentProp);
                 }
 
-                if (_.isPlainObject(childProp)){
-                    if (!_.isPlainObject(parentProp)){
+                if (lodash$1.isPlainObject(childProp)){
+                    if (!lodash$1.isPlainObject(parentProp)){
                         throw new Error('Inheritance error: You tried merging an object with an non object (for "' + key + '")');
                     }
-                    child[key] = _.extend({},parentProp,childProp);
+                    child[key] = lodash$1.extend({},parentProp,childProp);
                 }
 
             }
@@ -49366,7 +49433,7 @@ function inflateProvider$1(query, $rootScope){
         // we want to extend the childs data even if it already exists
         // its ok to shallow extend here (because by definition parent was created for this inflation)
         if (parent.data){
-            child.data = _.extend(parent.data, child.data || {});
+            child.data = lodash$1.extend(parent.data, child.data || {});
         }
 
         // Personal customization functions - only if this is the last iteration of inflate
@@ -49380,61 +49447,52 @@ function inflateProvider$1(query, $rootScope){
     return inflate;
 }
 
-var global = window.piGlobal;
+var global$4 = window.piGlobal;
 
-var collection = collectionService();
+var piConsole$3 = piConsoleFactory$2(console);
+var collection$1 = collectionService$1();
 
-var DatabaseRandomizer = RandomizerProvider(
-    randomInt,// randomize int
-    randomArr,// randomize range
-    collection
+var DatabaseRandomizer$1 = RandomizerProvider$1(
+    randomInt$1,// randomize int
+    randomArr$1,// randomize range
+    collection$1
 );
 
-var databaseQuery = queryProvider$1(
-    collection,
-    piConsole
+var databaseQuery$1 = queryProvider$3(
+    collection$1,
+    piConsole$3
 );
 
-var databaseInflate = inflateProvider$1(
-    databaseQuery,
-    {global: global}, // rootscope
-    piConsole
+var databaseInflate$1 = inflateProvider$3(
+    databaseQuery$1,
+    {global: global$4}, // rootscope
+    piConsole$3
 );
 
-var DatabaseStore = storeProvider$1(
-    collection
+var DatabaseStore$1 = storeProvider$3(
+    collection$1
 );
 
-var databaseSequence = SequenceProvider(
-    MixerSequence
+var databaseSequence$1 = SequenceProvider$1(
+    MixerSequence$1
 );
 
-
-var Database = DatabaseProvider(
-    DatabaseStore,
-    DatabaseRandomizer,
-    databaseInflate,
-    templateObj,
-    databaseSequence
+var Database$2 = DatabaseProvider$1(
+    DatabaseStore$1,
+    DatabaseRandomizer$1,
+    databaseInflate$1,
+    templateObj$1,
+    databaseSequence$1,
+    piConsole$3
 );
 
-function randomArr(length){
-    return _.shuffle(_.range(length));
+function randomArr$1(length){
+    return lodash$1.shuffle(lodash$1.range(length));
 }
 
-function randomInt(length){
+function randomInt$1(length){
     return Math.floor(Math.random()*length);
 }
-
-function piConsole(){
-    return console;
-}
-
-return Database;
-
-})));
-
-});
 
 /**
  * Go to a destination within the sequence (must be a property of a sequence)
@@ -49491,7 +49549,7 @@ function where(direction, properties, context, sequence){
 
 // load dependancies
 function createDB$1(script){
-    var db = new minnoSequencer$1();
+    var db = new Database$2();
     db.createColl('trial');
     db.createColl('stimulus');
     db.createColl('media');
@@ -49873,7 +49931,7 @@ function setup$1(canvas, script){
 
 function setupVars(script){
     // init global
-    var glob = global$2(global$2());
+    var glob = global$3(global$3());
     var name = script.name || 'anonymous minno-time';
     var current = script.current ? script.current : {};
 
@@ -50858,7 +50916,7 @@ function validateStimuli(type, source){
     if (!stimuli.every(function(stim){ return 'media' in stim; })) throw new Error('Each ' + type + ' stimulus must have a media property');
 }
 
-var global$3 = global$2();
+var global$5 = global$3();
 var conditionHash = {
     begin:begin,
     inputEquals:inputEquals,
@@ -50909,17 +50967,17 @@ function trialEquals(inputData, condition, trial){
 
 function inputEqualsGlobal(inputData, condition){
     if (lodash$1.isUndefined(condition.property)) throw new Error('inputEqualsGlobal requires "property" to be defined');
-    return inputData.handle === global$3[condition.property];
+    return inputData.handle === global$5[condition.property];
 }
 
 function globalEquals(inputData, condition){
     if (typeof condition.property == 'undefined' || typeof condition.value == 'undefined') throw new Error('globalEquals requires both "property" and "value" to be defined');
-    return condition.value === global$3[condition.property];
+    return condition.value === global$5[condition.property];
 }
 
 function globalEqualsTrial(inputData, condition, trial){
     if (typeof condition.globalProp == 'undefined' || typeof condition.trialProp == 'undefined') throw new Error('globalEqualsTrial requires both "globalProp" and "trialProp" to be defined');
-    return global$3[condition.globalProp] !== trial.data[condition.trialProp];
+    return global$5[condition.globalProp] !== trial.data[condition.trialProp];
 }
 
 function globalEqualsStim(inputData, condition, trial){
@@ -50928,31 +50986,31 @@ function globalEqualsStim(inputData, condition, trial){
     // create search object
     var searchObj = {};
     if (condition.handle) searchObj['handle'] = condition.handle;
-    searchObj[condition.stimProp] = global$3[condition.globalProp];
+    searchObj[condition.stimProp] = global$5[condition.globalProp];
 
     // are there stimuli answering this descriptions?
     return hasData(searchObj,trial);
 }
 
 function inputEqualsCurrent(inputData, condition){
-    var current = global$3.current;
+    var current = global$5.current;
     if (typeof condition.property == 'undefined') throw new Error('inputEqualsCurrent requires "property" to be defined');
     return inputData.handle === current[condition.property];
 }
 function currentEquals(inputData, condition){
-    var current = global$3.current;
+    var current = global$5.current;
     if (typeof condition.property == 'undefined' || typeof condition.value == 'undefined') throw new Error('currentEquals requires both "property" and "value" to be defined');
     return condition.value !== current[condition.property];
 }
 
 function currentEqualsTrial(inputData, condition, trial){
-    var current = global$3.current;
+    var current = global$5.current;
     if (typeof condition.currentProp == 'undefined' || typeof condition.trialProp == 'undefined') throw new Error('currentEqualsTrial requires both "currentProp" and "trialProp" to be defined');
     return current[condition.currentProp] === trial.data[condition.trialProp];
 }
 
 function currentEqualsStim(inputData, condition, trial){
-    var current = global$3.current;
+    var current = global$5.current;
     if (typeof condition.currentProp == 'undefined' || typeof condition.stimProp == 'undefined') throw new Error('currentEqualsStim requires both "currentProp" and "stimProp" to be defined');
 
     // create search object
@@ -51105,10 +51163,10 @@ var actions = {
     setGlobalAttr: function(action){
         switch (typeof action.setter){
             case 'function':
-                action.setter.apply(null,[global$2(), action]);
+                action.setter.apply(null,[global$3(), action]);
                 break;
             case 'object':
-                lodash$1.extend(global$2(), action.setter);
+                lodash$1.extend(global$3(), action.setter);
                 break;
             default:
                 throw new Error('setGlobalAttr requires a "setter" property');
@@ -51323,7 +51381,7 @@ function addTrialDetails(trial){
 function nextTrial$1(db, settings, goto){
     var destination = goto[0], properties = goto[1];
     var sequence = db.currentSequence;
-    var global = global$2();
+    var global = global$3();
     var context = {global: global, current: global.current};
     var source;
 
@@ -51498,10 +51556,10 @@ function playerPhase(sink){
     var $trial = $source.map(activateTrial());
     var $sourceLogs = stream();
     var $messages = stream();
-    var $logs = createLogs$1($sourceLogs, composeLoggerSettings(sink.script, global$2()), transformLogs);
+    var $logs = createLogs$1($sourceLogs, composeLoggerSettings(sink.script, global$3()), transformLogs);
 
     $logs.map(function(log){
-        global$2().current.logs.push(log);
+        global$3().current.logs.push(log);
     });
 
     var onDone = lodash$1.get(settings, 'hooks.endTask', settings.onEnd || lodash$1.noop);
@@ -54593,159 +54651,8 @@ module$5.value('randomizeRange', function randomArr(length){
     return lodash.shuffle(lodash.range(length));
 });
 
-piConsoleFactory.$inject = ['$log'];
-function piConsoleFactory($log){
-    return window.DEBUG ? piConsole : lodash.noop;
-
-    function piConsole(log){
-        if (lodash.get(piConsole,'settings.hideConsole', false)) return window.postMessage({type:'kill-console'},'*');
-
-        $log[log.type] && $log[log.type](log.message); 
-        window.postMessage(noramlizeMessage(log),'*');
-    }
-
-    function noramlizeMessage(obj){
-        return lodash.cloneDeep(obj, normalize);
-        function normalize(val){
-            if (lodash.isFunction(val)) return val.toString();
-            if (lodash.isError(val)) return {name:val.name, message:val.message, stack:val.stack};
-        }
-    }
-}
-
 var consoleModule$1 = angular.module('piConsole',[]);
 consoleModule$1.factory('piConsole', piConsoleFactory);
-
-/**
- * A function that maps a mixer object into a sequence.
- *
- * The basic structure of such an obect is:
- * {
- *		mixer: 'functionType',
- *		remix : false,
- *		data: [task1, task2]
- *	}
- *
- * The results of the mix are set into `$parsed` within the original mixer object.
- * if remix is true $parsed is returned instead of recomputing
- *
- * @param {Object} [obj] [a mixer object]
- * @returns {Array} [An array of mixed objects]
- */
-
-mixProvider.$inject = ['randomizeShuffle', 'randomizeRandom'];
-function mixProvider(shuffle, random){
-
-    function mix(obj){
-        var mixerName = obj.mixer;
-
-        // if this isn't a mixer
-        // make sure we catch mixers that are set with undefined by accident...
-        if (!(lodash.isPlainObject(obj) && 'mixer' in obj)){
-            return [obj];
-        }
-
-        if (lodash.isUndefined(mix.mixers[mixerName])){
-            throw new Error('Mixer: unknow mixer type = ' + mixerName);
-        }
-
-        if (!obj.remix && obj.$parsed) {
-            return obj.$parsed;
-        }
-
-        obj.$parsed = mix.mixers[mixerName].apply(null, arguments);
-
-        if (!lodash.isArray(obj.$parsed)) {
-            throw new Error('Mixer: mixers must return an array (mixer: ' + mixerName + ')');
-        }
-
-        return obj.$parsed;
-    }
-
-    function deepMixer(sequence, context){
-        return lodash.reduce(sequence, function(arr,value){
-
-            if (lodash.isPlainObject(value) && 'mixer' in value && value.mixer != 'wrapper' && !value.wrapper){
-                var seq = deepMixer(mix(value, context), context);
-                return arr.concat(seq);
-            } else {
-                return arr.concat([value]);
-            }
-        }, []);
-    }
-
-
-    mix.mixers = {
-        wrapper : function(obj){
-            return obj.data;
-        },
-
-        repeat: function(obj){
-            var sequence = obj.data || [];
-            var result = [], i;
-            for (i=0; i < obj.times; i++){
-                result = result.concat(lodash.clone(sequence,true));
-            }
-            return result;
-        },
-
-        // randomize any elements
-        random: function(obj, context){
-            var sequence = obj.data ? deepMixer(obj.data, context) : [];
-            return shuffle(sequence);
-        },
-
-        choose: function(obj, context){
-            var sequence = obj.data ? deepMixer(obj.data, context) : [];
-            return lodash.take(shuffle(sequence), obj.n ? obj.n : 1);
-        },
-
-        custom: function(obj, context){
-            return lodash.isFunction(obj.fn) ? obj.fn(obj, context) : [];
-        },
-
-        weightedRandom: weightedChoose,
-        weightedChoose: weightedChoose
-
-    };
-
-
-    return mix;
-
-    function weightedChoose(obj, context){
-        var sequence = obj.data ? deepMixer(obj.data, context) : [];
-        var i;
-        var n = obj.n || 1;
-        var result = [];
-        var total_weight = lodash.reduce(obj.weights,function (prev, cur) {
-            return prev + cur;
-        });
-
-        for (i = 0; i < n; i++){
-            result.push(generate());
-        }
-
-        return result;
-
-        function generate(){
-            var i;
-            var random_num = random() * total_weight; // cutoff - when we reach this sum - we've reached the desired weight
-            var weight_sum = 0;
-
-            for (i = 0; i < sequence.length; i++) {
-                weight_sum += obj.weights[i];
-                weight_sum = +weight_sum.toFixed(3);
-
-                if (random_num <= weight_sum) {
-                    return obj.data[i];
-                }
-            }
-
-            throw new Error('Mixer: something went wrong with weightedRandom');
-        }
-    }
-
-}
 
 mixerSequentialProvider.$inject = ['mixer'];
 function mixerSequentialProvider(mix){
@@ -54806,277 +54713,6 @@ function mixerRecursiveProvider(mix){
     return mixerRecursive;
 }
 
-mixerSequenceProvider$1.$inject = ['mixer'];
-function mixerSequenceProvider$1(mix){
-
-    /**
-     * MixerSequence takes an mixer array and allows browsing back and forth within it
-     * @param {Array} arr [a mixer array]
-     */
-    function MixerSequence(arr){
-        this.sequence = arr;
-        this.stack = [];
-        this.add(arr);
-        this.pointer = 0;
-    }
-
-    lodash.extend(MixerSequence.prototype, {
-        /**
-         * Add sequence to mixer
-         * @param {[type]} arr     Sequence
-         * @param {[type]} reverse Whether to start from begining or end
-         */
-        add: function(arr, reverse){
-            this.stack.push({pointer:reverse ? arr.length : -1,sequence:arr});
-        },
-
-        proceed: function(direction, context){
-            // get last subSequence
-            var subSequence = this.stack[this.stack.length-1];
-            var isNext = (direction === 'next');
-
-            // if we ran out of sequence
-            // add the original sequence back in
-            if (!subSequence) {
-                throw new Error ('mixerSequence: subSequence not found');
-            }
-
-            subSequence.pointer += isNext ? 1 : -1;
-
-            var el = subSequence.sequence[subSequence.pointer];
-
-            // if we ran out of elements, go to previous level (unless we are on the root sequence)
-            if (lodash.isUndefined(el) && this.stack.length > 1){
-                this.stack.pop();
-                return this.proceed.call(this,direction,context);
-            }
-
-            // if element is a mixer, mix it
-            if (el && el.mixer){
-                this.add(mix(el,context), !isNext);
-                return this.proceed.call(this,direction,context);
-            }
-
-            // regular element or undefined (end of sequence)
-            return this;
-        },
-
-        next: function(context){
-            this.pointer++;
-            return this.proceed.call(this, 'next',context);
-        },
-
-        prev: function(context){
-            this.pointer--;
-            return this.proceed.call(this, 'prev',context);
-        },
-
-        /**
-         * Return current element
-         * should **never** return a mixer - supposed to abstract them away
-         * @return {[type]} undefined or element
-         */
-        current:function(){
-            // get last subSequence
-            var subSequence = this.stack[this.stack.length-1];
-
-            if (!subSequence) {
-                throw new Error ('mixerSequence: subSequence not found');
-            }
-
-            var el = subSequence.sequence[subSequence.pointer];
-
-            if (!el){
-                return undefined;
-            }
-
-            // extend element with meta data
-            el.$meta = this.meta();
-
-            return el;
-        },
-
-        meta: function(){
-            return {
-                number: this.pointer,
-
-                // sum of sequence length, minus one (the mixer) for each level of stack except the last
-                outOf:  lodash.reduce(this.stack, function(memo,sub){return memo + sub.sequence.length-1;},0)+1
-            };
-        }
-
-    });
-
-    return MixerSequence;
-}
-
-function dotNotation$1(chain, obj){
-
-    if (lodash.isUndefined(chain)) return;
-    if (lodash.isString(chain)) chain = chain.split('.');
-
-    // @TODO maybe lodash _.get?
-    return chain.reduce(function(result, link){
-
-        if (lodash.isPlainObject(result) || lodash.isArray(result)){
-            return result[link];
-        }
-
-        return undefined;
-
-    }, obj);
-}
-
-mixerDotNotationProvider$1.$inject = ['dotNotation'];
-function mixerDotNotationProvider$1(dotNotation){
-
-    function mixerDotNotation(chain, obj){
-
-        var escapeSeparatorRegex= /[^/]\./;
-
-        if (!lodash.isString(chain)) return chain;
-
-        // We do not have a non escaped dot: we treat this as a string
-        if (!escapeSeparatorRegex.test(chain)) return chain.replace('/.','.');
-
-        return dotNotation(chain, obj);
-    }
-
-    return mixerDotNotation;
-}
-
-mixerConditionProvider$1.$inject = ['mixerDotNotation','piConsole'];
-function mixerConditionProvider$1(dotNotation,piConsole){
-    var operatorHash = {
-        gt: forceNumeric(lodash.gt),
-        greaterThan: forceNumeric(lodash.gt),
-        gte: forceNumeric(lodash.gte),
-        greaterThanOrEqual: forceNumeric(lodash.gte),
-        equals: lodash.eq,
-        'in': lodash.rearg(lodash.contains,1,0), // effectively reverse
-        contains: lodash.rearg(lodash.contains,1,0), // effectively reverse
-        exactly: exactly,
-        isTruthy: isTruthy
-    };
-
-    function mixerCondition(condition, context){
-        var operator = getOperator(condition);
-        var left = dotNotation(condition.compare,context);
-        var right = dotNotation(condition.to,context);
-
-        if (condition.DEBUG) piConsole({
-            type:'info',
-            message:'Condition info',
-            rows: [
-                ['Left: ', left], 
-                ['Operator: ', condition.operator || 'equals'],
-                ['Right: ', right]
-            ],
-            context: condition,
-        });
-
-        return condition.negate
-            ? !operator.apply(context,[left, right, context])
-            : operator.apply(context,[left, right, context]);
-    }
-
-    return mixerCondition;
-
-
-    // extract the operator function from the condition
-    function getOperator(condition){
-        var operator = condition.operator;
-        if (lodash.isFunction(condition)) return condition;
-        if (!lodash.has(condition, 'operator')) return lodash.has(condition,'to') ? lodash.eq : isTruthy;
-        if (lodash.isFunction(operator)) return operator;
-        return operatorHash[operator];
-    }
-
-    function isTruthy(left){ return !!left; }
-    function exactly(left,right){ return left === right;}
-    function forceNumeric(cb){ return function(left,right){ return [left,right].every(lodash.isNumber) ? cb(left,right) : false; }; } 
-
-}
-
-/**
- * Registers the branching mixers with the mixer
- * @return {function}         [mixer decorator]
- */
-
-mixerBranchingDecorator$1.$inject = ['$delegate','mixerEvaluate','mixerDefaultContext'];
-function mixerBranchingDecorator$1(mix, evaluate, mixerDefaultContext){
-
-    mix.mixers.branch = branch;
-    mix.mixers.multiBranch = multiBranch;
-
-    return mix;
-
-    /**
-     * Branching mixer
-     * @return {Array}         [A data array with objects to continue with]
-     */
-    function branch(obj, context){
-        context = lodash.extend(context || {}, mixerDefaultContext);
-        return evaluate(obj.conditions, context) ? obj.data || [] : obj.elseData || [];
-    }
-
-    /**
-     * multiBranch mixer
-     * @return {Array}         [A data array with objects to continue with]
-     */
-    function multiBranch(obj, context){
-        context = lodash.extend(context || {}, mixerDefaultContext);
-        var row;
-
-        row = lodash.find(obj.branches, function(branch){
-            return evaluate(branch.conditions, context);
-        });
-
-        if (row) {
-            return row.data || [];
-        }
-
-        return obj.elseData || [];
-    }
-}
-
-evaluateProvider.$inject = ['mixerCondition'];
-function evaluateProvider(condition){
-    /**
-     * Checks if a conditions set is true
-     * @param  {Array} conditions [an array of conditions]
-     * @param  {Object} context   [A context for the condition checker]
-     * @return {Boolean}          [Are these conditions true]
-     */
-
-    function evaluate(conditions,context){
-        // make && the default
-        lodash.isArray(conditions) && (conditions = {and:conditions});
-
-        function test(cond){return evaluate(cond,context);}
-
-        // && objects
-        if (conditions.and){
-            return lodash.every(conditions.and, test);
-        }
-        if (conditions.nand){
-            return !lodash.every(conditions.nand, test);
-        }
-
-        // || objects
-        if (conditions.or){
-            return lodash.some(conditions.or, test);
-        }
-        if (conditions.nor){
-            return !lodash.some(conditions.nor, test);
-        }
-
-        return condition(conditions, context);
-    }
-
-    return evaluate;
-}
-
 var module$4 = angular.module('mixer',[
     module$5.name,
     consoleModule$1.name
@@ -55124,615 +54760,11 @@ function templateFilter$1($log, defaultContext){
 
 }
 
-templateObjProvider$1.$inject = ['templateDefaultContext'];
-function templateObjProvider$1(templateDefaultContext){
-
-    function templateObj(obj, context, options){
-        var skip = lodash.get(options, 'skip', []);
-        var result = {};
-        var key;
-        var ctx = lodash.assign({}, context, templateDefaultContext);
-
-        for (key in obj){
-            result[key] = (skip.indexOf(key) == -1) ? expand(obj[key]) : obj[key];
-        }
-
-        return result;
-
-        function expand(value){
-            if (lodash.isString(value)) return template(value);
-            if (lodash.isArray(value)) return value.map(expand);
-            if (lodash.isPlainObject(value)) return lodash.mapValues(value, expand);
-            return value;
-        }
-
-        function template(input){
-            // if there is no template just return the string
-            if (!~input.indexOf('<%')) return input;
-            return lodash.template(input)(ctx);
-        }
-    }
-
-    return templateObj;
-}
-
 var module$6 = angular.module('template', []);
 
 module$6.filter('template', templateFilter$1);
 module$6.service('templateObj', templateObjProvider$1);
 module$6.constant('templateDefaultContext',{});
-
-// @TODO: repeat currently repeats only the last element, we need repeat = 'set' or something in order to prevent re-randomizing of exRandom...
-
-RandomizerProvider.$inject = ['randomizeInt', 'randomizeRange', 'Collection'];
-function RandomizerProvider(randomizeInt, randomizeRange, Collection){
-
-    function Randomizer(){
-        this._cache = {
-            random : {},
-            exRandom : {},
-            sequential : {}
-        };
-    }
-
-    lodash.extend(Randomizer.prototype, {
-        random: random,
-        exRandom: exRandom,
-        sequential: sequential
-    });
-
-    return Randomizer;
-
-    function random(length, seed, repeat){
-        var cache  = this._cache.random;
-
-        if (repeat && !lodash.isUndefined(cache[seed])) {
-            return cache[seed];
-        }
-
-        // save result in cache
-        cache[seed] = randomizeInt(length);
-
-        return cache[seed];
-    }
-
-    function sequential(length, seed, repeat){
-        var cache = this._cache.sequential;
-        var coll = cache[seed];
-        var result;
-
-        // if needed create collection and set it in seed
-        if (lodash.isUndefined(coll)){
-            coll = cache[seed] = new Collection(lodash.range(length));
-            return coll.first();
-        }
-
-        if (coll.length !== length){
-            throw new Error('This seed  ('+ seed +') points to a collection with the wrong length, you can only use a seed for sets of the same length');
-        }
-
-        // if this is a repeated element:
-        if (repeat) {
-            return coll.current();
-        }
-
-        // if we've reached the end
-        result = coll.next();
-
-        // if we've reached the end of the collection (next)
-        if (lodash.isUndefined(result)){
-            return coll.first();
-        } else {
-            return result;
-        }
-    }
-
-    function exRandom(length, seed, repeat){
-        var cache = this._cache.exRandom;
-        var coll = cache[seed];
-        var result;
-
-        // if needed create collection and set it in seed
-        if (lodash.isUndefined(coll)){
-            coll = cache[seed] = new Collection(randomizeRange(length));
-            return coll.first();
-        }
-
-        if (coll.length !== length){
-            throw new Error('This seed  ('+ seed +') points to a collection with the wrong length, you can only use a seed for sets of the same length');
-        }
-
-        // if this is a repeated element:
-        if (repeat) {
-            return coll.current();
-        }
-
-        // if we've reached the end
-        result = coll.next();
-
-        // if we've reached the end of the collection (next)
-        // we should re-randomize
-        if (lodash.isUndefined(result)){
-            coll = cache[seed] = new Collection(randomizeRange(length));
-            return coll.first();
-        } else {
-            return result;
-        }
-    }
-
-}
-
-/*
- * The constructor for an Array wrapper
- */
-
-function collectionService(){
-
-    function Collection (arr) {
-        if (arr instanceof Collection) {
-            return arr;
-        }
-
-        // Make sure we are creating this array out of a valid argument
-        if (!lodash.isUndefined(arr) && !lodash.isArray(arr) && !(arr instanceof Collection)) {
-            throw new Error('Collections can only be constructed from arrays');
-        }
-
-        this.collection = arr || [];
-        this.length = this.collection.length;
-
-        // pointer to the current location within the array
-        // we start with -1 so that the initial next points to the begining of the array
-        this.pointer = -1;
-    }
-
-    lodash.extend(Collection.prototype,{
-
-        first : function first(){
-            this.pointer = 0;
-            return this.collection[this.pointer];
-        },
-
-        last : function last(){
-            this.pointer = this.collection.length - 1;
-            return this.collection[this.pointer];
-        },
-
-        end : function end(){
-            this.pointer = this.collection.length;
-            return undefined;
-        },
-
-        current : function(){
-            return this.collection[this.pointer];
-        },
-
-        next : function(){
-            return this.collection[++this.pointer];
-        },
-
-        previous : function(){
-            return this.collection[--this.pointer];
-        },
-
-        // add list of items to the collection
-        add : function(list){
-            // dont allow adding nothing
-            if (!arguments.length) {
-                return this;
-            }
-
-            // make sure list is as an array
-            list = lodash.isArray(list) ? list : [list];
-            this.collection = this.collection.concat(list);
-
-            this.length = this.collection.length;
-
-            return this;
-        },
-
-        // return the item at index
-        at: function(index){
-            return this.collection[index];
-        }
-    });
-
-
-    // Stuff we took out of bootstrap that can augment the collection
-    // **************************************************************
-    var methods = ['where','filter'];
-    var slice = Array.prototype.slice;
-
-    // Mix in each Underscore method as a proxy to `Collection#models`.
-    lodash.each(methods, function(method) {
-        Collection.prototype[method] = function() {
-            var args = slice.call(arguments);
-            args.unshift(this.collection);
-            var coll = lodash[method].apply(lodash,args);
-            return new Collection(coll);
-        };
-    });
-
-    return Collection;
-}
-
-/*
- * inflates an object
- * this function is responsible for inheritance
- *
- * function inflate(source,coll, randomizer, recursive, counter)
- * @param source: the object to inflate
- * @param coll: a collection to inherit from
- * @param randomizer: a randomizer object for the query
- * @param recursive: private use only, is this inside the recursion (true) or top level (false)
- * @param depth: private use only, a counter for the depth of the recursion
- */
-inflateProvider$1.$inject = ['databaseQuery','$rootScope'];
-function inflateProvider$1(query, $rootScope){
-
-    function customize(source){
-        // check for a custom function and run it if it exists
-        if (lodash.isFunction(source.customize)){
-            source.customize.apply(source, [source, $rootScope.global]);
-        }
-        return source;
-    }
-
-    // @param source - object to inflate
-    // @param type - trial stimulus or media
-    // @param recursive - whether this is a recursive call or not
-    function inflate(source, coll, randomizer, recursive, depth){
-
-        // protection against infinte loops
-        // ***********************************
-        depth = recursive ? --depth : 10;
-
-        if (!depth) throw new Error('Inheritance loop too deep, you can only inherit up to 10 levels down');
-
-        if (!lodash.isPlainObject(source)) throw new Error('You are trying to inflate a non object (' + JSON.stringify(source) + ')');
-
-        var parent;
-        var child = lodash.cloneDeep(source);
-        var inheritObj = child.inherit;
-
-        /*
-         * no inheritance
-         */
-
-        if (!child.inherit) {
-            if (!recursive) customize(child); // customize only on the last call (non recursive)
-            return child;
-        }
-
-        /*
-         * get parent
-         */
-        parent = query(inheritObj, coll, randomizer);
-
-        // if inherit target was not found
-        if (!parent) throw new Error('Query failed, object (' + JSON.stringify(inheritObj) +	') not found.');
-
-        // inflate parent (recursively)
-        parent = inflate(
-            parent,
-            coll,
-            randomizer,
-            true,
-            depth
-        );
-
-        // extending the child
-        // ***********************************
-        if (inheritObj.merge && !lodash.isArray(inheritObj.merge)){
-            throw new Error('Inheritance error: inherit.merge must be an array.');
-        }
-
-        // start inflating child (we have to extend selectively...)
-        lodash.each(parent, function(value, key){
-            var childProp, parentProp;
-            // if this key is not set yet, copy it out of the parent
-            if (!(key in child)){
-                child[key] = lodash.isFunction(value) ? value : lodash.cloneDeep(value);
-                return;
-            }
-
-            // if we have a merge array,
-            if (lodash.indexOf(inheritObj.merge, key) != -1){
-                childProp = child[key];
-                parentProp = value;
-
-                if (lodash.isArray(childProp)){
-                    if (!lodash.isArray(parentProp)){
-                        throw new Error('Inheritance error: You tried merging an array with an non array (for "' + key + '")');
-                    }
-                    child[key] = childProp.concat(parentProp);
-                }
-
-                if (lodash.isPlainObject(childProp)){
-                    if (!lodash.isPlainObject(parentProp)){
-                        throw new Error('Inheritance error: You tried merging an object with an non object (for "' + key + '")');
-                    }
-                    child[key] = lodash.extend({},parentProp,childProp);
-                }
-
-            }
-        });
-
-        // we want to extend the childs data even if it already exists
-        // its ok to shallow extend here (because by definition parent was created for this inflation)
-        if (parent.data){
-            child.data = lodash.extend(parent.data, child.data || {});
-        }
-
-        // Personal customization functions - only if this is the last iteration of inflate
-        // This way the customize function gets called only once.
-        !recursive && customize(child);
-
-        // return inflated trial
-        return child;
-    }
-
-    return inflate;
-}
-
-queryProvider$1.$inject = ['Collection'];
-function queryProvider$1(Collection){
-
-    function queryFn(query, collection, randomizer){
-        var coll = new Collection(collection);
-
-        // shortcuts:
-        // ****************************
-
-        if (lodash.isFunction(query)) return query(collection);
-
-        if (lodash.isString(query) || lodash.isNumber(query)) query = {set:query, type:'random'};
-
-        // filter by set
-        // ****************************
-        if (query.set) coll = coll.where({set:query.set});
-
-        // filter by data
-        // ****************************
-        if (lodash.isString(query.data)){
-            coll = coll.filter(function(q){
-                return q.handle === query.data || (q.data && q.data.handle === query.data);
-            });
-        }
-
-        if (lodash.isPlainObject(query.data)) coll = coll.where({data:query.data});
-
-        if (lodash.isFunction(query.data)) coll = coll.filter(query.data);
-
-        // pick by type
-        // ****************************
-
-        // the default seed is namespace specific just to minimize the situations where seeds clash across namespaces
-        var seed = query.seed || ('$' + collection.namespace + query.set);
-        var length = coll.length;
-        var repeat = query.repeat;
-        var at;
-
-        switch (query.type){
-            case undefined:
-            case 'byData':
-            case 'random':
-                at = randomizer.random(length,seed,repeat);
-                break;
-            case 'exRandom':
-                at = randomizer.exRandom(length,seed,repeat);
-                break;
-            case 'sequential':
-                at = randomizer.sequential(length,seed,repeat);
-                break;
-            case 'first':
-                at = 0;
-                break;
-            case 'last':
-                at = length-1;
-                break;
-            default:
-                throw new Error('Unknow query type: ' + query.type);
-        }
-
-        if (lodash.isUndefined(coll.at(at))) throw new Error('Query failed, object (' + JSON.stringify(query) +	') not found. If you are trying to apply a template, you should know that they are not supported for inheritance.');
-
-        return coll.at(at);
-    }
-
-    return queryFn;
-}
-
-DatabaseProvider.$inject = ['DatabaseStore', 'DatabaseRandomizer', 'databaseInflate', 'templateObj', 'databaseSequence','piConsole'];
-function DatabaseProvider(Store, Randomizer, inflate, templateObj, DatabaseSequence, piConsole){
-
-    function Database(){
-        this.store = new Store();
-        this.randomizer = new Randomizer();
-    }
-
-    lodash.extend(Database.prototype, {
-        createColl: function(namespace){
-            this.store.create(namespace);
-        },
-
-        getColl: function(namespace){
-            return this.store.read(namespace);
-        },
-
-        add: function(namespace, query){
-            var coll = this.store.read(namespace);
-            coll.add(query);
-        },
-
-        inflate: function(namespace, query, context, options){
-            var coll = this.getColl(namespace);
-            var result;
-
-            // inherit
-            try {
-                if (!query.$inflated || query.reinflate) {
-                    query.$inflated = inflate(query, coll, this.randomizer);
-                    query.$templated = null; // we have to retemplate after querying, who know what new templates we got here...
-                }
-            } catch(err) {
-                piConsole({
-                    type:'error',
-                    message: 'Failed to inherit',
-                    error:err,
-                    context: query
-                });
-                if (this.onError) this.onError(err);
-                throw err;
-            }
-
-            // template
-            try {
-                if (!query.$templated || query.$inflated.regenerateTemplate){
-                    context[namespace + 'Meta'] = query.$meta;
-                    context[namespace + 'Data'] = templateObj(query.$inflated.data || {}, context, options); // make sure we support
-                    query.$templated = templateObj(query.$inflated, context, options);
-                }
-            } catch(err) {
-                piConsole({
-                    type:'error',
-                    message: 'Failed to apply template',
-                    error:err,
-                    context: query.$inflated
-                });
-                if (this.onError) this.onError(err);
-                throw err;
-            }
-
-            result = query.$templated;
-
-            // set flags
-            if (context.global && result.addGlobal) lodash.extend(context.global, result.addGlobal);
-
-            if (context.current && result.addCurrent) lodash.extend(context.current, result.addCurrent);
-
-            return result;
-        },
-
-        sequence: function(namespace, arr){
-            if (!lodash.isArray(arr)){
-                throw new Error('Sequence must be an array.');
-            }
-            return new DatabaseSequence(namespace, arr, this);
-        }
-    });
-
-    return Database;
-}
-
-/*
- *	The store is a collection of collection devided into namespaces.
- *	You can think of every namespace/collection as a table.
- */
-storeProvider$1.$inject = ['Collection'];
-function storeProvider$1(Collection){
-
-    function Store(){
-        this.store = {};
-    }
-
-    lodash.extend(Store.prototype, {
-        create: function create(nameSpace){
-            if (this.store[nameSpace]){
-                throw new Error('The name space ' + nameSpace + ' already exists');
-            }
-            this.store[nameSpace] = new Collection();
-            this.store[nameSpace].namespace = nameSpace;
-        },
-
-        read: function read(nameSpace){
-            if (!this.store[nameSpace]){
-                throw new Error('The name space ' + nameSpace + ' does not exist');
-            }
-            return this.store[nameSpace];
-        },
-
-        update: function update(nameSpace, data){
-            var coll = this.read(nameSpace);
-            coll.add(data);
-        },
-
-        del: function del(nameSpace){
-            this.store[nameSpace] = undefined;
-        }
-    });
-
-    return Store;
-}
-
-SequenceProvider.$inject = ['MixerSequence'];
-function SequenceProvider(MixerSequence){
-
-    /**
-     * Sequence Constructor:
-     * Manage the progression of a sequence, including parsing (mixing, inheritance and templating).
-     * @param  {String  } namespace [pages or questions (the type of db.Store)]
-     * @param  {Array   } arr       [a sequence to manage]
-     * @param  {Database} db        [the db itself]
-     */
-
-    function Sequence(namespace, arr,db){
-        this.namespace = namespace;
-        this.mixerSequence = new MixerSequence(arr);
-        this.db = db;
-    }
-
-    lodash.extend(Sequence.prototype, {
-        // only mix
-        next: function(context){
-            this.mixerSequence.next(context);
-            return this;
-        },
-
-        // anti mix
-        prev: function(context){
-            this.mixerSequence.prev(context);
-            return this;
-        },
-
-        /**
-         * Return the element currently in focus.
-         * It always returns either an element or undefined (mixers are abstrcted away)
-         * @param  {[type]} context [description]
-         * @return {[type]}         [description]
-         */
-        current: function(context, options){
-            context || (context = {});
-            // must returned an element or undefined
-            var obj = this.mixerSequence.current(context);
-
-            // in case this is the end of the sequence
-            if (!obj){
-                return obj;
-            }
-
-            return this.db.inflate(this.namespace, obj, context, options);
-        },
-
-        /**
-         * Returns an array of elements, created by proceeding through the whole sequence.
-         * @return {[type]} [description]
-         */
-        all: function(context, options){
-            var sequence = [];
-
-            var el = this.next().current(context, options);
-            while (el){
-                sequence.push(el);
-                el = this.next().current(context, options);
-            }
-
-            return sequence;
-        }
-    });
-
-    return Sequence;
-}
 
 var module$3 = angular.module('database',[
     module$4.name,
@@ -55959,7 +54991,7 @@ function stringify(value, pretty) {
     return value;
 }
 
-function SequenceProvider$1(){
+function SequenceProvider$2(){
 
     function Sequence(arr, db){
         if (!db){
@@ -56349,7 +55381,7 @@ var module$2 = angular.module('task', [
     module$7.name
 ]);
 
-module$2.service('QuestSequence', SequenceProvider$1);
+module$2.service('QuestSequence', SequenceProvider$2);
 module$2.service('QuestTask', TaskProvider);
 module$2.service('taskParse', parseProvider);
 module$2.value('Logger', createLogs$2);
@@ -59950,17 +58982,29 @@ module$14.config(['taskActivateProvider', function(activateProvider){
  * Post
  */
 module$14.config(['taskActivateProvider', function(activateProvider){
-    activatePost.$inject = ['done', 'task', '$http','$q', '$rootScope'];
-    function activatePost(done, task, $http, $q, $rootScope){
+    activatePost.$inject = ['done', 'task', '$http','$q', '$rootScope', 'piConsole'];
+    function activatePost(done, task, $http, $q, $rootScope, piConsole){
         var canceler = $q.defer(); // http://stackoverflow.com/questions/13928057/how-to-cancel-an-http-request-in-angularjs
         var global = $rootScope.global;
         var data = task.path ? lodash.get(global, task.path) : task.data;
 
         $http
             .post(task.url, data, {timeout: canceler.promise})
-            .then(done,done);
+            .then(done,fail);
 
         return canceler.resolve;
+
+        function fail(response){
+            var err = new Error('Post error("'+task.url+'"): ' + response.statusText); // but shout about the failure
+            done(); // continue with the task
+            piConsole({
+                type:'error',
+                error:err,
+                message: 'Post error',
+                context: task
+            });
+            throw err;
+        }
     }
 
     activateProvider.set('post', activatePost);
@@ -62651,10 +61695,10 @@ module$17.animation('.slide', slideAnimation);
 
 var module$18 = angular.module('piConsole',[]);
 
-module$18.factory('piConsole', piConsoleFactory$1);
+module$18.factory('piConsole', piConsoleFactory$3);
 
-piConsoleFactory$1.$inject = ['$log'];
-function piConsoleFactory$1($log){
+piConsoleFactory$3.$inject = ['$log'];
+function piConsoleFactory$3($log){
     return window.DEBUG ? piConsole : lodash.noop;
 
     function piConsole(log){
@@ -62794,7 +61838,7 @@ define('managerAPI', lodash.constant(API));
 define('timeAPI', lodash.constant(API$1));
 define('pipAPI', lodash.constant(API$1));
 define('questAPI', lodash.constant(API$2));
-define('minno-sequencer', lodash.constant(minnoSequencer));
+define('minno-sequencer', lodash.constant(Database));
 define('lodash', lodash.constant(lodash));
 define('underscore', lodash.constant(lodash));
 define('angular', lodash.constant(angular));
