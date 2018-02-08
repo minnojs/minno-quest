@@ -1,6 +1,6 @@
 {
   "name": "PIQuest",
-  "version": "0.0.113",
+  "version": "0.0.114",
   "license": "Apache-2.0",
   "scripts": {
     "test": "grunt test --sauce --report",
