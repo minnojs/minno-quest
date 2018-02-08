@@ -47,7 +47,6 @@ const config = {
         if ( /requirejs/.test( message ) ) return;
         console.error( message );
     },
-    //external:['angular'],
     globals: {
         angular: 'angular'
     }
