@@ -6,13 +6,13 @@ styles/main.css
 js/bootstrap.js
 ----------------
 js/../../bower_components/requirejs/require.js
-/home/eladzlot/public_html/quest/bower_components/angular/angular.min.js
-/home/eladzlot/public_html/quest/bower_components/angular-animate/angular-animate.min.js
-/home/eladzlot/public_html/quest/bower_components/lodash-compat/lodash.min.js
-/home/eladzlot/public_html/quest/bower_components/requirejs-text/text.js
+/Users/eladzlot/www/quest/bower_components/angular/angular.min.js
+/Users/eladzlot/www/quest/bower_components/angular-animate/angular-animate.min.js
+/Users/eladzlot/www/quest/bower_components/lodash-compat/lodash.min.js
+/Users/eladzlot/www/quest/bower_components/requirejs-text/text.js
 js/config.js
 js/bootstrap.js
-/home/eladzlot/public_html/quest/bower_components/fastclick/lib/fastclick.js
+/Users/eladzlot/www/quest/bower_components/fastclick/lib/fastclick.js
 js/utils/timer/timerStopper.js
 js/utils/timer/timerDirective.js
 js/utils/timer/timerNow.js
@@ -51,7 +51,7 @@ text!quest/directives/select/selectOne.html
 js/quest/directives/select/selectOneDirective.js
 text!quest/directives/select/selectMulti.html
 js/quest/directives/select/selectMultiDirective.js
-/home/eladzlot/public_html/quest/bower_components/dragula.js/dist/dragula.js
+/Users/eladzlot/www/quest/bower_components/dragula.js/dist/dragula.js
 text!quest/directives/rank/rank.html
 js/quest/directives/rank/rankDirective.js
 text!quest/directives/grid/grid.html
@@ -99,6 +99,7 @@ js/quest/questModule.js
 js/message/messageDirective.js
 js/message/messageDoneDirective.js
 js/message/messageModule.js
+js/taskManager/task/managerToCsv.js
 js/taskManager/task/taskActivateProvider.js
 js/taskManager/task/taskDirective.js
 js/taskManager/task/taskModule.js
@@ -109,7 +110,6 @@ js/utils/helperDirectives/piSwap/piSwapDirective.js
 text!utils/helperDirectives/piSpinner/spinner.html
 js/utils/helperDirectives/piSpinner/piSpinnerDirective.js
 js/utils/helperDirectives/helperDirectivesModule.js
-js/taskManager/managerToCsv.js
 js/taskManager/managerService.js
 js/taskManager/managerSequence.js
 js/taskManager/managerLoadService.js
@@ -136,13 +136,13 @@ js/APIs/managerAPI.js
 js/pibootstrap.js
 ----------------
 js/../../bower_components/requirejs/require.js
-/home/eladzlot/public_html/quest/bower_components/angular/angular.min.js
-/home/eladzlot/public_html/quest/bower_components/angular-animate/angular-animate.min.js
-/home/eladzlot/public_html/quest/bower_components/lodash-compat/lodash.min.js
-/home/eladzlot/public_html/quest/bower_components/requirejs-text/text.js
+/Users/eladzlot/www/quest/bower_components/angular/angular.min.js
+/Users/eladzlot/www/quest/bower_components/angular-animate/angular-animate.min.js
+/Users/eladzlot/www/quest/bower_components/lodash-compat/lodash.min.js
+/Users/eladzlot/www/quest/bower_components/requirejs-text/text.js
 js/config.js
 js/pibootstrap.js
-/home/eladzlot/public_html/quest/bower_components/fastclick/lib/fastclick.js
+/Users/eladzlot/www/quest/bower_components/fastclick/lib/fastclick.js
 js/utils/timer/timerStopper.js
 js/utils/timer/timerDirective.js
 js/utils/timer/timerNow.js
@@ -181,7 +181,7 @@ text!quest/directives/select/selectOne.html
 js/quest/directives/select/selectOneDirective.js
 text!quest/directives/select/selectMulti.html
 js/quest/directives/select/selectMultiDirective.js
-/home/eladzlot/public_html/quest/bower_components/dragula.js/dist/dragula.js
+/Users/eladzlot/www/quest/bower_components/dragula.js/dist/dragula.js
 text!quest/directives/rank/rank.html
 js/quest/directives/rank/rankDirective.js
 text!quest/directives/grid/grid.html
@@ -229,6 +229,7 @@ js/quest/questModule.js
 js/message/messageDirective.js
 js/message/messageDoneDirective.js
 js/message/messageModule.js
+js/taskManager/task/managerToCsv.js
 js/taskManager/task/taskActivateProvider.js
 js/taskManager/task/taskDirective.js
 js/taskManager/task/taskModule.js
@@ -239,7 +240,6 @@ js/utils/helperDirectives/piSwap/piSwapDirective.js
 text!utils/helperDirectives/piSpinner/spinner.html
 js/utils/helperDirectives/piSpinner/piSpinnerDirective.js
 js/utils/helperDirectives/helperDirectivesModule.js
-js/taskManager/managerToCsv.js
 js/taskManager/managerService.js
 js/taskManager/managerSequence.js
 js/taskManager/managerLoadService.js

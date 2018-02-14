@@ -6,6 +6,7 @@ StudySession studySession = (StudySession) session.getAttribute("studysession");
 String fullUrl = ((PageTask)studySession.getCurrentTask()).getUrl();
 String urlPath = fullUrl.substring(0,fullUrl.indexOf("manager.jsp"));
 String sessionId= studySession.encryptId();
+String unencryptedSessionId= studySession.getId();
 String datagroup=studySession.getStudy().getDataGroup();
 String studyId=studySession.getStudy().getId();
 String studyUrl="null";
@@ -54,9 +55,10 @@ if(randomStudy!=null)
                      script: '<%= script %>',
                      studyId: '<%=studyId%>',
                      sessionId: '<%=sessionId%>',
+                     userId: '<%=unencryptedSessionId%>',
                      datagroup: '<%=datagroup%>',
                      studyUrl: '<%=studyUrl%>',
-                     rulesUrl: '<%=rulesUrl%>'
+                     rulesUrl: '<%=rulesUrl%>',
                      app: 'manager'
 				}
 
