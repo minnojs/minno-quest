@@ -5106,7 +5106,7 @@ button.close {
       text-align: left; }
     .slider-labels li.last {
       text-align: right; }
-#pi-app .modal {
+.minno-modal {
   display: block; }
 [piq-page] {
   position: relative;

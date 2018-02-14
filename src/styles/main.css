@@ -5955,7 +5955,7 @@ button.close {
     .slider-labels li.last {
       text-align: right; }
 
-#pi-app .modal {
+.minno-modal {
   display: block; }
 
 [piq-page] {
