@@ -21,7 +21,7 @@ function managerControler($scope, ManagerService, managerLoad, piConsole){
         try {
             taskSource = $scope.$eval(source); // if source is a plain string eval returns undefined so we want to load this as a url
         } catch(e){
-            // don't do anything. This means that the source is un compilable...
+            // don't do anything. This means that the source is not compilable...
         } finally {
             taskSource || (taskSource = source);
         }
@@ -30,13 +30,9 @@ function managerControler($scope, ManagerService, managerLoad, piConsole){
 
         function success(script){
             // takes taskSource and returns a path or undefined
-            function getPath(path){
-
-                if (!_.isString(path)) {
-                    return;
-                } else {
-                    return path.substring(0, path.lastIndexOf('/'));
-                }
+            function getBasePath(path){
+                if (!_.isString(path)) return;
+                return path.substring(0, path.lastIndexOf('/'));
             }
 
             // keep the script on scope
@@ -45,7 +41,7 @@ function managerControler($scope, ManagerService, managerLoad, piConsole){
 
             // create the manager
             ctrl.manager = new ManagerService($scope, script);
-            ctrl.manager.setBaseUrl(getPath(taskSource));
+            ctrl.manager.setBaseUrl(getBasePath(taskSource));
 
             // activate first task
             $scope.$emit('manager:next');
@@ -82,24 +78,15 @@ function directive($q, $injector,piConsole){
 
             thisCtrl.init(attr.piManager);
 
-            $scope.$on('manager:loaded', loaded);
+            $scope.$on('manager:loaded', loaded); // gets triggered after "task" is populated with $script and $template
             $scope.$on('task:done', taskDone);
             $scope.loading = true;
 
             function loaded(){
                 $scope.loading = false;
 
-                // keep previous task
-                prevTask = currentTask;
-
-                // get loaded task
-                currentTask = thisCtrl.manager.current();
-                piConsole({
-                    tags:['manager'],
-                    type:'debug',
-                    message:'Manager:currentTask', 
-                    context: currentTask
-                });
+                prevTask = currentTask; // keep previous task
+                currentTask = thisCtrl.manager.current(); // get loaded task
 
                 // procced or and manager
                 currentTask ? proceed() : done();
@@ -108,14 +95,17 @@ function directive($q, $injector,piConsole){
             function proceed(){
                 var locals = {prevTask: prevTask, currentTask: currentTask, managerSettings: $scope.settings};
                 $qSequence([
+                    // progress update
+                    function(){
+                        var data = {taskName: currentTask.name || 'namelessTask', taskNumber: currentTask.$meta.number, taskURL:currentTask.scriptUrl || currentTask.templateUrl};
+                        thisCtrl.manager.logger(data, $scope.settings);
+                    },
                     $scope.settings.onPreTask,
                     _.get(prevTask,'post'),
                     currentTask.pre,
                     _.bind(swap.next, swap, {task:currentTask, settings:$scope.settings}),
                     currentTask.load,
-                    function(){
-                        $scope.loading = false;
-                    }
+                    function(){ $scope.loading = false; }
                 ], locals);
             }
 
@@ -134,11 +124,11 @@ function directive($q, $injector,piConsole){
             }
 
             /**
-				 * This is called uppon task:done
-				 * It is responsible for proceeding to the following task
-				 * @param  {Event} ev   The event that triggered the taskdone
-				 * @param  {Object} args An object that describes the direction of proceeding
-				 */
+             * This is called uppon task:done
+             * It is responsible for proceeding to the following task
+             * @param  {Event} ev   The event that triggered the taskdone
+             * @param  {Object} args An object that describes the direction of proceeding
+             */
             function taskDone(ev, args){
                 ev.stopPropagation();
                 $scope.loading = true;
@@ -146,10 +136,10 @@ function directive($q, $injector,piConsole){
             }
 
             /**
-				 * chain a series of functions/promises/undefined
-				 * @param  {Array} arr an array of functions etc.
-				 * @return {promise}
-				 */
+             * chain a series of functions/promises/undefined
+             * @param  {Array} arr an array of functions etc.
+             * @return {promise}
+             */
             function $qSequence(arr, locals){
                 var promise = $q.when();
 

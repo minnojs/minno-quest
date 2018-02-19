@@ -102,10 +102,6 @@ function onPreTask(currentTask, $http, $rootScope, beforeUnload, templateDefault
         meta.subtaskURL = currentTask.scriptUrl || currentTask.templateUrl;
     }
 
-    var posturl = _.get(managerSettings, 'logger.url', '/implicit/PiManager');
-
-    return $http.post(posturl, data)['catch'](error);
-
     function error(){
         var e =  new Error('Failed to update server');
         var reportNoConnection = currentTask.reportNoConnection;

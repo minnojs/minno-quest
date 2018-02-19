@@ -7,6 +7,26 @@ import _ from 'lodash';
 
 taskLoadService.$inject = ['$q', 'managerGetScript', 'piConsole'];
 function taskLoadService($q, managerGetScript, $console){
+    return taskLoad;
+
+    // WARNING: side effects. This function transforms the task object itself.
+    function taskLoad(task, options){
+        var script, template;
+
+        // load sources
+        script = task.scriptUrl ? getScript(task.scriptUrl, options) : task.script;
+        template = task.templateUrl ? getScript(task.templateUrl, _.extend({isText:true},options)) : task.template;
+
+        return  $q.all({
+            script: $q.when(script), 
+            template: $q.when(template)
+        })
+            .then(function(promises){
+                task.$script = promises.script;
+                task.$template = promises.template;
+                return task;
+            });
+    }
 
     function getScript(url, options){
         return managerGetScript(url, options)
@@ -18,6 +38,7 @@ function taskLoadService($q, managerGetScript, $console){
                 $console({
                     tags:'task',
                     type:'error',
+                    context: url,
                     message: 'Make sure that you returned the script and that your script does not have any errors',
                     error:e
                 });
@@ -25,43 +46,6 @@ function taskLoadService($q, managerGetScript, $console){
             });
     }
 
-    function taskLoad(task, options){
-        var promise, script, template;
-
-        // script def
-        if (task.scriptUrl){
-            script = getScript(task.scriptUrl, options);
-        } else {
-            script = task.script;
-        }
-
-        // template def
-        if (task.templateUrl){
-            template = getScript(task.templateUrl, _.extend({isText:true},options));
-        } else {
-            template = task.template;
-        }
-
-        promise = $q.all({script: $q.when(script), template: $q.when(template)});
-
-        promise.then(function(promises){
-            task.$script = promises.script;
-            task.$template = promises.template;
-            return task;
-        }, function(e){
-            $console({
-                tags:'load',
-                type:'error',
-                message:'Failed to load task script - make sure that your URLs are all correct and that your script does not have any errors.',
-                context:task
-            });
-            throw e;
-        });
-
-        return promise;
-    }
-
-    return taskLoad;
 }
 
 export default taskLoadService;

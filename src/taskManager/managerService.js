@@ -1,33 +1,29 @@
 import _ from 'lodash';
 
-managerService.$inject = ['$rootScope', '$q', 'managerSequence', 'managerTaskLoad', '$injector'];
-function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector){
+managerService.$inject = ['$rootScope', '$q', 'managerSequence', 'managerTaskLoad', '$injector', 'piConsole'];
+function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector, piConsole){
 
     /**
-		 * This is the constructor for the manager object.
-		 *
-		 * The manager is responsible for the interface between the managerDirective and the managerSequence
-		 * It deals with loading tasks (pulled from the sequence)
-		 * And notifying the directive that a new task is ready to be run.
-		 *
-		 * listens to manager:next and manager:prev ==> proceeds sequence
-		 *
-		 * emits manager:loaded <== when a script is loaded
-		 *
-		 * @param  {Scope} $scope The scope to be notified
-		 * @param  {Object} script The manager script to be parsed
-		 * @return {Object}
-		 */
+     * This is the constructor for the manager object.
+     *
+     * The manager is responsible for the interface between the managerDirective and the managerSequence
+     * It deals with loading tasks (pulled from the sequence)
+     * And notifying the directive that a new task is ready to be run.
+     *
+     * listens to manager:next and manager:prev ==> proceeds sequence
+     *
+     * emits manager:loaded <== when a script is loaded
+     *
+     * @param  {Scope} $scope The scope to be notified
+     * @param  {Object} script The manager script to be parsed
+     * @return {Object}
+     */
     function manager($scope, script){
         var self = this;
         var settings = script.settings || {};
 
         // make sure this works without a new statement
-        if (!(this instanceof manager)){
-            // jshint newcap:false
-            return new manager($scope,script);
-            // jshint newcap:true
-        }
+        if (!(this instanceof manager)) return new manager($scope,script);
 
         this.$scope = $scope;
         this.script = script;
@@ -54,7 +50,6 @@ function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector){
             }
         });
         $scope.$on('manager:prev', function(){self.prev();});
-
     }
 
     _.extend(manager.prototype, {
@@ -81,14 +76,19 @@ function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector){
                 bustCache: target && target.bustCache
             };
 
-            if (task){
-                taskLoad(task, loadOptions).then(function(){
-                    $scope.$emit('manager:loaded');
+            // taskLoad adds $script and $template to the task object
+            if (task) return taskLoad(task, loadOptions).then(function(){
+                piConsole({
+                    tags:['manager'],
+                    type:'debug',
+                    message:'Manager:currentTask',
+                    context: task
                 });
-            } else {
-                // let the directive deal with the end of the sequence
                 $scope.$emit('manager:loaded');
-            }
+            });
+
+            // let the directive deal with the end of the sequence
+            $scope.$emit('manager:loaded');
         },
 
         setBaseUrl: function(baseUrl){

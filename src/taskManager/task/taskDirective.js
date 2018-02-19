@@ -22,13 +22,11 @@ function directive(activateTask, canvas, $document, $window, $rootScope, piConso
             var taskName = task.name || script.name;
             var piGlobal = window.piGlobal;
 
-            if (!task){
-                return;
-            }
+            if (!task) return;
 
             /**
-                 * listen for skip events
-                 */
+             * listen for skip events
+             */
             if (settings.skip && window.DEBUG === true){
                 $document.on('keydown',proceedListener);
                 $scope.$on('$destroy', function(){
@@ -54,21 +52,21 @@ function directive(activateTask, canvas, $document, $window, $rootScope, piConso
             }
 
             /**
-                 * Activate task
-                 */
+             * Activate task
+             */
             def = activateTask(task, $element, $scope.$new());
             promise = def.promise;
 
             /**
-                 * Add and remove canvas
-                 */
+             * Add and remove canvas
+             */
             canvasOff = canvas(task.canvas); // apply canvas settings
             promise['finally'](canvasOff); // remove canvas settings
 
             /**
-                 * Add and remove title
-                 * if task.title is set, set the title and remove at the end...
-                 */
+             * Add and remove title
+             * if task.title is set, set the title and remove at the end...
+             */
             if (task.title){
                 oldTitle = $document[0].title;
                 $document[0].title = task.title;
