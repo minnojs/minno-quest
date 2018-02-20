@@ -44,7 +44,6 @@ define(['managerAPI'], function(Manager){
         { type:'post', url:'sdf'},
         { type:'pip', version: 0.5,  scriptUrl: '/test/maintask.js' },
         { type:'message', templateUrl: 'message.jst' },
-        { type: 'quest', name: 'dotWidth', scriptUrl: 'questScript1.js' },
         {
             mixer: 'branch',
             conditions: [

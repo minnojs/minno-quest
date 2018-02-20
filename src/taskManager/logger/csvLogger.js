@@ -10,7 +10,7 @@ export default {
     serialize: function(name, logs){ return toCsv(createMatrix(logs)); },
     send: function(name, serialized, settings,ctx){ 
         var url = _.isString(settings.postCsv) ? settings.postCsv : settings.url;
-        xhr({url:url, body:serialized}).catch(onError); 
+        return xhr({url:url, body:serialized}).catch(onError); 
         function onError(e){ settings.onError.apply(null, [e,name,serialized,settings,ctx]); }
     }
 };

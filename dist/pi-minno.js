@@ -45013,35 +45013,93 @@ function directive$10(activateTask, canvas, $document, $window, $rootScope, piCo
     };
 }
 
-function harvest(global){
-    var logs = getLogs(global);
-    var matrix = createMatrix(logs);
-    return toCsv(matrix);
+activateQuest$1.$inject = ['done', '$element', '$scope', '$compile', 'script','task'];
+function activateQuest$1(done, $canvas, $scope, $compile, script, task){
+    var $el;
+
+    // update script name
+    task.name && (script.name = task.name);
+
+    $scope.script = script;
+
+    $canvas.append('<div pi-quest></div>');
+    $el = $canvas.contents();
+    $compile($el)($scope);
+
+    // clean up piQuest
+    $el.controller('piQuest').task.promise['finally'](done);
+
+    return function questDestroy(){
+        $el.scope().$destroy();
+        $el.remove();
+    };
 }
+
+activateMessage$1.$inject = ['done', '$element', 'task', '$scope','$compile'];
+function activateMessage$1(done, $canvas, task, $scope, $compile){
+    var $el;
+
+    $scope.script = task;
+
+    $canvas.append('<div pi-message></div>');
+    $el = $canvas.contents();
+    $compile($el)($scope);
+
+    // clean up
+    $scope.$on('message:done', function(){
+        done();
+    });
+
+    return function destroyMessage(){
+        $scope.$destroy();
+        $el.remove();
+    };
+}
+
+/**
+ * @param options.url url
+ * @param options.method method
+ * @param options.body body
+ **/
+function xhr(options){
+    return new Promise(function(resolve, reject){
+        var request = new XMLHttpRequest();
+        request.open(options.method || 'POST',options.url, true);
+        request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+
+        request.onreadystatechange = function() {
+            if (this.readyState === 4) {
+                if (this.status >= 200 && this.status < 400) resolve(this.responseText);
+                else reject(new Error('Failed posting to: ' + options.url));
+            }
+        };
+
+        request.send(options.body);
+    });
+}
+
+var csvLogger = {
+    onRow: function(name, row, settings, ctx){
+        var logs = ctx.csv || (ctx.csv = []);
+        logs.push(lodash.assign({taskName:name}, row));
+    },
+    onEnd: function(name, settings, ctx){ if (name == 'manager') return ctx.logs; },
+    serialize: function(name, logs){ return toCsv(createMatrix(logs)); },
+    send: function(name, serialized, settings,ctx){ 
+        var url = lodash.isString(settings.postCsv) ? settings.postCsv : settings.url;
+        return xhr({url:url, body:serialized}).catch(onError); 
+        function onError(e){ settings.onError.apply(null, [e,name,serialized,settings,ctx]); }
+    }
+};
 
 /*
-     * Harvest Logs from global
-     */
-function getLogs(global){
-    return lodash.reduce(global, reducer, []);
-    function reducer(results, task, taskName){ return results.concat(harvestTask(taskName, task)); }
-}
-
-function harvestTask(taskName, task){
-    if (taskName !== 'current' && lodash.isPlainObject(task) && Array.isArray(task.logs)) return task.logs.map(addTaskName);
-    return [];
-        
-    function addTaskName(obj){ obj.taskName = taskName; return obj; }
-}
-
-/*
-     * Transform Logs into matrix
-     */
+ * Transform Logs into matrix
+ */
 function createMatrix(logs){
     var getIndex = GetIndex();
     var rows = logs.map(toRows);
     var headers = getIndex();
-        
+
     rows.forEach(normalizeLength(headers.length));
 
     return [headers].concat(rows);
@@ -45072,10 +45130,10 @@ function GetIndex(){
 }
 
 /*
-     * Csv encoder
-     * https://www.ietf.org/rfc/rfc4180.txt
-     * toCSv :: [[String]] -> String
-     */
+ * Csv encoder
+ * https://www.ietf.org/rfc/rfc4180.txt
+ * toCSv :: [[String]] -> String
+ */
 
 var quotableRgx = /(\n|,|")/;
 function toCsv(matrice){ return matrice.map(buildRow).join('\n'); }
@@ -45086,189 +45144,54 @@ function normalize(val){
     return val;
 }
 
-/**
- * The module responsible for the single task.
- * It knows how to load a task and activate it.
- * It also supplies the basic task directive.
- * @return {module} pi.task module.
- */
+postCsv.$inject = ['done', 'task', '$scope'];
+function postCsv(done, task, $scope){
+    var Logger = $scope.$parent.$parent.manager.logger;
+    var logs = Logger.ctx.logs;
+    if (!logs || !logs.length) return done();
+    var serialized = csvLogger.serialize('manager', logs);
+    var promise = csvLogger.send('manager', serialized, task);
+    promise.then(function(){ logs.length = 0; }).finally(done);
+}
 
+activatePost$1.$inject = ['done', 'task', '$http','$q', '$rootScope', 'piConsole'];
+function activatePost$1(done, task, $http, $q, $rootScope, piConsole){
+    var canceler = $q.defer(); // http://stackoverflow.com/questions/13928057/how-to-cancel-an-http-request-in-angularjs
+    var global = $rootScope.global;
+    var data = task.path ? lodash.get(global, task.path) : task.data;
 
-var module$14 = angular.module('pi.task',[]);
-module$14.provider('taskActivate', provider);
-module$14.directive('piTask', directive$10);
+    $http
+        .post(task.url, data, {timeout: canceler.promise})
+        .then(done,fail);
 
+    return canceler.resolve;
 
-// the tasks defined here essentialy activate the default players for quest/message/pip.
-
-/**
- * Quest
- */
-module$14.config(['taskActivateProvider', function(activateProvider){
-
-    activateQuest.$inject = ['done', '$element', '$scope', '$compile', 'script','task'];
-    function activateQuest(done, $canvas, $scope, $compile, script, task){
-        var $el;
-
-        // update script name
-        task.name && (script.name = task.name);
-
-        $scope.script = script;
-
-        $canvas.append('<div pi-quest></div>');
-        $el = $canvas.contents();
-        $compile($el)($scope);
-
-        // clean up piQuest
-        $el.controller('piQuest').task.promise['finally'](done);
-
-        return function questDestroy(){
-            $el.scope().$destroy();
-            $el.remove();
-        };
-    }
-
-    activateProvider.set('quest', activateQuest);
-}]);
-
-module$14.config(['taskActivateProvider', function(activateProvider){
-    activateMessage.$inject = ['done', '$element', 'task', '$scope','$compile'];
-    function activateMessage(done, $canvas, task, $scope, $compile){
-        var $el;
-
-        $scope.script = task;
-
-        $canvas.append('<div pi-message></div>');
-        $el = $canvas.contents();
-        $compile($el)($scope);
-
-        // clean up
-        $scope.$on('message:done', function(){
-            done();
+    function fail(response){
+        var err = new Error('Post error("'+task.url+'"): ' + response.statusText); // but shout about the failure
+        done(); // continue with the task
+        piConsole({
+            type:'error',
+            error:err,
+            message: 'Post error',
+            context: task
         });
-
-        return function destroyMessage(){
-            $scope.$destroy();
-            $el.remove();
-        };
+        throw err;
     }
+}
 
-    activateProvider.set('message', activateMessage);
-}]);
+activateRedirect$1.$inject = ['done', 'task', 'managerBeforeUnload'];
+function activateRedirect$1(done, task, beforeUnload){
+    if (!lodash.result(task,'condition',true)) return done();
+    beforeUnload.deactivate();
+    location.href = task.url;
+}
 
-/**
- * Post
- */
-module$14.config(['taskActivateProvider', function(activateProvider){
-    activatePost.$inject = ['done', 'task', '$http','$q', '$rootScope', 'piConsole'];
-    function activatePost(done, task, $http, $q, $rootScope, piConsole){
-        var canceler = $q.defer(); // http://stackoverflow.com/questions/13928057/how-to-cancel-an-http-request-in-angularjs
-        var global = $rootScope.global;
-        var data = task.path ? lodash.get(global, task.path) : task.data;
+activatePIP$1.$inject = ['done', '$element', 'task', 'script', 'piConsole'];
+function activatePIP$1(done, $canvas, task, script, piConsole){
+    var $el, req;
+    var pipSink;
 
-        $http
-            .post(task.url, data, {timeout: canceler.promise})
-            .then(done,fail);
-
-        return canceler.resolve;
-
-        function fail(response){
-            var err = new Error('Post error("'+task.url+'"): ' + response.statusText); // but shout about the failure
-            done(); // continue with the task
-            piConsole({
-                type:'error',
-                error:err,
-                message: 'Post error',
-                context: task
-            });
-            throw err;
-        }
-    }
-
-    activateProvider.set('post', activatePost);
-}]);
-
-module$14.config(['taskActivateProvider', function(activateProvider){
-    activatePostCsv.$inject = ['done', 'task', '$http','$q', '$rootScope'];
-    function activatePostCsv(done, task, $http, $q, $rootScope){
-        var canceler = $q.defer(); // http://stackoverflow.com/questions/13928057/how-to-cancel-an-http-request-in-angularjs
-        var global = $rootScope.global;
-        var csv = harvest(global);
-
-        $http
-            .post(task.url, csv, {timeout: canceler.promise})
-            .then(done,done);
-
-        return canceler.resolve;
-    }
-
-    activateProvider.set('postCsv', activatePostCsv);
-}]);
-
-/**
- * Redirect
- */
-module$14.config(['taskActivateProvider', function(activateProvider){
-    activateRedirect.$inject = ['done', 'task', 'managerBeforeUnload'];
-    function activateRedirect(done, task, beforeUnload){
-        if (lodash.result(task,'condition',true)){
-            beforeUnload.deactivate();
-            location.href = task.url;
-        } else {
-            done();
-        }
-    }
-
-    activateProvider.set('redirect', activateRedirect);
-}]);
-
-/**
- * minno-time activator
- **/
-module$14.config(['taskActivateProvider', function(activateProvider){
-    activatePIP.$inject = ['done', '$element', 'task', 'script', 'piConsole'];
-    function activatePIP(done, $canvas, task, script, piConsole){
-        var $el, req;
-        var pipSink;
-
-        if (task.version > 0.4) {
-            // update script name
-            task.name && (script.name = task.name);
-
-            $canvas.append('<div pi-player></div>');
-            $el = $canvas.contents();
-            $el.addClass('pi-spinner');
-
-            requirejs$1([ task.baseUrl + '/dist/time.js'], function(time){
-                pipSink = time($el[0], script);
-                pipSink.onEnd(done);
-                pipSink.$messages.map(piConsole);
-                $el.removeClass('pi-spinner');
-            });
-
-            return function destroyPIP(){
-                $el.remove();
-                pipSink && pipSink.end();
-            };
-        }
-
-        // load PIP
-        req = requirejs$1.config({
-            context: lodash.uniqueId(),
-            baseUrl: task.baseUrl || '../bower_components/PIPlayer/dist/js', // can't use packages yet as urls in pip aren't relative...
-            paths: {
-                //plugins
-                text: ['//cdnjs.cloudflare.com/ajax/libs/require-text/2.0.3/text.min', '../../bower_components/require-text/text'],
-
-                // Core Libraries
-                jquery: ['//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min','../../bower_components/jquery/dist/jquery.min'],
-                underscore: ['//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min','../../bower_components/lodash-compat/lodash.min'],
-                backbone: ['//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min', '../../bower_components/backbone/backbone']
-            },
-
-            deps: ['jquery', 'backbone', 'underscore']
-        });
-
+    if (task.version > 0.4) {
         // update script name
         task.name && (script.name = task.name);
 
@@ -45276,49 +45199,98 @@ module$14.config(['taskActivateProvider', function(activateProvider){
         $el = $canvas.contents();
         $el.addClass('pi-spinner');
 
-        req(['activatePIP'], function(activate){
+        requirejs$1([ task.baseUrl + '/dist/time.js'], function(time){
+            pipSink = time($el[0], script);
+            pipSink.onEnd(done);
+            pipSink.$messages.map(piConsole);
             $el.removeClass('pi-spinner');
-            activate(script, done);
         });
 
         return function destroyPIP(){
             $el.remove();
-            req(['app/task/main_view'], function(main){
-                main.deferred.resolve();
-                main.destroy();
-            });
+            pipSink && pipSink.end();
         };
     }
 
-    activateProvider.set('pip', activatePIP);
-}]);
+    // load PIP
+    req = requirejs$1.config({
+        context: lodash.uniqueId(),
+        baseUrl: task.baseUrl || '../bower_components/PIPlayer/dist/js', // can't use packages yet as urls in pip aren't relative...
+        paths: {
+            //plugins
+            text: ['//cdnjs.cloudflare.com/ajax/libs/require-text/2.0.3/text.min', '../../bower_components/require-text/text'],
+
+            // Core Libraries
+            jquery: ['//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min','../../bower_components/jquery/dist/jquery.min'],
+            underscore: ['//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min','../../bower_components/lodash-compat/lodash.min'],
+            backbone: ['//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min', '../../bower_components/backbone/backbone']
+        },
+
+        deps: ['jquery', 'backbone', 'underscore']
+    });
+
+    // update script name
+    task.name && (script.name = task.name);
+
+    $canvas.append('<div pi-player></div>');
+    $el = $canvas.contents();
+    $el.addClass('pi-spinner');
+
+    req(['activatePIP'], function(activate){
+        $el.removeClass('pi-spinner');
+        activate(script, done);
+    });
+
+    return function destroyPIP(){
+        $el.remove();
+        req(['app/task/main_view'], function(main){
+            main.deferred.resolve();
+            main.destroy();
+        });
+    };
+}
+
+activateTime$1.$inject = ['done', '$element', 'task', 'script', 'piConsole'];
+function activateTime$1(done, $canvas, task, script, piConsole){
+    var $el;
+    var pipSink;
+
+    // update script name
+    task.name && (script.name = task.name);
+
+    $canvas.append('<div pi-player></div>');
+    $el = $canvas.contents();
+
+    pipSink = activate$2($el[0], script);
+    pipSink.onEnd(done);
+    pipSink.$messages.map(piConsole);
+
+    return function destroyPIP(){
+        $el.remove();
+        pipSink.end();
+    };
+}
 
 /**
- * minno-time activator
- **/
+ * The module responsible for the single task.
+ * It knows how to load a task and activate it.
+ * It also supplies the basic task directive.
+ * @return {module} pi.task module.
+ */
+
+var module$14 = angular.module('pi.task',[]);
+module$14.provider('taskActivate', provider);
+module$14.directive('piTask', directive$10);
+
+
 module$14.config(['taskActivateProvider', function(activateProvider){
-    activateTime.$inject = ['done', '$element', 'task', 'script', 'piConsole'];
-    function activateTime(done, $canvas, task, script, piConsole){
-        var $el;
-        var pipSink;
-
-        // update script name
-        task.name && (script.name = task.name);
-
-        $canvas.append('<div pi-player></div>');
-        $el = $canvas.contents();
-
-        pipSink = activate$2($el[0], script);
-        pipSink.onEnd(done);
-        pipSink.$messages.map(piConsole);
-
-        return function destroyPIP(){
-            $el.remove();
-            pipSink.end();
-        };
-    }
-
-    activateProvider.set('time', activateTime);
+    activateProvider.set('postCsv', postCsv);
+    activateProvider.set('quest', activateQuest$1);
+    activateProvider.set('message', activateMessage$1);
+    activateProvider.set('post', activatePost$1);
+    activateProvider.set('redirect', activateRedirect$1);
+    activateProvider.set('pip', activatePIP$1);
+    activateProvider.set('time', activateTime$1);
 }]);
 
 /**
@@ -45600,28 +45572,6 @@ function Logger$1(defaultSettings){
     }
 }
 
-/**
- * @param options.url url
- * @param options.method method
- * @param options.body body
- **/
-function xhr(options){
-    return new Promise(function(resolve, reject){
-        var request = new XMLHttpRequest();
-        request.open(options.method || 'POST',options.url, true);
-        request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-
-        request.onreadystatechange = function() {
-            if (this.readyState === 4) {
-                if (this.status >= 200 && this.status < 400) resolve(this.responseText);
-                else reject(new Error('Failed posting to: ' + options.url));
-            }
-        };
-
-        request.send(options.body);
-    });
-}
-
 var dfltLogger = {onRow:onRow, onEnd:onEnd, serialize:serialize$4, send:send};
 
 /*
@@ -45677,72 +45627,6 @@ function serialize$5(name, logs, settings){
         for (key in data) r.push(encodeURIComponent(key) + '=' + encodeURIComponent(data[key]));
         return r.join('&').replace(/%20/g, '+');
     }
-}
-
-var csvLogger = {
-    onRow: function(name, row, settings, ctx){
-        var logs = ctx.csv || (ctx.csv = []);
-        logs.push(lodash.assign({taskName:name}, row));
-    },
-    onEnd: function(name, settings, ctx){ if (name == 'manager') return ctx.logs; },
-    serialize: function(name, logs){ return toCsv$1(createMatrix$1(logs)); },
-    send: function(name, serialized, settings,ctx){ 
-        var url = lodash.isString(settings.postCsv) ? settings.postCsv : settings.url;
-        xhr({url:url, body:serialized}).catch(onError); 
-        function onError(e){ settings.onError.apply(null, [e,name,serialized,settings,ctx]); }
-    }
-};
-
-/*
- * Transform Logs into matrix
- */
-function createMatrix$1(logs){
-    var getIndex = GetIndex$1();
-    var rows = logs.map(toRows);
-    var headers = getIndex();
-
-    rows.forEach(normalizeLength(headers.length));
-
-    return [headers].concat(rows);
-
-    function toRows(log){
-        var row = [];
-        lodash.forEach(log, extractValues);
-        return row;
-
-        function extractValues(value, key){ row[getIndex(key)] = typeof value === 'object' ? JSON.stringify(value) : value; }
-    }
-
-    function normalizeLength(maxLength){
-        return function(arr){ arr.length = maxLength; };
-    }
-}
-
-function GetIndex$1(){
-    var hash = {taskName:0};
-    var index = 1;
-    return getIndex;
-
-    function getIndex(key){
-        if (!arguments.length) return lodash.keys(hash);
-        if (key in hash) return hash[key];
-        return hash[key] = index++;
-    }
-}
-
-/*
- * Csv encoder
- * https://www.ietf.org/rfc/rfc4180.txt
- * toCSv :: [[String]] -> String
- */
-
-var quotableRgx$1 = /(\n|,|")/;
-function toCsv$1(matrice){ return matrice.map(buildRow$1).join('\n'); }
-function buildRow$1(arr){ return arr.map(normalize$1).join(','); }
-function normalize$1(val){
-    // wrap in double quotes and escape inner double quotes
-    if (quotableRgx$1.test(val)) return '"' + val.replace(/"/g, '""') + '"';
-    return val;
 }
 
 function managerLogger(settings, piConsole){
