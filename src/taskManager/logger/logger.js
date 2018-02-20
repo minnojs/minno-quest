@@ -15,13 +15,13 @@ function Logger(defaultSettings){
         if (!_.isString(name)) throw new Error('Log name must be a string');
         validateSettings(settings);
         
-        log.map(onRow).map(logs);
-        log.end.map(onEnd).map(logs);
+        log.map(tryCatch(onRow)).map(logs);
+        log.end.map(tryCatch(onEnd)).map(logs);
 
         logs
             .map(filterUndefined)
-            .map(serialize)
-            .map(send);
+            .map(tryCatch(serialize))
+            .map(tryCatch(send));
 
         return log;
 
@@ -35,6 +35,16 @@ function Logger(defaultSettings){
             var functionNames = ['onRow','onEnd','serialize','send'];
             if (functionNames.every(function(prop){return _.isFunction(settings[prop]);})) return;
             throw new Error('The Logger requires all four of the following functions: "onRow","onEnd","serialize","send"');
+        }
+
+        function tryCatch(tryer){
+            return function(){
+                try { return tryer.apply(this, arguments); } 
+                catch (e) { 
+                    if (settings.onError) return settings.onError.apply(this, [e].concat(arguments)); 
+                    throw e;
+                }
+            };
         }
     }
 }

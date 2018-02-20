@@ -13,21 +13,23 @@ function directive(activateTask, canvas, $document, $window, $rootScope, piConso
         },
         link: function($scope, $element){
             var task = $scope.task;
+            var script = task.$script || {};
+            var taskName = task.name || script.name || 'unnamedTask';
+            var managerSettings = $scope.$parent.settings || {};
+            var taskLog = $scope.$parent.manager.logger.createLog(taskName, _.get(script, 'setting.logger', {}));
+            var piGlobal = window.piGlobal;
+
             var canvasOff, oldTitle;
             var def;
             var promise;
             var proceedObject;
-            var settings = $scope.$parent.settings || {};
-            var script = task.$script || {};
-            var taskName = task.name || script.name;
-            var piGlobal = window.piGlobal;
 
             if (!task) return;
 
             /**
              * listen for skip events
              */
-            if (settings.skip && window.DEBUG === true){
+            if (managerSettings.skip && window.DEBUG === true){
                 $document.on('keydown',proceedListener);
                 $scope.$on('$destroy', function(){
                     $document.off('keydown', proceedListener);
@@ -54,7 +56,7 @@ function directive(activateTask, canvas, $document, $window, $rootScope, piConso
             /**
              * Activate task
              */
-            def = activateTask(task, $element, $scope.$new());
+            def = activateTask(task, $element, $scope.$new(), taskLog);
             promise = def.promise;
 
             /**

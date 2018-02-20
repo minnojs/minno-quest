@@ -25,11 +25,13 @@ function onEnd(name, settings, ctx){
 function serialize(name, logs, settings){
     var obj =  _.assign({
         data: logs.map(function(log){ return _.set(log, 'taskName', name); }),
-    }, settings.meta);
+    }, window.piGlobal.$meta, settings.meta);
 
     return JSON.stringify(obj);
 }
 
-function send(name, serialized, settings){
-    xhr({url:settings.url, mehtod:'PUT', body:serialized});
+function send(name, serialized, settings, ctx){
+    if (!settings.url) return;
+    xhr({url:settings.url, mehtod:'PUT', body:serialized}).catch(onError);
+    function onError(e){ settings.onError.apply(null, [e,name,serialized,settings,ctx]); }
 }

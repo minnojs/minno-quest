@@ -8,12 +8,16 @@ export default {
     },
     onEnd: function(name, settings, ctx){ if (name == 'manager') return ctx.logs; },
     serialize: function(name, logs){ return toCsv(createMatrix(logs)); },
-    send: function(name, serialized, settings){ xhr({url:settings.url, body:serialized}); }
+    send: function(name, serialized, settings,ctx){ 
+        var url = _.isString(settings.postCsv) ? settings.postCsv : settings.url;
+        xhr({url:url, body:serialized}).catch(onError); 
+        function onError(e){ settings.onError.apply(null, [e,name,serialized,settings,ctx]); }
+    }
 };
 
 /*
-     * Transform Logs into matrix
-     */
+ * Transform Logs into matrix
+ */
 function createMatrix(logs){
     var getIndex = GetIndex();
     var rows = logs.map(toRows);
@@ -49,10 +53,10 @@ function GetIndex(){
 }
 
 /*
-     * Csv encoder
-     * https://www.ietf.org/rfc/rfc4180.txt
-     * toCSv :: [[String]] -> String
-     */
+ * Csv encoder
+ * https://www.ietf.org/rfc/rfc4180.txt
+ * toCSv :: [[String]] -> String
+ */
 
 var quotableRgx = /(\n|,|")/;
 function toCsv(matrice){ return matrice.map(buildRow).join('\n'); }

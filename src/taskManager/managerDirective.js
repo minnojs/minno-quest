@@ -40,7 +40,7 @@ function managerControler($scope, ManagerService, managerLoad, piConsole){
             $scope.settings = (script && script.settings) || {};
 
             // create the manager
-            ctrl.manager = new ManagerService($scope, script);
+            $scope.manager = ctrl.manager = new ManagerService($scope, script);
             ctrl.manager.setBaseUrl(getBasePath(taskSource));
 
             // activate first task
@@ -98,7 +98,7 @@ function directive($q, $injector,piConsole){
                     // progress update
                     function(){
                         var data = {taskName: currentTask.name || 'namelessTask', taskNumber: currentTask.$meta.number, taskURL:currentTask.scriptUrl || currentTask.templateUrl};
-                        thisCtrl.manager.logger(data, $scope.settings);
+                        thisCtrl.manager.log(data, $scope.settings);
                     },
                     $scope.settings.onPreTask,
                     _.get(prevTask,'post'),
