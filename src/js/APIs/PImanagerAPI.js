@@ -106,7 +106,9 @@ define(function(require){
 
         return $http.post(posturl, data)['catch'](error);
 
-        function error(){
+        function error(response){
+            var url = response.config.url;
+            var errMessage = response.statusText +' (' + response.status +').';
             var reportNoConnection = currentTask.reportNoConnection;
             if (reportNoConnection){
                 var message = document.createElement('div');
@@ -115,7 +117,7 @@ define(function(require){
                 document.body.insertBefore(message, document.body.firstChild);
             }
 
-            throw new Error('Failed to update server');
+            throw new Error('Failed to update "' + url + '". ' + errMessage);
         }
     }
 

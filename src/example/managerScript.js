@@ -1,8 +1,8 @@
 define(['managerAPI'], function(Manager){
 	var API = new Manager();
 	API.addSettings('skin', '');
-    var images = Array(30).fill('http://placehold.it/120x120&text=image').map((v,i)=>v+i);
-	API.addSettings('preloadImages', images);
+    //var images = Array(30).fill('http://placehold.it/120x120&text=image').map((v,i)=>v+i);
+	//API.addSettings('preloadImages', images);
 
     API.addSettings('injectStyle', [
         '[pi-player] {position:fixed;left:0; right:0;}',
@@ -42,7 +42,7 @@ define(['managerAPI'], function(Manager){
             }
 		},
         { type: 'quest', name: 'dotWidth', scriptUrl: 'questScript1.js' },
-        { type: 'postCsv', url: 'csv.php' }, 
+        //{ type: 'postCsv', url: 'csv.php' }, 
         {
 			type: 'pip',
 			name: 'iat',
