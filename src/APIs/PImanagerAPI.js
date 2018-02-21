@@ -15,7 +15,8 @@ export default API;
 function API(){
     Constructor.call(this);
     this.settings.onPreTask = onPreTask;
-    _.set(this, 'settings.logger.url', '/implicit/PiManager/');
+    _.set(this, 'settings.logger.managerUrl', '/implicit/PiManager/');
+    _.set(this, 'settings.logger.type', 'old');
 }
 
 // create API functions

@@ -2,7 +2,7 @@ define(['managerAPI'], function(Manager){
     var API = new Manager();
 
     API.addSettings('skin', '');
-    //API.addSettings('logger', {type:'debug'});
+    API.addSettings('logger', {type:'debug', url:'barkk'});
     //API.addSettings('preloadImages', images);
     //API.addSettings('skip', true);
 
@@ -42,9 +42,9 @@ define(['managerAPI'], function(Manager){
                 global.current = global.iat =  {feedback:'bam!'};
             }
         },
+        { type:'time', version: 0.5,  scriptUrl: '/test/anup.js' },
         { type: 'quest', name: 'dotWidth', scriptUrl: '/test/rate.js' },
         { type:'post', url:'sdf'},
-        { type:'pip', version: 0.5,  scriptUrl: '/test/maintask.js' },
         { type:'message', templateUrl: 'message.jst' },
         {
             mixer: 'branch',

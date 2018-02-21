@@ -5,8 +5,9 @@ import dfltLogger from './dfltLogger';
 export default  _.defaults({serialize:serialize, send:send}, dfltLogger);
 
 function send(name, serialized, settings, ctx){
-    if (!settings.url) return;
-    xhr({url:settings.url, mehtod:'POST', body:serialized}).catch(onError);
+    var url = name === 'manager' ? settings.managerUrl : settings.url;
+    if (!url) return;
+    xhr({url:url, mehtod:'POST', body:serialized}).catch(onError);
 
     function onError(e){ settings.onError.apply(null, [e,name,serialized,settings,ctx]); }
 }

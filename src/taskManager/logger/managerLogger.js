@@ -24,11 +24,10 @@ export default function managerLogger(settings, piConsole){
 }
 
 function getSettingsObject(settings){
+    var type = settings.type;
     if (settings.postCsv) return csvLogger;
-    if (settings.type == 'csv') return csvLogger;
-    if (settings.type == 'old') return oldLogger;
-    if (settings.type == 'new') return dfltLogger;
-    if (settings.type == 'debug') return debugLogger;
-    return oldLogger;
+    if (type == 'csv') return csvLogger;
+    if (type == 'old') return oldLogger;
+    if (type == 'debug') return debugLogger;
+    return dfltLogger;
 }
-   
