@@ -22,7 +22,7 @@ define(function(require){
     decorator(API);
 
     // annotate onPreTask
-    onPreTask.$inject = ['currentTask', '$http','$rootScope','managerBeforeUnload','templateDefaultContext', 'managerSettings'];
+    onPreTask.$inject = ['currentTask', '$http','$rootScope','managerBeforeUnload','templateDefaultContext', 'managerSettings','$q'];
 
     return API;
 
@@ -35,7 +35,7 @@ define(function(require){
      * @param  {Object} $http       The $http service
      * @return {Promise}            Resolved when server responds
      */
-    function onPreTask(currentTask, $http, $rootScope, beforeUnload, templateDefaultContext,managerSettings){
+    function onPreTask(currentTask, $http, $rootScope, beforeUnload, templateDefaultContext,managerSettings,$q){
         var global = $rootScope.global;
         var context = {};
         var data = _.assign({}, global.$meta, {taskName: currentTask.name || 'namelessTask', taskNumber: currentTask.$meta.number, taskURL:currentTask.scriptUrl || currentTask.templateUrl});
@@ -104,10 +104,10 @@ define(function(require){
 
         var posturl = _.get(managerSettings, 'logger.url', '/implicit/PiManager');
 
-        return $http.post(posturl, data)['catch'](error);
+        $http.post(posturl, data)['catch'](error);
+        return $q.when(); // alias for resolve, we return a promise in order to give tasks time to clean up before they continue.
 
         function error(response){
-            var url = response.config.url;
             var errMessage = response.statusText +' (' + response.status +').';
             var reportNoConnection = currentTask.reportNoConnection;
             if (reportNoConnection){
@@ -117,7 +117,7 @@ define(function(require){
                 document.body.insertBefore(message, document.body.firstChild);
             }
 
-            throw new Error('Failed to update "' + url + '". ' + errMessage);
+            throw new Error('Failed to update. ' + errMessage);
         }
     }
 
