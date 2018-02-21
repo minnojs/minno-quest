@@ -2,27 +2,37 @@ import _ from 'lodash';
 import {requirejs} from 'requirejs/require.js';
 export default activatePIP;
 
-activatePIP.$inject = ['done', '$element', 'task', 'script', 'piConsole'];
-function activatePIP(done, $canvas, task, script, piConsole){
+activatePIP.$inject = ['done', '$element', 'task', 'script', 'piConsole', 'logger'];
+function activatePIP(done, $canvas, task, script, piConsole,logger){
+    var log = logger.createLog(task.$name, script.settings.logger);
     var $el, req;
     var pipSink;
 
-    if (task.version > 0.4) {
-        // update script name
-        task.name && (script.name = task.name);
+    // update script name
+    task.name && (script.name = task.name);
 
+    if (task.version > 0.4) {
         $canvas.append('<div pi-player></div>');
         $el = $canvas.contents();
-        $el.addClass('pi-spinner');
+        requirejs([task.baseUrl + '/dist/time.js'], function(time){
 
-        requirejs([ task.baseUrl + '/dist/time.js'], function(time){
             pipSink = time($el[0], script);
             pipSink.onEnd(done);
             pipSink.$messages.map(piConsole);
-            $el.removeClass('pi-spinner');
+
+            pipSink.$logs.map(log);
+            pipSink.$logs.end.map(log.end);
+        }, function(e){
+            piConsole({
+                type:'error',
+                message: 'Failed to load minno-time, please make sure that task.baseUrl is set correctly',
+                error: e
+            });
+            throw e;
         });
 
         return function destroyPIP(){
+            log.end(true);
             $el.remove();
             pipSink && pipSink.end();
         };
@@ -65,4 +75,3 @@ function activatePIP(done, $canvas, task, script, piConsole){
         });
     };
 }
-

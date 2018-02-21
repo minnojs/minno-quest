@@ -41400,23 +41400,40 @@ function SequenceProvider$1(){
     return Sequence;
 }
 
-TaskProvider.$inject = ['$q','Database','Logger','QuestSequence','taskParse', 'dfltQuestLogger', '$rootScope'];
-function TaskProvider($q, Database, Logger, QuestSequence, parse, dfltQuestLogger,$rootScope){
+function createLogs$2($sourceLogs, settings, defaultLogMap){
+    var logMap = settings.logger || settings.logMap || defaultLogMap;
+    return $sourceLogs.map(applyMap(logMap));
+
+    // $logs is a stream of array, we want to apply them as args to the transform function
+    function applyMap(fn){
+        return function(args){ return fn.apply(null,args); };
+    }
+}
+
+function dfltQuestLogger(log, pageData, global){
+    var logObj = lodash.extend({},pageData,log);
+    if (logObj.declined) {
+        logObj.response = log.responseObj = undefined;
+    }
+    return logObj;
+}
+
+TaskProvider.$inject = ['$q','Database','QuestSequence','taskParse', '$rootScope'];
+function TaskProvider($q, Database, QuestSequence, parse, $rootScope){
     function Task(script){
         var self = this;
         var settings = script.settings || {};
         var global = $rootScope.global;
 
+        if (!lodash.isArray(script.sequence)) throw new Error('Task: no sequence was defined'); // shouldn't ever be thrown
+
         // save script for later use...
         this.script = script;
         this.db = new Database();
-        this.$logSource = stream();
-        this.logger = new Logger(this.$logSource, composeLoggerSettings(script, global), dfltQuestLogger);
-        this.q = $q.defer();
-
-        if (!lodash.isArray(script.sequence)) throw new Error('Task: no sequence was defined');
-
         this.sequence = new QuestSequence(script.sequence, this.db);
+        this.$logSource = stream();
+        this.$logs = createLogs$2(this.$logSource, settings.logger, dfltQuestLogger);
+        this.q = $q.defer();
 
         this.promise = this.q.promise
             .then(function(){
@@ -41426,18 +41443,12 @@ function TaskProvider($q, Database, Logger, QuestSequence, parse, dfltQuestLogge
                     self.log(quest, {}, global);
                     quest.$logged = true;
                 });
-                self.logger.end(true);
+                // a bug in mithril-stream prevents the parent stream from closing the child
+                self.$logSource.end(true);
+                self.$logs.end(true);
             })['finally'](settings.onEnd || lodash.noop); // end only after logging has finished (regardless of success)
 
         parse(script, this.db);
-    }
-
-    // create metaDeta to add to post
-    function composeLoggerSettings(script, global){
-        var loggerSettings = lodash.assign({}, lodash.get(script, 'settings.logger'));
-        var metaData = lodash.assign({taskName:script.name}, global.$meta, loggerSettings.metaData);
-        loggerSettings.metaData = metaData;
-        return loggerSettings;
     }
 
     lodash.extend(Task.prototype, {
@@ -41478,101 +41489,6 @@ function parseProvider(){
     return parse;
 }
 
-function dfltQuestLogger(log, pageData, global){
-    var logObj = lodash.extend({},pageData,log);
-    if (logObj.declined) {
-        logObj.response = log.responseObj = undefined;
-    }
-    return logObj;
-}
-
-function post$4(url, data){
-    return new Promise(function(resolve, reject){
-        var request = new XMLHttpRequest();
-        request.open('POST',url, true);
-        request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-
-        request.onreadystatechange = function() {
-            if (this.readyState === 4) {
-                if (this.status >= 200 && this.status < 400) resolve(this.responseText);
-                else reject(new Error('Failed posting to: ' + url));
-            }
-        };
-
-        request.send(serialize$3(data));
-    });
-}
-
-function serialize$3(data) {
-    if (typeof data == 'string') return data;
-    return JSON.stringify(data);
-}
-
-function poster$3($logs, settings){
-    var cache = [];
-    var url = settings.url;
-
-    if (!url) return; // if we have no url, we can't log anything anyway
-
-    $logs.map(eachLog);
-    $logs.end.map(finalizefLogs);
-
-    function eachLog(log){
-        cache.push(log);
-        if (!settings.pulse) return;
-        if (cache.length >= settings.pulse) {
-            send(cache);
-            cache.length = 0;
-        }
-    }
-
-    function finalizefLogs(){
-        if (cache.length) send(cache);
-    }
-
-    function send(logs){
-        var serialize = settings.serialize || (settings.newServelet ? buildPost$1 : buildPostOld$1);
-        var serializedPost = serialize(logs, settings.metaData);
-
-        return post$4(url,serializedPost)
-            .catch(function retry(){ return post$4(url, serializedPost); })
-            .catch(settings.error || lodash.noop);
-    }
-
-}
-
-function buildPost$1(logs, metaData){
-    var data = lodash.assign({ data:logs }, metaData);
-    return JSON.stringify(data);
-}
-
-function buildPostOld$1(logs, metaData){
-    var data = 'json=' + JSON.stringify(logs); // do not re-encode json
-    var meta = serialize$2(metaData);
-    return data + (meta ? '&'+meta : '');
-}
-
-
-function serialize$2(data){
-    var key, r = [];
-    for (key in data) r.push(encodeURIComponent(key) + '=' + encodeURIComponent(data[key]));
-    return r.join('&').replace(/%20/g, '+');
-}
-
-function createLogs$2($sourceLogs, settings, defaultLogMap){
-    var $logs = $sourceLogs.map(applyMap(settings.logger || settings.logMap || defaultLogMap));
-
-    if (settings.poster) settings.poster($logs, settings, poster$3);
-    else poster$3($logs, settings);
-
-    return $logs;
-
-    // $logs is a stream of array, we want to apply them as args to the transform function
-    function applyMap(fn){
-        return function(args){ return fn.apply(null,args); };
-    }
-}
-
 var module$2 = angular.module('task', [
     module$3.name,
     module$7.name
@@ -41581,7 +41497,6 @@ var module$2 = angular.module('task', [
 module$2.service('QuestSequence', SequenceProvider$1);
 module$2.service('QuestTask', TaskProvider);
 module$2.service('taskParse', parseProvider);
-module$2.value('Logger', createLogs$2);
 
 module$2.value('dfltQuestLogger', dfltQuestLogger);
 
@@ -45013,13 +44928,13 @@ function directive$10(activateTask, canvas, $document, $window, $rootScope, piCo
     };
 }
 
-activateQuest$1.$inject = ['done', '$element', '$scope', '$compile', 'script','task'];
-function activateQuest$1(done, $canvas, $scope, $compile, script, task){
+activateQuest$1.$inject = ['done', '$element', '$scope', '$compile', 'script','task','logger'];
+function activateQuest$1(done, $canvas, $scope, $compile, script, task, logger){
     var $el;
+    var log = logger.createLog(task.$name, script.settings.logger);
 
     // update script name
-    task.name && (script.name = task.name);
-
+    script.name = task.$name;
     $scope.script = script;
 
     $canvas.append('<div pi-quest></div>');
@@ -45028,6 +44943,10 @@ function activateQuest$1(done, $canvas, $scope, $compile, script, task){
 
     // clean up piQuest
     $el.controller('piQuest').task.promise['finally'](done);
+
+    var $questLog = $el.controller('piQuest').task.$logs;
+    $questLog.map(log);
+    $questLog.end.map(log.end);
 
     return function questDestroy(){
         $el.scope().$destroy();
@@ -45068,9 +44987,10 @@ function xhr(options){
         request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
 
         request.onreadystatechange = function() {
-            if (this.readyState === 4) {
-                if (this.status >= 200 && this.status < 400) resolve(this.responseText);
-                else reject(new Error('Failed posting to: ' + options.url));
+
+            if (request.readyState === 4) {
+                if (request.status >= 200 && request.status < 400) resolve(request.responseText);
+                else reject(new Error('Failed sending to: "' + options.url + '". ' + request.statusText + ' (' + request.status +')'));
             }
         };
 
@@ -45185,27 +45105,37 @@ function activateRedirect$1(done, task, beforeUnload){
     location.href = task.url;
 }
 
-activatePIP$1.$inject = ['done', '$element', 'task', 'script', 'piConsole'];
-function activatePIP$1(done, $canvas, task, script, piConsole){
+activatePIP$1.$inject = ['done', '$element', 'task', 'script', 'piConsole', 'logger'];
+function activatePIP$1(done, $canvas, task, script, piConsole,logger){
+    var log = logger.createLog(task.$name, script.settings.logger);
     var $el, req;
     var pipSink;
 
-    if (task.version > 0.4) {
-        // update script name
-        task.name && (script.name = task.name);
+    // update script name
+    task.name && (script.name = task.name);
 
+    if (task.version > 0.4) {
         $canvas.append('<div pi-player></div>');
         $el = $canvas.contents();
-        $el.addClass('pi-spinner');
+        requirejs$1([task.baseUrl + '/dist/time.js'], function(time){
 
-        requirejs$1([ task.baseUrl + '/dist/time.js'], function(time){
             pipSink = time($el[0], script);
             pipSink.onEnd(done);
             pipSink.$messages.map(piConsole);
-            $el.removeClass('pi-spinner');
+
+            pipSink.$logs.map(log);
+            pipSink.$logs.end.map(log.end);
+        }, function(e){
+            piConsole({
+                type:'error',
+                message: 'Failed to load minno-time, please make sure that task.baseUrl is set correctly',
+                error: e
+            });
+            throw e;
         });
 
         return function destroyPIP(){
+            log.end(true);
             $el.remove();
             pipSink && pipSink.end();
         };
@@ -45256,7 +45186,7 @@ function activateTime$1(done, $canvas, task, script, piConsole, logger){
     var log = logger.createLog(task.$name, script.settings.logger);
 
     // update script name
-    task.name && (script.name = task.name);
+    script.name = task.$name;
 
     $canvas.append('<div pi-player></div>');
     $el = $canvas.contents();
@@ -45269,6 +45199,7 @@ function activateTime$1(done, $canvas, task, script, piConsole, logger){
     pipSink.$logs.end.map(log.end);
 
     return function destroyPIP(){
+        log.end(true);
         $el.remove();
         pipSink.end();
     };
@@ -45575,7 +45506,7 @@ function Logger$1(defaultSettings){
     }
 }
 
-var dfltLogger = {onRow:onRow, onEnd:onEnd, serialize:serialize$4, send:send};
+var dfltLogger = {onRow:onRow, onEnd:onEnd, serialize:serialize$2, send:send};
 
 /*
  * Regular logs
@@ -45596,7 +45527,7 @@ function onEnd(name, settings, ctx){
     if (logs.length) return logs;
 }
 
-function serialize$4(name, logs, settings){
+function serialize$2(name, logs, settings){
     var obj =  lodash.assign({
         data: logs.map(function(log){ return lodash.set(log, 'taskName', name); }),
     }, window.piGlobal.$meta, settings.meta);
@@ -45610,7 +45541,7 @@ function send(name, serialized, settings, ctx){
     function onError(e){ settings.onError.apply(null, [e,name,serialized,settings,ctx]); }
 }
 
-var oldLogger = lodash.defaults({serialize:serialize$5, send:send$1}, dfltLogger);
+var oldLogger = lodash.defaults({serialize:serialize$3, send:send$1}, dfltLogger);
 
 function send$1(name, serialized, settings, ctx){
     if (!settings.url) return;
@@ -45619,7 +45550,7 @@ function send$1(name, serialized, settings, ctx){
     function onError(e){ settings.onError.apply(null, [e,name,serialized,settings,ctx]); }
 }
 
-function serialize$5(name, logs, settings){
+function serialize$3(name, logs, settings){
     var metaData =  lodash.assign({}, window.piGlobal.$meta, settings.meta);
     var data = 'json=' + JSON.stringify(logs); // do not re-encode json
     var meta = serialize(metaData);
@@ -45632,7 +45563,7 @@ function serialize$5(name, logs, settings){
     }
 }
 
-var debugLogger = {onRow:onRow$1, onEnd:onEnd$1, serialize:serialize$6, send:send$2};
+var debugLogger = {onRow:onRow$1, onEnd:onEnd$1, serialize:serialize$4, send:send$2};
 
 /*
  * Regular logs
@@ -45653,7 +45584,7 @@ function onEnd$1(name, settings, ctx){
     if (logs.length) return logs;
 }
 
-function serialize$6(name, logs){
+function serialize$4(name, logs){
     return logs;
 }
 

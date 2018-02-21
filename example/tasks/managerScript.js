@@ -2,7 +2,7 @@ define(['managerAPI'], function(Manager){
     var API = new Manager();
 
     API.addSettings('skin', '');
-    API.addSettings('logger', {type:'debug'});
+    //API.addSettings('logger', {type:'debug'});
     //API.addSettings('preloadImages', images);
     //API.addSettings('skip', true);
 
@@ -35,6 +35,7 @@ define(['managerAPI'], function(Manager){
 
     API.addSequence([
         {
+            name:'allow-refresh',
             script:function(done, managerBeforeUnload, global){
                 managerBeforeUnload.deactivate();
                 done();
@@ -56,7 +57,7 @@ define(['managerAPI'], function(Manager){
                     var questions = API.getGlobal().audit.questions;
                     var responses = [];
                     for (var key in questions) responses.push(+questions[key].response || 0); 
-                    var sum = responses.reduce(function(sum, value){return sum + value}, 0);
+                    var sum = responses.reduce(function(sum, value){return sum + value;}, 0);
                     return sum >= 8;
                 }}
             ],

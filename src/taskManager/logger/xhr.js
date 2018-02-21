@@ -10,9 +10,10 @@ export default function xhr(options){
         request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
 
         request.onreadystatechange = function() {
-            if (this.readyState === 4) {
-                if (this.status >= 200 && this.status < 400) resolve(this.responseText);
-                else reject(new Error('Failed posting to: ' + options.url));
+
+            if (request.readyState === 4) {
+                if (request.status >= 200 && request.status < 400) resolve(request.responseText);
+                else reject(new Error('Failed sending to: "' + options.url + '". ' + request.statusText + ' (' + request.status +')'));
             }
         };
 

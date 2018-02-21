@@ -8,7 +8,7 @@ function activateTime(done, $canvas, task, script, piConsole, logger){
     var log = logger.createLog(task.$name, script.settings.logger);
 
     // update script name
-    task.name && (script.name = task.name);
+    script.name = task.$name;
 
     $canvas.append('<div pi-player></div>');
     $el = $canvas.contents();
@@ -21,6 +21,7 @@ function activateTime(done, $canvas, task, script, piConsole, logger){
     pipSink.$logs.end.map(log.end);
 
     return function destroyPIP(){
+        log.end(true);
         $el.remove();
         pipSink.end();
     };

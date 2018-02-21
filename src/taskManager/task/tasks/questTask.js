@@ -1,12 +1,12 @@
 export default activateQuest;
 
-activateQuest.$inject = ['done', '$element', '$scope', '$compile', 'script','task'];
-function activateQuest(done, $canvas, $scope, $compile, script, task){
+activateQuest.$inject = ['done', '$element', '$scope', '$compile', 'script','task','logger'];
+function activateQuest(done, $canvas, $scope, $compile, script, task, logger){
     var $el;
+    var log = logger.createLog(task.$name, script.settings.logger);
 
     // update script name
-    task.name && (script.name = task.name);
-
+    script.name = task.$name;
     $scope.script = script;
 
     $canvas.append('<div pi-quest></div>');
@@ -16,10 +16,12 @@ function activateQuest(done, $canvas, $scope, $compile, script, task){
     // clean up piQuest
     $el.controller('piQuest').task.promise['finally'](done);
 
+    var $questLog = $el.controller('piQuest').task.$logs;
+    $questLog.map(log);
+    $questLog.end.map(log.end);
+
     return function questDestroy(){
         $el.scope().$destroy();
         $el.remove();
     };
 }
-
-

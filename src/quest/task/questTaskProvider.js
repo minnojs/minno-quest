@@ -1,23 +1,24 @@
 import stream from 'mithril-stream';
+import createLogStream from './logger/createLogStream';
+import dfltQuestLogger from './logger/dfltQuestLogger';
 import _ from 'lodash';
 
-TaskProvider.$inject = ['$q','Database','Logger','QuestSequence','taskParse', 'dfltQuestLogger', '$rootScope'];
-function TaskProvider($q, Database, Logger, QuestSequence, parse, dfltQuestLogger,$rootScope){
+TaskProvider.$inject = ['$q','Database','QuestSequence','taskParse', '$rootScope'];
+function TaskProvider($q, Database, QuestSequence, parse, $rootScope){
     function Task(script){
         var self = this;
         var settings = script.settings || {};
         var global = $rootScope.global;
 
+        if (!_.isArray(script.sequence)) throw new Error('Task: no sequence was defined'); // shouldn't ever be thrown
+
         // save script for later use...
         this.script = script;
         this.db = new Database();
-        this.$logSource = stream();
-        this.logger = new Logger(this.$logSource, composeLoggerSettings(script, global), dfltQuestLogger);
-        this.q = $q.defer();
-
-        if (!_.isArray(script.sequence)) throw new Error('Task: no sequence was defined');
-
         this.sequence = new QuestSequence(script.sequence, this.db);
+        this.$logSource = stream();
+        this.$logs = createLogStream(this.$logSource, settings.logger, dfltQuestLogger);
+        this.q = $q.defer();
 
         this.promise = this.q.promise
             .then(function(){
@@ -27,18 +28,12 @@ function TaskProvider($q, Database, Logger, QuestSequence, parse, dfltQuestLogge
                     self.log(quest, {}, global);
                     quest.$logged = true;
                 });
-                self.logger.end(true);
+                // a bug in mithril-stream prevents the parent stream from closing the child
+                self.$logSource.end(true);
+                self.$logs.end(true);
             })['finally'](settings.onEnd || _.noop); // end only after logging has finished (regardless of success)
 
         parse(script, this.db);
-    }
-
-    // create metaDeta to add to post
-    function composeLoggerSettings(script, global){
-        var loggerSettings = _.assign({}, _.get(script, 'settings.logger'));
-        var metaData = _.assign({taskName:script.name}, global.$meta, loggerSettings.metaData);
-        loggerSettings.metaData = metaData;
-        return loggerSettings;
     }
 
     _.extend(Task.prototype, {
