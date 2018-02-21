@@ -105,7 +105,12 @@ define(function(require){
 			meta.subtaskURL = currentTask.scriptUrl || currentTask.templateUrl;
 		}
 
-		return $http.post('/implicit/PiManager', data)['catch'](function(e){throw new Error('Failed to update server ("/implicit/PiManager/")');});
+		return $http.post('/implicit/PiManager', data)['catch'](error);
+        function error(response){
+            var url = response.config.url;
+            var errMessage = response.statusText +' (' + response.status +').';
+            throw new Error('Failed to update "' + url + '". ' + errMessage);
+        }
 	}
 
 	function postRedirect(path, params, method) {
@@ -170,5 +175,4 @@ define(function(require){
 
 		return options.wrap ? showPanel(feedback,options.header,options.footer) : feedback;
 	}
-})
-;
+});
