@@ -118,20 +118,36 @@ API.addSettings('skin', 'demo');
 ```
 
 #### logger
-The logger allows control of manager level logging activities.
+The logger allows control of logging activities.
 
-You may set `logger.postCsv` in order to post a csv with the results of all of your tasks at the end of the manager.
-Each log will be logged to a separate row.
-Each property will have a separate column.
-Each row has a unique column called taskName that holds the appropriate task name.
+Folowing are the properties available for the logger:
+
+property    | description 
+----------- | -----------
+url         | The url to send to. If it is not set, data will not be sent.
+type        | The strategy to use for sending logs to the server. See options below.
+pulse       | Allows you to post your data in pulses of "pulse" logs instead of all at the end of the task (Does not work for csv logger).
 
 ```javascript
 API.addSettings('logger', {
-    postCsv: '/url/to/csv/saver/'
+    url: '/manager/data',
+    type:'new',
+    pulse: 20
 });
 ```
 
-When using this setting, make sure you do not set `logger.url` in your individual tasks, or else they will post individually in addition to your csv post.
+By deafault the logger posts according to the Project Implicit server rules (old).
+You can change the logging style by setting the logger `type` as follows:
+
+type    | description
+------- | -----------
+old     | Uses the post strategy implemented by the old PI server
+new     | Uses the post strategy implemented by the new server  
+csv     | Posts all data as CSV at the end of the manager. If you are creating a manager that does not fully complete (for instance, when you have a message as your last page), use the postCSV task in addition to settings the log type to csv.
+debug   | Logs all posts to the console. Do not do this in production! These logs aren't posted to the server at all!
+
+You can change the logging strategy or even create new strategies.
+Doing this is rather advanced and is documented [here](https://github.com/minnojs/minno-quest/blob/0.2/src/taskManager/logger/readme.md).
 
 #### DEBUG
 The `DEBUG` settings allows you to control the debug messages produced by the player.
@@ -256,16 +272,6 @@ var taskElement = {scriptUrl:'path/to/script'};
 ```
 
 ### Project Implicit Build
-
-#### logger.url
-The project implicit build logs the movement from each task to the next.
-By default advancement is logged to `/implicit/PiManager`, if you want to change the default behaviour you should change settings.logger.url.
-
-```javascript
-API.addSettings('logger', {
-    url: '/my/url'
-});
-```
 
 #### mTurk
 The project implicit build has a feature for integration with mTurk.

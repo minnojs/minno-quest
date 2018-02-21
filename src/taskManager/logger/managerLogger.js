@@ -3,6 +3,7 @@ import Logger from './logger';
 import dfltLogger from './dfltLogger';
 import oldLogger from './oldLogger';
 import csvLogger from './csvLogger';
+import debugLogger from './debugLogger';
 
 export default function managerLogger(settings, piConsole){
     var composedSettings = _.assign({onError:onError}, getSettingsObject(settings), settings);
@@ -24,8 +25,10 @@ export default function managerLogger(settings, piConsole){
 
 function getSettingsObject(settings){
     if (settings.postCsv) return csvLogger;
+    if (settings.type == 'csv') return csvLogger;
     if (settings.type == 'old') return oldLogger;
     if (settings.type == 'new') return dfltLogger;
+    if (settings.type == 'debug') return debugLogger;
     return oldLogger;
 }
    

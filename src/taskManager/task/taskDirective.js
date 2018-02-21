@@ -14,9 +14,9 @@ function directive(activateTask, canvas, $document, $window, $rootScope, piConso
         link: function($scope, $element){
             var task = $scope.task;
             var script = task.$script || {};
-            var taskName = task.name || script.name || 'unnamedTask';
+            var taskName = task.$name;
             var managerSettings = $scope.$parent.settings || {};
-            var taskLog = $scope.$parent.manager.logger.createLog(taskName, _.get(script, 'setting.logger', {}));
+            var logger = $scope.$parent.manager.logger;
             var piGlobal = window.piGlobal;
 
             var canvasOff, oldTitle;
@@ -56,7 +56,7 @@ function directive(activateTask, canvas, $document, $window, $rootScope, piConso
             /**
              * Activate task
              */
-            def = activateTask(task, $element, $scope.$new(), taskLog);
+            def = activateTask(task, $element, $scope.$new(), logger);
             promise = def.promise;
 
             /**

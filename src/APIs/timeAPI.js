@@ -2,7 +2,7 @@ import factory from './APIConstructor';
 export default api;
 
 var api = factory({
-    type: 'PIP',
+    type: 'minno-time',
     sets: ['trial', 'stimulus','media']
 });
 

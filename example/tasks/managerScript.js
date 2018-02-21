@@ -1,7 +1,10 @@
 define(['managerAPI'], function(Manager){
     var API = new Manager();
+
     API.addSettings('skin', '');
+    API.addSettings('logger', {type:'debug'});
     //API.addSettings('preloadImages', images);
+    //API.addSettings('skip', true);
 
     API.addSettings('injectStyle', [
         '[pi-player] {position:fixed;left:0; right:0;}',
@@ -29,8 +32,6 @@ define(['managerAPI'], function(Manager){
         }
     ]);
 
-    API.addSettings('onEnd', function(){console.log('onEnd');});
-    //API.addSettings('skip', true);
 
     API.addSequence([
         {

@@ -35842,7 +35842,7 @@ function showFeedback(global, options){
 }
 
 var api$1 = APIconstructor({
-    type: 'PIP',
+    type: 'minno-time',
     sets: ['trial', 'stimulus','media']
 });
 
@@ -40487,7 +40487,7 @@ function buildBaseUrl(version){
 }
 
 var Constructor$2 = APIconstructor({
-    type: 'quest',
+    type: 'minnno-quest',
     sets: ['pages', 'questions']
 });
 
@@ -44842,7 +44842,7 @@ taskActivateProvider.$inject = ['$q', '$rootScope', '$injector'];
 function taskActivateProvider($q,$rootScope, $injector){
     var self = this;
 
-    function taskActivate(task, $element, $scope, log){
+    function taskActivate(task, $element, $scope, logger){
         var def = $q.defer();
         var global = $rootScope.global;
         var script = task.$script;
@@ -44862,7 +44862,7 @@ function taskActivateProvider($q,$rootScope, $injector){
             $element: $element,
             $scope: $scope,
             global: global,
-            log: log
+            logger: logger
         });
 
         // if activator returns a function use it to clean up the task
@@ -44908,9 +44908,9 @@ function directive$10(activateTask, canvas, $document, $window, $rootScope, piCo
         link: function($scope, $element){
             var task = $scope.task;
             var script = task.$script || {};
-            var taskName = task.name || script.name || 'unnamedTask';
+            var taskName = task.$name;
             var managerSettings = $scope.$parent.settings || {};
-            var taskLog = $scope.$parent.manager.logger.createLog(taskName, lodash.get(script, 'setting.logger', {}));
+            var logger = $scope.$parent.manager.logger;
             var piGlobal = window.piGlobal;
 
             var canvasOff, oldTitle;
@@ -44950,7 +44950,7 @@ function directive$10(activateTask, canvas, $document, $window, $rootScope, piCo
             /**
              * Activate task
              */
-            def = activateTask(task, $element, $scope.$new(), taskLog);
+            def = activateTask(task, $element, $scope.$new(), logger);
             promise = def.promise;
 
             /**
@@ -45144,10 +45144,9 @@ function normalize(val){
     return val;
 }
 
-postCsv.$inject = ['done', 'task', '$scope'];
-function postCsv(done, task, $scope){
-    var Logger = $scope.$parent.$parent.manager.logger;
-    var logs = Logger.ctx.logs;
+postCsv.$inject = ['done', 'task', 'logger'];
+function postCsv(done, task, logger){
+    var logs = logger.ctx.logs;
     if (!logs || !logs.length) return done();
     var serialized = csvLogger.serialize('manager', logs);
     var promise = csvLogger.send('manager', serialized, task);
@@ -45250,10 +45249,11 @@ function activatePIP$1(done, $canvas, task, script, piConsole){
     };
 }
 
-activateTime$1.$inject = ['done', '$element', 'task', 'script', 'piConsole'];
-function activateTime$1(done, $canvas, task, script, piConsole){
+activateTime$1.$inject = ['done', '$element', 'task', 'script', 'piConsole','logger'];
+function activateTime$1(done, $canvas, task, script, piConsole, logger){
     var $el;
     var pipSink;
+    var log = logger.createLog(task.$name, script.settings.logger);
 
     // update script name
     task.name && (script.name = task.name);
@@ -45264,6 +45264,9 @@ function activateTime$1(done, $canvas, task, script, piConsole){
     pipSink = activate$2($el[0], script);
     pipSink.onEnd(done);
     pipSink.$messages.map(piConsole);
+
+    pipSink.$logs.map(log);
+    pipSink.$logs.end.map(log.end);
 
     return function destroyPIP(){
         $el.remove();
@@ -45629,6 +45632,38 @@ function serialize$5(name, logs, settings){
     }
 }
 
+var debugLogger = {onRow:onRow$1, onEnd:onEnd$1, serialize:serialize$6, send:send$2};
+
+/*
+ * Regular logs
+ */
+function onRow$1(name, row, settings, ctx){
+    var logs = ctx[name] || (ctx[name] = []);
+    logs.push(row);
+
+    if (settings.pulse && logs.length >= settings.pulse){
+        var res = [].concat(logs);
+        logs.length = 0;
+        return res;
+    }
+}
+
+function onEnd$1(name, settings, ctx){
+    var logs = ctx[name] || (ctx[name] = []);
+    if (logs.length) return logs;
+}
+
+function serialize$6(name, logs){
+    return logs;
+}
+
+function send$2(name, serialized, settings){
+    // eslint-disable-next-line no-console
+    if (!settings.url) console.warn('Logger('+name+'): You have not set a logger url');
+    // eslint-disable-next-line no-console
+    serialized.map(function(val){ console.info('Logger('+name+'):', val); });
+}
+
 function managerLogger(settings, piConsole){
     var composedSettings = lodash.assign({onError:onError}, getSettingsObject(settings), settings);
     return Logger$1(composedSettings);
@@ -45649,8 +45684,10 @@ function managerLogger(settings, piConsole){
 
 function getSettingsObject(settings){
     if (settings.postCsv) return csvLogger;
+    if (settings.type == 'csv') return csvLogger;
     if (settings.type == 'old') return oldLogger;
     if (settings.type == 'new') return dfltLogger;
+    if (settings.type == 'debug') return debugLogger;
     return oldLogger;
 }
 
@@ -45922,6 +45959,7 @@ function taskLoadService($q, managerGetScript, $console){
             template: $q.when(template)
         })
             .then(function(promises){
+                task.$name = task.name || lodash.get(promises.script, 'name', 'unnamedTask');
                 task.$script = promises.script;
                 task.$template = promises.template;
                 return task;

@@ -25,7 +25,7 @@ taskActivateProvider.$inject = ['$q', '$rootScope', '$injector'];
 function taskActivateProvider($q,$rootScope, $injector){
     var self = this;
 
-    function taskActivate(task, $element, $scope, log){
+    function taskActivate(task, $element, $scope, logger){
         var def = $q.defer();
         var global = $rootScope.global;
         var script = task.$script;
@@ -45,7 +45,7 @@ function taskActivateProvider($q,$rootScope, $injector){
             $element: $element,
             $scope: $scope,
             global: global,
-            log: log
+            logger: logger
         });
 
         // if activator returns a function use it to clean up the task

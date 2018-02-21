@@ -22,6 +22,7 @@ function taskLoadService($q, managerGetScript, $console){
             template: $q.when(template)
         })
             .then(function(promises){
+                task.$name = task.name || _.get(promises.script, 'name', 'unnamedTask');
                 task.$script = promises.script;
                 task.$template = promises.template;
                 return task;
