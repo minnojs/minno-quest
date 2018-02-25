@@ -27,12 +27,13 @@ define(function(require){
                 scope.sliderResponse = scope.response;
 
                 // setup view => model
-				scope.$on('slider:change', function(e, newValue){
+				var deRegister = scope.$on('slider:change', function(e, newValue){
                     scope.$apply(function(){
                         scope.response = newValue;
                         data.autoSubmit && scope.$emit('quest:submit:now');
                     });
 				});
+                scope.$on('quest:timeout', deRegister);
 			}
 		};
 	}
