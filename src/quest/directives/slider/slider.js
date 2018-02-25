@@ -1,14 +1,6 @@
-(function (root, factory) {
-    if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
-        define([], factory);
-    } else {
-        /* global angular */
-        var app = angular.module('pi', []);
-        /* global angular:false */
-        app.directive('piSlider', factory(root.angular));
-    }
-}(this, function () {
+export default slider();
+
+function slider() {
     var SLIDER_CHANGE_EVENT = 'slider:change';
 
     sliderDirective.$inject = ['$document', '$sce'];
@@ -206,4 +198,4 @@
     function isEmpty(n){
         return isNaN(parseFloat(n)) || !isFinite(n);
     }
-}));
+}

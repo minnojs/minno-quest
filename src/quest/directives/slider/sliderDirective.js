@@ -2,11 +2,10 @@ import slider from './slider.html';
 
 export default sliderDirective;
 
-sliderDirective.$inject = [];
 function sliderDirective(){
     return {
         replace: true,
-        template: slider.html,
+        template: slider,
         require: ['form', 'ngModel'],
         controller: 'questController',
         controllerAs: 'ctrl',
@@ -27,12 +26,13 @@ function sliderDirective(){
             scope.sliderResponse = scope.response;
 
             // setup view => model
-            scope.$on('slider:change', function(e, newValue){
+            var deRegister = scope.$on('slider:change', function(e, newValue){
                 scope.$apply(function(){
                     scope.response = newValue;
                     data.autoSubmit && scope.$emit('quest:submit:now');
                 });
             });
+            scope.$on('quest:timeout', deRegister);
         }
     };
 }

@@ -68,7 +68,6 @@ module.directive('questSlider',sliderDirective);
 module.directive('piSlider',slider);
 module.directive('piPointerdown',piPointerdown);
 
-
 // @TODO: move to utils or something
 module.config(['$sceProvider', function($sceProvider){
     $sceProvider.enabled(false);

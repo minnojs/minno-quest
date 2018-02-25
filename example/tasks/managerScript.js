@@ -40,6 +40,7 @@ define(['managerAPI'], function(Manager){
                 global.current = global.iat =  {feedback:'bam!'};
             }
         },
+        { type: 'quest', name: 'dotWidth', scriptUrl: '/test/rate.js' },
         { type:'post', url:'sdf'},
         { type:'pip', version: 0.5,  scriptUrl: '/test/maintask.js' },
         { type:'message', templateUrl: 'message.jst' },
