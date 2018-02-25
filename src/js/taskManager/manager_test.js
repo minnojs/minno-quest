@@ -60,24 +60,6 @@ define(['require','./managerModule'], function(require){
                 expect($document[0].title).toBe('test123');
             }));
 
-            it('should postCsv is active', inject(function($http,managerService){
-                var global = $scope.global;
-                var expected = [
-                    'taskName,a,b,c,d,e',
-                    'task1,1,2,,,',
-                    'task1,,,3,"""4""",',
-                    'task2,,,,,"5\n6"'
-                ].join('\n');
-
-                global.task1 = {logs:[{a:1,b:2},{c:3,d:'"4"'}]};
-                global.task2 = {logs:[{e:'5\n6'}]};
-
-                spyOn($http,'post');
-                manager = managerService($scope, {settings:{logger:{postCsv:'postUrl'}}});
-                $scope.$destroy();
-                expect($http.post).toHaveBeenCalledWith('postUrl', expected);
-            }));
-
             it('should activate canvas', inject(function(managerCanvas){
                 expect(managerCanvas).toHaveBeenCalled();
             }));
