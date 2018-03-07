@@ -91,9 +91,21 @@ function APIconstructor(options){
             return this.script;
         },
 
-        save: function(){
-            // eslint-disable-next-line no-console
-            console.info('API.save was called with', arguments, 'but is not supported by this version of MinnoJS');
+        save: function save(obj){
+            var script = this.script;
+            var toSave = script._toSave || (script._toSave = []);
+           
+
+            if (!_.isPlainObject(obj)) throw new Error('API.save can send only objects.'); 
+
+            var saveObj = _.set(obj, '$isManual', true);
+
+            /**
+             * Check if we already have a reference to the logger, if not - keep the logged object on ice
+             * See taskManager/logger/liftSave for the rational here
+             */
+            if (script._save) return script._save(saveObj);
+            toSave.push(saveObj);
         },
 
         // name, response, taskName, taskNumber

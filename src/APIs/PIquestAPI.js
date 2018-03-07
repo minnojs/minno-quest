@@ -1,5 +1,4 @@
 import Constructor from './questAPI';
-import decorator from './PIAPIdecorator';
 import _ from 'lodash';
 
 export default API;
@@ -15,4 +14,3 @@ function API(){
 
 // create API functions
 _.extend(API.prototype, Constructor.prototype);
-decorator(API);

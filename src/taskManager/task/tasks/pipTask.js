@@ -1,15 +1,16 @@
 import _ from 'lodash';
+import liftSave from './liftSave';
 import {requirejs} from 'requirejs/require.js';
 export default activatePIP;
 
 activatePIP.$inject = ['done', '$element', 'task', 'script', 'piConsole', 'logger'];
-function activatePIP(done, $canvas, task, script, piConsole,logger){
+function activatePIP(done, $canvas, task, script, piConsole, logger){
     var log = logger.createLog(task.$name, script.settings.logger);
     var $el, req;
     var pipSink;
 
-    // update script name
-    task.name && (script.name = task.name);
+    script.name = task.$name;
+    liftSave(log, script);
 
     if (task.version > 0.4) {
         $canvas.append('<div pi-player></div>');

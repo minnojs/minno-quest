@@ -35516,9 +35516,21 @@ function APIconstructor(options){
             return this.script;
         },
 
-        save: function(){
-            // eslint-disable-next-line no-console
-            console.info('API.save was called with', arguments, 'but is not supported by this version of MinnoJS');
+        save: function save(obj){
+            var script = this.script;
+            var toSave = script._toSave || (script._toSave = []);
+           
+
+            if (!lodash.isPlainObject(obj)) throw new Error('API.save can send only objects.'); 
+
+            var saveObj = lodash.set(obj, '$isManual', true);
+
+            /**
+             * Check if we already have a reference to the logger, if not - keep the logged object on ice
+             * See taskManager/logger/liftSave for the rational here
+             */
+            if (script._save) return script._save(saveObj);
+            toSave.push(saveObj);
         },
 
         // name, response, taskName, taskNumber
@@ -35609,36 +35621,6 @@ var Constructor = APIconstructor({
     static: {PROGRESS_BAR:PROGRESS_BAR}
 });
 
-var counter = 1000;
-
-function APIdecorator(constructor){
-    constructor.prototype.save = save;
-}
-
-function save(obj){
-    var script = this.script;
-    if (!lodash.isPlainObject(obj)){
-        throw new Error('API.save can send only objects.');
-    }
-
-    var globalMeta = (window.piGlobal && window.piGlobal.$meta) || {};
-
-    var meta = {
-        taskName: script.name,
-        taskNumber: script.serial || 0
-    };
-
-    var arr = lodash.map(obj, function(value, key){
-        return lodash.extend({
-            name: key,
-            response: value,
-            serial: ++counter
-        }, meta, globalMeta);
-    });
-
-    return this.post('/implicit/PiQuest', arr);
-}
-
 var messageTemplate = "<div class=\"panel panel-info\" style=\"margin-top:1em\">\n\t<% if (task.header){ %>\n\t\t<div class=\"panel-heading\">\n\t\t\t<h1 class=\"panel-title\" style=\"font-size:2em\"><%= task.header %></h1>\n\t\t</div>\n\t<% } %>\n\n\t<div class=\"panel-body\">\n\t\t<%= content %>\n\n\t\t<% if (!task.buttonHide){ %>\n\t\t\t<div class=\"text-center proceed\" style=\"margin: 30px auto 10px;\">\n\t\t\t\t<button pi-message-done type=\"button\" class=\"btn btn-primary\">\n\t\t\t\t\t<% if (task.buttonText){ %>\n\t\t\t\t\t\t<%= task.buttonText %>\n\t\t\t\t\t<% } else { %>\n\t\t\t\t\t\tClick Here or press the space button to Proceed\n\t\t\t\t\t<% } %>\n\t\t\t\t</button>\n\t\t\t</div>\n\t\t<% } %>\n\t</div>\n\n\t<% if (task.footer){ %>\n\t\t<div class=\"panel-footer\">\n\t\t\t<%= task.footer %>\n\t\t</div>\n\t<% } %>\n</div>\n<div style=\"text-align:center; padding: 1em\">&middot; Project Implicit &middot;</div>";
 
 var messageTemplateDebrief = "<style type=\"text/css\">\n\t.navbar-inverse .navbar-nav > li > a {color:#dbdbdb;font-weight: bold;}\n</style>\n<nav class=\"navbar navbar-inverse navbar-fixed-top\">\n\t<div class=\"container\">\n\t\t<div class=\"navbar-header\">\n\t\t\t<button type=\"button\" class=\"navbar-toggle collapsed\" ng-click=\"showNavbar = !showNavbar\" aria-expanded=\"false\" aria-controls=\"navbar\">\n\t\t\t\t<span class=\"sr-only\">Toggle navigation</span>\n\t\t\t\t<span class=\"icon-bar\"></span>\n\t\t\t\t<span class=\"icon-bar\"></span>\n\t\t\t\t<span class=\"icon-bar\"></span>\n\t\t\t</button>\n\t\t\t<a class=\"navbar-brand\" href=\"http://www.projectimplicit.net/index.html\" >\n\t\t\t\t<img width=\"20\" height=\"20\" title=\"\" alt=\"\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAD9klEQVR42m3T/U+TVxQH8HMvLftb5g+dZDFpzJY0mdR1CAxqEWxpq9JiW0oHzOnGQiOLGqFF12kVKuXVUkqrK1KQFx1bcFGnYS/dsizLksVfTNhUthmTGe/ZuU+BSUuTb3J77+3nOec+t8C8mfvw3txzaLsp4OhXAtq/FuC/K+CT+wJOfSegKysg8JOA7h8FnP5ewIllAZ33BHTcFvDhkoAjiwJaFgQ0X1/l7kwvgHf6OfPNImtdQPhgEaH9FoL/NkLnNwgnv0Xo+gEJzEWO5VznPdpzJ7f36CKytgVUDE/mH4CmabEB0iJ8dEs+HeE4gSeWEU6/BMrxSZo7TmDHndzezSACeDIEXkdonSfwywfQsWSEzrs7lJxa3gHdWcrPa8nm5tbXP16qoK5+lcVIg3mmCHQT6J1GOkcB79+sgbxPLBYrSU4k5pITEzdGotGd+et09ruhZV6w5hlkbgm6rgnWRKUqVU5r8/cHurqyZ4NBcSYYQBr/ptPpVJs2+GY0INttmkbmmiSwcVIosneGUgj6vE2rzR4PruWZ3+/fDLpmNMybq441fk6g46pgh0mWB7oFeMCyv8VmMf9rs1he2Mzm9oKWJUgdSoM5rhB4KCWUweE0gitdAILJX/yau0df4ggYtpkSxYVgWiNbZc6ryA4lCbRPCGVAE+BK5YF+Dq037NC28BDa5le4b7YRnL3qAlBiDSlk9gSB1rhg9nEEiTa8BJpMReCdbaZ/wAr45pS7Si/uEW/OHAN/9v9KrUmNgh1IILOOEWi+LFg9DaRuXwP9VJk77aMb8Cd46OLT+SqXlsbgmnrC3ZPHNiqVoH0NM48SWDssYP8IgiVG4KgWTIkiOJiyg+PKinxh4EwL1phGGXDSW5RzjtQj3pB0gu4LFVhjGqiPKRirHUZgpgHB9g0i1A3LSS3Ux18F2/hDqljAweQqHcXv8oyVNKQe0MMeK0dki6+ALfE61BFIBbHaISSLQOMlwff2I6sZQHXNgBZqh0qo2r/BOvaY2+OtYB8flEAu8QS3JT209gdV9UxVF3sDjEMaWRA3RZEbLxFY2St4VR8STGBEC9v8xWAZe5OyEwyhV+jpYbBcRhluHh1R1qkTlWVEJ9dVVZFSZowKXh1BXnmRwLLzgpeHkdEXdXlki3sYDfN9QyhTVDM4pTYNbM+lb7tqb7+eV/f9wt/tRV5xAXnZOQINoRf8nc+Q0Rd1eagQrI6EZSsyzNgvWFUEmeyIEFbZpxTD95xHaXBDiEB9zxO++yyytz9FtWELcM+FsFLBeiou5qrJg6TB9T1PgZcGz/Fdgb9YaQ+qdwULwbJQWPnheqiTDYSK4PozuZQGn6re6j7yHw6qbqUIb1GZAAAAAElFTkSuQmCC\" />\n\t\t\t</a>\n\t\t</div>\n\t\t<div id=\"navbar\" class=\"collapse navbar-collapse\" ng-class=\"{in:showNavbar}\">\n\t\t\t<ul class=\"nav navbar-nav\">\n\t\t\t\t<li ><a href=\"/implicit/research/\">Try a study</a></li>\n\t\t\t\t<li><a href=\"/implicit/takeatest.html\" >Take a test</a></li>\n\t\t\t\t<li><a href=\"/implicit/education.html\">Background</a></li>\n\t\t\t\t<li><a href=\"/implicit/help.html\">Tech Support</a></li>\n\t\t\t\t<li><a href=\"/implicit/aboutus.html\">The Scientists</a></li>\n\t\t\t\t<li><a href=\"https://4agc.com/donation_pages/9dda692c-6aa1-47e7-852d-58d396ebd3af\">Donate</a></li>\n\t\t\t</ul>\n\t\t</div><!--/.nav-collapse -->\n\t</div>\n</nav>\n\n<div class=\"container\" style=\"margin-top:50px;\">\n\t<div class=\"row\">\n\t\t<div class=\"col-md-12\">\n\t\t\t<h2>You have completed the study.</h2>\n\t\t</div>\n\t</div>\n\n\t<div class=\"row\">\n\t\t<div class=\"col-md-12\">\n\t\t\t<%= content %>\n\t\t</div>\n\t</div>\n\n\t<div class=\"row\">\n\t\t<div class=\"col-md-12 text-center\" style=\"margin: 30px auto 10px;\">\n            <% if (!task.noDonate){ %>\n                <a href=\"https://4agc.com/donation_pages/9dda692c-6aa1-47e7-852d-58d396ebd3af\" target=\"_blank\" class=\"btn btn-primary\">Donate to Project Implicit</a>\n            <% } %>\n\n\t\t\t<% if (task.demo) { %>\n\t\t\t\t<a href=\"<%= task.isTouch ? '/implicit/selectatouchtest.html' : '/implicit/selectatest.html'%>\" class=\"btn btn-default\">Take another test</a>\n\t\t\t<% } else { %>\n\t\t\t\t<a href=\"/implicit/Assign\" class=\"btn btn-default\">Start next study</a>\n\t\t\t<% } %>\n\t\t</div>\n\t</div>\n\n</div>\n\n<footer role=\"contentinfo\">\n\n\t<style type=\"text/css\">\n\t\tfooter {text-align:center;border-top: 1px solid #e5e5e5;margin-top:50px;color: #767676;padding: 30px 0;}\n\t\tfooter li {display: inline;padding: 0 2px}\n\t</style>\n\n\t<ul class=\"text-muted\">\n\t\t<li><button onClick=\"window.print()\" class=\"btn btn-default\">\n\t\t\t<span aria-hidden=\"true\" class=\"glyphicon glyphicon-print\"></span>\n\t\t\tPrint Page\n\t\t</button></li>\n\t\t<li>·</li>\n\t\t<li><a href=\"/implicit/backgroundinformation.html\">Background Information</a></li>\n\t\t<li>·</li>\n\t\t<li><a href=\"/implicit/privacy.html\">Privacy Information</a></li>\n\t\t<li>·</li>\n\t\t<li><a href=\"/implicit\">Project Implicit Home</a></li>\n\t</ul>\n</footer>\n";
@@ -35654,7 +35636,6 @@ function API(){
 
 // create API functions
 lodash.extend(API.prototype, Constructor.prototype);
-APIdecorator(API);
 
 // annotate onPreTask
 onPreTask.$inject = ['currentTask', '$http','$rootScope','managerBeforeUnload','templateDefaultContext', 'managerSettings', 'piConsole'];
@@ -50227,7 +50208,7 @@ else module.exports = exports;
 });
 
 function preloadPhase$1(canvas, script, $messages){
-    var preloader = preloadScript(script, script.base_url);
+    var preloader = preloadScript(script, script.settings.base_url);
 
     if (preloader.progress() == 1) return Promise.resolve().then(emptyCanvas);
 
@@ -50241,7 +50222,6 @@ function preloadPhase$1(canvas, script, $messages){
         });
     };
     preloader.onerror = function(e, src){
-        console.log(src);
         $messages({
             type:'error',
             message: 'Failed to preload',
@@ -53674,7 +53654,6 @@ function API$1(name){
 // create API functions
 lodash.extend(API$1.prototype, api$1.prototype);
 API$1.prototype.setVersion = function setVersion(ver){this.script.version = ver;};
-APIdecorator(API$1);
 
 // annotate the play function
 play.$inject = ['done', '$element', 'script', 'task', 'piConsole'];
@@ -53789,7 +53768,6 @@ function API$2(){
 
 // create API functions
 lodash.extend(API$2.prototype, Constructor$2.prototype);
-APIdecorator(API$2);
 
 /**
  * Essentialy a defaults object for the scorer
@@ -54856,11 +54834,9 @@ function createLogs$2($sourceLogs, settings, defaultLogMap){
     }
 }
 
-function dfltQuestLogger(log, pageData, global){
+function dfltQuestLogger(log, pageData /*, global*/){
     var logObj = lodash.extend({},pageData,log);
-    if (logObj.declined) {
-        logObj.response = log.responseObj = undefined;
-    }
+    if (logObj.declined) logObj.response = log.responseObj = undefined;
     return logObj;
 }
 
@@ -58370,6 +58346,23 @@ function directive$10(activateTask, canvas, $document, $window, $rootScope, piCo
     };
 }
 
+/**
+ * This is a horrible horrible hack.
+ * ---------------------------------
+ * Here is the rational:
+ * The task script was supposed to be a declarative description of the task.
+ * A requirement was added to allow procedural saving of data.
+ * When a script is loaded we have no guarantee that the manager even exists yet.
+ * Therefore API.save pushes all logs into _toSave until the task is loaded, and then _save gives a direct reference to the logger
+ **/
+function liftSave$1(log, script){
+    script._save = log;
+    if (script._toSave) {
+        script._toSave.map(log);
+        script._toSave.length = 0;
+    }
+}
+
 activateQuest$1.$inject = ['done', '$element', '$scope', '$compile', 'script','task','logger'];
 function activateQuest$1(done, $canvas, $scope, $compile, script, task, logger){
     var $el;
@@ -58377,6 +58370,7 @@ function activateQuest$1(done, $canvas, $scope, $compile, script, task, logger){
 
     // update script name
     script.name = task.$name;
+    liftSave$1(log, script);
     $scope.script = script;
 
     $canvas.append('<div pi-quest></div>');
@@ -58548,13 +58542,13 @@ function activateRedirect$1(done, task, beforeUnload){
 }
 
 activatePIP$1.$inject = ['done', '$element', 'task', 'script', 'piConsole', 'logger'];
-function activatePIP$1(done, $canvas, task, script, piConsole,logger){
+function activatePIP$1(done, $canvas, task, script, piConsole, logger){
     var log = logger.createLog(task.$name, script.settings.logger);
     var $el, req;
     var pipSink;
 
-    // update script name
-    task.name && (script.name = task.name);
+    script.name = task.$name;
+    liftSave$1(log, script);
 
     if (task.version > 0.4) {
         $canvas.append('<div pi-player></div>');
@@ -58621,18 +58615,6 @@ function activatePIP$1(done, $canvas, task, script, piConsole,logger){
     };
 }
 
-function activate$4(canvas, script){
-    var sink = setup$1(canvas, script);
-    var playSink = playerPhase(sink);
-
-    playSink.$trial.end.map(playSink.$resize.end); // end resize stream
-
-    // preload Images, then start "playPhase"
-    preloadPhase$1(canvas, script, playSink.$messages).then(playSink.start);
-
-    return playSink;
-}
-
 activateTime$1.$inject = ['done', '$element', 'task', 'script', 'piConsole','logger'];
 function activateTime$1(done, $canvas, task, script, piConsole, logger){
     var $el;
@@ -58641,11 +58623,12 @@ function activateTime$1(done, $canvas, task, script, piConsole, logger){
 
     // update script name
     script.name = task.$name;
+    liftSave$1(log, script);
 
     $canvas.append('<div pi-player></div>');
     $el = $canvas.contents();
 
-    pipSink = activate$4($el[0], script);
+    pipSink = activate$2($el[0], script);
     pipSink.onEnd(done);
 
     pipSink.$messages.map(piConsole);
@@ -58953,6 +58936,9 @@ var dfltLogger = {onRow:onRow, onEnd:onEnd, serialize:serialize, send:send};
  */
 function onRow(name, row, settings, ctx){
     var logs = ctx[name] || (ctx[name] = []);
+
+    if (row.$isManual) return [row];
+
     logs.push(row);
 
     if (settings.pulse && logs.length >= settings.pulse){
@@ -58981,14 +58967,41 @@ function send(name, serialized, settings, ctx){
     function onError(e){ settings.onError.apply(null, [e,name,serialized,settings,ctx]); }
 }
 
-var oldLogger = lodash.defaults({serialize:serialize$1, send:send$1}, dfltLogger);
+var serial = 1;
+var oldLogger = {onRow:onRow$1, onEnd:onEnd$1, serialize:serialize$1, send:send$1};
 
-function send$1(name, serialized, settings, ctx){
-    var url = name === 'manager' ? settings.managerUrl : settings.url;
-    if (!url) return;
-    xhr({url:url, mehtod:'POST', body:serialized}).catch(onError);
+/*
+ * Regular logs
+ */
+function onRow$1(name, row, settings, ctx){
+    var logs = ctx[name] || (ctx[name] = []);
 
-    function onError(e){ settings.onError.apply(null, [e,name,serialized,settings,ctx]); }
+    if (row.$isManual) return apiSave(row);
+
+    logs.push(row);
+
+    if (settings.pulse && logs.length >= settings.pulse){
+        var res = [].concat(logs);
+        logs.length = 0;
+        return res;
+    }
+}
+
+function apiSave(row){
+    return lodash.pairs(row) // row => [[key,value]]
+        .filter(function(pair){ return pair[0] !== '$isManual'; })
+        .map(function(pair){ 
+            return {
+                name:pair[0], 
+                response: pair[1], 
+                serial: serial++
+            }; 
+        });
+}
+
+function onEnd$1(name, settings, ctx){
+    var logs = ctx[name] || (ctx[name] = []);
+    if (logs.length) return logs;
 }
 
 function serialize$1(name, logs, settings){
@@ -59004,12 +59017,20 @@ function serialize$1(name, logs, settings){
     }
 }
 
-var debugLogger = {onRow:onRow$1, onEnd:onEnd$1, serialize:serialize$2, send:send$2};
+function send$1(name, serialized, settings, ctx){
+    var url = name === 'manager' ? settings.managerUrl : settings.url;
+    if (!url) return;
+    xhr({url:url, mehtod:'POST', body:serialized}).catch(onError);
+
+    function onError(e){ settings.onError.apply(null, [e,name,serialized,settings,ctx]); }
+}
+
+var debugLogger = {onRow:onRow$2, onEnd:onEnd$2, serialize:serialize$2, send:send$2};
 
 /*
  * Regular logs
  */
-function onRow$1(name, row, settings, ctx){
+function onRow$2(name, row, settings, ctx){
     var logs = ctx[name] || (ctx[name] = []);
     logs.push(row);
 
@@ -59020,7 +59041,7 @@ function onRow$1(name, row, settings, ctx){
     }
 }
 
-function onEnd$1(name, settings, ctx){
+function onEnd$2(name, settings, ctx){
     var logs = ctx[name] || (ctx[name] = []);
     if (logs.length) return logs;
 }
@@ -59092,6 +59113,7 @@ function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector, pi
         this.script = script;
         this.logger = managerLogger(settings.logger || {}, piConsole); // the central logger to be used by tasks
         this.log = this.logger.createLog('manager', {pulse:1}); // a specific log to deal with manager logging (make sure we post immediately
+        liftSave$1(this.log,this.script); // fix API.save
         $scope.$on('$destroy', function(){ self.log.end(true); });
 
         // create sequence
@@ -61376,7 +61398,7 @@ function piConsoleFactory$4($log){
     function noramlizeMessage(obj){
         return lodash.cloneDeep(obj, normalize);
         function normalize(val){
-            if (lodash.isFunction(val)) return val.toString();
+            if (lodash.isFunction(val)) return 'Function: ' + val.name;
             if (lodash.isError(val)) return {name:val.name, message:val.message, stack:val.stack};
         }
     }

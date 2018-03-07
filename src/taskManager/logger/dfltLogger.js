@@ -8,6 +8,9 @@ export default {onRow:onRow, onEnd:onEnd, serialize:serialize, send:send};
  */
 function onRow(name, row, settings, ctx){
     var logs = ctx[name] || (ctx[name] = []);
+
+    if (row.$isManual) return [row];
+
     logs.push(row);
 
     if (settings.pulse && logs.length >= settings.pulse){

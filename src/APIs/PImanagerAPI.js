@@ -1,6 +1,5 @@
 import Constructor from './managerAPI';
 import _ from 'lodash';
-import decorator from './PIAPIdecorator';
 
 import messageTemplate from './pi/messageTemplate.jst';
 import messageTemplateDebrief from './pi/messageTemplateDebrief.jst';
@@ -21,7 +20,6 @@ function API(){
 
 // create API functions
 _.extend(API.prototype, Constructor.prototype);
-decorator(API);
 
 // annotate onPreTask
 onPreTask.$inject = ['currentTask', '$http','$rootScope','managerBeforeUnload','templateDefaultContext', 'managerSettings', 'piConsole'];

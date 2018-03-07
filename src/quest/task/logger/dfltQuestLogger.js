@@ -1,11 +1,8 @@
 import _ from 'lodash';
 
-function dfltQuestLogger(log, pageData, global){
-    global;
+function dfltQuestLogger(log, pageData /*, global*/){
     var logObj = _.extend({},pageData,log);
-    if (logObj.declined) {
-        logObj.response = log.responseObj = undefined;
-    }
+    if (logObj.declined) logObj.response = log.responseObj = undefined;
     return logObj;
 }
 

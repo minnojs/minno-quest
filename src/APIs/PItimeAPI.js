@@ -1,6 +1,5 @@
 import Constructor from './timeAPI';
 import _ from 'lodash';
-import decorator from './PIAPIdecorator';
 import time from 'minno-time';
 import {require as requirejs} from 'requirejs/require';
 
@@ -35,7 +34,6 @@ function API(name){
 // create API functions
 _.extend(API.prototype, Constructor.prototype);
 API.prototype.setVersion = function setVersion(ver){this.script.version = ver;};
-decorator(API);
 
 // annotate the play function
 play.$inject = ['done', '$element', 'script', 'task', 'piConsole'];

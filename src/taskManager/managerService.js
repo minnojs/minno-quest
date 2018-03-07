@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import Logger from './logger/managerLogger';
+import liftSave from './task/tasks/liftSave';
 
 managerService.$inject = ['$rootScope', '$q', 'managerSequence', 'managerTaskLoad', '$injector', 'piConsole'];
 function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector, piConsole){
@@ -30,6 +31,7 @@ function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector, pi
         this.script = script;
         this.logger = Logger(settings.logger || {}, piConsole); // the central logger to be used by tasks
         this.log = this.logger.createLog('manager', {pulse:1}); // a specific log to deal with manager logging (make sure we post immediately
+        liftSave(this.log,this.script); // fix API.save
         $scope.$on('$destroy', function(){ self.log.end(true); });
 
         // create sequence

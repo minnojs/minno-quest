@@ -2,7 +2,8 @@ define(['managerAPI'], function(Manager){
     var API = new Manager();
 
     API.addSettings('skin', '');
-    API.addSettings('logger', {type:'debug', url:'barkk'});
+    API.addSettings('logger', {type:'old', url:'barkk'});
+    API.save({hark:'bangladore', sven:'tendencies'});
     //API.addSettings('preloadImages', images);
     //API.addSettings('skip', true);
 

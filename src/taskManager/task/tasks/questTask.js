@@ -1,3 +1,4 @@
+import liftSave from './liftSave';
 export default activateQuest;
 
 activateQuest.$inject = ['done', '$element', '$scope', '$compile', 'script','task','logger'];
@@ -7,6 +8,7 @@ function activateQuest(done, $canvas, $scope, $compile, script, task, logger){
 
     // update script name
     script.name = task.$name;
+    liftSave(log, script);
     $scope.script = script;
 
     $canvas.append('<div pi-quest></div>');

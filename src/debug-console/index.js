@@ -126,27 +126,27 @@ function toggle(state, prop){
 }
 
 function syntaxHighlight(json) {    
-    var _string = 'color:green',
-        _number = 'color:darkorange',
-            _boolean = 'color:blue',
-                _null = 'color:magenta',
-                    _key = 'color:red';
+    var _string = 'color:green';
+    var _number = 'color:darkorange';
+    var _boolean = 'color:blue';
+    var _null = 'color:magenta';
+    var _key = 'color:red';
 
-                    json = JSON.stringify(json, null, 2);
-                    json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-                    return m.trust(json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
-                        var style = _number;
-                        if (/^"/.test(match)) {
-                            if (/:$/.test(match)) {
-                                style = _key;
-                            } else {
-                                style = _string;
-                            }
-                        } 
-                        else if (/true|false/.test(match)) style = _boolean;
-                        else if (/null/.test(match)) style = _null;
-                        return '<span style="' + style + '">' + match + '</span>';
-                    }));
+    json = JSON.stringify(json, null, 2);
+    json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return m.trust(json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+        var style = _number;
+        if (/^"/.test(match)) {
+            if (/:$/.test(match)) {
+                style = _key;
+            } else {
+                style = _string;
+            }
+        } 
+        else if (/true|false/.test(match)) style = _boolean;
+        else if (/null/.test(match)) style = _null;
+        return '<span style="' + style + '">' + match + '</span>';
+    }));
 }
 
 var Scroller = {
