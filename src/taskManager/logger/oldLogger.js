@@ -67,10 +67,10 @@ function serialize(name, logs, settings){
 
 function send(name, serialized, settings, ctx){
     var url = settings.isSave || settings.isQuest
-        ? '/implicit/PiQuest/'
+        ? '/implicit/PiQuest'
         : settings.isPIP || settings.isTime
-            ? '/implicit/PiPlayer/'
-            : '/implicit/PiManager/';
+            ? '/implicit/PiPlayerApplet'
+            : '/implicit/PiManager';
 
     xhr({url:url, mehtod:'POST', body:serialized}).catch(onError);
 
