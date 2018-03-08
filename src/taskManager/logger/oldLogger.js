@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import xhr from './xhr';
 
-var serial = 1;
+var serial = 1000;
 export default {onRow:onRow, onEnd:onEnd, serialize:serialize, send:send};
 
 /*
@@ -10,7 +10,8 @@ export default {onRow:onRow, onEnd:onEnd, serialize:serialize, send:send};
 function onRow(name, row, settings, ctx){
     var logs = ctx[name] || (ctx[name] = []);
 
-    if (row.$isManual) return apiSave(row);
+    if (settings.isSave) return apiSave(row);
+    if (settings.isManager) return row;
 
     logs.push(row);
 
@@ -19,19 +20,20 @@ function onRow(name, row, settings, ctx){
         logs.length = 0;
         return res;
     }
+
+    function apiSave(row){
+        return _.pairs(row) // row => [[key,value]]
+            .map(function(pair){ 
+                return {
+                    name:pair[0], 
+                    response: pair[1], 
+                    serial: serial++,
+                    taskName: name
+                }; 
+            });
+    }
 }
 
-function apiSave(row){
-    return _.pairs(row) // row => [[key,value]]
-        .filter(function(pair){ return pair[0] !== '$isManual'; })
-        .map(function(pair){ 
-            return {
-                name:pair[0], 
-                response: pair[1], 
-                serial: serial++
-            }; 
-        });
-}
 
 function onEnd(name, settings, ctx){
     var logs = ctx[name] || (ctx[name] = []);
@@ -39,12 +41,24 @@ function onEnd(name, settings, ctx){
 }
 
 function serialize(name, logs, settings){
+    var data,meta;
     var metaData =  _.assign({}, window.piGlobal.$meta, settings.meta);
-    var data = 'json=' + JSON.stringify(logs); // do not re-encode json
-    var meta = serialize(metaData);
-    return data + (meta ? '&'+meta : '');
 
-    function serialize(data){
+    // manager style
+    if (settings.isManager && !settings.isSave) return JSON.stringify(logs);
+
+    // pip style
+    if (settings.isPIP || settings.isTime) {
+        data = 'json=' + JSON.stringify(logs); // do not re-encode json
+        meta = serializePIP(metaData);
+        return data + (meta ? '&'+meta : '');
+    }
+
+    // piQuest style
+    data = logs.map(function(log) { return _.assign({},log,metaData); });
+    return JSON.stringify(data);
+
+    function serializePIP(data){
         var key, r = [];
         for (key in data) r.push(encodeURIComponent(key) + '=' + encodeURIComponent(data[key]));
         return r.join('&').replace(/%20/g, '+');
@@ -52,8 +66,12 @@ function serialize(name, logs, settings){
 }
 
 function send(name, serialized, settings, ctx){
-    var url = name === 'manager' ? settings.managerUrl : settings.url;
-    if (!url) return;
+    var url = settings.isSave || settings.isQuest
+        ? '/implicit/PiQuest/'
+        : settings.isPIP || settings.isTime
+            ? '/implicit/PiPlayer/'
+            : '/implicit/PiManager/';
+
     xhr({url:url, mehtod:'POST', body:serialized}).catch(onError);
 
     function onError(e){ settings.onError.apply(null, [e,name,serialized,settings,ctx]); }

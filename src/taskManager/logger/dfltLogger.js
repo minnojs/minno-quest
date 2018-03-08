@@ -9,7 +9,7 @@ export default {onRow:onRow, onEnd:onEnd, serialize:serialize, send:send};
 function onRow(name, row, settings, ctx){
     var logs = ctx[name] || (ctx[name] = []);
 
-    if (row.$isManual) return [row];
+    if (row.isSave) return [_.set(row, '$isManual', true)];
 
     logs.push(row);
 

@@ -35519,18 +35519,14 @@ function APIconstructor(options){
         save: function save(obj){
             var script = this.script;
             var toSave = script._toSave || (script._toSave = []);
-           
 
             if (!lodash.isPlainObject(obj)) throw new Error('API.save can send only objects.'); 
-
-            var saveObj = lodash.set(obj, '$isManual', true);
 
             /**
              * Check if we already have a reference to the logger, if not - keep the logged object on ice
              * See taskManager/logger/liftSave for the rational here
              */
-            if (script._save) return script._save(saveObj);
-            toSave.push(saveObj);
+            return script._save ? script._save(obj) : toSave.push(obj);
         },
 
         // name, response, taskName, taskNumber
@@ -54606,7 +54602,7 @@ function piConsoleFactory$3($log){
     function noramlizeMessage(obj){
         return lodash.cloneDeep(obj, normalize);
         function normalize(val){
-            if (lodash.isFunction(val)) return val.toString();
+            if (lodash.isFunction(val)) return 'Function: ' + val.name;
             if (lodash.isError(val)) return {name:val.name, message:val.message, stack:val.stack};
         }
     }
@@ -57683,8 +57679,8 @@ function sliderDirective$1(){
             var deRegister = scope.$on('slider:change', function(e, newValue){
                 scope.$apply(function(){
                     scope.response = newValue;
-                    data.autoSubmit && scope.$emit('quest:submit:now');
                 });
+                data.autoSubmit && scope.$emit('quest:submit:now');
             });
             scope.$on('quest:timeout', deRegister);
         }
@@ -58346,31 +58342,44 @@ function directive$10(activateTask, canvas, $document, $window, $rootScope, piCo
     };
 }
 
-/**
- * This is a horrible horrible hack.
- * ---------------------------------
- * Here is the rational:
- * The task script was supposed to be a declarative description of the task.
- * A requirement was added to allow procedural saving of data.
- * When a script is loaded we have no guarantee that the manager even exists yet.
- * Therefore API.save pushes all logs into _toSave until the task is loaded, and then _save gives a direct reference to the logger
- **/
-function liftSave$1(log, script){
-    script._save = log;
+function createLog(logger, script, task){
+    var name = task.$name;
+    var type = task.type;
+    var settings = cloneSet(script.settings.logger, lodash.camelCase('is-' + type), true);
+
+    var log = logger.createLog(name, settings);
+    var saveLog = logger.createLog(name, cloneSet(settings, 'isSave',true));
+    log.end(saveLog.end);
+
+    /**
+     * This is a horrible horrible hack.
+     * ---------------------------------
+     * Here is the rational:
+     * The task script was supposed to be a declarative description of the task.
+     * A requirement was added to allow procedural saving of data.
+     * When a script is loaded we have no guarantee that the manager even exists yet.
+     * Therefore API.save pushes all logs into _toSave until the task is loaded, and then _save gives a direct reference to the logger
+     **/
+    script._save = saveLog;
     if (script._toSave) {
-        script._toSave.map(log);
+        script._toSave.map(saveLog);
         script._toSave.length = 0;
     }
+
+    return log;
+}
+
+function cloneSet(obj, prop, val){
+    return lodash.assign(lodash.set({},prop, val), obj);
 }
 
 activateQuest$1.$inject = ['done', '$element', '$scope', '$compile', 'script','task','logger'];
 function activateQuest$1(done, $canvas, $scope, $compile, script, task, logger){
     var $el;
-    var log = logger.createLog(task.$name, script.settings.logger);
+    var log = createLog(logger, script, task);
 
     // update script name
     script.name = task.$name;
-    liftSave$1(log, script);
     $scope.script = script;
 
     $canvas.append('<div pi-quest></div>');
@@ -58543,12 +58552,11 @@ function activateRedirect$1(done, task, beforeUnload){
 
 activatePIP$1.$inject = ['done', '$element', 'task', 'script', 'piConsole', 'logger'];
 function activatePIP$1(done, $canvas, task, script, piConsole, logger){
-    var log = logger.createLog(task.$name, script.settings.logger);
+    var log = createLog(logger, script, task);
     var $el, req;
     var pipSink;
 
     script.name = task.$name;
-    liftSave$1(log, script);
 
     if (task.version > 0.4) {
         $canvas.append('<div pi-player></div>');
@@ -58615,20 +58623,31 @@ function activatePIP$1(done, $canvas, task, script, piConsole, logger){
     };
 }
 
+function activate$4(canvas, script){
+    var sink = setup$1(canvas, script);
+    var playSink = playerPhase(sink);
+
+    playSink.$trial.end.map(playSink.$resize.end); // end resize stream
+
+    // preload Images, then start "playPhase"
+    preloadPhase$1(canvas, script, playSink.$messages).then(playSink.start);
+
+    return playSink;
+}
+
 activateTime$1.$inject = ['done', '$element', 'task', 'script', 'piConsole','logger'];
 function activateTime$1(done, $canvas, task, script, piConsole, logger){
     var $el;
     var pipSink;
-    var log = logger.createLog(task.$name, script.settings.logger);
+    var log = createLog(logger, script, task);
 
     // update script name
     script.name = task.$name;
-    liftSave$1(log, script);
 
     $canvas.append('<div pi-player></div>');
     $el = $canvas.contents();
 
-    pipSink = activate$2($el[0], script);
+    pipSink = activate$4($el[0], script);
     pipSink.onEnd(done);
 
     pipSink.$messages.map(piConsole);
@@ -58937,7 +58956,7 @@ var dfltLogger = {onRow:onRow, onEnd:onEnd, serialize:serialize, send:send};
 function onRow(name, row, settings, ctx){
     var logs = ctx[name] || (ctx[name] = []);
 
-    if (row.$isManual) return [row];
+    if (row.isSave) return [lodash.set(row, '$isManual', true)];
 
     logs.push(row);
 
@@ -58967,7 +58986,7 @@ function send(name, serialized, settings, ctx){
     function onError(e){ settings.onError.apply(null, [e,name,serialized,settings,ctx]); }
 }
 
-var serial = 1;
+var serial = 1000;
 var oldLogger = {onRow:onRow$1, onEnd:onEnd$1, serialize:serialize$1, send:send$1};
 
 /*
@@ -58976,7 +58995,8 @@ var oldLogger = {onRow:onRow$1, onEnd:onEnd$1, serialize:serialize$1, send:send$
 function onRow$1(name, row, settings, ctx){
     var logs = ctx[name] || (ctx[name] = []);
 
-    if (row.$isManual) return apiSave(row);
+    if (settings.isSave) return apiSave(row);
+    if (settings.isManager) return row;
 
     logs.push(row);
 
@@ -58985,19 +59005,20 @@ function onRow$1(name, row, settings, ctx){
         logs.length = 0;
         return res;
     }
+
+    function apiSave(row){
+        return lodash.pairs(row) // row => [[key,value]]
+            .map(function(pair){ 
+                return {
+                    name:pair[0], 
+                    response: pair[1], 
+                    serial: serial++,
+                    taskName: name
+                }; 
+            });
+    }
 }
 
-function apiSave(row){
-    return lodash.pairs(row) // row => [[key,value]]
-        .filter(function(pair){ return pair[0] !== '$isManual'; })
-        .map(function(pair){ 
-            return {
-                name:pair[0], 
-                response: pair[1], 
-                serial: serial++
-            }; 
-        });
-}
 
 function onEnd$1(name, settings, ctx){
     var logs = ctx[name] || (ctx[name] = []);
@@ -59005,12 +59026,24 @@ function onEnd$1(name, settings, ctx){
 }
 
 function serialize$1(name, logs, settings){
+    var data,meta;
     var metaData =  lodash.assign({}, window.piGlobal.$meta, settings.meta);
-    var data = 'json=' + JSON.stringify(logs); // do not re-encode json
-    var meta = serialize(metaData);
-    return data + (meta ? '&'+meta : '');
 
-    function serialize(data){
+    // manager style
+    if (settings.isManager && !settings.isSave) return JSON.stringify(logs);
+
+    // pip style
+    if (settings.isPIP || settings.isTime) {
+        data = 'json=' + JSON.stringify(logs); // do not re-encode json
+        meta = serializePIP(metaData);
+        return data + (meta ? '&'+meta : '');
+    }
+
+    // piQuest style
+    data = logs.map(function(log) { return lodash.assign({},log,metaData); });
+    return JSON.stringify(data);
+
+    function serializePIP(data){
         var key, r = [];
         for (key in data) r.push(encodeURIComponent(key) + '=' + encodeURIComponent(data[key]));
         return r.join('&').replace(/%20/g, '+');
@@ -59018,8 +59051,12 @@ function serialize$1(name, logs, settings){
 }
 
 function send$1(name, serialized, settings, ctx){
-    var url = name === 'manager' ? settings.managerUrl : settings.url;
-    if (!url) return;
+    var url = settings.isSave || settings.isQuest
+        ? '/implicit/PiQuest/'
+        : settings.isPIP || settings.isTime
+            ? '/implicit/PiPlayer/'
+            : '/implicit/PiManager/';
+
     xhr({url:url, mehtod:'POST', body:serialized}).catch(onError);
 
     function onError(e){ settings.onError.apply(null, [e,name,serialized,settings,ctx]); }
@@ -59112,8 +59149,7 @@ function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector, pi
         this.$scope = $scope;
         this.script = script;
         this.logger = managerLogger(settings.logger || {}, piConsole); // the central logger to be used by tasks
-        this.log = this.logger.createLog('manager', {pulse:1}); // a specific log to deal with manager logging (make sure we post immediately
-        liftSave$1(this.log,this.script); // fix API.save
+        this.log = createLog(this.logger, this.script, {type:'manager', $name:script.name}); // a specific log to deal with manager logging (make sure we post immediately
         $scope.$on('$destroy', function(){ self.log.end(true); });
 
         // create sequence

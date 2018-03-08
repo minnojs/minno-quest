@@ -94,18 +94,14 @@ function APIconstructor(options){
         save: function save(obj){
             var script = this.script;
             var toSave = script._toSave || (script._toSave = []);
-           
 
             if (!_.isPlainObject(obj)) throw new Error('API.save can send only objects.'); 
-
-            var saveObj = _.set(obj, '$isManual', true);
 
             /**
              * Check if we already have a reference to the logger, if not - keep the logged object on ice
              * See taskManager/logger/liftSave for the rational here
              */
-            if (script._save) return script._save(saveObj);
-            toSave.push(saveObj);
+            return script._save ? script._save(obj) : toSave.push(obj);
         },
 
         // name, response, taskName, taskNumber

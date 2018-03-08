@@ -1,14 +1,13 @@
-import liftSave from './liftSave';
+import createLogs from './createLogs';
 export default activateQuest;
 
 activateQuest.$inject = ['done', '$element', '$scope', '$compile', 'script','task','logger'];
 function activateQuest(done, $canvas, $scope, $compile, script, task, logger){
     var $el;
-    var log = logger.createLog(task.$name, script.settings.logger);
+    var log = createLogs(logger, script, task);
 
     // update script name
     script.name = task.$name;
-    liftSave(log, script);
     $scope.script = script;
 
     $canvas.append('<div pi-quest></div>');

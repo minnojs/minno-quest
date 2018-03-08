@@ -1,16 +1,15 @@
 import time from 'minno-time';
-import liftSave from './liftSave';
+import createLogs from './createLogs';
 export default activateTime;
 
 activateTime.$inject = ['done', '$element', 'task', 'script', 'piConsole','logger'];
 function activateTime(done, $canvas, task, script, piConsole, logger){
     var $el;
     var pipSink;
-    var log = logger.createLog(task.$name, script.settings.logger);
+    var log = createLogs(logger, script, task);
 
     // update script name
     script.name = task.$name;
-    liftSave(log, script);
 
     $canvas.append('<div pi-player></div>');
     $el = $canvas.contents();
