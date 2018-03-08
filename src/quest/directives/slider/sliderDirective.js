@@ -29,8 +29,8 @@ function sliderDirective(){
             var deRegister = scope.$on('slider:change', function(e, newValue){
                 scope.$apply(function(){
                     scope.response = newValue;
-                    data.autoSubmit && scope.$emit('quest:submit:now');
                 });
+                data.autoSubmit && scope.$emit('quest:submit:now');
             });
             scope.$on('quest:timeout', deRegister);
         }
