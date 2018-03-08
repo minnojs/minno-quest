@@ -2,7 +2,7 @@
  * The directive for creating text inputs.
  */
 define(function (require) {
-	// This is the only way to get a non js file relatively
+    // This is the only way to get a non js file relatively
     var textTemplate = require('text!./text.html');
     var textareaTemplate = require('text!./textarea.html');
     var angular = require('angular');
@@ -34,6 +34,7 @@ define(function (require) {
 
                 data.autoSubmit && element.bind('keydown keypress', function (event) {
                     if(event.which === 13) {
+                        // @TODO: this apply is possibly superfluous
                         scope.$apply(function(){
                             scope.$emit('quest:submit:now');
                         });
@@ -41,13 +42,13 @@ define(function (require) {
                     }
                 });
 
-				// limit the length of the input string
-				// essentially a formatter for the input ngModel
+                // limit the length of the input string
+                // essentially a formatter for the input ngModel
                 function maxlengthLimit($event){
                     var $input = angular.element($event.target);
                     var response = $input.val();
                     var limit = data.maxlength || response.length; // in case maxlength isn't defined...
-					// update the scope
+                    // update the scope
                     scope.response = response.slice(0,limit);
                 }
             }

@@ -49,7 +49,7 @@
     "requirejs": "^2.1.17"
   },
   "engines": {
-    "node": ">=0.4.11"
+    "node": "~4.2.4"
   },
   "dependencies": {
     "minno-gendocs": "^1.0.0"

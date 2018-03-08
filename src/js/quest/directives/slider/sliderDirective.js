@@ -28,8 +28,8 @@ define(function(require){
                 var removeListener = scope.$on('slider:change', function(e, newValue){
                     scope.$apply(function(){
                         scope.response = newValue;
-                        data.autoSubmit && scope.$emit('quest:submit:now');
                     });
+                    data.autoSubmit && scope.$emit('quest:submit:now');
                 });
                 scope.$on('quest:timeout', removeListener); // so that dropping the slider after timer runs out does not update
             }

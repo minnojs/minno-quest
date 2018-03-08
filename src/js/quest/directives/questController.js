@@ -64,7 +64,6 @@ define(function(require){
 			// has to be evaluated in the context of the parent scope because we're assuming that the quest directives have an isolated scope
             log = ngModelGet($scope.$parent);
 
-			// init log
 			// ********
 			// create log if it doesn't exist yet
             if (_.isUndefined(log)){

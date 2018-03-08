@@ -41,7 +41,7 @@ define(['managerAPI'], function(Manager){
                 global.current = global.iat =  {feedback:'bam!'};
             }
 		},
-        { type: 'quest', name: 'dotWidth', scriptUrl: 'questScript1.js' },
+        { type: 'quest', name: 'dotWidth', scriptUrl: '/test/timeSlider.js' },
         //{ type: 'postCsv', url: 'csv.php' }, 
         {
 			type: 'pip',
