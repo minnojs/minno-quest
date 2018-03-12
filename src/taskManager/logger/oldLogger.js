@@ -2,6 +2,7 @@ import _ from 'lodash';
 import xhr from './xhr';
 
 var serial = 1000;
+var taskNumber = 0;
 export default {onRow:onRow, onEnd:onEnd, serialize:serialize, send:send};
 
 /*
@@ -27,8 +28,7 @@ function onRow(name, row, settings, ctx){
                 return {
                     name:pair[0], 
                     response: pair[1], 
-                    serial: serial++,
-                    taskName: name
+                    serial: serial++
                 }; 
             });
     }
@@ -37,12 +37,14 @@ function onRow(name, row, settings, ctx){
 
 function onEnd(name, settings, ctx){
     var logs = ctx[name] || (ctx[name] = []);
+    taskNumber++;
+    serial=1000;
     if (logs.length) return logs;
 }
 
 function serialize(name, logs, settings){
     var data,meta;
-    var metaData =  _.assign({}, window.piGlobal.$meta, settings.meta);
+    var metaData =  _.assign({taskName:name, taskNumber:taskNumber}, window.piGlobal.$meta, settings.meta);
 
     // manager style
     if (settings.isManager && !settings.isSave) return JSON.stringify(logs);
