@@ -16,9 +16,10 @@
   "minno": {
     "activeVersions": [
       "0.0",
-      "0.1"
+      "0.1",
+      "0.2"
     ],
-    "timeVersion": "0.3"
+    "timeVersion": "0.5"
   },
   "repository": {
     "type": "git",
