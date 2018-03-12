@@ -11,7 +11,7 @@ export default createLog;
 function createLog(logger, script, task){
     var name = task.$name;
     var type = task.type;
-    var settings = cloneSet(script.settings.logger, _.camelCase('is-' + type), true);
+    var settings = cloneSet(_.get(script,'settings.logger',{}), _.camelCase('is-' + type), true);
 
     var log = logger.createLog(name, settings);
     var saveLog = logger.createLog(name, cloneSet(settings, 'isSave',true));

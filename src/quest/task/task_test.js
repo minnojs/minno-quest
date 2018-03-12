@@ -5,7 +5,7 @@ describe('QuestTask',function(){
     var createSpy = jasmine.createSpy('create');
     var parseSpy = jasmine.createSpy('parse');
     var nextSpy = jasmine.createSpy('next').and.returnValue('nextObj');
-    var script = {sequence:[]};
+    var script;
 
     // stubout constructors
     beforeEach(module('task', 'database', function($provide) {
@@ -19,6 +19,7 @@ describe('QuestTask',function(){
     }));
 
     beforeEach(inject(function(QuestTask, $rootScope){
+        script = {sequence:[],settings:{}};
         $rootScope.global = {};
         $rootScope.global.current = $rootScope.current = {questions:{}};
         task = new QuestTask(script);
@@ -42,7 +43,7 @@ describe('QuestTask',function(){
             }
         };
         task = new QuestTask(script);
-        expect(task.logger._state).toBeTruthy();
+        expect(task.$logs._state).toBeTruthy();
         expect(task.$logSource._state).toBeTruthy();
     }));
 

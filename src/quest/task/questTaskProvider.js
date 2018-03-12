@@ -17,7 +17,7 @@ function TaskProvider($q, Database, QuestSequence, parse, $rootScope){
         this.db = new Database();
         this.sequence = new QuestSequence(script.sequence, this.db);
         this.$logSource = stream();
-        this.$logs = createLogStream(this.$logSource, settings.logger, dfltQuestLogger);
+        this.$logs = createLogStream(this.$logSource, settings.logger || {}, dfltQuestLogger);
         this.q = $q.defer();
 
         this.promise = this.q.promise

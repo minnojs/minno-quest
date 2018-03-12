@@ -12,7 +12,7 @@ function Logger(defaultSettings){
         var logs = stream();
         var settings = _.defaults({}, localSettings, defaultSettings);
 
-        if (!_.isString(name)) throw new Error('Log name must be a string');
+        if (!_.isString(name) && !_.isNumber(name)) throw new Error('Log name must be a string');
         validateSettings(settings);
         
         log.map(tryCatch(onRow)).map(logs);

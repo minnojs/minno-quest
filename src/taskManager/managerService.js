@@ -30,7 +30,7 @@ function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector, pi
         this.$scope = $scope;
         this.script = script;
         this.logger = Logger(settings.logger || {}, piConsole); // the central logger to be used by tasks
-        this.log = createLogs(this.logger, this.script, {type:'manager', $name:script.name}); // a specific log to deal with manager logging (make sure we post immediately
+        this.log = createLogs(this.logger, this.script, {type:'manager', $name:script.name || 'manager'}); // a specific log to deal with manager logging (make sure we post immediately
         $scope.$on('$destroy', function(){ self.log.end(true); });
 
         // create sequence

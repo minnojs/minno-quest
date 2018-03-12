@@ -63,6 +63,7 @@ function taskActivateProvider($q,$rootScope, $injector){
         if (script && _.isFunction(script.play)){
             activator = _.bind(script.play, script);
             activator.$inject = $injector.annotate(script.play);
+            return activator;
         }
 
         if (script && _.isArray(script.play)){

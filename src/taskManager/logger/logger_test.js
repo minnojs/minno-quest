@@ -1,7 +1,7 @@
 import Logger from './logger';
 import _ from 'lodash';
 
-fdescribe('Logger', function(){
+describe('Logger', function(){
     var logger;
 
     beforeEach(function(){

@@ -34,7 +34,7 @@ describe('manager', function(){
         beforeEach(inject(function($rootScope, managerService){
             $rootScope.global = {};
             $scope = $rootScope.$new();
-            manager = managerService($scope, {});
+            manager = managerService($scope, {settings:{}});
         }));
 
         afterEach(function(){
@@ -154,7 +154,7 @@ describe('manager', function(){
         }));
 
         beforeEach(inject(function(managerSequence){
-            script = {taskSets:[],sequence:[]};
+            script = {taskSets:[],sequence:[], settings:{}};
             sequence = managerSequence(script);
         }));
 
@@ -219,6 +219,7 @@ describe('manager', function(){
             $provide.value('managerService', jasmine.createSpy('managerService').and.callFake(function(){
                 this.current = currentSpy;
                 this.setBaseUrl = angular.noop;
+                this.log = angular.noop;
             }));
         }));
 

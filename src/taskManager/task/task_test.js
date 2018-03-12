@@ -23,7 +23,7 @@ describe('task', function(){
             expect(spy).toHaveBeenCalled();
         });
 
-        it('should run and inject a script.play function', function(){
+        fit('should run and inject a script.play function', function(){
             var spy = jasmine.createSpy('task').and.callFake(function(){
                 expect(this).toBe(script);
             });

@@ -97,7 +97,7 @@ function directive($q, $injector,piConsole){
                 $qSequence([
                     // progress update
                     function(){
-                        var data = {taskName: currentTask.name || 'namelessTask', taskNumber: currentTask.$meta.number, taskURL:currentTask.scriptUrl || currentTask.templateUrl};
+                        var data = {taskName: currentTask.name || 'namelessTask', taskNumber: _.get(currentTask,'$meta.number'), taskURL:currentTask.scriptUrl || currentTask.templateUrl};
                         thisCtrl.manager.log(data, $scope.settings);
                     },
                     $scope.settings.onPreTask,
