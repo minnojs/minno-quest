@@ -1,5 +1,3 @@
-
-
 import _ from 'lodash';
 import template from './modal.html';
 
@@ -14,17 +12,9 @@ function modalConstructor($rootScope, $rootElement, $compile, $q, $document){
     this.close = modalCleanup;
 
     function modalCleanup(){
-        if ($element){
-            $element.remove();
-        }
-
-        if ($scope){
-            $scope.$destroy();
-        }
-
-        if (deferred){
-            deferred.resolve();
-        }
+        if ($element) $element.remove();
+        if ($scope) $scope.$destroy();
+        if (deferred) deferred.resolve();
 
         $backDrop.remove();
         $document.off('keydown', modalCleanup);
@@ -46,7 +36,6 @@ function modalConstructor($rootScope, $rootElement, $compile, $q, $document){
         // set up scope methods
         $scope.close = modalCleanup;
         $document.on('keydown', modalCleanup);
-
 
         // set scope texts + template
         $scope.header = _.template(options.header)(context);

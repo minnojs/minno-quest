@@ -43,8 +43,8 @@ define(['managerAPI'], function(Manager){
                 global.current = global.iat =  {feedback:'bam!'};
             }
         },
+        { type: 'quest', name: 'dotWidth', scriptUrl: '/test/timeSlider.js' },
         { type:'time', version: 0.5,  scriptUrl: '/test/helloplay.js' },
-        { type: 'quest', name: 'dotWidth', scriptUrl: '/test/helloQuest.js' },
         { type:'post', url:'sdf'},
         { type:'message', templateUrl: 'message.jst' },
         {

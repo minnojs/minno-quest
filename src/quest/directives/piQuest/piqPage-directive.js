@@ -173,7 +173,6 @@ function piqPageCtrl($scope,$timeout, $rootScope, piModal){
 
                 // extend message object with scope and context
                 _.defaults(message, {
-                    header: 'Timer Done',
                     $context: context,
                     $scope: $scope
                 });

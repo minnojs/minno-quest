@@ -77,7 +77,6 @@ function piQuestCtrl($scope, $rootScope, QuestTask, templateDefaultContext, mixe
 
                 // extend message object with scope and context
                 _.defaults(message, {
-                    header: 'Timer Done',
                     $context: defaultContext
                 });
 
