@@ -34352,23 +34352,6 @@ var lodash = createCommonjsModule(function (module, exports) {
 }.call(commonjsGlobal));
 });
 
-/**
- * A function that maps a mixer object into a sequence.
- *
- * The basic structure of such an obect is:
- * {
- *		mixer: 'functionType',
- *		remix : false,
- *		data: [task1, task2]
- *	}
- *
- * The results of the mix are set into `$parsed` within the original mixer object.
- * if remix is true $parsed is returned instead of recomputing
- *
- * @param {Object} [obj] [a mixer object]
- * @returns {Array} [An array of mixed objects]
- */
-
 mixProvider.$inject = ['randomizeShuffle', 'randomizeRandom'];
 function mixProvider(shuffle, random){
 
@@ -34832,10 +34815,6 @@ function templateObjProvider$1(templateDefaultContext){
 
 var templateObj = templateObjProvider$1({});
 
-/*
- * The constructor for an Array wrapper
- */
-
 function collectionService(){
 
     function Collection (arr) {
@@ -34925,8 +34904,6 @@ function collectionService(){
 
     return Collection;
 }
-
-// @TODO: repeat currently repeats only the last element, we need repeat = 'set' or something in order to prevent re-randomizing of exRandom...
 
 RandomizerProvider.$inject = ['randomizeInt', 'randomizeRange', 'Collection'];
 function RandomizerProvider(randomizeInt, randomizeRange, Collection){
@@ -35646,10 +35623,6 @@ var messageTemplateDebrief = "<style type=\"text/css\">\n\t.navbar-inverse .navb
 
 var messageTemplatePanel = "<div class=\"panel panel-info\" style=\"margin-top:1em\">\n\t<% if (header){ %>\n\t\t<div class=\"panel-heading\">\n\t\t\t<h2 class=\"panel-title text-center\" style=\"font-size:1.3em\"><%= header %></h2>\n\t\t</div>\n\t<% } %>\n\n\t<div class=\"panel-body\">\n\t\t<%= content %>\n\t</div>\n\n\t<% if (footer){ %>\n\t\t<div class=\"panel-footer\">\n\t\t\t<%= footer %>\n\t\t</div>\n\t<% } %>\n</div>";
 
-/**
- * Constructor for PIPlayer script creator
- * @return {Object}		Script creator
- */
 function API(){
     Constructor.call(this);
     this.settings.onPreTask = onPreTask;
@@ -35836,10 +35809,6 @@ api$1.prototype.getLogs = function getLogs(){
     return this.script.current.logs;
 };
 
-/**
- * Constructor for PIPlayer script creator
- * @return {Object}		Script creator
- */
 function API$1(name){
     api$1.call(this, name);
 
@@ -35859,10 +35828,6 @@ var Constructor$2 = APIconstructor({
     sets: ['pages', 'questions']
 });
 
-/**
- * Constructor for PIPlayer script creator
- * @return {Object}		Script creator
- */
 function API$2(){
     Constructor$2.call(this);
     lodash.set(this, 'settings.logger.url', '/implicit/PiQuest');
@@ -39371,8 +39336,6 @@ function preloadImg(url, cb){
     img.src = url;
 }
 
-//import preloaderService from './preloaderService';
-//import preloaderDecorator from './preloaderDecorator';
 var module$10 = angular.module('pi.utils',[]);
 
 // module.service('piPreloader', preloaderService);
@@ -40500,7 +40463,6 @@ var template$7 = "<div>\n\t<div ng-class=\"listClass\" ng-style=\"listCss\">\n\t
  * The directive for creating selectMulti inputs.
  */
 
-// This is the only way to get a non js file relatively
 directive$6.$inject = ['questSelectMixer'];
 function directive$6(mixer){
     return {
@@ -42221,7 +42183,6 @@ function isNumeric(obj){
     return !lodash.isArray( obj ) && (obj - parseFloat( obj ) + 1) >= 0;
 }
 
-// set modules that are requirements for the quest module
 var module$8 = angular.module('questDirectives',[
     module$9.name,
     module$10.name,
@@ -42601,12 +42562,6 @@ function directive$10(activateTask, canvas, $document, $window, $rootScope, piCo
     };
 }
 
-/**
- * Create the source streams for logging.
- * The API.save stream is set directly into the stream (WARNING: side effects)
- * The task log stream is returned
- * @returns Stream 
- **/
 function createLog(logger, script, task){
     var name = task.$name;
     var type = task.type;
@@ -42937,7 +42892,7 @@ if (!console.table) console.table = log;
     }
 }());
 
-/** @constructor */
+// Promise polyfill from https://github.com/MithrilJS/mithril.js/blob/next/promise/promise.js 
 var PromisePolyfill = function(executor) {
     if (!(this instanceof PromisePolyfill)) throw new Error("Promise must be called with `new`")
         if (typeof executor !== "function") throw new TypeError("executor must be a function")
@@ -55419,29 +55374,11 @@ var lodash$1 = createCommonjsModule(function (module, exports) {
 }.call(commonjsGlobal));
 });
 
-// initiate piGloabl
 var glob = window.piGlobal || (window.piGlobal = {});
 
 function global$3(){
     return glob;
 }
-
-/**
- * A function that maps a mixer object into a sequence.
- *
- * The basic structure of such an obect is:
- * {
- *		mixer: 'functionType',
- *		remix : false,
- *		data: [task1, task2]
- *	}
- *
- * The results of the mix are set into `$parsed` within the original mixer object.
- * if remix is true $parsed is returned instead of recomputing
- *
- * @param {Object} [obj] [a mixer object]
- * @returns {Array} [An array of mixed objects]
- */
 
 mixProvider$1.$inject = ['randomizeShuffle', 'randomizeRandom'];
 function mixProvider$1(shuffle, random){
@@ -55906,10 +55843,6 @@ function templateObjProvider$3(templateDefaultContext){
 
 var templateObj$1 = templateObjProvider$3({});
 
-/*
- * The constructor for an Array wrapper
- */
-
 function collectionService$1(){
 
     function Collection (arr) {
@@ -55999,8 +55932,6 @@ function collectionService$1(){
 
     return Collection;
 }
-
-// @TODO: repeat currently repeats only the last element, we need repeat = 'set' or something in order to prevent re-randomizing of exRandom...
 
 RandomizerProvider$1.$inject = ['randomizeInt', 'randomizeRange', 'Collection'];
 function RandomizerProvider$1(randomizeInt, randomizeRange, Collection){
@@ -56597,7 +56528,6 @@ function createDB$1(script){
     return db;
 }
 
-// helper function: returns sizes of element;
 function getSize$1(el){
     var computedStyle = window.getComputedStyle(el);
     return {
@@ -56613,7 +56543,6 @@ function parse$1(num){ return parseFloat(num, 10) || 0;}
  * this module is built to be part of the main view
  */
 
-// the function to be used by the main view
 function adjust_canvas(canvas, settings){
 
     return lodash$1.throttle(eventListener, 16);
@@ -56681,21 +56610,6 @@ function parse(num){ return parseFloat(num, 10) || 0;}
  *
  */
 
-/**
- * Takes a map of css rules and applies them.
- * Returns a function that returns the page to its former condition.
- *
- * The rule map is an object of ruleName -> ruleObject.
- *
- * var ruleObject = {
- * 	element : wrapped element to affect
- * 	property: css property to modify
- * }
- *
- * @param  {Object} map      A hash of rules.
- * @param  {Object} settings A hash of ruleName -> value
- * @return {Function}        A function that undoes all the previous changes
- */
 function canvasContructor(map, settings){
     var offArr;
 
@@ -57044,13 +56958,6 @@ function getXhr(url){
  * build the url for this src (add the generic baseUrl)
  */
 
-/**
- * @param baseUrl {String|Object} the base url to prepend
- * @param url {String} the url we are dealing with
- * @param type {String} the type of resource we are dealing with (image or tempmlate) in case we have multiple base urls
- *
- * @returns String built url
- **/
 function buildUrl(baseUrl, url, type){
     // it this is a dataUrl type of image, we don't need to append the baseurl
     if (type == 'image' && /^data:image/.test(url)) return url;
@@ -57510,10 +57417,6 @@ function timeout$1(inputObj){
     }
 }
 
-/**
- * The input binder is a hash of default input types
- * It returns a stream of events
- **/
 function inputBinder(inputObj, canvas){
     var on = inputObj.on; // what type of binding is this?
 
@@ -58112,8 +58015,6 @@ function conditionsEvaluate(conditions, inputData, trial){
     }
 }
 
-// @TODO: see if we can afford to change the signature of actions
-// I'd like to have the trial go first here (used almost always).
 var actions = {
     /*
      * Stimulus actions
@@ -58270,12 +58171,6 @@ function applyActions(actions$$1, eventData, trial){
 /*
 * Organizer for the interaction function
 */
-
-/*
- * Trial -> Event -> Event
- *
- * Can use trial to produce side efects
- **/
 
 var MAX_RECURSION_DEPTH = 50;
 function interactions$1(trial){
@@ -58506,12 +58401,6 @@ function transformLogs(action,eventData,trial){
     };
 }
 
-/**
- * run the task
- * Essentialy wiring up all the play phase stuff
- * @TODO: document this function, its super complicated
- **/
-
 function playerPhase(sink){
 
     var canvas = sink.canvas;
@@ -58607,12 +58496,6 @@ function composeLoggerSettings(script, global){
     return loggerSettings;
 }
 
-/**
- * activate : (HTMLelement, timeScript) -> Sink
- *
- * timeScript : {settings, sequence, trialSets, stimulusSets, mediaSets, current}
- * Sink: {$trial, $logs, play, end}
- **/
 function activate$2(canvas, script){
     var sink = setup$1(canvas, script);
     var playSink = playerPhase(sink);
@@ -58673,21 +58556,6 @@ module$14.config(['taskActivateProvider', function(activateProvider){
     activateProvider.set('time', activateTime$1);
 }]);
 
-/**
- * Takes a map of css rules and applies them.
- * Returns a function that returns the page to its former condition.
- *
- * The rule map is an object of ruleName -> ruleObject.
- *
- * var ruleObject = {
- * 	element : wrapped element to affect
- * 	property: css property to modify
- * }
- *
- * @param  {Object} map      A hash of rules.
- * @param  {Object} settings A hash of ruleName -> value
- * @return {Function}        A function that undoes all the previous changes
- */
 function canvasContructor$1(map, settings){
     var offArr;
 
@@ -59057,13 +58925,14 @@ function serialize$1(name, logs, settings){
 }
 
 function send$1(name, serialized, settings, ctx){
+    var contentType = !settings.isSave && (settings.isPIP || settings.isTime) && 'application/x-www-form-urlencoded; charset=UTF-8';
     var url = settings.isSave || settings.isQuest
         ? '/implicit/PiQuest'
         : settings.isPIP || settings.isTime
             ? '/implicit/PiPlayerApplet'
             : '/implicit/PiManager';
 
-    xhr({url:url, mehtod:'POST', body:serialized, contentType:(settings.isPIP && settings.isTime) || 'application/x-www-form-urlencoded; charset=UTF-8'}).catch(onError);
+    xhr({url:url, mehtod:'POST', body:serialized, contentType:contentType}).catch(onError);
 
 
     function onError(e){ settings.onError.apply(null, [e,name,serialized,settings,ctx]); }
@@ -61452,7 +61321,6 @@ function piConsoleFactory$4($log){
  *	Essentially, we are creating a module with dependencies on anything interesting...
  */
 
-// requirejs does not explicitly export these as globals
 window.require = require;
 window.requirejs = requirejs$1;
 window.define = define;
@@ -61563,7 +61431,6 @@ app$1.config(['$provide', function($provide) {
 
 }]);
 
-// setup amd loader with common packages
 define('managerAPI', lodash.constant(API));
 define('timeAPI', lodash.constant(API$1));
 define('pipAPI', lodash.constant(API$1));

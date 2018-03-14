@@ -68,13 +68,14 @@ function serialize(name, logs, settings){
 }
 
 function send(name, serialized, settings, ctx){
+    var contentType = !settings.isSave && (settings.isPIP || settings.isTime) && 'application/x-www-form-urlencoded; charset=UTF-8';
     var url = settings.isSave || settings.isQuest
         ? '/implicit/PiQuest'
         : settings.isPIP || settings.isTime
             ? '/implicit/PiPlayerApplet'
             : '/implicit/PiManager';
 
-    xhr({url:url, mehtod:'POST', body:serialized, contentType:(settings.isPIP && settings.isTime) || 'application/x-www-form-urlencoded; charset=UTF-8'}).catch(onError);
+    xhr({url:url, mehtod:'POST', body:serialized, contentType:contentType}).catch(onError);
 
 
     function onError(e){ settings.onError.apply(null, [e,name,serialized,settings,ctx]); }
