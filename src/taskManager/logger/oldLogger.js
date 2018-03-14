@@ -47,7 +47,7 @@ function serialize(name, logs, settings){
     var metaData =  _.assign({taskName:name, taskNumber:taskNumber}, window.piGlobal.$meta, settings.meta);
 
     // manager style
-    if (settings.isManager && !settings.isSave) return JSON.stringify(logs);
+    if (settings.isManager && !settings.isSave) return JSON.stringify(_.assign(metaData,logs));
 
     // pip style
     if (settings.isPIP || settings.isTime) {
