@@ -483,7 +483,7 @@ labels					| An array of labels to display underneath the slider. They will be s
 displayValue			| Display the value of the slider, beneath the slider control.
 required				| (true of false; default: false) Validation: require a non-empty string as a response.
 dflt 					| The default value for the slider. If no default value is defined, the handle will not be displayed until the slider is first clicked.
-autosubmit				| Submit automatically on click or when handle is drop.
+autoSubmit				| Submit automatically on click or when handle is drop.
 
 The most common use of the slider is the creation of a visual analog scale (VAS). This is an example of using a slider to create a Likert type scale:
 
