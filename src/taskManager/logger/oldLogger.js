@@ -51,7 +51,7 @@ function serialize(name, logs, settings){
 
     // pip style
     if (settings.isPIP || settings.isTime) {
-        data = 'json=' + JSON.stringify(logs); // do not re-encode json
+        data = 'json=' + encodeURIComponent(JSON.stringify(logs)); // do not re-encode json
         meta = serializePIP(metaData);
         return data + (meta ? '&'+meta : '');
     }
@@ -74,7 +74,8 @@ function send(name, serialized, settings, ctx){
             ? '/implicit/PiPlayerApplet'
             : '/implicit/PiManager';
 
-    xhr({url:url, mehtod:'POST', body:serialized}).catch(onError);
+    xhr({url:url, mehtod:'POST', body:serialized, contentType:(settings.isPIP && settings.isTime) || 'application/x-www-form-urlencoded; charset=UTF-8'}).catch(onError);
+
 
     function onError(e){ settings.onError.apply(null, [e,name,serialized,settings,ctx]); }
 }

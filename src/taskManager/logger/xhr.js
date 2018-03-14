@@ -7,7 +7,7 @@ export default function xhr(options){
     return new Promise(function(resolve, reject){
         var request = new XMLHttpRequest();
         request.open(options.method || 'POST',options.url, true);
-        request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+        request.setRequestHeader('Content-Type', options.contentType || 'application/json; charset=UTF-8');
 
         request.onreadystatechange = function() {
 
