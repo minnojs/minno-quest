@@ -74,7 +74,6 @@ define(function (require) {
 
 					// extend message object with scope and context
                     _.defaults(message, {
-                        header: 'Timer Done',
                         $context: defaultContext
                     });
 
