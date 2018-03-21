@@ -3,6 +3,7 @@ import xhr from './xhr';
 
 var serial = 1000;
 var taskNumber = 0;
+var lastTrialId; // keep track of last trialId to preven duplicates
 export default {onRow:onRow, onEnd:onEnd, serialize:serialize, send:send};
 
 /*
@@ -13,6 +14,11 @@ function onRow(name, row, settings, ctx){
 
     if (settings.isSave) return apiSave(row);
     if (settings.isManager) return row;
+
+    if (settings.isPIP || settings.isTime){
+        if (row.trial_id === lastTrialId) settings.onError.apply(null, [new Error('minno-time: PI server does not accept multiple logs per trial'),name,row,settings,ctx]);
+        lastTrialId = row.trial_id;
+    }
 
     logs.push(row);
 

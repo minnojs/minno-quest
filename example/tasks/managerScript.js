@@ -4,13 +4,8 @@ define(['managerAPI'], function(Manager){
     API.addSettings('skin', '');
     API.addSettings('logger', {type:'old', url:'barkk'});
     API.save({hark:'bangladore', sven:'tendencies'});
-    //API.addSettings('preloadImages', images);
-    //API.addSettings('skip', true);
 
-    API.addSettings('injectStyle', [
-        '[pi-player] {position:fixed;left:0; right:0;}',
-        '.minno-canvas { margin-top: auto; background:lightblue;}',
-    ].join(''));
+    API.addSettings('injectStyle', [ '[pi-player] {position:fixed;left:0; right:0;}', '.minno-canvas { margin-top: auto; background:lightblue;}', ].join(''));
 
     API.addGlobal({
         $mTurk:{assignmentId:0,hitId:0,workerId:0},
@@ -18,33 +13,11 @@ define(['managerAPI'], function(Manager){
         demographics: {questions: {demo02:{response:'23'}, b:{response:undefined}, c:{response:345}}}
     });
 
-    API.addTasksSet('instructions', {type:'message', keys:' '});
-
-    API.addTasksSet('quests', [
-        {
-            type:'quest',
-            name: 'first',
-            scriptUrl: 'questScript1.js'
-        },
-        {
-            type:'quest',
-            name:'second',
-            scriptUrl: 'questScript2.js'
-        }
-    ]);
-
-
     API.addSequence([
-        {
-            name:'allow-refresh',
-            script:function(done, managerBeforeUnload, global){
-                managerBeforeUnload.deactivate();
-                done();
-                global.current = global.iat =  {feedback:'bam!'};
-            }
-        },
-        { type: 'quest', name: 'dotWidth', scriptUrl: '/test/timeSlider.js' },
+        { name:'allow-refresh', script:function(done, managerBeforeUnload){ managerBeforeUnload.deactivate(); done(); } },
+
         { type:'time', version: 0.5,  scriptUrl: '/test/helloplay.js' },
+        { type: 'quest', name: 'dotWidth', scriptUrl: '/test/timeSlider.js' },
         { type:'post', url:'sdf'},
         { type:'message', templateUrl: 'message.jst' },
         {
@@ -165,6 +138,8 @@ define(['managerAPI'], function(Manager){
         {inherit:'instructions', template: 'Please answer the following questionnaire:'},
         {inherit:{type:'exRandom', set:'quests'}}
     ]);
+
+    API.addTasksSet('instructions', {type:'message', keys:' '});
 
     return API.script;
 });
