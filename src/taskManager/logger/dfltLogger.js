@@ -35,6 +35,6 @@ function serialize(name, logs, settings){
 
 function send(name, serialized, settings, ctx){
     if (!settings.url) return;
-    xhr({url:settings.url, mehtod:'PUT', body:serialized}).catch(onError);
+    xhr({url:settings.url, method:'PUT', body:serialized}).catch(onError);
     function onError(e){ settings.onError.apply(null, [e,name,serialized,settings,ctx]); }
 }
