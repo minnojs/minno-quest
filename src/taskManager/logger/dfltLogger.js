@@ -10,6 +10,7 @@ function onRow(name, row, settings, ctx){
     var logs = ctx[name] || (ctx[name] = []);
 
     if (row.isSave) return [_.set(row, '$isManual', true)];
+    if (settings.isManager) return [row];
 
     logs.push(row);
 
