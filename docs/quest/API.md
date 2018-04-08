@@ -119,11 +119,12 @@ You may want to debug questions by [activating the `question` DEBUG setting](#de
 
 #### Hooks
 
-Questions have hooks that allow you to respond to many events in the life time of the question. Each hook is invoked with `global`, `current` and the question `log`. 
+Questions have hooks that allow you to respond to many events in the life time of the question. Each hook is invoked with `global`, `current`,  the question `log` and the current `question`. 
 
 property		| description
 --------------- | ---------------------
 onCreate 		| At the creation of the question.
+onLoad   		| After the first rendering of the question.
 onChange 		| At each change of the question response (note that this hook may be called many times for each question).
 onSubmit 		| When the question is submitted.
 onDecline 		| When the question is declined.

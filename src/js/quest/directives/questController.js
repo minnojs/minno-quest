@@ -29,20 +29,20 @@ define(function(require){
             event.preventDefault();
             log.declined = undefined;
             log.submitLatency = self.stopper.now();
-            invoke(data.onSubmit, {log:log});
+            invoke(data.onSubmit, {log:log,question:data});
         });
 
         $scope.$on('quest:decline', function(event){
             event.preventDefault();
             log.declined = true;
             log.submitLatency = self.stopper.now();
-            invoke(data.onDecline, {log:log});
+            invoke(data.onDecline, {log:log,question:data});
         });
 
         $scope.$on('quest:timeout', function(event){
             event.preventDefault();
             log.timeout = true;
-            invoke(data.onTimeout, {log:log});
+            invoke(data.onTimeout, {log:log,question:data});
         });
 
 
@@ -88,20 +88,20 @@ define(function(require){
 
             $scope.response = ngModel.$viewValue = log.response;
 
-			// model --> view
-			// should probably never be called (since our model is an object and not a primitive)
+            // model --> view
+            // should probably never be called (since our model is an object and not a primitive)
             ngModel.$formatters.push(function(modelValue) {
                 return modelValue.response;
             });
 
-			// view --> model
+            // view --> model
             ngModel.$parsers.push(function(viewValue){
                 var latency = self.stopper.now();
 
                 log.response = viewValue;
                 log.latency = latency;
 
-				// if this is the first change
+                // if this is the first change
                 if (!log.pristineLatency){
                     log.pristineLatency = latency;
                 }
@@ -112,12 +112,12 @@ define(function(require){
             $scope.$watch('response',function(newValue, oldValue /*, scope*/){
                 if (!_.isEqual(newValue, oldValue)){
                     ngModel.$setViewValue(newValue);
-                    invoke(data.onChange, {log:log});
-                }
+                    invoke(data.onChange, {log:log,question:data});
+                } 
             });
 
             $scope.$on('$destroy', function(){
-                invoke(data.onDestroy, {log:log});
+                invoke(data.onDestroy, {log:log,question:data});
             });
 
             if (data.correct) {
@@ -125,13 +125,17 @@ define(function(require){
                 data.response = correctValidator(this.log);
             }
 
-            invoke(data.onCreate, {log:log});
+            invoke(data.onCreate, {log:log,question:data});
+
+            $scope.$evalAsync(function() { 
+                invoke(data.onLoad, {log:log,question:data});
+            } );
 
             function correctValidator(value) {
                 var response = value.response;
                 var correctValue = data.correctValue;
 
-				// make sure numbers are always treated as strings
+                // make sure numbers are always treated as strings
                 _.isNumber(correctValue) && (correctValue+='');
                 _.isNumber(response) && (response+='');
 
