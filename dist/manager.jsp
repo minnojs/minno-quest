@@ -112,7 +112,7 @@ if(randomStudy!=null)
             </script>
         <% } %>
         
-		<!--[if lt IE 7]>
+		<!--[if lt IE 8]>
 			<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 		<![endif]-->
 
@@ -121,12 +121,8 @@ if(randomStudy!=null)
 			<div pi-manager="<%= script %>"></div>
 			<% if (org.uva.Implicit.IS_PRODUCTION == "false") {%><div pi-console></div><% } %>
 		</div>
-
 	</body>
 
-	<!--[if lt IE 7]>
-		<script src="//cdnjs.cloudflare.com/ajax/libs/json3/3.3.1/json3.min.js"></script>
-	<![endif]-->
 	<!--[if lte IE 8]>
 		<script src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/3.4.0/es5-shim.min.js"></script>
 		<script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
