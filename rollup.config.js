@@ -11,20 +11,24 @@ import cssnano from 'cssnano';
 
 // add argument --production to uglify + index.js
 const production = process.argv.slice(2).some(v => v === '--production');
-const banner =  `/* minno-quest v${version} */`;
+const banner = `/**
+ * @preserve minno-quest v${version}
+ * @license Apache-2.0 (${(new Date()).getFullYear()})
+ */
+`;
 
 const output = {
     file: 'dist/minno.js',
     format: 'iife', 
     name: 'minnoQuest',
-    banner
+    banner: banner
 };
 
 const piOutput = {
     file: 'dist/pi-minno.js',
     format: 'iife', 
     name: 'minnoQuest',
-    banner
+    banner: banner
 };
 
 const debugConsole = {
@@ -45,7 +49,7 @@ const config = {
         resolve(),
         string({include:['**/*.html', '**/*.jst']}),
         commonjs(),
-        production && uglify() // minify, but only in production
+        production && uglify({output:{comments:'some' }}) // minify, but only in production
     ],
     onwarn: function ( message ) {
         if ( /requirejs/.test( message ) ) return;
