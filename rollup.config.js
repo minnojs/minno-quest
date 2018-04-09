@@ -1,5 +1,6 @@
 /* eslint env:"node" */
 
+import {version} from './package.json';
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import uglify from 'rollup-plugin-uglify';
@@ -10,17 +11,20 @@ import cssnano from 'cssnano';
 
 // add argument --production to uglify + index.js
 const production = process.argv.slice(2).some(v => v === '--production');
+const banner =  `/* minno-quest v${version} */`;
 
 const output = {
     file: 'dist/minno.js',
     format: 'iife', 
-    name: 'minnoQuest'
+    name: 'minnoQuest',
+    banner
 };
 
 const piOutput = {
     file: 'dist/pi-minno.js',
     format: 'iife', 
-    name: 'minnoQuest'
+    name: 'minnoQuest',
+    banner
 };
 
 const debugConsole = {
