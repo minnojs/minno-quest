@@ -31,20 +31,20 @@ function questController($scope, Stopper, $parse, $attr, piConsole, invoke, $roo
         event.preventDefault();
         log.declined = undefined;
         log.submitLatency = self.stopper.now();
-        invoke(data.onSubmit, {log:log});
+        invoke(data.onSubmit, {log:log,question:data});
     });
 
     $scope.$on('quest:decline', function(event){
         event.preventDefault();
         log.declined = true;
         log.submitLatency = self.stopper.now();
-        invoke(data.onDecline, {log:log});
+        invoke(data.onDecline, {log:log,question:data});
     });
 
     $scope.$on('quest:timeout', function(event){
         event.preventDefault();
         log.timeout = true;
-        invoke(data.onTimeout, {log:log});
+        invoke(data.onTimeout, {log:log,question:data});
     });
 
 
@@ -121,12 +121,12 @@ function questController($scope, Stopper, $parse, $attr, piConsole, invoke, $roo
         $scope.$watch('response',function(newValue, oldValue /*, scope*/){
             if (!_.isEqual(newValue, oldValue)){
                 ngModel.$setViewValue(newValue);
-                invoke(data.onChange, {log:log});
+                invoke(data.onChange, {log:log,question:data});
             }
         });
 
         $scope.$on('$destroy', function(){
-            invoke(data.onDestroy, {log:log});
+            invoke(data.onDestroy, {log:log,question:data});
         });
 
         if (data.correct) {
@@ -134,7 +134,11 @@ function questController($scope, Stopper, $parse, $attr, piConsole, invoke, $roo
             data.response = correctValidator(this.log);
         }
 
-        invoke(data.onCreate, {log:log});
+        invoke(data.onCreate, {log:log,question:data});
+
+        $scope.$evalAsync(function() { 
+            invoke(data.onLoad, {log:log,question:data});
+        } );
 
         function correctValidator(value) {
             var response = value.response;
