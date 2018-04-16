@@ -35623,6 +35623,10 @@ var messageTemplateDebrief = "<style type=\"text/css\">\n\t.navbar-inverse .navb
 
 var messageTemplatePanel = "<div class=\"panel panel-info\" style=\"margin-top:1em\">\n\t<% if (header){ %>\n\t\t<div class=\"panel-heading\">\n\t\t\t<h2 class=\"panel-title text-center\" style=\"font-size:1.3em\"><%= header %></h2>\n\t\t</div>\n\t<% } %>\n\n\t<div class=\"panel-body\">\n\t\t<%= content %>\n\t</div>\n\n\t<% if (footer){ %>\n\t\t<div class=\"panel-footer\">\n\t\t\t<%= footer %>\n\t\t</div>\n\t<% } %>\n</div>";
 
+/**
+ * Constructor for PIPlayer script creator
+ * @return {Object}		Script creator
+ */
 function API(){
     Constructor.call(this);
     this.settings.onPreTask = onPreTask;
@@ -35664,8 +35668,13 @@ function onPreTask(currentTask, $http, $rootScope, beforeUnload, templateDefault
     }
 
     var isDev = /^(localhost|127.0.0.1)/.test(location.host);
-    if (currentTask.type == 'pip') currentTask.baseUrl = isDev ? '/pip' : '/implicit/common/all/js/pip/' + (currentTask.version || 0.3);
-    if (currentTask.type == 'time') currentTask.baseUrl = isDev ? '/pip' : '/implicit/common/all/js/pip/0.5';
+    if (currentTask.type == 'pip') currentTask.baseUrl = currentTask.baseUrl ? currentTask.baseUrl 
+        : isDev ? '/pip' 
+        : '/implicit/common/all/js/pip/' + (currentTask.version || 0.3);
+
+    if (currentTask.type == 'time') currentTask.baseUrl = currentTask.baseUrl ? currentTask.baseUrl 
+        : isDev ? '/pip' 
+        : '/implicit/common/all/js/pip/0.5';
 
     // add feedback functions to the default template context
     lodash.extend(templateDefaultContext,{
@@ -57596,7 +57605,7 @@ function getMedia$1(media){
 
     if (lodash$1.isString(media)) media = {word:media};
 
-    if (media.word) {
+    if (lodash$1.isString(media.word)) {
         el = document.createElement('div');
         el.textContent = media.word;
         return Promise.resolve(el);

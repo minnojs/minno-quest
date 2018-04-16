@@ -52,8 +52,13 @@ function onPreTask(currentTask, $http, $rootScope, beforeUnload, templateDefault
     }
 
     var isDev = /^(localhost|127.0.0.1)/.test(location.host);
-    if (currentTask.type == 'pip') currentTask.baseUrl = isDev ? '/pip' : '/implicit/common/all/js/pip/' + (currentTask.version || 0.3);
-    if (currentTask.type == 'time') currentTask.baseUrl = isDev ? '/pip' : '/implicit/common/all/js/pip/0.5';
+    if (currentTask.type == 'pip') currentTask.baseUrl = currentTask.baseUrl ? currentTask.baseUrl 
+        : isDev ? '/pip' 
+        : '/implicit/common/all/js/pip/' + (currentTask.version || 0.3);
+
+    if (currentTask.type == 'time') currentTask.baseUrl = currentTask.baseUrl ? currentTask.baseUrl 
+        : isDev ? '/pip' 
+        : '/implicit/common/all/js/pip/0.5';
 
     // add feedback functions to the default template context
     _.extend(templateDefaultContext,{
