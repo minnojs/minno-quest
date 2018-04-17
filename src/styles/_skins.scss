@@ -1,5 +1,13 @@
 // This is the default skin, we separatae it into a skin of its own so that some unusual effects can be easily separated out...
 .default-skin [piq-page] .page-buttons , .demo-skin [piq-page] .page-buttons {
+
+    // allows to keep .page-buttons the right size with absolute positioned buttons
+    .page-dummy-button { 
+        height:51px; 
+        display: inline-block;
+    }
+    .page-dummy-button:nth-last-child(1) { display:none; }
+
 	.page-submit {
 		padding: 10px 0;
 		font-size: 1.6em;
@@ -16,6 +24,7 @@
 }
 
 .simple-skin [piq-page] .page-buttons {
+    .page-dummy-button { display:none; }
 	text-align:right;
 
 	.page-submit {

@@ -5826,6 +5826,13 @@ button.close {
     background: black;
     opacity: 0.3; }
 
+.default-skin [piq-page] .page-buttons .page-dummy-button, .demo-skin [piq-page] .page-buttons .page-dummy-button {
+  height: 51px;
+  display: inline-block; }
+
+.default-skin [piq-page] .page-buttons .page-dummy-button:nth-last-child(1), .demo-skin [piq-page] .page-buttons .page-dummy-button:nth-last-child(1) {
+  display: none; }
+
 .default-skin [piq-page] .page-buttons .page-submit, .demo-skin [piq-page] .page-buttons .page-submit {
   padding: 10px 0;
   font-size: 1.6em;
@@ -5840,6 +5847,8 @@ button.close {
 
 .simple-skin [piq-page] .page-buttons {
   text-align: right; }
+  .simple-skin [piq-page] .page-buttons .page-dummy-button {
+    display: none; }
 
 .slider-label-left, .slider-label-right {
   float: left;
