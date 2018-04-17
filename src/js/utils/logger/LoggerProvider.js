@@ -92,13 +92,13 @@ define(function(require){
 
                 function error(){
 					// try again
-                    return $http.post(settings.url, sendData).then(success, function(){
+                    return $http.post(settings.url, sendData).then(success, function(e){
                         piConsole(['logger']).error('Failed to send data, it seems the backend is not responding. (sending to: "' + settings.url +'")');
-                        var promise = _.result(settings, 'error');
+                        var promise = _.isFunction(settings.error) && settings.error(e);
                         if (promise && _.isFunction(promise.then)) {
                             return promise.then(def.resolve, def.reject);
                         } else {
-                            return def.reject();
+                            return def.reject(e);
                         }
                     });
                 }
