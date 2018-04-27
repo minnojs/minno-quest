@@ -16,9 +16,9 @@ define(['managerAPI'], function(Manager){
     API.addSequence([
         { name:'allow-refresh', script:function(done, managerBeforeUnload){ managerBeforeUnload.deactivate(); done(); } },
 
+        { type: 'quest', name: 'dotWidth', scriptUrl: '/test/helloQuest.js' },
         { type:'time', version: 0.5,  scriptUrl: '/test/helloPlay.js' },
         { type:'pip', version: 0.3,  scriptUrl: '/test/helloPlay.js', baseUrl:'https://app-prod-03.implicit.harvard.edu/implicit/common/all/js/pip/0.3/' },
-        { type: 'quest', name: 'dotWidth', scriptUrl: '/test/timeSlider.js' },
         { type:'post', url:'sdf'},
         { type:'message', templateUrl: 'message.jst' },
         {
