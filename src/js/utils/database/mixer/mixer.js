@@ -98,18 +98,12 @@ define(['underscore'],function(_){
 
         function weightedChoose(obj, context){
             var sequence = obj.data ? deepMixer(obj.data, context) : [];
-            var i;
             var n = obj.n || 1;
-            var result = [];
-            var total_weight = _.reduce(obj.weights,function (prev, cur) {
-                return prev + cur;
-            });
+            var total_weight = _.sum(obj.weights);
 
-            for (i = 0; i < n; i++){
-                result.push(generate());
-            }
-
-            return result;
+            return _.range(0,n) // instead of for loop
+                .map(generate)
+                .map(_.clone); // so that we can treat each element separately
 
             function generate(){
                 var i;
@@ -120,9 +114,7 @@ define(['underscore'],function(_){
                     weight_sum += obj.weights[i];
                     weight_sum = +weight_sum.toFixed(3);
 
-                    if (random_num <= weight_sum) {
-                        return obj.data[i];
-                    }
+                    if (random_num <= weight_sum) return obj.data[i];
                 }
 
                 throw new Error('Mixer: something went wrong with weightedRandom');
