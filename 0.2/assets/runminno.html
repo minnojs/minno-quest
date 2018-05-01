@@ -1,23 +1,27 @@
-
 <!doctype html>
-<!--[if IE 7]>				 <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>				 <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" > <!--<![endif]-->
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<title>PI questionnaire</title>
-		<meta name="description" content="Project Implicit Questionnaire">
 		<meta name="viewport" content="width=device-width">
-		<meta name="viewport" content="user-scalable=no, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1" />
-		<meta name="pinterest" content="nopin" />
 
-		<link rel="stylesheet" href="styles/main.css" />
+
+        <script>
+            // all this because we need a dynamic base element, and by the time it was created links and scripts had already been downloaded :(
+            (function(){
+                var baseUrl = /minno-time/.test(location.href) ? '/minno-quest/0.1/dist/' : '../dist/';
+                document.write('<base href="' + baseUrl  +  '" \/>')
+                document.write('<link rel="stylesheet" href="' + baseUrl + 'styles/main.css" \/>');
+                document.write('<script src="' + baseUrl + 'js/bootstrap.js"><\/script>');
+            })();
+        </script>
+
+		<!-- Favicons -->
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+		<link rel="icon" href="/favicon.ico">
 
 		<style type="text/css">
 
 			.container {padding-top: 15px;}
-
 			/* http://www.sitepoint.com/css3-responsive-centered-image/ */
 			.pi-spinner {
 				position: absolute;max-width: 80%;top: 50%;left: 50%;margin-left: -32px;margin-top: -32px;border-radius: 3px;
@@ -28,57 +32,68 @@
 			@media screen and (orientation: portrait) {.pi-spinner { max-width: 90%; }}
 			@media screen and (orientation: landscape) {.pi-spinner { max-height: 90%; }}
 		</style>
-		<script type="text/javascript">window.DEBUG = true</script>
 	</head>
 
 	<body>
-        <div id="dev-message" class="alert alert-success alert-dismissible" style="position:fixed;bottom:0;padding:5px 30px 5px 5px;z-index:999;">
-            <button id="dismiss-message" type="button" class="close">
-                <span>&times;</span>
-            </button>
-            <strong>Development Environment</strong></br>
-            miManager/miQuest v0.1
-        </div>
-        <script>
-            document.getElementById('dismiss-message').addEventListener('click', function(event){
-                document.body.removeChild(document.getElementById('dev-message'));
-            });
-        </script>
-        
-		<!--[if lt IE 7]>
-			<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-		<![endif]-->
-
-		<div class="container" id="pi-app">
+		<div class="container">
+            <div id="task">
+            
 			<img class="pi-spinner" ng-hide="1"/>
-			<div pi-manager="/quest1/src/example/managerScript.js"></div>
-			<div spi-manager="https://dw2.psyc.virginia.edu/implicit/user/ezlotnick/manager/managerScript.js"></div>
-			<div spi-manager-task="{type:'quest',scriptUrl:'/test/spin.js'}"></div>
+            </div>
 			<div pi-console></div>
 		</div>
 
 	</body>
 
-	<!-- Uncomment For debugging -->
-	<!-- <script type="text/javascript" src="libs/jquery/dist/jquery.js"></script> -->
+	<script type="text/javascript">
+        var pipUrl = '/minno-time/0.3/dist/js';
 
-	<!--[if lt IE 7]>
-		<script src="//cdnjs.cloudflare.com/ajax/libs/json3/3.3.1/json3.min.js"></script>
-	<![endif]-->
-	<!--[if lte IE 8]>
-		<script src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/3.4.0/es5-shim.min.js"></script>
-		 <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
-	<![endif]-->
-     <script type="text/javascript">
-         if (/\/src\/$/.test(location.href)) document.write('<script src="../bower_components/requirejs/require.js" type="text/javascript"><\/script>');
-     </script>
+		window.activate = function(taskMap){
+            var contents, i, element = document.getElementById('task'), type = taskType(taskMap);
 
-     <script type="text/javascript">
-         if (window.requirejs) {
-             requirejs.config({baseUrl:'js'});
-             requirejs(['pibootstrap']);
-         } else {
-             document.write('<script src="js/pibootstrap.js" type="text/javascript"><\/script>');
-         }
-     </script>
+            if (typeof taskMap === 'string') taskMap = {task: taskMap};
+
+            if (type === 'manager') {
+                element.setAttribute('pi-manager', 'task');
+            } else {
+                element.setAttribute('pi-manager-task', JSON.stringify({type:type, scriptUrl:'task', baseUrl:type === 'pip' ? pipUrl : undefined}));
+            }
+
+            for (i in taskMap) {
+                contents = taskMap[i].replace('define(', 'define("' + i + '",');
+                eval(contents);
+            }
+
+            require(['task'], function(script){
+                script.settings || (script.settings = {});
+                script.settings.onEnd = window.close;
+                script.settings.hooks = {endTask:window.close.bind(window)};
+
+                var oldPreTask = script.settings.onPreTask;
+                script.settings.onPreTask = preTask;
+
+                require(['angular','app'], function(angular, app) {
+                    angular.element(document).ready(function() {
+                        angular.bootstrap(element, [app.name]);
+                    });
+                });
+
+                preTask.$inject = oldPreTask ? oldPreTask.$inject : ['currentTask'];
+                function preTask(task){
+                    if (task.type === 'pip') task.baseUrl = pipUrl;
+                    if (oldPreTask) oldPreTask.apply(this, arguments);
+                }
+            });
+
+            function taskType(taskMap){
+                if (typeof taskMap !== 'string') return 'manager';
+
+                var minnoTypeRgx = /define.+(manager|pip|quest)API/;
+                var matches = minnoTypeRgx.exec(taskMap);
+
+                if (matches) return matches[1];
+                throw new Error('Unknown player type');
+            }
+        };
+    </script>
 </html>

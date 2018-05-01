@@ -343,7 +343,7 @@
 </tbody>
 </table>
 <p>You may want to debug questions by <a href="#debugging">activating the <code>question</code> DEBUG setting</a>. You will then be warned in the console if a question name is reused (note: sometimes a question is supposed to be reused, if this warning pops up just make sure the use case is correct).</p>
-<h4><a name="hooks" class="header-link" href="#hooks"><span></span></a>Hooks</h4><p>Questions have hooks that allow you to respond to many events in the life time of the question. Each hook is invoked with <code>global</code>, <code>current</code> and the question <code>log</code>. </p>
+<h4><a name="hooks" class="header-link" href="#hooks"><span></span></a>Hooks</h4><p>Questions have hooks that allow you to respond to many events in the life time of the question. Each hook is invoked with <code>global</code>, <code>current</code>,  the question <code>log</code> and the current <code>question</code>. </p>
 <table>
 <thead>
 <tr>
@@ -355,6 +355,10 @@
 <tr>
 <td>onCreate</td>
 <td>At the creation of the question.</td>
+</tr>
+<tr>
+<td>onLoad</td>
+<td>After the first rendering of the question.</td>
 </tr>
 <tr>
 <td>onChange</td>
@@ -1104,7 +1108,7 @@ These are the supported properties:</p>
 <td>The default value for the slider. If no default value is defined, the handle will not be displayed until the slider is first clicked.</td>
 </tr>
 <tr>
-<td>autosubmit</td>
+<td>autoSubmit</td>
 <td>Submit automatically on click or when handle is drop.</td>
 </tr>
 </tbody>

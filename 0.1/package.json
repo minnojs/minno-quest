@@ -1,6 +1,6 @@
 {
   "name": "PIQuest",
-  "version": "0.1.35",
+  "version": "0.1.43",
   "license": "Apache-2.0",
   "scripts": {
     "test": "grunt test --sauce --report",
@@ -49,7 +49,7 @@
     "requirejs": "^2.1.17"
   },
   "engines": {
-    "node": ">=0.4.11"
+    "node": "~4.2.4"
   },
   "dependencies": {
     "minno-gendocs": "^1.0.0"

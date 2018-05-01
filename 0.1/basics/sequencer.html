@@ -285,7 +285,7 @@ Select the elements in <code>data</code> if all the conditions in the <code>cond
 <p><strong>custom</strong>
 Custom mixers must return an array of appropriate elements.
 You can create them using the mixer context and the mixer element itself, or use them to create arbitrary elements as you like.</p>
-<p>``js
+<p><code></code>js
 {
     mixer: &#39;custom&#39;,
     fn: function(obj, context){
@@ -667,6 +667,7 @@ Most of the time, the seed is transparent to the user, but sometimes it becomes 
         inherit: {set:&#39;trials&#39;, type:&#39;exRandom&#39;,seed:&#39;block2&#39;}
     }
 ]
+
 </code></pre>
 <p>Seeds are not confined to a specific set, and not even to a specific element type. Maybe a more interesting use, is to use the same seed across two different sets (you can see a real world application for this under the <a href="#repeat">repeat</a> option).
 It is important to take note that if you create custom seeds, it is your responsibility that they query sets of the same length. If you try to inherit two sets with different lengths the sequencer will throw an error.
