@@ -3,6 +3,9 @@ export default api;
 
 var api = factory({
     type: 'minno-time',
+    settings: {
+        logger:{pulse:20}
+    },
     sets: ['trial', 'stimulus','media']
 });
 

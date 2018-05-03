@@ -1,6 +1,6 @@
 import api from './APIConstructor';
 
 export default api({
-    type: 'minnno-quest',
+    type: 'minno-quest',
     sets: ['pages', 'questions']
 });

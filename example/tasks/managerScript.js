@@ -2,7 +2,7 @@ define(['managerAPI'], function(Manager){
     var API = new Manager();
 
     API.addSettings('skin', '');
-    API.addSettings('logger', {type:'old', url:'barkk'});
+    API.addSettings('logger', {url:'barkk'});
     API.save({hark:'bangladore', sven:'tendencies'});
 
     API.addSettings('injectStyle', [ '[pi-player] {position:fixed;left:0; right:0;}', '.minno-canvas { margin-top: auto; background:lightblue;}', ].join(''));

@@ -21,7 +21,7 @@ function APIconstructor(options){
         var script = this.script = {
             type: options.type,
             name: 'anonymous ' + options.type,
-            settings: {},
+            settings: options.settings || {},
             current: {}, // this is the actual namespace for this PIP
             sequence: []
         };
@@ -35,7 +35,7 @@ function APIconstructor(options){
     }
 
     _.forEach(options.sets, function(set){
-        API.prototype[_.camelCase('add-' + set + '-set')] = add_set(set);
+        _.set(API.prototype, _.camelCase('add-' + set + '-set') ,  add_set(set));
     });
 
     _.extend(API.prototype, options.static, {

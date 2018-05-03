@@ -34357,23 +34357,6 @@ var lodash = createCommonjsModule(function (module, exports) {
 }.call(commonjsGlobal));
 });
 
-/**
- * A function that maps a mixer object into a sequence.
- *
- * The basic structure of such an obect is:
- * {
- *		mixer: 'functionType',
- *		remix : false,
- *		data: [task1, task2]
- *	}
- *
- * The results of the mix are set into `$parsed` within the original mixer object.
- * if remix is true $parsed is returned instead of recomputing
- *
- * @param {Object} [obj] [a mixer object]
- * @returns {Array} [An array of mixed objects]
- */
-
 mixProvider.$inject = ['randomizeShuffle', 'randomizeRandom'];
 function mixProvider(shuffle, random){
 
@@ -35453,7 +35436,7 @@ function APIconstructor(options){
         var script = this.script = {
             type: options.type,
             name: 'anonymous ' + options.type,
-            settings: {},
+            settings: options.settings || {},
             current: {}, // this is the actual namespace for this PIP
             sequence: []
         };
@@ -35467,7 +35450,7 @@ function APIconstructor(options){
     }
 
     lodash.forEach(options.sets, function(set){
-        API.prototype[lodash.camelCase('add-' + set + '-set')] = add_set(set);
+        lodash.set(API.prototype, lodash.camelCase('add-' + set + '-set') ,  add_set(set));
     });
 
     lodash.extend(API.prototype, options.static, {
@@ -35630,18 +35613,24 @@ var messageTemplateDebrief = "<style type=\"text/css\">\n\t.navbar-inverse .navb
 
 var messageTemplatePanel = "<div class=\"panel panel-info\" style=\"margin-top:1em\">\n\t<% if (header){ %>\n\t\t<div class=\"panel-heading\">\n\t\t\t<h2 class=\"panel-title text-center\" style=\"font-size:1.3em\"><%= header %></h2>\n\t\t</div>\n\t<% } %>\n\n\t<div class=\"panel-body\">\n\t\t<%= content %>\n\t</div>\n\n\t<% if (footer){ %>\n\t\t<div class=\"panel-footer\">\n\t\t\t<%= footer %>\n\t\t</div>\n\t<% } %>\n</div>";
 
+/**
+ * Constructor for PIPlayer script creator
+ * @return {Object}		Script creator
+ */
 function API(){
     Constructor.call(this);
-    this.settings.onPreTask = onPreTask;
-    lodash.set(this, 'settings.logger.managerUrl', '/implicit/PiManager/');
-    lodash.set(this, 'settings.logger.type', 'old');
+
+    lodash.set(this, 'settings.onPreTask',onPreTask);
+    lodash.set(this, 'settings.logger.url', '../data');
+    window.IS_PI && lodash.set(this, 'settings.logger.managerUrl', '/implicit/PiManager/');
+    window.IS_PI && lodash.set(this, 'settings.logger.type', 'old');
 }
 
 // create API functions
 lodash.extend(API.prototype, Constructor.prototype);
 
 // annotate onPreTask
-onPreTask.$inject = ['currentTask', '$http','$rootScope','managerBeforeUnload','templateDefaultContext', 'managerSettings', 'piConsole'];
+onPreTask.$inject = ['currentTask', '$http','managerBeforeUnload','templateDefaultContext', 'managerSettings', 'piConsole'];
 
 /**
  * Before each task,
@@ -35652,14 +35641,18 @@ onPreTask.$inject = ['currentTask', '$http','$rootScope','managerBeforeUnload','
  * @param  {Object} $http       The $http service
  * @return {Promise}            Resolved when server responds
  */
-function onPreTask(currentTask, $http, $rootScope, beforeUnload, templateDefaultContext,managerSettings, piConsole){
-    var global = $rootScope.global;
+function onPreTask(currentTask, $http, beforeUnload, templateDefaultContext,managerSettings, piConsole){
+    var global = window.piGlobal;
     var context = {};
-    var data = lodash.assign({}, global.$meta, {taskName: currentTask.name || 'namelessTask', taskNumber: currentTask.$meta.number, taskURL:currentTask.scriptUrl || currentTask.templateUrl});
+    var data = lodash.assign({}, global.$meta, {
+        taskName: currentTask.name || 'namelessTask', 
+        taskNumber: currentTask.$meta.number, 
+        taskURL:currentTask.scriptUrl || currentTask.templateUrl
+    });
 
     // set last task flag
     if (currentTask.last){
-        data.sessionStatus = 'C';
+        window.IS_PI && (data.sessionStatus = 'C');
         beforeUnload.deactivate();
     }
 
@@ -35673,11 +35666,13 @@ function onPreTask(currentTask, $http, $rootScope, beforeUnload, templateDefault
     var isDev = /^(localhost|127.0.0.1)/.test(location.host);
     if (currentTask.type == 'pip') currentTask.baseUrl = currentTask.baseUrl ? currentTask.baseUrl 
         : isDev ? '/pip' 
-        : '/implicit/common/all/js/pip/' + (currentTask.version || 0.3);
+        : window.IS_PI ?'/implicit/common/all/js/pip/' + (currentTask.version || 0.3)
+        : '/openserver/minnojs/minno-time/0.3';
 
     if (currentTask.type == 'time') currentTask.baseUrl = currentTask.baseUrl ? currentTask.baseUrl 
         : isDev ? '/pip' 
-        : '/implicit/common/all/js/pip/0.5';
+        : window.IS_PI ? '/implicit/common/all/js/pip/0.5/'
+        : '/openserver/minnojs/minno-time/0.5';
 
     // add feedback functions to the default template context
     lodash.extend(templateDefaultContext,{
@@ -35705,7 +35700,7 @@ function onPreTask(currentTask, $http, $rootScope, beforeUnload, templateDefault
         }
     }
 
-
+    // @TODO: export as individual task
     if (currentTask.last && global.$mTurk){
         var $mTurk = global.$mTurk;
         var mturkUrl = $mTurk.isProduction ?  'http://www.mturk.com/mturk/externalSubmit' : 'https://workersandbox.mturk.com/mturk/externalSubmit';
@@ -35724,14 +35719,16 @@ function onPreTask(currentTask, $http, $rootScope, beforeUnload, templateDefault
         };
     }
 
+    // connect to errorception
     if (window._err && window._err.meta){
         var meta = window._err.meta;
         meta.subtaskName = currentTask.name;
         meta.subtaskURL = currentTask.scriptUrl || currentTask.templateUrl;
     }
 
-    function error(){
-        var e =  new Error('Failed to update server');
+    function error(response){
+        var errMessage = response.statusText +' (' + response.status +').';
+        var e = new Error('Failed to update. ' + errMessage);
         var reportNoConnection = currentTask.reportNoConnection;
         if (reportNoConnection){
             var message = document.createElement('div');
@@ -35810,6 +35807,9 @@ function showFeedback(global, options){
 
 var api$1 = APIconstructor({
     type: 'minno-time',
+    settings: {
+        logger:{pulse:20}
+    },
     sets: ['trial', 'stimulus','media']
 });
 
@@ -35821,32 +35821,10 @@ api$1.prototype.getLogs = function getLogs(){
     return this.script.current.logs;
 };
 
-function API$1(name){
-    api$1.call(this, name);
-
-    var settings = this.settings;
-
-    settings.logger = {
-        pulse: 20,
-        url : '/implicit/PiPlayerApplet'
-    };
-}
-
-// create API functions
-lodash.extend(API$1.prototype, api$1.prototype);
-
-var Constructor$2 = APIconstructor({
-    type: 'minnno-quest',
+var quest = APIconstructor({
+    type: 'minno-quest',
     sets: ['pages', 'questions']
 });
-
-function API$2(){
-    Constructor$2.call(this);
-    lodash.set(this, 'settings.logger.url', '/implicit/PiQuest');
-}
-
-// create API functions
-lodash.extend(API$2.prototype, Constructor$2.prototype);
 
 /**
  * Essentialy a defaults object for the scorer
@@ -43029,2065 +43007,6 @@ var glob = window.piGlobal || (window.piGlobal = {});
 
 function global$3(){
     return glob;
-}
-
-mixProvider$1.$inject = ['randomizeShuffle', 'randomizeRandom'];
-function mixProvider$1(shuffle, random){
-
-    function mix(obj){
-        var mixerName = obj.mixer;
-
-        // if this isn't a mixer
-        // make sure we catch mixers that are set with undefined by accident...
-        if (!(lodash.isPlainObject(obj) && 'mixer' in obj)){
-            return [obj];
-        }
-
-        if (lodash.isUndefined(mix.mixers[mixerName])){
-            throw new Error('Mixer: unknow mixer type = ' + mixerName);
-        }
-
-        if (!obj.remix && obj.$parsed) {
-            return obj.$parsed;
-        }
-
-        obj.$parsed = mix.mixers[mixerName].apply(null, arguments);
-
-        if (!lodash.isArray(obj.$parsed)) {
-            throw new Error('Mixer: mixers must return an array (mixer: ' + mixerName + ')');
-        }
-
-        return obj.$parsed;
-    }
-
-    function deepMixer(sequence, context){
-        return lodash.reduce(sequence, function(arr,value){
-
-            if (lodash.isPlainObject(value) && 'mixer' in value && value.mixer != 'wrapper' && !value.wrapper){
-                var seq = deepMixer(mix(value, context), context);
-                return arr.concat(seq);
-            } else {
-                return arr.concat([value]);
-            }
-        }, []);
-    }
-
-
-    mix.mixers = {
-        wrapper : function(obj){
-            return obj.data;
-        },
-
-        repeat: function(obj){
-            var sequence = obj.data || [];
-            var result = [], i;
-            for (i=0; i < obj.times; i++){
-                result = result.concat(lodash.clone(sequence,true));
-            }
-            return result;
-        },
-
-        // randomize any elements
-        random: function(obj, context){
-            var sequence = obj.data ? deepMixer(obj.data, context) : [];
-            return shuffle(sequence);
-        },
-
-        choose: function(obj, context){
-            var sequence = obj.data ? deepMixer(obj.data, context) : [];
-            return lodash.take(shuffle(sequence), obj.n ? obj.n : 1);
-        },
-
-        custom: function(obj, context){
-            return lodash.isFunction(obj.fn) ? obj.fn(obj, context) : [];
-        },
-
-        weightedRandom: weightedChoose,
-        weightedChoose: weightedChoose
-
-    };
-
-
-    return mix;
-
-    function weightedChoose(obj, context){
-        var sequence = obj.data ? deepMixer(obj.data, context) : [];
-        var i;
-        var n = obj.n || 1;
-        var result = [];
-        var total_weight = lodash.reduce(obj.weights,function (prev, cur) {
-            return prev + cur;
-        });
-
-        for (i = 0; i < n; i++){
-            result.push(generate());
-        }
-
-        return result;
-
-        function generate(){
-            var i;
-            var random_num = random() * total_weight; // cutoff - when we reach this sum - we've reached the desired weight
-            var weight_sum = 0;
-
-            for (i = 0; i < sequence.length; i++) {
-                weight_sum += obj.weights[i];
-                weight_sum = +weight_sum.toFixed(3);
-
-                if (random_num <= weight_sum) {
-                    return obj.data[i];
-                }
-            }
-
-            throw new Error('Mixer: something went wrong with weightedRandom');
-        }
-    }
-
-}
-
-mixerDotNotationProvider$3.$inject = ['dotNotation'];
-function mixerDotNotationProvider$3(dotNotation){
-
-    function mixerDotNotation(chain, obj){
-
-        var escapeSeparatorRegex= /[^/]\./;
-
-        if (!lodash.isString(chain)) return chain;
-
-        // We do not have a non escaped dot: we treat this as a string
-        if (!escapeSeparatorRegex.test(chain)) return chain.replace('/.','.');
-
-        return dotNotation(chain, obj);
-    }
-
-    return mixerDotNotation;
-}
-
-mixerConditionProvider$3.$inject = ['mixerDotNotation','piConsole'];
-function mixerConditionProvider$3(dotNotation,piConsole){
-    var operatorHash = {
-        gt: forceNumeric(lodash.gt),
-        greaterThan: forceNumeric(lodash.gt),
-        gte: forceNumeric(lodash.gte),
-        greaterThanOrEqual: forceNumeric(lodash.gte),
-        equals: lodash.eq,
-        'in': lodash.rearg(lodash.contains,1,0), // effectively reverse
-        contains: lodash.rearg(lodash.contains,1,0), // effectively reverse
-        exactly: exactly,
-        isTruthy: isTruthy
-    };
-
-    function mixerCondition(condition, context){
-        var operator = getOperator(condition);
-        var left = dotNotation(condition.compare,context);
-        var right = dotNotation(condition.to,context);
-
-        if (condition.DEBUG) piConsole({
-            type:'info',
-            message:'Condition info',
-            rows: [
-                ['Left: ', left], 
-                ['Operator: ', condition.operator || 'equals'],
-                ['Right: ', right]
-            ],
-            context: condition,
-        });
-
-        return condition.negate
-            ? !operator.apply(context,[left, right, context])
-            : operator.apply(context,[left, right, context]);
-    }
-
-    return mixerCondition;
-
-
-    // extract the operator function from the condition
-    function getOperator(condition){
-        var operator = condition.operator;
-        if (lodash.isFunction(condition)) return condition;
-        if (!lodash.has(condition, 'operator')) return lodash.has(condition,'to') ? lodash.eq : isTruthy;
-        if (lodash.isFunction(operator)) return operator;
-        return operatorHash[operator];
-    }
-
-    function isTruthy(left){ return !!left; }
-    function exactly(left,right){ return left === right;}
-    function forceNumeric(cb){ return function(left,right){ return [left,right].every(lodash.isNumber) ? cb(left,right) : false; }; } 
-
-}
-
-evaluateProvider$1.$inject = ['mixerCondition'];
-function evaluateProvider$1(condition){
-    /**
-     * Checks if a conditions set is true
-     * @param  {Array} conditions [an array of conditions]
-     * @param  {Object} context   [A context for the condition checker]
-     * @return {Boolean}          [Are these conditions true]
-     */
-
-    function evaluate(conditions,context){
-        // make && the default
-        lodash.isArray(conditions) && (conditions = {and:conditions});
-
-        function test(cond){return evaluate(cond,context);}
-
-        // && objects
-        if (conditions.and){
-            return lodash.every(conditions.and, test);
-        }
-        if (conditions.nand){
-            return !lodash.every(conditions.nand, test);
-        }
-
-        // || objects
-        if (conditions.or){
-            return lodash.some(conditions.or, test);
-        }
-        if (conditions.nor){
-            return !lodash.some(conditions.nor, test);
-        }
-
-        return condition(conditions, context);
-    }
-
-    return evaluate;
-}
-
-/**
- * Registers the branching mixers with the mixer
- * @return {function}         [mixer decorator]
- */
-
-mixerBranchingDecorator$3.$inject = ['$delegate','mixerEvaluate','mixerDefaultContext'];
-function mixerBranchingDecorator$3(mix, evaluate, mixerDefaultContext){
-
-    mix.mixers.branch = branch;
-    mix.mixers.multiBranch = multiBranch;
-
-    return mix;
-
-    /**
-     * Branching mixer
-     * @return {Array}         [A data array with objects to continue with]
-     */
-    function branch(obj, context){
-        context = lodash.extend(context || {}, mixerDefaultContext);
-        return evaluate(obj.conditions, context) ? obj.data || [] : obj.elseData || [];
-    }
-
-    /**
-     * multiBranch mixer
-     * @return {Array}         [A data array with objects to continue with]
-     */
-    function multiBranch(obj, context){
-        context = lodash.extend(context || {}, mixerDefaultContext);
-        var row;
-
-        row = lodash.find(obj.branches, function(branch){
-            return evaluate(branch.conditions, context);
-        });
-
-        if (row) {
-            return row.data || [];
-        }
-
-        return obj.elseData || [];
-    }
-}
-
-mixerSequenceProvider$3.$inject = ['mixer'];
-function mixerSequenceProvider$3(mix){
-
-    /**
-     * MixerSequence takes an mixer array and allows browsing back and forth within it
-     * @param {Array} arr [a mixer array]
-     */
-    function MixerSequence(arr){
-        this.sequence = arr;
-        this.stack = [];
-        this.add(arr);
-        this.pointer = 0;
-    }
-
-    lodash.extend(MixerSequence.prototype, {
-        /**
-         * Add sequence to mixer
-         * @param {[type]} arr     Sequence
-         * @param {[type]} reverse Whether to start from begining or end
-         */
-        add: function(arr, reverse){
-            this.stack.push({pointer:reverse ? arr.length : -1,sequence:arr});
-        },
-
-        proceed: function(direction, context){
-            // get last subSequence
-            var subSequence = this.stack[this.stack.length-1];
-            var isNext = (direction === 'next');
-
-            // if we ran out of sequence
-            // add the original sequence back in
-            if (!subSequence) {
-                throw new Error ('mixerSequence: subSequence not found');
-            }
-
-            subSequence.pointer += isNext ? 1 : -1;
-
-            var el = subSequence.sequence[subSequence.pointer];
-
-            // if we ran out of elements, go to previous level (unless we are on the root sequence)
-            if (lodash.isUndefined(el) && this.stack.length > 1){
-                this.stack.pop();
-                return this.proceed.call(this,direction,context);
-            }
-
-            // if element is a mixer, mix it
-            if (el && el.mixer){
-                this.add(mix(el,context), !isNext);
-                return this.proceed.call(this,direction,context);
-            }
-
-            // regular element or undefined (end of sequence)
-            return this;
-        },
-
-        next: function(context){
-            this.pointer++;
-            return this.proceed.call(this, 'next',context);
-        },
-
-        prev: function(context){
-            this.pointer--;
-            return this.proceed.call(this, 'prev',context);
-        },
-
-        /**
-         * Return current element
-         * should **never** return a mixer - supposed to abstract them away
-         * @return {[type]} undefined or element
-         */
-        current:function(){
-            // get last subSequence
-            var subSequence = this.stack[this.stack.length-1];
-
-            if (!subSequence) {
-                throw new Error ('mixerSequence: subSequence not found');
-            }
-
-            var el = subSequence.sequence[subSequence.pointer];
-
-            if (!el){
-                return undefined;
-            }
-
-            // extend element with meta data
-            el.$meta = this.meta();
-
-            return el;
-        },
-
-        meta: function(){
-            return {
-                number: this.pointer,
-
-                // sum of sequence length, minus one (the mixer) for each level of stack except the last
-                outOf:  lodash.reduce(this.stack, function(memo,sub){return memo + sub.sequence.length-1;},0)+1
-            };
-        }
-
-    });
-
-    return MixerSequence;
-}
-
-function dotNotation$3(chain, obj){
-
-    if (lodash.isUndefined(chain)) return;
-    if (lodash.isString(chain)) chain = chain.split('.');
-
-    // @TODO maybe lodash _.get?
-    return chain.reduce(function(result, link){
-
-        if (lodash.isPlainObject(result) || lodash.isArray(result)){
-            return result[link];
-        }
-
-        return undefined;
-
-    }, obj);
-}
-
-piConsoleFactory$3.$inject = ['$log'];
-function piConsoleFactory$3($log){
-    return window.DEBUG ? piConsole : lodash.noop;
-
-    function piConsole(log){
-        if (lodash.get(piConsole,'settings.hideConsole', false)) return window.postMessage({type:'kill-console'},'*');
-
-        $log[log.type] && $log[log.type](log.message); 
-        window.postMessage(noramlizeMessage(log),'*');
-    }
-
-    function noramlizeMessage(obj){
-        return lodash.cloneDeep(obj, normalize);
-        function normalize(val){
-            if (lodash.isFunction(val)) return val.toString();
-            if (lodash.isError(val)) return {name:val.name, message:val.message, stack:val.stack};
-        }
-    }
-}
-
-var piConsole$4 = piConsoleFactory$3(console);
-var mixer$2 = mixProvider$1(
-    lodash.shuffle, // randomizeShuffle
-    Math.random // randomizeRandom
-);
-
-var mixerDotNotation$1 = mixerDotNotationProvider$3(dotNotation$3);
-var mixerCondition$1 = mixerConditionProvider$3(
-    mixerDotNotation$1,
-    piConsole$4
-);
-
-var mixerEvaluate$1 = evaluateProvider$1(mixerCondition$1);
-
-var mixerDefaultContext$1 = {};
-
-mixerBranchingDecorator$3(
-    mixer$2,
-    mixerEvaluate$1,
-    mixerDefaultContext$1
-);
-
-var MixerSequence$1 = mixerSequenceProvider$3(mixer$2);
-
-templateObjProvider$3.$inject = ['templateDefaultContext'];
-function templateObjProvider$3(templateDefaultContext){
-
-    function templateObj(obj, context, options){
-        var skip = lodash.get(options, 'skip', []);
-        var result = {};
-        var key;
-        var ctx = lodash.assign({}, context, templateDefaultContext);
-
-        for (key in obj){
-            result[key] = (skip.indexOf(key) == -1) ? expand(obj[key]) : obj[key];
-        }
-
-        return result;
-
-        function expand(value){
-            if (lodash.isString(value)) return template(value);
-            if (lodash.isArray(value)) return value.map(expand);
-            if (lodash.isPlainObject(value)) return lodash.mapValues(value, expand);
-            return value;
-        }
-
-        function template(input){
-            // if there is no template just return the string
-            if (!~input.indexOf('<%')) return input;
-            return lodash.template(input)(ctx);
-        }
-    }
-
-    return templateObj;
-}
-
-var templateObj$1 = templateObjProvider$3({});
-
-function collectionService$1(){
-
-    function Collection (arr) {
-        if (arr instanceof Collection) {
-            return arr;
-        }
-
-        // Make sure we are creating this array out of a valid argument
-        if (!lodash.isUndefined(arr) && !lodash.isArray(arr) && !(arr instanceof Collection)) {
-            throw new Error('Collections can only be constructed from arrays');
-        }
-
-        this.collection = arr || [];
-        this.length = this.collection.length;
-
-        // pointer to the current location within the array
-        // we start with -1 so that the initial next points to the begining of the array
-        this.pointer = -1;
-    }
-
-    lodash.extend(Collection.prototype,{
-
-        first : function first(){
-            this.pointer = 0;
-            return this.collection[this.pointer];
-        },
-
-        last : function last(){
-            this.pointer = this.collection.length - 1;
-            return this.collection[this.pointer];
-        },
-
-        end : function end(){
-            this.pointer = this.collection.length;
-            return undefined;
-        },
-
-        current : function(){
-            return this.collection[this.pointer];
-        },
-
-        next : function(){
-            return this.collection[++this.pointer];
-        },
-
-        previous : function(){
-            return this.collection[--this.pointer];
-        },
-
-        // add list of items to the collection
-        add : function(list){
-            // dont allow adding nothing
-            if (!arguments.length) {
-                return this;
-            }
-
-            // make sure list is as an array
-            list = lodash.isArray(list) ? list : [list];
-            this.collection = this.collection.concat(list);
-
-            this.length = this.collection.length;
-
-            return this;
-        },
-
-        // return the item at index
-        at: function(index){
-            return this.collection[index];
-        }
-    });
-
-
-    // Stuff we took out of bootstrap that can augment the collection
-    // **************************************************************
-    var methods = ['where','filter'];
-    var slice = Array.prototype.slice;
-
-    // Mix in each Underscore method as a proxy to `Collection#models`.
-    lodash.each(methods, function(method) {
-        Collection.prototype[method] = function() {
-            var args = slice.call(arguments);
-            args.unshift(this.collection);
-            var coll = lodash[method].apply(lodash,args);
-            return new Collection(coll);
-        };
-    });
-
-    return Collection;
-}
-
-RandomizerProvider$1.$inject = ['randomizeInt', 'randomizeRange', 'Collection'];
-function RandomizerProvider$1(randomizeInt, randomizeRange, Collection){
-
-    function Randomizer(){
-        this._cache = {
-            random : {},
-            exRandom : {},
-            sequential : {}
-        };
-    }
-
-    lodash.extend(Randomizer.prototype, {
-        random: random,
-        exRandom: exRandom,
-        sequential: sequential
-    });
-
-    return Randomizer;
-
-    function random(length, seed, repeat){
-        var cache  = this._cache.random;
-
-        if (repeat && !lodash.isUndefined(cache[seed])) {
-            return cache[seed];
-        }
-
-        // save result in cache
-        cache[seed] = randomizeInt(length);
-
-        return cache[seed];
-    }
-
-    function sequential(length, seed, repeat){
-        var cache = this._cache.sequential;
-        var coll = cache[seed];
-        var result;
-
-        // if needed create collection and set it in seed
-        if (lodash.isUndefined(coll)){
-            coll = cache[seed] = new Collection(lodash.range(length));
-            return coll.first();
-        }
-
-        if (coll.length !== length){
-            throw new Error('This seed  ('+ seed +') points to a collection with the wrong length, you can only use a seed for sets of the same length');
-        }
-
-        // if this is a repeated element:
-        if (repeat) {
-            return coll.current();
-        }
-
-        // if we've reached the end
-        result = coll.next();
-
-        // if we've reached the end of the collection (next)
-        if (lodash.isUndefined(result)){
-            return coll.first();
-        } else {
-            return result;
-        }
-    }
-
-    function exRandom(length, seed, repeat){
-        var cache = this._cache.exRandom;
-        var coll = cache[seed];
-        var result;
-
-        // if needed create collection and set it in seed
-        if (lodash.isUndefined(coll)){
-            coll = cache[seed] = new Collection(randomizeRange(length));
-            return coll.first();
-        }
-
-        if (coll.length !== length){
-            throw new Error('This seed  ('+ seed +') points to a collection with the wrong length, you can only use a seed for sets of the same length');
-        }
-
-        // if this is a repeated element:
-        if (repeat) {
-            return coll.current();
-        }
-
-        // if we've reached the end
-        result = coll.next();
-
-        // if we've reached the end of the collection (next)
-        // we should re-randomize
-        if (lodash.isUndefined(result)){
-            coll = cache[seed] = new Collection(randomizeRange(length));
-            return coll.first();
-        } else {
-            return result;
-        }
-    }
-
-}
-
-/*
- *	The store is a collection of collection devided into namespaces.
- *	You can think of every namespace/collection as a table.
- */
-storeProvider$3.$inject = ['Collection'];
-function storeProvider$3(Collection){
-
-    function Store(){
-        this.store = {};
-    }
-
-    lodash.extend(Store.prototype, {
-        create: function create(nameSpace){
-            if (this.store[nameSpace]){
-                throw new Error('The name space ' + nameSpace + ' already exists');
-            }
-            this.store[nameSpace] = new Collection();
-            this.store[nameSpace].namespace = nameSpace;
-        },
-
-        read: function read(nameSpace){
-            if (!this.store[nameSpace]){
-                throw new Error('The name space ' + nameSpace + ' does not exist');
-            }
-            return this.store[nameSpace];
-        },
-
-        update: function update(nameSpace, data){
-            var coll = this.read(nameSpace);
-            coll.add(data);
-        },
-
-        del: function del(nameSpace){
-            this.store[nameSpace] = undefined;
-        }
-    });
-
-    return Store;
-}
-
-SequenceProvider$2.$inject = ['MixerSequence'];
-function SequenceProvider$2(MixerSequence){
-
-    /**
-     * Sequence Constructor:
-     * Manage the progression of a sequence, including parsing (mixing, inheritance and templating).
-     * @param  {String  } namespace [pages or questions (the type of db.Store)]
-     * @param  {Array   } arr       [a sequence to manage]
-     * @param  {Database} db        [the db itself]
-     */
-
-    function Sequence(namespace, arr,db){
-        this.namespace = namespace;
-        this.mixerSequence = new MixerSequence(arr);
-        this.db = db;
-    }
-
-    lodash.extend(Sequence.prototype, {
-        // only mix
-        next: function(context){
-            this.mixerSequence.next(context);
-            return this;
-        },
-
-        // anti mix
-        prev: function(context){
-            this.mixerSequence.prev(context);
-            return this;
-        },
-
-        /**
-         * Return the element currently in focus.
-         * It always returns either an element or undefined (mixers are abstrcted away)
-         * @param  {[type]} context [description]
-         * @return {[type]}         [description]
-         */
-        current: function(context, options){
-            context || (context = {});
-            // must returned an element or undefined
-            var obj = this.mixerSequence.current(context);
-
-            // in case this is the end of the sequence
-            if (!obj){
-                return obj;
-            }
-
-            return this.db.inflate(this.namespace, obj, context, options);
-        },
-
-        /**
-         * Returns an array of elements, created by proceeding through the whole sequence.
-         * @return {[type]} [description]
-         */
-        all: function(context, options){
-            var sequence = [];
-
-            var el = this.next().current(context, options);
-            while (el){
-                sequence.push(el);
-                el = this.next().current(context, options);
-            }
-
-            return sequence;
-        }
-    });
-
-    return Sequence;
-}
-
-DatabaseProvider$1.$inject = ['DatabaseStore', 'DatabaseRandomizer', 'databaseInflate', 'templateObj', 'databaseSequence','piConsole'];
-function DatabaseProvider$1(Store, Randomizer, inflate, templateObj, DatabaseSequence, piConsole){
-
-    function Database(){
-        this.store = new Store();
-        this.randomizer = new Randomizer();
-    }
-
-    lodash.extend(Database.prototype, {
-        createColl: function(namespace){
-            this.store.create(namespace);
-        },
-
-        getColl: function(namespace){
-            return this.store.read(namespace);
-        },
-
-        add: function(namespace, query){
-            var coll = this.store.read(namespace);
-            coll.add(query);
-        },
-
-        inflate: function(namespace, query, context, options){
-            var coll = this.getColl(namespace);
-            var result;
-
-            // inherit
-            try {
-                if (!query.$inflated || query.reinflate) {
-                    query.$inflated = inflate(query, coll, this.randomizer);
-                    query.$templated = null; // we have to retemplate after querying, who know what new templates we got here...
-                }
-            } catch(err) {
-                piConsole({
-                    type:'error',
-                    message: 'Failed to inherit',
-                    error:err,
-                    context: query
-                });
-                if (this.onError) this.onError(err);
-                throw err;
-            }
-
-            // template
-            try {
-                if (!query.$templated || query.$inflated.regenerateTemplate){
-                    context[namespace + 'Meta'] = query.$meta;
-                    context[namespace + 'Data'] = templateObj(query.$inflated.data || {}, context, options); // make sure we support
-                    query.$templated = templateObj(query.$inflated, context, options);
-                }
-            } catch(err) {
-                piConsole({
-                    type:'error',
-                    message: 'Failed to apply template',
-                    error:err,
-                    context: query.$inflated
-                });
-                if (this.onError) this.onError(err);
-                throw err;
-            }
-
-            result = query.$templated;
-
-            // set flags
-            if (context.global && result.addGlobal) lodash.extend(context.global, result.addGlobal);
-
-            if (context.current && result.addCurrent) lodash.extend(context.current, result.addCurrent);
-
-            return result;
-        },
-
-        sequence: function(namespace, arr){
-            if (!lodash.isArray(arr)){
-                throw new Error('Sequence must be an array.');
-            }
-            return new DatabaseSequence(namespace, arr, this);
-        }
-    });
-
-    return Database;
-}
-
-queryProvider$3.$inject = ['Collection'];
-function queryProvider$3(Collection){
-
-    function queryFn(query, collection, randomizer){
-        var coll = new Collection(collection);
-
-        // shortcuts:
-        // ****************************
-
-        if (lodash.isFunction(query)) return query(collection);
-
-        if (lodash.isString(query) || lodash.isNumber(query)) query = {set:query, type:'random'};
-
-        // filter by set
-        // ****************************
-        if (query.set) coll = coll.where({set:query.set});
-
-        // filter by data
-        // ****************************
-        if (lodash.isString(query.data)){
-            coll = coll.filter(function(q){
-                return q.handle === query.data || (q.data && q.data.handle === query.data);
-            });
-        }
-
-        if (lodash.isPlainObject(query.data)) coll = coll.where({data:query.data});
-
-        if (lodash.isFunction(query.data)) coll = coll.filter(query.data);
-
-        // pick by type
-        // ****************************
-
-        // the default seed is namespace specific just to minimize the situations where seeds clash across namespaces
-        var seed = query.seed || ('$' + collection.namespace + query.set);
-        var length = coll.length;
-        var repeat = query.repeat;
-        var at;
-
-        switch (query.type){
-            case undefined:
-            case 'byData':
-            case 'random':
-                at = randomizer.random(length,seed,repeat);
-                break;
-            case 'exRandom':
-                at = randomizer.exRandom(length,seed,repeat);
-                break;
-            case 'sequential':
-                at = randomizer.sequential(length,seed,repeat);
-                break;
-            case 'first':
-                at = 0;
-                break;
-            case 'last':
-                at = length-1;
-                break;
-            default:
-                throw new Error('Unknow query type: ' + query.type);
-        }
-
-        if (lodash.isUndefined(coll.at(at))) throw new Error('Query failed, object (' + JSON.stringify(query) +	') not found. If you are trying to apply a template, you should know that they are not supported for inheritance.');
-
-        return coll.at(at);
-    }
-
-    return queryFn;
-}
-
-/*
- * inflates an object
- * this function is responsible for inheritance
- *
- * function inflate(source,coll, randomizer, recursive, counter)
- * @param source: the object to inflate
- * @param coll: a collection to inherit from
- * @param randomizer: a randomizer object for the query
- * @param recursive: private use only, is this inside the recursion (true) or top level (false)
- * @param depth: private use only, a counter for the depth of the recursion
- */
-inflateProvider$3.$inject = ['databaseQuery','$rootScope'];
-function inflateProvider$3(query, $rootScope){
-
-    function customize(source){
-        // check for a custom function and run it if it exists
-        if (lodash.isFunction(source.customize)){
-            source.customize.apply(source, [source, $rootScope.global]);
-        }
-        return source;
-    }
-
-    // @param source - object to inflate
-    // @param type - trial stimulus or media
-    // @param recursive - whether this is a recursive call or not
-    function inflate(source, coll, randomizer, recursive, depth){
-
-        // protection against infinte loops
-        // ***********************************
-        depth = recursive ? --depth : 10;
-
-        if (!depth) throw new Error('Inheritance loop too deep, you can only inherit up to 10 levels down');
-
-        if (!lodash.isPlainObject(source)) throw new Error('You are trying to inflate a non object (' + JSON.stringify(source) + ')');
-
-        var parent;
-        var child = lodash.cloneDeep(source);
-        var inheritObj = child.inherit;
-
-        /*
-         * no inheritance
-         */
-
-        if (!child.inherit) {
-            if (!recursive) customize(child); // customize only on the last call (non recursive)
-            return child;
-        }
-
-        /*
-         * get parent
-         */
-        parent = query(inheritObj, coll, randomizer);
-
-        // if inherit target was not found
-        if (!parent) throw new Error('Query failed, object (' + JSON.stringify(inheritObj) +	') not found.');
-
-        // inflate parent (recursively)
-        parent = inflate(
-            parent,
-            coll,
-            randomizer,
-            true,
-            depth
-        );
-
-        // extending the child
-        // ***********************************
-        if (inheritObj.merge && !lodash.isArray(inheritObj.merge)){
-            throw new Error('Inheritance error: inherit.merge must be an array.');
-        }
-
-        // start inflating child (we have to extend selectively...)
-        lodash.each(parent, function(value, key){
-            var childProp, parentProp;
-            // if this key is not set yet, copy it out of the parent
-            if (!(key in child)){
-                child[key] = lodash.isFunction(value) ? value : lodash.cloneDeep(value);
-                return;
-            }
-
-            // if we have a merge array,
-            if (lodash.indexOf(inheritObj.merge, key) != -1){
-                childProp = child[key];
-                parentProp = value;
-
-                if (lodash.isArray(childProp)){
-                    if (!lodash.isArray(parentProp)){
-                        throw new Error('Inheritance error: You tried merging an array with an non array (for "' + key + '")');
-                    }
-                    child[key] = childProp.concat(parentProp);
-                }
-
-                if (lodash.isPlainObject(childProp)){
-                    if (!lodash.isPlainObject(parentProp)){
-                        throw new Error('Inheritance error: You tried merging an object with an non object (for "' + key + '")');
-                    }
-                    child[key] = lodash.extend({},parentProp,childProp);
-                }
-
-            }
-        });
-
-        // we want to extend the childs data even if it already exists
-        // its ok to shallow extend here (because by definition parent was created for this inflation)
-        if (parent.data){
-            child.data = lodash.extend(parent.data, child.data || {});
-        }
-
-        // Personal customization functions - only if this is the last iteration of inflate
-        // This way the customize function gets called only once.
-        !recursive && customize(child);
-
-        // return inflated trial
-        return child;
-    }
-
-    return inflate;
-}
-
-var global$4 = window.piGlobal;
-
-var piConsole$3 = piConsoleFactory$3(console);
-var collection$1 = collectionService$1();
-
-var DatabaseRandomizer$1 = RandomizerProvider$1(
-    randomInt$1,// randomize int
-    randomArr$1,// randomize range
-    collection$1
-);
-
-var databaseQuery$1 = queryProvider$3(
-    collection$1,
-    piConsole$3
-);
-
-var databaseInflate$1 = inflateProvider$3(
-    databaseQuery$1,
-    {global: global$4}, // rootscope
-    piConsole$3
-);
-
-var DatabaseStore$1 = storeProvider$3(
-    collection$1
-);
-
-var databaseSequence$1 = SequenceProvider$2(
-    MixerSequence$1
-);
-
-var Database$2 = DatabaseProvider$1(
-    DatabaseStore$1,
-    DatabaseRandomizer$1,
-    databaseInflate$1,
-    templateObj$1,
-    databaseSequence$1,
-    piConsole$3
-);
-
-function randomArr$1(length){
-    return lodash.shuffle(lodash.range(length));
-}
-
-function randomInt$1(length){
-    return Math.floor(Math.random()*length);
-}
-
-/**
- * Go to a destination within the sequence (must be a property of a sequence)
- * @param  {String} target destination type
- * @param  {Object} properties destination options
- * @return {Object}        result element
- */
-
-function go$1(destination, properties, context){
-    var mixerSequence = this.mixerSequence;
-
-    switch (destination){
-        case 'nextWhere':
-            where('next', properties, context, mixerSequence);
-            break;
-        case 'previousWhere':
-            where('next', properties, context, mixerSequence);
-            break;
-        case 'current':
-            // don't need to do anything...
-            break;
-        case 'first':
-            do {mixerSequence.prev(context);} while (mixerSequence.current(context));
-            break;
-        case 'last':
-            do {mixerSequence.next(context);} while (mixerSequence.current(context));
-            mixerSequence.prev();
-            break;
-        case 'end':
-            do {mixerSequence.next(context);} while (mixerSequence.current(context));
-            break;
-        case 'next' :
-            mixerSequence.next(context); // get the next trial, in case there are no more trials, returns undefined
-            break;
-        default:
-            throw new Error('Unknow destination "' + destination + '" for goto.');
-    }
-
-    return this;
-}
-
-function where(direction, properties, context, sequence){
-    var curr;
-
-    do {
-        sequence[direction]();
-        curr = sequence.current(context);
-    } while (curr && !lodash.callback(properties)(curr.data));
-}
-
-/*
- * this file is resposible for taking the experiment script (json) and parsing it
- */
-
-// load dependancies
-function createDB$1(script){
-    var db = new Database$2();
-    db.createColl('trial');
-    db.createColl('stimulus');
-    db.createColl('media');
-
-    db.add('trial', script.trialSets || []);
-    db.add('stimulus', script.stimulusSets || []);
-    db.add('media', script.mediaSets || []);
-
-    if (!lodash.isArray(script.sequence)) throw new Error('You must set a sequence array.');
-
-    var sequence = db.sequence('trial', script.sequence);
-    sequence.go = go$1; // see sequence/goto.js to understand why we are doing this
-    db.currentSequence = sequence;
-    return db;
-}
-
-var fastdom = createCommonjsModule(function (module) {
-!(function(win) {
-
-/**
- * FastDom
- *
- * Eliminates layout thrashing
- * by batching DOM read/write
- * interactions.
- *
- * @author Wilson Page <wilsonpage@me.com>
- * @author Kornel Lesinski <kornel.lesinski@ft.com>
- */
-
-var debug = function() {};
-
-/**
- * Normalized rAF
- *
- * @type {Function}
- */
-var raf = win.requestAnimationFrame
-  || win.webkitRequestAnimationFrame
-  || win.mozRequestAnimationFrame
-  || win.msRequestAnimationFrame
-  || function(cb) { return setTimeout(cb, 16); };
-
-/**
- * Initialize a `FastDom`.
- *
- * @constructor
- */
-function FastDom() {
-  var self = this;
-  self.reads = [];
-  self.writes = [];
-  self.raf = raf.bind(win); // test hook
-  
-}
-
-FastDom.prototype = {
-  constructor: FastDom,
-
-  /**
-   * Adds a job to the read batch and
-   * schedules a new frame if need be.
-   *
-   * @param  {Function} fn
-   * @param  {Object} ctx the context to be bound to `fn` (optional).
-   * @public
-   */
-  measure: function(fn, ctx) {
-    var task = !ctx ? fn : fn.bind(ctx);
-    this.reads.push(task);
-    scheduleFlush(this);
-    return task;
-  },
-
-  /**
-   * Adds a job to the
-   * write batch and schedules
-   * a new frame if need be.
-   *
-   * @param  {Function} fn
-   * @param  {Object} ctx the context to be bound to `fn` (optional).
-   * @public
-   */
-  mutate: function(fn, ctx) {
-    var task = !ctx ? fn : fn.bind(ctx);
-    this.writes.push(task);
-    scheduleFlush(this);
-    return task;
-  },
-
-  /**
-   * Clears a scheduled 'read' or 'write' task.
-   *
-   * @param {Object} task
-   * @return {Boolean} success
-   * @public
-   */
-  clear: function(task) {
-    return remove(this.reads, task) || remove(this.writes, task);
-  },
-
-  /**
-   * Extend this FastDom with some
-   * custom functionality.
-   *
-   * Because fastdom must *always* be a
-   * singleton, we're actually extending
-   * the fastdom instance. This means tasks
-   * scheduled by an extension still enter
-   * fastdom's global task queue.
-   *
-   * The 'super' instance can be accessed
-   * from `this.fastdom`.
-   *
-   * @example
-   *
-   * var myFastdom = fastdom.extend({
-   *   initialize: function() {
-   *     // runs on creation
-   *   },
-   *
-   *   // override a method
-   *   measure: function(fn) {
-   *     // do extra stuff ...
-   *
-   *     // then call the original
-   *     return this.fastdom.measure(fn);
-   *   },
-   *
-   *   ...
-   * });
-   *
-   * @param  {Object} props  properties to mixin
-   * @return {FastDom}
-   */
-  extend: function(props) {
-    if (typeof props != 'object') throw new Error('expected object');
-
-    var child = Object.create(this);
-    mixin(child, props);
-    child.fastdom = this;
-
-    // run optional creation hook
-    if (child.initialize) child.initialize();
-
-    return child;
-  },
-
-  // override this with a function
-  // to prevent Errors in console
-  // when tasks throw
-  catch: null
-};
-
-/**
- * Schedules a new read/write
- * batch if one isn't pending.
- *
- * @private
- */
-function scheduleFlush(fastdom) {
-  if (!fastdom.scheduled) {
-    fastdom.scheduled = true;
-    fastdom.raf(flush.bind(null, fastdom));
-    
-  }
-}
-
-/**
- * Runs queued `read` and `write` tasks.
- *
- * Errors are caught and thrown by default.
- * If a `.catch` function has been defined
- * it is called instead.
- *
- * @private
- */
-function flush(fastdom) {
-  var writes = fastdom.writes;
-  var reads = fastdom.reads;
-  var error;
-
-  try {
-    debug('flushing reads', reads.length);
-    runTasks(reads);
-    debug('flushing writes', writes.length);
-    runTasks(writes);
-  } catch (e) { error = e; }
-
-  fastdom.scheduled = false;
-
-  // If the batch errored we may still have tasks queued
-  if (reads.length || writes.length) scheduleFlush(fastdom);
-
-  if (error) {
-    debug('task errored', error.message);
-    if (fastdom.catch) fastdom.catch(error);
-    else throw error;
-  }
-}
-
-/**
- * We run this inside a try catch
- * so that if any jobs error, we
- * are able to recover and continue
- * to flush the batch until it's empty.
- *
- * @private
- */
-function runTasks(tasks) {
-  var task; while (task = tasks.shift()) task();
-}
-
-/**
- * Remove an item from an Array.
- *
- * @param  {Array} array
- * @param  {*} item
- * @return {Boolean}
- */
-function remove(array, item) {
-  var index = array.indexOf(item);
-  return !!~index && !!array.splice(index, 1);
-}
-
-/**
- * Mixin own properties of source
- * object into the target.
- *
- * @param  {Object} target
- * @param  {Object} source
- */
-function mixin(target, source) {
-  for (var key in source) {
-    if (source.hasOwnProperty(key)) target[key] = source[key];
-  }
-}
-
-// There should never be more than
-// one instance of `FastDom` in an app
-var exports = win.fastdom = (win.fastdom || new FastDom()); // jshint ignore:line
-
-// Expose to CJS & AMD
-if ((typeof undefined) == 'function') undefined(function() { return exports; });
-else module.exports = exports;
-
-})( typeof window !== 'undefined' ? window : commonjsGlobal);
-});
-
-function getSize$1(el){
-    var computedStyle = window.getComputedStyle(el);
-    return {
-        height    : parse$1(el.offsetHeight) - parse$1(computedStyle.borderTopWidth) - parse$1(computedStyle.borderBottomWidth),
-        width    : parse$1(el.offsetWidth) - parse$1(computedStyle.borderLeftWidth) - parse$1(computedStyle.borderRightWidth)
-    };
-}
-
-function parse$1(num){ return parseFloat(num, 10) || 0;}
-
-/*
- * adjust canvas according to window size and settings
- * this module is built to be part of the main view
- */
-
-function adjust_canvas(canvas, settings){
-
-    return lodash.throttle(eventListener, 16);
-
-    function eventListener(event){
-        // we put this in a time out because of a latency of orientation change on android devices
-        if (event.type == 'orientationchange') setTimeout(resize, 500);
-        else resize();
-    }
-
-    function resize(){
-        fastdom.measure(function(){
-            var targetSize = getTargetSize(settings, canvas);
-
-            // remove border width and top margin from calculated width (can't depend on cool box styles yet...)
-            // we compute only margin-top because of a difference calculating margins between chrome + IE and firefox + mobile
-            var computedStyle = window.getComputedStyle(canvas);
-            targetSize.height -= parse(computedStyle.borderTopWidth) + parse(computedStyle.borderBottomWidth) + parse(computedStyle.marginTop);
-            targetSize.width -= parse(computedStyle.borderLeftWidth) + parse(computedStyle.borderRightWidth);
-
-            fastdom.mutate(function(){
-                // reset canvas size
-                canvas.style.width = targetSize.width + 'px';
-                canvas.style.height = targetSize.height + 'px';
-                canvas.style.fontSize = targetSize.height*(settings.textSize || 3)/100 + 'px';
-
-                // scroll to top of window (hides some of the mess on the top of mobile devices)
-                window.scrollTo(0, 1);
-            });
-        });
-    }
-}
-
-function getProportions(proportions){
-    if (!lodash.isPlainObject(proportions)) return proportions || 0.8; // by default proportions are 0.8
-    if ([proportions.height, proportions.width].every(lodash.isFinite)) return proportions.height/proportions.width; 
-    throw new Error('The canvas proportions object`s height and a width properties must be numeric');
-}
-
-function getTargetSize(settings, canvas){
-    // calculate proportions (as height/width)
-    var proportions = getProportions(settings.proportions);
-
-    // static canvas size
-    // ------------------
-    if (settings.width) return {
-        width: settings.width,
-        height: settings.width*proportions
-    };
-
-    // dynamic canvas size
-    // -------------------
-
-    var docElement = window.document.documentElement; // used to get client view size
-
-    var maxHeight = docElement.clientHeight;
-    var maxWidth = Math.min(settings.maxWidth || Infinity, docElement.clientWidth, getSize$1(canvas.parentNode).width);
-
-    // calculate the correct size for this screen size
-    if (maxHeight > proportions * maxWidth) return { height: maxWidth*proportions, width: maxWidth };
-    else return { height: maxHeight, width: maxHeight/proportions};
-}
-
-function parse(num){ return parseFloat(num, 10) || 0;}
-
-/**
- *
- * This whole module taken from piManager
- *
- */
-
-function canvasContructor(map, settings){
-    var offArr;
-
-    if (!lodash.isPlainObject(map)) throw new Error('canvas(map): You must set a rule map for canvas to work properly');
-
-    // if settings is undefined return a function that doesn't do anything
-    // just so we don't need to make sure that the user modifies the canvas
-    if (lodash.isUndefined(settings)) return lodash.noop;
-    if (!lodash.isPlainObject(settings)) throw new Error('canvas(settings): canvas settings must be an object');
-
-    // create an array of off functions to undo any changes by this action
-    offArr = lodash.map(settings, function(value,key){
-        var rule = map[key];
-        if (rule) return on(rule.element, rule.property, value);
-        throw new Error('canvas('+ key +'): unknow key in canvas object.');
-    });
-
-    return function off(){
-        lodash.forEach(offArr, function(fn){fn.call();});
-    };
-}
-
-function on(el, property, value){
-    var old = el.style[property]; // save old value
-    el.style[property] = value; // set new value
-    return function(){el.style[property] = old;};  // create off function
-}
-
-var css_1 = css$2;
-
-/**
- * @arg el DOMElement any dom element
- * @arg obj Object a hash of styleName:value, where the style name may be either css-style or jsStyle (camelCase)
- * @returns void
- *
- * The function applies the styles set in obj to the el
- **/
-
-function css$2(el, obj){
-    var style = el.style;
-
-    if (!obj) return;
-
-    for (var key in obj) style[camelCase(key)] = obj[key];
-
-    function camelCase(str){ 
-        return  str.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); }); 
-    }
-}
-
-function setupCanvas(canvas, canvasSettings){
-    canvasSettings || (canvasSettings = {});
-    var $resize = stream();
-
-    if (!lodash.isElement(canvas)) throw new Error('Minno-time: canvas is not a DOM element');
-
-    canvas.classList.add('minno-canvas');
-
-    // apply canvas styles
-    var map = {
-        background 			: {element: document.body, property: 'backgroundColor'},
-        canvasBackground	: {element: canvas, property:'backgroundColor'},
-        borderColor			: {element: canvas, property:'borderColor'},
-        borderWidth			: {element: canvas, property:'borderWidth'}
-    };
-
-    var off = canvasContructor(map, lodash.pick(canvasSettings,['background','canvasBackground','borderColor','borderWidth']));
-
-    canvasSettings.css && css_1(canvas, canvasSettings.css);
-
-    // setup canvas resize
-    $resize.map(adjust_canvas(canvas, canvasSettings));
-    $resize({});
-
-    window.addEventListener('orientationchange', $resize);
-    window.addEventListener('resize', $resize);
-
-    $resize.end
-        .map(function(){canvas.classList.remove('minno-canvas');})
-        .map(function removeListeners(){
-            window.removeEventListener('orientationchange',$resize);
-            window.removeEventListener('resize', $resize);
-        })
-        .map(off);
-
-
-
-    return $resize;
-
-}
-
-function setup$1(canvas, script){
-    var $resize = setupCanvas(canvas, lodash.get(script, 'settings.canvas', {}));
-    var db = createDB$1(script);
-    setupVars(script);
-
-    return {
-        db:db, 
-        $resize:$resize,
-        canvas: canvas,
-        script: script,
-        settings: script.settings || {}
-    };
-}
-
-function setupVars(script){
-    // init global
-    var glob = global$3(global$3());
-    var name = script.name || 'anonymous minno-time';
-    var current = script.current ? script.current : {};
-
-    current.logs || (current.logs = []); // init logs object
-    glob[name] = glob.current = current; // create local namespace
-}
-
-/*
- * media preloader
- * TODO: turn into factory, possibly make progress into a stream.
- */
-var srcStack = [];				// an array holding all our sources
-var defStack = [];				// an array holding all the deferreds
-var stackDone = 0;				// the number of sources we have completed downloading
-var getText = lodash.memoize(getXhr);
-
-var loader = {
-    // loads a single source
-    load: load,
-
-    all: function(){
-        return Promise.all(defStack);
-    },
-
-    progress: function(){
-        return defStack.length ? stackDone/defStack.length : 1;
-    }
-};
-
-// load a single source
-function load(src, type){
-    // the source was already loaded
-    if (srcStack.indexOf(src) !== -1) return false;
-
-    // if we haven't loaded this yet
-    var promise = type == 'template' ? getText(src) : getImage(src);
-
-    promise
-        .then(function(){stackDone++;})
-        .then(function(){
-            loader.onload && loader.onload(src);
-        })
-        .catch(function(e){
-            loader.onerror && loader.onerror(e, src);
-        });
-
-    // keep defered and source for later.
-    defStack.push(promise);
-    srcStack.push(src);
-
-    return promise;
-}
-
-function getImage(url){
-    return  new Promise(function(resolve, reject){
-        var el = document.createElement('img');
-        el.onload = function(){resolve(el);};
-        el.onerror = function(){reject(new Error('Image not found: ' + url ));};
-        el.src = url;
-        
-    });
-}
-
-function getXhr(url){
-    return new Promise(function(resolve, reject){
-        var request = new XMLHttpRequest();
-        request.open('GET',url, true);
-        request.onreadystatechange = function() {
-            if (this.readyState === 4) {
-                if (this.status >= 200 && this.status < 400) resolve(this.responseText);
-                else reject(new Error('Template not found:' + url));
-            }
-        };
-        request.send();
-    });
-}
-
-/*
- * build the url for this src (add the generic baseUrl)
- */
-
-function buildUrl(baseUrl, url, type){
-    // it this is a dataUrl type of image, we don't need to append the baseurl
-    if (type == 'image' && /^data:image/.test(url)) return url;
-
-    // the base url setting may be either a string, or an object with the type as a field
-    if (lodash.isObject(baseUrl)) baseUrl = baseUrl[type];
-
-    // make sure base url is set, and add trailing slash if needed
-    if (!baseUrl) baseUrl = '';
-    else if (baseUrl[baseUrl.length-1] != '/') baseUrl += '/';
-
-    return baseUrl + url;
-}
-
-/*
- * gets all media that needs preloading and preloads it
- */
-
-function preloadScript(script, baseUrl){
-    getScriptMedia(script).forEach(loadMedia);
-    return loader;
-
-    function loadMedia(media){
-        if (!lodash.isUndefined(media.image)) loader.load(buildUrl(baseUrl, media.image, 'image'),'image');
-        if (!lodash.isUndefined(media.template)) loader.load(buildUrl(baseUrl, media.template,'template'),'template');
-    }
-}
-
-/**
- * Iterates over a script and gathers all media
- **/
-function getScriptMedia(script){
-    var mediaSets = script.mediaSets;
-    var stimulusSets = lodash.map(script.stimulusSets, getStimMedia);
-    var trialSets = lodash.map(script.trialSets, getTrialMedia);
-    var sequence = lodash.filter(script.sequence,notMixer).map(getTrialMedia);
-
-    return lodash.flattenDeep([mediaSets, stimulusSets, trialSets, sequence]).filter(notUndefined);
-} 
-
-function getTrialMedia(trial){
-    return [
-        lodash.map(trial.input, function(input){ return input.element; }),
-        lodash.map(trial.stimuli, getStimMedia),
-        lodash.map(trial.layout, getStimMedia)
-    ];
-}
-
-function getStimMedia(stim){ return stim.media; }
-function notMixer(trial){ return !trial.mixer; }
-function notUndefined(val){ return !lodash.isUndefined(val); }
-
-function preloadPhase$1(canvas, script, $messages){
-    var preloader = preloadScript(script, script.settings.base_url);
-
-    if (preloader.progress() == 1) return Promise.resolve().then(emptyCanvas);
-
-    canvas.innerHTML = '<div class="minno-progress"><div class="minno-progress-bar"></div></div>';
-
-    var barStyle = canvas.getElementsByClassName('minno-progress-bar')[0].style;
-    barStyle.width = preloader.progress() + '%';
-    preloader.onload = function(){
-        fastdom.mutate(function(){
-            barStyle.width = preloader.progress()*100 + '%';
-        });
-    };
-    preloader.onerror = function(e, src){
-        $messages({
-            type:'error',
-            message: 'Failed to preload',
-            error:e,
-            context:src
-        });
-    };
-
-    return preloader.all()
-        .then(emptyCanvas)['catch'](function(src){
-            throw new Error('loading resource failed, do something about it! (you can start by checking the error log, you are probably reffering to the wrong url - ' + src +')');
-        });
-
-    function emptyCanvas(){
-        while (canvas.firstChild) canvas.removeChild(canvas.firstChild);
-    }
-}
-
-function mouseEvents$1(eventName,inputObj, canvas){
-    var $listener = stream();
-    var element = inputObj.element;
-
-    if (element){
-        css_1(element, inputObj.css);
-        fastdom.mutate(function(){
-            canvas.appendChild(element);
-        });
-    }
-
-    canvas.addEventListener(eventName, clickListener);
-
-    $listener.end.map(removeClickListener);
-    return $listener;
-
-    function clickListener(e){
-        var target = e.target;
-        if (element && target === element) return $listener(e);
-        if (!element && target.getAttribute('data-handle') === inputObj.stimHandle) return $listener(e);
-        return;
-    }
-
-    function removeClickListener(){
-        if (element) canvas.removeChild(element);
-        canvas.removeEventListener(eventName, $listener);
-    }
-}
-
-/*
-* key pressed listener
-* reqires key
-*
-* key can be either charCode or string.
-* or an array of charCode/strings.
-*/
-
-// we monitor all key up events so that we trigger only once per key down
-var keyDownArr = [];
-
-document.addEventListener('keyup',function(e){ keyDownArr[e.which] = false; });// unset flag to prevent multi pressing of a key 
-
-function keypressed$1(inputObj){
-    var $listener = stream();
-
-    // make sure key is an array
-    var keys = Array.isArray(inputObj.key) ? inputObj.key : [inputObj.key];
-
-    // map keys to keyCodes
-    var target = keys.map(function(value){ 
-        return typeof value == 'string' ? value.toUpperCase().charCodeAt(0) : value; 
-    });
-
-    document.addEventListener('keydown', keypressListener);
-
-    $listener.end.map(removeKeypressListener);
-    return $listener;
-
-    function keypressListener(e){
-        if (keyDownArr[e.which] || (target.indexOf(e.which) === -1)) return;
-        e.preventDefault(); // prevent FF from wasting about 10ms in browser-content.js (and fast search)
-        keyDownArr[e.which] = true; // set flag to prevent multi pressing of a key
-        $listener(e);
-    }
-
-    function removeKeypressListener(){
-        document.removeEventListener('keydown', keypressListener);
-    }
-}
-
-function keyup$1(inputObj){
-    var $listener = stream();
-    // make sure key is array
-    var keys = Array.isArray(inputObj.key) ? inputObj.key : [inputObj.key];
-
-    // map keys to keyCodes
-    var target = keys.map(function(value){ 
-        return typeof value == 'string' ? value.toUpperCase().charCodeAt(0) : value; 
-    });
-
-    document.addEventListener('keyup', keypressListener);
-
-    $listener.end.map(removeKeypressListener);
-    return $listener;
-
-    function keypressListener(e){
-        if (target.indexOf(e.which) === -1) return;
-        e.preventDefault();
-        return $listener(e);
-    }
-
-    function removeKeypressListener(){
-        document.removeEventListener('keyup', $listener);
-    }
-}
-
-/**
- *	Takes a properties objects and returns the result of a randomization:
- *	If it is an array - pick a random member
- *	If it is an object pick from within a range
- *	If it is a function return its result using the context
- *	Otherwise simply return the properties
- */
-function simpleRandomize(properties, context){
-
-    if (lodash.isArray(properties)) {
-        var index = Math.floor(Math.random()*properties.length);
-        return properties[index];
-    }
-
-    if (lodash.isFunction(properties)) {
-        return properties.call(context);
-    }
-
-    // this must be after the test for arrays and functions, because they are considered objects too
-    if (lodash.isPlainObject(properties)) {
-        if (!lodash.isNumber(properties.min) || !lodash.isNumber(properties.max) || properties.min > properties.max) {
-            throw new Error('randomization objects need both a max and a minimum property, also max has to be larger than min');
-        }
-        return properties.min + (properties.max - properties.min) * Math.random();
-    }
-
-    // if this is not a randomization object simply return
-    return properties;
-}
-
-function timeout$1(inputObj){
-    var $listener = stream();
-    var timeoutID;
-    var duration = simpleRandomize(inputObj.duration) || 0;
-
-    $listener.end.map(cancel);
-
-    if (duration) setTimeout($listener.bind(null, {}), duration);
-    else $listener({}); // listener is already registered with $events so this should be immidiate
-
-    return $listener;
-
-    function cancel(){
-        clearTimeout(timeoutID);
-    }
-}
-
-function inputBinder(inputObj, canvas){
-    var on = inputObj.on; // what type of binding is this?
-
-    switch (on){
-
-        case 'keypressed'	: return keypressed$1(inputObj);
-
-        case 'keyup'		: return keyup$1(inputObj);
-
-        case 'click'		:
-        case 'mousedown'    :
-            return mouseEvents$1('mousedown', inputObj, canvas);
-
-        case 'mouseup'	    : return mouseEvents$1('mouseup', inputObj, canvas);
-
-        case 'mouseenter'	: return mouseEvents$1('mouseenter', inputObj, canvas);
-
-        case 'mouseleave'	: return mouseEvents$1('mouseleave', inputObj, canvas);
-
-        case 'timeout'		: return timeout$1(inputObj);
-
-        /*
-         * Shortcuts
-         */
-
-        case 'enter'	: return keypressed$1(lodash.assign({key:13},inputObj));
-
-        case 'space'	: return keypressed$1(lodash.assign({key:32},inputObj));
-
-        case 'esc'	    : return keypressed$1(lodash.assign({key:27},inputObj));
-
-        case 'leftTouch'	:
-            inputObj.element = createElement(inputObj.css, {
-                position: 'absolute',
-                left: 0,
-                width: '30%',
-                height: '100%',
-                background: '#00FF00',
-                opacity: 0.3
-            });
-
-            return mouseEvents$1('mousedown', inputObj, canvas);
-
-        case 'rightTouch'	:
-            inputObj.element = createElement(inputObj.css, {
-                position: 'absolute',
-                right: 0,
-                width: '30%',
-                height: '100%',
-                background: '#00FF00',
-                opacity: 0.3
-            });
-
-            return mouseEvents$1('mousedown', inputObj, canvas);
-
-        case 'topTouch'	:
-            inputObj.element = createElement(inputObj.css, {
-                position: 'absolute',
-                top: 0,
-                width: '100%',
-                height: '30%',
-                background: '#00FF00',
-                opacity: 0.3
-            });
-
-            return mouseEvents$1('mousedown', inputObj, canvas);
-
-        case 'bottomTouch'	:
-            inputObj.element = createElement(inputObj.css, {
-                position: 'absolute',
-                bottom: 0,
-                width: '100%',
-                height: '30%',
-                background: '#00FF00',
-                opacity: 0.3
-            });
-
-            return mouseEvents$1('mousedown', inputObj, canvas);
-
-        default:
-            throw new Error('You have an input element with an unrecognized "on" property: ' + on);
-
-    }
-
-
-    function createElement(css2, css1){
-        var el = document.createElement('div');
-        css_1(el, css1);
-        css_1(el, css2);
-        return el;
-    }
-}
-
-function createListener$1(inputObj,canvas){
-    var $listener = getListener(inputObj, canvas);
-
-    if (!isStream($listener)) throw new Error('Input functions must return valid streams: ' + logObj(inputObj));
-    if ('handle' in inputObj) $listener.handle = inputObj.handle;
-
-    return $listener;
-}
-
-function getListener(inputObj, canvas){
-    var $listener;
-
-    if (lodash.isFunction(inputObj)) return inputObj(inputObj, canvas, stream);
-
-    if (lodash.isPlainObject(inputObj)) {
-        if (lodash.isString(inputObj.on)) return inputBinder(inputObj,canvas,stream);
-
-        if (lodash.isFunction(inputObj.on )) $listener = inputObj.on(inputObj,canvas,stream);
-        if (lodash.isFunction(inputObj.off)) $listener.end.map(inputObj.off);
-    }
-        
-    throw new Error('Input must only contain objects and functions, do you have an undefined value?');
-}
-
-function logObj(obj){
-    return lodash.isFunction(obj) ? obj.toString() : JSON.stringify(obj);
-}
-
-
-function isStream(stream$$1) {return stream$$1._state; }
-
-var now = window.performance.now
-    ? window.performance.now.bind(window.performance)
-
-    // We aren't using the absoulte time anywhere so we can use raw Date.now as a replacement
-    // if we're not on IE9
-    : Date.now.bind(Date);
-
-function interfaceFn($events, canvas){
-    var listenerStack = []; // holds all active listeners
-    var baseTime = 0;
-
-    return { add:add,remove:remove,removeAll:removeAll,resetTimer:resetTimer };
-
-    function add(inputObj){
-        if (!inputObj) throw new Error('Missing input element. Could not add input listener');
-        var $listener = createListener$1(inputObj, canvas);
-        $listener.map(addDetails).map($events); // pipe events to $events
-        listenerStack.push($listener);
-
-        function addDetails(event){
-            return {
-                handle      : $listener.handle,
-                event       : event,
-                timestamp	: +new Date(),
-                latency		: now() - baseTime
-            };
-        }
-    }
-
-    function remove(handle){
-        // go through the listener stack and remove any listeners that fit the handle
-        // note that we do this in reverse so that the index does not change
-        for (var i = listenerStack.length - 1; i >= 0 ; i--){
-            var $listener = listenerStack[i];
-            if ($listener.handle === handle){
-                $listener.end(true);
-                listenerStack.splice(i,1);
-            }
-        }
-    }
-
-    function removeAll(){
-        listenerStack.forEach(function($listener){
-            $listener.end(true);
-        });
-        listenerStack.length = 0;
-    }
-
-    function resetTimer(){ baseTime = now(); }
 }
 
 var lodash$1 = createCommonjsModule(function (module, exports) {
@@ -57444,6 +55363,2050 @@ var lodash$1 = createCommonjsModule(function (module, exports) {
 }.call(commonjsGlobal));
 });
 
+mixProvider$1.$inject = ['randomizeShuffle', 'randomizeRandom'];
+function mixProvider$1(shuffle, random){
+
+    function mix(obj){
+        var mixerName = obj.mixer;
+
+        // if this isn't a mixer
+        // make sure we catch mixers that are set with undefined by accident...
+        if (!(lodash$1.isPlainObject(obj) && 'mixer' in obj)) return [obj];
+
+        if (lodash$1.isUndefined(mix.mixers[mixerName])) throw new Error('Mixer: unknow mixer type = ' + mixerName);
+
+        if (!obj.remix && obj.$parsed) return obj.$parsed;
+
+        obj.$parsed = mix.mixers[mixerName].apply(null, arguments);
+
+        if (!lodash$1.isArray(obj.$parsed)) throw new Error('Mixer: mixers must return an array (mixer: ' + mixerName + ')');
+
+        return obj.$parsed;
+    }
+
+    function deepMixer(sequence, context){
+        return lodash$1.reduce(sequence, function(arr,value){
+            if (lodash$1.isPlainObject(value) && 'mixer' in value && value.mixer != 'wrapper' && !value.wrapper){
+                var seq = deepMixer(mix(value, context), context);
+                return arr.concat(seq);
+            } else {
+                return arr.concat([value]);
+            }
+        }, []);
+    }
+
+
+    mix.mixers = {
+        wrapper : function(obj){
+            return obj.data;
+        },
+
+        repeat: function(obj){
+            var sequence = obj.data || [];
+            var result = [], i;
+            for (i=0; i < obj.times; i++){
+                result = result.concat(lodash$1.clone(sequence,true));
+            }
+            return result;
+        },
+
+        // randomize any elements
+        random: function(obj, context){
+            var sequence = obj.data ? deepMixer(obj.data, context) : [];
+            return shuffle(sequence);
+        },
+
+        choose: function(obj, context){
+            var sequence = obj.data ? deepMixer(obj.data, context) : [];
+            return lodash$1.take(shuffle(sequence), obj.n ? obj.n : 1);
+        },
+
+        custom: function(obj, context){
+            return lodash$1.isFunction(obj.fn) ? obj.fn(obj, context) : [];
+        },
+
+        weightedRandom: weightedChoose,
+        weightedChoose: weightedChoose
+
+    };
+
+
+    return mix;
+
+    function weightedChoose(obj, context){
+        var sequence = obj.data ? deepMixer(obj.data, context) : [];
+        var n = obj.n || 1;
+        var total_weight = lodash$1.sum(obj.weights);
+
+        if (!lodash$1.isArray(obj.weights)) throw new Error('Mixer: weightedRandom requires an array of weights');
+
+        return lodash$1.range(0,n)
+            .map(generate)
+            .map(lodash$1.clone);
+
+        function generate(){
+            var i;
+            var random_num = random() * total_weight; // cutoff - when we reach this sum - we've reached the desired weight
+            var weight_sum = 0;
+
+            for (i = 0; i < sequence.length; i++) {
+                weight_sum += obj.weights[i];
+                weight_sum = +weight_sum.toFixed(3);
+
+                if (random_num <= weight_sum) return obj.data[i];
+            }
+
+            throw new Error('Mixer: something went wrong with weightedRandom');
+        }
+    }
+
+}
+
+mixerDotNotationProvider$3.$inject = ['dotNotation'];
+function mixerDotNotationProvider$3(dotNotation){
+
+    function mixerDotNotation(chain, obj){
+
+        var escapeSeparatorRegex= /[^/]\./;
+
+        if (!lodash.isString(chain)) return chain;
+
+        // We do not have a non escaped dot: we treat this as a string
+        if (!escapeSeparatorRegex.test(chain)) return chain.replace('/.','.');
+
+        return dotNotation(chain, obj);
+    }
+
+    return mixerDotNotation;
+}
+
+mixerConditionProvider$3.$inject = ['mixerDotNotation','piConsole'];
+function mixerConditionProvider$3(dotNotation,piConsole){
+    var operatorHash = {
+        gt: forceNumeric(lodash.gt),
+        greaterThan: forceNumeric(lodash.gt),
+        gte: forceNumeric(lodash.gte),
+        greaterThanOrEqual: forceNumeric(lodash.gte),
+        equals: lodash.eq,
+        'in': lodash.rearg(lodash.contains,1,0), // effectively reverse
+        contains: lodash.rearg(lodash.contains,1,0), // effectively reverse
+        exactly: exactly,
+        isTruthy: isTruthy
+    };
+
+    function mixerCondition(condition, context){
+        var operator = getOperator(condition);
+        var left = dotNotation(condition.compare,context);
+        var right = dotNotation(condition.to,context);
+
+        if (condition.DEBUG) piConsole({
+            type:'info',
+            message:'Condition info',
+            rows: [
+                ['Left: ', left], 
+                ['Operator: ', condition.operator || 'equals'],
+                ['Right: ', right]
+            ],
+            context: condition,
+        });
+
+        return condition.negate
+            ? !operator.apply(context,[left, right, context])
+            : operator.apply(context,[left, right, context]);
+    }
+
+    return mixerCondition;
+
+
+    // extract the operator function from the condition
+    function getOperator(condition){
+        var operator = condition.operator;
+        if (lodash.isFunction(condition)) return condition;
+        if (!lodash.has(condition, 'operator')) return lodash.has(condition,'to') ? lodash.eq : isTruthy;
+        if (lodash.isFunction(operator)) return operator;
+        return operatorHash[operator];
+    }
+
+    function isTruthy(left){ return !!left; }
+    function exactly(left,right){ return left === right;}
+    function forceNumeric(cb){ return function(left,right){ return [left,right].every(lodash.isNumber) ? cb(left,right) : false; }; } 
+
+}
+
+evaluateProvider$1.$inject = ['mixerCondition'];
+function evaluateProvider$1(condition){
+    /**
+     * Checks if a conditions set is true
+     * @param  {Array} conditions [an array of conditions]
+     * @param  {Object} context   [A context for the condition checker]
+     * @return {Boolean}          [Are these conditions true]
+     */
+
+    function evaluate(conditions,context){
+        // make && the default
+        lodash.isArray(conditions) && (conditions = {and:conditions});
+
+        function test(cond){return evaluate(cond,context);}
+
+        // && objects
+        if (conditions.and){
+            return lodash.every(conditions.and, test);
+        }
+        if (conditions.nand){
+            return !lodash.every(conditions.nand, test);
+        }
+
+        // || objects
+        if (conditions.or){
+            return lodash.some(conditions.or, test);
+        }
+        if (conditions.nor){
+            return !lodash.some(conditions.nor, test);
+        }
+
+        return condition(conditions, context);
+    }
+
+    return evaluate;
+}
+
+/**
+ * Registers the branching mixers with the mixer
+ * @return {function}         [mixer decorator]
+ */
+
+mixerBranchingDecorator$3.$inject = ['$delegate','mixerEvaluate','mixerDefaultContext'];
+function mixerBranchingDecorator$3(mix, evaluate, mixerDefaultContext){
+
+    mix.mixers.branch = branch;
+    mix.mixers.multiBranch = multiBranch;
+
+    return mix;
+
+    /**
+     * Branching mixer
+     * @return {Array}         [A data array with objects to continue with]
+     */
+    function branch(obj, context){
+        context = lodash.extend(context || {}, mixerDefaultContext);
+        return evaluate(obj.conditions, context) ? obj.data || [] : obj.elseData || [];
+    }
+
+    /**
+     * multiBranch mixer
+     * @return {Array}         [A data array with objects to continue with]
+     */
+    function multiBranch(obj, context){
+        context = lodash.extend(context || {}, mixerDefaultContext);
+        var row;
+
+        row = lodash.find(obj.branches, function(branch){
+            return evaluate(branch.conditions, context);
+        });
+
+        if (row) {
+            return row.data || [];
+        }
+
+        return obj.elseData || [];
+    }
+}
+
+mixerSequenceProvider$3.$inject = ['mixer'];
+function mixerSequenceProvider$3(mix){
+
+    /**
+     * MixerSequence takes an mixer array and allows browsing back and forth within it
+     * @param {Array} arr [a mixer array]
+     */
+    function MixerSequence(arr){
+        this.sequence = arr;
+        this.stack = [];
+        this.add(arr);
+        this.pointer = 0;
+    }
+
+    lodash.extend(MixerSequence.prototype, {
+        /**
+         * Add sequence to mixer
+         * @param {[type]} arr     Sequence
+         * @param {[type]} reverse Whether to start from begining or end
+         */
+        add: function(arr, reverse){
+            this.stack.push({pointer:reverse ? arr.length : -1,sequence:arr});
+        },
+
+        proceed: function(direction, context){
+            // get last subSequence
+            var subSequence = this.stack[this.stack.length-1];
+            var isNext = (direction === 'next');
+
+            // if we ran out of sequence
+            // add the original sequence back in
+            if (!subSequence) {
+                throw new Error ('mixerSequence: subSequence not found');
+            }
+
+            subSequence.pointer += isNext ? 1 : -1;
+
+            var el = subSequence.sequence[subSequence.pointer];
+
+            // if we ran out of elements, go to previous level (unless we are on the root sequence)
+            if (lodash.isUndefined(el) && this.stack.length > 1){
+                this.stack.pop();
+                return this.proceed.call(this,direction,context);
+            }
+
+            // if element is a mixer, mix it
+            if (el && el.mixer){
+                this.add(mix(el,context), !isNext);
+                return this.proceed.call(this,direction,context);
+            }
+
+            // regular element or undefined (end of sequence)
+            return this;
+        },
+
+        next: function(context){
+            this.pointer++;
+            return this.proceed.call(this, 'next',context);
+        },
+
+        prev: function(context){
+            this.pointer--;
+            return this.proceed.call(this, 'prev',context);
+        },
+
+        /**
+         * Return current element
+         * should **never** return a mixer - supposed to abstract them away
+         * @return {[type]} undefined or element
+         */
+        current:function(){
+            // get last subSequence
+            var subSequence = this.stack[this.stack.length-1];
+
+            if (!subSequence) {
+                throw new Error ('mixerSequence: subSequence not found');
+            }
+
+            var el = subSequence.sequence[subSequence.pointer];
+
+            if (!el){
+                return undefined;
+            }
+
+            // extend element with meta data
+            el.$meta = this.meta();
+
+            return el;
+        },
+
+        meta: function(){
+            return {
+                number: this.pointer,
+
+                // sum of sequence length, minus one (the mixer) for each level of stack except the last
+                outOf:  lodash.reduce(this.stack, function(memo,sub){return memo + sub.sequence.length-1;},0)+1
+            };
+        }
+
+    });
+
+    return MixerSequence;
+}
+
+function dotNotation$3(chain, obj){
+
+    if (lodash.isUndefined(chain)) return;
+    if (lodash.isString(chain)) chain = chain.split('.');
+
+    // @TODO maybe lodash _.get?
+    return chain.reduce(function(result, link){
+
+        if (lodash.isPlainObject(result) || lodash.isArray(result)){
+            return result[link];
+        }
+
+        return undefined;
+
+    }, obj);
+}
+
+piConsoleFactory$3.$inject = ['$log'];
+function piConsoleFactory$3($log){
+    return window.DEBUG ? piConsole : lodash.noop;
+
+    function piConsole(log){
+        if (lodash.get(piConsole,'settings.hideConsole', false)) return window.postMessage({type:'kill-console'},'*');
+
+        $log[log.type] && $log[log.type](log.message); 
+        window.postMessage(noramlizeMessage(log),'*');
+    }
+
+    function noramlizeMessage(obj){
+        return lodash.cloneDeep(obj, normalize);
+        function normalize(val){
+            if (lodash.isFunction(val)) return val.toString();
+            if (lodash.isError(val)) return {name:val.name, message:val.message, stack:val.stack};
+        }
+    }
+}
+
+var piConsole$4 = piConsoleFactory$3(console);
+var mixer$2 = mixProvider$1(
+    lodash.shuffle, // randomizeShuffle
+    Math.random // randomizeRandom
+);
+
+var mixerDotNotation$1 = mixerDotNotationProvider$3(dotNotation$3);
+var mixerCondition$1 = mixerConditionProvider$3(
+    mixerDotNotation$1,
+    piConsole$4
+);
+
+var mixerEvaluate$1 = evaluateProvider$1(mixerCondition$1);
+
+var mixerDefaultContext$1 = {};
+
+mixerBranchingDecorator$3(
+    mixer$2,
+    mixerEvaluate$1,
+    mixerDefaultContext$1
+);
+
+var MixerSequence$1 = mixerSequenceProvider$3(mixer$2);
+
+templateObjProvider$3.$inject = ['templateDefaultContext'];
+function templateObjProvider$3(templateDefaultContext){
+
+    function templateObj(obj, context, options){
+        var skip = lodash.get(options, 'skip', []);
+        var result = {};
+        var key;
+        var ctx = lodash.assign({}, context, templateDefaultContext);
+
+        for (key in obj){
+            result[key] = (skip.indexOf(key) == -1) ? expand(obj[key]) : obj[key];
+        }
+
+        return result;
+
+        function expand(value){
+            if (lodash.isString(value)) return template(value);
+            if (lodash.isArray(value)) return value.map(expand);
+            if (lodash.isPlainObject(value)) return lodash.mapValues(value, expand);
+            return value;
+        }
+
+        function template(input){
+            // if there is no template just return the string
+            if (!~input.indexOf('<%')) return input;
+            return lodash.template(input)(ctx);
+        }
+    }
+
+    return templateObj;
+}
+
+var templateObj$1 = templateObjProvider$3({});
+
+function collectionService$1(){
+
+    function Collection (arr) {
+        if (arr instanceof Collection) {
+            return arr;
+        }
+
+        // Make sure we are creating this array out of a valid argument
+        if (!lodash.isUndefined(arr) && !lodash.isArray(arr) && !(arr instanceof Collection)) {
+            throw new Error('Collections can only be constructed from arrays');
+        }
+
+        this.collection = arr || [];
+        this.length = this.collection.length;
+
+        // pointer to the current location within the array
+        // we start with -1 so that the initial next points to the begining of the array
+        this.pointer = -1;
+    }
+
+    lodash.extend(Collection.prototype,{
+
+        first : function first(){
+            this.pointer = 0;
+            return this.collection[this.pointer];
+        },
+
+        last : function last(){
+            this.pointer = this.collection.length - 1;
+            return this.collection[this.pointer];
+        },
+
+        end : function end(){
+            this.pointer = this.collection.length;
+            return undefined;
+        },
+
+        current : function(){
+            return this.collection[this.pointer];
+        },
+
+        next : function(){
+            return this.collection[++this.pointer];
+        },
+
+        previous : function(){
+            return this.collection[--this.pointer];
+        },
+
+        // add list of items to the collection
+        add : function(list){
+            // dont allow adding nothing
+            if (!arguments.length) {
+                return this;
+            }
+
+            // make sure list is as an array
+            list = lodash.isArray(list) ? list : [list];
+            this.collection = this.collection.concat(list);
+
+            this.length = this.collection.length;
+
+            return this;
+        },
+
+        // return the item at index
+        at: function(index){
+            return this.collection[index];
+        }
+    });
+
+
+    // Stuff we took out of bootstrap that can augment the collection
+    // **************************************************************
+    var methods = ['where','filter'];
+    var slice = Array.prototype.slice;
+
+    // Mix in each Underscore method as a proxy to `Collection#models`.
+    lodash.each(methods, function(method) {
+        Collection.prototype[method] = function() {
+            var args = slice.call(arguments);
+            args.unshift(this.collection);
+            var coll = lodash[method].apply(lodash,args);
+            return new Collection(coll);
+        };
+    });
+
+    return Collection;
+}
+
+RandomizerProvider$1.$inject = ['randomizeInt', 'randomizeRange', 'Collection'];
+function RandomizerProvider$1(randomizeInt, randomizeRange, Collection){
+
+    function Randomizer(){
+        this._cache = {
+            random : {},
+            exRandom : {},
+            sequential : {}
+        };
+    }
+
+    lodash.extend(Randomizer.prototype, {
+        random: random,
+        exRandom: exRandom,
+        sequential: sequential
+    });
+
+    return Randomizer;
+
+    function random(length, seed, repeat){
+        var cache  = this._cache.random;
+
+        if (repeat && !lodash.isUndefined(cache[seed])) {
+            return cache[seed];
+        }
+
+        // save result in cache
+        cache[seed] = randomizeInt(length);
+
+        return cache[seed];
+    }
+
+    function sequential(length, seed, repeat){
+        var cache = this._cache.sequential;
+        var coll = cache[seed];
+        var result;
+
+        // if needed create collection and set it in seed
+        if (lodash.isUndefined(coll)){
+            coll = cache[seed] = new Collection(lodash.range(length));
+            return coll.first();
+        }
+
+        if (coll.length !== length){
+            throw new Error('This seed  ('+ seed +') points to a collection with the wrong length, you can only use a seed for sets of the same length');
+        }
+
+        // if this is a repeated element:
+        if (repeat) {
+            return coll.current();
+        }
+
+        // if we've reached the end
+        result = coll.next();
+
+        // if we've reached the end of the collection (next)
+        if (lodash.isUndefined(result)){
+            return coll.first();
+        } else {
+            return result;
+        }
+    }
+
+    function exRandom(length, seed, repeat){
+        var cache = this._cache.exRandom;
+        var coll = cache[seed];
+        var result;
+
+        // if needed create collection and set it in seed
+        if (lodash.isUndefined(coll)){
+            coll = cache[seed] = new Collection(randomizeRange(length));
+            return coll.first();
+        }
+
+        if (coll.length !== length){
+            throw new Error('This seed  ('+ seed +') points to a collection with the wrong length, you can only use a seed for sets of the same length');
+        }
+
+        // if this is a repeated element:
+        if (repeat) {
+            return coll.current();
+        }
+
+        // if we've reached the end
+        result = coll.next();
+
+        // if we've reached the end of the collection (next)
+        // we should re-randomize
+        if (lodash.isUndefined(result)){
+            coll = cache[seed] = new Collection(randomizeRange(length));
+            return coll.first();
+        } else {
+            return result;
+        }
+    }
+
+}
+
+/*
+ *	The store is a collection of collection devided into namespaces.
+ *	You can think of every namespace/collection as a table.
+ */
+storeProvider$3.$inject = ['Collection'];
+function storeProvider$3(Collection){
+
+    function Store(){
+        this.store = {};
+    }
+
+    lodash.extend(Store.prototype, {
+        create: function create(nameSpace){
+            if (this.store[nameSpace]){
+                throw new Error('The name space ' + nameSpace + ' already exists');
+            }
+            this.store[nameSpace] = new Collection();
+            this.store[nameSpace].namespace = nameSpace;
+        },
+
+        read: function read(nameSpace){
+            if (!this.store[nameSpace]){
+                throw new Error('The name space ' + nameSpace + ' does not exist');
+            }
+            return this.store[nameSpace];
+        },
+
+        update: function update(nameSpace, data){
+            var coll = this.read(nameSpace);
+            coll.add(data);
+        },
+
+        del: function del(nameSpace){
+            this.store[nameSpace] = undefined;
+        }
+    });
+
+    return Store;
+}
+
+SequenceProvider$2.$inject = ['MixerSequence'];
+function SequenceProvider$2(MixerSequence){
+
+    /**
+     * Sequence Constructor:
+     * Manage the progression of a sequence, including parsing (mixing, inheritance and templating).
+     * @param  {String  } namespace [pages or questions (the type of db.Store)]
+     * @param  {Array   } arr       [a sequence to manage]
+     * @param  {Database} db        [the db itself]
+     */
+
+    function Sequence(namespace, arr,db){
+        this.namespace = namespace;
+        this.mixerSequence = new MixerSequence(arr);
+        this.db = db;
+    }
+
+    lodash.extend(Sequence.prototype, {
+        // only mix
+        next: function(context){
+            this.mixerSequence.next(context);
+            return this;
+        },
+
+        // anti mix
+        prev: function(context){
+            this.mixerSequence.prev(context);
+            return this;
+        },
+
+        /**
+         * Return the element currently in focus.
+         * It always returns either an element or undefined (mixers are abstrcted away)
+         * @param  {[type]} context [description]
+         * @return {[type]}         [description]
+         */
+        current: function(context, options){
+            context || (context = {});
+            // must returned an element or undefined
+            var obj = this.mixerSequence.current(context);
+
+            // in case this is the end of the sequence
+            if (!obj){
+                return obj;
+            }
+
+            return this.db.inflate(this.namespace, obj, context, options);
+        },
+
+        /**
+         * Returns an array of elements, created by proceeding through the whole sequence.
+         * @return {[type]} [description]
+         */
+        all: function(context, options){
+            var sequence = [];
+
+            var el = this.next().current(context, options);
+            while (el){
+                sequence.push(el);
+                el = this.next().current(context, options);
+            }
+
+            return sequence;
+        }
+    });
+
+    return Sequence;
+}
+
+DatabaseProvider$1.$inject = ['DatabaseStore', 'DatabaseRandomizer', 'databaseInflate', 'templateObj', 'databaseSequence','piConsole'];
+function DatabaseProvider$1(Store, Randomizer, inflate, templateObj, DatabaseSequence, piConsole){
+
+    function Database(){
+        this.store = new Store();
+        this.randomizer = new Randomizer();
+    }
+
+    lodash.extend(Database.prototype, {
+        createColl: function(namespace){
+            this.store.create(namespace);
+        },
+
+        getColl: function(namespace){
+            return this.store.read(namespace);
+        },
+
+        add: function(namespace, query){
+            var coll = this.store.read(namespace);
+            coll.add(query);
+        },
+
+        inflate: function(namespace, query, context, options){
+            var coll = this.getColl(namespace);
+            var result;
+
+            // inherit
+            try {
+                if (!query.$inflated || query.reinflate) {
+                    query.$inflated = inflate(query, coll, this.randomizer);
+                    query.$templated = null; // we have to retemplate after querying, who know what new templates we got here...
+                }
+            } catch(err) {
+                piConsole({
+                    type:'error',
+                    message: 'Failed to inherit',
+                    error:err,
+                    context: query
+                });
+                if (this.onError) this.onError(err);
+                throw err;
+            }
+
+            // template
+            try {
+                if (!query.$templated || query.$inflated.regenerateTemplate){
+                    context[namespace + 'Meta'] = query.$meta;
+                    context[namespace + 'Data'] = templateObj(query.$inflated.data || {}, context, options); // make sure we support
+                    query.$templated = templateObj(query.$inflated, context, options);
+                }
+            } catch(err) {
+                piConsole({
+                    type:'error',
+                    message: 'Failed to apply template',
+                    error:err,
+                    context: query.$inflated
+                });
+                if (this.onError) this.onError(err);
+                throw err;
+            }
+
+            result = query.$templated;
+
+            // set flags
+            if (context.global && result.addGlobal) lodash.extend(context.global, result.addGlobal);
+
+            if (context.current && result.addCurrent) lodash.extend(context.current, result.addCurrent);
+
+            return result;
+        },
+
+        sequence: function(namespace, arr){
+            if (!lodash.isArray(arr)){
+                throw new Error('Sequence must be an array.');
+            }
+            return new DatabaseSequence(namespace, arr, this);
+        }
+    });
+
+    return Database;
+}
+
+queryProvider$3.$inject = ['Collection'];
+function queryProvider$3(Collection){
+
+    function queryFn(query, collection, randomizer){
+        var coll = new Collection(collection);
+
+        // shortcuts:
+        // ****************************
+
+        if (lodash.isFunction(query)) return query(collection);
+
+        if (lodash.isString(query) || lodash.isNumber(query)) query = {set:query, type:'random'};
+
+        // filter by set
+        // ****************************
+        if (query.set) coll = coll.where({set:query.set});
+
+        // filter by data
+        // ****************************
+        if (lodash.isString(query.data)){
+            coll = coll.filter(function(q){
+                return q.handle === query.data || (q.data && q.data.handle === query.data);
+            });
+        }
+
+        if (lodash.isPlainObject(query.data)) coll = coll.where({data:query.data});
+
+        if (lodash.isFunction(query.data)) coll = coll.filter(query.data);
+
+        // pick by type
+        // ****************************
+
+        // the default seed is namespace specific just to minimize the situations where seeds clash across namespaces
+        var seed = query.seed || ('$' + collection.namespace + query.set);
+        var length = coll.length;
+        var repeat = query.repeat;
+        var at;
+
+        switch (query.type){
+            case undefined:
+            case 'byData':
+            case 'random':
+                at = randomizer.random(length,seed,repeat);
+                break;
+            case 'exRandom':
+                at = randomizer.exRandom(length,seed,repeat);
+                break;
+            case 'sequential':
+                at = randomizer.sequential(length,seed,repeat);
+                break;
+            case 'first':
+                at = 0;
+                break;
+            case 'last':
+                at = length-1;
+                break;
+            default:
+                throw new Error('Unknow query type: ' + query.type);
+        }
+
+        if (lodash.isUndefined(coll.at(at))) throw new Error('Query failed, object (' + JSON.stringify(query) +	') not found. If you are trying to apply a template, you should know that they are not supported for inheritance.');
+
+        return coll.at(at);
+    }
+
+    return queryFn;
+}
+
+/*
+ * inflates an object
+ * this function is responsible for inheritance
+ *
+ * function inflate(source,coll, randomizer, recursive, counter)
+ * @param source: the object to inflate
+ * @param coll: a collection to inherit from
+ * @param randomizer: a randomizer object for the query
+ * @param recursive: private use only, is this inside the recursion (true) or top level (false)
+ * @param depth: private use only, a counter for the depth of the recursion
+ */
+inflateProvider$3.$inject = ['databaseQuery','$rootScope'];
+function inflateProvider$3(query, $rootScope){
+
+    function customize(source){
+        // check for a custom function and run it if it exists
+        if (lodash.isFunction(source.customize)){
+            source.customize.apply(source, [source, $rootScope.global]);
+        }
+        return source;
+    }
+
+    // @param source - object to inflate
+    // @param type - trial stimulus or media
+    // @param recursive - whether this is a recursive call or not
+    function inflate(source, coll, randomizer, recursive, depth){
+
+        // protection against infinte loops
+        // ***********************************
+        depth = recursive ? --depth : 10;
+
+        if (!depth) throw new Error('Inheritance loop too deep, you can only inherit up to 10 levels down');
+
+        if (!lodash.isPlainObject(source)) throw new Error('You are trying to inflate a non object (' + JSON.stringify(source) + ')');
+
+        var parent;
+        var child = lodash.cloneDeep(source);
+        var inheritObj = child.inherit;
+
+        /*
+         * no inheritance
+         */
+
+        if (!child.inherit) {
+            if (!recursive) customize(child); // customize only on the last call (non recursive)
+            return child;
+        }
+
+        /*
+         * get parent
+         */
+        parent = query(inheritObj, coll, randomizer);
+
+        // if inherit target was not found
+        if (!parent) throw new Error('Query failed, object (' + JSON.stringify(inheritObj) +	') not found.');
+
+        // inflate parent (recursively)
+        parent = inflate(
+            parent,
+            coll,
+            randomizer,
+            true,
+            depth
+        );
+
+        // extending the child
+        // ***********************************
+        if (inheritObj.merge && !lodash.isArray(inheritObj.merge)){
+            throw new Error('Inheritance error: inherit.merge must be an array.');
+        }
+
+        // start inflating child (we have to extend selectively...)
+        lodash.each(parent, function(value, key){
+            var childProp, parentProp;
+            // if this key is not set yet, copy it out of the parent
+            if (!(key in child)){
+                child[key] = lodash.isFunction(value) ? value : lodash.cloneDeep(value);
+                return;
+            }
+
+            // if we have a merge array,
+            if (lodash.indexOf(inheritObj.merge, key) != -1){
+                childProp = child[key];
+                parentProp = value;
+
+                if (lodash.isArray(childProp)){
+                    if (!lodash.isArray(parentProp)){
+                        throw new Error('Inheritance error: You tried merging an array with an non array (for "' + key + '")');
+                    }
+                    child[key] = childProp.concat(parentProp);
+                }
+
+                if (lodash.isPlainObject(childProp)){
+                    if (!lodash.isPlainObject(parentProp)){
+                        throw new Error('Inheritance error: You tried merging an object with an non object (for "' + key + '")');
+                    }
+                    child[key] = lodash.extend({},parentProp,childProp);
+                }
+
+            }
+        });
+
+        // we want to extend the childs data even if it already exists
+        // its ok to shallow extend here (because by definition parent was created for this inflation)
+        if (parent.data){
+            child.data = lodash.extend(parent.data, child.data || {});
+        }
+
+        // Personal customization functions - only if this is the last iteration of inflate
+        // This way the customize function gets called only once.
+        !recursive && customize(child);
+
+        // return inflated trial
+        return child;
+    }
+
+    return inflate;
+}
+
+var global$4 = window.piGlobal;
+
+var piConsole$3 = piConsoleFactory$3(console);
+var collection$1 = collectionService$1();
+
+var DatabaseRandomizer$1 = RandomizerProvider$1(
+    randomInt$1,// randomize int
+    randomArr$1,// randomize range
+    collection$1
+);
+
+var databaseQuery$1 = queryProvider$3(
+    collection$1,
+    piConsole$3
+);
+
+var databaseInflate$1 = inflateProvider$3(
+    databaseQuery$1,
+    {global: global$4}, // rootscope
+    piConsole$3
+);
+
+var DatabaseStore$1 = storeProvider$3(
+    collection$1
+);
+
+var databaseSequence$1 = SequenceProvider$2(
+    MixerSequence$1
+);
+
+var Database$2 = DatabaseProvider$1(
+    DatabaseStore$1,
+    DatabaseRandomizer$1,
+    databaseInflate$1,
+    templateObj$1,
+    databaseSequence$1,
+    piConsole$3
+);
+
+function randomArr$1(length){
+    return lodash.shuffle(lodash.range(length));
+}
+
+function randomInt$1(length){
+    return Math.floor(Math.random()*length);
+}
+
+/**
+ * Go to a destination within the sequence (must be a property of a sequence)
+ * @param  {String} target destination type
+ * @param  {Object} properties destination options
+ * @return {Object}        result element
+ */
+
+function go$1(destination, properties, context){
+    var mixerSequence = this.mixerSequence;
+
+    switch (destination){
+        case 'nextWhere':
+            where('next', properties, context, mixerSequence);
+            break;
+        case 'previousWhere':
+            where('next', properties, context, mixerSequence);
+            break;
+        case 'current':
+            // don't need to do anything...
+            break;
+        case 'first':
+            do {mixerSequence.prev(context);} while (mixerSequence.current(context));
+            break;
+        case 'last':
+            do {mixerSequence.next(context);} while (mixerSequence.current(context));
+            mixerSequence.prev();
+            break;
+        case 'end':
+            do {mixerSequence.next(context);} while (mixerSequence.current(context));
+            break;
+        case 'next' :
+            mixerSequence.next(context); // get the next trial, in case there are no more trials, returns undefined
+            break;
+        default:
+            throw new Error('Unknow destination "' + destination + '" for goto.');
+    }
+
+    return this;
+}
+
+function where(direction, properties, context, sequence){
+    var curr;
+
+    do {
+        sequence[direction]();
+        curr = sequence.current(context);
+    } while (curr && !lodash.callback(properties)(curr.data));
+}
+
+/*
+ * this file is resposible for taking the experiment script (json) and parsing it
+ */
+
+// load dependancies
+function createDB$1(script){
+    var db = new Database$2();
+    db.createColl('trial');
+    db.createColl('stimulus');
+    db.createColl('media');
+
+    db.add('trial', script.trialSets || []);
+    db.add('stimulus', script.stimulusSets || []);
+    db.add('media', script.mediaSets || []);
+
+    if (!lodash.isArray(script.sequence)) throw new Error('You must set a sequence array.');
+
+    var sequence = db.sequence('trial', script.sequence);
+    sequence.go = go$1; // see sequence/goto.js to understand why we are doing this
+    db.currentSequence = sequence;
+    return db;
+}
+
+var fastdom = createCommonjsModule(function (module) {
+!(function(win) {
+
+/**
+ * FastDom
+ *
+ * Eliminates layout thrashing
+ * by batching DOM read/write
+ * interactions.
+ *
+ * @author Wilson Page <wilsonpage@me.com>
+ * @author Kornel Lesinski <kornel.lesinski@ft.com>
+ */
+
+var debug = function() {};
+
+/**
+ * Normalized rAF
+ *
+ * @type {Function}
+ */
+var raf = win.requestAnimationFrame
+  || win.webkitRequestAnimationFrame
+  || win.mozRequestAnimationFrame
+  || win.msRequestAnimationFrame
+  || function(cb) { return setTimeout(cb, 16); };
+
+/**
+ * Initialize a `FastDom`.
+ *
+ * @constructor
+ */
+function FastDom() {
+  var self = this;
+  self.reads = [];
+  self.writes = [];
+  self.raf = raf.bind(win); // test hook
+  
+}
+
+FastDom.prototype = {
+  constructor: FastDom,
+
+  /**
+   * Adds a job to the read batch and
+   * schedules a new frame if need be.
+   *
+   * @param  {Function} fn
+   * @param  {Object} ctx the context to be bound to `fn` (optional).
+   * @public
+   */
+  measure: function(fn, ctx) {
+    var task = !ctx ? fn : fn.bind(ctx);
+    this.reads.push(task);
+    scheduleFlush(this);
+    return task;
+  },
+
+  /**
+   * Adds a job to the
+   * write batch and schedules
+   * a new frame if need be.
+   *
+   * @param  {Function} fn
+   * @param  {Object} ctx the context to be bound to `fn` (optional).
+   * @public
+   */
+  mutate: function(fn, ctx) {
+    var task = !ctx ? fn : fn.bind(ctx);
+    this.writes.push(task);
+    scheduleFlush(this);
+    return task;
+  },
+
+  /**
+   * Clears a scheduled 'read' or 'write' task.
+   *
+   * @param {Object} task
+   * @return {Boolean} success
+   * @public
+   */
+  clear: function(task) {
+    return remove(this.reads, task) || remove(this.writes, task);
+  },
+
+  /**
+   * Extend this FastDom with some
+   * custom functionality.
+   *
+   * Because fastdom must *always* be a
+   * singleton, we're actually extending
+   * the fastdom instance. This means tasks
+   * scheduled by an extension still enter
+   * fastdom's global task queue.
+   *
+   * The 'super' instance can be accessed
+   * from `this.fastdom`.
+   *
+   * @example
+   *
+   * var myFastdom = fastdom.extend({
+   *   initialize: function() {
+   *     // runs on creation
+   *   },
+   *
+   *   // override a method
+   *   measure: function(fn) {
+   *     // do extra stuff ...
+   *
+   *     // then call the original
+   *     return this.fastdom.measure(fn);
+   *   },
+   *
+   *   ...
+   * });
+   *
+   * @param  {Object} props  properties to mixin
+   * @return {FastDom}
+   */
+  extend: function(props) {
+    if (typeof props != 'object') throw new Error('expected object');
+
+    var child = Object.create(this);
+    mixin(child, props);
+    child.fastdom = this;
+
+    // run optional creation hook
+    if (child.initialize) child.initialize();
+
+    return child;
+  },
+
+  // override this with a function
+  // to prevent Errors in console
+  // when tasks throw
+  catch: null
+};
+
+/**
+ * Schedules a new read/write
+ * batch if one isn't pending.
+ *
+ * @private
+ */
+function scheduleFlush(fastdom) {
+  if (!fastdom.scheduled) {
+    fastdom.scheduled = true;
+    fastdom.raf(flush.bind(null, fastdom));
+    
+  }
+}
+
+/**
+ * Runs queued `read` and `write` tasks.
+ *
+ * Errors are caught and thrown by default.
+ * If a `.catch` function has been defined
+ * it is called instead.
+ *
+ * @private
+ */
+function flush(fastdom) {
+  var writes = fastdom.writes;
+  var reads = fastdom.reads;
+  var error;
+
+  try {
+    debug('flushing reads', reads.length);
+    runTasks(reads);
+    debug('flushing writes', writes.length);
+    runTasks(writes);
+  } catch (e) { error = e; }
+
+  fastdom.scheduled = false;
+
+  // If the batch errored we may still have tasks queued
+  if (reads.length || writes.length) scheduleFlush(fastdom);
+
+  if (error) {
+    debug('task errored', error.message);
+    if (fastdom.catch) fastdom.catch(error);
+    else throw error;
+  }
+}
+
+/**
+ * We run this inside a try catch
+ * so that if any jobs error, we
+ * are able to recover and continue
+ * to flush the batch until it's empty.
+ *
+ * @private
+ */
+function runTasks(tasks) {
+  var task; while (task = tasks.shift()) task();
+}
+
+/**
+ * Remove an item from an Array.
+ *
+ * @param  {Array} array
+ * @param  {*} item
+ * @return {Boolean}
+ */
+function remove(array, item) {
+  var index = array.indexOf(item);
+  return !!~index && !!array.splice(index, 1);
+}
+
+/**
+ * Mixin own properties of source
+ * object into the target.
+ *
+ * @param  {Object} target
+ * @param  {Object} source
+ */
+function mixin(target, source) {
+  for (var key in source) {
+    if (source.hasOwnProperty(key)) target[key] = source[key];
+  }
+}
+
+// There should never be more than
+// one instance of `FastDom` in an app
+var exports = win.fastdom = (win.fastdom || new FastDom()); // jshint ignore:line
+
+// Expose to CJS & AMD
+if ((typeof undefined) == 'function') undefined(function() { return exports; });
+else module.exports = exports;
+
+})( typeof window !== 'undefined' ? window : commonjsGlobal);
+});
+
+function getSize$1(el){
+    var computedStyle = window.getComputedStyle(el);
+    return {
+        height    : parse$1(el.offsetHeight) - parse$1(computedStyle.borderTopWidth) - parse$1(computedStyle.borderBottomWidth),
+        width    : parse$1(el.offsetWidth) - parse$1(computedStyle.borderLeftWidth) - parse$1(computedStyle.borderRightWidth)
+    };
+}
+
+function parse$1(num){ return parseFloat(num, 10) || 0;}
+
+/*
+ * adjust canvas according to window size and settings
+ * this module is built to be part of the main view
+ */
+
+function adjust_canvas(canvas, settings){
+
+    return lodash.throttle(eventListener, 16);
+
+    function eventListener(event){
+        // we put this in a time out because of a latency of orientation change on android devices
+        if (event.type == 'orientationchange') setTimeout(resize, 500);
+        else resize();
+    }
+
+    function resize(){
+        fastdom.measure(function(){
+            var targetSize = getTargetSize(settings, canvas);
+
+            // remove border width and top margin from calculated width (can't depend on cool box styles yet...)
+            // we compute only margin-top because of a difference calculating margins between chrome + IE and firefox + mobile
+            var computedStyle = window.getComputedStyle(canvas);
+            targetSize.height -= parse(computedStyle.borderTopWidth) + parse(computedStyle.borderBottomWidth) + parse(computedStyle.marginTop);
+            targetSize.width -= parse(computedStyle.borderLeftWidth) + parse(computedStyle.borderRightWidth);
+
+            fastdom.mutate(function(){
+                // reset canvas size
+                canvas.style.width = targetSize.width + 'px';
+                canvas.style.height = targetSize.height + 'px';
+                canvas.style.fontSize = targetSize.height*(settings.textSize || 3)/100 + 'px';
+
+                // scroll to top of window (hides some of the mess on the top of mobile devices)
+                window.scrollTo(0, 1);
+            });
+        });
+    }
+}
+
+function getProportions(proportions){
+    if (!lodash.isPlainObject(proportions)) return proportions || 0.8; // by default proportions are 0.8
+    if ([proportions.height, proportions.width].every(lodash.isFinite)) return proportions.height/proportions.width; 
+    throw new Error('The canvas proportions object`s height and a width properties must be numeric');
+}
+
+function getTargetSize(settings, canvas){
+    // calculate proportions (as height/width)
+    var proportions = getProportions(settings.proportions);
+
+    // static canvas size
+    // ------------------
+    if (settings.width) return {
+        width: settings.width,
+        height: settings.width*proportions
+    };
+
+    // dynamic canvas size
+    // -------------------
+
+    var docElement = window.document.documentElement; // used to get client view size
+
+    var maxHeight = docElement.clientHeight;
+    var maxWidth = Math.min(settings.maxWidth || Infinity, docElement.clientWidth, getSize$1(canvas.parentNode).width);
+
+    // calculate the correct size for this screen size
+    if (maxHeight > proportions * maxWidth) return { height: maxWidth*proportions, width: maxWidth };
+    else return { height: maxHeight, width: maxHeight/proportions};
+}
+
+function parse(num){ return parseFloat(num, 10) || 0;}
+
+/**
+ *
+ * This whole module taken from piManager
+ *
+ */
+
+function canvasContructor(map, settings){
+    var offArr;
+
+    if (!lodash.isPlainObject(map)) throw new Error('canvas(map): You must set a rule map for canvas to work properly');
+
+    // if settings is undefined return a function that doesn't do anything
+    // just so we don't need to make sure that the user modifies the canvas
+    if (lodash.isUndefined(settings)) return lodash.noop;
+    if (!lodash.isPlainObject(settings)) throw new Error('canvas(settings): canvas settings must be an object');
+
+    // create an array of off functions to undo any changes by this action
+    offArr = lodash.map(settings, function(value,key){
+        var rule = map[key];
+        if (rule) return on(rule.element, rule.property, value);
+        throw new Error('canvas('+ key +'): unknow key in canvas object.');
+    });
+
+    return function off(){
+        lodash.forEach(offArr, function(fn){fn.call();});
+    };
+}
+
+function on(el, property, value){
+    var old = el.style[property]; // save old value
+    el.style[property] = value; // set new value
+    return function(){el.style[property] = old;};  // create off function
+}
+
+var css_1 = css$2;
+
+/**
+ * @arg el DOMElement any dom element
+ * @arg obj Object a hash of styleName:value, where the style name may be either css-style or jsStyle (camelCase)
+ * @returns void
+ *
+ * The function applies the styles set in obj to the el
+ **/
+
+function css$2(el, obj){
+    var style = el.style;
+
+    if (!obj) return;
+
+    for (var key in obj) style[camelCase(key)] = obj[key];
+
+    function camelCase(str){ 
+        return  str.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); }); 
+    }
+}
+
+function setupCanvas(canvas, canvasSettings){
+    canvasSettings || (canvasSettings = {});
+    var $resize = stream();
+
+    if (!lodash.isElement(canvas)) throw new Error('Minno-time: canvas is not a DOM element');
+
+    canvas.classList.add('minno-canvas');
+
+    // apply canvas styles
+    var map = {
+        background 			: {element: document.body, property: 'backgroundColor'},
+        canvasBackground	: {element: canvas, property:'backgroundColor'},
+        borderColor			: {element: canvas, property:'borderColor'},
+        borderWidth			: {element: canvas, property:'borderWidth'}
+    };
+
+    var off = canvasContructor(map, lodash.pick(canvasSettings,['background','canvasBackground','borderColor','borderWidth']));
+
+    canvasSettings.css && css_1(canvas, canvasSettings.css);
+
+    // setup canvas resize
+    $resize.map(adjust_canvas(canvas, canvasSettings));
+    $resize({});
+
+    window.addEventListener('orientationchange', $resize);
+    window.addEventListener('resize', $resize);
+
+    $resize.end
+        .map(function(){canvas.classList.remove('minno-canvas');})
+        .map(function removeListeners(){
+            window.removeEventListener('orientationchange',$resize);
+            window.removeEventListener('resize', $resize);
+        })
+        .map(off);
+
+
+
+    return $resize;
+
+}
+
+function setup$1(canvas, script){
+    var $resize = setupCanvas(canvas, lodash.get(script, 'settings.canvas', {}));
+    var db = createDB$1(script);
+    setupVars(script);
+
+    return {
+        db:db, 
+        $resize:$resize,
+        canvas: canvas,
+        script: script,
+        settings: script.settings || {}
+    };
+}
+
+function setupVars(script){
+    // init global
+    var glob = global$3(global$3());
+    var name = script.name || 'anonymous minno-time';
+    var current = script.current ? script.current : {};
+
+    current.logs || (current.logs = []); // init logs object
+    glob[name] = glob.current = current; // create local namespace
+}
+
+/*
+ * media preloader
+ * TODO: turn into factory, possibly make progress into a stream.
+ */
+var srcStack = [];				// an array holding all our sources
+var defStack = [];				// an array holding all the deferreds
+var stackDone = 0;				// the number of sources we have completed downloading
+var getText = lodash.memoize(getXhr);
+
+var loader = {
+    // loads a single source
+    load: load,
+
+    all: function(){
+        return Promise.all(defStack);
+    },
+
+    progress: function(){
+        return defStack.length ? stackDone/defStack.length : 1;
+    }
+};
+
+// load a single source
+function load(src, type){
+    // the source was already loaded
+    if (srcStack.indexOf(src) !== -1) return false;
+
+    // if we haven't loaded this yet
+    var promise = type == 'template' ? getText(src) : getImage(src);
+
+    promise
+        .then(function(){stackDone++;})
+        .then(function(){
+            loader.onload && loader.onload(src);
+        })
+        .catch(function(e){
+            loader.onerror && loader.onerror(e, src);
+        });
+
+    // keep defered and source for later.
+    defStack.push(promise);
+    srcStack.push(src);
+
+    return promise;
+}
+
+function getImage(url){
+    return  new Promise(function(resolve, reject){
+        var el = document.createElement('img');
+        el.onload = function(){resolve(el);};
+        el.onerror = function(){reject(new Error('Image not found: ' + url ));};
+        el.src = url;
+        
+    });
+}
+
+function getXhr(url){
+    return new Promise(function(resolve, reject){
+        var request = new XMLHttpRequest();
+        request.open('GET',url, true);
+        request.onreadystatechange = function() {
+            if (this.readyState === 4) {
+                if (this.status >= 200 && this.status < 400) resolve(this.responseText);
+                else reject(new Error('Template not found:' + url));
+            }
+        };
+        request.send();
+    });
+}
+
+/*
+ * build the url for this src (add the generic baseUrl)
+ */
+
+function buildUrl(baseUrl, url, type){
+    // it this is a dataUrl type of image, we don't need to append the baseurl
+    if (type == 'image' && /^data:image/.test(url)) return url;
+
+    // the base url setting may be either a string, or an object with the type as a field
+    if (lodash.isObject(baseUrl)) baseUrl = baseUrl[type];
+
+    // make sure base url is set, and add trailing slash if needed
+    if (!baseUrl) baseUrl = '';
+    else if (baseUrl[baseUrl.length-1] != '/') baseUrl += '/';
+
+    return baseUrl + url;
+}
+
+/*
+ * gets all media that needs preloading and preloads it
+ */
+
+function preloadScript(script, baseUrl){
+    getScriptMedia(script).forEach(loadMedia);
+    return loader;
+
+    function loadMedia(media){
+        if (!lodash.isUndefined(media.image)) loader.load(buildUrl(baseUrl, media.image, 'image'),'image');
+        if (!lodash.isUndefined(media.template)) loader.load(buildUrl(baseUrl, media.template,'template'),'template');
+    }
+}
+
+/**
+ * Iterates over a script and gathers all media
+ **/
+function getScriptMedia(script){
+    var mediaSets = script.mediaSets;
+    var stimulusSets = lodash.map(script.stimulusSets, getStimMedia);
+    var trialSets = lodash.map(script.trialSets, getTrialMedia);
+    var sequence = lodash.filter(script.sequence,notMixer).map(getTrialMedia);
+
+    return lodash.flattenDeep([mediaSets, stimulusSets, trialSets, sequence]).filter(notUndefined);
+} 
+
+function getTrialMedia(trial){
+    return [
+        lodash.map(trial.input, function(input){ return input.element; }),
+        lodash.map(trial.stimuli, getStimMedia),
+        lodash.map(trial.layout, getStimMedia)
+    ];
+}
+
+function getStimMedia(stim){ return stim.media; }
+function notMixer(trial){ return !trial.mixer; }
+function notUndefined(val){ return !lodash.isUndefined(val); }
+
+function preloadPhase$1(canvas, script, $messages){
+    var preloader = preloadScript(script, script.settings.base_url);
+
+    if (preloader.progress() == 1) return Promise.resolve().then(emptyCanvas);
+
+    canvas.innerHTML = '<div class="minno-progress"><div class="minno-progress-bar"></div></div>';
+
+    var barStyle = canvas.getElementsByClassName('minno-progress-bar')[0].style;
+    barStyle.width = preloader.progress() + '%';
+    preloader.onload = function(){
+        fastdom.mutate(function(){
+            barStyle.width = preloader.progress()*100 + '%';
+        });
+    };
+    preloader.onerror = function(e, src){
+        $messages({
+            type:'error',
+            message: 'Failed to preload',
+            error:e,
+            context:src
+        });
+    };
+
+    return preloader.all()
+        .then(emptyCanvas)['catch'](function(src){
+            throw new Error('loading resource failed, do something about it! (you can start by checking the error log, you are probably reffering to the wrong url - ' + src +')');
+        });
+
+    function emptyCanvas(){
+        while (canvas.firstChild) canvas.removeChild(canvas.firstChild);
+    }
+}
+
+function mouseEvents$1(eventName,inputObj, canvas){
+    var $listener = stream();
+    var element = inputObj.element;
+
+    if (element){
+        css_1(element, inputObj.css);
+        fastdom.mutate(function(){
+            canvas.appendChild(element);
+        });
+    }
+
+    canvas.addEventListener(eventName, clickListener);
+
+    $listener.end.map(removeClickListener);
+    return $listener;
+
+    function clickListener(e){
+        var target = e.target;
+        if (element && target === element) return $listener(e);
+        if (!element && target.getAttribute('data-handle') === inputObj.stimHandle) return $listener(e);
+        return;
+    }
+
+    function removeClickListener(){
+        if (element) canvas.removeChild(element);
+        canvas.removeEventListener(eventName, $listener);
+    }
+}
+
+/*
+* key pressed listener
+* reqires key
+*
+* key can be either charCode or string.
+* or an array of charCode/strings.
+*/
+
+// we monitor all key up events so that we trigger only once per key down
+var keyDownArr = [];
+
+document.addEventListener('keyup',function(e){ keyDownArr[e.which] = false; });// unset flag to prevent multi pressing of a key 
+
+function keypressed$1(inputObj){
+    var $listener = stream();
+
+    // make sure key is an array
+    var keys = Array.isArray(inputObj.key) ? inputObj.key : [inputObj.key];
+
+    // map keys to keyCodes
+    var target = keys.map(function(value){ 
+        return typeof value == 'string' ? value.toUpperCase().charCodeAt(0) : value; 
+    });
+
+    document.addEventListener('keydown', keypressListener);
+
+    $listener.end.map(removeKeypressListener);
+    return $listener;
+
+    function keypressListener(e){
+        if (keyDownArr[e.which] || (target.indexOf(e.which) === -1)) return;
+        e.preventDefault(); // prevent FF from wasting about 10ms in browser-content.js (and fast search)
+        keyDownArr[e.which] = true; // set flag to prevent multi pressing of a key
+        $listener(e);
+    }
+
+    function removeKeypressListener(){
+        document.removeEventListener('keydown', keypressListener);
+    }
+}
+
+function keyup$1(inputObj){
+    var $listener = stream();
+    // make sure key is array
+    var keys = Array.isArray(inputObj.key) ? inputObj.key : [inputObj.key];
+
+    // map keys to keyCodes
+    var target = keys.map(function(value){ 
+        return typeof value == 'string' ? value.toUpperCase().charCodeAt(0) : value; 
+    });
+
+    document.addEventListener('keyup', keypressListener);
+
+    $listener.end.map(removeKeypressListener);
+    return $listener;
+
+    function keypressListener(e){
+        if (target.indexOf(e.which) === -1) return;
+        e.preventDefault();
+        return $listener(e);
+    }
+
+    function removeKeypressListener(){
+        document.removeEventListener('keyup', $listener);
+    }
+}
+
+/**
+ *	Takes a properties objects and returns the result of a randomization:
+ *	If it is an array - pick a random member
+ *	If it is an object pick from within a range
+ *	If it is a function return its result using the context
+ *	Otherwise simply return the properties
+ */
+function simpleRandomize(properties, context){
+
+    if (lodash.isArray(properties)) {
+        var index = Math.floor(Math.random()*properties.length);
+        return properties[index];
+    }
+
+    if (lodash.isFunction(properties)) {
+        return properties.call(context);
+    }
+
+    // this must be after the test for arrays and functions, because they are considered objects too
+    if (lodash.isPlainObject(properties)) {
+        if (!lodash.isNumber(properties.min) || !lodash.isNumber(properties.max) || properties.min > properties.max) {
+            throw new Error('randomization objects need both a max and a minimum property, also max has to be larger than min');
+        }
+        return properties.min + (properties.max - properties.min) * Math.random();
+    }
+
+    // if this is not a randomization object simply return
+    return properties;
+}
+
+function timeout$1(inputObj){
+    var $listener = stream();
+    var timeoutID;
+    var duration = simpleRandomize(inputObj.duration) || 0;
+
+    $listener.end.map(cancel);
+
+    if (duration) setTimeout($listener.bind(null, {}), duration);
+    else $listener({}); // listener is already registered with $events so this should be immidiate
+
+    return $listener;
+
+    function cancel(){
+        clearTimeout(timeoutID);
+    }
+}
+
+function inputBinder(inputObj, canvas){
+    var on = inputObj.on; // what type of binding is this?
+
+    switch (on){
+
+        case 'keypressed'	: return keypressed$1(inputObj);
+
+        case 'keyup'		: return keyup$1(inputObj);
+
+        case 'click'		:
+        case 'mousedown'    :
+            return mouseEvents$1('mousedown', inputObj, canvas);
+
+        case 'mouseup'	    : return mouseEvents$1('mouseup', inputObj, canvas);
+
+        case 'mouseenter'	: return mouseEvents$1('mouseenter', inputObj, canvas);
+
+        case 'mouseleave'	: return mouseEvents$1('mouseleave', inputObj, canvas);
+
+        case 'timeout'		: return timeout$1(inputObj);
+
+        /*
+         * Shortcuts
+         */
+
+        case 'enter'	: return keypressed$1(lodash.assign({key:13},inputObj));
+
+        case 'space'	: return keypressed$1(lodash.assign({key:32},inputObj));
+
+        case 'esc'	    : return keypressed$1(lodash.assign({key:27},inputObj));
+
+        case 'leftTouch'	:
+            inputObj.element = createElement(inputObj.css, {
+                position: 'absolute',
+                left: 0,
+                width: '30%',
+                height: '100%',
+                background: '#00FF00',
+                opacity: 0.3
+            });
+
+            return mouseEvents$1('mousedown', inputObj, canvas);
+
+        case 'rightTouch'	:
+            inputObj.element = createElement(inputObj.css, {
+                position: 'absolute',
+                right: 0,
+                width: '30%',
+                height: '100%',
+                background: '#00FF00',
+                opacity: 0.3
+            });
+
+            return mouseEvents$1('mousedown', inputObj, canvas);
+
+        case 'topTouch'	:
+            inputObj.element = createElement(inputObj.css, {
+                position: 'absolute',
+                top: 0,
+                width: '100%',
+                height: '30%',
+                background: '#00FF00',
+                opacity: 0.3
+            });
+
+            return mouseEvents$1('mousedown', inputObj, canvas);
+
+        case 'bottomTouch'	:
+            inputObj.element = createElement(inputObj.css, {
+                position: 'absolute',
+                bottom: 0,
+                width: '100%',
+                height: '30%',
+                background: '#00FF00',
+                opacity: 0.3
+            });
+
+            return mouseEvents$1('mousedown', inputObj, canvas);
+
+        default:
+            throw new Error('You have an input element with an unrecognized "on" property: ' + on);
+
+    }
+
+
+    function createElement(css2, css1){
+        var el = document.createElement('div');
+        css_1(el, css1);
+        css_1(el, css2);
+        return el;
+    }
+}
+
+function createListener$1(inputObj,canvas){
+    var $listener = getListener(inputObj, canvas);
+
+    if (!isStream($listener)) throw new Error('Input functions must return valid streams: ' + logObj(inputObj));
+    if ('handle' in inputObj) $listener.handle = inputObj.handle;
+
+    return $listener;
+}
+
+function getListener(inputObj, canvas){
+    var $listener;
+
+    if (lodash.isFunction(inputObj)) return inputObj(inputObj, canvas, stream);
+
+    if (lodash.isPlainObject(inputObj)) {
+        if (lodash.isString(inputObj.on)) return inputBinder(inputObj,canvas,stream);
+
+        if (lodash.isFunction(inputObj.on )) $listener = inputObj.on(inputObj,canvas,stream);
+        if (lodash.isFunction(inputObj.off)) $listener.end.map(inputObj.off);
+    }
+        
+    throw new Error('Input must only contain objects and functions, do you have an undefined value?');
+}
+
+function logObj(obj){
+    return lodash.isFunction(obj) ? obj.toString() : JSON.stringify(obj);
+}
+
+
+function isStream(stream$$1) {return stream$$1._state; }
+
+var now = window.performance.now
+    ? window.performance.now.bind(window.performance)
+
+    // We aren't using the absoulte time anywhere so we can use raw Date.now as a replacement
+    // if we're not on IE9
+    : Date.now.bind(Date);
+
+function interfaceFn($events, canvas){
+    var listenerStack = []; // holds all active listeners
+    var baseTime = 0;
+
+    return { add:add,remove:remove,removeAll:removeAll,resetTimer:resetTimer };
+
+    function add(inputObj){
+        if (!inputObj) throw new Error('Missing input element. Could not add input listener');
+        var $listener = createListener$1(inputObj, canvas);
+        $listener.map(addDetails).map($events); // pipe events to $events
+        listenerStack.push($listener);
+
+        function addDetails(event){
+            return {
+                handle      : $listener.handle,
+                event       : event,
+                timestamp	: +new Date(),
+                latency		: now() - baseTime
+            };
+        }
+    }
+
+    function remove(handle){
+        // go through the listener stack and remove any listeners that fit the handle
+        // note that we do this in reverse so that the index does not change
+        for (var i = listenerStack.length - 1; i >= 0 ; i--){
+            var $listener = listenerStack[i];
+            if ($listener.handle === handle){
+                $listener.end(true);
+                listenerStack.splice(i,1);
+            }
+        }
+    }
+
+    function removeAll(){
+        listenerStack.forEach(function($listener){
+            $listener.end(true);
+        });
+        listenerStack.length = 0;
+    }
+
+    function resetTimer(){ baseTime = now(); }
+}
+
 function getMedia$1(media){
     // all templateing is done within the inflate trial function and the sequencer
     var template = media.html || media.inlineTemplate || media.template; // give inline template precedence over template, because tempaltes are loaded into inlinetemplate
@@ -58103,7 +58066,6 @@ else module.exports = exports;
 })( typeof window !== 'undefined' ? window : commonjsGlobal);
 });
 
-// initiate piGloabl
 var glob$1 = window.piGlobal || (window.piGlobal = {});
 
 function global$7(){
@@ -58116,21 +58078,6 @@ function global$7(){
  *
  */
 
-/**
- * Takes a map of css rules and applies them.
- * Returns a function that returns the page to its former condition.
- *
- * The rule map is an object of ruleName -> ruleObject.
- *
- * var ruleObject = {
- * 	element : wrapped element to affect
- * 	property: css property to modify
- * }
- *
- * @param  {Object} map      A hash of rules.
- * @param  {Object} settings A hash of ruleName -> value
- * @return {Function}        A function that undoes all the previous changes
- */
 function canvasContructor$1(map, settings){
     var offArr;
 
@@ -58159,8 +58106,6 @@ function on$1(el, property, value){
     return function(){el.style[property] = old;};  // create off function
 }
 
-// @TODO: see if we can afford to change the signature of actions
-// I'd like to have the trial go first here (used almost always).
 var actions = {
     /*
      * Stimulus actions
@@ -61613,9 +61558,9 @@ app$1.config(['$provide', function($provide) {
 }]);
 
 define('managerAPI', lodash.constant(API));
-define('timeAPI', lodash.constant(API$1));
-define('pipAPI', lodash.constant(API$1));
-define('questAPI', lodash.constant(API$2));
+define('timeAPI', lodash.constant(api$1));
+define('pipAPI', lodash.constant(api$1));
+define('questAPI', lodash.constant(quest));
 define('minno-sequencer', lodash.constant(Database));
 define('lodash', lodash.constant(lodash));
 define('underscore', lodash.constant(lodash));

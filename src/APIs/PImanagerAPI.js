@@ -13,16 +13,18 @@ export default API;
  */
 function API(){
     Constructor.call(this);
-    this.settings.onPreTask = onPreTask;
-    _.set(this, 'settings.logger.managerUrl', '/implicit/PiManager/');
-    _.set(this, 'settings.logger.type', 'old');
+
+    _.set(this, 'settings.onPreTask',onPreTask);
+    _.set(this, 'settings.logger.url', '../data');
+    window.IS_PI && _.set(this, 'settings.logger.managerUrl', '/implicit/PiManager/');
+    window.IS_PI && _.set(this, 'settings.logger.type', 'old');
 }
 
 // create API functions
 _.extend(API.prototype, Constructor.prototype);
 
 // annotate onPreTask
-onPreTask.$inject = ['currentTask', '$http','$rootScope','managerBeforeUnload','templateDefaultContext', 'managerSettings', 'piConsole'];
+onPreTask.$inject = ['currentTask', '$http','managerBeforeUnload','templateDefaultContext', 'managerSettings', 'piConsole'];
 
 /**
  * Before each task,
@@ -33,14 +35,18 @@ onPreTask.$inject = ['currentTask', '$http','$rootScope','managerBeforeUnload','
  * @param  {Object} $http       The $http service
  * @return {Promise}            Resolved when server responds
  */
-function onPreTask(currentTask, $http, $rootScope, beforeUnload, templateDefaultContext,managerSettings, piConsole){
-    var global = $rootScope.global;
+function onPreTask(currentTask, $http, beforeUnload, templateDefaultContext,managerSettings, piConsole){
+    var global = window.piGlobal;
     var context = {};
-    var data = _.assign({}, global.$meta, {taskName: currentTask.name || 'namelessTask', taskNumber: currentTask.$meta.number, taskURL:currentTask.scriptUrl || currentTask.templateUrl});
+    var data = _.assign({}, global.$meta, {
+        taskName: currentTask.name || 'namelessTask', 
+        taskNumber: currentTask.$meta.number, 
+        taskURL:currentTask.scriptUrl || currentTask.templateUrl
+    });
 
     // set last task flag
     if (currentTask.last){
-        data.sessionStatus = 'C';
+        window.IS_PI && (data.sessionStatus = 'C');
         beforeUnload.deactivate();
     }
 
@@ -54,11 +60,13 @@ function onPreTask(currentTask, $http, $rootScope, beforeUnload, templateDefault
     var isDev = /^(localhost|127.0.0.1)/.test(location.host);
     if (currentTask.type == 'pip') currentTask.baseUrl = currentTask.baseUrl ? currentTask.baseUrl 
         : isDev ? '/pip' 
-        : '/implicit/common/all/js/pip/' + (currentTask.version || 0.3);
+        : window.IS_PI ?'/implicit/common/all/js/pip/' + (currentTask.version || 0.3)
+        : '/openserver/minnojs/minno-time/0.3';
 
     if (currentTask.type == 'time') currentTask.baseUrl = currentTask.baseUrl ? currentTask.baseUrl 
         : isDev ? '/pip' 
-        : '/implicit/common/all/js/pip/0.5';
+        : window.IS_PI ? '/implicit/common/all/js/pip/0.5/'
+        : '/openserver/minnojs/minno-time/0.5';
 
     // add feedback functions to the default template context
     _.extend(templateDefaultContext,{
@@ -86,7 +94,7 @@ function onPreTask(currentTask, $http, $rootScope, beforeUnload, templateDefault
         }
     }
 
-
+    // @TODO: export as individual task
     if (currentTask.last && global.$mTurk){
         var $mTurk = global.$mTurk;
         var mturkUrl = $mTurk.isProduction ?  'http://www.mturk.com/mturk/externalSubmit' : 'https://workersandbox.mturk.com/mturk/externalSubmit';
@@ -105,14 +113,16 @@ function onPreTask(currentTask, $http, $rootScope, beforeUnload, templateDefault
         };
     }
 
+    // connect to errorception
     if (window._err && window._err.meta){
         var meta = window._err.meta;
         meta.subtaskName = currentTask.name;
         meta.subtaskURL = currentTask.scriptUrl || currentTask.templateUrl;
     }
 
-    function error(){
-        var e =  new Error('Failed to update server');
+    function error(response){
+        var errMessage = response.statusText +' (' + response.status +').';
+        var e = new Error('Failed to update. ' + errMessage);
         var reportNoConnection = currentTask.reportNoConnection;
         if (reportNoConnection){
             var message = document.createElement('div');
