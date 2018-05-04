@@ -73,7 +73,6 @@ define(['underscore'],function(_){
                 return result;
             },
 
-			// randomize any elements
             random: function(obj, context){
                 var sequence = obj.data ? deepMixer(obj.data, context) : [];
                 return shuffle(sequence);

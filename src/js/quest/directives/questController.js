@@ -91,7 +91,7 @@ define(function(require){
             // model --> view
             // should probably never be called (since our model is an object and not a primitive)
             ngModel.$formatters.push(function(modelValue) {
-                return modelValue.response;
+                return _.get(modelValue, 'response');
             });
 
             // view --> model
