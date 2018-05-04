@@ -1,6 +1,6 @@
 # Redirect
 
-The post task is responsible for redirecting users to an external url. It is 
+The redirect task is responsible for redirecting users to an external url. It is 
 
 A typical redirect task looks like this:
 

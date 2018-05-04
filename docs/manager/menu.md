@@ -6,6 +6,7 @@
     - [Messages](messages.md)
     - [Post](post.md)
     - [Redirect](redirect.md)
+    - [AllowLeaving](allowleaving.md)
 - Examples
     - [Weight experiment](weightManager.js)
     - [Displaying Video](videoManager.js)

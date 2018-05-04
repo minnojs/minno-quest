@@ -15,6 +15,7 @@
     - [Quest](#quest)
     - [Message](#message)
     - [Post](#post)
+    - [AllowLeaving](#allowleaving)
 - [Inheritance](#inheritance)
 - [Custom tasks](#custom-tasks)
     - [Plugging in](#plugging-in)
@@ -189,6 +190,7 @@ script      | The actual script object for the quest task.
 scriptUrl   | The url for the quest script.
 
 #### Message
+
 Property    | Description
 ----------- | -------------
 template    | the actual html to display as a string.

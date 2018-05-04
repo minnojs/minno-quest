@@ -16,6 +16,7 @@ import activatePost from './tasks/postTask';
 import activateRedirect from './tasks/redirectTask';
 import activatePIP from './tasks/pipTask';
 import activateTime from './tasks/timeTask';
+import activateAllowLeaving from './tasks/allowLeaving';
 
 export default module;
 
@@ -32,4 +33,5 @@ module.config(['taskActivateProvider', function(activateProvider){
     activateProvider.set('redirect', activateRedirect);
     activateProvider.set('pip', activatePIP);
     activateProvider.set('time', activateTime);
+    activateProvider.set('allowLeaving', activateAllowLeaving);
 }]);
