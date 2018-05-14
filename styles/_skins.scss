@@ -12,11 +12,13 @@
 		position:absolute; 
 		right:15px; 
 		margin:8px 0;
+        @at-root [dir="rtl"]#{&} { right: auto; left: 15px; }
 	}
 }
 
 .simple-skin [piq-page] .page-buttons {
 	text-align:right;
+    @at-root [dir="rtl"]#{&} { text-align: left; }
 
 	.page-submit {
 	}

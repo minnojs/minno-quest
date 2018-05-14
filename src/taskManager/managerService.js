@@ -133,6 +133,7 @@ function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector, pi
         if (settings.title) $document[0].title = settings.title;
 
         rootElement.addClass(skinClass + '-skin');
+        rootElement.attr('dir', settings.rtl ? 'rtl' : '');
 
         // connect piConsole to settings
         piConsole.settings = settings.DEBUG || {};

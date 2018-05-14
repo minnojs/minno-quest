@@ -9,6 +9,7 @@
     - [preloadImages](#preloadimages)
     - [skip](#skip)
     - [skin](#skin)
+    - [rtl](#rtl)
     - [logger](#logger)
     - [DEBUG](#debug)
 - [Tasks](#tasks)
@@ -116,6 +117,13 @@ Add a skin to your project. Skins change the way that your tasks look. Currently
 
 ```javascript
 API.addSettings('skin', 'demo');
+```
+
+### rtl
+Setting rtl to `true` will change the layout of the player to right to left in order to ocomodate right to left languages such as arabic and hebrew.
+
+```javascript
+API.addSettings('rtl', true);
 ```
 
 #### logger
