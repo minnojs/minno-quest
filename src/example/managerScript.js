@@ -42,6 +42,7 @@ define(['managerAPI'], function(Manager){
             }
 		},
         { type: 'quest', name: 'dotWidth', scriptUrl: '/test/timeSlider.js' },
+        { type: 'message', template: 'yarkdasdf'},
         //{ type: 'postCsv', url: 'csv.php' }, 
         {
 			type: 'pip',
