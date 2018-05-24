@@ -41878,7 +41878,11 @@ function sliderDirective$1(){
                 scope.$apply(function(){
                     scope.response = newValue;
                 });
-                data.autoSubmit && scope.$emit('quest:submit:now');
+
+                // not sure why we need to do it this way, but emiting in a separate "apply" prevents FOUC
+                data.autoSubmit && scope.$apply(function(){
+                    scope.$emit('quest:submit:now');
+                });
             });
             scope.$on('quest:timeout', deRegister);
         }
