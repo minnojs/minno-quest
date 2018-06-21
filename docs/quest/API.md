@@ -19,8 +19,6 @@
 	- [logger](#logger)
 	- [timer](#timer)
 - [Data](#data)
-	- [Logs](#logs)
-	- [Variables](#variables)
 
 ### Pages
 The basic unit in PIquest is the **page**. A page is usually one screen in your questionnaire. If your questionnaire presents all its questions in one screen, it will probably have only one page. The properties within a page manage how the question(s) is(are) displayed and how the participants interact with it (e.g., select an answer and then click a submit button).
@@ -586,9 +584,17 @@ removeOnEnd 	| (true or false) Whether to remove the visual timer when the count
 message 		| (String or Object) Display a message at the end the timer duration. You can imput a simple string here. If you want finer control over the content of the message you can use the an object with the following properties: `header`: the header text for the message (defaults to "Timer Done"). `body`: the body of the message. `button`: the close button (defaults to "close").
 
 ## Data
+miQuest keeps record of user responses using plain js objects.
+These objects are both kept locally (see [variables](#variables)) and sent to the server.
 
-### Logs
-miQuest keeps record of user responses using plain js objects. These objects are kept locally (see #variables) and sent to the server (see [logger](#logger) setting).
+The data logs are available as properties of the `questsion` object  in `current`:
+
+```javascript
+current.questions = {
+	questionName1 : {...}, // log object
+	questionName2 : {...} // log object
+}
+```
 
 Following are the properties of the logged object:
 
@@ -600,15 +606,6 @@ declined 		| Whether or not the question was declined (if a question was decline
 latency 		| The time (from question presentation) to the last change of this response.
 submitLatency	| The time (from question presentation) to the time this page was submitted.
 
-### Variables
-
-The data logs are available as variables under the current object like so:
-
-```javascript
-current.questions = {
-	questionName1 : {...}, // log object
-	questionName2 : {...} // log object
-}
-```
-
-The response for questionName1 can be accessed using `current.questions.questionName1.response`. You can use this data within [templates](../basics/sequencer.html#templates) or from within [branches](../basics/sequencer.html#conditions).
+The response for questionName1 can be accessed using `current.questions.questionName1.response`. 
+You can use this data within [templates](../basics/sequencer.html#templates)
+or from within [branches](../basics/sequencer.html#conditions).
