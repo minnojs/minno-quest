@@ -70,11 +70,7 @@
 <li><a href="#debugging">Debugging</a></li>
 </ul>
 </li>
-<li><a href="#data">Data</a><ul>
-<li><a href="#logs">Logs</a></li>
-<li><a href="#variables">Variables</a></li>
-</ul>
-</li>
+<li><a href="#data">Data</a></li>
 </ul>
 </li>
 <li><a href="playground.html">Playground</a></li>
@@ -1300,7 +1296,14 @@ The player has several levels of logging, by default it logs only <code>error</c
 </table>
 <p><strong>hideConsole</strong>:
 This property allows you to control the display of logs inside the browser, if it is set to <code>true</code> then the logs will only be printed into your console.</p>
-<h2><a name="data" class="header-link" href="#data"><span></span></a>Data</h2><h3><a name="logs" class="header-link" href="#logs"><span></span></a>Logs</h3><p>miQuest keeps record of user responses using plain js objects. These objects are kept locally (see #variables) and sent to the server (see <a href="#logger">logger</a> setting).</p>
+<h2><a name="data" class="header-link" href="#data"><span></span></a>Data</h2><p>miQuest keeps record of user responses using plain js objects.
+These objects are both kept locally (see <a href="#variables">variables</a>) and sent to the server.</p>
+<p>The data logs are available as properties of the <code>questsion</code> object  in <code>current</code>:</p>
+<pre><code class="lang-javascript">current.questions = {
+    questionName1 : {...}, // log object
+    questionName2 : {...} // log object
+}
+</code></pre>
 <p>Following are the properties of the logged object:</p>
 <table>
 <thead>
@@ -1332,13 +1335,9 @@ This property allows you to control the display of logs inside the browser, if i
 </tr>
 </tbody>
 </table>
-<h3><a name="variables" class="header-link" href="#variables"><span></span></a>Variables</h3><p>The data logs are available as variables under the current object like so:</p>
-<pre><code class="lang-javascript">current.questions = {
-    questionName1 : {...}, // log object
-    questionName2 : {...} // log object
-}
-</code></pre>
-<p>The response for questionName1 can be accessed using <code>current.questions.questionName1.response</code>. You can use this data within <a href="../basics/sequencer.html#templates">templates</a> or from within <a href="../basics/sequencer.html#conditions">branches</a>.</p>
+<p>The response for questionName1 can be accessed using <code>current.questions.questionName1.response</code>. 
+You can use this data within <a href="../basics/sequencer.html#templates">templates</a>
+or from within <a href="../basics/sequencer.html#conditions">branches</a>.</p>
 
 				<hr />
 				<small>License: Apache 2. &copy; Project Implicit. &middot; Current version [version]</small>

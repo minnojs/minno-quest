@@ -5,7 +5,7 @@
 
 	<div ng-bind-html="page.text"></div>
 	<ol ng-class="{'list-unstyled':!page.numbered}" start="{{page.numberStart}}">
-		<li ng-repeat="quest in page.questions track by $index">
+		<li ng-repeat="quest in page.questions">
 			<div quest-wrapper quest-data="quest" quest-current="current"></div>
 		</li>
 	</ol>
@@ -13,7 +13,6 @@
 	<div pi-quest-validation="pageForm.$error.pageValidation" pi-post-submit="submitAttempt">{{page.pageValidationText || 'Invalid page'}}</div>
 
 	<div class="page-buttons">
-        <span class="page-dummy-button"></span>
 		<button
 			ng-click="prev()"
 			class="btn page-prev"
