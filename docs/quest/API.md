@@ -642,6 +642,7 @@ declined 		| Whether or not the question was declined (if a question was decline
 latency 		| The time (from question presentation) to the last change of this response.
 submitLatency	| The time (from question presentation) to the time this page was submitted.
 
-The response for questionName1 can be accessed using `current.questions.questionName1.response`. 
+The response for the question 'questionName1' in the current questionnaire can be accessed using `current.questions.questionName1.response`. 
+The response for the question 'questionName1' in the questionnaire called 'taskName' can be accessed using `global.taskName.questions.questionName1.response`. 
 You can use this data within [templates](../basics/sequencer.html#templates)
 or from within [branches](../basics/sequencer.html#conditions).
