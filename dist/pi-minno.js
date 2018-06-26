@@ -1,5 +1,5 @@
 /**
- * @preserve minno-quest v0.2.16
+ * @preserve minno-quest v0.2.18
  * @license Apache-2.0 (2018)
  */
 
@@ -43003,12 +43003,6 @@ function styleInject(css, ref) {
 var css = ".minno-canvas{height:400px;width:500px;position:relative;border:5px solid #fff;margin:auto;margin-top:10px;-webkit-text-size-adjust:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.minno-stimulus{position:absolute;text-align:center;overflow:hidden;visibility:hidden;width:fit-content}.minno-stimulus-visible{visibility:visible}.minno-stimulus-center-x{left:50%;transform:translateX(-50%)}.minno-stimulus-center-y{top:50%;transform:translateY(-50%)}.minno-stimulus-center-y.minno-stimulus-center-x{transform:translate(-50%,-50%)}.minno-progress{background-color:#20201f;border-radius:20px;padding:4px;position:relative;top:50%;width:80%;margin-left:10%;margin-top:-12px}.minno-progress-bar{background-color:#807b7a;width:0;height:16px;border-radius:10px}";
 styleInject(css);
 
-var glob = window.piGlobal || (window.piGlobal = {});
-
-function global$3(){
-    return glob;
-}
-
 var lodash$1 = createCommonjsModule(function (module, exports) {
 /**
  * @license
@@ -55363,6 +55357,12 @@ var lodash$1 = createCommonjsModule(function (module, exports) {
 }.call(commonjsGlobal));
 });
 
+var glob = window.piGlobal || (window.piGlobal = {});
+
+function global$3(){
+    return glob;
+}
+
 mixProvider$1.$inject = ['randomizeShuffle', 'randomizeRandom'];
 function mixProvider$1(shuffle, random){
 
@@ -55469,7 +55469,7 @@ function mixerDotNotationProvider$3(dotNotation){
 
         var escapeSeparatorRegex= /[^/]\./;
 
-        if (!lodash.isString(chain)) return chain;
+        if (!lodash$1.isString(chain)) return chain;
 
         // We do not have a non escaped dot: we treat this as a string
         if (!escapeSeparatorRegex.test(chain)) return chain.replace('/.','.');
@@ -55483,13 +55483,13 @@ function mixerDotNotationProvider$3(dotNotation){
 mixerConditionProvider$3.$inject = ['mixerDotNotation','piConsole'];
 function mixerConditionProvider$3(dotNotation,piConsole){
     var operatorHash = {
-        gt: forceNumeric(lodash.gt),
-        greaterThan: forceNumeric(lodash.gt),
-        gte: forceNumeric(lodash.gte),
-        greaterThanOrEqual: forceNumeric(lodash.gte),
-        equals: lodash.eq,
-        'in': lodash.rearg(lodash.contains,1,0), // effectively reverse
-        contains: lodash.rearg(lodash.contains,1,0), // effectively reverse
+        gt: forceNumeric(lodash$1.gt),
+        greaterThan: forceNumeric(lodash$1.gt),
+        gte: forceNumeric(lodash$1.gte),
+        greaterThanOrEqual: forceNumeric(lodash$1.gte),
+        equals: lodash$1.eq,
+        'in': lodash$1.rearg(lodash$1.contains,1,0), // effectively reverse
+        contains: lodash$1.rearg(lodash$1.contains,1,0), // effectively reverse
         exactly: exactly,
         isTruthy: isTruthy
     };
@@ -55521,15 +55521,15 @@ function mixerConditionProvider$3(dotNotation,piConsole){
     // extract the operator function from the condition
     function getOperator(condition){
         var operator = condition.operator;
-        if (lodash.isFunction(condition)) return condition;
-        if (!lodash.has(condition, 'operator')) return lodash.has(condition,'to') ? lodash.eq : isTruthy;
-        if (lodash.isFunction(operator)) return operator;
+        if (lodash$1.isFunction(condition)) return condition;
+        if (!lodash$1.has(condition, 'operator')) return lodash$1.has(condition,'to') ? lodash$1.eq : isTruthy;
+        if (lodash$1.isFunction(operator)) return operator;
         return operatorHash[operator];
     }
 
     function isTruthy(left){ return !!left; }
     function exactly(left,right){ return left === right;}
-    function forceNumeric(cb){ return function(left,right){ return [left,right].every(lodash.isNumber) ? cb(left,right) : false; }; } 
+    function forceNumeric(cb){ return function(left,right){ return [left,right].every(lodash$1.isNumber) ? cb(left,right) : false; }; } 
 
 }
 
@@ -55544,24 +55544,24 @@ function evaluateProvider$1(condition){
 
     function evaluate(conditions,context){
         // make && the default
-        lodash.isArray(conditions) && (conditions = {and:conditions});
+        lodash$1.isArray(conditions) && (conditions = {and:conditions});
 
         function test(cond){return evaluate(cond,context);}
 
         // && objects
         if (conditions.and){
-            return lodash.every(conditions.and, test);
+            return lodash$1.every(conditions.and, test);
         }
         if (conditions.nand){
-            return !lodash.every(conditions.nand, test);
+            return !lodash$1.every(conditions.nand, test);
         }
 
         // || objects
         if (conditions.or){
-            return lodash.some(conditions.or, test);
+            return lodash$1.some(conditions.or, test);
         }
         if (conditions.nor){
-            return !lodash.some(conditions.nor, test);
+            return !lodash$1.some(conditions.nor, test);
         }
 
         return condition(conditions, context);
@@ -55588,7 +55588,7 @@ function mixerBranchingDecorator$3(mix, evaluate, mixerDefaultContext){
      * @return {Array}         [A data array with objects to continue with]
      */
     function branch(obj, context){
-        context = lodash.extend(context || {}, mixerDefaultContext);
+        context = lodash$1.extend(context || {}, mixerDefaultContext);
         return evaluate(obj.conditions, context) ? obj.data || [] : obj.elseData || [];
     }
 
@@ -55597,10 +55597,10 @@ function mixerBranchingDecorator$3(mix, evaluate, mixerDefaultContext){
      * @return {Array}         [A data array with objects to continue with]
      */
     function multiBranch(obj, context){
-        context = lodash.extend(context || {}, mixerDefaultContext);
+        context = lodash$1.extend(context || {}, mixerDefaultContext);
         var row;
 
-        row = lodash.find(obj.branches, function(branch){
+        row = lodash$1.find(obj.branches, function(branch){
             return evaluate(branch.conditions, context);
         });
 
@@ -55626,7 +55626,7 @@ function mixerSequenceProvider$3(mix){
         this.pointer = 0;
     }
 
-    lodash.extend(MixerSequence.prototype, {
+    lodash$1.extend(MixerSequence.prototype, {
         /**
          * Add sequence to mixer
          * @param {[type]} arr     Sequence
@@ -55652,7 +55652,7 @@ function mixerSequenceProvider$3(mix){
             var el = subSequence.sequence[subSequence.pointer];
 
             // if we ran out of elements, go to previous level (unless we are on the root sequence)
-            if (lodash.isUndefined(el) && this.stack.length > 1){
+            if (lodash$1.isUndefined(el) && this.stack.length > 1){
                 this.stack.pop();
                 return this.proceed.call(this,direction,context);
             }
@@ -55707,7 +55707,7 @@ function mixerSequenceProvider$3(mix){
                 number: this.pointer,
 
                 // sum of sequence length, minus one (the mixer) for each level of stack except the last
-                outOf:  lodash.reduce(this.stack, function(memo,sub){return memo + sub.sequence.length-1;},0)+1
+                outOf:  lodash$1.reduce(this.stack, function(memo,sub){return memo + sub.sequence.length-1;},0)+1
             };
         }
 
@@ -55718,13 +55718,13 @@ function mixerSequenceProvider$3(mix){
 
 function dotNotation$3(chain, obj){
 
-    if (lodash.isUndefined(chain)) return;
-    if (lodash.isString(chain)) chain = chain.split('.');
+    if (lodash$1.isUndefined(chain)) return;
+    if (lodash$1.isString(chain)) chain = chain.split('.');
 
     // @TODO maybe lodash _.get?
     return chain.reduce(function(result, link){
 
-        if (lodash.isPlainObject(result) || lodash.isArray(result)){
+        if (lodash$1.isPlainObject(result) || lodash$1.isArray(result)){
             return result[link];
         }
 
@@ -55735,27 +55735,27 @@ function dotNotation$3(chain, obj){
 
 piConsoleFactory$3.$inject = ['$log'];
 function piConsoleFactory$3($log){
-    return window.DEBUG ? piConsole : lodash.noop;
+    return window.DEBUG ? piConsole : lodash$1.noop;
 
     function piConsole(log){
-        if (lodash.get(piConsole,'settings.hideConsole', false)) return window.postMessage({type:'kill-console'},'*');
+        if (lodash$1.get(piConsole,'settings.hideConsole', false)) return window.postMessage({type:'kill-console'},'*');
 
         $log[log.type] && $log[log.type](log.message); 
         window.postMessage(noramlizeMessage(log),'*');
     }
 
     function noramlizeMessage(obj){
-        return lodash.cloneDeep(obj, normalize);
+        return lodash$1.cloneDeep(obj, normalize);
         function normalize(val){
-            if (lodash.isFunction(val)) return val.toString();
-            if (lodash.isError(val)) return {name:val.name, message:val.message, stack:val.stack};
+            if (lodash$1.isFunction(val)) return val.toString();
+            if (lodash$1.isError(val)) return {name:val.name, message:val.message, stack:val.stack};
         }
     }
 }
 
 var piConsole$4 = piConsoleFactory$3(console);
 var mixer$2 = mixProvider$1(
-    lodash.shuffle, // randomizeShuffle
+    lodash$1.shuffle, // randomizeShuffle
     Math.random // randomizeRandom
 );
 
@@ -55781,10 +55781,10 @@ templateObjProvider$3.$inject = ['templateDefaultContext'];
 function templateObjProvider$3(templateDefaultContext){
 
     function templateObj(obj, context, options){
-        var skip = lodash.get(options, 'skip', []);
+        var skip = lodash$1.get(options, 'skip', []);
         var result = {};
         var key;
-        var ctx = lodash.assign({}, context, templateDefaultContext);
+        var ctx = lodash$1.assign({}, context, templateDefaultContext);
 
         for (key in obj){
             result[key] = (skip.indexOf(key) == -1) ? expand(obj[key]) : obj[key];
@@ -55793,16 +55793,16 @@ function templateObjProvider$3(templateDefaultContext){
         return result;
 
         function expand(value){
-            if (lodash.isString(value)) return template(value);
-            if (lodash.isArray(value)) return value.map(expand);
-            if (lodash.isPlainObject(value)) return lodash.mapValues(value, expand);
+            if (lodash$1.isString(value)) return template(value);
+            if (lodash$1.isArray(value)) return value.map(expand);
+            if (lodash$1.isPlainObject(value)) return lodash$1.mapValues(value, expand);
             return value;
         }
 
         function template(input){
             // if there is no template just return the string
             if (!~input.indexOf('<%')) return input;
-            return lodash.template(input)(ctx);
+            return lodash$1.template(input)(ctx);
         }
     }
 
@@ -55819,7 +55819,7 @@ function collectionService$1(){
         }
 
         // Make sure we are creating this array out of a valid argument
-        if (!lodash.isUndefined(arr) && !lodash.isArray(arr) && !(arr instanceof Collection)) {
+        if (!lodash$1.isUndefined(arr) && !lodash$1.isArray(arr) && !(arr instanceof Collection)) {
             throw new Error('Collections can only be constructed from arrays');
         }
 
@@ -55831,7 +55831,7 @@ function collectionService$1(){
         this.pointer = -1;
     }
 
-    lodash.extend(Collection.prototype,{
+    lodash$1.extend(Collection.prototype,{
 
         first : function first(){
             this.pointer = 0;
@@ -55868,7 +55868,7 @@ function collectionService$1(){
             }
 
             // make sure list is as an array
-            list = lodash.isArray(list) ? list : [list];
+            list = lodash$1.isArray(list) ? list : [list];
             this.collection = this.collection.concat(list);
 
             this.length = this.collection.length;
@@ -55889,11 +55889,11 @@ function collectionService$1(){
     var slice = Array.prototype.slice;
 
     // Mix in each Underscore method as a proxy to `Collection#models`.
-    lodash.each(methods, function(method) {
+    lodash$1.each(methods, function(method) {
         Collection.prototype[method] = function() {
             var args = slice.call(arguments);
             args.unshift(this.collection);
-            var coll = lodash[method].apply(lodash,args);
+            var coll = lodash$1[method].apply(lodash$1,args);
             return new Collection(coll);
         };
     });
@@ -55912,7 +55912,7 @@ function RandomizerProvider$1(randomizeInt, randomizeRange, Collection){
         };
     }
 
-    lodash.extend(Randomizer.prototype, {
+    lodash$1.extend(Randomizer.prototype, {
         random: random,
         exRandom: exRandom,
         sequential: sequential
@@ -55923,7 +55923,7 @@ function RandomizerProvider$1(randomizeInt, randomizeRange, Collection){
     function random(length, seed, repeat){
         var cache  = this._cache.random;
 
-        if (repeat && !lodash.isUndefined(cache[seed])) {
+        if (repeat && !lodash$1.isUndefined(cache[seed])) {
             return cache[seed];
         }
 
@@ -55939,8 +55939,8 @@ function RandomizerProvider$1(randomizeInt, randomizeRange, Collection){
         var result;
 
         // if needed create collection and set it in seed
-        if (lodash.isUndefined(coll)){
-            coll = cache[seed] = new Collection(lodash.range(length));
+        if (lodash$1.isUndefined(coll)){
+            coll = cache[seed] = new Collection(lodash$1.range(length));
             return coll.first();
         }
 
@@ -55957,7 +55957,7 @@ function RandomizerProvider$1(randomizeInt, randomizeRange, Collection){
         result = coll.next();
 
         // if we've reached the end of the collection (next)
-        if (lodash.isUndefined(result)){
+        if (lodash$1.isUndefined(result)){
             return coll.first();
         } else {
             return result;
@@ -55970,7 +55970,7 @@ function RandomizerProvider$1(randomizeInt, randomizeRange, Collection){
         var result;
 
         // if needed create collection and set it in seed
-        if (lodash.isUndefined(coll)){
+        if (lodash$1.isUndefined(coll)){
             coll = cache[seed] = new Collection(randomizeRange(length));
             return coll.first();
         }
@@ -55989,7 +55989,7 @@ function RandomizerProvider$1(randomizeInt, randomizeRange, Collection){
 
         // if we've reached the end of the collection (next)
         // we should re-randomize
-        if (lodash.isUndefined(result)){
+        if (lodash$1.isUndefined(result)){
             coll = cache[seed] = new Collection(randomizeRange(length));
             return coll.first();
         } else {
@@ -56010,7 +56010,7 @@ function storeProvider$3(Collection){
         this.store = {};
     }
 
-    lodash.extend(Store.prototype, {
+    lodash$1.extend(Store.prototype, {
         create: function create(nameSpace){
             if (this.store[nameSpace]){
                 throw new Error('The name space ' + nameSpace + ' already exists');
@@ -56056,7 +56056,7 @@ function SequenceProvider$2(MixerSequence){
         this.db = db;
     }
 
-    lodash.extend(Sequence.prototype, {
+    lodash$1.extend(Sequence.prototype, {
         // only mix
         next: function(context){
             this.mixerSequence.next(context);
@@ -56116,7 +56116,7 @@ function DatabaseProvider$1(Store, Randomizer, inflate, templateObj, DatabaseSeq
         this.randomizer = new Randomizer();
     }
 
-    lodash.extend(Database.prototype, {
+    lodash$1.extend(Database.prototype, {
         createColl: function(namespace){
             this.store.create(namespace);
         },
@@ -56172,15 +56172,15 @@ function DatabaseProvider$1(Store, Randomizer, inflate, templateObj, DatabaseSeq
             result = query.$templated;
 
             // set flags
-            if (context.global && result.addGlobal) lodash.extend(context.global, result.addGlobal);
+            if (context.global && result.addGlobal) lodash$1.extend(context.global, result.addGlobal);
 
-            if (context.current && result.addCurrent) lodash.extend(context.current, result.addCurrent);
+            if (context.current && result.addCurrent) lodash$1.extend(context.current, result.addCurrent);
 
             return result;
         },
 
         sequence: function(namespace, arr){
-            if (!lodash.isArray(arr)){
+            if (!lodash$1.isArray(arr)){
                 throw new Error('Sequence must be an array.');
             }
             return new DatabaseSequence(namespace, arr, this);
@@ -56199,9 +56199,9 @@ function queryProvider$3(Collection){
         // shortcuts:
         // ****************************
 
-        if (lodash.isFunction(query)) return query(collection);
+        if (lodash$1.isFunction(query)) return query(collection);
 
-        if (lodash.isString(query) || lodash.isNumber(query)) query = {set:query, type:'random'};
+        if (lodash$1.isString(query) || lodash$1.isNumber(query)) query = {set:query, type:'random'};
 
         // filter by set
         // ****************************
@@ -56209,15 +56209,15 @@ function queryProvider$3(Collection){
 
         // filter by data
         // ****************************
-        if (lodash.isString(query.data)){
+        if (lodash$1.isString(query.data)){
             coll = coll.filter(function(q){
                 return q.handle === query.data || (q.data && q.data.handle === query.data);
             });
         }
 
-        if (lodash.isPlainObject(query.data)) coll = coll.where({data:query.data});
+        if (lodash$1.isPlainObject(query.data)) coll = coll.where({data:query.data});
 
-        if (lodash.isFunction(query.data)) coll = coll.filter(query.data);
+        if (lodash$1.isFunction(query.data)) coll = coll.filter(query.data);
 
         // pick by type
         // ****************************
@@ -56250,7 +56250,7 @@ function queryProvider$3(Collection){
                 throw new Error('Unknow query type: ' + query.type);
         }
 
-        if (lodash.isUndefined(coll.at(at))) throw new Error('Query failed, object (' + JSON.stringify(query) +	') not found. If you are trying to apply a template, you should know that they are not supported for inheritance.');
+        if (lodash$1.isUndefined(coll.at(at))) throw new Error('Query failed, object (' + JSON.stringify(query) +	') not found. If you are trying to apply a template, you should know that they are not supported for inheritance.');
 
         return coll.at(at);
     }
@@ -56274,7 +56274,7 @@ function inflateProvider$3(query, $rootScope){
 
     function customize(source){
         // check for a custom function and run it if it exists
-        if (lodash.isFunction(source.customize)){
+        if (lodash$1.isFunction(source.customize)){
             source.customize.apply(source, [source, $rootScope.global]);
         }
         return source;
@@ -56291,10 +56291,10 @@ function inflateProvider$3(query, $rootScope){
 
         if (!depth) throw new Error('Inheritance loop too deep, you can only inherit up to 10 levels down');
 
-        if (!lodash.isPlainObject(source)) throw new Error('You are trying to inflate a non object (' + JSON.stringify(source) + ')');
+        if (!lodash$1.isPlainObject(source)) throw new Error('You are trying to inflate a non object (' + JSON.stringify(source) + ')');
 
         var parent;
-        var child = lodash.cloneDeep(source);
+        var child = lodash$1.cloneDeep(source);
         var inheritObj = child.inherit;
 
         /*
@@ -56325,36 +56325,36 @@ function inflateProvider$3(query, $rootScope){
 
         // extending the child
         // ***********************************
-        if (inheritObj.merge && !lodash.isArray(inheritObj.merge)){
+        if (inheritObj.merge && !lodash$1.isArray(inheritObj.merge)){
             throw new Error('Inheritance error: inherit.merge must be an array.');
         }
 
         // start inflating child (we have to extend selectively...)
-        lodash.each(parent, function(value, key){
+        lodash$1.each(parent, function(value, key){
             var childProp, parentProp;
             // if this key is not set yet, copy it out of the parent
             if (!(key in child)){
-                child[key] = lodash.isFunction(value) ? value : lodash.cloneDeep(value);
+                child[key] = lodash$1.isFunction(value) ? value : lodash$1.cloneDeep(value);
                 return;
             }
 
             // if we have a merge array,
-            if (lodash.indexOf(inheritObj.merge, key) != -1){
+            if (lodash$1.indexOf(inheritObj.merge, key) != -1){
                 childProp = child[key];
                 parentProp = value;
 
-                if (lodash.isArray(childProp)){
-                    if (!lodash.isArray(parentProp)){
+                if (lodash$1.isArray(childProp)){
+                    if (!lodash$1.isArray(parentProp)){
                         throw new Error('Inheritance error: You tried merging an array with an non array (for "' + key + '")');
                     }
                     child[key] = childProp.concat(parentProp);
                 }
 
-                if (lodash.isPlainObject(childProp)){
-                    if (!lodash.isPlainObject(parentProp)){
+                if (lodash$1.isPlainObject(childProp)){
+                    if (!lodash$1.isPlainObject(parentProp)){
                         throw new Error('Inheritance error: You tried merging an object with an non object (for "' + key + '")');
                     }
-                    child[key] = lodash.extend({},parentProp,childProp);
+                    child[key] = lodash$1.extend({},parentProp,childProp);
                 }
 
             }
@@ -56363,7 +56363,7 @@ function inflateProvider$3(query, $rootScope){
         // we want to extend the childs data even if it already exists
         // its ok to shallow extend here (because by definition parent was created for this inflation)
         if (parent.data){
-            child.data = lodash.extend(parent.data, child.data || {});
+            child.data = lodash$1.extend(parent.data, child.data || {});
         }
 
         // Personal customization functions - only if this is the last iteration of inflate
@@ -56417,7 +56417,7 @@ var Database$2 = DatabaseProvider$1(
 );
 
 function randomArr$1(length){
-    return lodash.shuffle(lodash.range(length));
+    return lodash$1.shuffle(lodash$1.range(length));
 }
 
 function randomInt$1(length){
@@ -56470,7 +56470,7 @@ function where(direction, properties, context, sequence){
     do {
         sequence[direction]();
         curr = sequence.current(context);
-    } while (curr && !lodash.callback(properties)(curr.data));
+    } while (curr && !lodash$1.callback(properties)(curr.data));
 }
 
 /*
@@ -56488,7 +56488,7 @@ function createDB$1(script){
     db.add('stimulus', script.stimulusSets || []);
     db.add('media', script.mediaSets || []);
 
-    if (!lodash.isArray(script.sequence)) throw new Error('You must set a sequence array.');
+    if (!lodash$1.isArray(script.sequence)) throw new Error('You must set a sequence array.');
 
     var sequence = db.sequence('trial', script.sequence);
     sequence.go = go$1; // see sequence/goto.js to understand why we are doing this
@@ -56746,7 +56746,7 @@ function parse$1(num){ return parseFloat(num, 10) || 0;}
 
 function adjust_canvas(canvas, settings){
 
-    return lodash.throttle(eventListener, 16);
+    return lodash$1.throttle(eventListener, 16);
 
     function eventListener(event){
         // we put this in a time out because of a latency of orientation change on android devices
@@ -56778,8 +56778,8 @@ function adjust_canvas(canvas, settings){
 }
 
 function getProportions(proportions){
-    if (!lodash.isPlainObject(proportions)) return proportions || 0.8; // by default proportions are 0.8
-    if ([proportions.height, proportions.width].every(lodash.isFinite)) return proportions.height/proportions.width; 
+    if (!lodash$1.isPlainObject(proportions)) return proportions || 0.8; // by default proportions are 0.8
+    if ([proportions.height, proportions.width].every(lodash$1.isFinite)) return proportions.height/proportions.width; 
     throw new Error('The canvas proportions object`s height and a width properties must be numeric');
 }
 
@@ -56818,22 +56818,22 @@ function parse(num){ return parseFloat(num, 10) || 0;}
 function canvasContructor(map, settings){
     var offArr;
 
-    if (!lodash.isPlainObject(map)) throw new Error('canvas(map): You must set a rule map for canvas to work properly');
+    if (!lodash$1.isPlainObject(map)) throw new Error('canvas(map): You must set a rule map for canvas to work properly');
 
     // if settings is undefined return a function that doesn't do anything
     // just so we don't need to make sure that the user modifies the canvas
-    if (lodash.isUndefined(settings)) return lodash.noop;
-    if (!lodash.isPlainObject(settings)) throw new Error('canvas(settings): canvas settings must be an object');
+    if (lodash$1.isUndefined(settings)) return lodash$1.noop;
+    if (!lodash$1.isPlainObject(settings)) throw new Error('canvas(settings): canvas settings must be an object');
 
     // create an array of off functions to undo any changes by this action
-    offArr = lodash.map(settings, function(value,key){
+    offArr = lodash$1.map(settings, function(value,key){
         var rule = map[key];
         if (rule) return on(rule.element, rule.property, value);
         throw new Error('canvas('+ key +'): unknow key in canvas object.');
     });
 
     return function off(){
-        lodash.forEach(offArr, function(fn){fn.call();});
+        lodash$1.forEach(offArr, function(fn){fn.call();});
     };
 }
 
@@ -56842,6 +56842,165 @@ function on(el, property, value){
     el.style[property] = value; // set new value
     return function(){el.style[property] = old;};  // create off function
 }
+
+var stream$2 = createCommonjsModule(function (module) {
+/* eslint-disable */
+(function() {
+var guid = 0, HALT = {};
+function createStream() {
+	function stream() {
+		if (arguments.length > 0 && arguments[0] !== HALT) updateStream(stream, arguments[0]);
+		return stream._state.value
+	}
+	initStream(stream);
+
+	if (arguments.length > 0 && arguments[0] !== HALT) updateStream(stream, arguments[0]);
+
+	return stream
+}
+function initStream(stream) {
+	stream.constructor = createStream;
+	stream._state = {id: guid++, value: undefined, state: 0, derive: undefined, recover: undefined, deps: {}, parents: [], endStream: undefined, unregister: undefined};
+	stream.map = stream["fantasy-land/map"] = map, stream["fantasy-land/ap"] = ap, stream["fantasy-land/of"] = createStream;
+	stream.valueOf = valueOf, stream.toJSON = toJSON, stream.toString = valueOf;
+
+	Object.defineProperties(stream, {
+		end: {get: function() {
+			if (!stream._state.endStream) {
+				var endStream = createStream();
+				endStream.map(function(value) {
+					if (value === true) {
+						unregisterStream(stream);
+						endStream._state.unregister = function(){unregisterStream(endStream);};
+					}
+					return value
+				});
+				stream._state.endStream = endStream;
+			}
+			return stream._state.endStream
+		}}
+	});
+}
+function updateStream(stream, value) {
+	updateState(stream, value);
+	for (var id in stream._state.deps) updateDependency(stream._state.deps[id], false);
+	if (stream._state.unregister != null) stream._state.unregister();
+	finalize(stream);
+}
+function updateState(stream, value) {
+	stream._state.value = value;
+	stream._state.changed = true;
+	if (stream._state.state !== 2) stream._state.state = 1;
+}
+function updateDependency(stream, mustSync) {
+	var state = stream._state, parents = state.parents;
+	if (parents.length > 0 && parents.every(active) && (mustSync || parents.some(changed))) {
+		var value = stream._state.derive();
+		if (value === HALT) return false
+		updateState(stream, value);
+	}
+}
+function finalize(stream) {
+	stream._state.changed = false;
+	for (var id in stream._state.deps) stream._state.deps[id]._state.changed = false;
+}
+
+function combine(fn, streams) {
+	if (!streams.every(valid)) throw new Error("Ensure that each item passed to stream.combine/stream.merge is a stream")
+	return initDependency(createStream(), streams, function() {
+		return fn.apply(this, streams.concat([streams.filter(changed)]))
+	})
+}
+
+function initDependency(dep, streams, derive) {
+	var state = dep._state;
+	state.derive = derive;
+	state.parents = streams.filter(notEnded);
+
+	registerDependency(dep, state.parents);
+	updateDependency(dep, true);
+
+	return dep
+}
+function registerDependency(stream, parents) {
+	for (var i = 0; i < parents.length; i++) {
+		parents[i]._state.deps[stream._state.id] = stream;
+		registerDependency(stream, parents[i]._state.parents);
+	}
+}
+function unregisterStream(stream) {
+	for (var i = 0; i < stream._state.parents.length; i++) {
+		var parent = stream._state.parents[i];
+		delete parent._state.deps[stream._state.id];
+	}
+	for (var id in stream._state.deps) {
+		var dependent = stream._state.deps[id];
+		var index = dependent._state.parents.indexOf(stream);
+		if (index > -1) dependent._state.parents.splice(index, 1);
+	}
+	stream._state.state = 2; //ended
+	stream._state.deps = {};
+}
+
+function map(fn) {return combine(function(stream) {return fn(stream())}, [this])}
+function ap(stream) {return combine(function(s1, s2) {return s1()(s2())}, [stream, this])}
+function valueOf() {return this._state.value}
+function toJSON() {return this._state.value != null && typeof this._state.value.toJSON === "function" ? this._state.value.toJSON() : this._state.value}
+
+function valid(stream) {return stream._state }
+function active(stream) {return stream._state.state === 1}
+function changed(stream) {return stream._state.changed}
+function notEnded(stream) {return stream._state.state !== 2}
+
+function merge(streams) {
+	return combine(function() {
+		return streams.map(function(s) {return s()})
+	}, streams)
+}
+
+function scan(reducer, seed, stream) {
+	var newStream = combine(function (s) {
+		return seed = reducer(seed, s._state.value)
+	}, [stream]);
+
+	if (newStream._state.state === 0) newStream(seed);
+
+	return newStream
+}
+
+function scanMerge(tuples, seed) {
+	var streams = tuples.map(function(tuple) {
+		var stream = tuple[0];
+		if (stream._state.state === 0) stream(undefined);
+		return stream
+	});
+
+	var newStream = combine(function() {
+		var changed = arguments[arguments.length - 1];
+
+		streams.forEach(function(stream, idx) {
+			if (changed.indexOf(stream) > -1) {
+				seed = tuples[idx][1](seed, stream._state.value);
+			}
+		});
+
+		return seed
+	}, streams);
+
+	return newStream
+}
+
+createStream["fantasy-land/of"] = createStream;
+createStream.merge = merge;
+createStream.combine = combine;
+createStream.scan = scan;
+createStream.scanMerge = scanMerge;
+createStream.HALT = HALT;
+
+module["exports"] = createStream;
+
+}());
+});
 
 var css_1 = css$2;
 
@@ -56867,9 +57026,9 @@ function css$2(el, obj){
 
 function setupCanvas(canvas, canvasSettings){
     canvasSettings || (canvasSettings = {});
-    var $resize = stream();
+    var $resize = stream$2();
 
-    if (!lodash.isElement(canvas)) throw new Error('Minno-time: canvas is not a DOM element');
+    if (!lodash$1.isElement(canvas)) throw new Error('Minno-time: canvas is not a DOM element');
 
     canvas.classList.add('minno-canvas');
 
@@ -56881,7 +57040,7 @@ function setupCanvas(canvas, canvasSettings){
         borderWidth			: {element: canvas, property:'borderWidth'}
     };
 
-    var off = canvasContructor(map, lodash.pick(canvasSettings,['background','canvasBackground','borderColor','borderWidth']));
+    var off = canvasContructor(map, lodash$1.pick(canvasSettings,['background','canvasBackground','borderColor','borderWidth']));
 
     canvasSettings.css && css_1(canvas, canvasSettings.css);
 
@@ -56907,7 +57066,7 @@ function setupCanvas(canvas, canvasSettings){
 }
 
 function setup$1(canvas, script){
-    var $resize = setupCanvas(canvas, lodash.get(script, 'settings.canvas', {}));
+    var $resize = setupCanvas(canvas, lodash$1.get(script, 'settings.canvas', {}));
     var db = createDB$1(script);
     setupVars(script);
 
@@ -56937,7 +57096,7 @@ function setupVars(script){
 var srcStack = [];				// an array holding all our sources
 var defStack = [];				// an array holding all the deferreds
 var stackDone = 0;				// the number of sources we have completed downloading
-var getText = lodash.memoize(getXhr);
+var getText = lodash$1.memoize(getXhr);
 
 var loader = {
     // loads a single source
@@ -57009,7 +57168,7 @@ function buildUrl(baseUrl, url, type){
     if (type == 'image' && /^data:image/.test(url)) return url;
 
     // the base url setting may be either a string, or an object with the type as a field
-    if (lodash.isObject(baseUrl)) baseUrl = baseUrl[type];
+    if (lodash$1.isObject(baseUrl)) baseUrl = baseUrl[type];
 
     // make sure base url is set, and add trailing slash if needed
     if (!baseUrl) baseUrl = '';
@@ -57027,8 +57186,8 @@ function preloadScript(script, baseUrl){
     return loader;
 
     function loadMedia(media){
-        if (!lodash.isUndefined(media.image)) loader.load(buildUrl(baseUrl, media.image, 'image'),'image');
-        if (!lodash.isUndefined(media.template)) loader.load(buildUrl(baseUrl, media.template,'template'),'template');
+        if (!lodash$1.isUndefined(media.image)) loader.load(buildUrl(baseUrl, media.image, 'image'),'image');
+        if (!lodash$1.isUndefined(media.template)) loader.load(buildUrl(baseUrl, media.template,'template'),'template');
     }
 }
 
@@ -57037,24 +57196,24 @@ function preloadScript(script, baseUrl){
  **/
 function getScriptMedia(script){
     var mediaSets = script.mediaSets;
-    var stimulusSets = lodash.map(script.stimulusSets, getStimMedia);
-    var trialSets = lodash.map(script.trialSets, getTrialMedia);
-    var sequence = lodash.filter(script.sequence,notMixer).map(getTrialMedia);
+    var stimulusSets = lodash$1.map(script.stimulusSets, getStimMedia);
+    var trialSets = lodash$1.map(script.trialSets, getTrialMedia);
+    var sequence = lodash$1.filter(script.sequence,notMixer).map(getTrialMedia);
 
-    return lodash.flattenDeep([mediaSets, stimulusSets, trialSets, sequence]).filter(notUndefined);
+    return lodash$1.flattenDeep([mediaSets, stimulusSets, trialSets, sequence]).filter(notUndefined);
 } 
 
 function getTrialMedia(trial){
     return [
-        lodash.map(trial.input, function(input){ return input.element; }),
-        lodash.map(trial.stimuli, getStimMedia),
-        lodash.map(trial.layout, getStimMedia)
+        lodash$1.map(trial.input, function(input){ return input.element; }),
+        lodash$1.map(trial.stimuli, getStimMedia),
+        lodash$1.map(trial.layout, getStimMedia)
     ];
 }
 
 function getStimMedia(stim){ return stim.media; }
 function notMixer(trial){ return !trial.mixer; }
-function notUndefined(val){ return !lodash.isUndefined(val); }
+function notUndefined(val){ return !lodash$1.isUndefined(val); }
 
 function preloadPhase$1(canvas, script, $messages){
     var preloader = preloadScript(script, script.settings.base_url);
@@ -57090,7 +57249,7 @@ function preloadPhase$1(canvas, script, $messages){
 }
 
 function mouseEvents$1(eventName,inputObj, canvas){
-    var $listener = stream();
+    var $listener = stream$2();
     var element = inputObj.element;
 
     if (element){
@@ -57132,7 +57291,7 @@ var keyDownArr = [];
 document.addEventListener('keyup',function(e){ keyDownArr[e.which] = false; });// unset flag to prevent multi pressing of a key 
 
 function keypressed$1(inputObj){
-    var $listener = stream();
+    var $listener = stream$2();
 
     // make sure key is an array
     var keys = Array.isArray(inputObj.key) ? inputObj.key : [inputObj.key];
@@ -57160,7 +57319,7 @@ function keypressed$1(inputObj){
 }
 
 function keyup$1(inputObj){
-    var $listener = stream();
+    var $listener = stream$2();
     // make sure key is array
     var keys = Array.isArray(inputObj.key) ? inputObj.key : [inputObj.key];
 
@@ -57194,18 +57353,18 @@ function keyup$1(inputObj){
  */
 function simpleRandomize(properties, context){
 
-    if (lodash.isArray(properties)) {
+    if (lodash$1.isArray(properties)) {
         var index = Math.floor(Math.random()*properties.length);
         return properties[index];
     }
 
-    if (lodash.isFunction(properties)) {
+    if (lodash$1.isFunction(properties)) {
         return properties.call(context);
     }
 
     // this must be after the test for arrays and functions, because they are considered objects too
-    if (lodash.isPlainObject(properties)) {
-        if (!lodash.isNumber(properties.min) || !lodash.isNumber(properties.max) || properties.min > properties.max) {
+    if (lodash$1.isPlainObject(properties)) {
+        if (!lodash$1.isNumber(properties.min) || !lodash$1.isNumber(properties.max) || properties.min > properties.max) {
             throw new Error('randomization objects need both a max and a minimum property, also max has to be larger than min');
         }
         return properties.min + (properties.max - properties.min) * Math.random();
@@ -57216,7 +57375,7 @@ function simpleRandomize(properties, context){
 }
 
 function timeout$1(inputObj){
-    var $listener = stream();
+    var $listener = stream$2();
     var timeoutID;
     var duration = simpleRandomize(inputObj.duration) || 0;
 
@@ -57257,11 +57416,11 @@ function inputBinder(inputObj, canvas){
          * Shortcuts
          */
 
-        case 'enter'	: return keypressed$1(lodash.assign({key:13},inputObj));
+        case 'enter'	: return keypressed$1(lodash$1.assign({key:13},inputObj));
 
-        case 'space'	: return keypressed$1(lodash.assign({key:32},inputObj));
+        case 'space'	: return keypressed$1(lodash$1.assign({key:32},inputObj));
 
-        case 'esc'	    : return keypressed$1(lodash.assign({key:27},inputObj));
+        case 'esc'	    : return keypressed$1(lodash$1.assign({key:27},inputObj));
 
         case 'leftTouch'	:
             inputObj.element = createElement(inputObj.css, {
@@ -57337,24 +57496,24 @@ function createListener$1(inputObj,canvas){
 function getListener(inputObj, canvas){
     var $listener;
 
-    if (lodash.isFunction(inputObj)) return inputObj(inputObj, canvas, stream);
+    if (lodash$1.isFunction(inputObj)) return inputObj(inputObj, canvas, stream$2);
 
-    if (lodash.isPlainObject(inputObj)) {
-        if (lodash.isString(inputObj.on)) return inputBinder(inputObj,canvas,stream);
+    if (lodash$1.isPlainObject(inputObj)) {
+        if (lodash$1.isString(inputObj.on)) return inputBinder(inputObj,canvas,stream$2);
 
-        if (lodash.isFunction(inputObj.on )) $listener = inputObj.on(inputObj,canvas,stream);
-        if (lodash.isFunction(inputObj.off)) $listener.end.map(inputObj.off);
+        if (lodash$1.isFunction(inputObj.on )) $listener = inputObj.on(inputObj,canvas,stream$2);
+        if (lodash$1.isFunction(inputObj.off)) $listener.end.map(inputObj.off);
     }
         
     throw new Error('Input must only contain objects and functions, do you have an undefined value?');
 }
 
 function logObj(obj){
-    return lodash.isFunction(obj) ? obj.toString() : JSON.stringify(obj);
+    return lodash$1.isFunction(obj) ? obj.toString() : JSON.stringify(obj);
 }
 
 
-function isStream(stream$$1) {return stream$$1._state; }
+function isStream(stream) {return stream._state; }
 
 var now = window.performance.now
     ? window.performance.now.bind(window.performance)
@@ -57468,7 +57627,7 @@ function setSize$1(el, stimulus){
 }
 
 function isSet(prop, obj){return prop in obj;}
-function isWordMedia(media){ return lodash.isString(media) || lodash.isString(media.word); }
+function isWordMedia(media){ return lodash$1.isString(media) || lodash$1.isString(media.word); }
 
 var YCLASS = 'minno-stimulus-center-y';
 var XCLASS = 'minno-stimulus-center-x';
@@ -57636,8 +57795,8 @@ function stimCollection(trial, canvas){
     validateStimuli('layout', trial._source);
 
     var source = trial._source;
-    var stimuli = lodash.map(source.stimuli, toStim);
-    var layout = lodash.map(source.layout, toLayout).map(toStim);
+    var stimuli = lodash$1.map(source.stimuli, toStim);
+    var layout = lodash$1.map(source.layout, toLayout).map(toStim);
     var ready = Promise.all(stimuli.concat(layout).map(function(stim){return stim.init();}));
 
     var self = {
@@ -57699,8 +57858,8 @@ var conditionHash = {
 };
 
 function getConditonFn(condition){
-    if (lodash.isFunction(condition)) return condition;
-    if (lodash.isFunction(conditionHash[condition.type])) return conditionHash[condition.type];
+    if (lodash$1.isFunction(condition)) return condition;
+    if (lodash$1.isFunction(conditionHash[condition.type])) return conditionHash[condition.type];
     throw new Error('Unknown condition type: ' + JSON.stringify(condition));
 }
 
@@ -57724,12 +57883,12 @@ function inputEqualsStim(inputData, condition, trial){
 }
 
 function trialEquals(inputData, condition, trial){
-    if (lodash.isUndefined(condition.property) || lodash.isUndefined(condition.value)) throw new Error('trialEquals requires both "property" and "value" to be defined');
+    if (lodash$1.isUndefined(condition.property) || lodash$1.isUndefined(condition.value)) throw new Error('trialEquals requires both "property" and "value" to be defined');
     return condition.value === trial.data[condition.property];
 }
 
 function inputEqualsGlobal(inputData, condition){
-    if (lodash.isUndefined(condition.property)) throw new Error('inputEqualsGlobal requires "property" to be defined');
+    if (lodash$1.isUndefined(condition.property)) throw new Error('inputEqualsGlobal requires "property" to be defined');
     return inputData.handle === global$5[condition.property];
 }
 
@@ -57833,279 +57992,6 @@ function conditionsEvaluate(conditions, inputData, trial){
     }
 }
 
-var fastdom$2 = createCommonjsModule(function (module) {
-!(function(win) {
-
-/**
- * FastDom
- *
- * Eliminates layout thrashing
- * by batching DOM read/write
- * interactions.
- *
- * @author Wilson Page <wilsonpage@me.com>
- * @author Kornel Lesinski <kornel.lesinski@ft.com>
- */
-
-var debug = function() {};
-
-/**
- * Normalized rAF
- *
- * @type {Function}
- */
-var raf = win.requestAnimationFrame
-  || win.webkitRequestAnimationFrame
-  || win.mozRequestAnimationFrame
-  || win.msRequestAnimationFrame
-  || function(cb) { return setTimeout(cb, 16); };
-
-/**
- * Initialize a `FastDom`.
- *
- * @constructor
- */
-function FastDom() {
-  var self = this;
-  self.reads = [];
-  self.writes = [];
-  self.raf = raf.bind(win); // test hook
-  
-}
-
-FastDom.prototype = {
-  constructor: FastDom,
-
-  /**
-   * Adds a job to the read batch and
-   * schedules a new frame if need be.
-   *
-   * @param  {Function} fn
-   * @param  {Object} ctx the context to be bound to `fn` (optional).
-   * @public
-   */
-  measure: function(fn, ctx) {
-    var task = !ctx ? fn : fn.bind(ctx);
-    this.reads.push(task);
-    scheduleFlush(this);
-    return task;
-  },
-
-  /**
-   * Adds a job to the
-   * write batch and schedules
-   * a new frame if need be.
-   *
-   * @param  {Function} fn
-   * @param  {Object} ctx the context to be bound to `fn` (optional).
-   * @public
-   */
-  mutate: function(fn, ctx) {
-    var task = !ctx ? fn : fn.bind(ctx);
-    this.writes.push(task);
-    scheduleFlush(this);
-    return task;
-  },
-
-  /**
-   * Clears a scheduled 'read' or 'write' task.
-   *
-   * @param {Object} task
-   * @return {Boolean} success
-   * @public
-   */
-  clear: function(task) {
-    return remove(this.reads, task) || remove(this.writes, task);
-  },
-
-  /**
-   * Extend this FastDom with some
-   * custom functionality.
-   *
-   * Because fastdom must *always* be a
-   * singleton, we're actually extending
-   * the fastdom instance. This means tasks
-   * scheduled by an extension still enter
-   * fastdom's global task queue.
-   *
-   * The 'super' instance can be accessed
-   * from `this.fastdom`.
-   *
-   * @example
-   *
-   * var myFastdom = fastdom.extend({
-   *   initialize: function() {
-   *     // runs on creation
-   *   },
-   *
-   *   // override a method
-   *   measure: function(fn) {
-   *     // do extra stuff ...
-   *
-   *     // then call the original
-   *     return this.fastdom.measure(fn);
-   *   },
-   *
-   *   ...
-   * });
-   *
-   * @param  {Object} props  properties to mixin
-   * @return {FastDom}
-   */
-  extend: function(props) {
-    if (typeof props != 'object') throw new Error('expected object');
-
-    var child = Object.create(this);
-    mixin(child, props);
-    child.fastdom = this;
-
-    // run optional creation hook
-    if (child.initialize) child.initialize();
-
-    return child;
-  },
-
-  // override this with a function
-  // to prevent Errors in console
-  // when tasks throw
-  catch: null
-};
-
-/**
- * Schedules a new read/write
- * batch if one isn't pending.
- *
- * @private
- */
-function scheduleFlush(fastdom) {
-  if (!fastdom.scheduled) {
-    fastdom.scheduled = true;
-    fastdom.raf(flush.bind(null, fastdom));
-    
-  }
-}
-
-/**
- * Runs queued `read` and `write` tasks.
- *
- * Errors are caught and thrown by default.
- * If a `.catch` function has been defined
- * it is called instead.
- *
- * @private
- */
-function flush(fastdom) {
-  var writes = fastdom.writes;
-  var reads = fastdom.reads;
-  var error;
-
-  try {
-    debug('flushing reads', reads.length);
-    runTasks(reads);
-    debug('flushing writes', writes.length);
-    runTasks(writes);
-  } catch (e) { error = e; }
-
-  fastdom.scheduled = false;
-
-  // If the batch errored we may still have tasks queued
-  if (reads.length || writes.length) scheduleFlush(fastdom);
-
-  if (error) {
-    debug('task errored', error.message);
-    if (fastdom.catch) fastdom.catch(error);
-    else throw error;
-  }
-}
-
-/**
- * We run this inside a try catch
- * so that if any jobs error, we
- * are able to recover and continue
- * to flush the batch until it's empty.
- *
- * @private
- */
-function runTasks(tasks) {
-  var task; while (task = tasks.shift()) task();
-}
-
-/**
- * Remove an item from an Array.
- *
- * @param  {Array} array
- * @param  {*} item
- * @return {Boolean}
- */
-function remove(array, item) {
-  var index = array.indexOf(item);
-  return !!~index && !!array.splice(index, 1);
-}
-
-/**
- * Mixin own properties of source
- * object into the target.
- *
- * @param  {Object} target
- * @param  {Object} source
- */
-function mixin(target, source) {
-  for (var key in source) {
-    if (source.hasOwnProperty(key)) target[key] = source[key];
-  }
-}
-
-// There should never be more than
-// one instance of `FastDom` in an app
-var exports = win.fastdom = (win.fastdom || new FastDom()); // jshint ignore:line
-
-// Expose to CJS & AMD
-if ((typeof undefined) == 'function') undefined(function() { return exports; });
-else module.exports = exports;
-
-})( typeof window !== 'undefined' ? window : commonjsGlobal);
-});
-
-var glob$1 = window.piGlobal || (window.piGlobal = {});
-
-function global$7(){
-    return glob$1;
-}
-
-/**
- *
- * This whole module taken from piManager
- *
- */
-
-function canvasContructor$1(map, settings){
-    var offArr;
-
-    if (!lodash$1.isPlainObject(map)) throw new Error('canvas(map): You must set a rule map for canvas to work properly');
-
-    // if settings is undefined return a function that doesn't do anything
-    // just so we don't need to make sure that the user modifies the canvas
-    if (lodash$1.isUndefined(settings)) return lodash$1.noop;
-    if (!lodash$1.isPlainObject(settings)) throw new Error('canvas(settings): canvas settings must be an object');
-
-    // create an array of off functions to undo any changes by this action
-    offArr = lodash$1.map(settings, function(value,key){
-        var rule = map[key];
-        if (rule) return on$1(rule.element, rule.property, value);
-        throw new Error('canvas('+ key +'): unknow key in canvas object.');
-    });
-
-    return function off(){
-        lodash$1.forEach(offArr, function(fn){fn.call();});
-    };
-}
-
-function on$1(el, property, value){
-    var old = el.style[property]; // save old value
-    el.style[property] = value; // set new value
-    return function(){el.style[property] = old;};  // create off function
-}
-
 var actions = {
     /*
      * Stimulus actions
@@ -58174,7 +58060,7 @@ var actions = {
 
     resetTimer: function(action,eventData,trial){
         // when to reset timer
-        action.immidiate ? reset() :  fastdom$2.mutate(reset);
+        action.immidiate ? reset() :  fastdom.mutate(reset);
 
         function reset(){
             eventData.latency = 0;
@@ -58197,10 +58083,10 @@ var actions = {
     setGlobalAttr: function(action){
         switch (typeof action.setter){
             case 'function':
-                action.setter.apply(null,[global$7(), action]);
+                action.setter.apply(null,[global$3(), action]);
                 break;
             case 'object':
-                lodash$1.extend(global$7(), action.setter);
+                lodash$1.extend(global$3(), action.setter);
                 break;
             default:
                 throw new Error('setGlobalAttr requires a "setter" property');
@@ -58222,7 +58108,7 @@ var actions = {
         };
 
         // settings activator
-        var off = canvasContructor$1(map, lodash$1.pick(action,['background','canvasBackground','borderColor','borderWidth']));
+        var off = canvasContructor(map, lodash$1.pick(action,['background','canvasBackground','borderColor','borderWidth']));
         trial.$end.map(off);
     },
 
@@ -58297,10 +58183,10 @@ function applyActions(actions$$1, eventData, trial){
     // marks whether this is the final action to take
     var endTrial = false;
 
-    actions$$1 = lodash.isArray(actions$$1) ? actions$$1 : [actions$$1];
+    actions$$1 = lodash$1.isArray(actions$$1) ? actions$$1 : [actions$$1];
 
-    lodash.forEach(actions$$1,function(action){
-        var actionFn = lodash.isFunction(action) ? action : actions[action.type];
+    lodash$1.forEach(actions$$1,function(action){
+        var actionFn = lodash$1.isFunction(action) ? action : actions[action.type];
         if (!actionFn) throw new Error('unknown action: ' + action.type);
 
         // the only reason to halt action activation is the endTrial command
@@ -58369,13 +58255,13 @@ function validateInteractions(interactions){
     if (!Array.isArray(interactions)) throw new Error('Interactions must be an array');
     if (!interactions.length) throw new Error('There are no interactions defined');
 
-    if (!interactions.every(lodash.isPlainObject)) throw new Error('Interactions must be plain objects');
+    if (!interactions.every(lodash$1.isPlainObject)) throw new Error('Interactions must be plain objects');
     if (!interactions.every(isValidProp('conditions'))) throw new Error('Conditions must be either an array or a function');
     if (!interactions.every(isValidProp('actions'))) throw new Error('Actions must be either an array or a function');
 
     function isValidProp(prop){
         return function(interaction) {
-            return Array.isArray(interaction[prop]) || lodash.isFunction(interaction[prop]);
+            return Array.isArray(interaction[prop]) || lodash$1.isFunction(interaction[prop]);
         };
     }
 }
@@ -58391,16 +58277,16 @@ function Trial$1(source, canvas, settings){
     this.settings = settings;
     this._source = source;
 
-    this.$logs = stream();
-    this.$messages = stream();
-    this.$events = stream();
+    this.$logs = stream$2();
+    this.$messages = stream$2();
+    this.$events = stream$2();
     this.$end = this.$events.end;
 
     // make sure we always have a data container
     this.data = source.data || {};
 
     // create a uniqueId for this trial
-    this._id = lodash.uniqueId('trial_');
+    this._id = lodash$1.uniqueId('trial_');
     this.counter = gid++;
 
     this.input = interfaceFn(this.$events, canvas);
@@ -58412,7 +58298,7 @@ function Trial$1(source, canvas, settings){
     this._next = ['next',{}];
 }
 
-lodash.extend(Trial$1.prototype,{
+lodash$1.extend(Trial$1.prototype,{
     start: function(){
         var trial = this;
 
@@ -58424,7 +58310,7 @@ lodash.extend(Trial$1.prototype,{
                 .map(interactions$1(trial));
 
             // activate input
-            lodash.forEach(trial._source.input, trial.input.add); // add each input
+            lodash$1.forEach(trial._source.input, trial.input.add); // add each input
             trial.input.resetTimer(); // reset the interface timer so that event latencies are relative to now.
             // start running
             trial.$events({type:'begin',latency:0});
@@ -58443,8 +58329,8 @@ lodash.extend(Trial$1.prototype,{
         if (this.data.alias) { return this.data.alias; }
 
         // otherwise try using the set we inherited from
-        if (lodash.isString(this._source.inherit)) return this._source.inherit;
-        if (lodash.isPlainObject(this._source.inherit)) return this._source.inherit.set;
+        if (lodash$1.isString(this._source.inherit)) return this._source.inherit;
+        if (lodash$1.isPlainObject(this._source.inherit)) return this._source.inherit.set;
 
         // we're out of options here
     }
@@ -58452,7 +58338,7 @@ lodash.extend(Trial$1.prototype,{
 
 function addTrialDetails(trial){
     return function(event){
-        return lodash.assign(event, {
+        return lodash$1.assign(event, {
             trialId     : trial._id,
             counter     : trial.counter
         });
@@ -58471,8 +58357,8 @@ function nextTrial$1(db, settings, goto){
 
     if (!source) return {done:true};
 
-    source.stimuli = lodash.map(source.stimuli || [], buildStim, context);
-    source.layout = lodash.map(source.layout || [], buildStim, context);
+    source.stimuli = lodash$1.map(source.stimuli || [], buildStim, context);
+    source.layout = lodash$1.map(source.layout || [], buildStim, context);
 
     context.trialData = null;
 
@@ -58481,8 +58367,8 @@ function nextTrial$1(db, settings, goto){
     function buildMedia(stim, prop, context){
         var val = stim[prop];
 
-        if (lodash.isUndefined(val)) return false;
-        if (lodash.isString(val)) val = {word: val};
+        if (lodash$1.isUndefined(val)) return false;
+        if (lodash$1.isString(val)) val = {word: val};
 
         val = db.inflate('media', val, context);
 
@@ -58493,7 +58379,7 @@ function nextTrial$1(db, settings, goto){
         if (val.template){
             // @TODO: remove dependency on requirejs
             val.inlineTemplate = requirejs('text!' + buildUrl(settings.base_url, val.template, 'template'));
-            val.inlineTemplate = lodash.template(val.inlineTemplate)(context);
+            val.inlineTemplate = lodash$1.template(val.inlineTemplate)(context);
         }
 
         stim[prop] = val;
@@ -58527,7 +58413,7 @@ function createLogs$3($sourceLogs, settings, defaultLogMap){
 function transformLogs(action,eventData,trial){
     var global = window.piGlobal;
     var trialData = trial.data, inputData = eventData, logStack = global.current.logs;
-    var fullpath = lodash.get(trial, 'settings.logger.fullpath', false);
+    var fullpath = lodash$1.get(trial, 'settings.logger.fullpath', false);
 
     var stimList = trial.stimulusCollection.getStimlist();
     var mediaList = trial.stimulusCollection.getMedialist({fullpath:fullpath});
@@ -58544,18 +58430,30 @@ function transformLogs(action,eventData,trial){
     };
 }
 
+/**
+ * run the task
+ * Essentialy wiring up all the play phase stuff
+ * @TODO: document this function, its super complicated
+ **/
+
 function playerPhase(sink){
 
     var canvas = sink.canvas;
     var db = sink.db;
     var settings = sink.settings;
+    var global = global$3();
 
-    var $source = stream(); // a stream of trial POJO
+    var $source = stream$2(); // a stream of trial POJO
     var $trial = $source.map(activateTrial());
-    var $sourceLogs = stream();
-    var $messages = stream();
-    var $logs = createLogs$3($sourceLogs, composeLoggerSettings(sink.script, global$3()), transformLogs);
-    var onDone = lodash.get(settings, 'hooks.endTask', settings.onEnd || lodash.noop);
+    var $sourceLogs = stream$2();
+    var $messages = stream$2();
+    var $logs = createLogs$3($sourceLogs, composeLoggerSettings(sink.script, global), transformLogs);
+    var onDone = lodash$1.get(settings, 'hooks.endTask', settings.onEnd || lodash$1.noop);
+
+    // expose logs on current
+    $logs.map(function(log){
+        global.current.logs.push(log);        
+    });
 
     $source.end
         .map($trial.end)
@@ -58563,7 +58461,7 @@ function playerPhase(sink){
         .map(clearCanvas)
         .map(onDone);
 
-    return lodash.extend({
+    return lodash$1.extend({
         $trial:$trial, 
         end: $source.end.bind(null,true), 
         $logs: $logs,
@@ -58633,8 +58531,8 @@ function setupDebug(trial){
 
 // create metaDeta to add to post
 function composeLoggerSettings(script, global){
-    var loggerSettings = lodash.assign({}, lodash.get(script, 'settings.logger'));
-    var metaData = lodash.assign({taskName:script.name}, global.$meta, loggerSettings.metaData);
+    var loggerSettings = lodash$1.assign({}, lodash$1.get(script, 'settings.logger'));
+    var metaData = lodash$1.assign({taskName:script.name}, global.$meta, loggerSettings.metaData);
     loggerSettings.metaData = metaData;
     return loggerSettings;
 }
@@ -58706,7 +58604,7 @@ module$14.config(['taskActivateProvider', function(activateProvider){
     activateProvider.set('allowLeaving', allowLeaving);
 }]);
 
-function canvasContructor$2(map, settings){
+function canvasContructor$1(map, settings){
     var offArr;
 
     if (!lodash.isPlainObject(map)){
@@ -58727,7 +58625,7 @@ function canvasContructor$2(map, settings){
     offArr = lodash.map(settings, function(value,key){
         var rule = map[key];
         if (rule){
-            return on$2(rule.element, rule.property, value);
+            return on$1(rule.element, rule.property, value);
         } else {
             throw new Error('canvas('+ key +'): unknow key in canvas object.');
         }
@@ -58738,7 +58636,7 @@ function canvasContructor$2(map, settings){
     };
 }
 
-function on$2($el, property, value){
+function on$1($el, property, value){
     var old = $el.css(property); // save old value
     $el.css(property, value); // set new value
     return lodash.bind($el.css, $el, property, old); // create off function: bind $el.css(property, old)
@@ -58755,7 +58653,7 @@ function managerCanvasService($rootElement, $document){
         fontColor 			: {element: $rootElement, property:'color'}
     };
 
-    return lodash.bind(canvasContructor$2, null, map);
+    return lodash.bind(canvasContructor$1, null, map);
 }
 
 var module$15 = angular.module('pi.canvas',[]);
