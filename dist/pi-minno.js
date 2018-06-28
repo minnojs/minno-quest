@@ -59363,10 +59363,23 @@ function managerLoadService($q, getScript){
 
     function managerLoadScript(source){
         var promise = lodash.isString(source) ? getScript(source) : source;
-        return $q.when(promise);
+        return $q.when(promise).then(normalizeTasks);
     }
 
     return managerLoadScript;
+}
+
+// if we loaded a non manager - play it!
+function normalizeTasks(script){
+    if (!script.type || script.type == 'manager') return script;
+    return {
+        type: 'manager',
+        settings: {logger:{type:'debug'}},
+        current: {},
+        sequence: [
+            {type:script.type, script:script}
+        ]
+    };
 }
 
 function getScriptProvider(){
@@ -59668,34 +59681,6 @@ function directive$12($q, $injector,piConsole){
     };
 }
 
-function directive$13(){
-    return {
-        priority: 1000,
-        template: '<div pi-manager="script"></div>',
-        compile: function(){
-            return {
-                // this need to be pre so that the wrapping directive gets rendered before the template
-                pre: function($scope, $element, $attr){
-                    var taskSource;
-                    var source = $attr.piManagerTask;
-                    try{
-                        taskSource = $scope.$eval(source);
-                    } catch(e){/* empty catch */}
-
-                    var task  = taskSource ? taskSource : {scriptUrl:source};
-
-                    $scope.script = {
-                        sequence: [
-                            {script:['done', 'managerBeforeUnload', function(done, beforeUnload){beforeUnload.deactivate(); done();}]},
-                            task
-                        ]
-                    };
-                }
-            };
-        }
-    };
-}
-
 piLinkDirective.$inject = ['managerBeforeUnload'];
 function piLinkDirective(managerBeforeUnload){
     return {
@@ -59723,7 +59708,6 @@ module$13.service('managerTaskLoad', taskLoadService);
 module$13.factory('managerBeforeUnload', beforeunloadFactory);
 module$13.constant('managerInjectStyle', injectStyle);
 module$13.directive('piManager', directive$12);
-module$13.directive('piManagerTask', directive$13);
 
 module$13.directive('piLink', piLinkDirective);
 

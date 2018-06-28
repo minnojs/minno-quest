@@ -463,11 +463,11 @@ describe('manager', function(){
         }));
 
 
-        it('should return a promise for a string', function(){
+        it('should return a promise when passed a string', function(){
             load('my/url').then(spy);
             $rootScope.$digest();
             expect(spy).not.toHaveBeenCalled();
-            def.resolve();
+            def.resolve({});
             $rootScope.$digest();
             expect(spy).toHaveBeenCalled();
         });

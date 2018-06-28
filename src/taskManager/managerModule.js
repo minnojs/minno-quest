@@ -12,7 +12,6 @@ import managerTaskLoadService from './managerTaskLoadService';
 import beforeUnloadFactory from './beforeUnloadFactory';
 import injectStyle from './injectStyle';
 import managerDirective from './managerDirective';
-import managerTaskDirective from './managerTaskDirective';
 import piLinkDirective from './piLinkDirective';
 
 export default module;
@@ -33,6 +32,5 @@ module.service('managerTaskLoad', managerTaskLoadService);
 module.factory('managerBeforeUnload', beforeUnloadFactory);
 module.constant('managerInjectStyle', injectStyle);
 module.directive('piManager', managerDirective);
-module.directive('piManagerTask', managerTaskDirective);
 
 module.directive('piLink', piLinkDirective);
