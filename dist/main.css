@@ -5937,9 +5937,13 @@ button.close {
   position: absolute;
   right: 15px;
   margin: 8px 0; }
-  [dir="rtl"].default-skin [piq-page] .page-buttons .page-decline, .default-skin [piq-page] .page-buttons .page-prev, .demo-skin [piq-page] .page-buttons .page-decline, .demo-skin [piq-page] .page-buttons .page-prev {
-    right: auto;
-    left: 15px; }
+
+[dir="rtl"] .default-skin [piq-page] .page-buttons .page-decline,
+[dir="rtl"] .default-skin [piq-page] .page-buttons .page-prev,
+[dir="rtl"] .demo-skin [piq-page] .page-buttons .page-decline,
+[dir="rtl"] .demo-skin [piq-page] .page-buttons .page-prev {
+  right: auto;
+  left: 15px; }
 
 .simple-skin [piq-page] .page-buttons {
   text-align: right; }
