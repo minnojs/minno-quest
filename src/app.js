@@ -19,15 +19,13 @@ window.require = require;
 window.requirejs = requirejs;
 window.define = define;
 
-var submodules = [
+var app = angular.module('piApp', [
     questModule.name,
     messageModule.name,
     managerModule.name,
     animationModule.name,
     consoleModule.name
-];
-
-var app = angular.module('piApp', submodules);
+]);
 
 // setup the global variable
 app.run(['$rootScope', '$rootElement', '$parse', '$window', function($rootScope, $rootElement, $parse, $window){
@@ -39,9 +37,7 @@ app.run(['$rootScope', '$rootElement', '$parse', '$window', function($rootScope,
     window.piGlobal || (window.piGlobal = {});
     $rootScope.global = window.piGlobal;
 
-    if (piGlobal){
-        _.extend($rootScope.global, piGlobal);
-    }
+    if (piGlobal) _.extend($rootScope.global, piGlobal);
 }]);
 
 // monkey patch an IOS8 problem
@@ -61,7 +57,6 @@ app.config(['$provide', function($provide) {
             };
         }
     }
-
 
 
     // Minification-safe hack.

@@ -1,9 +1,3 @@
-/**
- * @name: managerLoadService
- * @returns {$q} A $q.promise that returns the target script
- */
-
-
 import _ from 'lodash';
 
 managerLoadService.$inject = ['$q', 'managerGetScript'];

@@ -2,7 +2,7 @@ import factory from './APIConstructor';
 export default api;
 
 var api = factory({
-    type: 'minno-time',
+    type: 'time',
     settings: {
         logger:{pulse:20}
     },

@@ -1,39 +1,30 @@
 /**
- * Should manage various tasks.
- * For now it should simply load and activate a questionnaire.
- * Eventually it should be able to take a sequence of tasks and run them.
  * @name  managerDirctive
  * @return {directive}
  */
-
-
 import _ from 'lodash';
 
 managerControler.$inject = ['$scope', 'managerService', 'managerLoad', 'piConsole'];
 function managerControler($scope, ManagerService, managerLoad, piConsole){
     this.init = init;
 
-
     function init(source){
         var ctrl = this;
         var taskSource;
 
-        try {
-            taskSource = $scope.$eval(source); // if source is a plain string eval returns undefined so we want to load this as a url
-        } catch(e){
-            // don't do anything. This means that the source is not compilable...
-        } finally {
-            taskSource || (taskSource = source);
+        if (!source) return;
+
+        if (_.isString(source)){
+            // if source is a plain string eval returns undefined so we want to load this as a url 
+            try { taskSource = $scope.$eval(source); }
+            catch(e){ /* don't do anything. This means that the source is not compilable... */ } 
+            finally { taskSource || (taskSource = source); }
         }
+        else taskSource = source;
 
         managerLoad(taskSource).then(success,error);
 
         function success(script){
-            // takes taskSource and returns a path or undefined
-            function getBasePath(path){
-                if (!_.isString(path)) return;
-                return path.substring(0, path.lastIndexOf('/'));
-            }
 
             // keep the script on scope
             $scope.script = script;
@@ -54,6 +45,11 @@ function managerControler($scope, ManagerService, managerLoad, piConsole){
                 tags:['manager'],
                 error:e
             });
+        }
+        
+        function getBasePath(path){
+            if (!_.isString(path)) return;
+            return path.substring(0, path.lastIndexOf('/'));
         }
     }
 }
