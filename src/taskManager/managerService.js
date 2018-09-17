@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import Logger from './logger/managerLogger';
 import createLogs from './task/tasks/createLogs';
+import getUrlParameters from './getUrlParameters';
 
 managerService.$inject = ['$rootScope', '$q', 'managerSequence', 'managerTaskLoad', '$injector', 'piConsole'];
 function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector, piConsole){
@@ -20,12 +21,12 @@ function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector, pi
      * @param  {Object} script The manager script to be parsed
      * @return {Object}
      */
-    function manager($scope, script){
+    function Manager($scope, script){
         var self = this;
         var settings = script.settings || {};
 
         // make sure this works without a new statement
-        if (!(this instanceof manager)) return new manager($scope,script);
+        if (!(this instanceof Manager)) return new Manager($scope,script);
 
         this.$scope = $scope;
         this.script = script;
@@ -57,7 +58,7 @@ function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector, pi
         $scope.$on('manager:prev', function(){self.prev();});
     }
 
-    _.extend(manager.prototype, {
+    _.extend(Manager.prototype, {
         next: function(target){
             this.sequence.next();
             this.load(target);
@@ -101,7 +102,7 @@ function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector, pi
         }
     });
 
-    return manager;
+    return Manager;
 
     // just to separate the activation of all the settings: KISS
     function setup($scope, settings){
@@ -137,7 +138,10 @@ function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector, pi
 
         // connect piConsole to settings
         piConsole.settings = settings.DEBUG || {};
+
+        $scope.global.$url = getUrlParameters();
     }
 }
 
 export default managerService;
+

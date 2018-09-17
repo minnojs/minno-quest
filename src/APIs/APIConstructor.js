@@ -99,7 +99,8 @@ function APIconstructor(options){
 
             /**
              * Check if we already have a reference to the logger, if not - keep the logged object on ice
-             * See taskManager/logger/liftSave for the rational here
+             * See taskManager/task/tasks/createLogs.js for the rational here
+             *
              */
             return script._save ? script._save(obj) : toSave.push(obj);
         },

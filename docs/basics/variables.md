@@ -6,6 +6,7 @@
 
 - [Accessing variables](#accessing-variables)
 - [Global](#global)
+    - [Url](#url)
 - [The task object (current)](#the-task-object-current)
 - [Local Variables (local & meta)](#local-variables-local-&-meta)
 
@@ -45,6 +46,19 @@ Note that this allows you to access task objects as well.
 ```javascript
 window.piGlobal.greeting = 'Hello world';
 console.log(window.piGlobal);
+```
+
+#### Url
+The [query string](https://en.wikipedia.org/wiki/Query_string) is a set of parameters that can be passed within a URL string.
+The global object exposes the url query string in a dedicated object called `$url`.
+
+So that if you have a url such as `example.com?bar=buz&bam=bif` the object takes the following form:
+
+```javascript
+global.$url == {
+    bar: 'buz',
+    bam: 'bif'
+}
 ```
 
 ### The task object (current)
