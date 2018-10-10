@@ -42365,7 +42365,9 @@ function provider(){
     };
 
     this.get = function(name){
-        return activators[name];
+        var activator = activators[name];
+        if (!activator) throw new Error('Unknown task type: "' + name + '"');
+        return activator;
     };
 }
 
@@ -42422,8 +42424,6 @@ function taskActivateProvider($q,$rootScope, $injector){
         }
 
         if (task.type) return self.get(task.type);
-
-        throw new Error('Activator function not found for the "' + task.type + '" task');
     }
 }
 
@@ -42604,13 +42604,13 @@ function activateQuest$1(done, $canvas, $scope, $compile, script, task, logger){
 }
 
 activateMessage$1.$inject = ['done', '$element', 'task', '$scope','$compile'];
-function activateMessage$1(done, $canvas, task, $scope, $compile){
+function activateMessage$1(done, $element, task, $scope, $compile){
     var $el;
 
     $scope.script = task;
 
-    $canvas.append('<div pi-message></div>');
-    $el = $canvas.contents();
+    $element.append('<div pi-message></div>');
+    $el = $element.contents();
     $compile($el)($scope);
 
     // clean up
@@ -46063,6 +46063,46 @@ function allowLeaving(done, managerBeforeUnload){
     done(); 
 }
 
+var template$9 = "<div class=\"jumbotron\">\n  <h2>{{ heading }}</h2>\n  <p>{{ text }}</p>\n    <div class=\"row\">\n      <div class=\"col-md-2\"></div>\n      <div class=\"col-md-4\">\n        <button class=\"btn btn-primary btn-lg btn-block\" ng-click=\"choose(true)\"> {{ yesText }} </button>\n      </div>\n      <div class=\"col-md-4\">\n        <button class=\"btn btn-primary btn-lg btn-block\" ng-click=\"choose(false)\"> {{ noText }} </button>\n      </div>\n      <div class=\"col-md-2\"></div>\n    </div>\n</div>\n";
+
+activateChoose$1.$inject = ['done', '$element', 'task', '$rootScope','$scope', '$compile', 'piConsole'];
+function activateChoose$1(done, $element, task, $rootScope, $scope, $compile, piConsole){
+    var global = $rootScope.global;
+    var $el;
+
+    if (!('propertyName' in task)) piConsole({
+        type:'warn',
+        message: '"properyName" was not set in the choose task',
+        context: task
+    });
+
+    if (('propertyName' in task) && !lodash.isUndefined(global[task.propertyName])) piConsole({
+        type:'warn',
+        message: 'A value was already saved to "global.' + task.propertyName + '". Please make sure that this is intentional.',
+        context: task
+    });
+
+    lodash.defaults($scope, task, {
+        heading: null,
+        text: 'Please choose one of the following',
+        noText: 'No',
+        yesText:'Yes'
+    });
+
+    $scope.choose = lodash.flow(choose, done);
+
+    $element.append(template$9);
+    $el = $element.contents();
+    $compile($el)($scope);
+
+    return function destroyChoose(){
+        $scope.$destroy();
+        $el.remove();
+    };
+
+    function choose(value){ lodash.set(global, task.propertyName, value); }
+}
+
 /**
  * The module responsible for the single task.
  * It knows how to load a task and activate it.
@@ -46074,7 +46114,6 @@ var module$14 = angular.module('pi.task',[]);
 module$14.provider('taskActivate', provider);
 module$14.directive('piTask', directive$10);
 
-
 module$14.config(['taskActivateProvider', function(activateProvider){
     activateProvider.set('postCsv', postCsv);
     activateProvider.set('quest', activateQuest$1);
@@ -46084,6 +46123,7 @@ module$14.config(['taskActivateProvider', function(activateProvider){
     activateProvider.set('pip', activatePIP$1);
     activateProvider.set('time', activateTime$1);
     activateProvider.set('allowLeaving', allowLeaving);
+    activateProvider.set('choose', activateChoose$1);
 }]);
 
 function canvasContructor$1(map, settings){
@@ -46277,7 +46317,7 @@ function swapDirective($compile, $animate, $injector){
     };
 }
 
-var template$9 = "<div>\n\t<img ng-if=\"spinner\" class=\"pi-logo\" src=\"img/loader.gif\" />\n\t<div ng-if=\"!spinner\" ng-transclude></div>\n</div>\n";
+var template$10 = "<div>\n\t<img ng-if=\"spinner\" class=\"pi-logo\" src=\"img/loader.gif\" />\n\t<div ng-if=\"!spinner\" ng-transclude></div>\n</div>\n";
 
 /*
  * @name: spinner Directive
@@ -46289,7 +46329,7 @@ function directive$11(){
     return {
         transclude: true,
         replace: true,
-        template:template$9,
+        template:template$10,
         require: [],
         // controller: '',
         // controllerAs: 'ctrl',

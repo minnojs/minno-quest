@@ -7,6 +7,7 @@
     - [Post](post.md)
     - [Redirect](redirect.md)
     - [AllowLeaving](allowleaving.md)
+    - [Choose](choose.md)
 - Examples
     - [Weight experiment](weightManager.js)
     - [Displaying Video](videoManager.js)

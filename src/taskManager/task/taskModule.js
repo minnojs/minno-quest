@@ -17,13 +17,13 @@ import activateRedirect from './tasks/redirectTask';
 import activatePIP from './tasks/pipTask';
 import activateTime from './tasks/timeTask';
 import activateAllowLeaving from './tasks/allowLeaving';
+import activateChoose from './tasks/choose';
 
 export default module;
 
 var module = angular.module('pi.task',[]);
 module.provider('taskActivate', taskActivateProvider);
 module.directive('piTask', taskDirective);
-
 
 module.config(['taskActivateProvider', function(activateProvider){
     activateProvider.set('postCsv', activatePostCsv);
@@ -34,4 +34,5 @@ module.config(['taskActivateProvider', function(activateProvider){
     activateProvider.set('pip', activatePIP);
     activateProvider.set('time', activateTime);
     activateProvider.set('allowLeaving', activateAllowLeaving);
+    activateProvider.set('choose', activateChoose);
 }]);

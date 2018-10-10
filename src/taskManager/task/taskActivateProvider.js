@@ -16,7 +16,9 @@ function provider(){
     };
 
     this.get = function(name){
-        return activators[name];
+        var activator = activators[name];
+        if (!activator) throw new Error('Unknown task type: "' + name + '"');
+        return activator;
     };
 }
 
@@ -73,8 +75,6 @@ function taskActivateProvider($q,$rootScope, $injector){
         }
 
         if (task.type) return self.get(task.type);
-
-        throw new Error('Activator function not found for the "' + task.type + '" task');
     }
 }
 
