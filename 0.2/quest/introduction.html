@@ -1,0 +1,204 @@
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Minno.js</title>
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+		<link href="../assets/prism.css" rel="stylesheet" />
+		<link href="../assets/style.css" rel="stylesheet" />
+	</head>
+	<body>
+		<header>
+			<section>
+				<nav class="brand">
+                    <a href="/"><h1>Minno</h1></a>
+				</nav>
+				<nav>
+					<a href="/minno-quest/0.2/basics/overview.html">Basics</a>
+					<a href="/minno-quest/0.2/manager/overview.html">miManager</a>
+					<a href="/minno-quest/0.2/quest/overview.html">miQuest</a>
+					<a href="/minno-time/0.5/time/overview.html">miTime</a>
+				</nav>
+				<nav>
+                    <div id="search-box">
+                        <script>
+                            (function() {
+                                var cx = '002953266509769041597:smg5beek-iu';
+                                var gcse = document.createElement('script');
+                                gcse.type = 'text/javascript';
+                                gcse.async = true;
+                                gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+                                var s = document.getElementsByTagName('script')[0];
+                                s.parentNode.insertBefore(gcse, s);
+                            })();
+                        </script>
+                        <gcse:searchbox-only></gcse:searchbox-only>
+                    </div>
+                    <select id="version-select"><option value="0.0" >v0.0</option>,<option value="0.1" >v0.1</option>,<option value="0.2" selected>v0.2</option></select>
+					<a href="https://github.com/minnojs">Github</a>
+				</nav>
+			</section>
+		</header>
+		<main>
+			<section class="docs">
+                <h1><a name="introduction" class="header-link" href="#introduction"><span></span></a>Introduction</h1><ul>
+<li>Core<ul>
+<li><a href="overview.html">Overview</a></li>
+<li><strong><a href="introduction.html">Introduction</a></strong><ul>
+<li><a href="#structure">Structure</a></li>
+<li><a href="#pages-questions">Pages &amp; Questions</a></li>
+<li><a href="#thats-it">Thats it</a></li>
+</ul>
+</li>
+<li><a href="API.html">API</a></li>
+<li><a href="playground.html">Playground</a></li>
+</ul>
+</li>
+<li>Question types<ul>
+<li><a href="text.html">Text</a></li>
+<li><a href="textarea.html">Textarea</a></li>
+<li><a href="textNumber.html">Text Number</a></li>
+<li><a href="selectOne.html">Select One</a></li>
+<li><a href="selectMulti.html">Select Multi</a></li>
+<li><a href="grid.html">Grid</a></li>
+<li><a href="gridMulti.html">Multi Grid</a></li>
+<li><a href="slider.html">Slider</a></li>
+<li><a href="rank.html">Rank</a></li>
+</ul>
+</li>
+<li>Examples<ul>
+<li><a href="helloworld.html">Hello world</a></li>
+<li><a href="bodyAwareness.html">Body Awareness</a></li>
+<li><a href="weight.html">Weight demo</a></li>
+<li><a href="usingImages.html">Using Images</a></li>
+<li><a href="buttons.html">Buttons</a></li>
+<li><a href="buttonsAdvanced.html">Buttons Advanced</a></li>
+<li><a href="buttonsOnePage.html">Buttons One Page</a></li>
+<li><a href="dependency.html">Dependency</a></li>
+<li><a href="liveDependency.html">Live Dependency</a></li>
+<li><a href="gridExample.html">Grid</a></li>
+<li><a href="timer.html">Timer</a></li>
+<li><a href="openEnded.html">Open Ended</a></li>
+<li><a href="openEndedLong.html">Open Ended Long</a></li>
+<li><a href="rateImages.html">Rate Images</a></li>
+<li><a href="rateImagesSizes.html">Rate Images Sizes</a></li>
+<li><a href="scaleWithFeedback.html">Scale With Feedback</a></li>
+<li><a href="sliderExample.html">Slider</a></li>
+<li><a href="userPrevResp.html">User Prev Resp</a></li>
+<li><a href="nfc.html">Agreement scale</a></li>
+</ul>
+</li>
+</ul>
+<h3><a name="structure" class="header-link" href="#structure"><span></span></a>Structure</h3><p>The first step learning to use miQuest is getting to know the structure of a miQuest script. The scripts are written in javascript, although all you really need to know is how to use our very specific API (this means that if you&#39;re in to that sort of thing, you can write any javascript that you like...).</p>
+<p>Each script is wrapped within a <a href="http://requirejs.org/docs/whyamd.html#amd"><code>define</code></a> statement. At the beginning you create the API object, and at the end you return the script that you have created. This basic structure stays more or less constant across any script that you create. In other words: you can always just copy paste this portion of the script and get on with building your questionnaire:</p>
+<pre><code class="lang-javascript">define([&#39;questAPI&#39;], function(Quest){
+    // create new quest API
+    var API = new Quest();
+
+    /**
+     * This is where the magic happens...
+     */
+
+    // return questionnaire script to the player gods...
+    return API.script;
+});
+</code></pre>
+<p>Between the declaration of the API and returning the script, we use the API to put the task together. The full functionality of the API is described in the <a href="API.html">documentation </a>. This tutorial will walk you through using it to create a very basic questionnaire. You can use it as a template for creating your own questionnaires in the future.</p>
+<p>We will use the API to setup the questionnaire environment (using <code>addSettings</code>), then we will create prototypes for pages and questions within the questionnaire (using <code>addPagesSet</code> and <code>addQuestionsSet</code>), and finally we will setup the sequence of questions that will be presented to the subjects (using <code>addSequence</code>).</p>
+<pre><code class="lang-javascript">define([&#39;questAPI&#39;], function(Quest){
+    // create new quest API
+    var API = new Quest();
+
+    // setup the environment
+    API.addSettings(/* ... */);
+
+    // create the prototypes
+    API.addPagesSet(/* ... */);
+    API.addQuestionsSet(/* ... */);
+
+    // create questionnaire sequence
+    API.addSequence(/* ... */);
+
+    // return questionnaire script to the player gods...
+    return API.script;
+});
+</code></pre>
+<p>Before we jump into learning how each of these functions work, let us take a look at the basic building block of the questionnaire; pages and questions.</p>
+<h3><a name="pages-&amp-questions" class="header-link" href="#pages-&amp-questions"><span></span></a>Pages &amp; questions</h3><p>The basic building blocks within miQuest are <strong>pages</strong> and <strong>questions</strong>.</p>
+<p>A page is an object that describes one screen within your questionnaire. If your questionnaire presents all of its questions in one screen, it will probably have only one page. The properties within a page manage how the question(s) is(are) displayed and how the participants interact with it (e.g., select an answer and then click a submit button).</p>
+<p>For the purpose of this presentation we will create a page that has a &quot;Hello world!&quot; header, and allows participants to decline answering the questions. Further documentation of the properties of pages may be found in the <a href="API.html#pages">API docs</a>.</p>
+<pre><code class="lang-javascript">var page = {
+    header: &#39;Hello world!&#39;,
+    decline: true,
+    declineText: &#39;I prefer to keep this information to myself&#39;,
+    questions: [
+        /* This is where we will soon set our questions */
+    ]
+}
+</code></pre>
+<p>Within our page we want to ask the participant a question: &#39;When you say good morning, what do you mean?&#39;. We want the user to select the correct answer out of a list, so we pick the <em>type</em> <code>selectOne</code> and set the answers within the <em>answers</em> property. Further documentation of the properties of questions may be found in the <a href="API.html#questions">API docs</a>.</p>
+<pre><code class="lang-javascript">var quest = {
+    type: &#39;selectOne&#39;,
+    stem: &#39;When you say good morning, what do you mean?&#39;,
+    answers: [
+        &#39;Do you wish me a good morning&#39;,
+        &#39;Or mean that it is a good morning whether I want it or not&#39;,
+        &#39;Or that you feel good this morning&#39;,
+        &#39;Or that it is a morning to be good on&#39;,
+        &#39;All of them at once&#39;
+    ]
+}
+</code></pre>
+<p>We will put the page and question together in a moment, but first let us get back to the API object and how we actually use these questions and objects.</p>
+<h3><a name="thats-it" class="header-link" href="#thats-it"><span></span></a>Thats it</h3><p>The most important part of every questionnaire is the sequence. This is where you tell miQuest how to interact with the participants. In our case we want to simply present a single page with a single question so we get something like this:</p>
+<pre><code class="lang-javascript">define([&#39;questAPI&#39;], function(Quest){
+    // create new quest API
+    var API = new Quest();
+
+    // create questionnaire sequence
+    API.addSequence([
+        // page begins
+        {
+            header: &#39;Hello world!&#39;,
+            decline: true,
+            declineText: &#39;I prefer to keep this information to myself&#39;,
+            questions: [
+                // question begins
+                {
+                    type: &#39;selectOne&#39;,
+                    stem: &#39;When you say good morning, what do you mean?&#39;,
+                    answers: [
+                        &#39;Do you wish me a good morning&#39;,
+                        &#39;Or mean that it is a good morning whether I want it or not&#39;,
+                        &#39;Or that you feel good this morning&#39;,
+                        &#39;Or that it is a morning to be good on&#39;,
+                        &#39;All of them at once&#39;
+                    ]
+                }
+                // question ends
+            ]
+        }
+        // page ends
+    ]);
+
+    // return questionnaire script to the player gods...
+    return API.script;
+});
+</code></pre>
+<p>The code we put together is enough to run in your browser: <a href="helloworldPlay.html">check it out</a>.</p>
+
+				<hr />
+				<small>License: Apache 2. &copy; Project Implicit. &middot; Current version [version]</small>
+			</section>
+		</main>
+		<script src="../assets/prism.js"></script>
+        <script>
+            (function(){
+                var select = document.getElementById('version-select');
+                select.addEventListener('change', function(event){
+                    var version = event.target.value;
+                    location.href = location.href.replace(/[0-9]\.[0-9]/, version)
+                });
+            })();
+        </script>
+	</body>
+</html>

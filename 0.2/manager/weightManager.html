@@ -1,0 +1,158 @@
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Minno.js</title>
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+		<link href="../assets/prism.css" rel="stylesheet" />
+		<link href="../assets/style.css" rel="stylesheet" />
+	</head>
+	<body>
+		<header>
+			<section>
+				<nav class="brand">
+                    <a href="/"><h1>Minno</h1></a>
+				</nav>
+				<nav>
+					<a href="/minno-quest/0.2/basics/overview.html">Basics</a>
+					<a href="/minno-quest/0.2/manager/overview.html">miManager</a>
+					<a href="/minno-quest/0.2/quest/overview.html">miQuest</a>
+					<a href="/minno-time/0.5/time/overview.html">miTime</a>
+				</nav>
+				<nav>
+                    <div id="search-box">
+                        <script>
+                            (function() {
+                                var cx = '002953266509769041597:smg5beek-iu';
+                                var gcse = document.createElement('script');
+                                gcse.type = 'text/javascript';
+                                gcse.async = true;
+                                gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+                                var s = document.getElementsByTagName('script')[0];
+                                s.parentNode.insertBefore(gcse, s);
+                            })();
+                        </script>
+                        <gcse:searchbox-only></gcse:searchbox-only>
+                    </div>
+                    <select id="version-select"><option value="0.0" >v0.0</option>,<option value="0.1" >v0.1</option>,<option value="0.2" selected>v0.2</option></select>
+					<a href="https://github.com/minnojs">Github</a>
+				</nav>
+			</section>
+		</header>
+		<main>
+			<section class="docs">
+                <h1><a name="a-hrefweightmanagerhtmlweight-experimenta" class="header-link" href="#a-hrefweightmanagerhtmlweight-experimenta"><span></span></a><a href="weightManager.html">Weight experiment</a></h1><ul>
+<li>Core<ul>
+<li><a href="overview.html">Overview</a></li>
+<li><a href="API.html">API</a></li>
+<li><a href="playground.html">Playground</a></li>
+</ul>
+</li>
+<li>Tasks<ul>
+<li><a href="messages.html">Messages</a></li>
+<li><a href="post.html">Post</a></li>
+<li><a href="redirect.html">Redirect</a></li>
+<li><a href="allowleaving.html">AllowLeaving</a></li>
+<li><a href="choose.html">Choose</a></li>
+</ul>
+</li>
+<li>Examples<ul>
+<li><strong>Weight experiment</strong></li>
+<li><a href="videoManager.html">Displaying Video</a></li>
+</ul>
+</li>
+</ul>
+<p> The weight manager is a basic example of how we user miManager.
+ It is heavily commented so that you can follow everything that goes on.
+ After reading the documentation feel free to download the file and modify it according to your needs.</p>
+<h3><a name="opening-section" class="header-link" href="#opening-section"><span></span></a>Opening section</h3><p> The opening section of each script is always more or less the same.
+ We create the wrapper for the script (<code>define</code>), and create a new instance of a manager.</p>
+<section playground>
+    <div class="buttons">
+        <a class="activate-button">Activate</a>
+        <a class="download-button" href="weightManager.js" download>Download</a>
+    </div>
+    <div class="editor">//
+// The weight manager is a basic example of how we user miManager.
+// It is heavily commented so that you can follow everything that goes on.
+// After reading the documentation feel free to download the file and modify it according to your needs.
+//
+// ### Opening section
+//
+// The opening section of each script is always more or less the same.
+// We create the wrapper for the script (`define`), and create a new instance of a manager.
+define([&apos;managerAPI&apos;], function(Manager){
+
+  var API = new Manager();
+
+  // ### The sequence
+  // The most important part of every manager script is the sequence.
+  // This is where you tell it how to interact with the participants.
+  // In our case we want to simply present a single instruction page, and then activate a miQuest questionnaire.
+  API.addSequence([
+    // #### Instructions
+    // This is a message task. It is used to give instructions to the user.
+    //
+    // The task type is defined using the `type` property.
+    // Setting `keys` to &apos;&amp;nbsp;&amp;nbsp;&apos; allows using the space button in order to proceed.
+    // We use `template` to insert a plain html template to the task.
+    // Usually it is more convenient to use `templateUrl` and get the html out of a separate file, we chose this method here in order to keep the script concise.
+    {
+      type: &apos;message&apos;,
+      keys: &apos; &apos;,
+      template:
+        &apos;&lt;div class=&quot;panel panel-info&quot; style=&quot;margin-top:1em&quot;&gt;&apos; +
+
+          &apos;&lt;div class=&quot;panel-heading&quot;&gt;&apos; +
+            &apos;&lt;h1 class=&quot;panel-title&quot; style=&quot;font-size:2em&quot;&gt;Welcome&lt;/h1&gt;&apos; +
+          &apos;&lt;/div&gt;&apos; +
+
+          &apos;&lt;div class=&quot;panel-body&quot;&gt;&apos; +
+            &apos;&lt;p&gt;You are about to take a questionnaire that has to do with your perception of personal weight.&lt;/p&gt;&apos; +
+            &apos;&lt;p&gt;Please take your time and answer to the best of your ability. In case there is no answer that fits you exactly, pick the closest answer possible.&lt;/p&gt;&apos; +
+            &apos;&lt;div style=&quot;max-width: 50%; margin: 30px auto 10px;&quot; class=&quot;well&quot;&gt;&apos; +
+              &apos;&lt;button pi-message-done type=&quot;button&quot; class=&quot;btn btn-primary btn-block&quot;&gt;Click Here or press the space button to Proceed&lt;/button&gt;&apos; +
+            &apos;&lt;/div&gt;&apos; +
+          &apos;&lt;/div&gt;&apos; +
+
+        &apos;&lt;/div&gt;&apos;
+    },
+    // #### Weight Questionnaire
+    // This is a miQuest task. In this case it is the central task of this experiment.
+    // The questionnaire is loaded from a file (you can see it right [here](../quest/weightDocco.html)).
+    {
+      type: &apos;quest&apos;,
+      name: &apos;weightQuest&apos;,
+      scriptUrl: &apos;../../quest/weight.js&apos;
+    }
+
+    // Now, we just close the sequence.
+  ]);
+
+  // ### Closing section
+  //
+  // And finally, we close the script.
+  // Here again, all scripts look more or less the same.
+  // We return the `script` and close the `define` wrapper.
+  return API.script;
+});
+</div>
+</section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js" integrity="sha256-xrr4HH5eSY+cFz4SH7ja/LaAi9qcEdjMpeMP49/iOLs=" crossorigin="anonymous"></script>
+<script src="../assets/playground.js"></script>
+
+				<hr />
+				<small>License: Apache 2. &copy; Project Implicit. &middot; Current version [version]</small>
+			</section>
+		</main>
+		<script src="../assets/prism.js"></script>
+        <script>
+            (function(){
+                var select = document.getElementById('version-select');
+                select.addEventListener('change', function(event){
+                    var version = event.target.value;
+                    location.href = location.href.replace(/[0-9]\.[0-9]/, version)
+                });
+            })();
+        </script>
+	</body>
+</html>

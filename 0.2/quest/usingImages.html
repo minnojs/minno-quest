@@ -1,0 +1,188 @@
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Minno.js</title>
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+		<link href="../assets/prism.css" rel="stylesheet" />
+		<link href="../assets/style.css" rel="stylesheet" />
+	</head>
+	<body>
+		<header>
+			<section>
+				<nav class="brand">
+                    <a href="/"><h1>Minno</h1></a>
+				</nav>
+				<nav>
+					<a href="/minno-quest/0.2/basics/overview.html">Basics</a>
+					<a href="/minno-quest/0.2/manager/overview.html">miManager</a>
+					<a href="/minno-quest/0.2/quest/overview.html">miQuest</a>
+					<a href="/minno-time/0.5/time/overview.html">miTime</a>
+				</nav>
+				<nav>
+                    <div id="search-box">
+                        <script>
+                            (function() {
+                                var cx = '002953266509769041597:smg5beek-iu';
+                                var gcse = document.createElement('script');
+                                gcse.type = 'text/javascript';
+                                gcse.async = true;
+                                gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+                                var s = document.getElementsByTagName('script')[0];
+                                s.parentNode.insertBefore(gcse, s);
+                            })();
+                        </script>
+                        <gcse:searchbox-only></gcse:searchbox-only>
+                    </div>
+                    <select id="version-select"><option value="0.0" >v0.0</option>,<option value="0.1" >v0.1</option>,<option value="0.2" selected>v0.2</option></select>
+					<a href="https://github.com/minnojs">Github</a>
+				</nav>
+			</section>
+		</header>
+		<main>
+			<section class="docs">
+                <h1><a name="a-hrefusingimageshtmlusing-imagesa" class="header-link" href="#a-hrefusingimageshtmlusing-imagesa"><span></span></a><a href="usingImages.html">Using Images</a></h1><ul>
+<li>Core<ul>
+<li><a href="overview.html">Overview</a></li>
+<li><a href="introduction.html">Introduction</a></li>
+<li><a href="API.html">API</a></li>
+<li><a href="playground.html">Playground</a></li>
+</ul>
+</li>
+<li>Question types<ul>
+<li><a href="text.html">Text</a></li>
+<li><a href="textarea.html">Textarea</a></li>
+<li><a href="textNumber.html">Text Number</a></li>
+<li><a href="selectOne.html">Select One</a></li>
+<li><a href="selectMulti.html">Select Multi</a></li>
+<li><a href="grid.html">Grid</a></li>
+<li><a href="gridMulti.html">Multi Grid</a></li>
+<li><a href="slider.html">Slider</a></li>
+<li><a href="rank.html">Rank</a></li>
+</ul>
+</li>
+<li>Examples<ul>
+<li><a href="helloworld.html">Hello world</a></li>
+<li><a href="bodyAwareness.html">Body Awareness</a></li>
+<li><a href="weight.html">Weight demo</a></li>
+<li><strong>Using Images</strong></li>
+<li><a href="buttons.html">Buttons</a></li>
+<li><a href="buttonsAdvanced.html">Buttons Advanced</a></li>
+<li><a href="buttonsOnePage.html">Buttons One Page</a></li>
+<li><a href="dependency.html">Dependency</a></li>
+<li><a href="liveDependency.html">Live Dependency</a></li>
+<li><a href="gridExample.html">Grid</a></li>
+<li><a href="timer.html">Timer</a></li>
+<li><a href="openEnded.html">Open Ended</a></li>
+<li><a href="openEndedLong.html">Open Ended Long</a></li>
+<li><a href="rateImages.html">Rate Images</a></li>
+<li><a href="rateImagesSizes.html">Rate Images Sizes</a></li>
+<li><a href="scaleWithFeedback.html">Scale With Feedback</a></li>
+<li><a href="sliderExample.html">Slider</a></li>
+<li><a href="userPrevResp.html">User Prev Resp</a></li>
+<li><a href="nfc.html">Agreement scale</a></li>
+</ul>
+</li>
+</ul>
+<section playground>
+    <div class="buttons">
+        <a class="activate-button">Activate</a>
+        <a class="download-button" href="usingImages.js" download>Download</a>
+    </div>
+    <div class="editor">define([&apos;questAPI&apos;], function(Quest){
+	var API = new Quest();
+
+	// This is just a trick you can use in order to simplify the use of images;
+	// set the baseUrl into your current object, and use templates in order to inject them into your questions.
+	API.addCurrent({
+		baseURL: &apos;../../images/&apos;
+	});
+
+	// ### Questions
+	// Create the general structure of our questions
+	API.addQuestionsSet(&apos;basicSelect&apos;, {
+		type: &apos;selectOne&apos;,
+		autoSubmit:true,
+		numericValues:true,
+		help: &apos;&lt;%= pagesMeta.number &lt; 3 %&gt;&apos;,
+		helpText: &apos;Selecting an answer once colors it blue.&lt;br/&gt;&apos; +
+			&apos;You can change your answer by selecting another option.&lt;br/&gt;&apos; +
+			&apos;To confirm, click the selected (blue) button a second time.&apos;
+	});
+
+	// ### Pages
+	// Create the generic pages template:
+	// * `decline`: allow participants to decline answering
+	// * `noSubmit`: do not display the submit button (we rely on `autoSubmit` for submitting)
+	API.addPagesSet(&apos;basicPage&apos;, {
+		progressBar: &apos;&lt;%= pagesMeta.number %&gt; out of 3&apos;,
+		headerStyle : {&apos;font-size&apos;:&apos;1.2em&apos;},
+		decline:true,
+		noSubmit:true
+	});
+
+	// ### Sequence
+	// We put the questions together within the sequence here.
+	// The stem here includes an image. It uses plain html, but this is a template you can definitely use yourself.
+	// Note that we use a template to set the baseUrl for the images, this is useful so that you can easily change the location of you images.
+	API.addSequence(
+	[
+		{
+			mixer : &apos;random&apos;,
+			data :[
+				{
+					inherit: &apos;basicPage&apos;,
+					header: &apos;How much do you like this man?&apos;,
+					questions: {
+						inherit: &apos;basicSelect&apos;,
+						name: &apos;like&apos;,
+						stem :  &apos;&lt;h4&gt;Chris&lt;/h4&gt;&lt;img class=&quot;img-responsive&quot; src=&quot;&lt;%=current.baseURL%&gt;face1.jpg&quot;&gt;&apos;,
+						answers: [&quot;Dislike extremely&quot;, &quot;Dislike moderately&quot;, &quot;Dislike slightly&quot;,&quot;Neither like or dislike&quot;, &quot;Like slightly&quot;, &quot;Like moderately&quot;, &quot;Like extremely&quot;]
+					}
+				},
+				{
+					inherit: &apos;basicPage&apos;,
+					header: &apos;How friendly do you think that this man is?&apos;,
+					questions: {
+						inherit: &apos;basicSelect&apos;,
+						name: &apos;friendly&apos;,
+						stem :  &apos;&lt;h4&gt;Chris&lt;/h4&gt;&lt;img class=&quot;img-responsive&quot; src=&quot;&lt;%=current.baseURL%&gt;face1.jpg&quot;&gt;&apos;,
+						answers: [&quot;Extremely unfriendly&quot;, &quot;Moderately unfriendly&quot;, &quot;Slightly unfriendly&quot;,&quot;Neither friendly nor unfriendly&quot;, &quot;Slightly friendly&quot;, &quot;Moderately friendly&quot;, &quot;Extremely friendly&quot;]
+					}
+				},
+				{
+					inherit: &apos;basicPage&apos;,
+					header: &apos;How trustworthy do you think that this man is?&apos;,
+					questions: {
+						inherit: &apos;basicSelect&apos;,
+						name: &apos;trustworthy&apos;,
+						stem :  &apos;&lt;h4&gt;Chris&lt;/h4&gt;&lt;img class=&quot;img-responsive&quot; src=&quot;&lt;%=current.baseURL%&gt;face1.jpg&quot;&gt;&apos;,
+						answers: [&quot;Extremely untrustworthy&quot;, &quot;Moderately untrustworthy&quot;, &quot;Slightly untrustworthy&quot;,&quot;Neither trustworthy nor untrustworthy&quot;, &quot;Slightly trustworthy&quot;, &quot;Moderately trustworthy&quot;, &quot;Extremely trustworthy&quot;]
+					}
+				}
+			]
+		}
+	]);
+
+	// Return the script to piquest&apos;s god, or something of that sort.
+	return API.script;
+});</div>
+</section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js" integrity="sha256-xrr4HH5eSY+cFz4SH7ja/LaAi9qcEdjMpeMP49/iOLs=" crossorigin="anonymous"></script>
+<script src="../assets/playground.js"></script>
+
+				<hr />
+				<small>License: Apache 2. &copy; Project Implicit. &middot; Current version [version]</small>
+			</section>
+		</main>
+		<script src="../assets/prism.js"></script>
+        <script>
+            (function(){
+                var select = document.getElementById('version-select');
+                select.addEventListener('change', function(event){
+                    var version = event.target.value;
+                    location.href = location.href.replace(/[0-9]\.[0-9]/, version)
+                });
+            })();
+        </script>
+	</body>
+</html>

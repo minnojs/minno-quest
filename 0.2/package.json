@@ -1,0 +1,64 @@
+{
+  "name": "minno-quest",
+  "version": "0.2.25",
+  "main": "dist/minno.js",
+  "module": "src/index.js",
+  "license": "Apache-2.0",
+  "scripts": {
+    "test": "karma start",
+    "gendocs": "minno-gendocs docs pages",
+    "css": "node-sass styles/main.scss --output dist --include-path=node_modules/bootstrap-sass/assets/stylesheets/ --include-path=node_modules --source-map=true",
+    "rollup": "./node_modules/rollup/bin/rollup -c -w",
+    "dev": "npm run rollup & npm test",
+    "build": "npm run css && ./node_modules/rollup/bin/rollup -c --production",
+    "version": "npm run build && git add -A dist"
+  },
+  "minno": {
+    "activeVersions": [
+      "0.0",
+      "0.1",
+      "0.2"
+    ],
+    "timeVersion": "0.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ProjectImplicit/PIquest"
+  },
+  "description": "Project implicit Questionnaires",
+  "devDependencies": {
+    "angular-mocks": "1.2.27",
+    "jasmine-core": "^2.8.0",
+    "jquery": "^1.11.2",
+    "karma": "^1.7.1",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-jasmine": "^1.1.0",
+    "karma-rollup-preprocessor": "^5.0.1",
+    "minno-gendocs": "^1.0.3",
+    "node-sass": "^3.4.2",
+    "rollup": "^0.51.8",
+    "rollup-plugin-commonjs": "^8.2.1",
+    "rollup-plugin-html": "^0.2.1",
+    "rollup-plugin-legacy": "^1.0.0",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-postcss": "^1.2.5",
+    "rollup-plugin-string": "^2.0.2",
+    "rollup-plugin-uglify": "^2.0.1"
+  },
+  "engines": {
+    "node": ">=0.4.11"
+  },
+  "dependencies": {
+    "angular": "1.2.27",
+    "angular-animate": "1.2.27",
+    "bootstrap-sass": "^3.3.7",
+    "dragula": "^3.7.2",
+    "lodash": "^3.10.1",
+    "minno-sequencer": "github:minnojs/minno-sequencer",
+    "minno-time": "github:minnojs/minno-time#0.5",
+    "mithril": "^1.1.6",
+    "mithril-stream": "^1.1.0",
+    "requirejs": "^2.3.5",
+    "utils": "file:src/utils"
+  }
+}

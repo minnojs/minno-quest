@@ -1,0 +1,203 @@
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Minno.js</title>
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+		<link href="../assets/prism.css" rel="stylesheet" />
+		<link href="../assets/style.css" rel="stylesheet" />
+	</head>
+	<body>
+		<header>
+			<section>
+				<nav class="brand">
+                    <a href="/"><h1>Minno</h1></a>
+				</nav>
+				<nav>
+					<a href="/minno-quest/0.2/basics/overview.html">Basics</a>
+					<a href="/minno-quest/0.2/manager/overview.html">miManager</a>
+					<a href="/minno-quest/0.2/quest/overview.html">miQuest</a>
+					<a href="/minno-time/0.5/time/overview.html">miTime</a>
+				</nav>
+				<nav>
+                    <div id="search-box">
+                        <script>
+                            (function() {
+                                var cx = '002953266509769041597:smg5beek-iu';
+                                var gcse = document.createElement('script');
+                                gcse.type = 'text/javascript';
+                                gcse.async = true;
+                                gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+                                var s = document.getElementsByTagName('script')[0];
+                                s.parentNode.insertBefore(gcse, s);
+                            })();
+                        </script>
+                        <gcse:searchbox-only></gcse:searchbox-only>
+                    </div>
+                    <select id="version-select"><option value="0.0" >v0.0</option>,<option value="0.1" >v0.1</option>,<option value="0.2" selected>v0.2</option></select>
+					<a href="https://github.com/minnojs">Github</a>
+				</nav>
+			</section>
+		</header>
+		<main>
+			<section class="docs">
+                <h1><a name="overview" class="header-link" href="#overview"><span></span></a>Overview</h1><ul>
+<li>Core<ul>
+<li><strong><a href="overview.html">Overview</a></strong></li>
+<li><a href="introduction.html">Introduction</a></li>
+<li><a href="API.html">API</a></li>
+<li><a href="playground.html">Playground</a></li>
+</ul>
+</li>
+<li>Question types<ul>
+<li><a href="text.html">Text</a></li>
+<li><a href="textarea.html">Textarea</a></li>
+<li><a href="textNumber.html">Text Number</a></li>
+<li><a href="selectOne.html">Select One</a></li>
+<li><a href="selectMulti.html">Select Multi</a></li>
+<li><a href="grid.html">Grid</a></li>
+<li><a href="gridMulti.html">Multi Grid</a></li>
+<li><a href="slider.html">Slider</a></li>
+<li><a href="rank.html">Rank</a></li>
+</ul>
+</li>
+<li>Examples<ul>
+<li><a href="helloworld.html">Hello world</a></li>
+<li><a href="bodyAwareness.html">Body Awareness</a></li>
+<li><a href="weight.html">Weight demo</a></li>
+<li><a href="usingImages.html">Using Images</a></li>
+<li><a href="buttons.html">Buttons</a></li>
+<li><a href="buttonsAdvanced.html">Buttons Advanced</a></li>
+<li><a href="buttonsOnePage.html">Buttons One Page</a></li>
+<li><a href="dependency.html">Dependency</a></li>
+<li><a href="liveDependency.html">Live Dependency</a></li>
+<li><a href="gridExample.html">Grid</a></li>
+<li><a href="timer.html">Timer</a></li>
+<li><a href="openEnded.html">Open Ended</a></li>
+<li><a href="openEndedLong.html">Open Ended Long</a></li>
+<li><a href="rateImages.html">Rate Images</a></li>
+<li><a href="rateImagesSizes.html">Rate Images Sizes</a></li>
+<li><a href="scaleWithFeedback.html">Scale With Feedback</a></li>
+<li><a href="sliderExample.html">Slider</a></li>
+<li><a href="userPrevResp.html">User Prev Resp</a></li>
+<li><a href="nfc.html">Agreement scale</a></li>
+</ul>
+</li>
+</ul>
+<p>miQuest is written in JavaScript and is built to be extremely versatile and customizable. The scripts are written as JavaScript objects. This format allows writing simple and straightforward scripts using a constrained scripting language. The format also allows advanced users to easily create complex and dynamic scripts using in-line JavaScript.</p>
+<h3><a name="table-of-contents" class="header-link" href="#table-of-contents"><span></span></a>Table of contents</h3><ul>
+<li><a href="#central-concepts">Central concepts</a></li>
+<li><a href="#a-short-introduction">A short introduction </a></li>
+</ul>
+<h3><a name="central-concepts" class="header-link" href="#central-concepts"><span></span></a>Central concepts</h3><p>The player treats each questionnaire a <strong>sequence</strong> of <strong>pages</strong>. Each page may have one or more <strong>questions</strong>.</p>
+<p>The pages are set into a sequence and presented sequentially. This is essentially all you need to know in order to start writing questionnaires.</p>
+<p>The sequence supports <strong><em>mixers</em></strong> that allow randomizing the order of the pages (or questions) that you create, and other features often needed when creating the sequence of a questionnaire. The questionnaire also supports an <em>inheritance</em> system, that allows abstracting questionnaires and makes them shorter, simpler, more dynamic, and most important, reusable.</p>
+<p>Questionnaires are created by writing a Java-script object that has several property objects: <code>settings</code>, <code>sequence</code>, <code>pages</code>, <code>questions</code>, <code>global</code> and <code>current</code>. Some of these properties have to do with advanced uses of the player. The only objects that you <strong>have</strong> to know are <code>sequence</code> and <code>settings</code>. We&#39;ll first show a simple questionnaire, then go through each of the more advanced options.</p>
+<h3><a name="a-short-introduction" class="header-link" href="#a-short-introduction"><span></span></a>A short introduction</h3><p>The basic unit in PIquest&#39;s scripts is the page. A page represents one screen in the questionnaire. A page can have a few properties to define its settings, and, most importantly, a list of one or more questions that will be displayed in the page. Here is the most basic page. It only has the <code>questions</code> property. It creates a simple page with no header/progress-bar/decline button, and other features.</p>
+<pre><code class="lang-javascript">var page = {
+    questions: []
+}
+</code></pre>
+<p>There are plenty of additional features that <a href="API.html#pages">pages have</a>, but this is the very minimum that you&#39;ll need.</p>
+<p>Well, you also need to define the questions. There are several <a href="API.html#questions">types of questions</a>. All share a few basic properties.</p>
+<pre><code class="lang-javascript">var question = {
+    type: &#39;text&#39;,
+    name: &#39;myQuestName&#39;,
+    stem: &#39;What would you like to know?&#39;
+}
+</code></pre>
+<p>The <code>type</code> of question is the first decision that you have to make, it defines the question type and interface. This is where you decide if you want the user to enter some text, choose from a list or use a slider. The <code>name</code> is the question&#39;s name to save when logged to the server. The name also allows you to refer to the question from other objects. Finally, <code>stem</code> is the text that will be displayed.</p>
+<p>The question in the example above shows a text input with the question &#39;What would you like to know?&#39;. </p>
+<p>Here is an example of a <code>selectOne</code> question that prompts the user to choose one response out of a list of answers: red, blue or green.</p>
+<pre><code class="lang-javascript">var question = {
+    type: &#39;selectOne&#39;,
+    name: &#39;mySelectQuest&#39;,
+    stem: &#39;What color is the sky?&#39;,
+    answers: [
+        &#39;red&#39;,
+        &#39;blue&#39;,
+        &#39;green&#39;
+    ]
+}
+</code></pre>
+<p>Now that we know how to create questions, let&#39;s create the sequence. The main component of your questionnaire will always be the sequence. The sequence describes the course of your questionnaire; most of the time it is possible to create everything that you want just within the sequence (i.e., define all the pages and all the questions when you define the sequence). The sequence is a javascript array of page objects that are activated one after the other. The following sequence includes two pages, the first has two questions, the second only one:</p>
+<pre><code class="lang-javascript">var sequence = [
+    // 1. This is a page object
+    {
+        // It has a questions property
+        questions:[
+            // 1a. This is the first question (a text input):
+            {
+                type: &#39;text&#39;,
+                stem: &#39;What is your name?&#39;
+            },
+            // 1b. This is a second question (a select one input)
+            {
+                type: &#39;selectOne&#39;,
+                stem: &#39;How are you?&#39;,
+                answers: [&#39;good&#39;, &#39;fair&#39; ,&#39;bad&#39;]
+            }
+        ]
+    },
+    // 2. This is the second page object
+    {
+        // It has the same structure as the previous one
+        questions:[
+            // 2a. But only one question
+            {
+                type: &#39;text&#39;,
+                stem: &#39;What is your name again?&#39;
+            }
+        ]
+    }
+]
+</code></pre>
+<p>The sequence also supports randomization and branching. Read about it <a href="API.html#mixer">here</a>.</p>
+<p>Now that we&#39;ve created the sequence, let&#39;s put it into the player. The first and last two lines are the same for all scripts (they have to do with the way Javascript works), you can simply ignore them. The <code>API</code> object assists you in putting your script together, you will <a href="API.html#API">eventually</a> learn more about its functionality, but for now we only need to know that the <code>addSequence</code> function is responsible for adding pages into the sequence. You may call it as many times as you like.</p>
+<pre><code class="lang-javascript">define([&#39;questAPI&#39;], function(quest){
+    var API = new quest();
+
+    API.addSequence([
+        {
+            questions:[
+                {
+                    type: &#39;text&#39;,
+                    stem: &#39;What is your name?&#39;
+                },
+                {
+                    type: &#39;selectOne&#39;,
+                    stem: &#39;How are you?&#39;,
+                    answers: [&#39;good&#39;, &#39;fair&#39; ,&#39;bad&#39;]
+                }
+            ]
+        },
+        {
+            questions:[
+                {
+                    type: &#39;text&#39;,
+                    stem: &#39;What is your name again?&#39;
+                }
+            ]
+        }
+    ]);
+
+    return API.script;
+});
+</code></pre>
+<p>That&#39;s it! PIquest has loads of additional features (as you can read below), but this was the very basic information that you must know first. (by the way, if you want to log the responses to your questions you should learn about the <a href="API.html#settings"> logger setting </a>).</p>
+
+				<hr />
+				<small>License: Apache 2. &copy; Project Implicit. &middot; Current version [version]</small>
+			</section>
+		</main>
+		<script src="../assets/prism.js"></script>
+        <script>
+            (function(){
+                var select = document.getElementById('version-select');
+                select.addEventListener('change', function(event){
+                    var version = event.target.value;
+                    location.href = location.href.replace(/[0-9]\.[0-9]/, version)
+                });
+            })();
+        </script>
+	</body>
+</html>

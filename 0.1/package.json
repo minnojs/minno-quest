@@ -1,6 +1,6 @@
 {
   "name": "PIQuest",
-  "version": "0.1.40",
+  "version": "0.1.46",
   "license": "Apache-2.0",
   "scripts": {
     "test": "grunt test --sauce --report",
@@ -16,7 +16,8 @@
   "minno": {
     "activeVersions": [
       "0.0",
-      "0.1"
+      "0.1",
+      "0.2"
     ],
     "timeVersion": "0.3"
   },

@@ -1,0 +1,208 @@
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Minno.js</title>
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+		<link href="../assets/prism.css" rel="stylesheet" />
+		<link href="../assets/style.css" rel="stylesheet" />
+	</head>
+	<body>
+		<header>
+			<section>
+				<nav class="brand">
+                    <a href="/"><h1>Minno</h1></a>
+				</nav>
+				<nav>
+					<a href="/minno-quest/0.2/basics/overview.html">Basics</a>
+					<a href="/minno-quest/0.2/manager/overview.html">miManager</a>
+					<a href="/minno-quest/0.2/quest/overview.html">miQuest</a>
+					<a href="/minno-time/0.5/time/overview.html">miTime</a>
+				</nav>
+				<nav>
+                    <div id="search-box">
+                        <script>
+                            (function() {
+                                var cx = '002953266509769041597:smg5beek-iu';
+                                var gcse = document.createElement('script');
+                                gcse.type = 'text/javascript';
+                                gcse.async = true;
+                                gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+                                var s = document.getElementsByTagName('script')[0];
+                                s.parentNode.insertBefore(gcse, s);
+                            })();
+                        </script>
+                        <gcse:searchbox-only></gcse:searchbox-only>
+                    </div>
+                    <select id="version-select"><option value="0.0" >v0.0</option>,<option value="0.1" >v0.1</option>,<option value="0.2" selected>v0.2</option></select>
+					<a href="https://github.com/minnojs">Github</a>
+				</nav>
+			</section>
+		</header>
+		<main>
+			<section class="docs">
+                <h1><a name="a-hrefvideomanagerhtmldisplaying-videoa" class="header-link" href="#a-hrefvideomanagerhtmldisplaying-videoa"><span></span></a><a href="videoManager.html">Displaying Video</a></h1><ul>
+<li>Core<ul>
+<li><a href="overview.html">Overview</a></li>
+<li><a href="API.html">API</a></li>
+<li><a href="playground.html">Playground</a></li>
+</ul>
+</li>
+<li>Tasks<ul>
+<li><a href="messages.html">Messages</a></li>
+<li><a href="post.html">Post</a></li>
+<li><a href="redirect.html">Redirect</a></li>
+<li><a href="allowleaving.html">AllowLeaving</a></li>
+<li><a href="choose.html">Choose</a></li>
+</ul>
+</li>
+<li>Examples<ul>
+<li><a href="weightManager.html">Weight experiment</a></li>
+<li><strong>Displaying Video</strong></li>
+</ul>
+</li>
+</ul>
+<p> The Video manager is a basic example of how to display videos.
+ It is heavily commented so that you can follow everything that goes on.
+ After reading the documentation feel free to download the file and modify it according to your needs.</p>
+<h3><a name="opening-section" class="header-link" href="#opening-section"><span></span></a>Opening section</h3><p> The opening section of each script is always more or less the same.
+ We create the wrapper for the script (<code>define</code>), and create a new instance of a manager.</p>
+<section playground>
+    <div class="buttons">
+        <a class="activate-button">Activate</a>
+        <a class="download-button" href="videoManager.js" download>Download</a>
+    </div>
+    <div class="editor">// The Video manager is a basic example of how to display videos.
+// It is heavily commented so that you can follow everything that goes on.
+// After reading the documentation feel free to download the file and modify it according to your needs.
+//
+// ### Opening section
+//
+// The opening section of each script is always more or less the same.
+// We create the wrapper for the script (`define`), and create a new instance of a manager.
+define([&apos;managerAPI&apos;], function(Manager){
+
+  var API = new Manager();
+
+  // ### The sequence
+  // The most important part of every manager script is the sequence.
+  // This is where you tell it how to interact with the participants.
+  API.addSequence([
+
+    // #### Show Video
+    // This message simply displays a video
+    // You can use [this site](http://v4e.thewikies.com/) to create appropriate templates
+    // Note that the video url is set within the data attributes
+    {
+      type: &apos;message&apos;,
+
+      data: {
+        // The video url (as mp4!)
+        videoUrl: &apos;http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4&apos;,
+        // An image to use as a poster until the video plays
+        imageUrl: &apos;http://sandbox.thewikies.com/vfe-generator/images/big-buck-bunny_poster.jpg&apos;
+      },
+
+      // We create the video template itself
+      template: [
+        &apos;&lt;div class=&quot;text-center&quot;&gt;&apos;,
+        &apos; &lt;video controls=&quot;controls&quot; autoplay=&quot;autoplay&quot; poster=&quot;&lt;%= tasksData.imageUrl %&gt;&quot; width=&quot;640&quot; height=&quot;360&quot; style=&quot;margin:auto&quot;&gt;&apos;,
+        &apos;   &lt;source src=&quot;&lt;%= tasksData.videoUrl %&gt;&quot; type=&quot;video/mp4&quot;/&gt;&apos;,
+        &apos;   &lt;object type=&quot;application/x-shockwave-flash&quot; data=&quot;http://flashfox.googlecode.com/svn/trunk/flashfox.swf&quot; width=&quot;640&quot; height=&quot;360&quot;&gt;&apos;,
+        &apos;     &lt;param name=&quot;movie&quot; value=&quot;http://flashfox.googlecode.com/svn/trunk/flashfox.swf&quot; /&gt;&apos;,
+        &apos;     &lt;param name=&quot;allowFullScreen&quot; value=&quot;true&quot; /&gt;&apos;,
+        &apos;     &lt;param name=&quot;wmode&quot; value=&quot;transparent&quot; /&gt;&apos;,
+        &apos;     &lt;param name=&quot;flashVars&quot; value=&quot;autoplay=true&amp;controls=true&amp;poster=&lt;%= tasksData.imageUrl %&gt;&amp;src=&lt;%= tasksData.videoUrl %&gt;&quot; /&gt;&apos;,
+        &apos;   &lt;/object&gt;&apos;,
+        &apos; &lt;/video&gt;&apos;,
+        &apos;&lt;/div&gt;&apos;,
+        &apos;&lt;div class=&quot;text-center proceed&quot; style=&quot;margin: 30px auto 10px;&quot;&gt;&apos;,
+        &apos; &lt;button pi-message-done type=&quot;button&quot; class=&quot;btn btn-primary&quot;&gt;Click Here to Proceed&lt;/button&gt;&apos;,
+        &apos;&lt;/div&gt;&apos;
+      ].join(&apos;\n&apos;)
+    },
+
+
+    // ### Show video and defer proceed
+    // This message is identical to the previous one,
+    // only now we use a trick to defer the presentation of the proceed button until the video completes
+    {
+      type: &apos;message&apos;,
+
+      data: {
+        // The video url (as mp4!)
+        videoUrl: &apos;http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4&apos;,
+        // An image to use as a poster until the video plays
+        imageUrl: &apos;http://sandbox.thewikies.com/vfe-generator/images/big-buck-bunny_poster.jpg&apos;
+      },
+
+      // We create the video template itself
+      template: [
+        &apos;&lt;div class=&quot;text-center&quot;&gt;&apos;,
+        &apos; &lt;video controls=&quot;controls&quot; autoplay=&quot;autoplay&quot; poster=&quot;&lt;%= tasksData.imageUrl %&gt;&quot; width=&quot;640&quot; height=&quot;360&quot; style=&quot;margin:auto&quot;&gt;&apos;,
+        &apos;   &lt;source src=&quot;&lt;%= tasksData.videoUrl %&gt;&quot; type=&quot;video/mp4&quot;/&gt;&apos;,
+        &apos;   &lt;object type=&quot;application/x-shockwave-flash&quot; data=&quot;http://flashfox.googlecode.com/svn/trunk/flashfox.swf&quot; width=&quot;640&quot; height=&quot;360&quot;&gt;&apos;,
+        &apos;     &lt;param name=&quot;movie&quot; value=&quot;http://flashfox.googlecode.com/svn/trunk/flashfox.swf&quot; /&gt;&apos;,
+        &apos;     &lt;param name=&quot;allowFullScreen&quot; value=&quot;true&quot; /&gt;&apos;,
+        &apos;     &lt;param name=&quot;wmode&quot; value=&quot;transparent&quot; /&gt;&apos;,
+        &apos;     &lt;param name=&quot;flashVars&quot; value=&quot;autoplay=true&amp;controls=true&amp;poster=&lt;%= tasksData.imageUrl %&gt;&amp;src=&lt;%= tasksData.videoUrl %&gt;&quot; /&gt;&apos;,
+        &apos;   &lt;/object&gt;&apos;,
+        &apos; &lt;/video&gt;&apos;,
+        &apos;&lt;/div&gt;&apos;,
+        &apos;&lt;div class=&quot;text-center proceed&quot; style=&quot;margin: 30px auto 10px;&quot;&gt;&apos;,
+        &apos; &lt;button pi-message-done type=&quot;button&quot; class=&quot;btn btn-primary&quot;&gt;Click Here to Proceed&lt;/button&gt;&apos;,
+        &apos;&lt;/div&gt;&apos;
+      ].join(&apos;\n&apos;),
+
+
+      // This is where the magic happens. as soon as the page is loaded
+      // We hide The proceed button, and show it only after 60 seconds when the video is supposed to end.
+      // (Note that in certain situations the button may be displayed before the video finishes playing. This is because the timing is absolute and not dependant on the video actually finishing)
+      load: function(){
+        var proceed = document.querySelectorAll(&apos;.proceed&apos;)[0];
+        proceed.style.visibility = &apos;hidden&apos;;
+        setTimeout(function(){
+          proceed.style.visibility = &apos;&apos;;
+        }, 60 * 1000); // after 10 seconds
+      }
+
+    }
+
+
+    // Now, we just close the sequence.
+  ]);
+
+  // ### Closing section
+  //
+  // And finally, we close the script.
+  // Here again, all scripts look more or less the same.
+  // We return the `script` and close the `define` wrapper.
+  return API.script;
+});
+
+
+
+
+
+
+
+</div>
+</section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js" integrity="sha256-xrr4HH5eSY+cFz4SH7ja/LaAi9qcEdjMpeMP49/iOLs=" crossorigin="anonymous"></script>
+<script src="../assets/playground.js"></script>
+
+				<hr />
+				<small>License: Apache 2. &copy; Project Implicit. &middot; Current version [version]</small>
+			</section>
+		</main>
+		<script src="../assets/prism.js"></script>
+        <script>
+            (function(){
+                var select = document.getElementById('version-select');
+                select.addEventListener('change', function(event){
+                    var version = event.target.value;
+                    location.href = location.href.replace(/[0-9]\.[0-9]/, version)
+                });
+            })();
+        </script>
+	</body>
+</html>

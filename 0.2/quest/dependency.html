@@ -1,0 +1,194 @@
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Minno.js</title>
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+		<link href="../assets/prism.css" rel="stylesheet" />
+		<link href="../assets/style.css" rel="stylesheet" />
+	</head>
+	<body>
+		<header>
+			<section>
+				<nav class="brand">
+                    <a href="/"><h1>Minno</h1></a>
+				</nav>
+				<nav>
+					<a href="/minno-quest/0.2/basics/overview.html">Basics</a>
+					<a href="/minno-quest/0.2/manager/overview.html">miManager</a>
+					<a href="/minno-quest/0.2/quest/overview.html">miQuest</a>
+					<a href="/minno-time/0.5/time/overview.html">miTime</a>
+				</nav>
+				<nav>
+                    <div id="search-box">
+                        <script>
+                            (function() {
+                                var cx = '002953266509769041597:smg5beek-iu';
+                                var gcse = document.createElement('script');
+                                gcse.type = 'text/javascript';
+                                gcse.async = true;
+                                gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+                                var s = document.getElementsByTagName('script')[0];
+                                s.parentNode.insertBefore(gcse, s);
+                            })();
+                        </script>
+                        <gcse:searchbox-only></gcse:searchbox-only>
+                    </div>
+                    <select id="version-select"><option value="0.0" >v0.0</option>,<option value="0.1" >v0.1</option>,<option value="0.2" selected>v0.2</option></select>
+					<a href="https://github.com/minnojs">Github</a>
+				</nav>
+			</section>
+		</header>
+		<main>
+			<section class="docs">
+                <h1><a name="a-hrefdependencyhtmldependencya" class="header-link" href="#a-hrefdependencyhtmldependencya"><span></span></a><a href="dependency.html">Dependency</a></h1><ul>
+<li>Core<ul>
+<li><a href="overview.html">Overview</a></li>
+<li><a href="introduction.html">Introduction</a></li>
+<li><a href="API.html">API</a></li>
+<li><a href="playground.html">Playground</a></li>
+</ul>
+</li>
+<li>Question types<ul>
+<li><a href="text.html">Text</a></li>
+<li><a href="textarea.html">Textarea</a></li>
+<li><a href="textNumber.html">Text Number</a></li>
+<li><a href="selectOne.html">Select One</a></li>
+<li><a href="selectMulti.html">Select Multi</a></li>
+<li><a href="grid.html">Grid</a></li>
+<li><a href="gridMulti.html">Multi Grid</a></li>
+<li><a href="slider.html">Slider</a></li>
+<li><a href="rank.html">Rank</a></li>
+</ul>
+</li>
+<li>Examples<ul>
+<li><a href="helloworld.html">Hello world</a></li>
+<li><a href="bodyAwareness.html">Body Awareness</a></li>
+<li><a href="weight.html">Weight demo</a></li>
+<li><a href="usingImages.html">Using Images</a></li>
+<li><a href="buttons.html">Buttons</a></li>
+<li><a href="buttonsAdvanced.html">Buttons Advanced</a></li>
+<li><a href="buttonsOnePage.html">Buttons One Page</a></li>
+<li><strong>Dependency</strong></li>
+<li><a href="liveDependency.html">Live Dependency</a></li>
+<li><a href="gridExample.html">Grid</a></li>
+<li><a href="timer.html">Timer</a></li>
+<li><a href="openEnded.html">Open Ended</a></li>
+<li><a href="openEndedLong.html">Open Ended Long</a></li>
+<li><a href="rateImages.html">Rate Images</a></li>
+<li><a href="rateImagesSizes.html">Rate Images Sizes</a></li>
+<li><a href="scaleWithFeedback.html">Scale With Feedback</a></li>
+<li><a href="sliderExample.html">Slider</a></li>
+<li><a href="userPrevResp.html">User Prev Resp</a></li>
+<li><a href="nfc.html">Agreement scale</a></li>
+</ul>
+</li>
+</ul>
+<section playground>
+    <div class="buttons">
+        <a class="activate-button">Activate</a>
+        <a class="download-button" href="dependency.js" download>Download</a>
+    </div>
+    <div class="editor">define([&apos;questAPI&apos;], function(Quest){
+	var API = new Quest();
+
+	// ### Questions
+	API.addQuestionsSet(&apos;basicSelect&apos;,
+	{
+		type: &apos;selectOne&apos;,
+		autoSubmit:true,
+		numericValues:true,
+		required:true,
+		errorMsg: {
+			required: &quot;Please select an answer, or click &apos;decline to answer&apos;&quot;
+		},
+		help: &apos;&lt;%= pagesMeta.number &lt; 3 %&gt;&apos;,
+		helpText: &apos;Selecting an answer once colors it blue.&lt;br/&gt;You can change your answer by selecting another option.&lt;br/&gt;To confirm, click the selected (blue) button a second time.&apos;
+	});
+
+	API.addQuestionsSet({
+		funnyChoice: [{
+			inherit: &apos;basicSelect&apos;,
+			name:&apos;moreFunny&apos;,
+			stem:&apos;On avarage, who do you think are funnier, women or men?&apos;,
+			answers : [&apos;Men&apos;, &apos;Women&apos;]
+		}],
+		funnyMen: [{
+			inherit: &apos;basicSelect&apos;,
+			name:&apos;menMore&apos;,
+			stem:&apos;How much funnier do you think that men are in comparison to women?&apos;,
+			answers : [&apos;Extremely funneir&apos;, &apos;Moderately funnier&apos;, &apos;Slightly funnier&apos;]
+		}],
+		funnyWomen: [{
+			inherit: &apos;basicSelect&apos;,
+			name:&apos;womenMore&apos;,
+			stem:&apos;How much funnier do you think that women are in comparison to men?&apos;,
+			answers : [&apos;Extremely funneir&apos;, &apos;Moderately funnier&apos;, &apos;Slightly funnier&apos;]
+		}]
+	});
+
+	// ### Pages
+	API.addPagesSet(&apos;basicPage&apos;,
+	{
+		progressBar: &apos;&lt;%= pagesMeta.number %&gt; out of 2&apos;,
+		headerStyle : {&apos;font-size&apos;:&apos;1em&apos;},
+		v1style:2,
+		decline:true,
+		numbered: false
+	});
+
+	// ### Sequence
+	API.addSequence(
+	[
+		//Present the first question
+		{inherit :&apos;basicPage&apos;, questions:{inherit:&apos;funnyChoice&apos;}},
+
+		//Select one of the two possible questions, based on the response to the previous question.
+		{
+			mixer : &apos;multiBranch&apos;,
+			branches: [
+				{
+					conditions: [
+						{compare: &apos;current.questions.moreFunny.response&apos;, to: 1}
+					],
+					data: [
+						{inherit :&apos;basicPage&apos;, questions:{inherit:&apos;funnyMen&apos;}}
+					]
+				},
+				{
+					conditions: [
+						{compare: &apos;current.questions.moreFunny.response&apos;, to: 2}
+					],
+					data: [
+						{inherit :&apos;basicPage&apos;, questions:{inherit:&apos;funnyWomen&apos;}}
+					]
+				}
+			]
+		}
+	]);
+
+	/**
+	Return the script to piquest&apos;s god, or something of that sort.
+	**/
+	return API.script;
+});
+</div>
+</section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js" integrity="sha256-xrr4HH5eSY+cFz4SH7ja/LaAi9qcEdjMpeMP49/iOLs=" crossorigin="anonymous"></script>
+<script src="../assets/playground.js"></script>
+
+				<hr />
+				<small>License: Apache 2. &copy; Project Implicit. &middot; Current version [version]</small>
+			</section>
+		</main>
+		<script src="../assets/prism.js"></script>
+        <script>
+            (function(){
+                var select = document.getElementById('version-select');
+                select.addEventListener('change', function(event){
+                    var version = event.target.value;
+                    location.href = location.href.replace(/[0-9]\.[0-9]/, version)
+                });
+            })();
+        </script>
+	</body>
+</html>

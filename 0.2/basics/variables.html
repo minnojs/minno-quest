@@ -1,0 +1,245 @@
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Minno.js</title>
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+		<link href="../assets/prism.css" rel="stylesheet" />
+		<link href="../assets/style.css" rel="stylesheet" />
+	</head>
+	<body>
+		<header>
+			<section>
+				<nav class="brand">
+                    <a href="/"><h1>Minno</h1></a>
+				</nav>
+				<nav>
+					<a href="/minno-quest/0.2/basics/overview.html">Basics</a>
+					<a href="/minno-quest/0.2/manager/overview.html">miManager</a>
+					<a href="/minno-quest/0.2/quest/overview.html">miQuest</a>
+					<a href="/minno-time/0.5/time/overview.html">miTime</a>
+				</nav>
+				<nav>
+                    <div id="search-box">
+                        <script>
+                            (function() {
+                                var cx = '002953266509769041597:smg5beek-iu';
+                                var gcse = document.createElement('script');
+                                gcse.type = 'text/javascript';
+                                gcse.async = true;
+                                gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+                                var s = document.getElementsByTagName('script')[0];
+                                s.parentNode.insertBefore(gcse, s);
+                            })();
+                        </script>
+                        <gcse:searchbox-only></gcse:searchbox-only>
+                    </div>
+                    <select id="version-select"><option value="0.0" >v0.0</option>,<option value="0.1" >v0.1</option>,<option value="0.2" selected>v0.2</option></select>
+					<a href="https://github.com/minnojs">Github</a>
+				</nav>
+			</section>
+		</header>
+		<main>
+			<section class="docs">
+                <h1><a name="variables" class="header-link" href="#variables"><span></span></a>Variables</h1><ul>
+<li>Core<ul>
+<li><a href="overview.html">Overview</a></li>
+<li><a href="javascript.html">Javascript</a></li>
+<li><a href="create.html">Creating a task</a></li>
+<li><a href="API.html">API</a></li>
+<li><a href="resources.html">Resources</a></li>
+</ul>
+</li>
+<li>Sequencer<ul>
+<li><a href="introduction.html">Introduction</a></li>
+<li><a href="mixer.html">Mixer</a></li>
+<li><a href="templates.html">Templates</a></li>
+<li><strong><a href="variables.html">Variables</a></strong></li>
+<li><a href="inheritance.html">Inheritance</a></li>
+</ul>
+</li>
+<li>Inheritance<ul>
+<li><a href="inheritanceAbstraction.html">Abstraction</a></li>
+<li><a href="inheritanceRandom.html">Random</a></li>
+<li><a href="inheritanceExRandom.html">Exclusive Random</a></li>
+<li><a href="inheritanceSequential.html">Sequential</a></li>
+<li><a href="inheritanceByData.html">By Data</a></li>
+<li><a href="inheritanceCustom.html">Custom</a></li>
+<li><a href="inheritanceSeed.html">Seed</a></li>
+<li><a href="inheritanceRepeat.html">Repeat</a></li>
+</ul>
+</li>
+<li>Mixers<ul>
+<li><a href="mixerRandom.html">Random</a></li>
+<li><a href="mixerRepeat.html">Repeat</a></li>
+<li><a href="mixerWeightedRandom.html">Weighted Random</a></li>
+<li><a href="mixerChoose.html">Choose</a></li>
+<li><a href="mixerWrapper.html">Wrapper</a></li>
+<li><a href="mixerBranch.html">Branch</a></li>
+<li><a href="mixerMultiBranch.html">Multi Branch</a></li>
+</ul>
+</li>
+<li>Variables &amp; Templates<ul>
+<li><a href="templateGlobal.html">Global</a></li>
+<li><a href="templateData.html">Data</a></li>
+<li><a href="templateMeta.html">Meta</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><a href="#accessing-variables">Accessing variables</a></li>
+<li><a href="#global">Global</a><ul>
+<li><a href="#url">Url</a></li>
+</ul>
+</li>
+<li><a href="#the-task-object-current">The task object (current)</a></li>
+<li><a href="#local-variables-local-&amp;-meta">Local Variables (local &amp; meta)</a></li>
+</ul>
+<p>Sometimes it is not enough to hard code behaviors into your tasks, 
+sometimes you want behavior to depend on a previous response,
+or change some texts according to randomization.
+In order to achieve these behaviors you can use variables.</p>
+<p>We will first describe variables that are common across all tasks, and are always available - these are the <code>global</code> and <code>current</code> variables.
+Then we will get down to variables variables that are available only in specific contexts - such as the <code>data</code> and <code>meta</code> variables.</p>
+<h3><a name="accessing-variables" class="header-link" href="#accessing-variables"><span></span></a>Accessing variables</h3><p>There are many ways to use variables within the PI tasks.
+You can learn about them in their respective documentation, check out <a href="mixer.html#conditions">conditions</a> and <a href="templates.html">templates</a>.
+In addition, some of the variables can be accessed directly from your JavaScript, in cases that this is possible it will be mentioned in the description of the variable.</p>
+<h3><a name="global" class="header-link" href="#global"><span></span></a>Global</h3><p>The PI tasks expose one central object that serves as the hub of all of you tasks.
+The <a href="#the-task-object-current">task objects</a> get automatically registered on the <code>global</code> object, so that you can access them all from here.
+In addition, you can register any data that you want shared between your tasks onto <code>global</code>.
+This options is useful in various cases of branching, as well as when you want a common theme to appear in multiple tasks.</p>
+<p>The following snippet sets <code>global.value</code> to 123, and <code>global.variable</code> to [1,2,3].</p>
+<pre><code class="lang-javascript">API.addGlobal({
+    value: 123,
+    variable: [1,2,3]
+})
+</code></pre>
+<p>It may sometimes be handy to access <code>global</code> directly as <code>window.piGlobal</code>.
+Note that this allows you to access task objects as well.</p>
+<pre><code class="lang-javascript">window.piGlobal.greeting = &#39;Hello world&#39;;
+console.log(window.piGlobal);
+</code></pre>
+<h4><a name="url" class="header-link" href="#url"><span></span></a>Url</h4><p>The <a href="https://en.wikipedia.org/wiki/Query_string">query string</a> is a set of parameters that can be passed within a URL string.
+The global object exposes the url query string in a dedicated object called <code>$url</code>.</p>
+<p>So that if you have a url such as <code>example.com?bar=buz&amp;bam=bif</code> the object takes the following form:</p>
+<pre><code class="lang-javascript">global.$url == {
+    bar: &#39;buz&#39;,
+    bam: &#39;bif&#39;
+}
+</code></pre>
+<h3><a name="the-task-object-current" class="header-link" href="#the-task-object-current"><span></span></a>The task object (current)</h3><p>Each PI task creates an object that holds information regarding that task.
+The object is automatically updated with data from within the tasks (such as question answers or other logs).
+The task object can be changed manually as well.
+You can extend it however you like using <code>API.addCurrent</code>:</p>
+<pre><code class="lang-javascript">API.addCurrent({
+    value: 123,
+    variable: [1,2,3]
+});
+</code></pre>
+<p>While a task is running, its task object is available as <code>current</code>.
+Even when the task is not active it is available from within the <a href="#global"><code>global</code></a> object, as <code>global.&amp;lt;taskName&gt;</code>, 
+where <code>&lt;taskName&gt;</code> stands for the <a href="../manager/API.html#tasks">task name</a> as defined within the task manager.</p>
+<p>For your convenience, here is a table describing some of the data available within the different task objects.</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>miTime</td>
+<td>The task object holds all trial logs: <code>current.logs</code>.</td>
+</tr>
+<tr>
+<td>miQuest</td>
+<td>The task object holds all questions: <code>current.questions</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3><a name="local-variables-local-&amp-meta" class="header-link" href="#local-variables-local-&amp-meta"><span></span></a>Local Variables (local &amp; meta)</h3><p>The variables that we&#39;ve discussed so far are relevant for whole tasks or even whole studies.
+We now approach variables that have a narrower scope: they have to do with specific elements within your task.
+These variables are called <em>Data</em> and <em>Meta</em>. </p>
+<p>The <em>Data</em> variables allow you to manually set useful information into each element. 
+Their behaviour is described fully within as part of element <a href="./inheritance.html#data">inheritance</a>.</p>
+<p>The <em>Meta</em> variables hold some meta information regarding this element that is auto-generated by the mixer.
+In particular it holds two properties: `</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description  </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>number</td>
+<td>The serial number for this element within the sequence (i.e. 3 if this is the third element to be presented).</td>
+</tr>
+<tr>
+<td>outOf</td>
+<td>An attempt to estimate how many elements are in the sequence overall. This number cannot be fully trusted as the number of elements may be dynamically generated and depend on various variables not yet determined.</td>
+</tr>
+</tbody>
+</table>
+<p>The naming convention for these variables is <code>&lt;elementName&gt;Data</code> and <code>&lt;elementName&gt;Meta</code> respectively.
+For example, for tasks they appear as <code>tasksData</code> and <code>tasksMeta</code>. </p>
+<p>The elementNames for the various tasks are as follows:</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>elementName</th>
+<th>Object names</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>miManager</td>
+<td>tasks</td>
+<td>tasksData, tasksMeta</td>
+</tr>
+<tr>
+<td>miQuest</td>
+<td>pages</td>
+<td>pagesData, pagesMeta</td>
+</tr>
+<tr>
+<td></td>
+<td>questions</td>
+<td>questionsData, questionsMeta</td>
+</tr>
+<tr>
+<td>miTime</td>
+<td>trial</td>
+<td>trialData, trialMeta</td>
+</tr>
+<tr>
+<td></td>
+<td>stimulus</td>
+<td>stimulusData, stimulusMeta</td>
+</tr>
+<tr>
+<td></td>
+<td>media</td>
+<td>mediaData, mediaMeta</td>
+</tr>
+</tbody>
+</table>
+
+				<hr />
+				<small>License: Apache 2. &copy; Project Implicit. &middot; Current version [version]</small>
+			</section>
+		</main>
+		<script src="../assets/prism.js"></script>
+        <script>
+            (function(){
+                var select = document.getElementById('version-select');
+                select.addEventListener('change', function(event){
+                    var version = event.target.value;
+                    location.href = location.href.replace(/[0-9]\.[0-9]/, version)
+                });
+            })();
+        </script>
+	</body>
+</html>

@@ -1,0 +1,1308 @@
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Minno.js</title>
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+		<link href="../assets/prism.css" rel="stylesheet" />
+		<link href="../assets/style.css" rel="stylesheet" />
+	</head>
+	<body>
+		<header>
+			<section>
+				<nav class="brand">
+                    <a href="/"><h1>Minno</h1></a>
+				</nav>
+				<nav>
+					<a href="/minno-quest/0.2/basics/overview.html">Basics</a>
+					<a href="/minno-quest/0.2/manager/overview.html">miManager</a>
+					<a href="/minno-quest/0.2/quest/overview.html">miQuest</a>
+					<a href="/minno-time/0.5/time/overview.html">miTime</a>
+				</nav>
+				<nav>
+                    <div id="search-box">
+                        <script>
+                            (function() {
+                                var cx = '002953266509769041597:smg5beek-iu';
+                                var gcse = document.createElement('script');
+                                gcse.type = 'text/javascript';
+                                gcse.async = true;
+                                gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+                                var s = document.getElementsByTagName('script')[0];
+                                s.parentNode.insertBefore(gcse, s);
+                            })();
+                        </script>
+                        <gcse:searchbox-only></gcse:searchbox-only>
+                    </div>
+                    <select id="version-select"><option value="0.0" >v0.0</option>,<option value="0.1" >v0.1</option>,<option value="0.2" selected>v0.2</option></select>
+					<a href="https://github.com/minnojs">Github</a>
+				</nav>
+			</section>
+		</header>
+		<main>
+			<section class="docs">
+                <h1><a name="api" class="header-link" href="#api"><span></span></a>API</h1><ul>
+<li>Core<ul>
+<li><a href="overview.html">Overview</a></li>
+<li><a href="introduction.html">Introduction</a></li>
+<li><strong><a href="API.html">API</a></strong><ul>
+<li><a href="#pages">Pages</a><ul>
+<li><a href="#page-timer">Page Timer</a></li>
+<li><a href="#page-messages">Page Messages</a></li>
+</ul>
+</li>
+<li><a href="#questions">Questions</a><ul>
+<li><a href="#hooks">Hooks</a></li>
+<li><a href="#info">Info</a></li>
+<li><a href="#text-&amp;-textarea">Text &amp; Textarea</a></li>
+<li><a href="#textnumber">textNumber</a></li>
+<li><a href="#dropdown">dropdown</a></li>
+<li><a href="#selectone-&amp;-selectmulti">selectOne &amp; selectMulti</a></li>
+<li><a href="#grid">grid</a></li>
+<li><a href="#multigrid">multGrid</a></li>
+<li><a href="#slider">slider</a></li>
+<li><a href="#rank">rank</a></li>
+</ul>
+</li>
+<li><a href="#settings">settings</a><ul>
+<li><a href="#onend">onEnd</a></li>
+<li><a href="#logger">logger</a></li>
+<li><a href="#timer">timer</a></li>
+</ul>
+</li>
+<li><a href="#data">Data</a></li>
+</ul>
+</li>
+<li><a href="playground.html">Playground</a></li>
+</ul>
+</li>
+<li>Question types<ul>
+<li><a href="text.html">Text</a></li>
+<li><a href="textarea.html">Textarea</a></li>
+<li><a href="textNumber.html">Text Number</a></li>
+<li><a href="selectOne.html">Select One</a></li>
+<li><a href="selectMulti.html">Select Multi</a></li>
+<li><a href="grid.html">Grid</a></li>
+<li><a href="gridMulti.html">Multi Grid</a></li>
+<li><a href="slider.html">Slider</a></li>
+<li><a href="rank.html">Rank</a></li>
+</ul>
+</li>
+<li>Examples<ul>
+<li><a href="helloworld.html">Hello world</a></li>
+<li><a href="bodyAwareness.html">Body Awareness</a></li>
+<li><a href="weight.html">Weight demo</a></li>
+<li><a href="usingImages.html">Using Images</a></li>
+<li><a href="buttons.html">Buttons</a></li>
+<li><a href="buttonsAdvanced.html">Buttons Advanced</a></li>
+<li><a href="buttonsOnePage.html">Buttons One Page</a></li>
+<li><a href="dependency.html">Dependency</a></li>
+<li><a href="liveDependency.html">Live Dependency</a></li>
+<li><a href="gridExample.html">Grid</a></li>
+<li><a href="timer.html">Timer</a></li>
+<li><a href="openEnded.html">Open Ended</a></li>
+<li><a href="openEndedLong.html">Open Ended Long</a></li>
+<li><a href="rateImages.html">Rate Images</a></li>
+<li><a href="rateImagesSizes.html">Rate Images Sizes</a></li>
+<li><a href="scaleWithFeedback.html">Scale With Feedback</a></li>
+<li><a href="sliderExample.html">Slider</a></li>
+<li><a href="userPrevResp.html">User Prev Resp</a></li>
+<li><a href="nfc.html">Agreement scale</a></li>
+</ul>
+</li>
+</ul>
+<h3><a name="pages" class="header-link" href="#pages"><span></span></a>Pages</h3><p>The basic unit in PIquest is the <strong>page</strong>. A page is usually one screen in your questionnaire. If your questionnaire presents all its questions in one screen, it will probably have only one page. The properties within a page manage how the question(s) is(are) displayed and how the participants interact with it (e.g., select an answer and then click a submit button).</p>
+<table>
+<thead>
+<tr>
+<th>property</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td>(text) The identifier for this page, is used mainly for logging.</td>
+</tr>
+<tr>
+<td>text</td>
+<td>(text) Some html to present above the questions.</td>
+</tr>
+<tr>
+<td>decline</td>
+<td>(true, false, &#39;double&#39;. default:false) Whether to allow participants decline to answer the questions on this page. This option displays a &quot;decline&quot; button that proceeds to the next page without validation and marks this response as &quot;declined&quot;. If decline is set to &#39;double&#39; then two click are required in order to decline answering.</td>
+</tr>
+<tr>
+<td>declineText</td>
+<td>(text) The text for the decline button (default value: &quot;Decline to answer&quot;)</td>
+</tr>
+<tr>
+<td>prev</td>
+<td>(true or false) Whether to allow users to return to the previous page. The previous button does not appear on the first page (default value: false).</td>
+</tr>
+<tr>
+<td>prevText</td>
+<td>(text) The text for the previous button (default value: &quot;Go Back&quot;)</td>
+</tr>
+<tr>
+<td>noSubmit</td>
+<td>(true of false) remove submit button (useful when using the &#39;autoSubmit&#39; function of some questions; default value: false).</td>
+</tr>
+<tr>
+<td>submitText</td>
+<td>(text) The text of the submit button (default: &quot;Submit&quot;).</td>
+</tr>
+<tr>
+<td>header</td>
+<td>(text) Text for the page header.</td>
+</tr>
+<tr>
+<td>headerStyle</td>
+<td>(Object) A <a href="#http://api.jquery.com/css/#css-properties">css object</a>  to set the style of the header (see examples below).</td>
+</tr>
+<tr>
+<td>progressBar</td>
+<td>(text) Text for the progress bar (You might want to use a template for this, maybe something like: <code>&lt;%= pagesMeta.number %&gt; out of &amp;lt;%= pagesMeta.outOf%&gt;</code>.).</td>
+</tr>
+<tr>
+<td>numbered</td>
+<td>(true of false) Whether to  display the number of each question (default value: false).</td>
+</tr>
+<tr>
+<td>numberStart</td>
+<td>(Number) The number for the first question in the page (default: 1).</td>
+</tr>
+<tr>
+<td>timer</td>
+<td>(Object) This property controls the page timer, its properties are documented right <a href="#page-timer">here</a>.</td>
+</tr>
+<tr>
+<td>questions</td>
+<td>(Array or Object) an array of <a href="#questions">questions</a> to be displayed in the page. Note that the questions may be randomized and chosen conditionally using a <a href="#mixer">mixer</a>. This property also accepts a single question object if you want to present only a single question per page.</td>
+</tr>
+<tr>
+<td>lognow</td>
+<td>(true or false) Whether to log the questions on this page. This option is useful when you know that the page will not be accessed any more. It allows you to use the <code>pulse</code> option from the <a href="#logger">logger</a> to send questions as they are being answered instead of sending only at the end of the task. (default: false)</td>
+</tr>
+<tr>
+<td>animate</td>
+<td>(text) What types of animation to use when this page enters and leaves the screen. We currently support three animations: fade, slide, and drop-in. You can use any and all of them by adding them to the string (for example: &quot;slide fade&quot; will activate both of these animations).</td>
+</tr>
+<tr>
+<td>v1style</td>
+<td>(true or false or 2) Activate in order to use the version 0.1 style. Currently this only affects the way that the submit/decline buttons are presented. Set this to 2 in order to use the latest version of 0.1</td>
+</tr>
+<tr>
+<td>autoFocus</td>
+<td>(true or false) Automatically focus on the first input in the page so that keyboard users have an easier time.</td>
+</tr>
+<tr>
+<td>pageValidation</td>
+<td>(function) A custom validation function. Return <code>false</code> if the page is unvalid. You can control the error message using the <code>pageValidationText</code> property.</td>
+</tr>
+<tr>
+<td>pageValidationText</td>
+<td>(text) The error message for cases where <code>pageValidation</code> is not valid. By default the error message here is <em>Page Invalid</em>.</td>
+</tr>
+</tbody>
+</table>
+<p>For example, a page can look something like this:</p>
+<pre><code class="lang-javascript">var page = {
+    header: &#39;Personal information:&#39;,
+    headerStyle: {&#39;background-color&#39;:&#39;red&#39;,color:&#39;blue&#39;},
+    decline: true,
+    declineText: &#39;I prefer to keep this information to myself&#39;,
+    questions: [
+        {type:&#39;text&#39;, stem:&#39;What is your name?&#39;},
+        {type:&#39;text&#39;, stem:&#39;Where do you live?&#39;}
+    ]
+}
+</code></pre>
+<h4><a name="page-timer" class="header-link" href="#page-timer"><span></span></a>Page Timer</h4><p>The page timer allows you to constrain the time that users have to answer their questions. In order to control it, you may use the following properties.</p>
+<table>
+<thead>
+<tr>
+<th>property</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>duration</td>
+<td>(number) How long (in seconds) before the timer ends.</td>
+</tr>
+<tr>
+<td>submitOnEnd</td>
+<td>(true or false) Whether to submit when the timer ends (true by default).</td>
+</tr>
+<tr>
+<td>show</td>
+<td>(true or false) Whether to display a visual countdown (true by default).</td>
+</tr>
+<tr>
+<td>direction</td>
+<td>(&quot;up&quot; or &quot;down&quot;) Whether to use a countdown or to count up (&quot;down&quot; by default).</td>
+</tr>
+<tr>
+<td>removeOnEnd</td>
+<td>(true or false) Whether to remove the visual timer when the countdown ends (if you don&#39;t auto proceed when the timer ends. ).        </td>
+</tr>
+<tr>
+<td>message</td>
+<td>(String or Object) Display a message at the end the timer duration. You can input a simple string here, but if you want finer control over the content of the message you can use the <a href="#page-messages">object API</a>.</td>
+</tr>
+</tbody>
+</table>
+<h4><a name="page-messages" class="header-link" href="#page-messages"><span></span></a>Page Messages</h4><p>You may want to display a message to the users when they run out of time at the end of a timer. Messages can be simple strings, or if you want finer control over the content of the message you can use the object API, that may be used as follows:</p>
+<table>
+<thead>
+<tr>
+<th>property</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>header</td>
+<td>The header text for the message (defaults to &quot;Timer Done&quot;).</td>
+</tr>
+<tr>
+<td>body</td>
+<td>The body of the message.</td>
+</tr>
+<tr>
+<td>button</td>
+<td>The close button (defaults to &quot;close&quot;).</td>
+</tr>
+</tbody>
+</table>
+<p>All these strings may use templates, and have access to the following objects: <code>global</code>, <code>current</code>, <code>pagesData</code>, <code>pagesMeta</code>.</p>
+<h3><a name="questions" class="header-link" href="#questions"><span></span></a>Questions</h3><p>Here are the types of questions PIQuest currently supports:</p>
+<ul>
+<li><a href="#info">Info</a></li>
+<li><a href="#text-&amp;-textarea">Text &amp; Textarea</a></li>
+<li><a href="#textnumber">textNumber</a></li>
+<li><a href="#dropdown">dropdown</a></li>
+<li><a href="#selectone-&amp;-selectmulti">selectOne &amp; selectMulti</a></li>
+<li><a href="#grid">grid</a></li>
+<li><a href="#slider">slider</a></li>
+</ul>
+<p>All question types share some basic properties:</p>
+<table>
+<thead>
+<tr>
+<th>property</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td>(text; default: &#39;text&#39;) Controls the question type. See the possible types below. </td>
+</tr>
+<tr>
+<td>name</td>
+<td>(text) The name that this question is marked with when it is logged. Also allows you to refer to the question from within PIquest.</td>
+</tr>
+<tr>
+<td>stem</td>
+<td>(text; default: &#39;&#39;) The text for the question itself..</td>
+</tr>
+<tr>
+<td>stemCss</td>
+<td>A <a href="#http://api.jquery.com/css/#css-properties">css object</a> to be applied to the stem.</td>
+</tr>
+<tr>
+<td>description</td>
+<td>(text; default: &#39;&#39;) Any additional text you want in order to extend the question description.</td>
+</tr>
+<tr>
+<td>maxWidth</td>
+<td>Force question inputs to have this maximum width. The <code>maxWidth</code> must include an explicit measuring unit (for example &#39;800px&#39; or &#39;50%&#39;).</td>
+</tr>
+<tr>
+<td>help</td>
+<td>(true or false;  (default: false)) Whether to display the question help text.</td>
+</tr>
+<tr>
+<td>helpText</td>
+<td>(text) The question help text. (Some questions have default help texts, some don&#39;t).</td>
+</tr>
+<tr>
+<td>lognow</td>
+<td>(true or false) Whether to log this questions when the page is submitted. This option is useful when you know that the question will not be accessed any more. It allows you to use the <code>pulse</code> option from the <a href="#logger">logger</a> to send questions as they are being answered instead of sending only at the end of the task. (default: false)</td>
+</tr>
+<tr>
+<td>errorMsg</td>
+<td>(Object: {}) This object has a property for each validation type. Setting the appropriate type changes the validation message. For instance setting the <code>required</code> property will change the validation message for instances where no response was given.</td>
+</tr>
+</tbody>
+</table>
+<p>You may want to debug questions by setting the <a href="../manager/API.html#debug">debug level in the manager</a> to <code>verbose</code>.
+You will then be warned in the console if a question name is reused 
+(note: sometimes a question is supposed to be reused, if this warning pops up just make sure the use case is correct).</p>
+<h4><a name="hooks" class="header-link" href="#hooks"><span></span></a>Hooks</h4><p>Questions have hooks that allow you to respond to many events in the life time of the question. Each hook is invoked with <code>global</code>, <code>current</code> and the question <code>log</code>. </p>
+<table>
+<thead>
+<tr>
+<th>property</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>onCreate</td>
+<td>At the creation of the question.</td>
+</tr>
+<tr>
+<td>onChange</td>
+<td>At each change of the question response (note that this hook may be called many times for each question).</td>
+</tr>
+<tr>
+<td>onSubmit</td>
+<td>When the question is submitted.</td>
+</tr>
+<tr>
+<td>onDecline</td>
+<td>When the question is declined.</td>
+</tr>
+<tr>
+<td>onTimeout</td>
+<td>When the timer finishes.</td>
+</tr>
+<tr>
+<td>onDestroy</td>
+<td>When the question is removed from the screen (either decline or submit).</td>
+</tr>
+</tbody>
+</table>
+<p>For example, in case the participant made an error you can mark it on the current object:</p>
+<pre><code class="lang-javascript">var questions = {
+    stem: &#39;Please write &quot;Hello&quot;&#39;,
+    onSubmit: function(log, current){
+        // if the question response is not correct
+        if (log.response !== &#39;Hello&#39;){
+            // mark an arbitrary flag so that it may be accessed somewhere else
+            current.error = true;
+        }
+    }
+}
+</code></pre>
+<h4><a name="info" class="header-link" href="#info"><span></span></a>Info</h4><p>The info question isn&#39;t strictly a question. It allows you to use the common question properties in order to display information to the users. For example you can use it as follows:</p>
+<pre><code class="lang-javascript">{
+    type: &#39;info&#39;,
+    description: &#39;&lt;p&gt;The following questions deal with emotions&lt;/p&gt;&#39; +
+        &#39;&lt;p&gt;Please answer them as honestly as possible&lt;/p&gt;&#39;
+}
+</code></pre>
+<p>This question will simply display the description without offering any additional user interface (explicit question).</p>
+<h4><a name="text-&amp-textarea" class="header-link" href="#text-&amp-textarea"><span></span></a>Text &amp; Textarea</h4><p>The <code>text</code> and <code>textarea</code> questions consist of a simple text input in which the users can type in text. The difference between them is that text questions consist of a single line, whereas textareas are multiline. There are also several properties that are unique to textareas.
+Both types of questions support the following properties.</p>
+<table>
+<thead>
+<tr>
+<th>property</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dflt</td>
+<td>(test; default value: &quot;&quot;) The default value for this question.</td>
+</tr>
+<tr>
+<td>inline</td>
+<td>Show the stem in the same line as the input box (this will make the input box narrower as well).</td>
+</tr>
+<tr>
+<td>width</td>
+<td>(Number or text) The width of the input box (By default numbers are translated to pixels, but you can use text to use other units).</td>
+</tr>
+<tr>
+<td>autoSubmit</td>
+<td>(true or false; default: false) If this property is set to true typing <code>Enter</code> while this input is focused will submit the page.</td>
+</tr>
+<tr>
+<td>minlength</td>
+<td>(Number) Validation: force at least this number of characters.</td>
+</tr>
+<tr>
+<td>minLength</td>
+<td>@DEPRECATED see minlength. (Number) Validation: force at least this number of characters.</td>
+</tr>
+<tr>
+<td>maxlength</td>
+<td>(Number) Validation: force at most this number of characters.</td>
+</tr>
+<tr>
+<td>maxlengthLimit</td>
+<td>(true or false) Do not allow the user to input more characters than defined by <code>maxlength</code> (if maxlength is not defined, any number of characters will be allowed).</td>
+</tr>
+<tr>
+<td>required</td>
+<td>(true of false; default: false) Validation: require a non-empty string as a response.</td>
+</tr>
+<tr>
+<td>pattern</td>
+<td>(text [supports regex]) Validation: require the response to match the regular expression set in pattern (takes either a string <code>&quot;a&#124;b&quot;</code> or a regular expression <code>/a&#124;b/</code>).</td>
+</tr>
+<tr>
+<td>correct</td>
+<td>(true or false; default: false) Validation: require the response to be correct (set the target value using <code>correctValue</code>)</td>
+</tr>
+<tr>
+<td>correctValue</td>
+<td>(*) Set the correct response value for the correct validation.</td>
+</tr>
+<tr>
+<td>errorMsg</td>
+<td>(Object: {}) This object has a property for each validation type. Setting the appropriate type changes the validation message. For instance setting the <code>required</code> property will change the validation message for instances where no response was given.</td>
+</tr>
+</tbody>
+</table>
+<p>The following properties are supported only by <code>textarea</code>s:</p>
+<table>
+<thead>
+<tr>
+<th>property</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>rows</td>
+<td>The number of visible text lines.</td>
+</tr>
+<tr>
+<td>columns</td>
+<td>The visible width of the textarea, in average character widths (this setting overrides the width setting).</td>
+</tr>
+</tbody>
+</table>
+<p>For example, this is a text question that requires a valid email address (although there are better <em>patterns</em> out there for this purpose):</p>
+<pre><code class="lang-javascript">var quest = {
+    stem: &quot;Please type your email address&quot;,
+    dflt: &quot;my@email.com&quot;,
+    required: true,
+    pattern: /[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}/igm,
+    errorMsg: {
+        required: &quot;You must enter a valid email address.&quot;,
+        pattern: &quot;This is not a valid email address&quot;
+    }
+}
+</code></pre>
+<h4><a name="textnumber" class="header-link" href="#textnumber"><span></span></a>textNumber</h4><p>The <code>textNumber</code> questions consist of a simple text input that limits the participant to numeric responses only. This type of questions have the following parameters:</p>
+<table>
+<thead>
+<tr>
+<th>property</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dflt</td>
+<td>(Number; default: null) The default value for this question.</td>
+</tr>
+<tr>
+<td>inline</td>
+<td>Show the stem in the same line as the input box (this will make the input box narrower as well).</td>
+</tr>
+<tr>
+<td>autoSubmit</td>
+<td>(true or false; default: false) If this property is set to true typing <code>Enter</code> while this input is focused will submit the form.</td>
+</tr>
+<tr>
+<td>min</td>
+<td>(Number) Validation: minimum valid number.</td>
+</tr>
+<tr>
+<td>max</td>
+<td>(Number) Validation: maximum valid number.</td>
+</tr>
+<tr>
+<td>required</td>
+<td>(true or false; default: false) Validation: require a non empty string as a response.</td>
+</tr>
+<tr>
+<td>correct</td>
+<td>(true or false; default: false) Validation: require the response to be correct (set the target value using <code>correctValue</code>)</td>
+</tr>
+<tr>
+<td>correctValue</td>
+<td>(*) Set the correct response value for the correct validation.</td>
+</tr>
+<tr>
+<td>errorMsg</td>
+<td>(Object: {}) This object has a property for each validation type. Setting the appropriate type changes the validation message. For instance setting the <code>required</code> property will change the validation message for instances where no response was given. Note that their is a special property <code>number</code> that is triggered whenever the response is not a valid number.</td>
+</tr>
+</tbody>
+</table>
+<p>For example, this is a text question that asks for a number under 273:</p>
+<pre><code class="lang-javascript">var quest = {
+    type: &#39;textNumber&#39;,
+    stem: &quot;Please enter your height in cm&quot;,
+    max: 273,
+    required: true,
+    errorMsg: {
+        max: &quot;That is a bit too much to believe... - even Robert Wadlow wasn&#39;t this tall!&quot;,
+        number: &quot;Your height has to be a number&quot;
+    }
+}
+</code></pre>
+<h4><a name="dropdown" class="header-link" href="#dropdown"><span></span></a>dropdown</h4><p>The <code>dropdown</code> question presents a dropdown that the user can use to select a single response. It has the following parameters: </p>
+<table>
+<thead>
+<tr>
+<th>property</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dflt</td>
+<td>The default <em>value</em> for this question.</td>
+</tr>
+<tr>
+<td>autoSubmit</td>
+<td>(true or false; default: false) If this property is set to true, selecting a response will submit the form.</td>
+</tr>
+<tr>
+<td>randomize</td>
+<td>(true or false; default: false) Shuffle response options after mixing them (the mixer is activated regardless of this parameter, this serves as a shortcut)</td>
+</tr>
+<tr>
+<td>reverse</td>
+<td>(true or false; default: false) Reverses the order of response options in this question. It is useful when you inherit a question and only wants to change the order of the response options. Or, if you want to have a between-participant condition that reverses the response scale for half of the participants.</td>
+</tr>
+<tr>
+<td>numericValues</td>
+<td>(true or false; default: false) If <code>numericValues</code> is true, default numeric values are set for each answer, they are set <em>before</em> randomization, but <em>after</em> the mixer is activated.</td>
+</tr>
+<tr>
+<td>answers</td>
+<td>(Array: []) The list of possible answers for this question. There are two acceptable formats; (1) an array of strings/numbers, (2) an array of objects with <code>text</code>, <code>value</code> and optionally <code>group</code> parameters. The <code>group</code> parameter will display the values divided into groups with the same name.</td>
+</tr>
+<tr>
+<td>required</td>
+<td>(true or false; default: false) Validation: require a response.</td>
+</tr>
+<tr>
+<td>correct</td>
+<td>(true or false; default: false) Validation: require the response to be correct (set the target value using <code>correctValue</code>)</td>
+</tr>
+<tr>
+<td>correctValue</td>
+<td>(*) Set the correct response value for the correct validation.</td>
+</tr>
+<tr>
+<td>errorMsg</td>
+<td>(Object: {}) This object has a property for each validation type. Setting the appropriate type changes the validation message. For instance setting the <code>correct</code> property will change the validation message for instances where the correct response was not given.</td>
+</tr>
+</tbody>
+</table>
+<h4><a name="selectone-&amp-selectmulti" class="header-link" href="#selectone-&amp-selectmulti"><span></span></a>selectOne &amp; selectMulti</h4><p>The <code>selectOne</code> and <code>selectMulti</code> questions present a list of possible response options for the user to pick from. The only difference between them is that select Multi allows the user to select more than one response option. They have the following parameters:</p>
+<table>
+<thead>
+<tr>
+<th>property</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dflt</td>
+<td>The default <em>value</em> for this question; Use one value for <code>selectOne</code>, and an array of values for <code>selectMulti</code>.</td>
+</tr>
+<tr>
+<td>autoSubmit</td>
+<td>(true or false; default: false) If this property is set to true, Clicking twice on the same answer will submit the form. This options is not supported for <code>selectMulti</code>.</td>
+</tr>
+<tr>
+<td>randomize</td>
+<td>(true or false; default: false) Shuffle response options after mixing them (the mixer is activated regardless of this parameter, this serves as a shortcut)</td>
+</tr>
+<tr>
+<td>reverse</td>
+<td>(true or false; default: false) Reverses the order of response options in this question. It is useful when you inherit a question and only wants to change the order of the response options. Or, if you want to have a between-participant condition that reverses the response scale for half of the participants.</td>
+</tr>
+<tr>
+<td>numericValues</td>
+<td>(true or false; default: false) If <code>numericValues</code> is true, default numeric values are set for each answer, they are set <em>before</em> randomization, but <em>after</em> the mixer is activated.</td>
+</tr>
+<tr>
+<td>style</td>
+<td>The default style for the select questions is a vertical list (<code>list</code>). You can display the individual answers as a horizontal button group using <code>horizontal</code> instead, or if you have many short answers you can use <code>multiButtons</code> (you might want to use <code>minWidth</code> in order to fineTune the way your question looks). </td>
+</tr>
+<tr>
+<td>minWidth</td>
+<td>(String, default:auto) The minimum width for individual answers (e.g. &#39;30%&#39; or &#39;200px&#39;). Usefull in concert with <code>style</code>.</td>
+</tr>
+<tr>
+<td>buttons</td>
+<td><em>@DEPRECATED</em> (true or false; default: false) Do not use this property any more! use <code>style</code> instead. </br> By default we use a vertical list format for this question. Set this property to true in order to use a horizontal scale (Likert style). This option  does not currently support extremely narrow screens.</td>
+</tr>
+<tr>
+<td>answers</td>
+<td>(Array: []) The list of possible answers for this question. There are two acceptable formats; (1) an array of strings/numbers, (2) an array of objects with <code>text</code> and <code>value</code> parameters.</td>
+</tr>
+<tr>
+<td>required</td>
+<td>(true or false; default: false) Validation: require a response.</td>
+</tr>
+<tr>
+<td>correct</td>
+<td>(true or false; default: false) Validation: require the response to be correct (set the target value using <code>correctValue</code>)</td>
+</tr>
+<tr>
+<td>correctValue</td>
+<td>(*) Set the correct response value for the correct validation (This should be an array for selectMulti).</td>
+</tr>
+<tr>
+<td>errorMsg</td>
+<td>(Object: {}) This object has a property for each validation type. Setting the appropriate type changes the validation message. For instance setting the <code>correct</code> property will change the validation message for instances where the correct response was not given.</td>
+</tr>
+</tbody>
+</table>
+<p>Each answer on the list has a value associated with it. By default the value is equal to the text of the answer. If <code>numericValues</code> is set, the value is set to the appropriate number. Using the object notation, you can set values of your own.</p>
+<p>For example, the following question uses the plain notations, using <code>numericValues</code> to abstract numbers out of the result.</p>
+<pre><code class="lang-javascript">var quest = {
+    type: &#39;selectOne&#39;,
+    stem: &quot;Do you like bananas?&quot;
+    numericValues: true,
+    answers: [
+        &#39;Very much&#39;,    // ==&gt; 0
+        &#39;I guess&#39;,        // ==&gt; 1
+        &#39;Not at all&#39;    // ==&gt; 2
+    ]
+}
+</code></pre>
+<p>The following question uses the object notation to do the exact same thing:</p>
+<pre><code class="lang-javascript">var quest = {
+    type: &#39;selectMulti&#39;,
+    stem: &quot;Do you like bananas?&quot;
+    numericValues: true,
+    answers: [
+        {text:&#39;Very much&#39;, value:0},    // ==&gt; 0
+        {text:&#39;I guess&#39;, value:1},        // ==&gt; 1
+        {text:&#39;Not at all&#39;, value:2}    // ==&gt; 2
+    ]
+}
+</code></pre>
+<h4><a name="grid" class="header-link" href="#grid"><span></span></a>grid</h4><p>The grid question allows you to group multiple &quot;multiple choice&quot; questions into a single table. This is often useful when asking several likert type questions using the same scale.</p>
+<p>The grid question itself keeps track of the sum of the row questions (excluding any questions that have non-number values).</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>columns</td>
+<td>An array of column descriptions. You can use a string here or a column object as described <a href="#gridcolumns">below</a>.</td>
+</tr>
+<tr>
+<td>rows</td>
+<td>An array of row descriptions. You can use a string here or a row object as described <a href="#gridrows">below</a>.</td>
+</tr>
+<tr>
+<td>shuffle</td>
+<td>Whether to randomize the order of the rows.</td>
+</tr>
+<tr>
+<td>required</td>
+<td>Require the user to respond to all rows (true or false).</td>
+</tr>
+<tr>
+<td>columnStemCss</td>
+<td>CSS object for <em>all</em> the column stems.</td>
+</tr>
+<tr>
+<td>columnStemHide</td>
+<td>Hide the column stem row.</td>
+</tr>
+<tr>
+<td>rowStemCss</td>
+<td>CSS object for the row stems.</td>
+</tr>
+<tr>
+<td>rowStemHide</td>
+<td>Hide the row stem column.</td>
+</tr>
+<tr>
+<td>checkboxType</td>
+<td>Customize the type of checbox we use. <code>checkMark</code>: the default check style. <code>xMark</code>: use an X instead of the check. <code>colorMark</code>: fill the checkbox with a dark background.</td>
+</tr>
+<tr>
+<td>cellLabels</td>
+<td>(true or false) Wether to show the column label within the grid cells.</td>
+</tr>
+</tbody>
+</table>
+<h5><a name="gridcolumns" class="header-link" href="#gridcolumns"><span></span></a>grid.columns</h5><p>If you set a string instead of a column object it will be treated as if you set only the stem and all other values will be set by default.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>stem</td>
+<td>(text) The description of this column.</td>
+</tr>
+<tr>
+<td>value</td>
+<td>The value to set for this column. Defaults to the number of the column (starting from 1, so that the response for choosing the third column is 3).</td>
+</tr>
+<tr>
+<td>noReverse</td>
+<td>When reversing row values, ignore this column (it will retain its normal value).</td>
+</tr>
+<tr>
+<td>type</td>
+<td>What type of interface should this column have. </td>
+</tr>
+<tr>
+<td>css</td>
+<td>CSS object for the whole column. This is the place that you can control the column width (using the <code>width</code> property).</td>
+</tr>
+<tr>
+<td>stemCss</td>
+<td>CSS object for the column stem.</td>
+</tr>
+</tbody>
+</table>
+<p>There are several column types at your disposal, </p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>checkbox</td>
+<td>The default is &quot;checkbox&quot;.</td>
+</tr>
+<tr>
+<td>text</td>
+<td>Display text of you choice (use the <code>textProperty</code> property to set the row property that will be used as the text).  For example <code>{type: &#39;text&#39;, textProperty:&#39;rightStem&#39;}</code> will use the <code>rightStem</code> property of each row as the text content.</td>
+</tr>
+<tr>
+<td>dropdown</td>
+<td>Display a dropdown input. Use the <code>answers</code> property to set the options for the dropdown. For example <code>{type:&#39;text&#39;, answers: [&#39;Male&#39;, &#39;Female&#39;]}&#39;. See the [dropdown](#dropdown) question for more</code>answers` options.</td>
+</tr>
+<tr>
+<td>input</td>
+<td>Display a text input. Note that users can input responses that may be confused with other responses (if a user inputs a 1 it may be confused with a selection of a checkbox in the first column).</td>
+</tr>
+</tbody>
+</table>
+<h5><a name="gridrows" class="header-link" href="#gridrows"><span></span></a>grid.rows</h5><p>If you set a string instead of a row object it will be treated as if you set only the stem and all other values will be set by default.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>stem</td>
+<td>(text) The description of this column.</td>
+</tr>
+<tr>
+<td>name</td>
+<td>The name you want this row to be called within the <code>questions</code> object. If this is not set the grid automatically sets it according to the grid name. So that if grid.name is &quot;myGrid&quot; then you&#39;re first row will be called by default &quot;myGrid001&quot;.</td>
+</tr>
+<tr>
+<td>reverse</td>
+<td>When calculating the default value for this row, should we reverse the order of columns (high to low and vise versa).</td>
+</tr>
+<tr>
+<td>required</td>
+<td>Require the user to respond to this row (this property is redundant if you&#39;ve already set main questions required property to true).</td>
+</tr>
+<tr>
+<td>overwrite</td>
+<td>An array of column deffinitions to overwrite. Each element of the array overwrites the corresponding column column (so that the first element in the array overwrites the first column definitions and so on). If you do not want to overwrite a specific column, simply set it to <code>false</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>Here is a simple example of using a grid:</p>
+<pre><code class="lang-javascript">var grid =     {
+    type: &#39;grid&#39;,
+    name:&#39;grid&#39;,
+    columns: [&#39;Strongly agree&#39; , &#39;agree&#39; , &#39;don\&#39;t know&#39; , &#39;disagree&#39; , &#39;Strongly disagree&#39;],
+    rows: [&#39;I like grids&#39;, &#39;I like bananas too&#39;]
+}
+</code></pre>
+<p>You can, of course have tighter control over the way things work:</p>
+<pre><code class="lang-javascript">var grid =     {
+    type: &#39;grid&#39;,
+    name:&#39;grid&#39;,
+    columns: [
+        &#39;Strongly agree&#39;,
+        &#39;agree&#39;,
+        &#39;don\&#39;t know&#39;,
+        &#39;disagree&#39;,
+        &#39;Strongly disagree&#39;,
+        {stem:&#39;Decline to answer&#39;, value:&#39;n/a&#39;, noReverse:true}
+    ],
+    rows: [
+        {stem:&#39;I like grids&#39;,name:&#39;likeGrids&#39;},
+        // This questions scores will be reversed so that the sum of scores is meaningful 
+        {stem:&#39;I hate bananas&#39;, name:&#39;likeBananas&#39;, reverse:true},
+
+        // Allow only the extreme responses and declining to answer for this row only
+        {stem:&#39;Only extremes&#39;, name:&#39;extremes&#39;, overwrite:[false, {type:&#39;text&#39;}, {type:&#39;text&#39;}, {type:&#39;text&#39;}, false, false]}
+    ]
+}
+</code></pre>
+<h4><a name="multigrid" class="header-link" href="#multigrid"><span></span></a>multiGrid</h4><p>The multiGrid question allows you to group multiple questions into a single table. 
+This is often useful when you are asking a set of simple qustions repeatedly.</p>
+<p>The response for this question is an array of responses corresponding to the columns of the grid, so that the first item in the array corresponds to the response in the first column and so on.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>columns</td>
+<td>An array of column descriptions. You can use a string here or a column object as described <a href="#multigridcolumns">below</a>.</td>
+</tr>
+<tr>
+<td>rows</td>
+<td>An array of row descriptions. You can use a string here or a row object as described <a href="#multigridrows">below</a>.</td>
+</tr>
+<tr>
+<td>shuffle</td>
+<td>Whether to randomize the order of the rows.</td>
+</tr>
+<tr>
+<td>columnStemCss</td>
+<td>CSS object for <em>all</em> the column stems.</td>
+</tr>
+<tr>
+<td>columnStemHide</td>
+<td>Hide the column stem row.</td>
+</tr>
+<tr>
+<td>rowStemCss</td>
+<td>CSS object for the row stems.</td>
+</tr>
+<tr>
+<td>rowStemHide</td>
+<td>Hide the row stem column.</td>
+</tr>
+<tr>
+<td>checkboxType</td>
+<td>Customize the type of checbox we use. <code>checkMark</code>: the default check style. <code>xMark</code>: use an X instead of the check. <code>colorMark</code>: fill the checkbox with a dark background.</td>
+</tr>
+<tr>
+<td>cellLabels</td>
+<td>Show the column label within the grid cells.</td>
+</tr>
+<tr>
+<td>required</td>
+<td>Require all subquestions in the multigrid to be full</td>
+</tr>
+</tbody>
+</table>
+<h5><a name="multigridcolumns" class="header-link" href="#multigridcolumns"><span></span></a>multiGrid.columns</h5><p>If you set a string instead of a column object it will be treated as if you set only the stem and all other values will be set by default.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>stem</td>
+<td>(text) The description of this column.</td>
+</tr>
+<tr>
+<td>value</td>
+<td>The value to set for this column checkboxes. Defaults to <code>true</code>.</td>
+</tr>
+<tr>
+<td>type</td>
+<td>What type of interface should this column have (see below, defaults to checkbox)</td>
+</tr>
+<tr>
+<td>css</td>
+<td>CSS object for the whole column. This is the place that you can control the column width (using the <code>width</code> property).</td>
+</tr>
+<tr>
+<td>stemCss</td>
+<td>CSS object for the column stem.</td>
+</tr>
+<tr>
+<td>required</td>
+<td>Require all subquestions in the column to be full</td>
+</tr>
+<tr>
+<td>pattern</td>
+<td>(text or <a href="http://www.regular-expressions.info/">regular expression</a>) Require all subquestions in the column to match the pattern. This validation method only affects input type columns.</td>
+</tr>
+</tbody>
+</table>
+<p>There are several column types at your disposal, </p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>checkbox</td>
+<td>The default is &quot;checkbox&quot;.</td>
+</tr>
+<tr>
+<td>text</td>
+<td>Display text of you choice (use the <code>textProperty</code> property to set the row property that will be used as the text).  For example <code>{type: &#39;text&#39;, textProperty:&#39;rightStem&#39;}</code> will use the <code>rightStem</code> property of each row as the text content. You can use this option to present an empty cell by leaving the text empty.</td>
+</tr>
+<tr>
+<td>dropdown</td>
+<td>Display a dropdown input. Use the <code>answers</code> property to set the options for the dropdown. For example <code>{type:&#39;text&#39;, answers: [&#39;Male&#39;, &#39;Female&#39;]}&#39;. See the [dropdown](#dropdown) question for more</code>answers` options.</td>
+</tr>
+<tr>
+<td>input</td>
+<td>Display a text input. Note that users can input responses that may be confused with other responses (if a user inputs a 1 it may be confused with a selection of a checkbox in the first column).</td>
+</tr>
+</tbody>
+</table>
+<h5><a name="multigridrows" class="header-link" href="#multigridrows"><span></span></a>multiGrid.rows</h5><p>If you set a string instead of a row object it will be treated as if you set only the stem and all other values will be set by default.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>stem</td>
+<td>(text) The description of this row.</td>
+</tr>
+<tr>
+<td>name</td>
+<td>The name you want this row to be called within the <code>questions</code> object. If this is not set the grid automatically sets it according to the grid name. So that if grid.name is &quot;myGrid&quot; then you&#39;re first row will be called by default &quot;myGrid001&quot;.</td>
+</tr>
+<tr>
+<td>overwrite</td>
+<td>An array of column deffinitions to overwrite. Each element of the array overwrites the corresponding column column (so that the first element in the array overwrites the first column definitions and so on). If you do not want to overwrite a specific column, simply set it to <code>false</code>.</td>
+</tr>
+<tr>
+<td>required</td>
+<td>Require all subquestions in the row to be full</td>
+</tr>
+</tbody>
+</table>
+<p>Here is a simple example of using a multiGrid:</p>
+<pre><code class="lang-javascript">var multiGrid =     {
+    type: &#39;multiGrid&#39;,
+    name:&#39;multiGrid&#39;,
+    columns: [&#39;Sunday&#39;, &#39;Monday&#39;, &#39;Tuesday&#39;, &#39;Wednesday&#39;, &#39;Thursday&#39;, &#39;Friday&#39;, &#39;Saturday&#39;],
+    rows: [&#39;Days you work out&#39;, &#39;Days you go to work&#39;]
+}
+</code></pre>
+<p>You can, of course have tighter control over the way things work:</p>
+<pre><code class="lang-javascript">var grid =     {
+    type: &#39;multiGrid&#39;,
+    name:&#39;multiGrid&#39;,
+    columns: [
+        {stem:&#39;Gender&#39;, type:&#39;dropdown&#39;, answers: [&#39;Male&#39;, &#39;Female&#39;]},
+        &#39;Study together&#39;,
+        &#39;Work together&#39;,
+        {stem:&#39;Description&#39;, type:&#39;input&#39;}
+    ],
+    rows: [&#39;Friend 1&#39;, &#39;Friend 2&#39; ]
+}
+</code></pre>
+<h4><a name="slider" class="header-link" href="#slider"><span></span></a>slider</h4><p>The slider question presents a slider that allows the user to pick a response along a preassigned range. It allows either the creation a continuous scale or dividing the range into steps. The values of the slider are always numbers.
+These are the supported properties:</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>min</td>
+<td>Maximum slider value (default:0).</td>
+</tr>
+<tr>
+<td>max</td>
+<td>Minimum slider value (default:100).</td>
+</tr>
+<tr>
+<td>highlight</td>
+<td>Show highlight to left of handle.</td>
+</tr>
+<tr>
+<td>highlightDirection</td>
+<td>By default the slider highlight goes from left to right. If you want it to go right to left set the property to &#39;rtl&#39;. If you want the highlight to begin at the center, set this to &#39;center&#39;.</td>
+</tr>
+<tr>
+<td>steps</td>
+<td>How many steps the slider should be divided into. These intervals are marked with pips and the handle snaps to them.</td>
+</tr>
+<tr>
+<td>hidePips</td>
+<td>When the slider is divided into steps, do not display the step pips.</td>
+</tr>
+<tr>
+<td>showTicks</td>
+<td>@EXPERIMENATAL: this option may change in the future. Mark three vertical lines to accent the slider visually.</td>
+</tr>
+<tr>
+<td>leftLabel</td>
+<td>A label to display on the top left of the slider.</td>
+</tr>
+<tr>
+<td>leftLabelCss</td>
+<td>A style object to apply to the left label.</td>
+</tr>
+<tr>
+<td>rightLabel</td>
+<td>A label to display on the top right of the slider.</td>
+</tr>
+<tr>
+<td>rightLabelCss</td>
+<td>A style object to apply to the right label.</td>
+</tr>
+<tr>
+<td>labels</td>
+<td>An array of labels to display underneath the slider. They will be spread evenly across the slider.</td>
+</tr>
+<tr>
+<td>displayValue</td>
+<td>Display the value of the slider, beneath the slider control.</td>
+</tr>
+<tr>
+<td>required</td>
+<td>(true of false; default: false) Validation: require a non-empty string as a response.</td>
+</tr>
+<tr>
+<td>dflt</td>
+<td>The default value for the slider. If no default value is defined, the handle will not be displayed until the slider is first clicked.</td>
+</tr>
+<tr>
+<td>autoSubmit</td>
+<td>Submit automatically on click or when handle is drop.</td>
+</tr>
+</tbody>
+</table>
+<p>The most common use of the slider is the creation of a visual analog scale (VAS). This is an example of using a slider to create a Likert type scale:</p>
+<pre><code class="lang-javascript">var quest = {
+    type: &#39;slider&#39;,
+    stem: &#39;Sliders are exremely useful.&#39;,
+    min:1,
+    max:7,
+    steps:7,
+    labels: [&#39;Strongly Agree&#39;, &#39;Neutral&#39;, &#39;Strongly Disagree&#39;]    
+}
+</code></pre>
+<h4><a name="rank" class="header-link" href="#rank"><span></span></a>rank</h4><p>Ranking questions allow your subjects to sort a list of values.
+By default elements in the list are randomized.
+The response returned by this question is an array of numbers corresponding to the original - pre-randomized list.
+For example if you had a list <code>[&#39;a&#39;,&#39;b&#39;,&#39;c&#39;]</code> and it was sorted into<code>[&#39;a&#39;,&#39;c&#39;,&#39;b&#39;]</code> then the response array will be <code>[1,3,2]</code> because the second and third element changed locations. </p>
+<p>The syntax is fairly simple:</p>
+<pre><code class="lang-javascript">var quest = {
+      type: &#39;rank&#39;, 
+      stem: &#39;Please sort the follownig activities according to level of difficulty:&#39;,
+      name: &#39;mart&#39;,
+      correct: false,
+      list: [&#39;Cooking&#39;, &#39;Running&#39;, &#39;Dancing&#39;, &#39;Studying&#39;]
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td>Must be set to <code>&#39;rank&#39;</code>.</td>
+</tr>
+<tr>
+<td>list</td>
+<td>(Array) An array values to be sorted (can be either strings or numbers).</td>
+</tr>
+<tr>
+<td>required</td>
+<td>(true of false; default: false) Require the user to make a change from the original order (as defined in <code>list</code>).</td>
+</tr>
+<tr>
+<td>correct</td>
+<td>(true of false; default: false) Require the user to order the list according to a preset value (as defined in <code>correctValue</code></td>
+</tr>
+<tr>
+<td>correctValue</td>
+<td>(Array) The order that the list should be organized for the <code>correct</code> validator. This value should be a list of numbers coresponding to the target order.</td>
+</tr>
+<tr>
+<td>randomize</td>
+<td>(true of false; default: true) If false prevents the automatic randomization of the list order.</td>
+</tr>
+</tbody>
+</table>
+<h3><a name="settings" class="header-link" href="#settings"><span></span></a>settings</h3><p>Settings allow you to control the generic way that the player works. Change the settings using the <code>addSettings</code> function. The first argument to the function is always the name of the setting, the second argument is the setting values. In case the setting is an object, subsequent objects will extend each other so that settings may be progressively added.</p>
+<h4><a name="onend" class="header-link" href="#onend"><span></span></a>onEnd</h4><p><code>onEnd</code> is a function to be called as soon as the task ends. It should be taken care of automatically when PIQuest is run from within the task manager.</p>
+<pre><code class="lang-javascript">API.addSettings(&#39;onEnd&#39;, function(){
+    // Do something: for instance, redirect to &#39;my/url.html&#39;
+    location.href = &#39;my/url.html&#39;;
+});
+</code></pre>
+<h4><a name="logger" class="header-link" href="#logger"><span></span></a>logger</h4><p>This setting controls the way that logging works within the player.</p>
+<pre><code class="lang-javascript">API.addSettings(&quot;logger&quot;, {
+    pulse: 34,
+    url: &#39;/my/url&#39;,    
+    logfn: function(log,pagesData, global){
+        return {name: log.name, set: global.setName};
+    }
+});
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pulse</td>
+<td>(Number; Default: 0) How many rows to collect before posting to the server. 0 means that the player sends to the server only at the end of the task. Note that only questions and pages marked with the <code>lognow</code> property will be pulsed. All other questions will be sent at the end of the task.</td>
+</tr>
+<tr>
+<td>url</td>
+<td>(Text; default:&quot;&quot;) The URL to which we should post the data to.</td>
+</tr>
+<tr>
+<td>logfn</td>
+<td>(Function) The task has a default object that it logs, if you want to change the logged object itself, you may use a function of the form: <code>function(log, pagesData, global){return logObj;}</code></td>
+</tr>
+<tr>
+<td>error</td>
+<td>(Function) A function to manage errors in logging. It gets called when a post to the server fails.</td>
+</tr>
+</tbody>
+</table>
+<p>Within the player, each question (as defined by unique question name) may be logged only once. By default questions are logged at the end of a page (on submit or decline), if you want to delay logging until the end of the task, you may do so by setting <code>nolog</code> in the appropriate page or question.</p>
+<p>If you want a question not to be logged at all, simply do not give it a name.</p>
+<h4><a name="timer" class="header-link" href="#timer"><span></span></a>Timer</h4><p>The questionnaire timer allows you to constrain the time that users have to answer the whole questionnaire.</p>
+<pre><code class="lang-javascript">API.addSettings(&#39;timer&#39;, {
+    duration: 10,
+    message: {
+        header: &#39;Time out!&#39;,
+        body: &#39;You will now be redirected to the next task.&#39;
+    }
+});
+</code></pre>
+<p>In order to control it, you may use the following properties.</p>
+<table>
+<thead>
+<tr>
+<th>property</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>duration</td>
+<td>(number) How long (in seconds) before the timer ends.</td>
+</tr>
+<tr>
+<td>show</td>
+<td>(true or false) Whether to display a visual countdown (true by default).</td>
+</tr>
+<tr>
+<td>direction</td>
+<td>(&quot;up&quot; or &quot;down&quot;) Whether to use a countdown or to count up (&quot;down&quot; by default).</td>
+</tr>
+<tr>
+<td>removeOnEnd</td>
+<td>(true or false) Whether to remove the visual timer when the countdown ends (if you don&#39;t auto proceed when the timer ends. ).        </td>
+</tr>
+<tr>
+<td>message</td>
+<td>(String or Object) Display a message at the end the timer duration. You can imput a simple string here. If you want finer control over the content of the message you can use the an object with the following properties: <code>header</code>: the header text for the message (defaults to &quot;Timer Done&quot;). <code>body</code>: the body of the message. <code>button</code>: the close button (defaults to &quot;close&quot;).</td>
+</tr>
+</tbody>
+</table>
+<h2><a name="data" class="header-link" href="#data"><span></span></a>Data</h2><p>miQuest keeps record of user responses using plain js objects.
+These objects are both kept locally (see <a href="#variables">variables</a>) and sent to the server.</p>
+<p>The data logs are available as properties of the <code>questsion</code> object  in <code>current</code>:</p>
+<pre><code class="lang-javascript">current.questions = {
+    questionName1 : {...}, // log object
+    questionName2 : {...} // log object
+}
+</code></pre>
+<p>Following are the properties of the logged object:</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td>The <code>name</code> of the question.</td>
+</tr>
+<tr>
+<td>response</td>
+<td>The actual response for this question. This may be a string, a number or even an array.</td>
+</tr>
+<tr>
+<td>declined</td>
+<td>Whether or not the question was declined (if a question was declined, the response field will be undefined).</td>
+</tr>
+<tr>
+<td>latency</td>
+<td>The time (from question presentation) to the last change of this response.</td>
+</tr>
+<tr>
+<td>submitLatency</td>
+<td>The time (from question presentation) to the time this page was submitted.</td>
+</tr>
+</tbody>
+</table>
+<p>The response for questionName1 can be accessed using <code>current.questions.questionName1.response</code>. 
+You can use this data within <a href="../basics/sequencer.html#templates">templates</a>
+or from within <a href="../basics/sequencer.html#conditions">branches</a>.</p>
+
+				<hr />
+				<small>License: Apache 2. &copy; Project Implicit. &middot; Current version [version]</small>
+			</section>
+		</main>
+		<script src="../assets/prism.js"></script>
+        <script>
+            (function(){
+                var select = document.getElementById('version-select');
+                select.addEventListener('change', function(event){
+                    var version = event.target.value;
+                    location.href = location.href.replace(/[0-9]\.[0-9]/, version)
+                });
+            })();
+        </script>
+	</body>
+</html>

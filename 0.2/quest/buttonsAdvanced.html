@@ -1,0 +1,226 @@
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Minno.js</title>
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+		<link href="../assets/prism.css" rel="stylesheet" />
+		<link href="../assets/style.css" rel="stylesheet" />
+	</head>
+	<body>
+		<header>
+			<section>
+				<nav class="brand">
+                    <a href="/"><h1>Minno</h1></a>
+				</nav>
+				<nav>
+					<a href="/minno-quest/0.2/basics/overview.html">Basics</a>
+					<a href="/minno-quest/0.2/manager/overview.html">miManager</a>
+					<a href="/minno-quest/0.2/quest/overview.html">miQuest</a>
+					<a href="/minno-time/0.5/time/overview.html">miTime</a>
+				</nav>
+				<nav>
+                    <div id="search-box">
+                        <script>
+                            (function() {
+                                var cx = '002953266509769041597:smg5beek-iu';
+                                var gcse = document.createElement('script');
+                                gcse.type = 'text/javascript';
+                                gcse.async = true;
+                                gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+                                var s = document.getElementsByTagName('script')[0];
+                                s.parentNode.insertBefore(gcse, s);
+                            })();
+                        </script>
+                        <gcse:searchbox-only></gcse:searchbox-only>
+                    </div>
+                    <select id="version-select"><option value="0.0" >v0.0</option>,<option value="0.1" >v0.1</option>,<option value="0.2" selected>v0.2</option></select>
+					<a href="https://github.com/minnojs">Github</a>
+				</nav>
+			</section>
+		</header>
+		<main>
+			<section class="docs">
+                <h1><a name="a-hrefbuttonsadvancedhtmlbuttons-advanceda" class="header-link" href="#a-hrefbuttonsadvancedhtmlbuttons-advanceda"><span></span></a><a href="buttonsAdvanced.html">Buttons Advanced</a></h1><ul>
+<li>Core<ul>
+<li><a href="overview.html">Overview</a></li>
+<li><a href="introduction.html">Introduction</a></li>
+<li><a href="API.html">API</a></li>
+<li><a href="playground.html">Playground</a></li>
+</ul>
+</li>
+<li>Question types<ul>
+<li><a href="text.html">Text</a></li>
+<li><a href="textarea.html">Textarea</a></li>
+<li><a href="textNumber.html">Text Number</a></li>
+<li><a href="selectOne.html">Select One</a></li>
+<li><a href="selectMulti.html">Select Multi</a></li>
+<li><a href="grid.html">Grid</a></li>
+<li><a href="gridMulti.html">Multi Grid</a></li>
+<li><a href="slider.html">Slider</a></li>
+<li><a href="rank.html">Rank</a></li>
+</ul>
+</li>
+<li>Examples<ul>
+<li><a href="helloworld.html">Hello world</a></li>
+<li><a href="bodyAwareness.html">Body Awareness</a></li>
+<li><a href="weight.html">Weight demo</a></li>
+<li><a href="usingImages.html">Using Images</a></li>
+<li><a href="buttons.html">Buttons</a></li>
+<li><strong>Buttons Advanced</strong></li>
+<li><a href="buttonsOnePage.html">Buttons One Page</a></li>
+<li><a href="dependency.html">Dependency</a></li>
+<li><a href="liveDependency.html">Live Dependency</a></li>
+<li><a href="gridExample.html">Grid</a></li>
+<li><a href="timer.html">Timer</a></li>
+<li><a href="openEnded.html">Open Ended</a></li>
+<li><a href="openEndedLong.html">Open Ended Long</a></li>
+<li><a href="rateImages.html">Rate Images</a></li>
+<li><a href="rateImagesSizes.html">Rate Images Sizes</a></li>
+<li><a href="scaleWithFeedback.html">Scale With Feedback</a></li>
+<li><a href="sliderExample.html">Slider</a></li>
+<li><a href="userPrevResp.html">User Prev Resp</a></li>
+<li><a href="nfc.html">Agreement scale</a></li>
+</ul>
+</li>
+</ul>
+<section playground>
+    <div class="buttons">
+        <a class="activate-button">Activate</a>
+        <a class="download-button" href="buttonsAdvanced.js" download>Download</a>
+    </div>
+    <div class="editor">define([&apos;questAPI&apos;], function(Quest){
+	var API = new Quest();
+
+	// ### Setup
+	// Set the baseURL for use within images
+	API.addCurrent({baseURL:&apos;../../images/&apos;});
+
+	// ### Questions
+	// Use variables from the data property to create the name and stem.
+	// The idea is that this question will be inherited by many other questions.
+	// Those questions will set the name and stem by setting variables into the data property (see example below).
+	API.addQuestionsSet(&apos;basicSelect&apos;,
+	{
+		type: &apos;selectOne&apos;,
+		autoSubmit:true,
+		numericValues:true,
+		required:true,
+		style:&apos;multiButtons&apos;,
+		name:&apos;&lt;%=questionsData.trait%&gt;.&lt;%=questionsData.firstName%&gt;.&lt;%=questionsData.lastName%&gt;&apos;,
+		stem : &apos;How &lt;%=questionsData.trait%&gt; or &lt;%=questionsData.untrait%&gt; do you think that &lt;%=questionsData.firstName%&gt; &lt;%=questionsData.lastName%&gt; is?&apos;,
+		errorMsg: {
+			required: &quot;Please select an answer, or click &apos;decline to answer&apos;&quot;
+		},
+		answers : [
+			&apos;1 - Extremely &lt;%=questionsData.untrait%&gt;&apos;,
+			&apos;2&apos;,
+			&apos;3&apos;,
+			&apos;4&apos;,
+			&apos;5&apos;,
+			&apos;6&apos;,
+			&apos;7&apos;,
+			&apos;8&apos;,
+			&apos;9 - Extremely &lt;%=questionsData.trait%&gt;&apos;
+		],
+		help: &apos;&lt;%= pagesMeta.number &lt; 3 %&gt;&apos;,
+		helpText: &apos;Selecting an answer once colors it blue.&lt;br/&gt;You can change your answer by selecting another option.&lt;br/&gt;To confirm, click the selected (blue) button a second time.&apos;
+	});
+
+	// Create questions that inherit basicSelect and set the name of the target person.
+	API.addQuestionsSet(&apos;people&apos;,
+	[
+		{
+			inherit : &apos;basicSelect&apos;,
+			data : {firstName : &apos;Barack&apos;, lastName : &apos;Obama&apos;}
+		},
+		{
+			inherit : &apos;basicSelect&apos;,
+			data : {firstName : &apos;Beyonce&apos;, lastName : &apos;Knowles&apos;}
+		},
+		{
+			inherit : &apos;basicSelect&apos;,
+			data : {firstName : &apos;Stephen&apos;, lastName : &apos;Colbert&apos;}
+		},
+		{
+			inherit : &apos;basicSelect&apos;,
+			data : {firstName : &apos;David&apos;, lastName : &apos;Letterman&apos;}
+		}
+	]);
+
+	// Create questions that inherit one of the people questions, and set a specific trait.
+	// Note that we use the seed property in order to inherit separately the people questions for each trait.
+	// If we don&apos;t use seed, then the inheritance would be shared. Then, one trait might get the same target person.
+	API.addQuestionsSet(&apos;traits&apos;,
+	[
+		{
+			inherit : {set:&apos;people&apos;, type:&apos;exRandom&apos;, seed:&apos;friendly&apos;},
+			data : {trait:&apos;friendly&apos;, untrait:&apos;unfriendly&apos;}
+		},
+		{
+			inherit : {set:&apos;people&apos;, type:&apos;exRandom&apos;, seed:&apos;likeable&apos;},
+			data : {trait:&apos;likeable&apos;, untrait:&apos;unlikeable&apos;}
+		},
+		{
+			inherit : {set:&apos;people&apos;, type:&apos;exRandom&apos;, seed:&apos;trustworthy&apos;},
+			data : {trait:&apos;trustworthy&apos;, untrait:&apos;untrustworthy&apos;}
+		},
+		{
+			inherit : {set:&apos;people&apos;, type:&apos;exRandom&apos;, seed:&apos;honest&apos;},
+			data : {trait:&apos;honest&apos;, untrait:&apos;dishonest&apos;}
+		}
+	]);
+
+	// ### Pages
+	// Each time that it is ineherited, basicPage uses one of the four trait questions. Each trait question uses one of the four people.
+	API.addPagesSet(&apos;basicPage&apos;,
+	{
+		progressBar: &apos;&lt;%= pagesMeta.number %&gt; out of 16&apos;,
+		questions : {inherit:{set:&apos;traits&apos;, type:&apos;exRandom&apos;}},
+		v1style:2,
+		decline:true,
+		numbered: false
+	});
+
+	// ### Sequence
+	//Inherit the page 16 times.
+	//The question in the page will inherit each trait question four times,
+	//and each trait question will inherit the people questions four time.
+	//In that way, all four traits will appear with all four people, in random order.
+	API.addSequence(
+	[
+		{
+			mixer : &apos;repeat&apos;,
+			times : 16,
+			data :
+			[
+				{inherit : &apos;basicPage&apos;}
+			]
+		}
+	]);
+
+	/**
+	Return the script to piquest&apos;s god, or something of that sort.
+	**/
+	return API.script;
+});
+</div>
+</section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js" integrity="sha256-xrr4HH5eSY+cFz4SH7ja/LaAi9qcEdjMpeMP49/iOLs=" crossorigin="anonymous"></script>
+<script src="../assets/playground.js"></script>
+
+				<hr />
+				<small>License: Apache 2. &copy; Project Implicit. &middot; Current version [version]</small>
+			</section>
+		</main>
+		<script src="../assets/prism.js"></script>
+        <script>
+            (function(){
+                var select = document.getElementById('version-select');
+                select.addEventListener('change', function(event){
+                    var version = event.target.value;
+                    location.href = location.href.replace(/[0-9]\.[0-9]/, version)
+                });
+            })();
+        </script>
+	</body>
+</html>
