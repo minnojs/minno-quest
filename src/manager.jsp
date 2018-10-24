@@ -98,12 +98,13 @@ if(randomStudy!=null)
 
 	<body id="pi-app">
         <% if (org.uva.Implicit.IS_PRODUCTION == "false") {%>
-            <div id="dev-message" class="alert alert-success alert-dismissible" style="position:fixed;bottom:0;padding:5px 30px 5px 5px;z-index:999;">
+            <div id="dev-message" class="alert alert-success alert-dismissible" style="position:fixed;bottom:0;padding:5px 30px 5px 5px;z-index:999;max-width:300px;">
                 <button id="dismiss-message" type="button" class="close">
                     <span>&times;</span>
                 </button>
                 <strong>Development Environment</strong></br>
-                miManager/miQuest v0.1
+                <p>miManager/miQuest v0.1</p>
+                <p>Not all errors are recorded in the onscreen record. Check your <a href="https://kb.mailster.co/how-can-i-open-the-browsers-console/" target="blank">console</a> if you have unexplained problems</p>
             </div>
             <script>
                 document.getElementById('dismiss-message').addEventListener('click', function(event){
