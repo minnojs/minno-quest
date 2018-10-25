@@ -144,4 +144,3 @@ function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector, pi
 }
 
 export default managerService;
-

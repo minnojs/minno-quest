@@ -25,6 +25,7 @@ export default function managerLogger(settings, piConsole){
 
 function getSettingsObject(settings){
     var type = settings.type;
+
     if (settings.postCsv) return csvLogger;
     if (type == 'csv') return csvLogger;
     if (type == 'old') return oldLogger;

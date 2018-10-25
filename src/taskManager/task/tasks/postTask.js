@@ -1,28 +1,22 @@
 import _ from 'lodash';
 export default activatePost;
 
-activatePost.$inject = ['done', 'task', '$http','$q', '$rootScope', 'piConsole'];
-function activatePost(done, task, $http, $q, $rootScope, piConsole){
-    var canceler = $q.defer(); // http://stackoverflow.com/questions/13928057/how-to-cancel-an-http-request-in-angularjs
+activatePost.$inject = ['done', 'task', 'logger','$rootScope'];
+function activatePost(done, task, logger, $rootScope){
     var global = $rootScope.global;
-    var data = task.path ? _.get(global, task.path) : task.data;
+    var data = getData(task, global);
+    var settings = _.assign({isSave:true}, task.settings);
+    var log = logger.createLog(task.$name, settings);
 
-    $http
-        .post(task.url, data, {timeout: canceler.promise})
-        .then(done,fail);
-
-    return canceler.resolve;
-
-    function fail(response){
-        var err = new Error('Post error("'+task.url+'"): ' + response.statusText); // but shout about the failure
-        done(); // continue with the task
-        piConsole({
-            type:'error',
-            error:err,
-            message: 'Post error',
-            context: task
-        });
-        throw err;
-    }
+    log(data);
+    log.end(true);
+    done();
 }
 
+function getData(task, global){
+    var data = task.path ? _.get(global, task.path) : task.data;
+
+    if (_.isPlainObject(data)) return data;
+    if (_.isFunction(data)) return data(global, task);
+    return _.set({}, task.path || 'key', data);
+}

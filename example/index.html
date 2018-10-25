@@ -35,7 +35,7 @@
             miManager/miQuest v0.2
         </div>
         <script>
-            piGlobal = {$meta:{_id:1234}};
+            piGlobal = {$meta:{_id:1234}, $dataUrl: '/data'};
             document.getElementById('dismiss-message').addEventListener('click', function(event){
                 document.body.removeChild(event.target.parentElement.parentElement);
             });
