@@ -46153,6 +46153,33 @@ function is_touch_device() {
     function mq(query) { return window.matchMedia(query).matches; }
 }
 
+activateInjectCss.$inject = ['done', 'task'];
+function activateInjectCss(done, task){
+    injectStyle(task.css);
+    done();
+}
+
+// VanilaJS
+// http://stackoverflow.com/questions/524696/how-to-create-a-style-tag-with-javascript
+function injectStyle(css){
+    var head = document.head || document.querySelector('head');
+    var style = document.createElement('style');
+
+    style.type = 'text/css';
+
+    if (style.styleSheet){
+        style.styleSheet.cssText = css;
+    } else {
+        style.appendChild(document.createTextNode(css));
+    }
+
+    head.appendChild(style);
+
+    return function(){
+        head.removeChild(style);
+    };
+}
+
 /**
  * The module responsible for the single task.
  * It knows how to load a task and activate it.
@@ -46175,6 +46202,7 @@ module$14.config(['taskActivateProvider', function(activateProvider){
     activateProvider.set('allowLeaving', allowLeaving);
     activateProvider.set('yesNo', activateYesNo$1);
     activateProvider.set('isTouch', activateIsTouch$1);
+    activateProvider.set('injectStyle', activateInjectCss);
 }]);
 
 function canvasContructor$1(map, settings){
@@ -46748,7 +46776,6 @@ function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector, pi
         var $document = $injector.get('$document');
         var preloadImages = $injector.get('piPreloadImages');
         var beforeUnload = $injector.get('managerBeforeUnload');
-        var injectStyle = $injector.get('managerInjectStyle');
         var rootElement = $injector.get('$rootElement');
         var canvasOff, stylesOff, skinClass = settings.skin || 'default';
         var piConsole = $injector.get('piConsole');
@@ -46762,8 +46789,15 @@ function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector, pi
         $scope.$on('$destroy', canvasOff);
 
         // inject styles
-        stylesOff = injectStyle(settings.injectStyle);
-        $scope.$on('$destroy', stylesOff);
+        if (settings.injectStyle) {
+            piConsole({
+                type:'warn',
+                message: 'settings.injectStyle is deprecated, please use the injectStyle task instead',
+                context: settings.injectStyle
+            });
+            stylesOff = injectStyle(settings.injectStyle);
+            $scope.$on('$destroy', stylesOff);
+        }
 
         // preload images
         preloadImages(settings.preloadImages || []);
@@ -46968,28 +47002,6 @@ function beforeunloadFactory(){
     return lodash.create(proto);
 }
 
-// VanilaJS
-// http://stackoverflow.com/questions/524696/how-to-create-a-style-tag-with-javascript
-
-function injectStyle(css){
-    var head = document.head || document.querySelector('head');
-    var style = document.createElement('style');
-
-    style.type = 'text/css';
-
-    if (style.styleSheet){
-        style.styleSheet.cssText = css;
-    } else {
-        style.appendChild(document.createTextNode(css));
-    }
-
-    head.appendChild(style);
-
-    return function(){
-        head.removeChild(style);
-    };
-}
-
 /**
  * @name  managerDirctive
  * @return {directive}
@@ -47178,7 +47190,6 @@ module$13.service('managerLoad', managerLoadService);
 module$13.service('managerGetScript', getScriptProvider);
 module$13.service('managerTaskLoad', taskLoadService);
 module$13.factory('managerBeforeUnload', beforeunloadFactory);
-module$13.constant('managerInjectStyle', injectStyle);
 module$13.directive('piManager', directive$12);
 
 module$13.directive('piLink', piLinkDirective);

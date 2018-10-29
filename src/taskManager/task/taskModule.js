@@ -19,6 +19,7 @@ import activateTime from './tasks/timeTask';
 import activateAllowLeaving from './tasks/allowLeaving';
 import activateYesNo from './tasks/yesNo';
 import activateIsTouch from './tasks/isTouch';
+import activateInjectStyle from './tasks/injectStyle';
 
 export default module;
 
@@ -37,4 +38,5 @@ module.config(['taskActivateProvider', function(activateProvider){
     activateProvider.set('allowLeaving', activateAllowLeaving);
     activateProvider.set('yesNo', activateYesNo);
     activateProvider.set('isTouch', activateIsTouch);
+    activateProvider.set('injectStyle', activateInjectStyle);
 }]);

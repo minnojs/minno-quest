@@ -1,7 +1,14 @@
+export default activateInjectCss;
+
+activateInjectCss.$inject = ['done', 'task'];
+function activateInjectCss(done, task){
+    injectStyle(task.css);
+    done();
+}
+
 // VanilaJS
 // http://stackoverflow.com/questions/524696/how-to-create-a-style-tag-with-javascript
-
-function injectStyle(css){
+export function injectStyle(css){
     var head = document.head || document.querySelector('head');
     var style = document.createElement('style');
 
@@ -20,4 +27,3 @@ function injectStyle(css){
     };
 }
 
-export default injectStyle;

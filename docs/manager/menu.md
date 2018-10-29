@@ -7,6 +7,7 @@
     - [Post](post.md)
     - [Redirect](redirect.md)
     - [AllowLeaving](allowleaving.md)
+    - [injectStyle](injectStyle.md)
     - [Yes/No](choose.md)
     - [Is Touch](isTouch.md)
 - Examples

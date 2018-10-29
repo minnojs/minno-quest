@@ -2,6 +2,7 @@ import _ from 'lodash';
 import Logger from './logger/managerLogger';
 import createLogs from './task/tasks/createLogs';
 import getUrlParameters from './getUrlParameters';
+import {injectStyle} from './task/tasks/injectStyle';
 
 managerService.$inject = ['$rootScope', '$q', 'managerSequence', 'managerTaskLoad', '$injector', 'piConsole'];
 function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector, piConsole){
@@ -110,7 +111,6 @@ function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector, pi
         var $document = $injector.get('$document');
         var preloadImages = $injector.get('piPreloadImages');
         var beforeUnload = $injector.get('managerBeforeUnload');
-        var injectStyle = $injector.get('managerInjectStyle');
         var rootElement = $injector.get('$rootElement');
         var canvasOff, stylesOff, skinClass = settings.skin || 'default';
         var piConsole = $injector.get('piConsole');
@@ -124,8 +124,15 @@ function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector, pi
         $scope.$on('$destroy', canvasOff);
 
         // inject styles
-        stylesOff = injectStyle(settings.injectStyle);
-        $scope.$on('$destroy', stylesOff);
+        if (settings.injectStyle) {
+            piConsole({
+                type:'warn',
+                message: 'settings.injectStyle is deprecated, please use the injectStyle task instead',
+                context: settings.injectStyle
+            });
+            stylesOff = injectStyle(settings.injectStyle);
+            $scope.$on('$destroy', stylesOff);
+        }
 
         // preload images
         preloadImages(settings.preloadImages || []);
