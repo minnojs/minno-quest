@@ -10,7 +10,7 @@ It detects whether the user device has a device capable of touch interactions an
 explicitly asks if they whish to use these capabilities.
 
 The interface for this task is similar to the interface of the `yesNo` [task](./yesno.md).
-With the following differences; first, `propertyName` has a default value of `$isTouch`, and second the default values for the texts are differnt.
+With the following differences; first, `path` has a default value of `$isTouch`, and second the default values for the texts are differnt.
 
 A typical `isTouch` task may simply look like the following.
 It would set the response to the question into `global.$isTouch`.

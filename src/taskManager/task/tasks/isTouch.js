@@ -7,12 +7,12 @@ function activateIsTouch(done, $element, task, $rootScope, $scope, $compile, piC
     var global = $rootScope.global;
     var $el;
 
-    var propertyName = _.isUndefined(task.propertyName) ? '$isTouch' : task.propertyName;
+    var path = _.isUndefined(task.path) ? '$isTouch' : task.path;
 
 
-    if (!_.isUndefined(global[propertyName])) piConsole({
+    if (!_.isUndefined(global[path])) piConsole({
         type:'warn',
-        message: 'A value was already saved to "global.' + task.propertyName + '". Please make sure that this is intentional.',
+        message: 'A value was already saved to "global.' + task.path + '". Please make sure that this is intentional.',
         context: task
     });
 
@@ -39,7 +39,7 @@ function activateIsTouch(done, $element, task, $rootScope, $scope, $compile, piC
         $el.remove();
     };
 
-    function choose(value){ _.set(global, propertyName, value); }
+    function choose(value){ _.set(global, path, value); }
 }
 
 // https://stackoverflow.com/questions/4817029/whats-the-best-way-to-detect-a-touch-screen-device-using-javascript/4819886#4819886

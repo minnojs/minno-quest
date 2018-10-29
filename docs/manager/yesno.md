@@ -11,7 +11,7 @@ A typical `yesNo` task may look like this:
     text: 'Would you like to participate in the long task (15min), or in the short one (5min)',
     yesText: 'The long one',
     noText: 'The short one',
-    propertyName: 'longOrShort'
+    path: 'longOrShort'
 }
 ```
 
@@ -29,4 +29,4 @@ heading         | A bold heading for the questions (String)
 text            | The actual text of the question (String)
 yesText         | The text for the *true* value button (String)
 noText          | The text for the *false* value button (String)
-propertyName    | The property name within `global` to which to save the data. Values with dots (i.e. '$meta.isTouch') will be logged to the propery they are pointing to via [lodash set](https://lodash.com/docs/3.10.1#set)
+path            | The property name within `global` to which to save the data. Values with dots (i.e. '$meta.isTouch') will be logged to the propery they are pointing to via [lodash set](https://lodash.com/docs/3.10.1#set)

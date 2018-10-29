@@ -46065,15 +46065,15 @@ function activateYesNo$1(done, $element, task, $rootScope, $scope, $compile, piC
     var global = $rootScope.global;
     var $el;
 
-    if (!('propertyName' in task)) piConsole({
+    if (!('path' in task)) piConsole({
         type:'warn',
-        message: '"propertyName" was not set in the yesNo task',
+        message: '"path" was not set in the yesNo task',
         context: task
     });
 
-    if (('propertyName' in task) && !lodash.isUndefined(global[task.propertyName])) piConsole({
+    if (('path' in task) && !lodash.isUndefined(global[task.path])) piConsole({
         type:'warn',
-        message: 'A value was already saved to "global.' + task.propertyName + '". Please make sure that this is intentional.',
+        message: 'A value was already saved to "global.' + task.path + '". Please make sure that this is intentional.',
         context: task
     });
 
@@ -46095,7 +46095,7 @@ function activateYesNo$1(done, $element, task, $rootScope, $scope, $compile, piC
         $el.remove();
     };
 
-    function choose(value){ lodash.set(global, task.propertyName, value); }
+    function choose(value){ lodash.set(global, task.path, value); }
 }
 
 activateIsTouch$1.$inject = ['done', '$element', 'task', '$rootScope','$scope', '$compile', 'piConsole'];
@@ -46103,12 +46103,12 @@ function activateIsTouch$1(done, $element, task, $rootScope, $scope, $compile, p
     var global = $rootScope.global;
     var $el;
 
-    var propertyName = lodash.isUndefined(task.propertyName) ? '$isTouch' : task.propertyName;
+    var path = lodash.isUndefined(task.path) ? '$isTouch' : task.path;
 
 
-    if (!lodash.isUndefined(global[propertyName])) piConsole({
+    if (!lodash.isUndefined(global[path])) piConsole({
         type:'warn',
-        message: 'A value was already saved to "global.' + task.propertyName + '". Please make sure that this is intentional.',
+        message: 'A value was already saved to "global.' + task.path + '". Please make sure that this is intentional.',
         context: task
     });
 
@@ -46135,7 +46135,7 @@ function activateIsTouch$1(done, $element, task, $rootScope, $scope, $compile, p
         $el.remove();
     };
 
-    function choose(value){ lodash.set(global, propertyName, value); }
+    function choose(value){ lodash.set(global, path, value); }
 }
 
 // https://stackoverflow.com/questions/4817029/whats-the-best-way-to-detect-a-touch-screen-device-using-javascript/4819886#4819886

@@ -7,15 +7,15 @@ function activateYesNo(done, $element, task, $rootScope, $scope, $compile, piCon
     var global = $rootScope.global;
     var $el;
 
-    if (!('propertyName' in task)) piConsole({
+    if (!('path' in task)) piConsole({
         type:'warn',
-        message: '"propertyName" was not set in the yesNo task',
+        message: '"path" was not set in the yesNo task',
         context: task
     });
 
-    if (('propertyName' in task) && !_.isUndefined(global[task.propertyName])) piConsole({
+    if (('path' in task) && !_.isUndefined(global[task.path])) piConsole({
         type:'warn',
-        message: 'A value was already saved to "global.' + task.propertyName + '". Please make sure that this is intentional.',
+        message: 'A value was already saved to "global.' + task.path + '". Please make sure that this is intentional.',
         context: task
     });
 
@@ -37,5 +37,5 @@ function activateYesNo(done, $element, task, $rootScope, $scope, $compile, piCon
         $el.remove();
     };
 
-    function choose(value){ _.set(global, task.propertyName, value); }
+    function choose(value){ _.set(global, task.path, value); }
 }
