@@ -1,12 +1,12 @@
-# Choose
+# Yes/No
 
-Choose is a task that allows you to ask your users simple yes/no questions without resorting to a full fledged questionnaire.
+`yesNo` is a task that allows you to ask your users simple yes/no questions without resorting to a full fledged questionnaire.
 
-A typical choose task may look like this:
+A typical `yesNo` task may look like this:
 
 ```javascript
 {
-    type:'choose',
+    type:'yesNo',
     heading: 'Task length',
     text: 'Would you like to participate in the long task (15min), or in the short one (5min)',
     yesText: 'The long one',

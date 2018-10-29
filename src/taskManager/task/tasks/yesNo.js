@@ -1,15 +1,15 @@
 import _ from 'lodash';
-import template from './chooseTemplate.jst';
-export default activateChoose;
+import template from './yesNoTemplate.jst';
+export default activateYesNo;
 
-activateChoose.$inject = ['done', '$element', 'task', '$rootScope','$scope', '$compile', 'piConsole'];
-function activateChoose(done, $element, task, $rootScope, $scope, $compile, piConsole){
+activateYesNo.$inject = ['done', '$element', 'task', '$rootScope','$scope', '$compile', 'piConsole'];
+function activateYesNo(done, $element, task, $rootScope, $scope, $compile, piConsole){
     var global = $rootScope.global;
     var $el;
 
     if (!('propertyName' in task)) piConsole({
         type:'warn',
-        message: '"properyName" was not set in the choose task',
+        message: '"propertyName" was not set in the yesNo task',
         context: task
     });
 
@@ -32,7 +32,7 @@ function activateChoose(done, $element, task, $rootScope, $scope, $compile, piCo
     $el = $element.contents();
     $compile($el)($scope);
 
-    return function destroyChoose(){
+    return function destroyYesNo(){
         $scope.$destroy();
         $el.remove();
     };

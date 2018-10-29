@@ -17,7 +17,8 @@ import activateRedirect from './tasks/redirectTask';
 import activatePIP from './tasks/pipTask';
 import activateTime from './tasks/timeTask';
 import activateAllowLeaving from './tasks/allowLeaving';
-import activateChoose from './tasks/choose';
+import activateYesNo from './tasks/yesNo';
+import activateIsTouch from './tasks/isTouch';
 
 export default module;
 
@@ -34,5 +35,6 @@ module.config(['taskActivateProvider', function(activateProvider){
     activateProvider.set('pip', activatePIP);
     activateProvider.set('time', activateTime);
     activateProvider.set('allowLeaving', activateAllowLeaving);
-    activateProvider.set('choose', activateChoose);
+    activateProvider.set('yesNo', activateYesNo);
+    activateProvider.set('isTouch', activateIsTouch);
 }]);

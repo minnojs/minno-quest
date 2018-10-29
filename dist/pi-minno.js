@@ -46060,14 +46060,14 @@ function allowLeaving(done, managerBeforeUnload){
 
 var template$9 = "<div class=\"jumbotron\">\n  <h2>{{ heading }}</h2>\n  <p>{{ text }}</p>\n    <div class=\"row\">\n      <div class=\"col-md-2\"></div>\n      <div class=\"col-md-4\">\n        <button class=\"btn btn-primary btn-lg btn-block\" ng-click=\"choose(true)\"> {{ yesText }} </button>\n      </div>\n      <div class=\"col-md-4\">\n        <button class=\"btn btn-primary btn-lg btn-block\" ng-click=\"choose(false)\"> {{ noText }} </button>\n      </div>\n      <div class=\"col-md-2\"></div>\n    </div>\n</div>\n";
 
-activateChoose$1.$inject = ['done', '$element', 'task', '$rootScope','$scope', '$compile', 'piConsole'];
-function activateChoose$1(done, $element, task, $rootScope, $scope, $compile, piConsole){
+activateYesNo$1.$inject = ['done', '$element', 'task', '$rootScope','$scope', '$compile', 'piConsole'];
+function activateYesNo$1(done, $element, task, $rootScope, $scope, $compile, piConsole){
     var global = $rootScope.global;
     var $el;
 
     if (!('propertyName' in task)) piConsole({
         type:'warn',
-        message: '"properyName" was not set in the choose task',
+        message: '"propertyName" was not set in the yesNo task',
         context: task
     });
 
@@ -46090,12 +46090,67 @@ function activateChoose$1(done, $element, task, $rootScope, $scope, $compile, pi
     $el = $element.contents();
     $compile($el)($scope);
 
-    return function destroyChoose(){
+    return function destroyYesNo(){
         $scope.$destroy();
         $el.remove();
     };
 
     function choose(value){ lodash.set(global, task.propertyName, value); }
+}
+
+activateIsTouch$1.$inject = ['done', '$element', 'task', '$rootScope','$scope', '$compile', 'piConsole'];
+function activateIsTouch$1(done, $element, task, $rootScope, $scope, $compile, piConsole){
+    var global = $rootScope.global;
+    var $el;
+
+    var propertyName = lodash.isUndefined(task.propertyName) ? '$isTouch' : task.propertyName;
+
+
+    if (!lodash.isUndefined(global[propertyName])) piConsole({
+        type:'warn',
+        message: 'A value was already saved to "global.' + task.propertyName + '". Please make sure that this is intentional.',
+        context: task
+    });
+
+    if (!is_touch_device()) {
+        choose(false);
+        return done();
+    }
+
+    lodash.defaults($scope, task, {
+        heading: null,
+        text: 'We\'ve detected that you are using a device capable of touch interactions. Would you like to use the touch interface?',
+        noText: 'Use keyboard',
+        yesText:'Use touch'
+    });
+
+    $scope.choose = lodash.flow(choose, done);
+
+    $element.append(template$9);
+    $el = $element.contents();
+    $compile($el)($scope);
+
+    return function destroyChoose(){
+        $scope.$destroy();
+        $el.remove();
+    };
+
+    function choose(value){ lodash.set(global, propertyName, value); }
+}
+
+// https://stackoverflow.com/questions/4817029/whats-the-best-way-to-detect-a-touch-screen-device-using-javascript/4819886#4819886
+function is_touch_device() {
+    var prefixes = ' -webkit- -moz- -o- -ms- '.split(' ');
+
+    //  eslint-disable-next-line no-undef
+    if (('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch) return true;
+
+    // include the 'heartz' as a way to have a non matching MQ to help terminate the join
+    // https://git.io/vznFH
+    var query = ['(', prefixes.join('touch-enabled),('), 'heartz', ')'].join('');
+    return mq(query);
+
+    function mq(query) { return window.matchMedia(query).matches; }
 }
 
 /**
@@ -46118,7 +46173,8 @@ module$14.config(['taskActivateProvider', function(activateProvider){
     activateProvider.set('pip', activatePIP$1);
     activateProvider.set('time', activateTime$1);
     activateProvider.set('allowLeaving', allowLeaving);
-    activateProvider.set('choose', activateChoose$1);
+    activateProvider.set('yesNo', activateYesNo$1);
+    activateProvider.set('isTouch', activateIsTouch$1);
 }]);
 
 function canvasContructor$1(map, settings){
