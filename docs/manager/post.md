@@ -32,5 +32,5 @@ The API is as follows:
 property        | description
 --------------- | ---------------------
 settings        | Optional settings that overide the logger settings [as defined](./API.md#logger) in the manager.
-path            | A path within the global to the object that you want to send. For example: `"iat.feedback"` will post the object `feedback` from `global.iat`.
+path            | A path within the global to the object that you want to send. For example: `"iat.feedback"` will post the object `feedback` from `global.iat`. You can also use an array of paths that will be combined into a single post.
 data            | A raw object to be posted to the server. You may use templates in order to construct it.

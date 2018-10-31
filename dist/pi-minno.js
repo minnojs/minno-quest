@@ -42722,24 +42722,36 @@ function postCsv(done, task, logger){
     promise.then(function(){ logs.length = 0; }).finally(done);
 }
 
-activatePost$1.$inject = ['done', 'task', 'logger','$rootScope'];
+activatePost$1.$inject = ['done', 'task', 'logger','$rootScope', 'piConsole'];
 function activatePost$1(done, task, logger, $rootScope){
     var global = $rootScope.global;
-    var data = getData(task, global);
+    var data = task.path ? getPath(task.path) : getData(task.data);
     var settings = lodash.assign({isSave:true}, task.settings);
     var log = logger.createLog(task.$name, settings);
 
     log(data);
     log.end(true);
     done();
-}
 
-function getData(task, global){
-    var data = task.path ? lodash.get(global, task.path) : task.data;
 
-    if (lodash.isPlainObject(data)) return data;
-    if (lodash.isFunction(data)) return data(global, task);
-    return lodash.set({}, task.path || 'key', data);
+
+    function getData(task, global){
+        var data = task.data;
+
+        if (lodash.isPlainObject(data)) return data;
+        if (lodash.isFunction(data)) return data(global, task);
+        return lodash.set({}, task.path || 'key', data);
+
+    }
+
+    function getPath(path){
+        if (lodash.isString(path)) path = [path];
+
+        return path.reduce(function(obj, key){
+            var value = lodash.get(global, key);
+            return lodash.set(obj, key, value);
+        }, {});
+    }
 }
 
 activateRedirect$1.$inject = ['done', 'task', 'managerBeforeUnload'];
