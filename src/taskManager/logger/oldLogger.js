@@ -56,7 +56,7 @@ function serialize(name, logs, settings){
     if (settings.isManager && !settings.isSave) return JSON.stringify(_.assign(metaData,logs));
 
     // pip style
-    if (settings.isPIP || settings.isTime) {
+    if (!settings.isSave && (settings.isPIP || settings.isTime)) {
         data = 'json=' + encodeURIComponent(JSON.stringify(logs)); // do not re-encode json
         meta = serializePIP(metaData);
         return data + (meta ? '&'+meta : '');
