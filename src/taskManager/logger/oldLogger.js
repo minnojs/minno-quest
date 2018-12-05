@@ -55,17 +55,20 @@ function serialize(name, logs, settings){
     // manager style
     if (settings.isManager && !settings.isSave) return JSON.stringify(_.assign(metaData,logs));
 
+    data = logs.map(assignMeta);
+
+
     // pip style
     if (!settings.isSave && (settings.isPIP || settings.isTime)) {
-        data = 'json=' + encodeURIComponent(JSON.stringify(logs)); // do not re-encode json
+        data = 'json=' + encodeURIComponent(JSON.stringify(data)); // do not re-encode json
         meta = serializePIP(metaData);
         return data + (meta ? '&'+meta : '');
     }
 
     // piQuest style
-    data = logs.map(function(log) { return _.assign({},log,metaData); });
     return JSON.stringify(data);
 
+    function assignMeta(log) { return _.assign({},log,metaData); }
     function serializePIP(data){
         var key, r = [];
         for (key in data) r.push(encodeURIComponent(key) + '=' + encodeURIComponent(data[key]));
