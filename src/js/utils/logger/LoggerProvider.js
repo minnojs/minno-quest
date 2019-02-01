@@ -23,10 +23,11 @@ define(function(require){
     function loggerProvider($http, $q, piConsole,$rootScope){
         var self = this;
         var global = $rootScope.global;
-        var logs = [];
-        _.set(global, 'current.logs', logs);
 
         function Logger(dfltLogFn){
+            var logs = this.logs = _.get(global, 'current.logs', []);
+            _.set(global, 'current.logs', logs);
+
             this.pending = [];
             this.sent = [];
             this.settings = {};
@@ -46,7 +47,7 @@ define(function(require){
                 }
                 _.extend(logObj, this.meta);
                 
-                logs.push(logObj);
+                this.logs.push(logObj);
 
 				// if debug, then log this object
                 piConsole(['logger']).debug('Logged: ', logObj);
