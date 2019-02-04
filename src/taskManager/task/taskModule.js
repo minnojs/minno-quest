@@ -13,6 +13,7 @@ import activateQuest from './tasks/questTask';
 import activateMessage from './tasks/messageTask';
 import activatePostCsv from './tasks/postCsvTask';
 import activatePost from './tasks/postTask';
+import activateSetValue from './tasks/setValueTask';
 import activateRedirect from './tasks/redirectTask';
 import activatePIP from './tasks/pipTask';
 import activateTime from './tasks/timeTask';
@@ -32,6 +33,7 @@ module.config(['taskActivateProvider', function(activateProvider){
     activateProvider.set('quest', activateQuest);
     activateProvider.set('message', activateMessage);
     activateProvider.set('post', activatePost);
+    activateProvider.set('setValue', activateSetValue);
     activateProvider.set('redirect', activateRedirect);
     activateProvider.set('pip', activatePIP);
     activateProvider.set('time', activateTime);

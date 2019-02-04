@@ -4,7 +4,11 @@ export default activatePost;
 activatePost.$inject = ['done', 'task', 'logger','$rootScope', 'piConsole'];
 function activatePost(done, task, logger, $rootScope){
     var global = $rootScope.global;
-    var data = task.path ? getPath(task.path) : getData(task.data);
+    var data = task.path 
+        ? getPath(task.path)
+        : task.variableName
+            ? getPath(task.variableName)
+            : getData(task.data);
     var settings = _.assign({isSave:true}, task.settings);
     var log = logger.createLog(task.$name, settings);
 

@@ -9,6 +9,7 @@
     - [Messages](messages.md)
     - [Post](post.md)
     - [Redirect](redirect.md)
+    - [Set Value](setValue.md)
     - [Yes/No](yesno.md)
 - Examples
     - [Weight experiment](weightManager.js)
