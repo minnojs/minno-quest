@@ -16,7 +16,6 @@
     - [Quest](#quest)
     - [Message](#message)
     - [Post](#post)
-    - [AllowLeaving](#allowleaving)
 - [Inheritance](#inheritance)
 - [Custom tasks](#custom-tasks)
     - [Plugging in](#plugging-in)

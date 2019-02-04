@@ -3,13 +3,13 @@
     - [API](API.md)
     - [Playground](playground.js)
 - Tasks
+    - [Allow Leaving](allowleaving.md)
+    - [Inject Style](injectStyle.md)
+    - [Is Touch](isTouch.md)
     - [Messages](messages.md)
     - [Post](post.md)
     - [Redirect](redirect.md)
-    - [AllowLeaving](allowleaving.md)
-    - [injectStyle](injectStyle.md)
-    - [Yes/No](choose.md)
-    - [Is Touch](isTouch.md)
+    - [Yes/No](yesno.md)
 - Examples
     - [Weight experiment](weightManager.js)
     - [Displaying Video](videoManager.js)
