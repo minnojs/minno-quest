@@ -40,11 +40,11 @@
 		</header>
 		<main>
 			<section class="docs">
-                <h1><a name="a-hrefplaygroundhtmlplaygrounda" class="header-link" href="#a-hrefplaygroundhtmlplaygrounda"><span></span></a><a href="playground.html">Playground</a></h1><ul>
+                <h1><a name="is-touch" class="header-link" href="#is-touch"><span></span></a>Is Touch</h1><ul>
 <li>Core<ul>
 <li><a href="overview.html">Overview</a></li>
 <li><a href="API.html">API</a></li>
-<li><strong>Playground</strong></li>
+<li><a href="playground.html">Playground</a></li>
 </ul>
 </li>
 <li>Tasks<ul>
@@ -54,7 +54,7 @@
 <li><a href="allowleaving.html">AllowLeaving</a></li>
 <li><a href="injectStyle.html">injectStyle</a></li>
 <li><a href="yesno.html">Yes/No</a></li>
-<li><a href="isTouch.html">Is Touch</a></li>
+<li><strong><a href="isTouch.html">Is Touch</a></strong></li>
 </ul>
 </li>
 <li>Examples<ul>
@@ -63,29 +63,27 @@
 </ul>
 </li>
 </ul>
-<section playground>
-    <div class="buttons">
-        <a class="activate-button">Activate</a>
-        <a class="download-button" href="playground.js" download>Download</a>
-    </div>
-    <div class="editor">define([&apos;managerAPI&apos;], function(Manager){
-
-    var API = new Manager();
-
-    API.addSequence([
-        {
-            type:&apos;message&apos;, 
-            template:&apos;&lt;h1&gt;Hello world&lt;/h1&gt;&lt;p&gt;click space to end task&lt;/p&gt;&apos;, 
-            keys: &apos; &apos;
-        }
-    ]);
-
-    return API.script;
-});
-</div>
-</section>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js" integrity="sha256-xrr4HH5eSY+cFz4SH7ja/LaAi9qcEdjMpeMP49/iOLs=" crossorigin="anonymous"></script>
-<script src="../assets/playground.js"></script>
+<p>Detecting when users are using a touch interface on the way is notoriously difficult.
+It is reasonably easy to detect touch features (such as the existance of a touch screen),
+but many devices allow the use of both a touch screen and a keyboard and the player can 
+not know which of these the user <em>prefers</em> to use.</p>
+<p><code>isTouch</code> is a task that allows you to identify users that are using touch interfaces.
+It detects whether the user device has a device capable of touch interactions and if so
+explicitly asks if they whish to use these capabilities.</p>
+<p>The interface for this task is similar to the interface of the <code>yesNo</code> <a href="./yesno.html">task</a>.
+With the following differences; first, <code>path</code> has a default value of <code>$isTouch</code>, and second the default values for the texts are differnt.</p>
+<p>A typical <code>isTouch</code> task may simply look like the following.
+It would set the response to the question into <code>global.$isTouch</code>.</p>
+<pre><code class="lang-javascript">{ type:&#39;isTouch&#39; }
+</code></pre>
+<p>If you want to get more fancy you can customize it:</p>
+<pre><code class="lang-javascript">{ 
+    type:&#39;isTouch&#39;,
+    text: &#39;Would you like to use the touch interface?&#39;,
+    yesText: &#39;Yes! Touch is my thing!&#39;,
+    noText: &#39;Nah, I\&#39;ll go with the keyboard.&#39;
+}
+</code></pre>
 
 				<hr />
 				<small>License: Apache 2. &copy; Project Implicit. &middot; Current version [version]</small>

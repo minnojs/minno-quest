@@ -52,7 +52,9 @@
 <li><strong><a href="post.html">Post</a></strong></li>
 <li><a href="redirect.html">Redirect</a></li>
 <li><a href="allowleaving.html">AllowLeaving</a></li>
-<li><a href="choose.html">Choose</a></li>
+<li><a href="injectStyle.html">injectStyle</a></li>
+<li><a href="yesno.html">Yes/No</a></li>
+<li><a href="isTouch.html">Is Touch</a></li>
 </ul>
 </li>
 <li>Examples<ul>
@@ -62,14 +64,25 @@
 </li>
 </ul>
 <p>The post task is responsible for posting plain data to the server. You can either send data directly from the global object or create it yourself. This is a good way to keep track of complex conditions within your tasks or of manual manipulation of all sorts.</p>
-<p>A typical post task may look like this:</p>
+<p>The following post task takes all data from <code>global.randomization</code> and posts it to the server.</p>
 <pre><code class="lang-javascript">{
     type:&#39;post&#39;,
-    url: &#39;my/post/url&#39;,
-    data: {something:&#39;I&#39;,want:&#39;to save.&#39;}
+    name:&#39;primaryRandomization&#39;
+    path: &#39;randomization&#39;
 }
 </code></pre>
-<p>The API is as follows:</p>
+<p>In case the data to be sent is a function, it will be called with <code>global</code> and the <code>task</code> itself as arguments:</p>
+<pre><code>{
+    type:&#39;post&#39;,
+    name:&#39;secondaryRandomization&#39;
+    data: function(global, task){
+        return {
+            score: global.currentScore,
+            stage: task.data.stage
+        }
+    }
+}
+</code></pre><p>The API is as follows:</p>
 <table>
 <thead>
 <tr>
@@ -79,12 +92,12 @@
 </thead>
 <tbody>
 <tr>
-<td>url</td>
-<td>The url we intend to post to.</td>
+<td>settings</td>
+<td>Optional settings that overide the logger settings <a href="./API.html#logger">as defined</a> in the manager.</td>
 </tr>
 <tr>
 <td>path</td>
-<td>A path within the global to the object that you want to send. For example: <code>&quot;iat.feedback&quot;</code> will post the object <code>feedback</code> from <code>global.iat</code>.</td>
+<td>A path within the global to the object that you want to send. For example: <code>&quot;iat.feedback&quot;</code> will post the object <code>feedback</code> from <code>global.iat</code>. You can also use an array of paths that will be combined into a single post.</td>
 </tr>
 <tr>
 <td>data</td>

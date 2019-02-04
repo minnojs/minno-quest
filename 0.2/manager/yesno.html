@@ -40,7 +40,7 @@
 		</header>
 		<main>
 			<section class="docs">
-                <h1><a name="choose" class="header-link" href="#choose"><span></span></a>Choose</h1><ul>
+                <h1><a name="yesno" class="header-link" href="#yesno"><span></span></a>Yes/No</h1><ul>
 <li>Core<ul>
 <li><a href="overview.html">Overview</a></li>
 <li><a href="API.html">API</a></li>
@@ -52,7 +52,9 @@
 <li><a href="post.html">Post</a></li>
 <li><a href="redirect.html">Redirect</a></li>
 <li><a href="allowleaving.html">AllowLeaving</a></li>
-<li><strong><a href="choose.html">Choose</a></strong></li>
+<li><a href="injectStyle.html">injectStyle</a></li>
+<li><strong><a href="yesno.html">Yes/No</a></strong></li>
+<li><a href="isTouch.html">Is Touch</a></li>
 </ul>
 </li>
 <li>Examples<ul>
@@ -61,15 +63,15 @@
 </ul>
 </li>
 </ul>
-<p>Choose is a task that allows you to ask your users simple yes/no questions without resorting to a full fledged questionnaire.</p>
-<p>A typical choose task may look like this:</p>
+<p><code>yesNo</code> is a task that allows you to ask your users simple yes/no questions without resorting to a full fledged questionnaire.</p>
+<p>A typical <code>yesNo</code> task may look like this:</p>
 <pre><code class="lang-javascript">{
-    type:&#39;choose&#39;,
+    type:&#39;yesNo&#39;,
     heading: &#39;Task length&#39;,
     text: &#39;Would you like to participate in the long task (15min), or in the short one (5min)&#39;,
     yesText: &#39;The long one&#39;,
     noText: &#39;The short one&#39;,
-    propertyName: &#39;longOrShort&#39;
+    path: &#39;longOrShort&#39;
 }
 </code></pre>
 <p>After completing the task, the global property <code>longOrShort</code> will be set with <code>true</code> or <code>false</code> according to the response of the user.
@@ -102,7 +104,7 @@ This value can be used later within the player in order to branch or within temp
 <td>The text for the <em>false</em> value button (String)</td>
 </tr>
 <tr>
-<td>propertyName</td>
+<td>path</td>
 <td>The property name within <code>global</code> to which to save the data. Values with dots (i.e. &#39;$meta.isTouch&#39;) will be logged to the propery they are pointing to via <a href="https://lodash.com/docs/3.10.1#set">lodash set</a></td>
 </tr>
 </tbody>

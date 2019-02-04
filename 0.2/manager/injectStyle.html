@@ -40,11 +40,11 @@
 		</header>
 		<main>
 			<section class="docs">
-                <h1><a name="a-hrefplaygroundhtmlplaygrounda" class="header-link" href="#a-hrefplaygroundhtmlplaygrounda"><span></span></a><a href="playground.html">Playground</a></h1><ul>
+                <h1><a name="inject-style" class="header-link" href="#inject-style"><span></span></a>Inject Style</h1><ul>
 <li>Core<ul>
 <li><a href="overview.html">Overview</a></li>
 <li><a href="API.html">API</a></li>
-<li><strong>Playground</strong></li>
+<li><a href="playground.html">Playground</a></li>
 </ul>
 </li>
 <li>Tasks<ul>
@@ -52,7 +52,7 @@
 <li><a href="post.html">Post</a></li>
 <li><a href="redirect.html">Redirect</a></li>
 <li><a href="allowleaving.html">AllowLeaving</a></li>
-<li><a href="injectStyle.html">injectStyle</a></li>
+<li><strong><a href="injectStyle.html">injectStyle</a></strong></li>
 <li><a href="yesno.html">Yes/No</a></li>
 <li><a href="isTouch.html">Is Touch</a></li>
 </ul>
@@ -63,29 +63,37 @@
 </ul>
 </li>
 </ul>
-<section playground>
-    <div class="buttons">
-        <a class="activate-button">Activate</a>
-        <a class="download-button" href="playground.js" download>Download</a>
-    </div>
-    <div class="editor">define([&apos;managerAPI&apos;], function(Manager){
-
-    var API = new Manager();
-
-    API.addSequence([
-        {
-            type:&apos;message&apos;, 
-            template:&apos;&lt;h1&gt;Hello world&lt;/h1&gt;&lt;p&gt;click space to end task&lt;/p&gt;&apos;, 
-            keys: &apos; &apos;
-        }
-    ]);
-
-    return API.script;
-});
-</div>
-</section>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js" integrity="sha256-xrr4HH5eSY+cFz4SH7ja/LaAi9qcEdjMpeMP49/iOLs=" crossorigin="anonymous"></script>
-<script src="../assets/playground.js"></script>
+<p>The <code>injectStyle</code> task allows you to change the style of Minno throught a study.
+The style of web pages is determined by their <a href="https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS">CSS</a>.
+<code>injectStyle</code> allows you to add any CSS that you like into your study.</p>
+<pre><code class="lang-javascript">{
+    type:&#39;injectStyle&#39;,
+    css: &#39;[piq-page] .page-buttons .page-submit {background-color:#d9534f; border:#d43f3a}&#39;
+}
+</code></pre>
+<p>If you have a lot of CSS that you want to add, it makes sense to break the string down as follows:</p>
+<pre><code class="lang-javascript">{
+    type:&#39;injectStyle&#39;,
+    css: [
+        &#39;[piq-page] .page-buttons .page-submit {background-color:#d9534f; border:#d43f3a}&#39;,
+        &#39;[piq-page] .page-buttons .page-decline {background-color:#5cb85c; border:#4cae4c}&#39;
+    ].join(&#39;\n&#39;)
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>property</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>css</td>
+<td>A string of css to add to the page.</td>
+</tr>
+</tbody>
+</table>
 
 				<hr />
 				<small>License: Apache 2. &copy; Project Implicit. &middot; Current version [version]</small>
