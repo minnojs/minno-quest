@@ -48,13 +48,14 @@
 </ul>
 </li>
 <li>Tasks<ul>
+<li><a href="allowleaving.html">Allow Leaving</a></li>
+<li><a href="injectStyle.html">Inject Style</a></li>
+<li><a href="isTouch.html">Is Touch</a></li>
 <li><a href="messages.html">Messages</a></li>
 <li><strong><a href="post.html">Post</a></strong></li>
 <li><a href="redirect.html">Redirect</a></li>
-<li><a href="allowleaving.html">AllowLeaving</a></li>
-<li><a href="injectStyle.html">injectStyle</a></li>
+<li><a href="setValue.html">Set Value</a></li>
 <li><a href="yesno.html">Yes/No</a></li>
-<li><a href="isTouch.html">Is Touch</a></li>
 </ul>
 </li>
 <li>Examples<ul>
@@ -96,8 +97,12 @@
 <td>Optional settings that overide the logger settings <a href="./API.html#logger">as defined</a> in the manager.</td>
 </tr>
 <tr>
-<td>path</td>
+<td>variableName</td>
 <td>A path within the global to the object that you want to send. For example: <code>&quot;iat.feedback&quot;</code> will post the object <code>feedback</code> from <code>global.iat</code>. You can also use an array of paths that will be combined into a single post.</td>
+</tr>
+<tr>
+<td>path</td>
+<td>Deprecated verson of <code>variableName</code></td>
 </tr>
 <tr>
 <td>data</td>

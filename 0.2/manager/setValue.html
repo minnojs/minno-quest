@@ -1,0 +1,184 @@
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Minno.js</title>
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+		<link href="../assets/prism.css" rel="stylesheet" />
+		<link href="../assets/style.css" rel="stylesheet" />
+	</head>
+	<body>
+		<header>
+			<section>
+				<nav class="brand">
+                    <a href="/"><h1>Minno</h1></a>
+				</nav>
+				<nav>
+					<a href="/minno-quest/0.2/basics/overview.html">Basics</a>
+					<a href="/minno-quest/0.2/manager/overview.html">miManager</a>
+					<a href="/minno-quest/0.2/quest/overview.html">miQuest</a>
+					<a href="/minno-time/0.5/time/overview.html">miTime</a>
+				</nav>
+				<nav>
+                    <div id="search-box">
+                        <script>
+                            (function() {
+                                var cx = '002953266509769041597:smg5beek-iu';
+                                var gcse = document.createElement('script');
+                                gcse.type = 'text/javascript';
+                                gcse.async = true;
+                                gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+                                var s = document.getElementsByTagName('script')[0];
+                                s.parentNode.insertBefore(gcse, s);
+                            })();
+                        </script>
+                        <gcse:searchbox-only></gcse:searchbox-only>
+                    </div>
+                    <select id="version-select"><option value="0.0" >v0.0</option>,<option value="0.1" >v0.1</option>,<option value="0.2" selected>v0.2</option></select>
+					<a href="https://github.com/minnojs">Github</a>
+				</nav>
+			</section>
+		</header>
+		<main>
+			<section class="docs">
+                <h1><a name="setvalue" class="header-link" href="#setvalue"><span></span></a>setValue</h1><p>The <code>setValue</code> task allows setting a value to <a href="../basics/variables.html">environmental variables</a> (e.g., variables stored in the global object). 
+It is useful for implementing experiment conditions.</p>
+<h3><a name="contents" class="header-link" href="#contents"><span></span></a>Contents</h3><ul>
+<li><a href="#api">API</a></li>
+<li><a href="#basic-use">Basic use</a></li>
+<li><a href="#experiment-conditions">Experiment conditions</a></li>
+</ul>
+<h3><a name="api" class="header-link" href="#api"><span></span></a>API</h3><table>
+<thead>
+<tr>
+<th>property</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>variableName</td>
+<td>The name of the variable to which the value is set within the global object. For assigning variables nested within global, use the following format: <code>iat.feedback</code> would assign the value to the variable <code>feedback</code> under <code>global.iat</code>. </td>
+</tr>
+<tr>
+<td>value</td>
+<td>A raw value to be set into <code>variableName</code>.</td>
+</tr>
+<tr>
+<td>valueFromVariable</td>
+<td>The name of the variable from which the value is copied. It is within the global object. For accessing variables nested within global, use the following format: <code>iat.feedback</code> would assign the value to the variable <code>feedback</code> under <code>global.iat</code>. </td>
+</tr>
+<tr>
+<td>fn</td>
+<td>A function, that should be called, and the result set int <code>variableName</code>.</td>
+</tr>
+<tr>
+<td>post</td>
+<td>(true/false) should we log this value.</td>
+</tr>
+<tr>
+<td>settings</td>
+<td>Optional settings that overide the logger settings <a href="./API.html#logger">as defined</a> in the manager.</td>
+</tr>
+<tr>
+<td>path</td>
+<td>Deprecated verson of <code>variableName</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>Only one of <code>value</code>, <code>valueFromVariable</code> and <code>fn</code> can be used.</p>
+<h3><a name="basic-use" class="header-link" href="#basic-use"><span></span></a>Basic use</h3><p>Following are a set of examples for the basic use of the <code>setValue</code> task, <a href="#experimental-conditions">below</a> are some more advanced applications.</p>
+<p>In the following example, we set the value &#39;condition1&#39; into the variable cond within the global object.</p>
+<pre><code class="lang-javascript">{
+    type:&#39;setValue&#39;,
+    variableName:&#39;cond&#39;,
+    value:&#39;condition1&#39;
+}
+</code></pre>
+<p>It is possible to assign nested variable names. 
+In the following example, we set the value of the variable <code>isControl</code> within the <code>global.conditions</code> object.</p>
+<pre><code class="lang-javascript">{
+    type:&#39;setValue&#39;,
+    variableName:&#39;conditions.isControl&#39;,
+    value:true
+}
+</code></pre>
+<p>You can also copy variables. In the following example, we copy the user&#39;s response to a questionnaire into a variable under global</p>
+<pre><code class="lang-javascript">{
+    type:&#39;setValue&#39;,
+    variableName:&#39;conditions.hasConsent&#39;,
+    valueFromVariable: &#39;consent.questions.consent.response&#39;
+}
+</code></pre>
+<p>You can also create variables dynamically, using a function. The global object is the function&#39;s argument:</p>
+<pre><code class="lang-javascript">{
+    type: &#39;setValue&#39;,
+    variableName: &#39;score&#39;,
+    fn: function(global){
+        return global.score1 + global.score2;
+    }
+}
+</code></pre>
+<p>Finally, the task allows posting the variable and its value to the server (i.e., logging it):</p>
+<pre><code class="lang-javascript">{
+    type:&#39;setValue&#39;,
+    variableName:&#39;cond&#39;,
+    value:&#39;condition1&#39;,
+    post:true
+}
+</code></pre>
+<h3><a name="experimental-conditions" class="header-link" href="#experimental-conditions"><span></span></a>Experimental conditions</h3><p>Following, are two examples for the use of <code>setValue</code> in order to manage multiple experimental conditions.</p>
+<p>In this example, we use a &quot;choose&quot; mixer to choose an experimental condition. We set the selected condition to <code>global.condition</code> and even send it to the server (post:true). </p>
+<pre><code class="lang-javascript">{
+    mixer: &#39;choose&#39;,
+    data: [
+        {
+            mixer: &#39;wrapper&#39;,
+            data: [
+                {type:&#39;setValue&#39;, variableName: &#39;condition&#39;, value: &#39;trueInstructions&#39;, post:true},
+                {type:&#39;message&#39;, template: &#39;These are the true instructions&#39;, keys: &#39; &#39;}
+            ]
+        },
+        {type:&#39;setValue&#39;, variableName: &#39;condition&#39;, value: &#39;control&#39;, post:true},
+    ]
+}
+</code></pre>
+<p>Sometimes it is more convinient to separate the randomization from actually running the tasks.
+In this example, we use a &quot;weightedChoose&quot; mixer in order to randomize the <code>global.condition</code> variable, so that there is twice the probability to be in the &#39;trueInstructions&#39; group than in the &#39;control&#39; group.
+We then use a branch mixer in order to choose the appropriate instructions.</p>
+<pre><code class="lang-javascript">[
+    // Randomization
+    {
+        mixer: &#39;weightedChoose&#39;,
+        weights: [2,1],
+        data: [
+            {type:&#39;setValue&#39;, variableName: &#39;condition&#39;, value: &#39;trueInstructions&#39;, post:true},
+            {type:&#39;setValue&#39;, variableName: &#39;condition&#39;, value: &#39;control&#39;, post:true}
+        ]
+    },
+    // Execute appropriate task (or not...)
+    {
+        mixer: &#39;branch&#39;,
+        conditions: {compare: &#39;global.condition&#39;, to: &#39;trueInstructions&#39;},
+        data: [
+            {type:&#39;message&#39;, template: &#39;These are the true instructions&#39;, keys: &#39; &#39;}
+        ]
+    }
+]
+</code></pre>
+
+				<hr />
+				<small>License: Apache 2. &copy; Project Implicit. &middot; Current version [version]</small>
+			</section>
+		</main>
+		<script src="../assets/prism.js"></script>
+        <script>
+            (function(){
+                var select = document.getElementById('version-select');
+                select.addEventListener('change', function(event){
+                    var version = event.target.value;
+                    location.href = location.href.replace(/[0-9]\.[0-9]/, version)
+                });
+            })();
+        </script>
+	</body>
+</html>
