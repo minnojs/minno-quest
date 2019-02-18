@@ -1,12 +1,12 @@
 # setValue
- 
+
+- [API](#api)
+- [Basic use](#basic-use)
+- [Experiment conditions](#experiment-conditions)
+
 The `setValue` task allows setting a value to [environmental variables](../basics/variables.md) (e.g., variables stored in the global object). 
 It is useful for implementing experiment conditions.
 
-### Contents
-* [API](#api)
-* [Basic use](#basic-use)
-* [Experiment conditions](#experiment-conditions)
 
 ### API
 

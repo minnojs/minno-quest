@@ -12,7 +12,7 @@ export default {onRow:onRow, onEnd:onEnd, serialize:serialize, send:send};
 function onRow(name, row, settings, ctx){
     var logs = ctx[name] || (ctx[name] = []);
 
-    if (settings.isSave) return apiSave(row);
+    if (settings.isPost) return apiSave(row);
     if (settings.isManager) return row;
 
     if (settings.isPIP || settings.isTime){
@@ -53,13 +53,12 @@ function serialize(name, logs, settings){
     var metaData =  _.assign({taskName:name, taskNumber:taskNumber}, window.piGlobal.$meta, settings.meta);
 
     // manager style
-    if (settings.isManager && !settings.isSave) return JSON.stringify(_.assign(metaData,logs));
+    if (settings.isManager) return JSON.stringify(_.assign(metaData,logs));
 
     data = logs.map(assignMeta);
 
-
     // pip style
-    if (!settings.isSave && (settings.isPIP || settings.isTime)) {
+    if (settings.isPIP || settings.isTime) {
         data = 'json=' + encodeURIComponent(JSON.stringify(data)); // do not re-encode json
         meta = serializePIP(metaData);
         return data + (meta ? '&'+meta : '');
@@ -77,8 +76,8 @@ function serialize(name, logs, settings){
 }
 
 function send(name, serialized, settings, ctx){
-    var contentType = !settings.isSave && (settings.isPIP || settings.isTime) && 'application/x-www-form-urlencoded; charset=UTF-8';
-    var url = settings.isSave || settings.isQuest
+    var contentType = (settings.isPIP || settings.isTime) && 'application/x-www-form-urlencoded; charset=UTF-8';
+    var url = settings.isPost || settings.isQuest
         ? '/implicit/PiQuest'
         : settings.isPIP || settings.isTime
             ? '/implicit/PiPlayerApplet'

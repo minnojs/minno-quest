@@ -14,7 +14,7 @@ function createLog(logger, script, task){
     var settings = cloneSet(_.get(script,'settings.logger',{}), _.camelCase('is-' + type), true);
 
     var log = logger.createLog(name, settings);
-    var saveLog = logger.createLog(name, cloneSet(settings, 'isSave',true));
+    var saveLog = logger.createLog(name, cloneSet(settings, 'isPost',true));
     log.end(saveLog.end);
 
     /**

@@ -8,8 +8,9 @@ function activatePost(done, task, logger, $rootScope){
         ? getPath(task.path)
         : task.variableName
             ? getPath(task.variableName)
-            : getData(task.data);
-    var settings = _.assign({isSave:true}, task.settings);
+            : getData(task);
+
+    var settings = _.assign({isPost:'true'}, task.settings);
     var log = logger.createLog(task.$name, settings);
 
     log(data);
@@ -21,8 +22,8 @@ function activatePost(done, task, logger, $rootScope){
     function getData(task, global){
         var data = task.data;
 
-        if (_.isPlainObject(data)) return data;
         if (_.isFunction(data)) return data(global, task);
+        if (_.isPlainObject(data)) return data;
         return _.set({}, task.path || 'key', data);
 
     }

@@ -45,7 +45,7 @@ function activatePost(done, task, logger, $rootScope, piConsole){
     }
 
     function post(task, value){
-        var settings = _.assign({isSave:true}, task.settings);
+        var settings = _.assign({isPost:true}, task.settings);
         var log = logger.createLog(task.$name, settings);
         // we don't want to use _.set because we don't want to set a "deep" value here.
         var data = {};
