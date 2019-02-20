@@ -48,6 +48,30 @@ window.piGlobal.greeting = 'Hello world';
 console.log(window.piGlobal);
 ```
 
+#### Meta
+The `global.$meta` variable has a special meaning within the player.
+Each time the logger triggers within any of the manager tasks, all the data with then `global.$meta` object is added to each row of the log.
+
+The following definition will cause each log posted to the server to include `uid`:
+
+```
+API.addGlobal({
+    $meta: {uid: '12345678'}
+});
+```
+
+#### postOnce
+The `global.$postOnce` variable is posted to the server immidiately at the start of the task sequence.
+Note that any changes to this variable during the sequence will have no effect.
+
+The following definition will cause the `condition` to be saved to the server at the begining of the session.
+
+```
+API.addGlobal({
+    $postOnce: {condition: 'long'}
+});
+```
+
 #### Url
 The [query string](https://en.wikipedia.org/wiki/Query_string) is a set of parameters that can be passed within a URL string.
 The global object exposes the url query string in a dedicated object called `$url`.

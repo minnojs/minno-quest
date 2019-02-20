@@ -59297,7 +59297,7 @@ function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector, pi
         this.sequence = new ManagerSequence(script);
 
         // activate all setup stuff
-        setup($scope, settings);
+        setup(this, $scope, settings);
 
         $scope.$on('manager:next', function(event, target){
             target || (target = {type:'next'});
@@ -59364,7 +59364,7 @@ function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector, pi
     return Manager;
 
     // just to separate the activation of all the settings: KISS
-    function setup($scope, settings){
+    function setup(manager, $scope, settings){
         var canvas = $injector.get('managerCanvas');
         var $document = $injector.get('$document');
         var preloadImages = $injector.get('piPreloadImages');
@@ -59372,6 +59372,7 @@ function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector, pi
         var rootElement = $injector.get('$rootElement');
         var canvasOff, stylesOff, skinClass = settings.skin || 'default';
         var piConsole = $injector.get('piConsole');
+        var global = $scope.global;
 
         // prevent accidental browsing away
         beforeUnload.activate();
@@ -59404,7 +59405,10 @@ function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector, pi
         // connect piConsole to settings
         piConsole.settings = settings.DEBUG || {};
 
-        $scope.global.$url = getParameters();
+        global.$url = getParameters();
+
+        // post "postOnce" data
+        if (global.$postOnce) manager.log(global.$postOnce, settings);
     }
 }
 
