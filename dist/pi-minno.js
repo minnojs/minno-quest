@@ -1,5 +1,5 @@
 /**
- * @preserve minno-quest v0.2.30
+ * @preserve minno-quest v0.3.0
  * @license Apache-2.0 (2019)
  */
 var minnoQuest=function(){"use strict";
