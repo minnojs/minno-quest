@@ -76,7 +76,7 @@ function serialize(name, logs, settings){
 }
 
 function send(name, serialized, settings, ctx){
-    var contentType = (settings.isPIP || settings.isTime) && 'application/x-www-form-urlencoded; charset=UTF-8';
+    var contentType = !settings.isPost && (settings.isPIP || settings.isTime) && 'application/x-www-form-urlencoded; charset=UTF-8';
     var url = settings.isPost || settings.isQuest
         ? '/implicit/PiQuest'
         : settings.isPIP || settings.isTime
