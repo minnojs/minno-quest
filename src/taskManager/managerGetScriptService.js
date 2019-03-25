@@ -34,7 +34,7 @@ function getScriptProvider(){
             request.onreadystatechange = function() {
                 if (this.readyState === 4) {
                     if (this.status >= 200 && this.status < 400) resolve(this.responseText);
-                    else reject(new Error('Failed posting to: ' + url));
+                    else reject(new Error('Failed getting from: ' + url));
                 }
             };
             request.send();

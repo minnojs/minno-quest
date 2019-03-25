@@ -26,6 +26,16 @@ function taskLoadService($q, managerGetScript, $console){
                 task.$script = promises.script;
                 task.$template = promises.template;
                 return task;
+            })
+            .catch(function(e){
+                $console({
+                    tags:'task',
+                    type:'error',
+                    context: task,
+                    message: 'Task could not be loaded, please make sure that you have set the correct url.',
+                    error:e
+                });
+                throw e;
             });
     }
 
