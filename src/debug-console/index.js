@@ -60,6 +60,7 @@ var Console = {
                 ]),
                 state.$show() && m('select.form-control', {title: 'Select log level',onchange:m.withAttr('value', state.$level), value:state.level}, [
                     m('option', {value:1, selected:level==1}, 'Error'),
+                    m('option', {value:2, selected:level==2}, 'Warn'),
                     m('option', {value:9, selected:level==9}, 'All')
                 ]),        
                 m('span.input-group-btn',[
