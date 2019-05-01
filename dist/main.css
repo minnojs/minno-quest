@@ -6200,6 +6200,9 @@ button.close {
 [piq-page] > [pi-quest-validation] {
   margin: 15px; }
 
+[dir="rtl"] th {
+  text-align: right; }
+
 @media (min-width: 1200px) {
   [dir="rtl"] .col-lg-1, [dir="rtl"] .col-lg-2, [dir="rtl"] .col-lg-3, [dir="rtl"] .col-lg-4, [dir="rtl"] .col-lg-5, [dir="rtl"] .col-lg-6, [dir="rtl"] .col-lg-7, [dir="rtl"] .col-lg-8, [dir="rtl"] .col-lg-9, [dir="rtl"] .col-lg-10, [dir="rtl"] .col-lg-11 {
     float: right; } }
