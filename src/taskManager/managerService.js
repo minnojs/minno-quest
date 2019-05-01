@@ -76,6 +76,7 @@ function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector, pi
         },
 
         load: function(target){
+            var $document = $injector.get('$document');
             var task = this.current();
             var $scope = this.$scope;
             var loadOptions = {
@@ -83,19 +84,22 @@ function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector, pi
                 bustCache: target && target.bustCache
             };
 
-            // taskLoad adds $script and $template to the task object
-            if (task) return taskLoad(task, loadOptions).then(function(){
-                piConsole({
-                    tags:['manager'],
-                    type:'debug',
-                    message:'Manager:currentTask',
-                    context: task
-                });
-                $scope.$emit('manager:loaded');
-            });
-
             // let the directive deal with the end of the sequence
-            $scope.$emit('manager:loaded');
+            if (!task) return $scope.$emit('manager:loaded');
+                
+            $document[0].title = task.title || _.get(this.script, 'settings.title');
+
+            // taskLoad adds $script and $template to the task object
+            return taskLoad(task, loadOptions)
+                .then(function(){
+                    piConsole({
+                        tags:['manager'],
+                        type:'debug',
+                        message:'Manager:currentTask',
+                        context: task
+                    });
+                    $scope.$emit('manager:loaded');
+                });
         },
 
         setBaseUrl: function(baseUrl){
@@ -139,7 +143,8 @@ function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector, pi
         preloadImages(settings.preloadImages || []);
 
         // activate titles
-        if (settings.title) $document[0].title = settings.title;
+        if (!('title' in settings)) settings.title = $document[0].title;
+        $document[0].title = settings.title;
 
         rootElement.addClass(skinClass + '-skin');
         rootElement.attr('dir', settings.rtl ? 'rtl' : '');

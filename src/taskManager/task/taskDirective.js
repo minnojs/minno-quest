@@ -65,16 +65,6 @@ function directive(activateTask, canvas, $document, $window, $rootScope, piConso
             canvasOff = canvas(task.canvas); // apply canvas settings
             promise['finally'](canvasOff); // remove canvas settings
 
-            /**
-             * Add and remove title
-             * if task.title is set, set the title and remove at the end...
-             */
-            if (task.title){
-                oldTitle = $document[0].title;
-                $document[0].title = task.title;
-                promise['finally'](function(){$document[0].title = oldTitle;});
-            }
-
             promise['finally'](function(){
                 $scope.$emit('task:done', proceedObject);
             });
