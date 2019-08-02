@@ -75,6 +75,9 @@ define(function (require) {
                     // a container needs the dragula-container attr and to be in the current question
                     isContainer: function(el){
                         return el.hasAttribute('dragula-container') && element[0].contains(el);
+                    },
+                    invalid: function(el){
+                        return el.tagName == 'SELECT';
                     }
                 });
 
