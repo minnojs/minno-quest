@@ -95,7 +95,7 @@ function directive(mixer){
                 // get chosen answers
                 scope.response = _(newValue)
                     .filter(function(answer){return answer.chosen;})
-                    .pluck('value')
+                    .map('value')
                     .value();
             },true); // deep watch
 

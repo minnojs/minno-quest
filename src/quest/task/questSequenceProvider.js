@@ -44,7 +44,7 @@ function SequenceProvider(){
 
             // make sure we don't lose any thing in the orginal page
             // @TODO: this seems extremely expensive. Is this really neccesary?
-            page = _.clone(page, true);
+            page = _.cloneDeep(page, true);
             page.questions = questions;
 
             return page;

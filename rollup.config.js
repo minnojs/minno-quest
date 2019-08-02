@@ -35,7 +35,7 @@ const debugConsole = {
     file: 'dist/minno-debug.js',
     format: 'iife', 
     name: 'minnoDebug'
-}
+};
 
 const config = {
     sourcemap:true,

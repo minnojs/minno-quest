@@ -41,8 +41,9 @@ function gridDirective(shuffle){
     function mapRows(rows, data){
         return _(rows || [])
             .map(objectify)
-            .each(function setRowName(row, index){
+            .map(function setRowName(row, index){
                 row.hasOwnProperty('name') || (row.name = data.name + zerofill(index+1,3));
+                return row;
             })
             .thru(data.shuffle ? shuffle : _.identity)
             .value();

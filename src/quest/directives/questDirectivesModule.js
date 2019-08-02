@@ -3,7 +3,7 @@ import _ from 'lodash';
 import timerModule from 'utils/timer/timer-module';
 import utilsModule from 'utils/utils/utilsModule';
 import buttons from './buttons/buttons';
-import templateModule from 'minno-sequencer/src/template/templateModule';
+//import templateModule from 'minno-sequencer/src/template/templateModule';
 import consoleModule from 'utils/console/consoleModule';
 import modalModule from 'utils/modal/modalModule';
 import questController from './questController';
@@ -36,7 +36,7 @@ var module = angular.module('questDirectives',[
     timerModule.name,
     utilsModule.name,
     buttons.name,
-    templateModule.name,
+    //templateModule.name,
     consoleModule.name,
     modalModule.name
 ]);

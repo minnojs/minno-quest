@@ -29,7 +29,7 @@ function onRow(name, row, settings, ctx){
     }
 
     function apiSave(row){
-        return _.pairs(row) // row => [[key,value]]
+        return _.toPairs(row) // row => [[key,value]]
             .map(function(pair){ 
                 return {
                     name:pair[0], 

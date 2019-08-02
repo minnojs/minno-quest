@@ -1,6 +1,3 @@
-
-
-import _ from 'lodash';
 import angular from 'angular';
 import canvasConstructor from './canvasConstructor';
 
@@ -15,7 +12,7 @@ function managerCanvasService($rootElement, $document){
         fontColor 			: {element: $rootElement, property:'color'}
     };
 
-    return _.bind(canvasConstructor, null, map);
+    return canvasConstructor.bind(null, map);
 }
 
 export default managerCanvasService;

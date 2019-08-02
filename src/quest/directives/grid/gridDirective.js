@@ -28,7 +28,7 @@ function gridDirective(shuffle){
 
 
             scope.$watchCollection(function getResponses(){
-                return _.pluck(scope.rows, '$response');
+                return _.map(scope.rows, '$response');
             }, function sumResponses(responses){
                 scope.response = _.reduce(responses, function(total, response) {
                     return _.isFinite(response) ? total + response : total;
@@ -55,8 +55,9 @@ function gridDirective(shuffle){
     function mapRows(rows, data){
         return _(rows || [])
             .map(objectify)
-            .each(function setRowName(row, index){
+            .map(function setRowName(row, index){
                 row.hasOwnProperty('name') || (row.name = data.name + zerofill(index+1,3));
+                return row;
             })
             .thru(data.shuffle ? shuffle : _.identity)
             .value();

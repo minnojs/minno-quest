@@ -13,7 +13,7 @@ export default function managerLogger(settings, piConsole){
         piConsole({
             type:'error',
             message: 'Logger failed',
-            error: _.first(arguments),
+            error: _.head(arguments),
             rows: [
                 ['Task Name:', arguments[1]],
                 ['Data processed:', arguments.length == 5 ? arguments[2] : 'N/A'],
