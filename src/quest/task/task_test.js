@@ -8,7 +8,7 @@ describe('QuestTask',function(){
     var script;
 
     // stubout constructors
-    beforeEach(module('task', 'database', function($provide) {
+    beforeEach(module('task', function($provide) {
         $provide.value('Database', function(){ this.createColl = createSpy; });
         $provide.value('taskParse',parseSpy);
         $provide.value('QuestSequence',function(){
