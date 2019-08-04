@@ -44,7 +44,9 @@ function sequenceProvider(Database, $rootScope, mixerDefaultContext, templateDef
         },
 
         current: function(){
-            return this.sequence.current();
+            var ctx = {};
+            var options = {skip: ['script']}; // do not template whole scripts
+            return this.sequence.current(ctx, options);
         }
     });
 
