@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-selectMixerProvider.$inject = ['randomizeShuffle', 'mixerRecursive'];
+selectMixerProvider.$inject = ['questShuffle', 'mixerRecursive'];
 function selectMixerProvider(shuffle, mixer){
 
     function selectMixer(answersArr, options){

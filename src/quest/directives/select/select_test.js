@@ -1,18 +1,19 @@
 import angular from 'angular';
 import '../questDirectivesModule';
-import 'minno-sequencer/src/randomize/randomizeModuleMock';
 
 describe('select', function(){
     var mixerSpy = jasmine.createSpy('mixer').and.callFake(function(a){return a;});
-    beforeEach(module('questDirectives', 'randomizeMock', function($sceProvider){
+    beforeEach(module('questDirectives', function($provide,$sceProvider){
         $sceProvider.enabled(false);
+        $provide.value('mixerRecursive', mixerSpy);
+        $provide.value('questShuffle', function(arr){
+            return arr.reverse();
+        });
     }));
 
     describe('Mixer', function(){
         var mixer;
-        beforeEach(module(function($provide){
-            $provide.value('mixerRecursive', mixerSpy);
-        }));
+
         beforeEach(inject(function(questSelectMixer){
             mixer = questSelectMixer;
             mixerSpy.calls.reset();
