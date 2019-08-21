@@ -14,7 +14,7 @@ module.service('QuestSequence', questSequenceProvider);
 module.service('QuestTask', questTaskProvider);
 module.service('taskParse', parseProvider);
 module.factory('Database', function(){return Database;});
-module.factory('mixerRecursive', function(){return Database.mixerRecursive;});
+module.factory('mixerRecursive', function(){ return Database.mixerRecursive; });
 module.constant('mixerDefaultContext', Database.mixerDefaultContext);
 module.constant('templateDefaultContext',Database.templateDefaultContext);
 
