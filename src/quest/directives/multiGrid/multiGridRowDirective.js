@@ -50,7 +50,7 @@ function gridRowDirective(){
             scope.$watchCollection('response', function(value){ngModel.$setViewValue(value.slice());}); // reset response so that parsers trigger
 
             function requiredValidator(value){
-                var isValid = scope.columns.every(isFull);
+                var isValid = scope.columns.some(isFull);
                 ngModel.$setValidity('required', isValid);
                 return value;
 
