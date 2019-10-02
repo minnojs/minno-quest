@@ -24,7 +24,7 @@ function slider() {
                 '<li ng-repeat="i in getNumber(steps) track by $index" ng-style="{width: pipWidth + \'%\'}" ng-class="{last:$last}"></li>',
                 '</ul>',
                 '<ul class="slider-labels">',
-                '<li ng-repeat="label in labels track by $index" ng-style="{width: labelsWidth + \'%\'}" ng-class="{first:$first, last:$last}">{{label}}</li>',
+                '<li ng-repeat="label in labels track by $index" ng-style="{width: ($first || $last ? labelsWidth/2 : labelsWidth) + \'%\'}" ng-class="{first:$first, last:$last}">{{label}}</li>',
                 '</ul>',
                 '</div>'].join('\n'),
 
@@ -44,7 +44,7 @@ function slider() {
                 scope.pipWidth = options.steps && 100/scope.steps;
 
                 scope.labels = options.labels;
-                scope.labelsWidth = options.labels && 100 / options.labels.length;
+                scope.labelsWidth = options.labels && 100 / Math.max(options.labels.length - 1,1);
 
                 ngModel.$isEmpty = isEmpty;
                 ngModel.$render = renderView;
