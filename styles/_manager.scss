@@ -1,4 +1,5 @@
-.container {padding:5px}
+html { width:100%; height:100%; }
+.container {padding:5px;}
 
 [unselectable="on"] {
 	@include no-select();
