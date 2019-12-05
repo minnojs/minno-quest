@@ -385,29 +385,12 @@ describe('manager', function(){
                 expect(piSwap.empty).toHaveBeenCalled();
             });
 
-            it('should call manager.onEnd', function(){
-                var onEnd = jasmine.createSpy('onEnd').and.callFake(function(){
-                    expect(piSwap.empty).toHaveBeenCalled();
-                });
-                compile();
-                $scope.settings = {onEnd:onEnd}; // the compile function isn't flexible enough to accept functions
-
-                currentSpy.and.returnValue(undefined);
-                $scope.$emit('manager:loaded');
-                $scope.$digest();
-                expect(onEnd).toHaveBeenCalled();
-            });
-
             it('should emit manager:done', function(){
-                var onEnd = jasmine.createSpy('onEnd');
-                var done = jasmine.createSpy('manager:done').and.callFake(function(){
-                    expect(onEnd).toHaveBeenCalled();
-                });
+                var done = jasmine.createSpy('manager:done');
 
                 compile();
-                $scope.settings = {onEnd:onEnd}; // the compile function isn't flexible enough to accept functions
-
                 currentSpy.and.returnValue(undefined);
+
                 $scope.$on('manager:done', done);
                 $scope.$emit('manager:loaded');
                 $scope.$digest();

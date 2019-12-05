@@ -64569,11 +64569,14 @@ function activatePost$2(done, task, logger, $rootScope, piConsole){
     }
 }
 
-activateRedirect$1.$inject = ['done', 'task', 'managerBeforeUnload'];
-function activateRedirect$1(done, task, beforeUnload){
+activateRedirect$1.$inject = ['done', 'task', 'managerBeforeUnload','logger'];
+function activateRedirect$1(done, task, beforeUnload, logger){
     if (!lodash.result(task,'condition',true)) return done();
-    beforeUnload.deactivate();
-    location.href = task.url;
+    // make sure we don't go away before finishing logging
+    logger.$promise().finally(function(){
+        beforeUnload.deactivate();
+        location.href = task.url;
+    });
 }
 
 activatePIP$1.$inject = ['done', '$element', 'task', 'script', 'piConsole', 'logger'];
@@ -83954,12 +83957,6 @@ function transformLogs(action,eventData,trial){
     };
 }
 
-/**
- * run the task
- * Essentialy wiring up all the play phase stuff
- * @TODO: document this function, it's super complicated
- **/
-
 function playerPhase(sink){
 
     var canvas = sink.canvas;
@@ -84478,7 +84475,12 @@ module$12.directive('piSpinner', directive$11);
 
 function Logger$1(defaultSettings){
     var ctx = {};
-    return {createLog:createLog,ctx:ctx};
+    var $promises = stream(undefined);
+    return {
+        createLog:createLog,
+        ctx:ctx, 
+        $promise: $promises.map(allPromises())
+    };
 
     function createLog(name, localSettings){
         var log = stream();
@@ -84522,6 +84524,13 @@ function Logger$1(defaultSettings){
     }
 }
 
+/* stream concatenator, the result is a single promise which is resolve when all prior promises have resolved */
+function allPromises(cache){
+    return function(promise){
+        return Promise.all([cache, promise]);
+    };
+}
+
 var dfltLogger = {onRow:onRow, onEnd:onEnd, serialize:serialize, send:send};
 
 /*
@@ -84556,7 +84565,7 @@ function serialize(name, logs, settings){
 
 function send(name, serialized, settings, ctx){
     if (!settings.url) return;
-    xhr({url:settings.url, method:'PUT', body:serialized}).catch(onError);
+    return xhr({url:settings.url, method:'PUT', body:serialized}).catch(onError);
     function onError(e){ settings.onError.apply(null, [e,name,serialized,settings,ctx]); }
 }
 
@@ -84642,7 +84651,7 @@ function send$1(name, serialized, settings, ctx){
             ? '/implicit/PiPlayerApplet'
             : '/implicit/PiManager';
 
-    xhr({url:url, mehtod:'POST', body:serialized, contentType:contentType}).catch(onError);
+    return xhr({url:url, mehtod:'POST', body:serialized, contentType:contentType}).catch(onError);
 
 
     function onError(e){ settings.onError.apply(null, [e,name,serialized,settings,ctx]); }
@@ -84752,7 +84761,12 @@ function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector, pi
         this.script = script;
         this.logger = managerLogger(settings.logger || {}, piConsole); // the central logger to be used by tasks
         this.log = createLog(this.logger, this.script, {type:'manager', $name:script.name || 'manager'}); // a specific log to deal with manager logging (make sure we post immediately
-        $scope.$on('$destroy', function(){ self.log.end(true); });
+        $scope.$on('$destroy', function(){ 
+            self.log.end(true); 
+            self.logger.$promise().finally(function(){
+                lodash.invoke(settings, 'onEnd');
+            });
+        });
 
         // create sequence
         this.sequence = new ManagerSequence(script);
@@ -85187,7 +85201,6 @@ function directive$12($q, $injector,piConsole){
                 $qSequence([
                     prevTask && prevTask.post,
                     lodash.bind(swap.empty, swap),
-                    $scope.settings.onEnd,
                     function(){
                         $scope.loading = false;
                         $scope.$emit('manager:done');

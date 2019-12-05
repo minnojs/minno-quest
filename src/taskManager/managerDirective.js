@@ -110,7 +110,6 @@ function directive($q, $injector,piConsole){
                 $qSequence([
                     prevTask && prevTask.post,
                     _.bind(swap.empty, swap),
-                    $scope.settings.onEnd,
                     function(){
                         $scope.loading = false;
                         $scope.$emit('manager:done');

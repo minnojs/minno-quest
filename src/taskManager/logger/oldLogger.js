@@ -83,7 +83,7 @@ function send(name, serialized, settings, ctx){
             ? '/implicit/PiPlayerApplet'
             : '/implicit/PiManager';
 
-    xhr({url:url, mehtod:'POST', body:serialized, contentType:contentType}).catch(onError);
+    return xhr({url:url, mehtod:'POST', body:serialized, contentType:contentType}).catch(onError);
 
 
     function onError(e){ settings.onError.apply(null, [e,name,serialized,settings,ctx]); }

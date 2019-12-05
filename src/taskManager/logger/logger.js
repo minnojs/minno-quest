@@ -5,7 +5,12 @@ export default Logger;
 
 function Logger(defaultSettings){
     var ctx = {};
-    return {createLog:createLog,ctx:ctx};
+    var $promises = stream(undefined);
+    return {
+        createLog:createLog,
+        ctx:ctx, 
+        $promise: $promises.map(allPromises())
+    };
 
     function createLog(name, localSettings){
         var log = stream();
@@ -47,4 +52,11 @@ function Logger(defaultSettings){
             };
         }
     }
+}
+
+/* stream concatenator, the result is a single promise which is resolve when all prior promises have resolved */
+function allPromises(cache){
+    return function(promise){
+        return Promise.all([cache, promise]);
+    };
 }
