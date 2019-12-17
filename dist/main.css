@@ -5781,6 +5781,10 @@ button.close {
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
   filter: alpha(opacity=20); }
 
+html {
+  width: 100%;
+  height: 100%; }
+
 .container {
   padding: 5px; }
 
