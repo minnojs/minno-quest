@@ -30,14 +30,17 @@ app.config(['$provide',function($provide) {
     }]);
 }]);
 
+window.minnoJS = minnoJS;
 angular.element(document).ready(function() {
     var el = document.getElementById('minno-app');
-    if (el) activate(el);
+    if (el) minnoJS(el);
 });
 
 
-function activate(el){
+function minnoJS(el, url){
+    if (!_.isElement(el)) throw new Error('MinnoJS requires a DOM element');
+    if (_.isString(url)) el.setAttribute('pi-manager', url);
     angular.bootstrap(el, [app.name]);
 }
 
-export default activate;
+export default minnoJS;
