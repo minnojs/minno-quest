@@ -3,6 +3,7 @@
  * @return {directive}
  */
 import _ from 'lodash';
+import getUrlParameters from './getUrlParameters';
 
 managerControler.$inject = ['$scope', 'managerService', 'managerLoad', 'piConsole'];
 function managerControler($scope, ManagerService, managerLoad, piConsole){
@@ -11,6 +12,8 @@ function managerControler($scope, ManagerService, managerLoad, piConsole){
     function init(source){
         var ctrl = this;
         var taskSource;
+
+        $scope.global.$url = getUrlParameters();
 
         if (!source) return;
 

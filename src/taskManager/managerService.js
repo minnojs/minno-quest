@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import Logger from './logger/managerLogger';
 import createLogs from './task/tasks/createLogs';
-import getUrlParameters from './getUrlParameters';
 import {injectStyle} from './task/tasks/injectStyle';
 
 managerService.$inject = ['$rootScope', '$q', 'managerSequence', 'managerTaskLoad', '$injector', 'piConsole'];
@@ -157,7 +156,6 @@ function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector, pi
         // connect piConsole to settings
         piConsole.settings = settings.DEBUG || {};
 
-        global.$url = getUrlParameters();
 
         // post "postOnce" data
         if (global.$postOnce) manager.log(global.$postOnce, settings);
