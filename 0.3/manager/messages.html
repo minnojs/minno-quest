@@ -1,0 +1,285 @@
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Minno.js</title>
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+		<link href="../assets/prism.css" rel="stylesheet" />
+		<link href="../assets/style.css" rel="stylesheet" />
+	</head>
+	<body>
+		<header>
+			<section>
+				<nav class="brand">
+                    <a href="/"><h1>Minno</h1></a>
+				</nav>
+				<nav>
+					<a href="/minno-quest/0.3/basics/overview.html">Basics</a>
+					<a href="/minno-quest/0.3/manager/overview.html">miManager</a>
+					<a href="/minno-quest/0.3/quest/overview.html">miQuest</a>
+					<a href="/minno-time/0.5/time/overview.html">miTime</a>
+				</nav>
+				<nav>
+                    <div id="search-box">
+                        <script>
+                            (function() {
+                                var cx = '002953266509769041597:smg5beek-iu';
+                                var gcse = document.createElement('script');
+                                gcse.type = 'text/javascript';
+                                gcse.async = true;
+                                gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+                                var s = document.getElementsByTagName('script')[0];
+                                s.parentNode.insertBefore(gcse, s);
+                            })();
+                        </script>
+                        <gcse:searchbox-only></gcse:searchbox-only>
+                    </div>
+                    <select id="version-select"><option value="0.0" >v0.0</option>,<option value="0.1" >v0.1</option>,<option value="0.2" >v0.2</option>,<option value="0.3" selected>v0.3</option></select>
+					<a href="https://github.com/minnojs">Github</a>
+				</nav>
+			</section>
+		</header>
+		<main>
+			<section class="docs">
+                <h1><a name="messages" class="header-link" href="#messages"><span></span></a>Messages</h1><ul>
+<li>Core<ul>
+<li><a href="overview.html">Overview</a></li>
+<li><a href="API.html">API</a></li>
+<li><a href="playground.html">Playground</a></li>
+</ul>
+</li>
+<li>Tasks<ul>
+<li><a href="allowleaving.html">Allow Leaving</a></li>
+<li><a href="injectStyle.html">Inject Style</a></li>
+<li><a href="isTouch.html">Is Touch</a></li>
+<li><strong><a href="messages.html">Messages</a></strong></li>
+<li><a href="post.html">Post</a></li>
+<li><a href="redirect.html">Redirect</a></li>
+<li><a href="setValue.html">Set Value</a></li>
+<li><a href="yesno.html">Yes/No</a></li>
+</ul>
+</li>
+<li>Examples<ul>
+<li><a href="weightManager.html">Weight experiment</a></li>
+<li><a href="videoManager.html">Displaying Video</a></li>
+</ul>
+</li>
+</ul>
+<p>The message tasks are built to be as simple as possible, all they do is present simple html templates. In order to load a template simply set it into the <code>template</code> property as a string, or set the appropriate URL into <code>templateUrl</code>. 
+That&#39;s it. (This is not relevant for most users, but the templates are rendered using angularjs $compile and therefore all the relevant directives are available).</p>
+<p>The context for the template has the following variables available: {global, current, task}.</p>
+<table>
+<thead>
+<tr>
+<th>property</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>template</td>
+<td>(text) A string of html to display (The template uses <a href="https://lodash.com/docs#template">lodash templates</a>).</td>
+</tr>
+<tr>
+<td>templateUrl</td>
+<td>(text) A url to a html template (The template uses <a href="https://lodash.com/docs#template">lodash templates</a>).</td>
+</tr>
+<tr>
+<td>keys</td>
+<td>Sets a key (or keys) that allow users to proceed. The keys property takes either a key (i.e. <code>&#39;a&#39;</code>) a keyCode (i.e. <code>65</code>) or an array of such (i.e. <code>[&#39;a&#39;,&#39;b&#39;]</code>).</td>
+</tr>
+</tbody>
+</table>
+<p>&nbsp;</p>
+<p>The following example will display the message &quot;Hello World. I am a template.&quot;, and proceed when the <strong>keys</strong> space is pressed.</p>
+<pre><code class="lang-javascript">var task = {
+    template: &#39;&lt;div&gt;Hello World. I am a template.&lt;/div&gt;&#39;,
+    keys: &#39; &#39;
+}
+</code></pre>
+<p>The following task will do the exact same thing using two separate files:</p>
+<p><em>manager.html</em></p>
+<pre><code class="lang-javascript">var task = {
+    templateUrl: &#39;hello.htmlt&#39;,
+    keys: &#39; &#39;
+}
+</code></pre>
+<p><em>hello.htmlt</em></p>
+<pre><code class="lang-html">&lt;div&gt;Hello World. I am a template.&lt;/div&gt;
+</code></pre>
+<h3><a name="proceeding" class="header-link" href="#proceeding"><span></span></a>Proceeding</h3><p>There are two types of controls that allow users to proceed to the next task.</p>
+<p>First, you can use any element in your template as a proceed button, all you have to do is add the <code>pi-message-done</code> attribute to the appropriate element.</p>
+<pre><code class="lang-html">&lt;button type=&quot;button&quot; pi-message-done&gt;Click here to proceed&lt;/button&gt;
+</code></pre>
+<p>Alternatively you may use the <code>keys</code> property in order to set a key (or keys) that proceed. The keys property takes either a key (i.e. <code>&#39;a&#39;</code>) a keyCode (i.e. <code>65</code>) or an array of such (i.e. <code>[&#39;a&#39;,&#39;b&#39;]</code>).</p>
+<p>This table shows several useful keyCodes for your convenience (there are more <a href="http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes">here</a>):</p>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>13</td>
+<td>Enter</td>
+</tr>
+<tr>
+<td>27</td>
+<td>Escape</td>
+</tr>
+<tr>
+<td>32</td>
+<td>Space</td>
+</tr>
+<tr>
+<td>37</td>
+<td>Left arrow</td>
+</tr>
+<tr>
+<td>38</td>
+<td>Up arrow</td>
+</tr>
+<tr>
+<td>39</td>
+<td>Right arrow</td>
+</tr>
+<tr>
+<td>40</td>
+<td>Down arrow</td>
+</tr>
+</tbody>
+</table>
+<h3><a name="links-out" class="header-link" href="#links-out"><span></span></a>Links out</h3><p>PI tasks have a system to prevent accidental browsing away from your tasks.
+It will ask the user if she is sure that she wants to navigate away.
+When using links within you tasks you want the links to allow immediate navigation away.
+In order to do that, all you have to do is add a <code>pi-link</code> attribute to your link,</p>
+<pre><code class="lang-javascriptt">&lt;a href=&quot;google.com&quot; pi-link&gt;Link text&lt;/a&gt;
+</code></pre>
+<h2><a name="project-implicit-build" class="header-link" href="#project-implicit-build"><span></span></a>Project Implicit build</h2><p>The project implicit build has an optional &quot;meta template&quot; that you may use by setting the <code>piTemplate</code> property to true. When using it, you have several additional options.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>piTemplate</td>
+<td>(true, false or &#39;debrief&#39;) Activates the PI template. If set to &#39;debrief&#39; activates the debrief template, and makes the debrief functions available.</td>
+</tr>
+<tr>
+<td>header</td>
+<td>Header text.</td>
+</tr>
+<tr>
+<td>footer</td>
+<td>Footer text.</td>
+</tr>
+<tr>
+<td>buttonText</td>
+<td>Text for the proceed button (Defaults to: Click Here or press the space button to Proceed).</td>
+</tr>
+<tr>
+<td>buttonHide</td>
+<td>Do not display the button at all (use this as a final page or for messages that use only the <code>keys</code> advance method).</td>
+</tr>
+<tr>
+<td>demo</td>
+<td>If piTemplate is set to &#39;debrief&#39;, this property set to <code>true</code> will activate the demo version of the debrief.</td>
+</tr>
+<tr>
+<td>isTouch</td>
+<td>In the debriefing page, if demo is set to true, use the url for touch studies.</td>
+</tr>
+<tr>
+<td>noDonate</td>
+<td>(true or false) Do not show the donate button.</td>
+</tr>
+</tbody>
+</table>
+<p>The project implicit template supports a debrief template activated by setting <code>piTemplate</code> to &#39;debrief&#39;. If it is activated, there are two additional functions exposed from within the template.
+They can be used like so: <code>&lt;%= showPanel(&#39;body&#39;,&#39;header&#39;,&#39;footer&#39;) %&gt;</code> or <code>&lt;%= showFeedback({wrap:false}) %&gt;</code>.</p>
+<h4><a name="showpanelbody-header-footer" class="header-link" href="#showpanelbody-header-footer"><span></span></a>showPanel(body, header, footer)</h4><pre><code>&lt;%= showPanel(&#39;body&#39;,&#39;header&#39;,&#39;footer&#39;) %&gt;
+</code></pre><p><code>showPanel</code> displays content within a stylized panel.</p>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>body</td>
+<td>The main text of the panel</td>
+</tr>
+<tr>
+<td>header</td>
+<td>The panel header (optional)</td>
+</tr>
+<tr>
+<td>footer</td>
+<td>The panel footer (optional)</td>
+</tr>
+</tbody>
+</table>
+<h4><a name="showfeedbackoptions" class="header-link" href="#showfeedbackoptions"><span></span></a>showFeedback(options)</h4><pre><code>&lt;%= showFeedback({wrap:false}) %&gt;
+</code></pre><p><code>showFeedback</code> automatically gathers feedback from the global object and displays it within your page. It takes an options object as its single argument. The feedback is gathered from the global object by going through each task object (current) and searching for the <code>feedback</code> property. It depends on the individual tasks respecting this convention.
+You can fine tune the way feedback is collected and displayed using the following options:</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pre</td>
+<td>A string to be injected before each feedback (default :&#39;&lt;p&gt;&#39;).</td>
+</tr>
+<tr>
+<td>post</td>
+<td>A string to be injected after each feedback (default :&#39;&lt;/p&gt;&#39;).</td>
+</tr>
+<tr>
+<td>wrap</td>
+<td>Whether to wrap the results in a panel (default: true).</td>
+</tr>
+<tr>
+<td>header</td>
+<td>If wrapped within a panel, set the panel heading.</td>
+</tr>
+<tr>
+<td>noFeedback</td>
+<td>The text to show if no feedback is found (default: &#39;&lt;p&gt;No feedback was found&lt;/p&gt;&#39;).</td>
+</tr>
+<tr>
+<td>property</td>
+<td>The default property in which to look for the feedback string (default: &#39;feedback&#39;).</td>
+</tr>
+<tr>
+<td>exclude</td>
+<td>An array of task names to skip when gathering feedback.</td>
+</tr>
+</tbody>
+</table>
+
+				<hr />
+				<small>License: Apache 2. &copy; Project Implicit. &middot; Current version [version]</small>
+			</section>
+		</main>
+		<script src="../assets/prism.js"></script>
+        <script>
+            (function(){
+                var select = document.getElementById('version-select');
+                select.addEventListener('change', function(event){
+                    var version = event.target.value;
+                    location.href = location.href.replace(/[0-9]\.[0-9]/, version)
+                });
+            })();
+        </script>
+	</body>
+</html>

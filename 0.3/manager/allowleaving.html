@@ -1,0 +1,113 @@
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Minno.js</title>
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+		<link href="../assets/prism.css" rel="stylesheet" />
+		<link href="../assets/style.css" rel="stylesheet" />
+	</head>
+	<body>
+		<header>
+			<section>
+				<nav class="brand">
+                    <a href="/"><h1>Minno</h1></a>
+				</nav>
+				<nav>
+					<a href="/minno-quest/0.3/basics/overview.html">Basics</a>
+					<a href="/minno-quest/0.3/manager/overview.html">miManager</a>
+					<a href="/minno-quest/0.3/quest/overview.html">miQuest</a>
+					<a href="/minno-time/0.5/time/overview.html">miTime</a>
+				</nav>
+				<nav>
+                    <div id="search-box">
+                        <script>
+                            (function() {
+                                var cx = '002953266509769041597:smg5beek-iu';
+                                var gcse = document.createElement('script');
+                                gcse.type = 'text/javascript';
+                                gcse.async = true;
+                                gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+                                var s = document.getElementsByTagName('script')[0];
+                                s.parentNode.insertBefore(gcse, s);
+                            })();
+                        </script>
+                        <gcse:searchbox-only></gcse:searchbox-only>
+                    </div>
+                    <select id="version-select"><option value="0.0" >v0.0</option>,<option value="0.1" >v0.1</option>,<option value="0.2" >v0.2</option>,<option value="0.3" selected>v0.3</option></select>
+					<a href="https://github.com/minnojs">Github</a>
+				</nav>
+			</section>
+		</header>
+		<main>
+			<section class="docs">
+                <h1><a name="allowleaving" class="header-link" href="#allowleaving"><span></span></a>AllowLeaving</h1><ul>
+<li>Core<ul>
+<li><a href="overview.html">Overview</a></li>
+<li><a href="API.html">API</a></li>
+<li><a href="playground.html">Playground</a></li>
+</ul>
+</li>
+<li>Tasks<ul>
+<li><strong><a href="allowleaving.html">Allow Leaving</a></strong></li>
+<li><a href="injectStyle.html">Inject Style</a></li>
+<li><a href="isTouch.html">Is Touch</a></li>
+<li><a href="messages.html">Messages</a></li>
+<li><a href="post.html">Post</a></li>
+<li><a href="redirect.html">Redirect</a></li>
+<li><a href="setValue.html">Set Value</a></li>
+<li><a href="yesno.html">Yes/No</a></li>
+</ul>
+</li>
+<li>Examples<ul>
+<li><a href="weightManager.html">Weight experiment</a></li>
+<li><a href="videoManager.html">Displaying Video</a></li>
+</ul>
+</li>
+</ul>
+<p>By default, each time users attempt to leave the page, minno-manager inquires whether they actually mean it.
+The <code>allowLeave</code> task cancels this inquiry, and allows easily leaving the player..
+It is usefull if you want to allow users to browse away from a page, for example toward the end of a task in a debriefing page.
+It makes debugging a bit easier as well.</p>
+<p>The API is as follows:</p>
+<table>
+<thead>
+<tr>
+<th>property</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>preventLeaving</td>
+<td>Whether to prevent users from leaving the page (default is false).</td>
+</tr>
+</tbody>
+</table>
+<p>The following task will allow users to leave the page:</p>
+<pre><code class="lang-javascript">{ type:&#39;allowLeaving&#39; }
+</code></pre>
+<p>The following study shows how to use <code>allowLeaving</code> in order to allow users to browse away within an informed consent message.</p>
+<pre><code class="lang-javascript">API.addSequence([
+    { type: &#39;allowLeaving&#39; },
+    { type: &#39;message&#39;, templateUrl: &#39;consent.htmlt&#39; },
+    { type: &#39;allowLeaving&#39; , preventLeaving: true},
+    { type: &#39;quest&#39;, scriptUrl: &#39;quest.html&#39; }
+]);
+</code></pre>
+
+				<hr />
+				<small>License: Apache 2. &copy; Project Implicit. &middot; Current version [version]</small>
+			</section>
+		</main>
+		<script src="../assets/prism.js"></script>
+        <script>
+            (function(){
+                var select = document.getElementById('version-select');
+                select.addEventListener('change', function(event){
+                    var version = event.target.value;
+                    location.href = location.href.replace(/[0-9]\.[0-9]/, version)
+                });
+            })();
+        </script>
+	</body>
+</html>

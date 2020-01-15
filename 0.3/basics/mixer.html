@@ -1,0 +1,674 @@
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Minno.js</title>
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+		<link href="../assets/prism.css" rel="stylesheet" />
+		<link href="../assets/style.css" rel="stylesheet" />
+	</head>
+	<body>
+		<header>
+			<section>
+				<nav class="brand">
+                    <a href="/"><h1>Minno</h1></a>
+				</nav>
+				<nav>
+					<a href="/minno-quest/0.3/basics/overview.html">Basics</a>
+					<a href="/minno-quest/0.3/manager/overview.html">miManager</a>
+					<a href="/minno-quest/0.3/quest/overview.html">miQuest</a>
+					<a href="/minno-time/0.5/time/overview.html">miTime</a>
+				</nav>
+				<nav>
+                    <div id="search-box">
+                        <script>
+                            (function() {
+                                var cx = '002953266509769041597:smg5beek-iu';
+                                var gcse = document.createElement('script');
+                                gcse.type = 'text/javascript';
+                                gcse.async = true;
+                                gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+                                var s = document.getElementsByTagName('script')[0];
+                                s.parentNode.insertBefore(gcse, s);
+                            })();
+                        </script>
+                        <gcse:searchbox-only></gcse:searchbox-only>
+                    </div>
+                    <select id="version-select"><option value="0.0" >v0.0</option>,<option value="0.1" >v0.1</option>,<option value="0.2" >v0.2</option>,<option value="0.3" selected>v0.3</option></select>
+					<a href="https://github.com/minnojs">Github</a>
+				</nav>
+			</section>
+		</header>
+		<main>
+			<section class="docs">
+                <h1><a name="mixers" class="header-link" href="#mixers"><span></span></a>Mixers</h1><ul>
+<li>Core<ul>
+<li><a href="overview.html">Overview</a></li>
+<li><a href="javascript.html">Javascript</a></li>
+<li><a href="create.html">Creating a task</a></li>
+<li><a href="API.html">API</a></li>
+<li><a href="resources.html">Resources</a></li>
+</ul>
+</li>
+<li>Sequencer<ul>
+<li><a href="introduction.html">Introduction</a></li>
+<li><strong><a href="mixer.html">Mixer</a></strong><ul>
+<li><a href="#introduction">Introduction</a><ul>
+<li><a href="#syntax">Syntax</a></li>
+<li><a href="#nesting">Nesting</a></li>
+<li><a href="#real-time-remix">Real time (remix)</a></li>
+<li><a href="#sequence-evaluation-wrapper">Sequence evaluation (wrapper)</a></li>
+</ul>
+</li>
+<li><a href="#mixer-types">Mixer types</a><ul>
+<li><a href="#repeat">repeat</a></li>
+<li><a href="#random">random</a></li>
+<li><a href="#choose">choose</a></li>
+<li><a href="#weightedchoose">weightedChoose</a></li>
+<li><a href="#weightedrandom">weightedRandom</a></li>
+<li><a href="#wrapper">wrapper</a></li>
+<li><a href="#branch">branch</a></li>
+<li><a href="#multibranch">multiBranch</a></li>
+</ul>
+</li>
+<li><a href="#conditions">Conditions</a><ul>
+<li><a href="#operators">Operators</a></li>
+<li><a href="#negation">Negation</a></li>
+<li><a href="#aggregation">Aggregation</a></li>
+<li><a href="#debugging">Debugging</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="templates.html">Templates</a></li>
+<li><a href="variables.html">Variables</a></li>
+<li><a href="inheritance.html">Inheritance</a></li>
+</ul>
+</li>
+<li>Inheritance<ul>
+<li><a href="inheritanceAbstraction.html">Abstraction</a></li>
+<li><a href="inheritanceRandom.html">Random</a></li>
+<li><a href="inheritanceExRandom.html">Exclusive Random</a></li>
+<li><a href="inheritanceSequential.html">Sequential</a></li>
+<li><a href="inheritanceByData.html">By Data</a></li>
+<li><a href="inheritanceCustom.html">Custom</a></li>
+<li><a href="inheritanceSeed.html">Seed</a></li>
+<li><a href="inheritanceRepeat.html">Repeat</a></li>
+</ul>
+</li>
+<li>Mixers<ul>
+<li><a href="mixerRandom.html">Random</a></li>
+<li><a href="mixerRepeat.html">Repeat</a></li>
+<li><a href="mixerWeightedRandom.html">Weighted Random</a></li>
+<li><a href="mixerChoose.html">Choose</a></li>
+<li><a href="mixerWrapper.html">Wrapper</a></li>
+<li><a href="mixerBranch.html">Branch</a></li>
+<li><a href="mixerMultiBranch.html">Multi Branch</a></li>
+</ul>
+</li>
+<li>Variables &amp; Templates<ul>
+<li><a href="templateGlobal.html">Global</a></li>
+<li><a href="templateData.html">Data</a></li>
+<li><a href="templateMeta.html">Meta</a></li>
+</ul>
+</li>
+</ul>
+<h3><a name="introduction" class="header-link" href="#introduction"><span></span></a>Introduction</h3><p>Mixers allow you to control the flow of your sequences within the PI tasks.
+In particular they allow you to repeat, randomize and even branch sections of your sequence according to <a href="./variables.html">environmental variables</a>.</p>
+<h4><a name="syntax" class="header-link" href="#syntax"><span></span></a>Syntax</h4><p>Each one of the PI tasks is composed of a sequence of elements that is presented sequentially.
+For example, the sequence in miManager is composed of elements that each represent a task.
+These sequences are created using the <code>API.addSequence</code> method in your script.
+Mixers are inserted into the sequence the same way that regular elements are. 
+Each mixer represents a sub-sequence that is to be manipulated and then inserted in its place.</p>
+<p>For example, in the following sequence the second element is a mixer.
+It takes a sub-sequence than includes tasks two and three and randomizes their order.
+Note that the mixer element is effectively replaced by the two elements from the sub-sequence, turning this sequence into a four task sequence.</p>
+<pre><code class="lang-javascript">// The task sequence
+API.addSequence([
+    // First Element: task 1
+    {type:&#39;message&#39;, template: &#39;Task 2&#39;, keys: &#39; &#39;},
+
+    // Second Element: the mixer (task 2 and 3 randomized)
+    {
+        mixer: &#39;random&#39;,
+        data: [
+            {type:&#39;message&#39;, template: &#39;Task 2&#39;, keys: &#39; &#39;},
+            {type:&#39;message&#39;, template: &#39;Task 3&#39;, keys: &#39; &#39;}
+        ]
+    },
+
+    // Third Element: task 4
+    {type:&#39;message&#39;, template: &#39;Task 4&#39;, keys: &#39; &#39;}
+]);
+</code></pre>
+<p>Each mixer has a type associated with it as well as at least one sub-sequence.
+The <code>mixer</code> property always holds the mixer type (see below for the available types).
+In most cases the <code>data</code> property holds the sub-sequence (the exception is with the branching mixers that may hold multiple sub-sequences).</p>
+<p>A typical mixer looks something like this: </p>
+<pre><code class="lang-javascript">{
+    mixer: &#39;random&#39;,     // &lt;== The mixer type (randomize in this case)
+    data: [elem1, elem2]    // &lt;== The sub-sequence (holding elem1 and elem2)
+}
+</code></pre>
+<p>From now on, instead of explicitly writing in the mixed elements we will use arbitrary variable names instead, such as <code>elem1</code> and <code>elem2</code>. 
+We are doing this to keep the structures as simple and readable as possible.</p>
+<h4><a name="nesting" class="header-link" href="#nesting"><span></span></a>Nesting</h4><p>Mixers may be nested inside each other as much as you like. The following example illustrates a more complex example.
+Here, we have an opening and ending element (<code>firstelem</code> and <code>lastelem</code>).
+Between them we repeat a set of four elements ten times.
+The order within the four objects is randomized, so that <code>elem1</code> always comes first and the order of the following elements is randomized but <code>elem3</code> and <code>elem4</code> are wrapped together and therefore always stay consecutive.</p>
+<pre><code class="lang-javascript">API.addSequence([
+    // The first element
+    firstelem,
+
+    // Repeat the structure inside 10 time (so we get 40 objects overall)
+    {
+        mixer: &#39;repeat&#39;,
+        wrapper:true, // Delay the mixing of these elements until after the `repeat`.
+        times: 10,
+        data: [
+            elem1,
+
+            // Randomize the order of the elements within.
+            {
+                mixer: &#39;random&#39;,
+                data: [
+                    elem2,
+                    // Keep obj 3 and 4 together.
+                    {
+                        mixer: &#39;wrapper&#39;,
+                        data: [
+                            elem3,
+                            elem4
+                        ]
+                    }
+                ]
+            } // end random
+        ]
+    }, // end repeat
+
+    // the last element
+    lastelem
+]);
+</code></pre>
+<h4><a name="real-time-remix" class="header-link" href="#real-time-remix"><span></span></a>Real time (remix)</h4><p>By default each mixer is processed only once, when it is first encountered during the sequence. 
+There are only two conditions for when this is relevant.
+The first is when your task allows moving back to previous elements; in that case the mixer will keep the mixer elements as they where previously evaluated.
+The second condition is when you have a branch that you want to react to live changes (at this time this is relevant only for miQuest answers).</p>
+<p>If you want a mixer to react to changes in the environment you need to set <code>remix=true</code>.</p>
+<p>The following snippet uses <code>remix</code> to show a second question depending on the response of the first one (in miQuest).</p>
+<pre><code class="lang-javascript">var page = {
+    questions: [
+        // First question
+        {
+            name: &#39;q1,
+            stem: &#39;Please write &quot;hello&quot;&#39;
+        },
+
+        // The mixer
+        {
+            mixer: &#39;branch&#39;,
+            remix: true,
+            conditions: [ {compare: &#39;current.questions.q1&#39;, to: &#39;hello&#39;} ],
+            data: [
+                // Dependent question
+                {
+                    stem: &#39;You said &quot;hello&quot;!&#39;
+                } 
+            ]
+        }
+    ]
+}
+</code></pre>
+<h4><a name="sequence-evaluation-wrapper" class="header-link" href="#sequence-evaluation-wrapper"><span></span></a>Sequence evaluation (wrapper)</h4><p>Most of the time, mixers are lazily processed. 
+This means that the sequencer waits until it reaches the mixer before expanding it.
+This behaviour allows us to use branching mixers - we don&#39;t decide which branch to take until we reach it.
+The exception to this rule is randomizing mixers (such as <code>randomize</code> or <code>choose</code>), that in order to randomize <em>everything</em> inside them, must pre-mix all their content.</p>
+<p>This behaviour may cause some problematic results.
+For instance, a branching mixer within a randomization mixer, will be calculated according to the state of the task when it first reaches the randomizer, and not according to the state when it reaches the branch itself.
+If you have a randomizer &gt; repeat &gt; randomizer then the repeat will process an already randomized random mixer, and the repeated units will all be the same.
+The solution in this case is to wrap the inner mixer within a <a href="#wrapper">wrapper mixer</a> (or set the <code>wrapper</code> property to true).
+This way the randomizer will treat anything within the wrapper as a single unit and will not pre-mix it.</p>
+<p>Random randomizes the order of all the elements under the random mixer&#39;s data array, even if they are inside a mixer. 
+For example, consider the following code:</p>
+<pre><code class="lang-javascript">{
+    mixer:&#39;random&#39;,
+    data: [
+        elem1,
+        {
+            mixer:&#39;repeat&#39;,
+            times:2,
+            data:[
+                elem2
+            ]
+        }
+    ]
+}
+</code></pre>
+<p>It will form one of the following sequences: </p>
+<ul>
+<li>[elem1,elem2,elem2]</li>
+<li>[elem2,elem1,elem2]</li>
+<li>[elem2,elem2,elem1]</li>
+</ul>
+<p>If you want to keep some of the elements in the data together (and not randomized), use the <code>wrapper</code> mixer. For instance:</p>
+<pre><code class="lang-javascript">var mixer = {
+    mixer:&#39;random&#39;,
+    data: [
+        elem1
+        {
+            mixer:&#39;wrapper&#39;,
+            data:[
+                elem2,
+                elem3,
+                elem4
+            ]
+        }
+    ]
+}
+</code></pre>
+<p>This code will keep elem2, elem3, and elem4 together, in that same order (elem2, elem3, elem4), and will randomly present elem1 before or after these three objects.</p>
+<p>Sometimes you may want to make a mixer be a <code>wrapper</code> enen though it is already another kind of mixer.
+You can do that by adding <code>wrapper:true</code>. For example: </p>
+<pre><code class="lang-javascript">var mixer = {
+    mixer:&#39;random&#39;,
+    data: [
+        elem1,
+        {
+            mixer:&#39;repeat&#39;,
+            times:2,
+            wrapper:true,
+            data:[
+                elem2,
+                elem3
+            ]
+        }
+    ]
+}
+</code></pre>
+<p>This code will results in one of the following sequences:</p>
+<ul>
+<li>[elem1,elem2,elem3,elem2,elem3]</li>
+<li>[elem2,elem3,elem2,elem3,elem1]</li>
+</ul>
+<p>If you want to randomize the order of two lists, and randomize the objects within each list but without mixing the two lists together, the following code will do the trick: </p>
+<pre><code class="lang-javascript">var mixer = {
+    mixer:&#39;random&#39;,
+    data: [
+        {
+            mixer:&#39;random&#39;,
+            wrapper:true,
+            data:[elem1,elem2]
+        },
+        {
+            mixer:&#39;random&#39;,
+            wrapper:true,
+            data:[elem3,elem4]
+        }
+    ]
+}
+</code></pre>
+<p>This code will create one of the following sequences: </p>
+<ul>
+<li>[elem1,elem2,elem3,elem4]</li>
+<li>[elem1,elem2,elem4,elem3]</li>
+<li>[elem2,elem1,elem3,elem4]</li>
+<li>[elem2,elem1,elem4,elem3]</li>
+<li>[elem3,elem4,elem1,elem2]</li>
+<li>[elem4,elem3,elem1,elem2]</li>
+<li>[elem3,elem4,elem2,elem1]</li>
+<li>[elem4,elem3,elem2,elem1]</li>
+</ul>
+<p>The following snippet uses the wrapper property to keep the content of the repeat mixer together.
+@TODO: find a good example for the use of wrappers.</p>
+<pre><code class="lang-javascript">{
+    mixer: &#39;random&#39;,
+    data: [
+        elem1,
+        {
+            mixer: &#39;repeat&#39;,
+            times: 2,
+            wrapper: true,
+            data: [elem2]
+        }
+    ]
+}
+</code></pre>
+<h3><a name="mixer-types" class="header-link" href="#mixer-types"><span></span></a>Mixer types</h3><h4><a name="repeat" class="header-link" href="#repeat"><span></span></a>repeat</h4><p>Repeats the sub-sequence in <code>data</code> <code>times</code> times.
+So that the following mixer:</p>
+<pre><code class="lang-javascript">{
+    mixer:&#39;repeat&#39;, 
+    times:3, 
+    data: [elem1,elem2]
+}
+</code></pre>
+<p>Will be transformed into:</p>
+<ul>
+<li>[elem1,elem2,elem1,elem2,elem1,elem2]</li>
+</ul>
+<h4><a name="random" class="header-link" href="#random"><span></span></a>random</h4><p>Randomizes the order of elements in <code>data</code>. 
+So that the following mixer:</p>
+<pre><code class="lang-javascript">{
+    mixer:&#39;random&#39;,
+    data:[elem1,elem2]
+}
+</code></pre>
+<p>Will be transformed into one of the following:</p>
+<ul>
+<li>[elem1, elem2]</li>
+<li>[elem2, elem1]</li>
+</ul>
+<p>Please note that the <code>random</code> mixer pre-mixes all the content in <code>data</code>, please see <a href="#evaluation">sequence evaluation</a> and the <a href="#wrapper">wrapper mixer</a> for more details and related problems.</p>
+<h4><a name="choose" class="header-link" href="#choose"><span></span></a>choose</h4><p>Choose one or more (<code>n</code>) elements out of <code>data</code>.
+By default, <code>choose</code> picks a single element form the <code>data</code> subsequence:</p>
+<pre><code class="lang-javascript">{
+    mixer:&#39;choose&#39;,
+    data: [elem1, elem2, elem3]
+}
+</code></pre>
+<p>Will be transformed into one of the following:</p>
+<ul>
+<li>[elem1]</li>
+<li>[elem2]</li>
+<li>[elem3]</li>
+</ul>
+<p>You can choose more than one element by setting <code>n</code>:</p>
+<pre><code class="lang-javascript">{
+    mixer:&#39;choose&#39;,
+    n: 2,
+    data: [elem1, elem2, elem3]
+}
+</code></pre>
+<p>That will return one of the following:</p>
+<ul>
+<li>[elem1, elem2]</li>
+<li>[elem1, elem3]</li>
+<li>[elem2, elem3]</li>
+</ul>
+<h4><a name="weightedchoose" class="header-link" href="#weightedchoose"><span></span></a>weightedChoose</h4><p>Choose one or more (<code>n</code>) elements out of <code>data</code>. Using a weighted random algorithm.
+Each element in <code>data</code> is given the appropriate weight from <code>weights</code>.
+<code>weightedChoose</code> does inclusive randomization. This means that elements may be picked more than once.</p>
+<p>In the following example elem2 has four times the probability of being selected as elem1;</p>
+<pre><code class="lang-javascript">{
+    mixer:&#39;weightedChoose&#39;,
+    n: 2,
+    weights: [0.2,0.8],
+    data: [elem1,elem2]}
+}
+</code></pre>
+<p>This code will create one of the following sequences: </p>
+<ul>
+<li>[elem1,elem1] - 4% of cases</li>
+<li>[elem1,elem2] - 16% of cases</li>
+<li>[elem2,elem1] - 16% of cases</li>
+<li>[elem2,elem2] - 64% of cases</li>
+</ul>
+<h4><a name="weightedrandom" class="header-link" href="#weightedrandom"><span></span></a>weightedRandom</h4><p>Alias (synonym) that can be used interchangeably with <a href="#weightedChoose"><code>weightedChoose</code></a>.</p>
+<h4><a name="wrapper" class="header-link" href="#wrapper"><span></span></a>wrapper</h4><p>The wrapper mixer serves a sort of parenthesis for the mixer.
+It is used to keep a sub-sequence of elements to be randomized within one of the randomizing mixers (such as <a href="#random">random</a> or <a href="#choose">choose</a>).
+In case you want to keep a sub-sequence as a block (when randomizing) simply wrap them and they&#39;ll stay together.
+You can find more use cases in the <a href="#evaluation">sequence evaluation</a> section.</p>
+<p>The following snippet uses a wrapper to keep two elements together despite a being in a randomizer;</p>
+<pre><code class="lang-javascript">{
+    mixer: &#39;random&#39;,
+    data: [
+        elem1,
+        {
+            mixer: &#39;wrapper&#39;,
+            data: [elem2, elem3]
+        }
+    ]
+}
+</code></pre>
+<p>It will return one of the following (elem2 and elem3 are always kept together):</p>
+<ul>
+<li>[elem1, elem2, elem3]</li>
+<li>[elem2, elem3, elem1]</li>
+</ul>
+<p>The wrapper mixer is special in that it has an alternative syntax.
+You can add a <code>wrapper</code> property to any existing mixer, and it contents will be treated as if they were wrapped in a wrapper.
+This will look like this:</p>
+<pre><code class="lang-javascript">{
+    mixer:&#39;repeat&#39;,
+    time:10,
+    wrapper:true,
+    data: [elem1]
+}
+</code></pre>
+<h4><a name="branch" class="header-link" href="#branch"><span></span></a>branch</h4><p>The branch mixer allows you to choose the flow of your sequence according to environmental conditions.
+You can learn about environmental conditions <a href="./variables.html">here</a> and about how to create conditions <a href="#conditions">here</a>.
+This section will deal only with the stucture and use of the <code>branch</code> mixer itself.</p>
+<p>The branch mixer evaluates the <code>conditions</code> if they are true it returns the sequence in <code>data</code>, if they are false it returns the sequence in <code>elseData</code>.
+If <code>elseData</code> is not defined, or is left empty, then nothing happen in case the conditions are not true (see <a href="#conditions">conditions</a> to learn more about how conditions work).</p>
+<p>The following mixer:</p>
+<pre><code class="lang-javascript">{
+    mixer:&#39;branch&#39;,
+    conditions:[cond],
+    data:[elem1,elem2],
+    elseData:[elem3,elem4] // optional
+}
+</code></pre>
+<p>Will return</p>
+<ul>
+<li>[elem1,elem2] - if the condition is true</li>
+<li>[elem3,elem4] - if the condition is false</li>
+</ul>
+<h4><a name="multibranch" class="header-link" href="#multibranch"><span></span></a>multiBranch</h4><p><code>multiBranch</code> is similar to the <a href="#branch"><code>branch</code></a> mixer, only it allows you to switch between a list of conditions instead of only one.
+The mixer will attempt to find the first object within the <code>branches</code> array for which <code>conditions</code> is true, and select the sub-sequence in that objects <code>data</code>.
+If no object is selected then select the sub-sequence in <code>elseData</code>.</p>
+<pre><code class="lang-javascript">{
+    mixer: &#39;multiBranch&#39;,
+    branches: [
+        {conditions: [cond1],data: [elem1]},
+        {conditions: [cond2],data: [elem2]}
+    ],
+    elseData: [elem3] // optional
+}
+</code></pre>
+<p>Will return</p>
+<ul>
+<li>[elem1] - if cond1 is true</li>
+<li>[elem2] - if cond2 is true (but not cond1)</li>
+<li>[elem3] - if both cond1 and cond2 are false</li>
+</ul>
+<h4><a name="custom" class="header-link" href="#custom"><span></span></a>custom</h4><p><code>custom</code> allows you to create arbitrary sub-sequences.
+It uses the sub-sequence that is returned from the <code>fn</code> function.
+<code>fn</code> must return an array of elements.</p>
+<p><code>fn</code> has two arguments available: the mixer object itself, and the mixer context (as defined <a href="./variables.html">here</a>).
+You can either use them to create your elments or create elements arbitrarily.</p>
+<pre><code class="lang-javascript">{
+    mixer: &#39;custom&#39;,
+    prop: &#39;Custom property&#39;
+    fn: function(obj, context){
+        return [elem1, elem2]
+    }
+}
+</code></pre>
+<h3><a name="conditions" class="header-link" href="#conditions"><span></span></a>Conditions</h3><p>The conditional mixers (<a href="#branch"><code>branch</code></a> &amp; <a href="#multibranch"><code>multiBranch</code></a>) allow you to change the content of your sequence depending on <a href="./variables.html">environmental variables</a>. 
+This is done by settings <code>conditions</code>.
+A condition is a statement that is evaluated either as <code>true</code> or <code>false</code>.
+We choose the branch we advance to according to the result.
+You can think of each condition as an equation that compares two values.
+Conditions are each represented by an object as follows:</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>compare</td>
+<td>The left side of the equation.</td>
+</tr>
+<tr>
+<td>to</td>
+<td>The right side of the equation.</td>
+</tr>
+<tr>
+<td>operator</td>
+<td>The type of comparison to do (defaults to &#39;equals&#39;. Read more about operators <a href="#operators">here</a>).</td>
+</tr>
+</tbody>
+</table>
+<p>The values set into <code>compare</code> and <code>to</code> can be set either as plain values or as references to environmental variables:
+When you want to reference an environmental variable, you use text with dots: <code>global.var</code>, <code>questions.q1.response</code>
+(questions.q1.response` will retrieve the value of the response for q1 from the questions object).</p>
+<p>The following condition object compare&#39;s <strong>global.var</strong> <code>to</code> <strong>current.otherVar</strong> and checks if they are equal.
+It is equivalent to the following equation: <code>global.myVar === current.myOtherVar</code>.</p>
+<pre><code class="lang-javascript">var cond = {
+    compare: &#39;global.myVar&#39;,
+    to: &#39;current.myOtherVar&#39;
+}
+</code></pre>
+<p>Here are some examples of comparing variables with plain values:</p>
+<pre><code class="lang-javascript">//Compares the variable time to the value 12
+var cond1 = {
+    compare: &#39;global.time&#39;,
+    to: &#39;12&#39;
+}
+
+//Compare the variable gender to the value &#39;Female&#39;
+var cond2 = {
+    compare: &#39;Female&#39;,
+    to: &#39;local.gender&#39;
+}
+</code></pre>
+<p>Sometimes the standard conditions are not enough.
+More advanced users may want to replace the whole condition object with a custom function that returns true or false. 
+The context (<code>this</code>) for the function is an object holding the <em>global</em> and <em>current</em> objects 
+(there are some cases where additional properties are available, they are documented in their own docs).</p>
+<pre><code class="lang-javascript">function cond(){
+    var global = this.global; // get the global from the context
+    return global.skip;
+}
+</code></pre>
+<h4><a name="operators" class="header-link" href="#operators"><span></span></a>Operators</h4><p>The default comparison for a condition is to check equality (supports comparison of objects and arrays too). You can use the <code>operator</code> property to change the comparison method. The following checks if var is greater than otherVar:</p>
+<pre><code class="lang-javascript">var cond = {
+    compare: &#39;global.var&#39;,
+    to: &#39;local.otherVar&#39;,
+    operator: &#39;greaterThan&#39;
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Operator</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>equals</td>
+<td>This is the default operator. It checks if <em>compare</em> is equal to <em>to</em> (supports comparison of objects and arrays too)</td>
+</tr>
+<tr>
+<td>exactly</td>
+<td>Checks if <em>compare</em> is exactly equal to <em>to</em> (uses ===)</td>
+</tr>
+<tr>
+<td>greaterThan</td>
+<td><em>compare</em> &gt; <em>to</em></td>
+</tr>
+<tr>
+<td>greaterThanOrEquals</td>
+<td><em>compare</em> &gt;= <em>to</em></td>
+</tr>
+<tr>
+<td>in</td>
+<td><em>compare</em> is in the Array <em>to</em>;</td>
+</tr>
+<tr>
+<td>isTruthy</td>
+<td><em>compare</em> == true</td>
+</tr>
+<tr>
+<td>function(){}</td>
+<td>This operator allows you to use a custom function of the form: <code>function(compareValue, toValue, context){return {Boolean}}</code>. The context is an object holding the <em>global</em>, <em>current</em> and <em>questions</em> objects.</td>
+</tr>
+</tbody>
+</table>
+<h4><a name="negation" class="header-link" href="#negation"><span></span></a>Negation</h4><p>If you want to check for inequality (or make sure that a value is <em>not</em> in an array and so on, you can use the <code>negate</code> property.
+<code>negate</code> makes the mixer use the oposite value for that condition - true values become false and vice versa.</p>
+<pre><code class="lang-javascript">var cond = {
+    compare:&#39;global.flag&#39;,
+    to:&#39;current.flag&#39;,
+    negate:true
+};
+</code></pre>
+<h4><a name="aggregation" class="header-link" href="#aggregation"><span></span></a>Aggregation</h4><p>Sometimes you will want a branch to be activated only if more than one condition is true, or in some other complex specific condition.
+For cases like this, the mixer supports aggregation.
+The mixer supports applying logical operations on conditions in the following way:</p>
+<p>An aggregator object has a single property, denoting the type of aggregation, holding an array of conditions to aggregate.
+The following condition will only be true if <code>cond1</code> and <code>cond2</code> are both true:</p>
+<pre><code class="lang-javascript">var cond = {and:[cond1, cond2]};
+</code></pre>
+<p>The mixer supports several types of aggregators:</p>
+<table>
+<thead>
+<tr>
+<th>Aggregator</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>and</td>
+<td>If all conditions are true</td>
+</tr>
+<tr>
+<td>or</td>
+<td>If at least one condition is true</td>
+</tr>
+<tr>
+<td>nor</td>
+<td>If all conditions are false</td>
+</tr>
+<tr>
+<td>nand</td>
+<td>If at least one condition is false</td>
+</tr>
+</tbody>
+</table>
+<p>By default, if the mixer runs into an array instead of an object, it will treat it as an <code>and</code> aggregator and be true only if all conditions within the array are true.</p>
+<p>Following are several examples for how to create different aggregations:</p>
+<pre><code class="lang-javascript">// cond1 &amp;&amp; cond2
+var conds = [cond1, cond2];
+
+// cond1 &amp;&amp; (cond2 || cond3)
+var conds = [cond1, {or:[cond2,cond3]}];
+
+// (cond1 &amp;&amp; cond2) || cond2
+var conds = [{or:[{and:[cond1,cond2]},cond3]}]
+</code></pre>
+<h4><a name="debugging" class="header-link" href="#debugging"><span></span></a>Debugging</h4><p>Conditions are notoriously difficult to get just right.
+If they aren&#39;t working as you expected, you might want to see exactly which values you are getting for each of your conditions.
+The mixer provides you with an easy way to do this. Just set <code>DEBUG=true</code> on your condition, and you will see all the said values being printed into your <a href="../basics/javascript.html#errors-and-debugging">console</a>.</p>
+<pre><code class="lang-javascript">API.addGlobal({
+    value: 123,
+    otherVar: 345
+});
+
+var cond = {
+    compare: &#39;global.var&#39;,
+    to: &#39;global.otherVar&#39;,
+    DEBUG: true
+}
+</code></pre>
+<p>The debugger will log something like <code>Conditions: 123 equals 345</code> as well as the full condition object as it appears in your code.</p>
+
+				<hr />
+				<small>License: Apache 2. &copy; Project Implicit. &middot; Current version [version]</small>
+			</section>
+		</main>
+		<script src="../assets/prism.js"></script>
+        <script>
+            (function(){
+                var select = document.getElementById('version-select');
+                select.addEventListener('change', function(event){
+                    var version = event.target.value;
+                    location.href = location.href.replace(/[0-9]\.[0-9]/, version)
+                });
+            })();
+        </script>
+	</body>
+</html>

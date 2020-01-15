@@ -1,0 +1,506 @@
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Minno.js</title>
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+		<link href="../assets/prism.css" rel="stylesheet" />
+		<link href="../assets/style.css" rel="stylesheet" />
+	</head>
+	<body>
+		<header>
+			<section>
+				<nav class="brand">
+                    <a href="/"><h1>Minno</h1></a>
+				</nav>
+				<nav>
+					<a href="/minno-quest/0.3/basics/overview.html">Basics</a>
+					<a href="/minno-quest/0.3/manager/overview.html">miManager</a>
+					<a href="/minno-quest/0.3/quest/overview.html">miQuest</a>
+					<a href="/minno-time/0.5/time/overview.html">miTime</a>
+				</nav>
+				<nav>
+                    <div id="search-box">
+                        <script>
+                            (function() {
+                                var cx = '002953266509769041597:smg5beek-iu';
+                                var gcse = document.createElement('script');
+                                gcse.type = 'text/javascript';
+                                gcse.async = true;
+                                gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+                                var s = document.getElementsByTagName('script')[0];
+                                s.parentNode.insertBefore(gcse, s);
+                            })();
+                        </script>
+                        <gcse:searchbox-only></gcse:searchbox-only>
+                    </div>
+                    <select id="version-select"><option value="0.0" >v0.0</option>,<option value="0.1" >v0.1</option>,<option value="0.2" >v0.2</option>,<option value="0.3" selected>v0.3</option></select>
+					<a href="https://github.com/minnojs">Github</a>
+				</nav>
+			</section>
+		</header>
+		<main>
+			<section class="docs">
+                <h1><a name="api" class="header-link" href="#api"><span></span></a>API</h1><ul>
+<li>Core<ul>
+<li><a href="overview.html">Overview</a></li>
+<li><strong><a href="API.html">API</a></strong><ul>
+<li><a href="#settings">Settings</a><ul>
+<li><a href="#canvas">canvas</a></li>
+<li><a href="#injectstyle">injectStyle</a></li>
+<li><a href="#onpretask">onPreTask</a></li>
+<li><a href="#onend">onEnd</a></li>
+<li><a href="#title">title</a></li>
+<li><a href="#preloadimages">preloadImages</a></li>
+<li><a href="#skip">skip</a></li>
+<li><a href="#skin">skin</a></li>
+<li><a href="#rtl">rtl</a></li>
+<li><a href="#logger">logger</a></li>
+<li><a href="#debug">DEBUG</a></li>
+</ul>
+</li>
+<li><a href="#tasks">Tasks</a><ul>
+<li><a href="#quest">Quest</a></li>
+<li><a href="#message">Message</a></li>
+<li><a href="#post">Post</a></li>
+</ul>
+</li>
+<li><a href="#inheritance">Inheritance</a></li>
+<li><a href="#custom-tasks">Custom tasks</a><ul>
+<li><a href="#plugging-in">Plugging in</a></li>
+<li><a href="#activator-function">Activator function</a></li>
+<li><a href="#custom-task-example">Custom Task Example</a></li>
+</ul>
+</li>
+<li><a href="#project-implicit-build">Project Implicit Build</a><ul>
+<li><a href="#loggerurl">logger.url</a></li>
+<li><a href="#mturk">mTurk</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="playground.html">Playground</a></li>
+</ul>
+</li>
+<li>Tasks<ul>
+<li><a href="allowleaving.html">Allow Leaving</a></li>
+<li><a href="injectStyle.html">Inject Style</a></li>
+<li><a href="isTouch.html">Is Touch</a></li>
+<li><a href="messages.html">Messages</a></li>
+<li><a href="post.html">Post</a></li>
+<li><a href="redirect.html">Redirect</a></li>
+<li><a href="setValue.html">Set Value</a></li>
+<li><a href="yesno.html">Yes/No</a></li>
+</ul>
+</li>
+<li>Examples<ul>
+<li><a href="weightManager.html">Weight experiment</a></li>
+<li><a href="videoManager.html">Displaying Video</a></li>
+</ul>
+</li>
+</ul>
+<p>The miManager is responsible for managing several piTasks sequentially. It uses the same API used throughout Minno tasks.</p>
+<h3><a name="settings" class="header-link" href="#settings"><span></span></a>Settings</h3><p>Settings allow you to control the generic way that the player works. Change the settings using the <code>addSettings</code> function. The first argument to the function is always the name of the setting, the second argument is the setting values. In case the setting is an object, subsequent objects will extend each other so that settings may be progressively added.
+All the functions within settings are invoked using angular. This means that you have access to any service you like, as well as some specific assets. <a href="https://docs.angularjs.org/api/auto/service/$injector">In order to access the services</a> simply use arguments with the appropriate name. For instance, this is how you would access <code>$rootScope</code>:</p>
+<pre><code class="lang-javascript">function onEnd($rootScope){
+    $rootScope.$emit(&#39;end!!&#39;);
+}
+</code></pre>
+<h4><a name="canvas" class="header-link" href="#canvas"><span></span></a>canvas</h4><p><code>canvas</code> takes an object that describes the style of the task environment. Each property of the object changes a different style element.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Changes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>background</td>
+<td>The overall background color.</td>
+</tr>
+<tr>
+<td>canvasBackground</td>
+<td>Default canvas background color.</td>
+</tr>
+<tr>
+<td>fontColor</td>
+<td>Default font color.</td>
+</tr>
+<tr>
+<td>fontSize</td>
+<td>Default font size.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="lang-javascript">API.addSettings(&#39;canvas&#39;, {
+    fontSize: &#39;2em&#39;
+});
+</code></pre>
+<p>In case you need to fine tune the styles even further you can add css rules into the raw HTML. Support for dynamically adding CSS is planned but not yet supported.</p>
+<h4><a name="injectstyle" class="header-link" href="#injectstyle"><span></span></a>injectStyle</h4><p>Injects a string of css into the page.</p>
+<pre><code class="lang-javascript">API.addSettings(&#39;injectStyle&#39;, &#39;[pi-quest] label {font-size:1.2em; font-weight:normal;}&#39;);
+</code></pre>
+<h4><a name="onpretask" class="header-link" href="#onpretask"><span></span></a>onPreTask</h4><p><code>onPreTask</code> is a function to be called before each task is called.</p>
+<pre><code class="lang-javascript">API.addSettings(&#39;onPreTask&#39;, function(currentTask){
+    doSomethingWith(currentTask);
+});
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Asset</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>currentTask</td>
+<td>The current task object</td>
+</tr>
+<tr>
+<td>prevTask</td>
+<td>The previous task object (this may be used as a post task action as well...)</td>
+</tr>
+</tbody>
+</table>
+<h4><a name="onend" class="header-link" href="#onend"><span></span></a>onEnd</h4><p><code>onEnd</code> is a function to be called as soon as the task sequence ends.</p>
+<pre><code class="lang-javascript">API.addSettings(&#39;onEnd&#39;, function(){
+    // Do something: for instance, redirect to &#39;my/url.html&#39;
+    location.href = &#39;my/url.html&#39;;
+});
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Asset</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>currentTask</td>
+<td>The current (last) task object</td>
+</tr>
+</tbody>
+</table>
+<h4><a name="title" class="header-link" href="#title"><span></span></a>title</h4><p><code>title</code> is a string to be used as the page title (the name displayed on the tag).</p>
+<pre><code class="lang-javascript">API.addSettings(&#39;title&#39;, &#39;My Manager Title&#39;);
+</code></pre>
+<h4><a name="preloadimages" class="header-link" href="#preloadimages"><span></span></a>preloadImages</h4><p>Accepts an array of image urls to preload. The manager will <strong>not</strong> wait until all images are loaded, but it will make images displayed later in the manager sequence be displayed significantly faster.</p>
+<pre><code class="lang-javascript">API.addSettings(&#39;preloadImages&#39;, [&#39;my/image/url/imageName.png&#39;, &#39;my/other/url/otherImage.jpg&#39;]);
+</code></pre>
+<h4><a name="skip" class="header-link" href="#skip"><span></span></a>skip</h4><p>Whether to activate the skip and refresh option. If activated, clicking <code>ctrl r</code> reloads the current task (this feature may not be supported on older browsers), clicking <code>escape</code> and then the right or left arrows skips to the next or previous tasks.</p>
+<pre><code class="lang-javascript">API.addSettings(&#39;skip&#39;, true);
+</code></pre>
+<h4><a name="skin" class="header-link" href="#skin"><span></span></a>skin</h4><p>Add a skin to your project. Skins change the way that your tasks look. Currently the only skins that we support are <code>simple</code> and <code>demo</code>.</p>
+<pre><code class="lang-javascript">API.addSettings(&#39;skin&#39;, &#39;demo&#39;);
+</code></pre>
+<h3><a name="rtl" class="header-link" href="#rtl"><span></span></a>rtl</h3><p>Setting rtl to <code>true</code> will change the layout of the player to right to left in order to ocomodate right to left languages such as arabic and hebrew.</p>
+<pre><code class="lang-javascript">API.addSettings(&#39;rtl&#39;, true);
+</code></pre>
+<h4><a name="logger" class="header-link" href="#logger"><span></span></a>logger</h4><p>The logger allows control of logging activities.</p>
+<p>Folowing are the properties available for the logger:</p>
+<table>
+<thead>
+<tr>
+<th>property</th>
+<th>description </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>url</td>
+<td>The url to send to. If it is not set, data will not be sent.</td>
+</tr>
+<tr>
+<td>type</td>
+<td>The strategy to use for sending logs to the server. See options below.</td>
+</tr>
+<tr>
+<td>pulse</td>
+<td>Allows you to post your data in pulses of &quot;pulse&quot; logs instead of all at the end of the task (Does not work for csv logger).</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="lang-javascript">API.addSettings(&#39;logger&#39;, {
+    url: &#39;/manager/data&#39;,
+    type:&#39;new&#39;,
+    pulse: 20
+});
+</code></pre>
+<p>By deafault the logger posts according to the Project Implicit server rules (old).
+You can change the logging style by setting the logger <code>type</code> as follows:</p>
+<table>
+<thead>
+<tr>
+<th>type</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>old</td>
+<td>Uses the post strategy implemented by the old PI server</td>
+</tr>
+<tr>
+<td>new</td>
+<td>Uses the post strategy implemented by the new server  </td>
+</tr>
+<tr>
+<td>csv</td>
+<td>Posts all data as CSV at the end of the manager. If you are creating a manager that does not fully complete (for instance, when you have a message as your last page), use the postCSV task in addition to settings the log type to csv.</td>
+</tr>
+<tr>
+<td>debug</td>
+<td>Logs all posts to the console. Do not do this in production! These logs aren&#39;t posted to the server at all!</td>
+</tr>
+</tbody>
+</table>
+<p>You can change the logging strategy or even create new strategies.
+Doing this is rather advanced and is documented <a href="https://github.com/minnojs/minno-quest/blob/0.2/src/taskManager/logger/readme.html">here</a>.</p>
+<h4><a name="debug" class="header-link" href="#debug"><span></span></a>DEBUG</h4><p>The <code>DEBUG</code> settings allows you to control the debug messages produced by the player.
+In the development environment (when <code>window.DEBUG</code> is set to <code>true</code>) you have access to a development console.
+The console will hold messages describing the process of your studies.</p>
+<p>At the top of the console window you will see a dropdown that allows you to select the level of logging you would like to see.
+For example, you may want to be alerted only of errors, or of every possible activity of the player.
+In addition you have a button that allows you to close and open the console.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>hideConsole</td>
+<td>(true or false) hide console activity</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="lang-javascript">API.addSettings(&#39;DEBUG&#39;, { hideConsole: true});
+</code></pre>
+<h3><a name="tasks" class="header-link" href="#tasks"><span></span></a>Tasks</h3><p>The basic unit in miManager is the <strong>task</strong>. The manager currently supports several types of tasks; <code>quest</code>, <code>message</code> and <code>post</code>. You should just cue them into the sequence (you can use mixers to your hearts content as well).</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td>Task name.</td>
+</tr>
+<tr>
+<td>type</td>
+<td>Type of task (quest/message).</td>
+</tr>
+<tr>
+<td>pre</td>
+<td>A function to invoke before the task (may return a promise).</td>
+</tr>
+<tr>
+<td>load</td>
+<td>A function to invoke as soon as the task is loaded (may return a promise).</td>
+</tr>
+<tr>
+<td>post</td>
+<td>A function to invoke after the task (may return a promise).</td>
+</tr>
+<tr>
+<td>canvas</td>
+<td>A canvas object (as defined under <a href="#canvas">settings</a>) to invoke at the beginning of the task and remove </td>
+</tr>
+<tr>
+<td>title</td>
+<td>A string to be used as the page title (the name displayed on the tag). It is reset at the end of the task.</td>
+</tr>
+<tr>
+<td>preText</td>
+<td>A template to be expanded before the task</td>
+</tr>
+<tr>
+<td>postText</td>
+<td>A template to be expanded after the task</td>
+</tr>
+</tbody>
+</table>
+<h4><a name="quest" class="header-link" href="#quest"><span></span></a>Quest</h4><table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>script</td>
+<td>The actual script object for the quest task.</td>
+</tr>
+<tr>
+<td>scriptUrl</td>
+<td>The url for the quest script.</td>
+</tr>
+</tbody>
+</table>
+<h4><a name="message" class="header-link" href="#message"><span></span></a>Message</h4><table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>template</td>
+<td>the actual html to display as a string.</td>
+</tr>
+<tr>
+<td>templateUrl</td>
+<td>The url for the message html file.</td>
+</tr>
+<tr>
+<td>keys</td>
+<td>Controls the proceed key: either a key (i.e. <code>&#39;a&#39;</code>) a keyCode (i.e. <code>65</code>) or an array of such (i.e. <code>[&#39;a&#39;,&#39;b&#39;]</code>).</td>
+</tr>
+</tbody>
+</table>
+<h4><a name="post" class="header-link" href="#post"><span></span></a>Post</h4><table>
+<thead>
+<tr>
+<th>property</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>url</td>
+<td>The url we intend to post to.</td>
+</tr>
+<tr>
+<td>path</td>
+<td>A path within the global to the object that you want to send. For example: <code>&quot;iat.feedback&quot;</code> will post the object <code>feedback</code> from <code>global.iat</code>.</td>
+</tr>
+<tr>
+<td>data</td>
+<td>A raw object to be posted to the server. You may use templates in order to construct it.</td>
+</tr>
+</tbody>
+</table>
+<h3><a name="inheritance" class="header-link" href="#inheritance"><span></span></a>Inheritance</h3><p>miManager uses the same inheritance system used by miQuest. It has one type of set: the task set. In order to create task sets use <code>addTasksSet(set, list)</code>.</p>
+<h3><a name="custom-tasks" class="header-link" href="#custom-tasks"><span></span></a>Custom tasks</h3><p>The miManager allows the creation of custom tasks. The format is fairly simple though you probably need at least some experience with programing for it. </p>
+<h4><a name="plugging-in" class="header-link" href="#plugging-in"><span></span></a>Plugging in</h4><p>miManager manages the task sequence for you as well as loading the task script (if needed). There are several ways to plug a new task into miManager, the all involve passing the activator function to the manager in various ways.</p>
+<ol>
+<li>You can pass the activator function as a script.</li>
+<li>You can pass it as the play property of the script object ().</li>
+<li>You can set it into the <code>taskActivateProvider</code> using <code>taskActivateProvider.set(taskName, activatorFunction)</code> during the configuration stage of the angular flow (This is worth the trouble mainly if you intend to use this task many times).</li>
+</ol>
+<h4><a name="activator-function" class="header-link" href="#activator-function"><span></span></a>Activator function</h4><p>The activator function is the function that is responsible for the activation of your task as well as for the communication with miManager.</p>
+<p>It should:</p>
+<ul>
+<li>Run your task (just do whatever you like).</li>
+<li>Return a function that may be used to force the end of the task.</li>
+<li>Call the <code>done</code> function whenever it is done.</li>
+</ul>
+<p>The activator function is invoked using <a href="https://docs.angularjs.org/guide/di">angular dependency injection</a>, so you can use any of the angular <a href="https://docs.angularjs.org/guide/di#dependency-annotation">annotation</a> methods to get dependencies.</p>
+<p>The following dependencies are supported (as well as all standard angular services):</p>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>done</td>
+<td>A function that lets the manager know that the task has finished.</td>
+</tr>
+<tr>
+<td>props</td>
+<td>An object with all sorts of useful tools.</td>
+</tr>
+<tr>
+<td>$scope</td>
+<td>The task scope.</td>
+</tr>
+<tr>
+<td>task</td>
+<td>The miManager element that defined this task.</td>
+</tr>
+<tr>
+<td>script</td>
+<td>The task script (as defined in task.script or loaded from task.scriptUrl).</td>
+</tr>
+<tr>
+<td>$element</td>
+<td>The tasks DOM Node wrapped in jqLite or jQuery.</td>
+</tr>
+<tr>
+<td>global</td>
+<td>The global object</td>
+</tr>
+<tr>
+<td>$injector</td>
+<td>an angularjs injector (it can allow you to $compile or accesses $rootScope)</td>
+</tr>
+</tbody>
+</table>
+<h4><a name="custom-task-example" class="header-link" href="#custom-task-example"><span></span></a>Custom Task Example</h4><p>The following script will display a messages to the user and proceed to the next task after 5 seconds:</p>
+<pre><code class="lang-javascript">// the define wrapper
+define(function(){
+    // the script object being returned
+    return {
+        // custom script content
+        content: &#39;Hi there, I\&#39;m your custom message&#39;,
+
+        // the activator function uses three dependencie
+        play: function activator(done, script, $element){
+            var timeoutId = setTimeout(done, 5000);
+            $element.html(script.content);
+
+            // will be called at the end of the task to clean things up
+            // (whether the end is forced or triggered by &#39;done&#39;)
+            return function clear(){
+                clearTimeout(timeoutId);
+                $element.empty();           
+            };
+        }
+    };
+});
+</code></pre>
+<p>In order to use it all you have to do is point the task to the correct url:</p>
+<pre><code class="lang-javascript">var taskElement = {scriptUrl:&#39;path/to/script&#39;};
+</code></pre>
+<h3><a name="project-implicit-build" class="header-link" href="#project-implicit-build"><span></span></a>Project Implicit Build</h3><h4><a name="mturk" class="header-link" href="#mturk"><span></span></a>mTurk</h4><p>The project implicit build has a feature for integration with mTurk.
+All you have to do is add The following code to your project, replacing the <code>&lt;id#&gt;</code> tags with the appropriate data of course.
+The player will redirect the users back to mTurk immediately after the final task in the manager (as defined by the <code>last</code> property).
+Setting the <code>isProduction</code> property allows you to switch between the development and production urls for mTurk.</p>
+<pre><code class="lang-javascript">API.addGlobal({
+    $mTurk: {
+        assignmentId:&#39;&lt;id#&gt;&#39;,
+        hitId:&#39;&lt;id#&gt;&#39;,
+        workerId:&#39;&lt;id#&gt;&#39;,
+        isProduction: true
+    }
+});
+</code></pre>
+
+				<hr />
+				<small>License: Apache 2. &copy; Project Implicit. &middot; Current version [version]</small>
+			</section>
+		</main>
+		<script src="../assets/prism.js"></script>
+        <script>
+            (function(){
+                var select = document.getElementById('version-select');
+                select.addEventListener('change', function(event){
+                    var version = event.target.value;
+                    location.href = location.href.replace(/[0-9]\.[0-9]/, version)
+                });
+            })();
+        </script>
+	</body>
+</html>

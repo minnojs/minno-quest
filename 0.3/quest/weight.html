@@ -1,0 +1,595 @@
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Minno.js</title>
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+		<link href="../assets/prism.css" rel="stylesheet" />
+		<link href="../assets/style.css" rel="stylesheet" />
+	</head>
+	<body>
+		<header>
+			<section>
+				<nav class="brand">
+                    <a href="/"><h1>Minno</h1></a>
+				</nav>
+				<nav>
+					<a href="/minno-quest/0.3/basics/overview.html">Basics</a>
+					<a href="/minno-quest/0.3/manager/overview.html">miManager</a>
+					<a href="/minno-quest/0.3/quest/overview.html">miQuest</a>
+					<a href="/minno-time/0.5/time/overview.html">miTime</a>
+				</nav>
+				<nav>
+                    <div id="search-box">
+                        <script>
+                            (function() {
+                                var cx = '002953266509769041597:smg5beek-iu';
+                                var gcse = document.createElement('script');
+                                gcse.type = 'text/javascript';
+                                gcse.async = true;
+                                gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+                                var s = document.getElementsByTagName('script')[0];
+                                s.parentNode.insertBefore(gcse, s);
+                            })();
+                        </script>
+                        <gcse:searchbox-only></gcse:searchbox-only>
+                    </div>
+                    <select id="version-select"><option value="0.0" >v0.0</option>,<option value="0.1" >v0.1</option>,<option value="0.2" >v0.2</option>,<option value="0.3" selected>v0.3</option></select>
+					<a href="https://github.com/minnojs">Github</a>
+				</nav>
+			</section>
+		</header>
+		<main>
+			<section class="docs">
+                <h1><a name="a-hrefweighthtmlweight-demoa" class="header-link" href="#a-hrefweighthtmlweight-demoa"><span></span></a><a href="weight.html">Weight demo</a></h1><ul>
+<li>Core<ul>
+<li><a href="overview.html">Overview</a></li>
+<li><a href="introduction.html">Introduction</a></li>
+<li><a href="API.html">API</a></li>
+<li><a href="playground.html">Playground</a></li>
+</ul>
+</li>
+<li>Question types<ul>
+<li><a href="text.html">Text</a></li>
+<li><a href="textarea.html">Textarea</a></li>
+<li><a href="textNumber.html">Text Number</a></li>
+<li><a href="selectOne.html">Select One</a></li>
+<li><a href="selectMulti.html">Select Multi</a></li>
+<li><a href="grid.html">Grid</a></li>
+<li><a href="gridMulti.html">Multi Grid</a></li>
+<li><a href="slider.html">Slider</a></li>
+<li><a href="rank.html">Rank</a></li>
+</ul>
+</li>
+<li>Examples<ul>
+<li><a href="helloworld.html">Hello world</a></li>
+<li><a href="bodyAwareness.html">Body Awareness</a></li>
+<li><strong>Weight demo</strong></li>
+<li><a href="usingImages.html">Using Images</a></li>
+<li><a href="buttons.html">Buttons</a></li>
+<li><a href="buttonsAdvanced.html">Buttons Advanced</a></li>
+<li><a href="buttonsOnePage.html">Buttons One Page</a></li>
+<li><a href="dependency.html">Dependency</a></li>
+<li><a href="liveDependency.html">Live Dependency</a></li>
+<li><a href="gridExample.html">Grid</a></li>
+<li><a href="timer.html">Timer</a></li>
+<li><a href="openEnded.html">Open Ended</a></li>
+<li><a href="openEndedLong.html">Open Ended Long</a></li>
+<li><a href="rateImages.html">Rate Images</a></li>
+<li><a href="rateImagesSizes.html">Rate Images Sizes</a></li>
+<li><a href="scaleWithFeedback.html">Scale With Feedback</a></li>
+<li><a href="sliderExample.html">Slider</a></li>
+<li><a href="userPrevResp.html">User Prev Resp</a></li>
+<li><a href="nfc.html">Agreement scale</a></li>
+</ul>
+</li>
+</ul>
+<p> The weight questionnaire is a solid example of how we create a fairly complex questionnaire.
+ It is heavily commented so that you can follow everything that goes on.
+ After reading the documentation feel free to download the file and modify it according to your needs.</p>
+<h3><a name="opening-section" class="header-link" href="#opening-section"><span></span></a>Opening section</h3><p> The opening section of each script is always more or less the same.
+ We create the wrapper for the script (<code>define</code>), and create a new instance of a questionnaire.</p>
+<section playground>
+    <div class="buttons">
+        <a class="activate-button">Activate</a>
+        <a class="download-button" href="weight.js" download>Download</a>
+    </div>
+    <div class="editor">//
+// The weight questionnaire is a solid example of how we create a fairly complex questionnaire.
+// It is heavily commented so that you can follow everything that goes on.
+// After reading the documentation feel free to download the file and modify it according to your needs.
+//
+// ### Opening section
+//
+// The opening section of each script is always more or less the same.
+// We create the wrapper for the script (`define`), and create a new instance of a questionnaire.
+define([&apos;questAPI&apos;], function(Quest){
+
+  var API = new Quest();
+
+  // ### Creating page and questions sets
+  //
+  // The first thing we do in this script is create prototypes of the pages and questions that we will use.
+  // Many times (usually?), questionnaires use similar settings to describe the **pages** and **questions** in their studies.
+  // miQuest provides a system that allows us to prototype them so that our script may be shorter and easier to maintain
+  // (it&apos;s better to make a change in one place and have it affect all your questions than having to go through each question and change it individually).
+  // It&apos;s worth while to mention that it is not strictly necessary to use prototypes and inheritance,
+  // you can create your pages and questions from scratch from within the [sequence](API.html#sequence).
+  //
+  // The prototyping system uses `API.addPagesSet` and `API.addQuestionsSet` in order to create sets of prototypical pages/questions,
+  // later on we can `inherit` them into our sequence.
+  // Essentially, inheritance means that we use the object that we inherit as a base for the creation of a new object
+  // (see the [API](API.html#inheritance) for more details).
+
+
+  // #### Page prototype
+  // Here we create a prototype for the [pages](API.html#pages) in our group.
+  // The prototype belongs to a group that we arbitrarily call &apos;basicPage&apos;, we will later use this name in order to inherit this page.
+  // We will be using auto submit within the questions, so we disable the submit button for all pages (`noSubmit`).
+  // And finally we add a progress bar that will track the location of the participants within the questionnaire (`progressBar`).
+
+  /**
+   * Page prototype
+   */
+  API.addPagesSet(&apos;basicPage&apos;,{
+    noSubmit:true,
+    progressBar: &apos;&lt;%= pagesMeta.number %&gt; out of 15&apos;
+  });
+
+  // Note the use of templates within the progress bar.
+  // Templates are strings that have the `&lt;%= %&gt;` delimiters, they allow you to access environmental variables,
+  // in this case we access the `pagesMeta` variable and get the current page number.
+  // You can use templates anywhere you like within miQuest.
+  // Both [templates](API.html#templates) and [environmental variables](API.html#variables) are fully documented within the API.
+
+
+  // #### Question prototypes
+  //
+  // We are going to use two types of [questions](API.html#questions) throughout this questionnaire, and we&apos;ll create a prototype for each of them.
+  //
+  // The first question type is a simple [multiple choice input](API.html#selectone-selectmulti) (`type: &apos;selelctOne&apos;`).
+  // We set it to `autoSubmit` thus making the submit button redundant (autoSumit means that double clicking a response submits the page).
+  // Then we request `numericValues` so that the player logs the responses to questions as numbers instead of plain text.
+  // And finally we activate `help` for each of the questions and set the `helpText` for it.
+  // Note the use of templates again here to return a true/false value so that the help message is shown only on the first three pages.
+
+  /**
+   * Question prototypes
+   */
+  API.addQuestionsSet(&apos;basicSelect&apos;,{
+    type: &apos;selectOne&apos;,
+    autoSubmit:true,
+    numericValues:true,
+    help: &apos;&lt;%= pagesMeta.number &lt; 3 %&gt;&apos;, // show the help message only for the first three pages
+    helpText: &apos;Selecting an answer once colors it blue.&lt;br/&gt;You can change your answer by selecting another option.&lt;br/&gt;To confirm, click the selected (blue) button a second time.&apos;
+  });
+
+  // The second question is a another selectOne input. This time we use the multiButtons style.
+  // This is useful for questions with very many answers. Note the use of `minWidth` here, this allows us to set the width of the buttons, thus making sure they line up symmetrically.
+
+  API.addQuestionsSet(&apos;basicDropdown&apos;,{
+    type: &apos;selectOne&apos;,
+    style: &apos;multiButtons&apos;,
+    minWidth: &apos;150px&apos;,
+    autoSubmit:true,
+    numericValues:true
+  });
+
+  // ### The Sequence
+  //
+  // The sequence is an ordered list of all the pages that you want to present.
+  // This is where you tell miQuest how to interact with the participants.
+  // The sequence is created using the `API.addSequence` function which takes a single array of pages.
+  //
+  // This questionnaire has several demographic/personal questions that appear at the beginning in a constant order.
+  // After them we have a series of general questions that appear in a randomized order.
+
+  API.addSequence([
+
+    // #### Personal questions segment
+    //
+    // This segment has 6 demographic/personal questions.
+    // They are simply listed consecutively within the sequence array.
+    //
+    // Each page inherits the *basicPage* prototype that we defined previously (`inherit`) and manually create the questions for it.
+    // Each page has one question set into into it, inheriting either from the *basicSelect* or *basicDropdown* sets.
+    // The questions each have a unique `name` set into them here as well
+    // as the `stem` which is the question itself
+    // and the `answers` array that holds the possible answers for multiple choice questions.
+    //
+    // The concept that you should keep in mind reading this code is that the inherit property extends each object with its parents properties,
+    // so that each page inherits the `noSubmit` that we set into the *basicPage* prototype.
+
+    {
+      inherit : &apos;basicPage&apos;,
+      questions : [{
+        inherit : &apos;basicSelect&apos;,
+        name: &apos;weightpref&apos;,
+        stem: &apos;Which statement best describes you?&apos;,
+        answers: [
+          &apos;I strongly prefer Thin People to Fat People.&apos;,
+          &apos;I moderately prefer Thin People to Fat People.&apos;,
+          &apos;I slightly prefer Thin People to Fat People.&apos;,
+          &apos;I like Thin People and Fat People equally.&apos;,
+          &apos;I slightly prefer Fat People to Thin People.&apos;,
+          &apos;I moderately prefer Fat People to Thin People.&apos;,
+          &apos;I strongly prefer Fat People to Thin People.&apos;
+        ]
+      }]
+    },
+    {
+      inherit : &apos;basicPage&apos;,
+      questions : [{
+        inherit : &apos;basicSelect&apos;,
+        name: &apos;tempfat&apos;,
+        stem: &apos;How warm or cold do you feel towards &lt;b&gt;fat people&lt;/b&gt;?&apos;,
+        answers: [
+          &apos;Extremely warm&apos;,
+          &apos;Very warm&apos;,
+          &apos;Moderately warm&apos;,
+          &apos;Somewhat warm&apos;,
+          &apos;Slightly warm&apos;,
+          &apos;Neither warm nor cold&apos;,
+          &apos;Slightly cold&apos;,
+          &apos;Somewhat cold&apos;,
+          &apos;Moderately cold&apos;,
+          &apos;Very cold&apos;,
+          &apos;Extremely cold&apos;
+        ]
+      }]
+    },
+    {
+      inherit : &apos;basicPage&apos;,
+      questions : [{
+        inherit : &apos;basicSelect&apos;,
+        name: &apos;tempthin&apos;,
+        stem: &apos;How warm or cold do you feel towards &lt;b&gt;thin people&lt;/b&gt;?&apos;,
+        answers: [
+          &apos;Extremely warm&apos;,
+          &apos;Very warm&apos;,
+          &apos;Moderately warm&apos;,
+          &apos;Somewhat warm&apos;,
+          &apos;Slightly warm&apos;,
+          &apos;Neither warm nor cold&apos;,
+          &apos;Slightly cold&apos;,
+          &apos;Somewhat cold&apos;,
+          &apos;Moderately cold&apos;,
+          &apos;Very cold&apos;,
+          &apos;Extremely cold&apos;
+        ]
+      }]
+    },
+    {
+      inherit : &apos;basicPage&apos;,
+      questions : [{
+        inherit : &apos;basicDropdown&apos;,
+        name: &apos;myheight&apos;,
+        stem: &apos;Please indicate your height by selecting the most accurate option.&apos;,
+        answers: [
+          &apos;3 ft 0 in :: 91 cm&apos;,
+          &apos;3 ft 1 in :: 94 cm&apos;,
+          &apos;3 ft 2 in :: 97 cm&apos;,
+          &apos;3 ft 3 in :: 99 cm&apos;,
+          &apos;3 ft 4 in :: 102 cm&apos;,
+          &apos;3 ft 5 in :: 104 cm&apos;,
+          &apos;3 ft 6 in :: 107 cm&apos;,
+          &apos;3 ft 7 in :: 109 cm&apos;,
+          &apos;3 ft 8 in :: 112 cm&apos;,
+          &apos;3 ft 9 in :: 114 cm&apos;,
+          &apos;3 ft 10 in :: 117 cm&apos;,
+          &apos;3 ft 11 in :: 119 cm&apos;,
+          &apos;4 ft 0 in :: 122 cm&apos;,
+          &apos;4 ft 1 in :: 124 cm&apos;,
+          &apos;4 ft 2 in :: 127 cm&apos;,
+          &apos;4 ft 3 in :: 130 cm&apos;,
+          &apos;4 ft 4 in :: 132 cm&apos;,
+          &apos;4 ft 5 in :: 135 cm&apos;,
+          &apos;4 ft 6 in :: 137 cm&apos;,
+          &apos;4 ft 7 in :: 140 cm&apos;,
+          &apos;4 ft 8 in :: 142 cm&apos;,
+          &apos;4 ft 9 in :: 145 cm&apos;,
+          &apos;4 ft 10 in :: 147 cm&apos;,
+          &apos;4 ft 11 in :: 150 cm&apos;,
+          &apos;5 ft 0 in :: 152 cm&apos;,
+          &apos;5 ft 1 in :: 155 cm&apos;,
+          &apos;5 ft 2 in :: 157 cm&apos;,
+          &apos;5 ft 3 in :: 160 cm&apos;,
+          &apos;5 ft 4 in :: 163 cm&apos;,
+          &apos;5 ft 5 in :: 165 cm&apos;,
+          &apos;5 ft 6 in :: 168 cm&apos;,
+          &apos;5 ft 7 in :: 170 cm&apos;,
+          &apos;5 ft 8 in :: 173 cm&apos;,
+          &apos;5 ft 9 in :: 175 cm&apos;,
+          &apos;5 ft 10 in :: 178 cm&apos;,
+          &apos;5 ft 11 in :: 180 cm&apos;,
+          &apos;6 ft 0 in :: 183 cm&apos;,
+          &apos;6 ft 1 in :: 185 cm&apos;,
+          &apos;6 ft 2 in :: 188 cm&apos;,
+          &apos;6 ft 3 in :: 191 cm&apos;,
+          &apos;6 ft 4 in :: 193 cm&apos;,
+          &apos;6 ft 5 in :: 196 cm&apos;,
+          &apos;6 ft 6 in :: 198 cm&apos;,
+          &apos;6 ft 7 in :: 201 cm&apos;,
+          &apos;6 ft 8 in :: 203 cm&apos;,
+          &apos;6 ft 9 in :: 206 cm&apos;,
+          &apos;6 ft 10 in :: 208 cm&apos;,
+          &apos;6 ft 11 in :: 211 cm&apos;,
+          &apos;7 ft 0 in :: 213 cm&apos;,
+          &apos;7 ft 1 in :: 216 cm&apos;,
+          &apos;7 ft 2 in :: 218 cm&apos;,
+          &apos;7 ft 3 in :: 221 cm&apos;,
+          &apos;7 ft 4 in :: 224 cm&apos;,
+          &apos;7 ft 5 in :: 226 cm&apos;,
+          &apos;7 ft 6 in :: 229 cm&apos;,
+          &apos;7 ft 7 in :: 231 cm&apos;,
+          &apos;7 ft 8 in :: 234 cm&apos;,
+          &apos;7 ft 9 in :: 236 cm&apos;,
+          &apos;7 ft 10 in :: 239 cm&apos;,
+          &apos;7 ft 11 in :: 241 cm&apos;,
+          &apos;8 ft 0 in :: 244 cm&apos;,
+          &apos;8 ft 1 in :: 246 cm&apos;,
+          &apos;8 ft 2 in :: 249 cm&apos;,
+          &apos;8 ft 3 in :: 251 cm&apos;,
+          &apos;8 ft 4 in :: 254 cm&apos;,
+          &apos;8 ft 5 in :: 257 cm&apos;,
+          &apos;8 ft 6 in:: 259 cm&apos;
+        ]
+      }]
+    },
+    {
+      inherit : &apos;basicPage&apos;,
+      questions : [{
+        inherit : &apos;basicDropdown&apos;,
+        name: &apos;myweight&apos;,
+        stem: &apos;Please indicate your weight by selecting the most accurate option.&apos;,
+        answers: [
+          &apos;50 lb :: 23 kg&apos;,
+          &apos;55 lb :: 25 kg&apos;,
+          &apos;60 lb :: 27 kg&apos;,
+          &apos;65 lb :: 30 kg&apos;,
+          &apos;70 lb :: 32 kg&apos;,
+          &apos;75 lb :: 34 kg&apos;,
+          &apos;80 lb :: 36 kg&apos;,
+          &apos;85 lb :: 39 kg&apos;,
+          &apos;90 lb :: 41 kg&apos;,
+          &apos;95 lb :: 43 kg&apos;,
+          &apos;100 lb :: 45 kg&apos;,
+          &apos;105 lb :: 48 kg&apos;,
+          &apos;110 lb :: 50 kg&apos;,
+          &apos;115 lb :: 52 kg&apos;,
+          &apos;120 lb :: 55 kg&apos;,
+          &apos;125 lb :: 57 kg&apos;,
+          &apos;130 lb :: 59 kg&apos;,
+          &apos;135 lb :: 61 kg&apos;,
+          &apos;140 lb :: 64 kg&apos;,
+          &apos;145 lb :: 66 kg&apos;,
+          &apos;150 lb :: 68 kg&apos;,
+          &apos;155 lb :: 70 kg&apos;,
+          &apos;160 lb :: 73 kg&apos;,
+          &apos;165 lb :: 75 kg&apos;,
+          &apos;170 lb :: 77 kg&apos;,
+          &apos;175 lb :: 80 kg&apos;,
+          &apos;180 lb :: 82 kg&apos;,
+          &apos;185 lb :: 84 kg&apos;,
+          &apos;190 lb :: 86 kg&apos;,
+          &apos;195 lb :: 89 kg&apos;,
+          &apos;200 lb :: 91 kg&apos;,
+          &apos;205 lb :: 93 kg&apos;,
+          &apos;210 lb :: 95 kg&apos;,
+          &apos;215 lb :: 98 kg&apos;,
+          &apos;220 lb :: 100 kg&apos;,
+          &apos;225 lb :: 102 kg&apos;,
+          &apos;230 lb :: 105 kg&apos;,
+          &apos;235 lb :: 107 kg&apos;,
+          &apos;240 lb :: 109 kg&apos;,
+          &apos;245 lb :: 111 kg&apos;,
+          &apos;250 lb :: 114 kg&apos;,
+          &apos;255 lb :: 116 kg&apos;,
+          &apos;260 lb :: 118 kg&apos;,
+          &apos;265 lb :: 120 kg&apos;,
+          &apos;270 lb :: 123 kg&apos;,
+          &apos;275 lb :: 125 kg&apos;,
+          &apos;280 lb :: 127 kg&apos;,
+          &apos;285 lb :: 130 kg&apos;,
+          &apos;290 lb :: 132 kg&apos;,
+          &apos;295 lb :: 134 kg&apos;,
+          &apos;300 lb :: 136 kg&apos;,
+          &apos;305 lb :: 139 kg&apos;,
+          &apos;310 lb :: 141 kg&apos;,
+          &apos;315 lb :: 143 kg&apos;,
+          &apos;320 lb :: 145 kg&apos;,
+          &apos;325 lb :: 148 kg&apos;,
+          &apos;330 lb :: 150 kg&apos;,
+          &apos;335 lb :: 152 kg&apos;,
+          &apos;340 lb :: 155 kg&apos;,
+          &apos;345 lb :: 157 kg&apos;,
+          &apos;350 lb :: 159 kg&apos;,
+          &apos;355 lb :: 161 kg&apos;,
+          &apos;360 lb :: 164 kg&apos;,
+          &apos;365 lb :: 166 kg&apos;,
+          &apos;370 lb :: 168 kg&apos;,
+          &apos;375 lb :: 170 kg&apos;,
+          &apos;380 lb :: 173 kg&apos;,
+          &apos;385 lb :: 175 kg&apos;,
+          &apos;390 lb :: 177 kg&apos;,
+          &apos;395 lb :: 180 kg&apos;,
+          &apos;400 lb :: 182 kg&apos;,
+          &apos;405 lb :: 184 kg&apos;,
+          &apos;410 lb :: 186 kg&apos;,
+          &apos;415 lb :: 189 kg&apos;,
+          &apos;420 lb :: 191 kg&apos;,
+          &apos;425 lb :: 193 kg&apos;,
+          &apos;430 lb :: 195 kg&apos;,
+          &apos;435 lb :: 198 kg&apos;,
+          &apos;440 lb :: 200 kg&apos;,
+          &apos;&gt;440 lb :: &gt;200kg&apos;
+        ]
+      }]
+    }, // end personal segment
+
+    // #### General questions segment
+    //
+    // This segment has several generic questions.
+    // As far as the questions are concerned it follows the same principle that the previous segment followed.
+    // The main difference is that we want to randomize the order in which the questions appear.
+    //
+    // The sequence offers a tool for controlling the flow of pages within the sequence (or questions within a page).
+    // Instead of putting pages in the sequence you may put objects called mixers that allow you to manipulate &quot;sub sequences&quot; in different ways.
+    // In this case we will be using the `random` mixer in order to randomize a sub sequence of pages.
+    //
+    // Just to get a better  idea of what is going on here, you should know that mixers usually take the following form:
+    //
+    // ```javascript
+    // var mixer = {
+    //  mixer : &apos;random&apos;, // the type of mixer that we should use
+    //  data : [] // the subsequence to which we apply the mixer
+    // }
+    // ```
+    //
+    // In this case we wrap the pages that with general questions within the `data` property of a `type:&apos;random&apos;` mixer.
+
+    {
+      mixer: &apos;random&apos;,
+      data:[
+        {
+          inherit : &apos;basicPage&apos;,
+          questions : [{
+            inherit : &apos;basicSelect&apos;,
+            name: &apos;mostpref&apos;,
+            stem: &apos;Do most people prefer fat people or thin people?&apos;,
+            answers: [
+              &apos;Most people strongly prefer Fat People to Thin People&apos;,&apos;Most people somewhat prefer Fat People to Thin People&apos;,&apos;Most people slightly prefer Fat People to Thin People&apos;,&apos;Most people like Fat People and Thin People equally &apos;,&apos;Most people slightly prefer Thin People to Fat People&apos;, &apos;Most people somewhat prefer Thin People to Fat People&apos;,&apos;Most people strongly prefer Thin People to Fat People&apos;
+            ]
+          }]
+        },
+        {
+          inherit : &apos;basicPage&apos;,
+          questions : [{
+            inherit : &apos;basicSelect&apos;,
+            name: &apos;controlyou&apos;,
+            stem: &apos;How much control do you have over your weight?&apos;,
+            answers: [
+              &apos;Complete control&apos;,&apos;A lot of control&apos;,&apos;Some control &apos;,&apos;A little control&apos;,   &apos;No control&apos;
+            ]
+          }]
+        },
+        {
+          inherit : &apos;basicPage&apos;,
+          questions : [{
+            inherit : &apos;basicSelect&apos;,
+            name: &apos;controlother&apos;,
+            stem: &apos;How much control do people have over their weight?&apos;,
+            answers: [
+              &apos;Complete control&apos;,&apos;A lot of control&apos;,&apos;Some control &apos;,&apos;A little control&apos;,   &apos;No control&apos;
+            ]
+          }]
+        },
+        {
+          inherit : &apos;basicPage&apos;,
+          questions : [{
+            inherit : &apos;basicSelect&apos;,
+            name: &apos;iam&apos;,
+            stem: &apos;Currently, I am:&apos;,
+            answers: [
+              &apos;Very underweight&apos;,&apos;Moderately underweight&apos;,    &apos;Slightly underweight&apos;,&apos;Neither underweight nor overweight&apos;,&apos;Slightly overweight&apos;,&apos;Moderately overweight&apos;,&apos;Very overweight&apos;
+            ]
+          }]
+        },
+        {
+          inherit : &apos;basicPage&apos;,
+          questions : [{
+            inherit : &apos;basicSelect&apos;,
+            name: &apos;othersay&apos;,
+            stem: &apos;Other people would say that I am:&apos;,
+            answers: [
+              &apos;Very underweight&apos;,&apos;Moderately underweight&apos;,    &apos;Slightly underweight&apos;,&apos;Neither underweight nor overweight&apos;,&apos;Slightly overweight&apos;,&apos;Moderately overweight&apos;,&apos;Very overweight&apos;
+            ]
+          }]
+        },
+        {
+          inherit : &apos;basicPage&apos;,
+          questions : [{
+            inherit : &apos;basicSelect&apos;,
+            name: &apos;comptomost&apos;,
+            stem: &apos;Compared to most people I interact with, I am:&apos;,
+            answers: [
+              &apos;Much thinner&apos;,&apos;Moderately thinner&apos;,&apos;Slightly thinner&apos;,&apos;About the same&apos;,&apos;Slightly fatter&apos;,&apos;Moderately fatter&apos;,&apos;Much fatter&apos;
+            ]
+          }]
+        },
+        {
+          inherit : &apos;basicPage&apos;,
+          questions : [{
+            inherit : &apos;basicSelect&apos;,
+            name: &apos;important&apos;,
+            stem: &apos;How important is your weight to your sense of who you are?&apos;,
+            answers: [
+              &apos;Not at all important&apos;,&apos;Slightly important&apos;,&apos;Moderately important&apos;,&apos;Very important&apos;,&apos;Extremely important&apos;
+            ]
+          }]
+        },
+        {
+          inherit : &apos;basicPage&apos;,
+          questions : [{
+            inherit : &apos;basicSelect&apos;,
+            name: &apos;idfat&apos;,
+            stem: &apos;How much do you feel similar to people who are fat?&apos;,
+            answers: [
+              &apos;Not at all similar&apos;,&apos;Somewhat similar&apos;,&apos;Moderately similar&apos;,&apos;Very similar&apos;,&apos;Extremely similar&apos;
+            ]
+          }]
+        },
+        {
+          inherit : &apos;basicPage&apos;,
+          questions : [{
+            inherit : &apos;basicSelect&apos;,
+            name: &apos;idthin&apos;,
+            stem: &apos;How much do you feel similar to people who are thin?&apos;,
+            answers: [
+              &apos;Not at all similar&apos;,&apos;Somewhat similar&apos;,&apos;Moderately similar&apos;,&apos;Very similar&apos;,&apos;Extremely similar&apos;
+            ]
+          }]
+        },
+        {
+          inherit : &apos;basicPage&apos;,
+          questions : [{
+            inherit : &apos;basicSelect&apos;,
+            name: &apos;easytolose&apos;,
+            stem: &apos;How easy or difficult would it be for you to lose 5 to 10 pounds if you wanted to?&apos;,
+            answers: [
+              &apos;Very easy&apos;,&apos;Moderately easy&apos;,&apos;Somewhat easy&apos;,&apos;Somewhat difficult&apos;,&apos;Moderately difficult&apos;,&apos;Very difficult&apos;
+            ]
+          }]
+        }
+      ]
+    }
+
+    // Now, we just close the sequence.
+  ]);
+
+  // ### Closing section
+  //
+  // And finally, we close the script.
+  // Here again, all scripts look more or less the same.
+  // We return the `script` and close the `define` wrapper.
+  return API.script;
+});</div>
+</section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js" integrity="sha256-xrr4HH5eSY+cFz4SH7ja/LaAi9qcEdjMpeMP49/iOLs=" crossorigin="anonymous"></script>
+<script src="../assets/playground.js"></script>
+
+				<hr />
+				<small>License: Apache 2. &copy; Project Implicit. &middot; Current version [version]</small>
+			</section>
+		</main>
+		<script src="../assets/prism.js"></script>
+        <script>
+            (function(){
+                var select = document.getElementById('version-select');
+                select.addEventListener('change', function(event){
+                    var version = event.target.value;
+                    location.href = location.href.replace(/[0-9]\.[0-9]/, version)
+                });
+            })();
+        </script>
+	</body>
+</html>

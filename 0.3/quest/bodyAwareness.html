@@ -1,0 +1,268 @@
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Minno.js</title>
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+		<link href="../assets/prism.css" rel="stylesheet" />
+		<link href="../assets/style.css" rel="stylesheet" />
+	</head>
+	<body>
+		<header>
+			<section>
+				<nav class="brand">
+                    <a href="/"><h1>Minno</h1></a>
+				</nav>
+				<nav>
+					<a href="/minno-quest/0.3/basics/overview.html">Basics</a>
+					<a href="/minno-quest/0.3/manager/overview.html">miManager</a>
+					<a href="/minno-quest/0.3/quest/overview.html">miQuest</a>
+					<a href="/minno-time/0.5/time/overview.html">miTime</a>
+				</nav>
+				<nav>
+                    <div id="search-box">
+                        <script>
+                            (function() {
+                                var cx = '002953266509769041597:smg5beek-iu';
+                                var gcse = document.createElement('script');
+                                gcse.type = 'text/javascript';
+                                gcse.async = true;
+                                gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+                                var s = document.getElementsByTagName('script')[0];
+                                s.parentNode.insertBefore(gcse, s);
+                            })();
+                        </script>
+                        <gcse:searchbox-only></gcse:searchbox-only>
+                    </div>
+                    <select id="version-select"><option value="0.0" >v0.0</option>,<option value="0.1" >v0.1</option>,<option value="0.2" >v0.2</option>,<option value="0.3" selected>v0.3</option></select>
+					<a href="https://github.com/minnojs">Github</a>
+				</nav>
+			</section>
+		</header>
+		<main>
+			<section class="docs">
+                <h1><a name="a-hrefbodyawarenesshtmlbody-awarenessa" class="header-link" href="#a-hrefbodyawarenesshtmlbody-awarenessa"><span></span></a><a href="bodyAwareness.html">Body Awareness</a></h1><ul>
+<li>Core<ul>
+<li><a href="overview.html">Overview</a></li>
+<li><a href="introduction.html">Introduction</a></li>
+<li><a href="API.html">API</a></li>
+<li><a href="playground.html">Playground</a></li>
+</ul>
+</li>
+<li>Question types<ul>
+<li><a href="text.html">Text</a></li>
+<li><a href="textarea.html">Textarea</a></li>
+<li><a href="textNumber.html">Text Number</a></li>
+<li><a href="selectOne.html">Select One</a></li>
+<li><a href="selectMulti.html">Select Multi</a></li>
+<li><a href="grid.html">Grid</a></li>
+<li><a href="gridMulti.html">Multi Grid</a></li>
+<li><a href="slider.html">Slider</a></li>
+<li><a href="rank.html">Rank</a></li>
+</ul>
+</li>
+<li>Examples<ul>
+<li><a href="helloworld.html">Hello world</a></li>
+<li><strong>Body Awareness</strong></li>
+<li><a href="weight.html">Weight demo</a></li>
+<li><a href="usingImages.html">Using Images</a></li>
+<li><a href="buttons.html">Buttons</a></li>
+<li><a href="buttonsAdvanced.html">Buttons Advanced</a></li>
+<li><a href="buttonsOnePage.html">Buttons One Page</a></li>
+<li><a href="dependency.html">Dependency</a></li>
+<li><a href="liveDependency.html">Live Dependency</a></li>
+<li><a href="gridExample.html">Grid</a></li>
+<li><a href="timer.html">Timer</a></li>
+<li><a href="openEnded.html">Open Ended</a></li>
+<li><a href="openEndedLong.html">Open Ended Long</a></li>
+<li><a href="rateImages.html">Rate Images</a></li>
+<li><a href="rateImagesSizes.html">Rate Images Sizes</a></li>
+<li><a href="scaleWithFeedback.html">Scale With Feedback</a></li>
+<li><a href="sliderExample.html">Slider</a></li>
+<li><a href="userPrevResp.html">User Prev Resp</a></li>
+<li><a href="nfc.html">Agreement scale</a></li>
+</ul>
+</li>
+</ul>
+<section playground>
+    <div class="buttons">
+        <a class="activate-button">Activate</a>
+        <a class="download-button" href="bodyAwareness.js" download>Download</a>
+    </div>
+    <div class="editor">define([&apos;questAPI&apos;], function(Quest){
+	var API = new Quest();
+
+
+	// ### Questions
+
+	// Create the generic question template:
+	// * `autoSubmit`: submit when an answer is clicked twice.
+	// * `answers`: the text for all answers (in our case only the questions change...)
+	// * `help`: add help text (only for the first three questions presented).
+	API.addQuestionsSet(&apos;basicSelect&apos;, {
+		type: &apos;selectOne&apos;,
+		autoSubmit:true,
+		numericValues:true,
+		answers: [
+			&quot;1- Not at all true about me&quot;,
+			&quot;2&quot;,
+			&quot;3&quot;,
+			&quot;4&quot;,
+			&quot;5&quot;,
+			&quot;6&quot;,
+			&quot;7 - Very true about me&quot;
+		],
+		help: &apos;&lt;%= pagesMeta.number &lt; 3 %&gt;&apos;,
+		helpText: &apos;Selecting an answer once colors it blue.&lt;br/&gt;&apos; +
+			&apos;You can change your answer by selecting another option.&lt;br/&gt;&apos; +
+			&apos;To confirm, click the selected (blue) button a second time.&apos;
+	});
+
+	// Create a set with all the questions that we are going to use.
+	// Each questions `inherit`s our *basicSelect*, sets a `name` and sets the questions text (`stem`).
+	API.addQuestionsSet(&apos;baQuestions&apos;, [
+		{
+			inherit : &apos;basicSelect&apos;,
+			name : &apos;ba1&apos;,
+			stem : &quot;I notice differences in the way my body reacts to various foods.&quot;
+		},
+		{
+			inherit : &apos;basicSelect&apos;,
+			name : &apos;ba2&apos;,
+			stem : &quot;I can always tell when I bump myself whether or not it will become a bruise.&quot;
+		},
+		{
+			inherit : &apos;basicSelect&apos;,
+			name : &apos;ba3&apos;,
+			stem : &quot;I always know when I&apos;ve exerted myself to the point where I&apos;ll be sore the next day.&quot;
+		},
+		{
+			inherit : &apos;basicSelect&apos;,
+			name : &apos;ba4&apos;,
+			stem : &quot;I&apos;m always aware of changes in my energy level when I eat certain foods.&quot;
+		},
+		{
+			inherit : &apos;basicSelect&apos;,
+			name : &apos;ba5&apos;,
+			stem : &quot;I know in advance when I&apos;m getting the flu.&quot;
+		},
+		{
+			inherit : &apos;basicSelect&apos;,
+			name : &apos;ba6&apos;,
+			stem : &quot;I know I&apos;m running a fever without taking my temperature.&quot;
+		},
+		{
+			inherit : &apos;basicSelect&apos;,
+			name : &apos;ba7&apos;,
+			stem : &quot;I can distinguish between tiredness because of hunger and tiredness because of lack of sleep.&quot;
+		},
+		{
+			inherit : &apos;basicSelect&apos;,
+			name : &apos;ba8&apos;,
+			stem : &quot;I can accurately predict what time of day lack of sleep will catch up with me.&quot;
+		},
+		{
+			inherit : &apos;basicSelect&apos;,
+			name : &apos;ba9&apos;,
+			stem : &quot;I am aware of a cycle in my activity level throughout the day.&quot;
+		},
+		{
+			inherit : &apos;basicSelect&apos;,
+			name : &apos;ba10&apos;,
+			stem : &quot;I &lt;b&gt;don&apos;t&lt;/b&gt; notice seasonal rhythms and cycles in the way my body functions.&quot;
+		},
+		{
+			inherit : &apos;basicSelect&apos;,
+			name : &apos;ba11&apos;,
+			stem : &quot;As soon as I wake up in the morning I know how much energy I&apos;ll have during the day.&quot;
+		},
+		{
+			inherit : &apos;basicSelect&apos;,
+			name : &apos;ba12&apos;,
+			stem : &quot;I can tell when I go to bed how well I will sleep that night.&quot;
+		},
+		{
+			inherit : &apos;basicSelect&apos;,
+			name : &apos;ba13&apos;,
+			stem : &quot;I notice distinct body reactions when I am fatigued.&quot;
+		},
+		{
+			inherit : &apos;basicSelect&apos;,
+			name : &apos;ba14&apos;,
+			stem : &quot;I notice specific body responses to changes in the weather.&quot;
+		},
+		{
+			inherit : &apos;basicSelect&apos;,
+			name : &apos;ba15&apos;,
+			stem : &quot;I can predict how much sleep I will need at night in order to wake up refreshed.&quot;
+		},
+		{
+			inherit : &apos;basicSelect&apos;,
+			name : &apos;ba16&apos;,
+			stem : &quot;When my exercise habits change, I can predict very accurately how that will affect my energy level.&quot;
+		},
+		{
+			inherit : &apos;basicSelect&apos;,
+			name : &apos;ba17&apos;,
+			stem : &quot;There seems to be a best time for me to go to sleep at night.&quot;
+		},
+		{
+			inherit : &apos;basicSelect&apos;,
+			name : &apos;ba18&apos;,
+			stem : &quot;I notice specific bodily reactions to being overhungry.&quot;
+		}
+	]);
+
+
+	// ### Pages
+	// Create the generic pages template:
+	// * `decline`: allow participants to decline answering
+	// * `noSubmit`: do not display the submit button (we rely on `autoSubmit` for submitting)
+	API.addPagesSet(&apos;basicPage&apos;, {
+		progressBar: &apos;&lt;%= pagesMeta.number %&gt; out of 18&apos;,
+		header: &apos;Please rate your agreement with the following statement&apos;,
+		headerStyle : {&apos;font-size&apos;:&apos;1em&apos;},
+		questions : {inherit:{set:&apos;baQuestions&apos;, type:&apos;exRandom&apos;}},
+		decline:true,
+		noSubmit:true
+	});
+
+
+
+	// ### Sequence
+	// We use a simple mixer here to repeat a simple page that inherits from the basicPage.
+	// The basic page randomly inherits a question, therfore we get a different question for every page.
+	// We use exRandom in the basicPage page so that questions don&apos;t randomly appear more than once.
+	API.addSequence([
+		{
+			mixer : &apos;repeat&apos;,
+			times : 18,
+			data : [
+				{inherit : &apos;basicPage&apos;}
+			]
+		}
+	]);
+
+
+	// Return the script to piquest&apos;s god, or something of that sort.
+	return API.script;
+});</div>
+</section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js" integrity="sha256-xrr4HH5eSY+cFz4SH7ja/LaAi9qcEdjMpeMP49/iOLs=" crossorigin="anonymous"></script>
+<script src="../assets/playground.js"></script>
+
+				<hr />
+				<small>License: Apache 2. &copy; Project Implicit. &middot; Current version [version]</small>
+			</section>
+		</main>
+		<script src="../assets/prism.js"></script>
+        <script>
+            (function(){
+                var select = document.getElementById('version-select');
+                select.addEventListener('change', function(event){
+                    var version = event.target.value;
+                    location.href = location.href.replace(/[0-9]\.[0-9]/, version)
+                });
+            })();
+        </script>
+	</body>
+</html>

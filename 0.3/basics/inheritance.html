@@ -1,0 +1,385 @@
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Minno.js</title>
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+		<link href="../assets/prism.css" rel="stylesheet" />
+		<link href="../assets/style.css" rel="stylesheet" />
+	</head>
+	<body>
+		<header>
+			<section>
+				<nav class="brand">
+                    <a href="/"><h1>Minno</h1></a>
+				</nav>
+				<nav>
+					<a href="/minno-quest/0.3/basics/overview.html">Basics</a>
+					<a href="/minno-quest/0.3/manager/overview.html">miManager</a>
+					<a href="/minno-quest/0.3/quest/overview.html">miQuest</a>
+					<a href="/minno-time/0.5/time/overview.html">miTime</a>
+				</nav>
+				<nav>
+                    <div id="search-box">
+                        <script>
+                            (function() {
+                                var cx = '002953266509769041597:smg5beek-iu';
+                                var gcse = document.createElement('script');
+                                gcse.type = 'text/javascript';
+                                gcse.async = true;
+                                gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+                                var s = document.getElementsByTagName('script')[0];
+                                s.parentNode.insertBefore(gcse, s);
+                            })();
+                        </script>
+                        <gcse:searchbox-only></gcse:searchbox-only>
+                    </div>
+                    <select id="version-select"><option value="0.0" >v0.0</option>,<option value="0.1" >v0.1</option>,<option value="0.2" >v0.2</option>,<option value="0.3" selected>v0.3</option></select>
+					<a href="https://github.com/minnojs">Github</a>
+				</nav>
+			</section>
+		</header>
+		<main>
+			<section class="docs">
+                <h1><a name="inheritance" class="header-link" href="#inheritance"><span></span></a>Inheritance</h1><ul>
+<li>Core<ul>
+<li><a href="overview.html">Overview</a></li>
+<li><a href="javascript.html">Javascript</a></li>
+<li><a href="create.html">Creating a task</a></li>
+<li><a href="API.html">API</a></li>
+<li><a href="resources.html">Resources</a></li>
+</ul>
+</li>
+<li>Sequencer<ul>
+<li><a href="introduction.html">Introduction</a></li>
+<li><a href="mixer.html">Mixer</a></li>
+<li><a href="templates.html">Templates</a></li>
+<li><a href="variables.html">Variables</a></li>
+<li><strong><a href="inheritance.html">Inheritance</a></strong></li>
+</ul>
+</li>
+<li>Inheritance<ul>
+<li><a href="inheritanceAbstraction.html">Abstraction</a></li>
+<li><a href="inheritanceRandom.html">Random</a></li>
+<li><a href="inheritanceExRandom.html">Exclusive Random</a></li>
+<li><a href="inheritanceSequential.html">Sequential</a></li>
+<li><a href="inheritanceByData.html">By Data</a></li>
+<li><a href="inheritanceCustom.html">Custom</a></li>
+<li><a href="inheritanceSeed.html">Seed</a></li>
+<li><a href="inheritanceRepeat.html">Repeat</a></li>
+</ul>
+</li>
+<li>Mixers<ul>
+<li><a href="mixerRandom.html">Random</a></li>
+<li><a href="mixerRepeat.html">Repeat</a></li>
+<li><a href="mixerWeightedRandom.html">Weighted Random</a></li>
+<li><a href="mixerChoose.html">Choose</a></li>
+<li><a href="mixerWrapper.html">Wrapper</a></li>
+<li><a href="mixerBranch.html">Branch</a></li>
+<li><a href="mixerMultiBranch.html">Multi Branch</a></li>
+</ul>
+</li>
+<li>Variables &amp; Templates<ul>
+<li><a href="templateGlobal.html">Global</a></li>
+<li><a href="templateData.html">Data</a></li>
+<li><a href="templateMeta.html">Meta</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#syntax">Syntax</a></li>
+<li><a href="#sets">Sets</a></li>
+<li><a href="#merging">Merging</a></li>
+<li><a href="#type">Type</a><ul>
+<li><a href="#random">random:</a></li>
+<li><a href="#exrandom">exRandom:</a></li>
+<li><a href="#sequential">sequential:</a></li>
+<li><a href="#bydata">byData:</a></li>
+</ul>
+</li>
+<li><a href="#seed">Seed</a></li>
+<li><a href="#repeat">Repeat</a></li>
+<li><a href="#customize">Customize</a></li>
+<li><a href="#do-your-own-thing">Do your own thing</a></li>
+<li><a href="#real-time-reinflate">Real time (reinflate)</a></li>
+</ul>
+<h3><a name="overview" class="header-link" href="#overview"><span></span></a>Overview</h3><p>The inheritance system allows you to compose task elements based on previously defined prototypes. 
+It has many different uses.
+It is often used for the abstraction of tasks; having the behavior of multiple elements defined at a single location.
+Another typical use, is for advanced randomization that is not simple to achieve using the <a href="mixer.html#radom">mixer</a>.
+And finally it is used as a way to keep your scripts more readable.</p>
+<p>The process of inheritance involves picking an element from a set, resolving that element and finally extending the inheriting element with the properties of the inherited element.
+For the purpose of clarity we will use the the word <em>parent</em> to describe the inherited element, and the word <em>child</em> to the describe the inheriting element.jk</p>
+<p>The first stage in the process of inheritance is picking the parent element.
+This is done by choosing an <a href="#sets">element <code>set</code></a>,
+the particular element to be inherited will then be chosen according to the <a href="#types">inheritance type</a> which is <a href="#random">random</a> by default.
+Finaly, the parent element is <a href="#merging">merged</a> into the the child element.</p>
+<h3><a name="syntax" class="header-link" href="#syntax"><span></span></a>Syntax</h3><p>In order for an element to inherit another element you should use the <code>inherit</code> property.
+Inherit` takes either an object or a string, with instructions for which element to inherit. </p>
+<p>The following element uses an object to inherit.</p>
+<pre><code class="lang-javascript">{
+    inherit: {set:&#39;setName&#39;, type:&#39;exRandom&#39;}
+}
+</code></pre>
+<p>Using a string instead, affords a usefull shortcut to the same end.
+If a string is used, the sequencer treats it as if it was a set name, and picks a random element from within that set.
+So <code>{inherit: &#39;setName&#39;}</code> is eqivalent to <code>{inherit: {set: &#39;setName&#39;, type: &#39;random&#39;}</code>.
+This option is particularly useful when you use a set with only one element and want to pick it.</p>
+<p>Note that you cannot use <a href="templates.html">templates</a> for the <code>inherit</code> property.
+The reason for this is that when processing elements the sequencer first resolves the inheritance, and only then runs the templates.</p>
+<p>Following is a table describing the various properites of the inherit object.</p>
+<table>
+<thead>
+<tr>
+<th>property</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>set</td>
+<td>(String) The name of the <a href="#sets">set</a> from which we want to inherit.</td>
+</tr>
+<tr>
+<td>type</td>
+<td>(String) The inheritance <a href="#types">type</a> - essentially how to pick from within the set (random by default).</td>
+</tr>
+<tr>
+<td>merge</td>
+<td>(Array) An array of property names that we want to <a href="#merge">merge</a> instead of overwrite.</td>
+</tr>
+<tr>
+<td>seed</td>
+<td>(String) The randomization <a href="#seed">seed</a>.</td>
+</tr>
+<tr>
+<td>repeat</td>
+<td>(true</td>
+<td>false) <a href="#repeat">Repeat</a> the result of the last randomization.</td>
+</tr>
+<tr>
+<td>customize</td>
+<td>(Function) A function that can <a href="#customization">customize</a> the element before it is used. </td>
+</tr>
+</tbody>
+</table>
+<h3><a name="sets" class="header-link" href="#sets"><span></span></a>Sets</h3><p>In order to inherit an element it must be part of a <code>set</code>.
+Simply put, <code>sets</code> are lists (arrays) of elements, with a name.
+They are used both as a name for an element to inherit, and as a way to group several elements together.</p>
+<p><code>sets</code> are defined using the <code>add&amp;lt;elementType&gt;Sets</code> functions defined in the <a href="../basic/API.html">API</a>.
+Each element type has its own function (for example, <code>addQuestionsSets</code> for miQuest).</p>
+<pre><code class="lang-javascript">API.addQuestionsSet(&#39;likert&#39;, [
+    {type: &#39;selectOne&#39;, numericValues: true}
+]);
+
+API.addQuestionsSet(&#39;sizeLikert&#39;, [
+    {inherit: &#39;likert&#39;, answers: [&#39;Big&#39;, &#39;Medium&#39;, &#39;Small&#39;]}
+]);
+</code></pre>
+<p>Note that the name that you give the set (in the example: <em>likert</em> or <em>sizeLikert</em>) is the name that you will later use to refer to it.</p>
+<h3><a name="merging" class="header-link" href="#merging"><span></span></a>Merging</h3><p>The process of inheritance involves copying all properities from the parent element to the child.
+By default, any property that already exists in the child, doe not get copied over (this behaviour can be changed by using the <code>merge</code> property - see below).
+The exception to this rule is the <code>data</code> objects which we merge (again, giving precedence to the child).</p>
+<p>Follow this pseudo code:</p>
+<pre><code class="lang-javascript">// The parent element
+{
+    data: {name: &#39;jhon&#39;, family:&#39;doe&#39;}
+    questions: [
+        quest1,
+        quest2
+    ]
+}
+
+// The child element which attempts to inherit the parent
+{
+    inherit: &#39;parent&#39;,
+    data: {name: &#39;jack&#39;}
+    questions: [
+        quest3
+    ]
+}
+
+// The result would be:
+{
+    // the child kept its own name but inherited the family name
+    data: {name: &#39;jack&#39;, family:&#39;doe&#39;}
+    // the questions array was completely overwritten
+    questions: [                          
+        quest3
+    ]
+}
+</code></pre>
+<p>By default, inheritance ignores the properties that the child already has.
+Sometimes, you have proprties of the child that you&#39;d like to extend instead of just keeping as is (for example: a list of stimuli in miTime).
+In order to do this, you can set an array of property names to the <code>merge</code> property.
+Any property that appears in this array will be extended instead of skipped.</p>
+<p>This can look something like this:</p>
+<pre><code class="lang-javascript">// The parent element
+{    
+    set: &#39;parent&#39;
+    stimuli: [
+        stim1        
+    ]
+}
+
+// The child page which attempts to inherit the parent
+{
+    inherit: {set:&#39;parent&#39;, merge:[&#39;stimuli&#39;]},    
+    stimuli: [
+        stim2
+    ]
+}
+
+// The result would be:
+{
+    // the stimuli array was merged instead of overwritten
+    stimuli: [                          
+        stim1,
+        stim2
+    ]
+}
+</code></pre>
+<h3><a name="type" class="header-link" href="#type"><span></span></a>Type</h3><p>After picking a set to inherit, the inheritance type determines how to pick an element from within the set. 
+By default a <a href="#random">random</a> element is chosen.</p>
+<h4><a name="random" class="header-link" href="#random"><span></span></a>random:</h4><p>Randomly selects an element from the set (in case the set has only one element, the same element will always be selected, of course). </p>
+<ul>
+<li><code>&#39;setName&#39;</code></li>
+<li><code>{set: &#39;setName&#39;}</code></li>
+<li><code>{set: &#39;setName&#39;, type:&#39;random&#39;}</code></li>
+</ul>
+<p>This is the default inheritance type, so it is not obligatory to use the <code>type</code> property. You can also use a short cut and set the <code>set</code> using only its name, like we did in the example above</p>
+<h4><a name="exrandom" class="header-link" href="#exrandom"><span></span></a>exRandom:</h4><p>Selects a random element without repeating the same element until we&#39;ve gone through the whole set</p>
+<ul>
+<li><code>{set: &#39;setName&#39;, type:&#39;exRandom&#39;}</code></li>
+</ul>
+<h4><a name="sequential" class="header-link" href="#sequential"><span></span></a>sequential:</h4><p>Selects the elements by the order they were inserted into the set</p>
+<ul>
+<li><code>{set: &#39;setName&#39;, type:&#39;sequential&#39;}</code></li>
+</ul>
+<h4><a name="bydata" class="header-link" href="#bydata"><span></span></a>byData:</h4><p>Selects a specific element from the set.
+We compare the <code>data</code> property to the <code>element.data</code> property and if <code>data</code> is a subset of <code>element.data</code> it selects the element (this means that if all properties of data property equal to the properties of the same name in element.data it is a fit).
+This function will select only the first element to fit the data.
+If the data property is set as a string, we assume it refers to the element handle.</p>
+<ul>
+<li><code>{set: &#39;setName&#39;, type: &#39;byData&#39;, data: {block:1, row:2}}</code> picks the element with both block:1 and row:2</li>
+<li><code>{set: &#39;setName&#39;, type: &#39;byData&#39;, data: &quot;myStimHandle&quot;}</code> picks the element that has the &quot;myStimHandle&quot; handle</li>
+</ul>
+<h3><a name="seed" class="header-link" href="#seed"><span></span></a>Seed</h3><p>Some of the inheritance types keep track of consecutive calls.
+For instance <a href="#sequential"><code>sequential</code></a> presents the elements in a set one after the other.
+It needs to keep track of its place within the list.</p>
+<p>The inheritance system uses seeds to keep track of consecutive calls to the different types of inheritance.
+Each inheritance query automatically gets assigned to a &quot;seed&quot; that is used to track its progress.
+For example, the seed is used to keep track of the current element in the <code>sequential</code> type inheritance.
+Most of the time, the seed is transparent to the user, but sometimes it becomes useful to have manual control over the inheritance seed.
+For instance, if you want to reset an <code>exRandom</code> inheritance - simply use <code>exRandom</code> with a new seed, the same goes if you want to keep two instances of a <code>sequential</code> inheritance.
+If you want to have parallel groups of inheritance to the same set, you can use seeds.</p>
+<p>In the following example, both elements inherit exRandomly from the &quot;trials&quot; set. But the second element restarts the randomization.</p>
+<pre><code class="lang-javascript">[
+    {
+        inherit: {set:&#39;trials&#39;, type:&#39;exRandom&#39;,seed:&#39;block1&#39;}
+    },
+    {
+        inherit: {set:&#39;trials&#39;, type:&#39;exRandom&#39;,seed:&#39;block2&#39;}
+    }
+]
+
+</code></pre>
+<p>Seeds are not confined to a specific set, and not even to a specific element type.
+A more interesting use, is to use the same seed across two different sets (you can see a real world application for this under the <a href="#repeat">repeat</a> option).
+It is important to take note that if you create custom seeds, it is your responsibility that they query sets of the same length.
+If you try to inherit two sets with different lengths the sequencer will throw an error.
+In order to create a new seed all you have to do is set the <code>seed</code> property with the new seeds name (String).</p>
+<h3><a name="repeat" class="header-link" href="#repeat"><span></span></a>Repeat</h3><p>Sometimes we have need to repeat a previous choice done by the inheritance picker (especially in cases of randomization).
+In order to do this, all you have to do is set the <code>repeat</code> property to true.</p>
+<p>For instance, the following sequence will display a random element from the trials set twice.</p>
+<pre><code class="lang-javascript">[
+    {
+        inherit:{set:&#39;trials&#39;,type:&#39;random&#39;}
+    },
+    {
+        inherit:{set:&#39;trials&#39;,type:&#39;random&#39;, repeat:true}
+    }
+]
+</code></pre>
+<p>The <code>repeat</code> property can used within any type of randomization.
+We&#39;ve seen a simple use, but its true power comes when combined with <a href="#seeds">seeds</a>.</p>
+<p>The following example uses an exRandom <code>seed</code> to pick both a trial and the two stimuli associated with it 
+(the n<sup>th</sup> element in trials is always associated with the n<sup>th</sup> elements of stimuli-1 and stimuli-2).</p>
+<pre><code class="lang-javascript">[
+    {
+        inherit: {set:&#39;trials&#39;, type:&#39;exRandom&#39;, seed:&#39;mySeed&#39;}
+        stimuli:[
+            {inherit: {set:&#39;stimuli-1&#39;, type:&#39;exRandom&#39;, seed:&#39;mySeed&#39;, repeat:true}
+            {inherit: {set:&#39;stimuli-2&#39;, type:&#39;exRandom&#39;, seed:&#39;mySeed&#39;, repeat:true}
+        ]
+    }
+]
+</code></pre>
+<h3><a name="customize" class="header-link" href="#customize"><span></span></a>Customize</h3><p>This is an option only for advanced users, use this only if you really know what you are doing.</p>
+<p>Each element can define a <code>customize</code> method, this method is called after the element is inherited but before it is activated.
+It accepts two argument: the source element on which it is called, and the <a href="variables.html#global">global object</a> (in which you can find the current object etc.).
+The source element is also the context (this) for the function.
+You should make any changes that you want on the source element itself.</p>
+<pre><code class="lang-javascript">{    
+    inherit: &#39;mySet&#39;,
+    customize : function(element, global){
+        element.questions.push(quest);
+    }
+}
+</code></pre>
+<h3><a name="do-your-own-thing" class="header-link" href="#do-your-own-thing"><span></span></a>Do your own thing</h3><p>This is an option only for advanced users, use this only if you really know what you are doing.</p>
+<p>You may also use a custom function to select an element to inherit.
+The function takes a single argument: an array that holds all elements in all sets.
+Each element within the array has its set name set into it automatically.
+The function should return an element that will be used as the parent for the inheritance.
+If it has an <code>inherit</code> property then the inheritance cascade will continue.</p>
+<p>The following function will randomly choose an element from one of two sets: &#39;setOne&#39; or &#39;setTwo&#39;
+(for reasons of brefity this snippet users ES5, if you need to support legacy browsers, you can find other ways to achieve the same thing).</p>
+<pre><code class="lang-javascript">// setup the inheriting function
+function seek(collection){
+    var elements = collection.filter(function(elm){
+        return elm.set == &#39;setOne&#39; || elm.set == &#39;setTwo&#39;; 
+    });
+
+    var randomIndex = Math.floor(elements.length * Math.random());
+
+    return elements[randomIndex];
+}
+
+// and then:
+{inherit: seek}
+</code></pre>
+<p>You can use this option in order to create custom elements as well.
+Instead of returning an element from within the element collection, you can return an element of your own.</p>
+<p>The following function will show the string &#39;Question number 1&#39;, and increment it by 1 each time that it is called.</p>
+<pre><code class="lang-javascript">var i = 1;
+
+function count(){
+    return {stem: &#39;Question number &#39; + i};
+}
+
+// and then:
+{inherit: count}
+</code></pre>
+<h3><a name="real-time-reinflate" class="header-link" href="#real-time-reinflate"><span></span></a>Real time (reinflate)</h3><p>It is possible to run into elements multiple times,
+this is possible either when you have a task that allows going back to previous elements,
+or when you have a task that reloads the current elements for some reason.
+By default each element is processed only once, when it is first encountered during the sequence. 
+If you want to re-inherit an element when it is re-encountered, you should set <code>reinflate</code>.</p>
+
+				<hr />
+				<small>License: Apache 2. &copy; Project Implicit. &middot; Current version [version]</small>
+			</section>
+		</main>
+		<script src="../assets/prism.js"></script>
+        <script>
+            (function(){
+                var select = document.getElementById('version-select');
+                select.addEventListener('change', function(event){
+                    var version = event.target.value;
+                    location.href = location.href.replace(/[0-9]\.[0-9]/, version)
+                });
+            })();
+        </script>
+	</body>
+</html>

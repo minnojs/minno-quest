@@ -1,0 +1,114 @@
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Minno.js</title>
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+		<link href="../assets/prism.css" rel="stylesheet" />
+		<link href="../assets/style.css" rel="stylesheet" />
+	</head>
+	<body>
+		<header>
+			<section>
+				<nav class="brand">
+                    <a href="/"><h1>Minno</h1></a>
+				</nav>
+				<nav>
+					<a href="/minno-quest/0.3/basics/overview.html">Basics</a>
+					<a href="/minno-quest/0.3/manager/overview.html">miManager</a>
+					<a href="/minno-quest/0.3/quest/overview.html">miQuest</a>
+					<a href="/minno-time/0.5/time/overview.html">miTime</a>
+				</nav>
+				<nav>
+                    <div id="search-box">
+                        <script>
+                            (function() {
+                                var cx = '002953266509769041597:smg5beek-iu';
+                                var gcse = document.createElement('script');
+                                gcse.type = 'text/javascript';
+                                gcse.async = true;
+                                gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+                                var s = document.getElementsByTagName('script')[0];
+                                s.parentNode.insertBefore(gcse, s);
+                            })();
+                        </script>
+                        <gcse:searchbox-only></gcse:searchbox-only>
+                    </div>
+                    <select id="version-select"><option value="0.0" >v0.0</option>,<option value="0.1" >v0.1</option>,<option value="0.2" >v0.2</option>,<option value="0.3" selected>v0.3</option></select>
+					<a href="https://github.com/minnojs">Github</a>
+				</nav>
+			</section>
+		</header>
+		<main>
+			<section class="docs">
+                <h1><a name="inject-style" class="header-link" href="#inject-style"><span></span></a>Inject Style</h1><ul>
+<li>Core<ul>
+<li><a href="overview.html">Overview</a></li>
+<li><a href="API.html">API</a></li>
+<li><a href="playground.html">Playground</a></li>
+</ul>
+</li>
+<li>Tasks<ul>
+<li><a href="allowleaving.html">Allow Leaving</a></li>
+<li><strong><a href="injectStyle.html">Inject Style</a></strong></li>
+<li><a href="isTouch.html">Is Touch</a></li>
+<li><a href="messages.html">Messages</a></li>
+<li><a href="post.html">Post</a></li>
+<li><a href="redirect.html">Redirect</a></li>
+<li><a href="setValue.html">Set Value</a></li>
+<li><a href="yesno.html">Yes/No</a></li>
+</ul>
+</li>
+<li>Examples<ul>
+<li><a href="weightManager.html">Weight experiment</a></li>
+<li><a href="videoManager.html">Displaying Video</a></li>
+</ul>
+</li>
+</ul>
+<p>The <code>injectStyle</code> task allows you to change the style of Minno throught a study.
+The style of web pages is determined by their <a href="https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS">CSS</a>.
+<code>injectStyle</code> allows you to add any CSS that you like into your study.</p>
+<pre><code class="lang-javascript">{
+    type:&#39;injectStyle&#39;,
+    css: &#39;[piq-page] .page-buttons .page-submit {background-color:#d9534f; border:#d43f3a}&#39;
+}
+</code></pre>
+<p>If you have a lot of CSS that you want to add, it makes sense to break the string down as follows:</p>
+<pre><code class="lang-javascript">{
+    type:&#39;injectStyle&#39;,
+    css: [
+        &#39;[piq-page] .page-buttons .page-submit {background-color:#d9534f; border:#d43f3a}&#39;,
+        &#39;[piq-page] .page-buttons .page-decline {background-color:#5cb85c; border:#4cae4c}&#39;
+    ].join(&#39;\n&#39;)
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>property</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>css</td>
+<td>A string of css to add to the page.</td>
+</tr>
+</tbody>
+</table>
+
+				<hr />
+				<small>License: Apache 2. &copy; Project Implicit. &middot; Current version [version]</small>
+			</section>
+		</main>
+		<script src="../assets/prism.js"></script>
+        <script>
+            (function(){
+                var select = document.getElementById('version-select');
+                select.addEventListener('change', function(event){
+                    var version = event.target.value;
+                    location.href = location.href.replace(/[0-9]\.[0-9]/, version)
+                });
+            })();
+        </script>
+	</body>
+</html>
