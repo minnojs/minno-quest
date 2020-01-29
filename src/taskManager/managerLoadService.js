@@ -16,9 +16,10 @@ export default managerLoadService;
 // if we loaded a non manager - play it!
 function normalizeTasks(script){
     if (!script.type || script.type == 'manager') return script;
+    var dfltLogger = _.get(script,'settings.logger',{type:'debug'});
     return {
         type: 'manager',
-        settings: {logger:{type:'debug'}},
+        settings: {logger:dfltLogger},
         current: {},
         sequence: [
             {type:script.type, script:script}
