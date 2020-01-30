@@ -11,8 +11,12 @@
 - [Type](#type)
   - [random:](#random)
   - [exRandom:](#exrandom)
+  - [equalDistribution:](#equaldistribution)
   - [sequential:](#sequential)
   - [byData:](#bydata)
+  - [at:](#at)
+  - [first:](#first)
+  - [last:](#last)
 - [Seed](#seed)
 - [Repeat](#repeat)
 - [Customize](#customize)
@@ -174,6 +178,12 @@ This is the default inheritance type, so it is not obligatory to use the `type` 
 Selects a random element without repeating the same element until we've gone through the whole set
 * `{set: 'setName', type:'exRandom'}`
 
+#### equalDistribution
+Randomly selects elements from the set, keeping the number of appearances of each element equal within each cycle of n calls.
+For example, if you have a set of 8 elements, and you want 40 repetitions of the set where each element appears exactly 5 times you can use the following code:
+
+* `{set: 'setName', type:'equalDistribution', n:5*8}`
+
 #### sequential:
 Selects the elements by the order they were inserted into the set
 * `{set: 'setName', type:'sequential'}`
@@ -186,6 +196,20 @@ If the data property is set as a string, we assume it refers to the element hand
 
 * `{set: 'setName', type: 'byData', data: {block:1, row:2}}` picks the element with both block:1 and row:2
 * `{set: 'setName', type: 'byData', data: "myStimHandle"}` picks the element that has the "myStimHandle" handle
+
+#### at:
+Select the element at the `at` location in the set.
+For example in order to pick the 3rd element in a set, use the following code:
+
+* `{set: 'setName', type:'at', at:3}`
+
+#### first:
+Select the first element in the set.
+* `{set: 'setName', type:'first'}`
+
+#### last:
+Select the last element in the set.
+* `{set: 'setName', type:'last'}`
 
 ### Seed
 Some of the inheritance types keep track of consecutive calls.

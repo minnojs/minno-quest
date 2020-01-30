@@ -39813,7 +39813,6 @@ function RandomizerProvider(randomizeInt, randomizeRange, Collection){
             return result;
         }
     }
-
 }
 
 /*
@@ -40011,7 +40010,7 @@ queryProvider$1.$inject = ['Collection'];
 function queryProvider$1(Collection){
 
     function queryFn(query, collection, randomizer){
-        var coll = new Collection(collection);
+        var coll = collection instanceof Collection ? collection.collection : collection; // get array
 
         // shortcuts:
         // ****************************
@@ -40022,7 +40021,7 @@ function queryProvider$1(Collection){
 
         // filter by set
         // ****************************
-        if (query.set) coll = coll.filter({set:query.set});
+        if (query.set) coll = lodash.filter(coll,{set:query.set});
 
         // filter by data
         // ****************************
@@ -40032,9 +40031,11 @@ function queryProvider$1(Collection){
             });
         }
 
-        if (lodash.isPlainObject(query.data)) coll = coll.filter({data:query.data});
+        if (lodash.isPlainObject(query.data)) coll = lodash.filter(coll, {data:query.data});
 
-        if (lodash.isFunction(query.data)) coll = coll.filter(query.data);
+        if (lodash.isFunction(query.data)) coll = lodash.filter(coll, query.data);
+
+        if (query.n) coll = repeatArr(query.n, coll);
 
         // pick by type
         // ****************************
@@ -40051,11 +40052,15 @@ function queryProvider$1(Collection){
             case 'random':
                 at = randomizer.random(length,seed,repeat);
                 break;
+            case 'equalDistribution':
             case 'exRandom':
                 at = randomizer.exRandom(length,seed,repeat);
                 break;
             case 'sequential':
                 at = randomizer.sequential(length,seed,repeat);
+                break;
+            case 'at':
+                at = lodash.isUndefined(query.at) ? 0 : query.at - 1;
                 break;
             case 'first':
                 at = 0;
@@ -40067,12 +40072,19 @@ function queryProvider$1(Collection){
                 throw new Error('Unknow query type: ' + query.type);
         }
 
-        if (lodash.isUndefined(coll.at(at))) throw new Error('Query failed, object (' + JSON.stringify(query) +	') not found. If you are trying to apply a template, you should know that they are not supported for inheritance.');
+        if (lodash.isUndefined(coll[at])) throw new Error('Query failed, object (' + JSON.stringify(query) +	') not found. If you are trying to apply a template, you should know that they are not supported for inheritance.');
 
-        return coll.at(at);
+        return coll[at];
     }
 
     return queryFn;
+
+    function repeatArr(n, arr){
+        var res = [];
+        while (res.length <= n) res = res.concat(arr);
+        res.length = n;
+        return res;
+    }
 }
 
 /*
@@ -82881,7 +82893,7 @@ queryProvider$3.$inject = ['Collection'];
 function queryProvider$3(Collection){
 
     function queryFn(query, collection, randomizer){
-        var coll = new Collection(collection);
+        var coll = collection instanceof Collection ? collection.collection : collection; // get array
 
         // shortcuts:
         // ****************************
@@ -82892,7 +82904,7 @@ function queryProvider$3(Collection){
 
         // filter by set
         // ****************************
-        if (query.set) coll = coll.filter({set:query.set});
+        if (query.set) coll = lodash$2.filter(coll,{set:query.set});
 
         // filter by data
         // ****************************
@@ -82902,11 +82914,11 @@ function queryProvider$3(Collection){
             });
         }
 
-        if (lodash$2.isPlainObject(query.data)) coll = coll.filter({data:query.data});
+        if (lodash$2.isPlainObject(query.data)) coll = lodash$2.filter(coll, {data:query.data});
 
-        if (lodash$2.isFunction(query.data)) coll = coll.filter(query.data);
+        if (lodash$2.isFunction(query.data)) coll = lodash$2.filter(coll, query.data);
 
-        if (query.n) repeatArr(query.n, coll);
+        if (query.n) coll = repeatArr(query.n, coll);
 
         // pick by type
         // ****************************
@@ -82930,6 +82942,9 @@ function queryProvider$3(Collection){
             case 'sequential':
                 at = randomizer.sequential(length,seed,repeat);
                 break;
+            case 'at':
+                at = lodash$2.isUndefined(query.at) ? 0 : query.at - 1;
+                break;
             case 'first':
                 at = 0;
                 break;
@@ -82940,16 +82955,16 @@ function queryProvider$3(Collection){
                 throw new Error('Unknow query type: ' + query.type);
         }
 
-        if (lodash$2.isUndefined(coll.at(at))) throw new Error('Query failed, object (' + JSON.stringify(query) +	') not found. If you are trying to apply a template, you should know that they are not supported for inheritance.');
+        if (lodash$2.isUndefined(coll[at])) throw new Error('Query failed, object (' + JSON.stringify(query) +	') not found. If you are trying to apply a template, you should know that they are not supported for inheritance.');
 
-        return coll.at(at);
+        return coll[at];
     }
 
     return queryFn;
 
     function repeatArr(n, arr){
         var res = [];
-        while (res.length >= n) res = res.concat(arr);
+        while (res.length <= n) res = res.concat(arr);
         res.length = n;
         return res;
     }
@@ -84230,8 +84245,12 @@ function getListener(inputObj, canvas){
     if (lodash$1.isPlainObject(inputObj)) {
         if (lodash$1.isString(inputObj.on)) return inputBinder(inputObj,canvas,stream$2);
 
-        if (lodash$1.isFunction(inputObj.on )) $listener = inputObj.on(inputObj,canvas,stream$2);
-        if (lodash$1.isFunction(inputObj.off)) $listener.end.map(inputObj.off);
+        if (lodash$1.isFunction(inputObj.on )) {
+            $listener = inputObj.on(inputObj,canvas,stream$2);
+            if (!$listener || !$listener._state) throw new Error('input.on must return a stream');
+            if (lodash$1.isFunction(inputObj.off)) $listener.end.map(inputObj.off);
+            return $listener;
+        }
     }
         
     throw new Error('Input must only contain objects and functions, do you have an undefined value?');
@@ -86184,9 +86203,10 @@ function managerLoadService($q, getScript){
 // if we loaded a non manager - play it!
 function normalizeTasks(script){
     if (!script.type || script.type == 'manager') return script;
+    var dfltLogger = lodash.get(script,'settings.logger',{type:'debug'});
     return {
         type: 'manager',
-        settings: {logger:lodash.get(script,'settings.logger',{type:'debug'})},
+        settings: {logger:dfltLogger},
         current: {},
         sequence: [
             {type:script.type, script:script}
