@@ -15,11 +15,12 @@ function directive(activateTask, canvas, $document, $window, $rootScope, piConso
             var task = $scope.task;
             var script = task.$script || {};
             var taskName = task.$name;
+            var current = script.current || {};
             var managerSettings = $scope.$parent.settings || {};
             var logger = $scope.$parent.manager.logger;
-            var piGlobal = window.piGlobal;
+            var piGlobal = $window.piGlobal;
 
-            var canvasOff, oldTitle;
+            var canvasOff;
             var def;
             var promise;
             var proceedObject;
@@ -40,7 +41,6 @@ function directive(activateTask, canvas, $document, $window, $rootScope, piConso
             /**
              * Setup current object
              */
-            $rootScope.current = piGlobal.current = script.current || {};
             if (taskName){
                 if (piGlobal[taskName]) piConsole({
                     type:'warn',
@@ -48,10 +48,13 @@ function directive(activateTask, canvas, $document, $window, $rootScope, piConso
                     message:'This taskName has already been in use: "' + taskName + '"'
                 });
                 // extend current script with the piGlobal object
-                _.extend($rootScope.current, piGlobal[taskName] || {});
+                _.assign(current, piGlobal[taskName]);
                 // set the current object back into the global
-                $window.piGlobal[taskName] = script.current;
+                piGlobal[taskName] = current;
             }
+            _.assign(current,task.current);
+            $rootScope.current = piGlobal.current = current;
+            console.log(script.current == $rootScope.current, script.current == piGlobal[taskName], script.current == piGlobal.current)
 
             /**
              * Activate task

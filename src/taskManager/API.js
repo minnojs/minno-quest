@@ -60,14 +60,14 @@ _.extend(API.prototype, {
         if (!_.isPlainObject(global)){
             throw new Error('global must be an object');
         }
-        _.merge(this.script.global, global);
+        return _.merge(this.script.global, global);
     },
 
     addCurrent: function(current){
         if (!_.isPlainObject(current)){
             throw new Error('current must be an object');
         }
-        _.merge(this.script.current, current);
+        return _.merge(this.script.current, current);
     }
 
 });

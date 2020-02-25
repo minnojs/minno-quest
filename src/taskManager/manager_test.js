@@ -227,6 +227,7 @@ describe('manager', function(){
             loadDef = $injector.get('$q').defer(); // resolved within compile
             $compile = $injector.get('$compile');
             $scope = $injector.get('$rootScope').$new();
+            $scope.global = {};
         }));
 
         describe(': setup', function(){
