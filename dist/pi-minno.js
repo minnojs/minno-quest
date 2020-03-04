@@ -102864,64 +102864,6 @@ var module$12 = angular.module('piHelperDirective', []);
 module$12.directive('piSwap', swapDirective);
 module$12.directive('piSpinner', directive$11);
 
-function Logger$1(defaultSettings){
-    var ctx = {};
-    var $promises = stream(undefined);
-    return {
-        createLog:createLog,
-        ctx:ctx, 
-        $promise: $promises.map(allPromises())
-    };
-
-    function createLog(name, localSettings){
-        var log = stream();
-        var logs = stream();
-        var settings = lodash.defaults({}, localSettings, defaultSettings);
-
-        if (!lodash.isString(name) && !lodash.isNumber(name)) throw new Error('Log name must be a string');
-        validateSettings(settings);
-        
-        log.map(tryCatch(onRow)).map(logs);
-        log.end.map(tryCatch(onEnd)).map(logs);
-
-        logs
-            .map(filterUndefined)
-            .map(tryCatch(serialize))
-            .map(tryCatch(send));
-
-        return log;
-
-        function onRow(row){ return settings.onRow(name, row, settings, ctx); }
-        function onEnd(){ return settings.onEnd(name, settings, ctx); }
-        function filterUndefined(val){ return lodash.isUndefined(val) ? stream.HALT : val; }
-        function serialize(logs){ return settings.serialize(name, logs, settings, ctx); }
-        function send(serialized){ return settings.send(name, serialized, settings, ctx); }
-
-        function validateSettings(settings){
-            var functionNames = ['onRow','onEnd','serialize','send'];
-            if (functionNames.every(function(prop){return lodash.isFunction(settings[prop]);})) return;
-            throw new Error('The Logger requires all four of the following functions: "onRow","onEnd","serialize","send"');
-        }
-
-        function tryCatch(tryer){
-            return function(){
-                try { return tryer.apply(this, arguments); } 
-                catch (e) { 
-                    if (settings.onError) return settings.onError.apply(this, [e].concat(arguments)); 
-                    throw e;
-                }
-            };
-        }
-    }
-}
-
-/* stream concatenator, the result is a single promise which is resolve when all prior promises have resolved */
-function allPromises(cache){
-    return function(promise){
-        return Promise.all([cache, promise]);
-    };
-}
-
 var dfltLogger = {onRow:onRow, onEnd:onEnd, serialize:serialize, send:send};
 
 /*
@@ -103080,8 +103022,84 @@ function send$2(name, serialized, settings){
     serialized.map(function(val){ console.info('Logger('+name+'):', val); });
 }
 
+function loggerDefaultSettings(localSettings, globalSettings){
+    var settings = lodash.assign({}, globalSettings, localSettings);
+    var defaults = getLoggerDefaultSettingsObj(settings);
+    return lodash.defaults(settings, defaults);
+}
+
+function getLoggerDefaultSettingsObj(settings){
+    var type = settings.type;
+
+    if (settings.postCsv) return csvLogger;
+    if (type == 'csv') return csvLogger;
+    if (type == 'old') return oldLogger;
+    if (type == 'debug') return debugLogger;
+    return dfltLogger;
+}
+
+function Logger$1(defaultSettings){
+    var ctx = {};
+    var $promises = stream(undefined);
+
+    return {
+        createLog:createLog,
+        ctx:ctx, 
+        $promise: $promises.map(allPromises())
+    };
+
+    function createLog(name, localSettings){
+        var log = stream();
+        var logs = stream();
+
+        var settings = loggerDefaultSettings(localSettings, defaultSettings);
+
+        if (!lodash.isString(name) && !lodash.isNumber(name)) throw new Error('Log name must be a string');
+        validateSettings(settings);
+        
+        log.map(tryCatch(onRow)).map(logs);
+        log.end.map(tryCatch(onEnd)).map(logs);
+
+        logs
+            .map(filterUndefined)
+            .map(tryCatch(serialize))
+            .map(tryCatch(send));
+
+        return log;
+
+        function onRow(row){ return settings.onRow(name, row, settings, ctx); }
+        function onEnd(){ return settings.onEnd(name, settings, ctx); }
+        function filterUndefined(val){ return lodash.isUndefined(val) ? stream.HALT : val; }
+        function serialize(logs){ return settings.serialize(name, logs, settings, ctx); }
+        function send(serialized){ return settings.send(name, serialized, settings, ctx); }
+
+        function validateSettings(settings){
+            var functionNames = ['onRow','onEnd','serialize','send'];
+            if (functionNames.every(function(prop){return lodash.isFunction(settings[prop]);})) return;
+            throw new Error('The Logger requires all four of the following functions: "onRow","onEnd","serialize","send"');
+        }
+
+        function tryCatch(tryer){
+            return function(){
+                try { return tryer.apply(this, arguments); } 
+                catch (e) { 
+                    if (settings.onError) return settings.onError.apply(this, [e].concat(arguments)); 
+                    throw e;
+                }
+            };
+        }
+    }
+}
+
+/* stream concatenator, the result is a single promise which is resolve when all prior promises have resolved */
+function allPromises(cache){
+    return function(promise){
+        return Promise.all([cache, promise]);
+    };
+}
+
 function managerLogger(settings, piConsole){
-    var composedSettings = lodash.assign({onError:onError}, getSettingsObject(settings), settings);
+    var composedSettings = lodash.assign({onError:onError}, settings);
     return Logger$1(composedSettings);
 
     function onError(){
@@ -103096,16 +103114,6 @@ function managerLogger(settings, piConsole){
             ]
         });
     }
-}
-
-function getSettingsObject(settings){
-    var type = settings.type;
-
-    if (settings.postCsv) return csvLogger;
-    if (type == 'csv') return csvLogger;
-    if (type == 'old') return oldLogger;
-    if (type == 'debug') return debugLogger;
-    return dfltLogger;
 }
 
 managerService.$inject = ['$rootScope', '$q', 'managerSequence', 'managerTaskLoad', '$injector', 'piConsole'];
@@ -103333,10 +103341,9 @@ function managerLoadService($q, getScript){
 // if we loaded a non manager - play it!
 function normalizeTasks(script){
     if (!script.type || script.type == 'manager') return script;
-    var dfltLogger = lodash.get(script,'settings.logger',{type:'debug'});
     return {
         type: 'manager',
-        settings: {logger:dfltLogger},
+        settings: {logger:{type:'debug'}},
         current: {},
         sequence: [
             {type:script.type, script:script}
@@ -103578,7 +103585,11 @@ function directive$12($q, $injector,piConsole){
                 $qSequence([
                     // progress update
                     function(){
-                        var data = {taskName: currentTask.name || 'namelessTask', taskNumber: lodash.get(currentTask,'$meta.number'), taskURL:currentTask.scriptUrl || currentTask.templateUrl};
+                        var data = {
+                            taskName: currentTask.name || 'namelessTask', 
+                            taskNumber: lodash.get(currentTask,'$meta.number'),
+                            taskURL:currentTask.scriptUrl || currentTask.templateUrl
+                        };
                         thisCtrl.manager.log(data, $scope.settings);
                     },
                     $scope.settings.onPreTask,

@@ -1,4 +1,5 @@
 import stream from 'mithril-stream';
+import composeSettings from './loggerComposeSettings';
 import _ from 'lodash';
 
 export default Logger;
@@ -6,6 +7,7 @@ export default Logger;
 function Logger(defaultSettings){
     var ctx = {};
     var $promises = stream(undefined);
+
     return {
         createLog:createLog,
         ctx:ctx, 
@@ -15,7 +17,8 @@ function Logger(defaultSettings){
     function createLog(name, localSettings){
         var log = stream();
         var logs = stream();
-        var settings = _.defaults({}, localSettings, defaultSettings);
+
+        var settings = composeSettings(localSettings, defaultSettings);
 
         if (!_.isString(name) && !_.isNumber(name)) throw new Error('Log name must be a string');
         validateSettings(settings);

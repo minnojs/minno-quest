@@ -1,12 +1,8 @@
 import _ from 'lodash';
 import Logger from './logger';
-import dfltLogger from './dfltLogger';
-import oldLogger from './oldLogger';
-import csvLogger from './csvLogger';
-import debugLogger from './debugLogger';
 
 export default function managerLogger(settings, piConsole){
-    var composedSettings = _.assign({onError:onError}, getSettingsObject(settings), settings);
+    var composedSettings = _.assign({onError:onError}, settings);
     return Logger(composedSettings);
 
     function onError(){
@@ -21,14 +17,4 @@ export default function managerLogger(settings, piConsole){
             ]
         });
     }
-}
-
-function getSettingsObject(settings){
-    var type = settings.type;
-
-    if (settings.postCsv) return csvLogger;
-    if (type == 'csv') return csvLogger;
-    if (type == 'old') return oldLogger;
-    if (type == 'debug') return debugLogger;
-    return dfltLogger;
 }

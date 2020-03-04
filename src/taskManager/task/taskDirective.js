@@ -54,7 +54,6 @@ function directive(activateTask, canvas, $document, $window, $rootScope, piConso
             }
             _.assign(current,task.current);
             $rootScope.current = piGlobal.current = current;
-            console.log(script.current == $rootScope.current, script.current == piGlobal[taskName], script.current == piGlobal.current)
 
             /**
              * Activate task
