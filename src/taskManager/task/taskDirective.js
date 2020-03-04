@@ -30,7 +30,7 @@ function directive(activateTask, canvas, $document, $window, $rootScope, piConso
             /**
              * listen for skip events
              */
-            if (managerSettings.skip && window.DEBUG === true){
+            if (managerSettings.skip && $window.DEBUG === true){
                 $document.on('keydown',proceedListener);
                 $scope.$on('$destroy', function(){
                     $document.off('keydown', proceedListener);

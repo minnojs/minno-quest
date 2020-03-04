@@ -57070,6 +57070,12 @@ function DatabaseProvider(Store, Randomizer, inflate, templateObj, DatabaseSeque
                 if (!query.$inflated || query.reinflate) {
                     query.$inflated = inflate(query, coll, this.randomizer);
                     query.$templated = null; // we have to retemplate after querying, who know what new templates we got here...
+
+                    // this is somewhat of a hack just so we don't have to change the signature of inflate()
+                    lodash$1.get(options, 'skip', []).forEach(function(key){
+                        query.$inflated[key] = query[key];
+                    });
+
                 }
             } catch(err) {
                 piConsole({
@@ -57300,7 +57306,6 @@ function inflateProvider$1(query, $rootScope){
                     }
                     child[key] = lodash$1.extend({},parentProp,childProp);
                 }
-
             }
         });
 
@@ -64267,7 +64272,7 @@ function directive$10(activateTask, canvas, $document, $window, $rootScope, piCo
             /**
              * listen for skip events
              */
-            if (managerSettings.skip && window.DEBUG === true){
+            if (managerSettings.skip && $window.DEBUG === true){
                 $document.on('keydown',proceedListener);
                 $scope.$on('$destroy', function(){
                     $document.off('keydown', proceedListener);
@@ -64291,7 +64296,6 @@ function directive$10(activateTask, canvas, $document, $window, $rootScope, piCo
             }
             lodash.assign(current,task.current);
             $rootScope.current = piGlobal.current = current;
-            console.log(script.current == $rootScope.current, script.current == piGlobal[taskName], script.current == piGlobal.current);
 
             /**
              * Activate task
