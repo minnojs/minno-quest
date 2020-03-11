@@ -21,7 +21,9 @@ function normalizeTasks(script){
         settings: {logger:{type:'debug'}},
         current: {},
         sequence: [
-            {type:script.type, script:script}
+            // we use customize to copy script so that it does not get cloned by inflate
+            // this is important because we want direct reference to the orginal "current"
+            {type:script.type, customize:function(source){source.script = script;}}
         ]
     };
 }
