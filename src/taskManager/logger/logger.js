@@ -9,6 +9,7 @@ function Logger(defaultSettings){
     var $promises = stream(undefined);
 
     return {
+        settings: defaultSettings,
         createLog:createLog,
         ctx:ctx, 
         $promise: $promises.map(allPromises())
