@@ -83,6 +83,7 @@ function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector, pi
             var $document = $injector.get('$document');
             var task = this.current();
             var $scope = this.$scope;
+            var global = $scope.global;
             var loadOptions = {
                 baseUrl: this.baseUrl,
                 bustCache: target && target.bustCache
@@ -93,15 +94,35 @@ function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector, pi
                 
             $document[0].title = task.title || _.get(this.script, 'settings.title');
 
+            // setup current
+            $scope.current = global.current = _.cloneDeep(task.current || {});
+
             // taskLoad adds $script and $template to the task object
             return taskLoad(task, loadOptions)
                 .then(function(){
+                    var taskName = task.$name;
                     piConsole({
                         tags:['manager'],
                         type:'debug',
                         message:'Manager:currentTask',
                         context: task
                     });
+
+                    /**
+                     * Setup current object
+                     */
+                    if (taskName){
+                        if (global[taskName]) piConsole({
+                            type:'warn',
+                            tags:['task'],
+                            message:'This taskName has already been in use: "' + taskName + '"'
+                        });
+                        // extend current script with the piGlobal object
+                        _.assign(global.current, global[taskName]);
+                        // set the current object back into the global
+                        global[taskName] = global.current;
+                    }
+
                     $scope.$emit('manager:loaded');
                 });
         },

@@ -3,22 +3,16 @@
  */
 
 
-import _ from 'lodash';
-
-directive.$inject = ['taskActivate','managerCanvas','$document', '$window', '$rootScope', 'piConsole'];
-function directive(activateTask, canvas, $document, $window, $rootScope, piConsole){
+directive.$inject = ['taskActivate','managerCanvas','$document', '$window'];
+function directive(activateTask, canvas, $document, $window){
     return {
         scope:{
             task: '=piTask'
         },
         link: function($scope, $element){
             var task = $scope.task;
-            var script = task.$script || {};
-            var taskName = task.$name;
-            var current = script.current || {};
             var managerSettings = $scope.$parent.settings || {};
             var logger = $scope.$parent.manager.logger;
-            var piGlobal = $window.piGlobal;
 
             var canvasOff;
             var def;
@@ -37,23 +31,6 @@ function directive(activateTask, canvas, $document, $window, $rootScope, piConso
                     $document.off('keydown', skipListener);
                 });
             }
-
-            /**
-             * Setup current object
-             */
-            if (taskName){
-                if (piGlobal[taskName]) piConsole({
-                    type:'warn',
-                    tags:['task'],
-                    message:'This taskName has already been in use: "' + taskName + '"'
-                });
-                // extend current script with the piGlobal object
-                _.assign(current, piGlobal[taskName]);
-                // set the current object back into the global
-                piGlobal[taskName] = current;
-            }
-            _.assign(current,task.current);
-            $rootScope.current = piGlobal.current = current;
 
             /**
              * Activate task

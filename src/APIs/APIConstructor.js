@@ -22,7 +22,7 @@ function APIconstructor(options){
             type: options.type,
             name: 'anonymous ' + options.type,
             settings: options.settings || {},
-            current: {}, // this is the actual namespace for this PIP
+            current: global.current, 
             sequence: []
         };
 

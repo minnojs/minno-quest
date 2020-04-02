@@ -181,8 +181,9 @@ Selects a random element without repeating the same element until we've gone thr
 #### equalDistribution
 Randomly selects elements from the set, keeping the number of appearances of each element equal within each cycle of n calls.
 For example, if you have a set of 8 elements, and you want 40 repetitions of the set where each element appears exactly 5 times you can use the following code:
+Because `equalDistribution` can create multiple sets with a different number of repetitions, use of `equalDistribution` *requires* setting a specific [`seed`](#seed)
 
-* `{set: 'setName', type:'equalDistribution', n:5*8}`
+* `{set: 'setName', type:'equalDistribution', n:5*8, seed: '40reps'}`
 
 #### sequential:
 Selects the elements by the order they were inserted into the set
