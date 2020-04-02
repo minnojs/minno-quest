@@ -93,8 +93,12 @@
 <li><a href="#type">Type</a><ul>
 <li><a href="#random">random:</a></li>
 <li><a href="#exrandom">exRandom:</a></li>
+<li><a href="#equaldistribution">equalDistribution:</a></li>
 <li><a href="#sequential">sequential:</a></li>
 <li><a href="#bydata">byData:</a></li>
+<li><a href="#at">at:</a></li>
+<li><a href="#first">first:</a></li>
+<li><a href="#last">last:</a></li>
 </ul>
 </li>
 <li><a href="#seed">Seed</a></li>
@@ -252,6 +256,12 @@ By default a <a href="#random">random</a> element is chosen.</p>
 <ul>
 <li><code>{set: &#39;setName&#39;, type:&#39;exRandom&#39;}</code></li>
 </ul>
+<h4><a name="equaldistribution" class="header-link" href="#equaldistribution"><span></span></a>equalDistribution</h4><p>Randomly selects elements from the set, keeping the number of appearances of each element equal within each cycle of n calls.
+For example, if you have a set of 8 elements, and you want 40 repetitions of the set where each element appears exactly 5 times you can use the following code:
+Because <code>equalDistribution</code> can create multiple sets with a different number of repetitions, use of <code>equalDistribution</code> <em>requires</em> setting a specific <a href="#seed"><code>seed</code></a></p>
+<ul>
+<li><code>{set: &#39;setName&#39;, type:&#39;equalDistribution&#39;, n:5*8, seed: &#39;40reps&#39;}</code></li>
+</ul>
 <h4><a name="sequential" class="header-link" href="#sequential"><span></span></a>sequential:</h4><p>Selects the elements by the order they were inserted into the set</p>
 <ul>
 <li><code>{set: &#39;setName&#39;, type:&#39;sequential&#39;}</code></li>
@@ -263,6 +273,19 @@ If the data property is set as a string, we assume it refers to the element hand
 <ul>
 <li><code>{set: &#39;setName&#39;, type: &#39;byData&#39;, data: {block:1, row:2}}</code> picks the element with both block:1 and row:2</li>
 <li><code>{set: &#39;setName&#39;, type: &#39;byData&#39;, data: &quot;myStimHandle&quot;}</code> picks the element that has the &quot;myStimHandle&quot; handle</li>
+</ul>
+<h4><a name="at" class="header-link" href="#at"><span></span></a>at:</h4><p>Select the element at the <code>at</code> location in the set.
+For example in order to pick the 3rd element in a set, use the following code:</p>
+<ul>
+<li><code>{set: &#39;setName&#39;, type:&#39;at&#39;, at:3}</code></li>
+</ul>
+<h4><a name="first" class="header-link" href="#first"><span></span></a>first:</h4><p>Select the first element in the set.</p>
+<ul>
+<li><code>{set: &#39;setName&#39;, type:&#39;first&#39;}</code></li>
+</ul>
+<h4><a name="last" class="header-link" href="#last"><span></span></a>last:</h4><p>Select the last element in the set.</p>
+<ul>
+<li><code>{set: &#39;setName&#39;, type:&#39;last&#39;}</code></li>
 </ul>
 <h3><a name="seed" class="header-link" href="#seed"><span></span></a>Seed</h3><p>Some of the inheritance types keep track of consecutive calls.
 For instance <a href="#sequential"><code>sequential</code></a> presents the elements in a set one after the other.
