@@ -22,7 +22,7 @@ function APIconstructor(options){
             type: options.type,
             name: 'anonymous ' + options.type,
             settings: options.settings || {},
-            current: global.current, 
+            current: global.current || {}, 
             sequence: []
         };
 
