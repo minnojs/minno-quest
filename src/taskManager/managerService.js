@@ -82,7 +82,6 @@ function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector, pi
         load: function(target){
             var $document = $injector.get('$document');
             var task = this.current();
-            console.log(target,task)
             var $scope = this.$scope;
             var global = $scope.global;
             var loadOptions = {
