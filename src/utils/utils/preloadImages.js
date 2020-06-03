@@ -1,10 +1,16 @@
-export default preload.bind(null, preloadImg);
+import _ from 'lodash';
+export default preload;
+
+// this is important so that when we preload many images (>200) they stay chached.
+// Weird. I know.
+var cache = [];
 
 /**
- * preloadFn :: (data, cb) => SideEffect
  * images :: [url]
  **/
-function preload(preloadFn, images){
+function preload(images){
+    images = _.uniq(images);
+
     var current = 0;
     // start four load recursions so that we have max 4 preloaded in parralel
     next();
@@ -12,12 +18,13 @@ function preload(preloadFn, images){
     next();
     next();
 
-    function next(){ if (current < images.length) preloadFn(images[current++], next); }
+    function next(){ if (current < images.length) preloadImg(images[current++], next); }
+    function preloadImg(url, cb){
+        var img = new Image();	// create img object
+        cache.push(img);
+        img.onload = cb;
+        img.onerror = cb;
+        img.src = url;
+    }
 }
 
-function preloadImg(url, cb){
-    var img = new Image();	// create img object
-    img.onload = cb;
-    img.onerror = cb;
-    img.src = url;
-}
