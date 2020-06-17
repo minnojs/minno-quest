@@ -52,12 +52,7 @@
 <li><a href="injectStyle.html">Inject Style</a></li>
 <li><a href="isTouch.html">Is Touch</a></li>
 <li><a href="messages.html">Messages</a></li>
-<li><strong><a href="post.html">Post</a></strong><ul>
-<li><a href="#local-variables">Local variables</a></li>
-<li><a href="#manual-data">Manual data</a></li>
-<li><a href="#api">API</a></li>
-</ul>
-</li>
+<li><strong><a href="post.html">Post</a></strong></li>
 <li><a href="postCsv.html">Post CSV</a></li>
 <li><a href="redirect.html">Redirect</a></li>
 <li><a href="setValue.html">Set Value</a></li>
@@ -70,10 +65,28 @@
 </ul>
 </li>
 </ul>
-<p>The post task is responsible for posting plain data to the server. 
-You can either send data that has been saved in the global object or manually set the values to be sent.
-This is a good way to keep track of complex conditions within your tasks.</p>
-<h2><a name="local-variables" class="header-link" href="#local-variables"><span></span></a>Local variables</h2><p>The following post task takes all data from <code>global.iat.randomization</code> and posts it to the server.</p>
+<ul>
+<li><a href="#save-from-the-global-object">Save from the Global object</a></li>
+<li><a href="#send-data-directly">Send data directly</a></li>
+<li><a href="#api">API</a></li>
+</ul>
+<p>The post task posts plain data to the server. 
+You can use it to either send data that has been saved in the Global object or directly set the data that you want to send.
+This is a good way to keep track of conditions within your tasks.</p>
+<h3><a name="save-from-the-global-object" class="header-link" href="#save-from-the-global-object"><span></span></a>Save from the Global object</h3><p>In your code, you can save data to the <a href="./basics/variables.html#global">Global object</a>. For instance, you might randomly select a condition and save the condition to the Global object.</p>
+<p>For example, the following code randomly assigns participants to the experimental or the control group:</p>
+<pre><code class="lang-javascript">API.addGlobal({ condition: API.shuffle([&#39;experimental&#39;,&#39;control&#39;])[0] });
+</code></pre>
+<p>In your code, you can then use that condition to provide your participants different tasks or show them different stimuli. However, adding a variable to global does not mean that it would be logged to the server. In order to log that variable to the server, you need to add a &#39;post&#39; task to the sequence of tasks that you define in the manager file. For example:</p>
+<pre><code class="lang-javascript">{
+    type:&#39;post&#39;,
+    name:&#39;cond&#39;
+    variableName: &#39;condition&#39;
+}
+</code></pre>
+<p>This code saves the variable &#39;condition&#39; and its content to the server, under the task name &#39;cond&#39;.</p>
+<p>In each task, you can use the <a href="./basics/variables.html#the-task-object-current"><code>current</code> object</a> to save variables. 
+You can access the current variable from the global, using the task&#39;s name. For instance, if your study has a task named <code>iat</code>, and in that task you saved a variable called <code>randomization</code> you will have a variable that can be accessed with <code>global.iat.randomization</code>. You will use that to send the <code>randomization</code> variable to the server:</p>
 <pre><code class="lang-javascript">{
     type:&#39;post&#39;,
     name:&#39;primaryRandomization&#39;
@@ -81,7 +94,7 @@ This is a good way to keep track of complex conditions within your tasks.</p>
 }
 </code></pre>
 <p>You can also send several variables together. 
-The following task sends both <code>global.iat.randomization</code> and <code>global.iat.feedback</code> back to the server:</p>
+The following task sends <code>global.iat.randomization</code> and <code>global.iat.feedback</code> to the server:</p>
 <pre><code class="lang-javascript">{
     type:&#39;post&#39;,
     name:&#39;primaryRandomization&#39;
@@ -91,18 +104,53 @@ The following task sends both <code>global.iat.randomization</code> and <code>gl
     ]
 }
 </code></pre>
-<h2><a name="manual-data" class="header-link" href="#manual-data"><span></span></a>Manual data</h2><p>You can also manually define an object to be sent.
-This can be usefull for example when you want to save a specific branch that the participant reached.
-Note that you can use templates within the data object.</p>
+<h3><a name="send-data-directly" class="header-link" href="#send-data-directly"><span></span></a>Send data directly</h3><p>You can also define an object to be sent:</p>
 <pre><code class="lang-javascript">{
     type:&#39;post&#39;,
-    name:&#39;primaryRandomization&#39;
+    name:&#39;condition&#39;
     data: {
-        condition: &#39;branch1&#39;
+        condition: &#39;experimental&#39;
     }
 }
 </code></pre>
-<p>In case data is set as a function, it will be called with <code>global</code> and the <code>task</code> itself as arguments:</p>
+<p>One example for the usefulness of this feature is when the randomization in your task is done using a mixer (e.g., a <a href="/basics/mixer.html#choose">choose mixer</a>). Consider this code:</p>
+<pre><code class="lang-javascript">{
+    mixer:&#39;choose&#39;,
+    data:[
+        {
+            mixer:&#39;wrapper&#39;,
+            data: 
+            [
+                {inherit:&#39;manipulation&#39;},
+                {
+                    type:&#39;post&#39;,
+                    name:&#39;condition&#39;
+                    data: {
+                        condition: &#39;experimental&#39;
+                    }
+                }
+            ]
+        },
+        {
+            mixer:&#39;wrapper&#39;,
+            data: 
+            [
+                {inherit:&#39;control&#39;},
+                {
+                    type:&#39;post&#39;,
+                    name:&#39;condition&#39;
+                    data: {
+                        condition: &#39;control&#39;
+                    }
+                }
+            ]
+        }
+    ]
+}
+</code></pre>
+<p>Note that you can use <a href="./basics/templates.html">templates</a> as strings within the data object.
+This way you can pull information from different parts of <code>global</code> to the same place.</p>
+<p><code>data</code> can also be a function. In that case, it will recieve the arguments <code>global</code> and<code>task</code>:</p>
 <pre><code>{
     type:&#39;post&#39;,
     name:&#39;secondaryRandomization&#39;
