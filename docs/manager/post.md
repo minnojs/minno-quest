@@ -1,31 +1,71 @@
 # Post
 
-The post task is responsible for posting plain data to the server. You can either send data directly from the global object or create it yourself. This is a good way to keep track of complex conditions within your tasks or of manual manipulation of all sorts.
+- [Local variables](#local-variables)
+- [Manual data](#manual-data)
+- [API](#api)
 
-The following post task takes all data from `global.randomization` and posts it to the server.
+The post task is responsible for posting plain data to the server. 
+You can either send data that has been saved in the global object or manually set the values to be sent.
+This is a good way to keep track of complex conditions within your tasks.
+
+### Local variables
+The following post task takes all data from `global.iat.randomization` and posts it to the server.
 
 ```javascript
 {
     type:'post',
     name:'primaryRandomization'
-    path: 'randomization'
+    variableName: 'iat.randomization'
 }
 ```
 
-In case the data to be sent is a function, it will be called with `global` and the `task` itself as arguments:
+You can also send several variables together. 
+The following task sends both `global.iat.randomization` and `global.iat.feedback` back to the server:
+
+```javascript
+{
+    type:'post',
+    name:'primaryRandomization'
+    variableName: [
+        'iat.randomization',
+        'iat.feedback'
+    ]
+}
+```
+
+### Manual data
+
+You can also manually define an object to be sent.
+This can be usefull for example when you want to save a specific branch that the participant reached.
+Note that you can use templates within the data object.
+
+```javascript
+{
+    type:'post',
+    name:'primaryRandomization'
+    data: {
+        condition: 'branch1'
+    }
+}
+```
+
+In case data is set as a function, it will be called with `global` and the `task` itself as arguments:
 
 ```
 {
     type:'post',
     name:'secondaryRandomization'
+    stage: 2,
     data: function(global, task){
         return {
             score: global.currentScore,
-            stage: task.data.stage
+            stage: task.stage
         }
     }
 }
 ```
+
+### API
 
 The API is as follows:
 
