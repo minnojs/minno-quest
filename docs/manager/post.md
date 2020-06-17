@@ -4,12 +4,30 @@
 - [Manual data](#manual-data)
 - [API](#api)
 
-The post task is responsible for posting plain data to the server. 
-You can either send data that has been saved in the global object or manually set the values to be sent.
-This is a good way to keep track of complex conditions within your tasks.
+The post task posts plain data to the server. 
+You can use it to either send data that has been saved in the Global object or directly set the data that you want to send.
+This is a good way to keep track of conditions within your tasks.
 
-### Local variables
-The following post task takes all data from `global.iat.randomization` and posts it to the server.
+### Save from the Global object
+In your code, you can save data to the [`Global` object](./basics/variables.md#global). For instance, you might randomly select a condition and save the condition to the Global object.
+
+For example, the following code randomly assigns participants to the experimental or the control group:
+```javascript
+API.addGlobal({ condition: API.shuffle(['experimental','control'])[0] });
+```
+
+In your code, you can then use that condition to provide your participants different tasks or show them different stimuli. However, adding a variable to global does not mean that it would be logged to the server. In order to log that variable to the server, you need to add a 'post' task to the sequence of tasks that you define in the manager file. For example:
+```javascript
+{
+    type:'post',
+    name:'cond'
+    variableName: 'condition'
+}
+```
+This code save the variable 'condition' and its content to the server, under the task name 'cond'.
+
+In each task, you can use the [`current` object](./basics/variables.md#the-task-object-current) to save variables. 
+You can access the current variable from the global, using the task's name. For instance, if your study has a task named `iat`, and in that task you saved a variable called `randomization` you will have a variable that can be accessed with `global.iat.randomization`. You will use that to send the `randomization` variable to the server:
 
 ```javascript
 {
@@ -20,7 +38,7 @@ The following post task takes all data from `global.iat.randomization` and posts
 ```
 
 You can also send several variables together. 
-The following task sends both `global.iat.randomization` and `global.iat.feedback` back to the server:
+The following task sends `global.iat.randomization` and `global.iat.feedback` to the server:
 
 ```javascript
 {
@@ -33,23 +51,58 @@ The following task sends both `global.iat.randomization` and `global.iat.feedbac
 }
 ```
 
-### Manual data
+### Send data directly
 
-You can also manually define an object to be sent.
-This can be usefull for example when you want to save a specific branch that the participant reached.
-Note that you can use templates within the data object.
-
+You can also define an object to be sent:
 ```javascript
 {
     type:'post',
-    name:'primaryRandomization'
+    name:'condition'
     data: {
-        condition: 'branch1'
+        condition: 'experimental'
     }
 }
 ```
+One example for the usefulness of this feature is when the randomization in your task is done using a mixer (e.g., a [choose mixer](/basics/mixer.md#choose)). Consider this code:
 
-In case data is set as a function, it will be called with `global` and the `task` itself as arguments:
+```javascript
+{
+    mixer:'choose',
+    data:[
+        {
+            mixer:'wrapper',
+            data: 
+            [
+                {inherit:'manipulation'},
+                {
+                    type:'post',
+                    name:'condition'
+                    data: {
+                        condition: 'experimental'
+                    }
+                }
+            ]
+        },
+        {
+            mixer:'wrapper',
+            data: 
+            [
+                {inherit:'control'},
+                {
+                    type:'post',
+                    name:'condition'
+                    data: {
+                        condition: 'control'
+                    }
+                }
+            ]
+        }
+    ]
+}
+```
+Note that you can use templates within the data object. **@@YBA: Not sure what you mean here**
+
+data can also be a function. In that case, it will recieve the arguments `global` and`task`:
 
 ```
 {
