@@ -52,7 +52,13 @@
 <li><a href="injectStyle.html">Inject Style</a></li>
 <li><a href="isTouch.html">Is Touch</a></li>
 <li><a href="messages.html">Messages</a></li>
-<li><strong><a href="post.html">Post</a></strong></li>
+<li><strong><a href="post.html">Post</a></strong><ul>
+<li><a href="#local-variables">Local variables</a></li>
+<li><a href="#manual-data">Manual data</a></li>
+<li><a href="#api">API</a></li>
+</ul>
+</li>
+<li><a href="postCsv.html">Post CSV</a></li>
 <li><a href="redirect.html">Redirect</a></li>
 <li><a href="setValue.html">Set Value</a></li>
 <li><a href="yesno.html">Yes/No</a></li>
@@ -64,26 +70,51 @@
 </ul>
 </li>
 </ul>
-<p>The post task is responsible for posting plain data to the server. You can either send data directly from the global object or create it yourself. This is a good way to keep track of complex conditions within your tasks or of manual manipulation of all sorts.</p>
-<p>The following post task takes all data from <code>global.randomization</code> and posts it to the server.</p>
+<p>The post task is responsible for posting plain data to the server. 
+You can either send data that has been saved in the global object or manually set the values to be sent.
+This is a good way to keep track of complex conditions within your tasks.</p>
+<h2><a name="local-variables" class="header-link" href="#local-variables"><span></span></a>Local variables</h2><p>The following post task takes all data from <code>global.iat.randomization</code> and posts it to the server.</p>
 <pre><code class="lang-javascript">{
     type:&#39;post&#39;,
     name:&#39;primaryRandomization&#39;
-    path: &#39;randomization&#39;
+    variableName: &#39;iat.randomization&#39;
 }
 </code></pre>
-<p>In case the data to be sent is a function, it will be called with <code>global</code> and the <code>task</code> itself as arguments:</p>
+<p>You can also send several variables together. 
+The following task sends both <code>global.iat.randomization</code> and <code>global.iat.feedback</code> back to the server:</p>
+<pre><code class="lang-javascript">{
+    type:&#39;post&#39;,
+    name:&#39;primaryRandomization&#39;
+    variableName: [
+        &#39;iat.randomization&#39;,
+        &#39;iat.feedback&#39;
+    ]
+}
+</code></pre>
+<h2><a name="manual-data" class="header-link" href="#manual-data"><span></span></a>Manual data</h2><p>You can also manually define an object to be sent.
+This can be usefull for example when you want to save a specific branch that the participant reached.
+Note that you can use templates within the data object.</p>
+<pre><code class="lang-javascript">{
+    type:&#39;post&#39;,
+    name:&#39;primaryRandomization&#39;
+    data: {
+        condition: &#39;branch1&#39;
+    }
+}
+</code></pre>
+<p>In case data is set as a function, it will be called with <code>global</code> and the <code>task</code> itself as arguments:</p>
 <pre><code>{
     type:&#39;post&#39;,
     name:&#39;secondaryRandomization&#39;
+    stage: 2,
     data: function(global, task){
         return {
             score: global.currentScore,
-            stage: task.data.stage
+            stage: task.stage
         }
     }
 }
-</code></pre><p>The API is as follows:</p>
+</code></pre><h3><a name="api" class="header-link" href="#api"><span></span></a>API</h3><p>The API is as follows:</p>
 <table>
 <thead>
 <tr>

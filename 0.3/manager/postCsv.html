@@ -40,7 +40,7 @@
 		</header>
 		<main>
 			<section class="docs">
-                <h1><a name="inject-style" class="header-link" href="#inject-style"><span></span></a>Inject Style</h1><ul>
+                <h1><a name="post-csv" class="header-link" href="#post-csv"><span></span></a>Post CSV</h1><ul>
 <li>Core<ul>
 <li><a href="overview.html">Overview</a></li>
 <li><a href="API.html">API</a></li>
@@ -49,11 +49,11 @@
 </li>
 <li>Tasks<ul>
 <li><a href="allowleaving.html">Allow Leaving</a></li>
-<li><strong><a href="injectStyle.html">Inject Style</a></strong></li>
+<li><a href="injectStyle.html">Inject Style</a></li>
 <li><a href="isTouch.html">Is Touch</a></li>
 <li><a href="messages.html">Messages</a></li>
 <li><a href="post.html">Post</a></li>
-<li><a href="postCsv.html">Post CSV</a></li>
+<li><strong><a href="postCsv.html">Post CSV</a></strong></li>
 <li><a href="redirect.html">Redirect</a></li>
 <li><a href="setValue.html">Set Value</a></li>
 <li><a href="yesno.html">Yes/No</a></li>
@@ -65,38 +65,16 @@
 </ul>
 </li>
 </ul>
-<p>The <code>injectStyle</code> task allows you to change the style of Minno throught a study.
-The style of web pages is determined by their <a href="https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS">CSS</a>.
-<code>injectStyle</code> allows you to add any CSS that you like into your study.</p>
-<pre><code class="lang-javascript">{
-    type:&#39;injectStyle&#39;,
-    css: &#39;[piq-page] .page-buttons .page-submit {background-color:#d9534f; border:#d43f3a}&#39;
-}
+<p>The postCsv task is responsible for posting CSV data to the server.
+It is a good way to save data in a simple easy to use format.
+In fact, you can use <a href="https://github.com/minnojs/simple-minno-server">this</a> simple server in order to save it.</p>
+<p>In order to use the postCsv task, you should set up csv logging in the task settings:</p>
+<pre><code class="lang-javascript">API.addSettings(&#39;logger&#39;, {type:&#39;csv&#39;, url:&#39;csv.php&#39;});
 </code></pre>
-<p>If you have a lot of CSS that you want to add, it makes sense to break the string down as follows:</p>
-<pre><code class="lang-javascript">{
-    type:&#39;injectStyle&#39;,
-    css: [
-        &#39;[piq-page] .page-buttons .page-submit {background-color:#d9534f; border:#d43f3a}&#39;,
-        &#39;[piq-page] .page-buttons .page-decline {background-color:#5cb85c; border:#4cae4c}&#39;
-    ].join(&#39;\n&#39;)
-}
+<p>Then, whenever you want in your task you can send the data using the <code>postCsv</code> task.
+Any properties of the task object are merged into the logger settings (so you can for example change the url for posting).</p>
+<pre><code>{ type:&#39;postCsv&#39;, url:&#39;data.php&#39; }
 </code></pre>
-<table>
-<thead>
-<tr>
-<th>property</th>
-<th>description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>css</td>
-<td>A string of css to add to the page.</td>
-</tr>
-</tbody>
-</table>
-
 				<hr />
 				<small>License: Apache 2. &copy; Project Implicit. &middot; Current version [version]</small>
 			</section>
