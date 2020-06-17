@@ -1,5 +1,7 @@
 # Post
 
+**@@YBA: Not sure I defined the anchors and the links correctly**
+
 - [Save from the Global object](#local-variables)
 - [Send data directly](#manual-data)
 - [API](#api)
@@ -24,7 +26,7 @@ In your code, you can then use that condition to provide your participants diffe
     variableName: 'condition'
 }
 ```
-This code save the variable 'condition' and its content to the server, under the task name 'cond'.
+This code saves the variable 'condition' and its content to the server, under the task name 'cond'.
 
 In each task, you can use the [`current` object](./basics/variables.md#the-task-object-current) to save variables. 
 You can access the current variable from the global, using the task's name. For instance, if your study has a task named `iat`, and in that task you saved a variable called `randomization` you will have a variable that can be accessed with `global.iat.randomization`. You will use that to send the `randomization` variable to the server:
