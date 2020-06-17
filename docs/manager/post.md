@@ -1,7 +1,7 @@
 # Post
 
-- [Local variables](#local-variables)
-- [Manual data](#manual-data)
+- [Save from the Global object](#local-variables)
+- [Send data directly](#manual-data)
 - [API](#api)
 
 The post task posts plain data to the server. 
