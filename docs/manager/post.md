@@ -1,9 +1,8 @@
 # Post
 
-**@@YBA: Not sure I defined the anchors and the links correctly**
 
-- [Save from the Global object](#local-variables)
-- [Send data directly](#manual-data)
+- [Save from the Global object](#save-from-the-global-object)
+- [Send data directly](#send-data-directly)
 - [API](#api)
 
 The post task posts plain data to the server. 
@@ -11,7 +10,7 @@ You can use it to either send data that has been saved in the Global object or d
 This is a good way to keep track of conditions within your tasks.
 
 ### Save from the Global object
-In your code, you can save data to the [`Global` object](./basics/variables.md#global). For instance, you might randomly select a condition and save the condition to the Global object.
+In your code, you can save data to the [Global object](./basics/variables.md#global). For instance, you might randomly select a condition and save the condition to the Global object.
 
 For example, the following code randomly assigns participants to the experimental or the control group:
 ```javascript
@@ -102,9 +101,12 @@ One example for the usefulness of this feature is when the randomization in your
     ]
 }
 ```
-Note that you can use templates within the data object. **@@YBA: Not sure what you mean here**
 
-data can also be a function. In that case, it will recieve the arguments `global` and`task`:
+Note that you can use [templates](./basics/templates.md) as strings within the data object.
+This way you can pull information from different parts of `global` to the same place.
+
+
+`data` can also be a function. In that case, it will recieve the arguments `global` and`task`:
 
 ```
 {
