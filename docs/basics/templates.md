@@ -1,13 +1,7 @@
 # Templates
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
-
 - [Syntax](#syntax)
 - [Real time (reRender)](#real-time-rerender)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 One of the ways to create dynamic questionnaires is using templates.
 Templates are a format that allows you to dynamically generate properties for your elements using the [environmental variables](./variables.html). 

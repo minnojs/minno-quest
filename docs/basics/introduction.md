@@ -1,14 +1,8 @@
 # Introduction
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
-
 - [Mixers](#mixers)
 - [Inheritance](#inheritance)
 - [Templates](#templates)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 The sequencer is an overarching term for all of the features that allow you to dynamically change the flow of your tasks.
 It has three critical components: The mixer, templating and inheritance.
