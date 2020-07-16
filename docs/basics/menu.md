@@ -2,6 +2,7 @@
     - [Overview](overview.md)
     - [Javascript](javascript.md)
     - [Creating a task](create.md)
+    - [Deploying a task](deploy.md)
     - [API](API.md)
     - [Resources](resources.md)
 - Sequencer

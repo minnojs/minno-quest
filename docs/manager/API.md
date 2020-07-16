@@ -1,5 +1,12 @@
 # API
 
+- [Tasks](#tasks)
+    - [Task types](#task-types)
+    - [Task properties](#task-properties)
+- [Custom tasks](#custom-tasks)
+    - [Plugging in](#plugging-in)
+    - [Activator function](#activator-function)
+    - [Custom Task Example](#custom-task-example)
 - [Settings](#settings)
     - [canvas](#canvas)
     - [injectStyle](#injectstyle)
@@ -12,21 +19,134 @@
     - [rtl](#rtl)
     - [logger](#logger)
     - [DEBUG](#debug)
-- [Tasks](#tasks)
-    - [Quest](#quest)
-    - [Message](#message)
-    - [Post](#post)
 - [Inheritance](#inheritance)
-- [Custom tasks](#custom-tasks)
-    - [Plugging in](#plugging-in)
-    - [Activator function](#activator-function)
-    - [Custom Task Example](#custom-task-example)
 - [Project Implicit Build](#project-implicit-build)
     - [logger.url](#loggerurl)
     - [mTurk](#mturk)
 
-The miManager is responsible for managing several piTasks sequentially. It uses the same API used throughout Minno tasks.
+The miManager is responsible for managing several MinnoJS tasks sequentially.
 
+### Tasks
+The basic unit in miManager is the **task**. 
+There are many [types of tasks](#task-types) available, 
+and you can also create [custom tasks](#custom-tasks) of your own.
+Tasks are defined within the sequence just like any other element, 
+and you can use mixers, inheritance, and templates to control their flow.
+
+For example, following is a manager sequence with two subsequent tasks - first a questionnaire, then a time-sensitive tasks.
+
+```js
+API.addSequence([
+    { type: 'quest', name: 'race-questionnaire', scriptUrl:'race.quest.js'},
+    { type: 'time', name: 'race-iat', scriptUrl:'iat.js'}
+]);
+```
+
+#### Task types
+
+Minno time supports many types of tasks 
+(though by far the most extensive are [`quest`](../quest) and [`time`](../time)).
+Following is a list of tasks types, follow the link to learn how to use them.
+
+Task                                    | Description
+--------------------------------------- | -----------
+[Time](./time.html)                     | Almost any time-sensitive task you can imagine
+[Questionnaire](./quest.html)           | A full fledged questionnaire
+[Allow Leaving](./allowleaving.html)    | Control the mechanism preventing users from leaving the task by mistake
+[Inject Style](./injectStyle.html)      | Add css styles on the fly
+[Is Touch](./isTouch.html)              | Ask if the user wants to use the touch interface
+[Messages](./messages.html)             | Display messages and plain HTML to the user
+[Post](./post.html)                     | Post task data to the server
+[Post CSV](./postCsv.html)              | When using the CSV logger, post data to the server
+[Redirect](./redirect.html)             | Redirect user to an external URL
+[Set Value](./setValue.html)            | Manipulate environmental variables
+[Yes/No](./yesno.html)                  | Ask a single Yes/No question
+
+#### Task properties
+
+All tasks have some common properties that can be used to customize their behaviour.
+Following is a list of such properties and a description of their behaviour.
+
+Property    | Description
+----------- | -------------
+name        | Task name.
+type        | Type of task (quest,message etc.).
+pre         | A function to invoke before the task (may return a promise).
+load        | A function to invoke as soon as the task is loaded (may return a promise).
+post        | A function to invoke after the task (may return a promise).
+canvas      | A canvas object (as defined under [settings](#canvas)) to invoke at the beginning of the task and remove 
+title       | A string to be used as the page title (the name displayed on the tag). It is reset at the end of the task.
+preText	    | A template to be expanded before the task
+postText    | A template to be expanded after the task
+current     | An object that will be merged into the task `current` object.
+
+
+### Custom tasks
+The miManager allows the creation of custom tasks.
+The format is fairly simple though you probably need at least some experience with programing for it. 
+
+#### Plugging in
+miManager manages the task sequence for you as well as loading the task script (if needed). There are several ways to plug a new task into miManager, the all involve passing the activator function to the manager in various ways.
+
+1. You can pass the activator function as a script.
+2. You can pass it as the play property of the script object ().
+3. You can set it into the `taskActivateProvider` using `taskActivateProvider.set(taskName, activatorFunction)` during the configuration stage of the angular flow (This is worth the trouble mainly if you intend to use this task many times).
+
+#### Activator function
+The activator function is the function that is responsible for the activation of your task as well as for the communication with miManager.
+
+It should:
+* Run your task (just do whatever you like).
+* Return a function that may be used to force the end of the task.
+* Call the `done` function whenever it is done.
+
+The activator function is invoked using [angular dependency injection](https://docs.angularjs.org/guide/di), so you can use any of the angular [annotation](https://docs.angularjs.org/guide/di#dependency-annotation) methods to get dependencies.
+
+The following dependencies are supported (as well as all standard angular services):
+
+Service         | Description
+--------------- | -----------
+done            | A function that lets the manager know that the task has finished.
+props           | An object with all sorts of useful tools.
+$scope          | The task scope.
+task            | The miManager element that defined this task.
+script          | The task script (as defined in task.script or loaded from task.scriptUrl).
+$element        | The tasks DOM Node wrapped in jqLite or jQuery.
+global          | The global object
+$injector       | an angularjs injector (it can allow you to $compile or accesses $rootScope)
+
+#### Custom Task Example
+The following displays a messages to the user and proceeds to the next task after 5 seconds:
+
+```javascript
+// the define wrapper
+define(function(){
+    // the script object being returned
+    return {
+        // custom script content
+        content: 'Hi there, I\'m your custom message',
+
+        // the activator function uses three dependencie
+        play: function activator(done, script, $element){
+            var timeoutId = setTimeout(done, 5000);
+            $element.html(script.content);
+
+            // will be called at the end of the task to clean things up
+            // (whether the end is forced or triggered by 'done')
+            return function clear(){
+                clearTimeout(timeoutId);
+                $element.empty();           
+            };
+        }
+    };
+});
+```
+
+In order to use it all you have to do is point the task to the correct url:
+
+```javascript
+var taskElement = {scriptUrl:'path/to/script'};
+```
 ### Settings
 Settings allow you to control the generic way that the player works. Change the settings using the `addSettings` function. The first argument to the function is always the name of the setting, the second argument is the setting values. In case the setting is an object, subsequent objects will extend each other so that settings may be progressively added.
 All the functions within settings are invoked using angular. This means that you have access to any service you like, as well as some specific assets. [In order to access the services](https://docs.angularjs.org/api/auto/service/$injector) simply use arguments with the appropriate name. For instance, this is how you would access `$rootScope`:
@@ -174,112 +294,10 @@ hideConsole | (true or false) hide console activity
 API.addSettings('DEBUG', { hideConsole: true});
 ```
 
-### Tasks
-The basic unit in miManager is the **task**. The manager currently supports several types of tasks; `quest`, `message` and `post`. You should just cue them into the sequence (you can use mixers to your hearts content as well).
-
-Property    | Description
------------ | -------------
-name        | Task name.
-type        | Type of task (quest/message).
-pre         | A function to invoke before the task (may return a promise).
-load        | A function to invoke as soon as the task is loaded (may return a promise).
-post        | A function to invoke after the task (may return a promise).
-canvas      | A canvas object (as defined under [settings](#canvas)) to invoke at the beginning of the task and remove 
-title       | A string to be used as the page title (the name displayed on the tag). It is reset at the end of the task.
-preText	    | A template to be expanded before the task
-postText    | A template to be expanded after the task
-current     | An object that will be merged into the task `current` object.
-
-#### Quest
-
-Property    | Description
------------ | -------------
-script      | The actual script object for the quest task.
-scriptUrl   | The url for the quest script.
-
-#### Message
-
-Property    | Description
------------ | -------------
-template    | the actual html to display as a string.
-templateUrl | The url for the message html file.
-keys        | Controls the proceed key: either a key (i.e. `'a'`) a keyCode (i.e. `65`) or an array of such (i.e. `['a','b']`).
-
-#### Post
-property        | description
---------------- | ------------
-url             | The url we intend to post to.
-path            | A path within the global to the object that you want to send. For example: `"iat.feedback"` will post the object `feedback` from `global.iat`.
-data            | A raw object to be posted to the server. You may use templates in order to construct it.
 
 ### Inheritance
-miManager uses the same inheritance system used by miQuest. It has one type of set: the task set. In order to create task sets use `addTasksSet(set, list)`.
-
-### Custom tasks
-The miManager allows the creation of custom tasks. The format is fairly simple though you probably need at least some experience with programing for it. 
-
-#### Plugging in
-miManager manages the task sequence for you as well as loading the task script (if needed). There are several ways to plug a new task into miManager, the all involve passing the activator function to the manager in various ways.
-
-1. You can pass the activator function as a script.
-2. You can pass it as the play property of the script object ().
-3. You can set it into the `taskActivateProvider` using `taskActivateProvider.set(taskName, activatorFunction)` during the configuration stage of the angular flow (This is worth the trouble mainly if you intend to use this task many times).
-
-#### Activator function
-The activator function is the function that is responsible for the activation of your task as well as for the communication with miManager.
-
-It should:
-* Run your task (just do whatever you like).
-* Return a function that may be used to force the end of the task.
-* Call the `done` function whenever it is done.
-
-The activator function is invoked using [angular dependency injection](https://docs.angularjs.org/guide/di), so you can use any of the angular [annotation](https://docs.angularjs.org/guide/di#dependency-annotation) methods to get dependencies.
-
-The following dependencies are supported (as well as all standard angular services):
-
-Service         | Description
---------------- | -----------
-done            | A function that lets the manager know that the task has finished.
-props           | An object with all sorts of useful tools.
-$scope          | The task scope.
-task            | The miManager element that defined this task.
-script          | The task script (as defined in task.script or loaded from task.scriptUrl).
-$element        | The tasks DOM Node wrapped in jqLite or jQuery.
-global          | The global object
-$injector       | an angularjs injector (it can allow you to $compile or accesses $rootScope)
-
-#### Custom Task Example
-The following script will display a messages to the user and proceed to the next task after 5 seconds:
-
-```javascript
-// the define wrapper
-define(function(){
-    // the script object being returned
-    return {
-        // custom script content
-        content: 'Hi there, I\'m your custom message',
-
-        // the activator function uses three dependencie
-        play: function activator(done, script, $element){
-            var timeoutId = setTimeout(done, 5000);
-            $element.html(script.content);
-
-            // will be called at the end of the task to clean things up
-            // (whether the end is forced or triggered by 'done')
-            return function clear(){
-                clearTimeout(timeoutId);
-                $element.empty();           
-            };
-        }
-    };
-});
-```
-
-In order to use it all you have to do is point the task to the correct url:
-
-```javascript
-var taskElement = {scriptUrl:'path/to/script'};
-```
+miManager uses the same inheritance system used by miQuest. 
+It has one type of set: the task set. In order to create task sets use `API.addTasksSet(set, list)`.
 
 ### Project Implicit Build
 

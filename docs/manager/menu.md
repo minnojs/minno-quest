@@ -1,8 +1,11 @@
 - Core
     - [Overview](overview.md)
     - [API](API.md)
+    - [Creating a task](create.md)
     - [Playground](playground.js)
 - Tasks
+    - [Time sensitive](time.md)
+    - [Questionnaire](quest.md)
     - [Allow Leaving](allowleaving.md)
     - [Inject Style](injectStyle.md)
     - [Is Touch](isTouch.md)
