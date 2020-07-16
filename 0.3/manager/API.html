@@ -44,6 +44,17 @@
 <li>Core<ul>
 <li><a href="overview.html">Overview</a></li>
 <li><strong><a href="API.html">API</a></strong><ul>
+<li><a href="#tasks">Tasks</a><ul>
+<li><a href="#task-types">Task types</a></li>
+<li><a href="#task-properties">Task properties</a></li>
+</ul>
+</li>
+<li><a href="#custom-tasks">Custom tasks</a><ul>
+<li><a href="#plugging-in">Plugging in</a></li>
+<li><a href="#activator-function">Activator function</a></li>
+<li><a href="#custom-task-example">Custom Task Example</a></li>
+</ul>
+</li>
 <li><a href="#settings">Settings</a><ul>
 <li><a href="#canvas">canvas</a></li>
 <li><a href="#injectstyle">injectStyle</a></li>
@@ -58,17 +69,6 @@
 <li><a href="#debug">DEBUG</a></li>
 </ul>
 </li>
-<li><a href="#tasks">Tasks</a><ul>
-<li><a href="#task-types">Task types</a></li>
-<li><a href="#task-properties">Task properties</a></li>
-</ul>
-</li>
-<li><a href="#custom-tasks">Custom tasks</a><ul>
-<li><a href="#plugging-in">Plugging in</a></li>
-<li><a href="#activator-function">Activator function</a></li>
-<li><a href="#custom-task-example">Custom Task Example</a></li>
-</ul>
-</li>
 <li><a href="#inheritance">Inheritance</a></li>
 <li><a href="#project-implicit-build">Project Implicit Build</a><ul>
 <li><a href="#loggerurl">logger.url</a></li>
@@ -77,6 +77,7 @@
 </li>
 </ul>
 </li>
+<li><a href="create.html">Creating a task</a></li>
 <li><a href="playground.html">Playground</a></li>
 </ul>
 </li>
@@ -100,188 +101,7 @@
 </ul>
 </li>
 </ul>
-<p>The miManager is responsible for managing several piTasks sequentially. It uses the same API used throughout Minno tasks.</p>
-<h3><a name="settings" class="header-link" href="#settings"><span></span></a>Settings</h3><p>Settings allow you to control the generic way that the player works. Change the settings using the <code>addSettings</code> function. The first argument to the function is always the name of the setting, the second argument is the setting values. In case the setting is an object, subsequent objects will extend each other so that settings may be progressively added.
-All the functions within settings are invoked using angular. This means that you have access to any service you like, as well as some specific assets. <a href="https://docs.angularjs.org/api/auto/service/$injector">In order to access the services</a> simply use arguments with the appropriate name. For instance, this is how you would access <code>$rootScope</code>:</p>
-<pre><code class="lang-javascript">function onEnd($rootScope){
-    $rootScope.$emit(&#39;end!!&#39;);
-}
-</code></pre>
-<h4><a name="canvas" class="header-link" href="#canvas"><span></span></a>canvas</h4><p><code>canvas</code> takes an object that describes the style of the task environment. Each property of the object changes a different style element.</p>
-<table>
-<thead>
-<tr>
-<th>Property</th>
-<th>Changes</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>background</td>
-<td>The overall background color.</td>
-</tr>
-<tr>
-<td>canvasBackground</td>
-<td>Default canvas background color.</td>
-</tr>
-<tr>
-<td>fontColor</td>
-<td>Default font color.</td>
-</tr>
-<tr>
-<td>fontSize</td>
-<td>Default font size.</td>
-</tr>
-</tbody>
-</table>
-<pre><code class="lang-javascript">API.addSettings(&#39;canvas&#39;, {
-    fontSize: &#39;2em&#39;
-});
-</code></pre>
-<p>In case you need to fine tune the styles even further you can add css rules into the raw HTML. Support for dynamically adding CSS is planned but not yet supported.</p>
-<h4><a name="injectstyle" class="header-link" href="#injectstyle"><span></span></a>injectStyle</h4><p>Injects a string of css into the page.</p>
-<pre><code class="lang-javascript">API.addSettings(&#39;injectStyle&#39;, &#39;[pi-quest] label {font-size:1.2em; font-weight:normal;}&#39;);
-</code></pre>
-<h4><a name="onpretask" class="header-link" href="#onpretask"><span></span></a>onPreTask</h4><p><code>onPreTask</code> is a function to be called before each task is called.</p>
-<pre><code class="lang-javascript">API.addSettings(&#39;onPreTask&#39;, function(currentTask){
-    doSomethingWith(currentTask);
-});
-</code></pre>
-<table>
-<thead>
-<tr>
-<th>Asset</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>currentTask</td>
-<td>The current task object</td>
-</tr>
-<tr>
-<td>prevTask</td>
-<td>The previous task object (this may be used as a post task action as well...)</td>
-</tr>
-</tbody>
-</table>
-<h4><a name="onend" class="header-link" href="#onend"><span></span></a>onEnd</h4><p><code>onEnd</code> is a function to be called as soon as the task sequence ends.</p>
-<pre><code class="lang-javascript">API.addSettings(&#39;onEnd&#39;, function(){
-    // Do something: for instance, redirect to &#39;my/url.html&#39;
-    location.href = &#39;my/url.html&#39;;
-});
-</code></pre>
-<table>
-<thead>
-<tr>
-<th>Asset</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>currentTask</td>
-<td>The current (last) task object</td>
-</tr>
-</tbody>
-</table>
-<h4><a name="title" class="header-link" href="#title"><span></span></a>title</h4><p><code>title</code> is a string to be used as the page title (the name displayed on the tag).</p>
-<pre><code class="lang-javascript">API.addSettings(&#39;title&#39;, &#39;My Manager Title&#39;);
-</code></pre>
-<h4><a name="preloadimages" class="header-link" href="#preloadimages"><span></span></a>preloadImages</h4><p>Accepts an array of image urls to preload. The manager will <strong>not</strong> wait until all images are loaded, but it will make images displayed later in the manager sequence be displayed significantly faster.</p>
-<pre><code class="lang-javascript">API.addSettings(&#39;preloadImages&#39;, [&#39;my/image/url/imageName.png&#39;, &#39;my/other/url/otherImage.jpg&#39;]);
-</code></pre>
-<h4><a name="skip" class="header-link" href="#skip"><span></span></a>skip</h4><p>Whether to activate the skip and refresh option. If activated, clicking <code>ctrl r</code> reloads the current task (this feature may not be supported on older browsers), clicking <code>escape</code> and then the right or left arrows skips to the next or previous tasks.</p>
-<pre><code class="lang-javascript">API.addSettings(&#39;skip&#39;, true);
-</code></pre>
-<h4><a name="skin" class="header-link" href="#skin"><span></span></a>skin</h4><p>Add a skin to your project. Skins change the way that your tasks look. Currently the only skins that we support are <code>simple</code> and <code>demo</code>.</p>
-<pre><code class="lang-javascript">API.addSettings(&#39;skin&#39;, &#39;demo&#39;);
-</code></pre>
-<h3><a name="rtl" class="header-link" href="#rtl"><span></span></a>rtl</h3><p>Setting rtl to <code>true</code> will change the layout of the player to right to left in order to ocomodate right to left languages such as arabic and hebrew.</p>
-<pre><code class="lang-javascript">API.addSettings(&#39;rtl&#39;, true);
-</code></pre>
-<h4><a name="logger" class="header-link" href="#logger"><span></span></a>logger</h4><p>The logger allows control of logging activities.</p>
-<p>Folowing are the properties available for the logger:</p>
-<table>
-<thead>
-<tr>
-<th>property</th>
-<th>description </th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>url</td>
-<td>The url to send to. If it is not set, data will not be sent.</td>
-</tr>
-<tr>
-<td>type</td>
-<td>The strategy to use for sending logs to the server. See options below.</td>
-</tr>
-<tr>
-<td>pulse</td>
-<td>Allows you to post your data in pulses of &quot;pulse&quot; logs instead of all at the end of the task (Does not work for csv logger).</td>
-</tr>
-</tbody>
-</table>
-<pre><code class="lang-javascript">API.addSettings(&#39;logger&#39;, {
-    url: &#39;/manager/data&#39;,
-    type:&#39;new&#39;,
-    pulse: 20
-});
-</code></pre>
-<p>By deafault the logger posts according to the Project Implicit server rules (old).
-You can change the logging style by setting the logger <code>type</code> as follows:</p>
-<table>
-<thead>
-<tr>
-<th>type</th>
-<th>description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>old</td>
-<td>Uses the post strategy implemented by the old PI server</td>
-</tr>
-<tr>
-<td>new</td>
-<td>Uses the post strategy implemented by the new server  </td>
-</tr>
-<tr>
-<td>csv</td>
-<td>Posts all data as CSV at the end of the manager. If you are creating a manager that does not fully complete (for instance, when you have a message as your last page), use the postCSV task in addition to settings the log type to csv.</td>
-</tr>
-<tr>
-<td>debug</td>
-<td>Logs all posts to the console. Do not do this in production! These logs aren&#39;t posted to the server at all!</td>
-</tr>
-</tbody>
-</table>
-<p>You can change the logging strategy or even create new strategies.
-Doing this is rather advanced and is documented <a href="https://github.com/minnojs/minno-quest/blob/0.2/src/taskManager/logger/readme.html">here</a>.</p>
-<h4><a name="debug" class="header-link" href="#debug"><span></span></a>DEBUG</h4><p>The <code>DEBUG</code> settings allows you to control the debug messages produced by the player.
-In the development environment (when <code>window.DEBUG</code> is set to <code>true</code>) you have access to a development console.
-The console will hold messages describing the process of your studies.</p>
-<p>At the top of the console window you will see a dropdown that allows you to select the level of logging you would like to see.
-For example, you may want to be alerted only of errors, or of every possible activity of the player.
-In addition you have a button that allows you to close and open the console.</p>
-<table>
-<thead>
-<tr>
-<th>Property</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>hideConsole</td>
-<td>(true or false) hide console activity</td>
-</tr>
-</tbody>
-</table>
-<pre><code class="lang-javascript">API.addSettings(&#39;DEBUG&#39;, { hideConsole: true});
-</code></pre>
+<p>The miManager is responsible for managing several MinnoJS tasks sequentially.</p>
 <h3><a name="tasks" class="header-link" href="#tasks"><span></span></a>Tasks</h3><p>The basic unit in miManager is the <strong>task</strong>. 
 There are many <a href="#task-types">types of tasks</a> available, 
 and you can also create <a href="#custom-tasks">custom tasks</a> of your own.
@@ -486,6 +306,187 @@ define(function(){
 </code></pre>
 <p>In order to use it all you have to do is point the task to the correct url:</p>
 <pre><code class="lang-javascript">var taskElement = {scriptUrl:&#39;path/to/script&#39;};
+</code></pre>
+<h3><a name="settings" class="header-link" href="#settings"><span></span></a>Settings</h3><p>Settings allow you to control the generic way that the player works. Change the settings using the <code>addSettings</code> function. The first argument to the function is always the name of the setting, the second argument is the setting values. In case the setting is an object, subsequent objects will extend each other so that settings may be progressively added.
+All the functions within settings are invoked using angular. This means that you have access to any service you like, as well as some specific assets. <a href="https://docs.angularjs.org/api/auto/service/$injector">In order to access the services</a> simply use arguments with the appropriate name. For instance, this is how you would access <code>$rootScope</code>:</p>
+<pre><code class="lang-javascript">function onEnd($rootScope){
+    $rootScope.$emit(&#39;end!!&#39;);
+}
+</code></pre>
+<h4><a name="canvas" class="header-link" href="#canvas"><span></span></a>canvas</h4><p><code>canvas</code> takes an object that describes the style of the task environment. Each property of the object changes a different style element.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Changes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>background</td>
+<td>The overall background color.</td>
+</tr>
+<tr>
+<td>canvasBackground</td>
+<td>Default canvas background color.</td>
+</tr>
+<tr>
+<td>fontColor</td>
+<td>Default font color.</td>
+</tr>
+<tr>
+<td>fontSize</td>
+<td>Default font size.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="lang-javascript">API.addSettings(&#39;canvas&#39;, {
+    fontSize: &#39;2em&#39;
+});
+</code></pre>
+<p>In case you need to fine tune the styles even further you can add css rules into the raw HTML. Support for dynamically adding CSS is planned but not yet supported.</p>
+<h4><a name="injectstyle" class="header-link" href="#injectstyle"><span></span></a>injectStyle</h4><p>Injects a string of css into the page.</p>
+<pre><code class="lang-javascript">API.addSettings(&#39;injectStyle&#39;, &#39;[pi-quest] label {font-size:1.2em; font-weight:normal;}&#39;);
+</code></pre>
+<h4><a name="onpretask" class="header-link" href="#onpretask"><span></span></a>onPreTask</h4><p><code>onPreTask</code> is a function to be called before each task is called.</p>
+<pre><code class="lang-javascript">API.addSettings(&#39;onPreTask&#39;, function(currentTask){
+    doSomethingWith(currentTask);
+});
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Asset</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>currentTask</td>
+<td>The current task object</td>
+</tr>
+<tr>
+<td>prevTask</td>
+<td>The previous task object (this may be used as a post task action as well...)</td>
+</tr>
+</tbody>
+</table>
+<h4><a name="onend" class="header-link" href="#onend"><span></span></a>onEnd</h4><p><code>onEnd</code> is a function to be called as soon as the task sequence ends.</p>
+<pre><code class="lang-javascript">API.addSettings(&#39;onEnd&#39;, function(){
+    // Do something: for instance, redirect to &#39;my/url.html&#39;
+    location.href = &#39;my/url.html&#39;;
+});
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Asset</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>currentTask</td>
+<td>The current (last) task object</td>
+</tr>
+</tbody>
+</table>
+<h4><a name="title" class="header-link" href="#title"><span></span></a>title</h4><p><code>title</code> is a string to be used as the page title (the name displayed on the tag).</p>
+<pre><code class="lang-javascript">API.addSettings(&#39;title&#39;, &#39;My Manager Title&#39;);
+</code></pre>
+<h4><a name="preloadimages" class="header-link" href="#preloadimages"><span></span></a>preloadImages</h4><p>Accepts an array of image urls to preload. The manager will <strong>not</strong> wait until all images are loaded, but it will make images displayed later in the manager sequence be displayed significantly faster.</p>
+<pre><code class="lang-javascript">API.addSettings(&#39;preloadImages&#39;, [&#39;my/image/url/imageName.png&#39;, &#39;my/other/url/otherImage.jpg&#39;]);
+</code></pre>
+<h4><a name="skip" class="header-link" href="#skip"><span></span></a>skip</h4><p>Whether to activate the skip and refresh option. If activated, clicking <code>ctrl r</code> reloads the current task (this feature may not be supported on older browsers), clicking <code>escape</code> and then the right or left arrows skips to the next or previous tasks.</p>
+<pre><code class="lang-javascript">API.addSettings(&#39;skip&#39;, true);
+</code></pre>
+<h4><a name="skin" class="header-link" href="#skin"><span></span></a>skin</h4><p>Add a skin to your project. Skins change the way that your tasks look. Currently the only skins that we support are <code>simple</code> and <code>demo</code>.</p>
+<pre><code class="lang-javascript">API.addSettings(&#39;skin&#39;, &#39;demo&#39;);
+</code></pre>
+<h3><a name="rtl" class="header-link" href="#rtl"><span></span></a>rtl</h3><p>Setting rtl to <code>true</code> will change the layout of the player to right to left in order to ocomodate right to left languages such as arabic and hebrew.</p>
+<pre><code class="lang-javascript">API.addSettings(&#39;rtl&#39;, true);
+</code></pre>
+<h4><a name="logger" class="header-link" href="#logger"><span></span></a>logger</h4><p>The logger allows control of logging activities.</p>
+<p>Folowing are the properties available for the logger:</p>
+<table>
+<thead>
+<tr>
+<th>property</th>
+<th>description </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>url</td>
+<td>The url to send to. If it is not set, data will not be sent.</td>
+</tr>
+<tr>
+<td>type</td>
+<td>The strategy to use for sending logs to the server. See options below.</td>
+</tr>
+<tr>
+<td>pulse</td>
+<td>Allows you to post your data in pulses of &quot;pulse&quot; logs instead of all at the end of the task (Does not work for csv logger).</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="lang-javascript">API.addSettings(&#39;logger&#39;, {
+    url: &#39;/manager/data&#39;,
+    type:&#39;new&#39;,
+    pulse: 20
+});
+</code></pre>
+<p>By deafault the logger posts according to the Project Implicit server rules (old).
+You can change the logging style by setting the logger <code>type</code> as follows:</p>
+<table>
+<thead>
+<tr>
+<th>type</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>old</td>
+<td>Uses the post strategy implemented by the old PI server</td>
+</tr>
+<tr>
+<td>new</td>
+<td>Uses the post strategy implemented by the new server  </td>
+</tr>
+<tr>
+<td>csv</td>
+<td>Posts all data as CSV at the end of the manager. If you are creating a manager that does not fully complete (for instance, when you have a message as your last page), use the postCSV task in addition to settings the log type to csv.</td>
+</tr>
+<tr>
+<td>debug</td>
+<td>Logs all posts to the console. Do not do this in production! These logs aren&#39;t posted to the server at all!</td>
+</tr>
+</tbody>
+</table>
+<p>You can change the logging strategy or even create new strategies.
+Doing this is rather advanced and is documented <a href="https://github.com/minnojs/minno-quest/blob/0.2/src/taskManager/logger/readme.html">here</a>.</p>
+<h4><a name="debug" class="header-link" href="#debug"><span></span></a>DEBUG</h4><p>The <code>DEBUG</code> settings allows you to control the debug messages produced by the player.
+In the development environment (when <code>window.DEBUG</code> is set to <code>true</code>) you have access to a development console.
+The console will hold messages describing the process of your studies.</p>
+<p>At the top of the console window you will see a dropdown that allows you to select the level of logging you would like to see.
+For example, you may want to be alerted only of errors, or of every possible activity of the player.
+In addition you have a button that allows you to close and open the console.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>hideConsole</td>
+<td>(true or false) hide console activity</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="lang-javascript">API.addSettings(&#39;DEBUG&#39;, { hideConsole: true});
 </code></pre>
 <h3><a name="inheritance" class="header-link" href="#inheritance"><span></span></a>Inheritance</h3><p>miManager uses the same inheritance system used by miQuest. 
 It has one type of set: the task set. In order to create task sets use <code>API.addTasksSet(set, list)</code>.</p>
