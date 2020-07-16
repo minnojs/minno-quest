@@ -96,19 +96,20 @@ how to run the experiment and which experiment to run.</p>
 <p>Having the files &quot;on the internet&quot; is tantamount to putting it on a <a href="https://developer.mozilla.org/en-US/docs/Learn/Common_questions/What_is_a_web_server">server</a>.
 You can checkout a simple php server <a href="https://github.com/minnojs/simple-minno-server">here</a>,
 or if you do not need to save any data, you can use any server that you like 
-(such as <a href="https://www.wampserver.com/en/">wamp</a> or <a href="https://www.mamp.info/">mamp</a>).</p>
+(such as <a href="https://www.wampserver.com/en/">wamp</a> or <a href="https://www.mamp.info/">mamp</a>).
+You can see <a href="https://minnojs.github.io/minnojs-blog/local/">this</a> blog post, that explains how to run a local server for efficient testing of MinnoJS tasks.</p>
 <h3><a name="setting-up" class="header-link" href="#setting-up"><span></span></a>Setting up</h3><p>Here, we focus not on setting up your server, but rather on telling the browser how to run your study.
 A MinnoJS study is run by accessing a web page that activates the experiment scripts.
 Web pages are created using a markup language called <a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a>.
 Below is an HTML page that is built to launce a MinnoJS study.
 The important line to notice is the following:</p>
-<pre><code class="lang-html">&lt;div pi-manager=&quot;study/mgr.html&quot;&gt;&lt;/div&gt;
+<pre><code class="lang-HTML">&lt;div pi-manager=&quot;study/mgr.html&quot;&gt;&lt;/div&gt;
 </code></pre>
 <p>This is the line that defines the url where MinnoJS can find your study (in this case: <code>study/mgr.html</code>).
 It is the only line that you are likely to need to change.
 The code running MinnoJS itself is automatically downloaded from a central repository.
 And most of the local modification can be done from within the study scripts themselves.</p>
-<pre><code class="lang-html">&lt;!doctype html&gt;
+<pre><code class="lang-HTML">&lt;!doctype html&gt;
     &lt;head&gt;
         &lt;title&gt;MinnoJS&lt;/title&gt;
         &lt;meta charset=&quot;utf-8&quot;&gt;
@@ -152,7 +153,7 @@ The way that we do this, is by setting the data into the <a href="./variables.ht
 <p>For example, the following addition creates a global object with two keys:
 <code>userName</code> is an arbitrary value that would be used within the study (maybe as a greeting?).
 <code>$meta</code> is a special keyword object that will be added to all posts to the server (see <a href="./variables.html#meta">here</a>.</p>
-<pre><code class="lang-html">&lt;script&gt;
+<pre><code class="lang-HTML">&lt;script&gt;
     window.piGlobal = {
         $meta:{uid: &#39;bb59cfegg&#39;, condition: 2},
         userName: &#39;Paul Simon&#39;
