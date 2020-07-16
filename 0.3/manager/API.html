@@ -59,18 +59,17 @@
 </ul>
 </li>
 <li><a href="#tasks">Tasks</a><ul>
-<li><a href="#quest">Quest</a></li>
-<li><a href="#message">Message</a></li>
-<li><a href="#post">Post</a></li>
+<li><a href="#task-types">Task types</a></li>
+<li><a href="#task-properties">Task properties</a></li>
 </ul>
 </li>
-<li><a href="#inheritance">Inheritance</a></li>
 <li><a href="#custom-tasks">Custom tasks</a><ul>
 <li><a href="#plugging-in">Plugging in</a></li>
 <li><a href="#activator-function">Activator function</a></li>
 <li><a href="#custom-task-example">Custom Task Example</a></li>
 </ul>
 </li>
+<li><a href="#inheritance">Inheritance</a></li>
 <li><a href="#project-implicit-build">Project Implicit Build</a><ul>
 <li><a href="#loggerurl">logger.url</a></li>
 <li><a href="#mturk">mTurk</a></li>
@@ -82,6 +81,8 @@
 </ul>
 </li>
 <li>Tasks<ul>
+<li><a href="time.html">Time sensitive</a></li>
+<li><a href="quest.html">Questionnaire</a></li>
 <li><a href="allowleaving.html">Allow Leaving</a></li>
 <li><a href="injectStyle.html">Inject Style</a></li>
 <li><a href="isTouch.html">Is Touch</a></li>
@@ -281,7 +282,76 @@ In addition you have a button that allows you to close and open the console.</p>
 </table>
 <pre><code class="lang-javascript">API.addSettings(&#39;DEBUG&#39;, { hideConsole: true});
 </code></pre>
-<h3><a name="tasks" class="header-link" href="#tasks"><span></span></a>Tasks</h3><p>The basic unit in miManager is the <strong>task</strong>. The manager currently supports several types of tasks; <code>quest</code>, <code>message</code> and <code>post</code>. You should just cue them into the sequence (you can use mixers to your hearts content as well).</p>
+<h3><a name="tasks" class="header-link" href="#tasks"><span></span></a>Tasks</h3><p>The basic unit in miManager is the <strong>task</strong>. 
+There are many <a href="#task-types">types of tasks</a> available, 
+and you can also create <a href="#custom-tasks">custom tasks</a> of your own.
+Tasks are defined within the sequence just like any other element, 
+and you can use mixers, inheritance, and templates to control their flow.</p>
+<p>For example, following is a manager sequence with two subsequent tasks - first a questionnaire, then a time-sensitive tasks.</p>
+<pre><code class="lang-js">API.addSequence([
+    { type: &#39;quest&#39;, name: &#39;race-questionnaire&#39;, scriptUrl:&#39;race.quest.html&#39;},
+    { type: &#39;time&#39;, name: &#39;race-iat&#39;, scriptUrl:&#39;iat.html&#39;}
+]);
+</code></pre>
+<h4><a name="task-types" class="header-link" href="#task-types"><span></span></a>Task types</h4><p>Minno time supports many types of tasks 
+(though by far the most extensive are <a href="../quest"><code>quest</code></a> and <a href="../time"><code>time</code></a>).
+Following is a list of tasks types, follow the link to learn how to use them.</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="./time.html">Time</a></td>
+<td>Almost any time-sensitive task you can imagine</td>
+</tr>
+<tr>
+<td><a href="./quest.html">Questionnaire</a></td>
+<td>A full fledged questionnaire</td>
+</tr>
+<tr>
+<td><a href="./allowleaving.html">Allow Leaving</a></td>
+<td>Control the mechanism preventing users from leaving the task by mistake</td>
+</tr>
+<tr>
+<td><a href="./injectStyle.html">Inject Style</a></td>
+<td>Add css styles on the fly</td>
+</tr>
+<tr>
+<td><a href="./isTouch.html">Is Touch</a></td>
+<td>Ask if the user wants to use the touch interface</td>
+</tr>
+<tr>
+<td><a href="./messages.html">Messages</a></td>
+<td>Display messages and plain HTML to the user</td>
+</tr>
+<tr>
+<td><a href="./post.html">Post</a></td>
+<td>Post task data to the server</td>
+</tr>
+<tr>
+<td><a href="./postCsv.html">Post CSV</a></td>
+<td>When using the CSV logger, post data to the server</td>
+</tr>
+<tr>
+<td><a href="./redirect.html">Redirect</a></td>
+<td>Redirect user to an external URL</td>
+</tr>
+<tr>
+<td><a href="./setValue.html">Set Value</a></td>
+<td>Manipulate environmental variables</td>
+</tr>
+<tr>
+<td><a href="./yesno.html">Yes/No</a></td>
+<td>Ask a single Yes/No question</td>
+</tr>
+</tbody>
+</table>
+<h4><a name="task-properties" class="header-link" href="#task-properties"><span></span></a>Task properties</h4><p>All tasks have some common properties that can be used to customize their behaviour.
+Following is a list of such properties and a description of their behaviour.</p>
 <table>
 <thead>
 <tr>
@@ -296,7 +366,7 @@ In addition you have a button that allows you to close and open the console.</p>
 </tr>
 <tr>
 <td>type</td>
-<td>Type of task (quest/message).</td>
+<td>Type of task (quest,message etc.).</td>
 </tr>
 <tr>
 <td>pre</td>
@@ -332,70 +402,8 @@ In addition you have a button that allows you to close and open the console.</p>
 </tr>
 </tbody>
 </table>
-<h4><a name="quest" class="header-link" href="#quest"><span></span></a>Quest</h4><table>
-<thead>
-<tr>
-<th>Property</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>script</td>
-<td>The actual script object for the quest task.</td>
-</tr>
-<tr>
-<td>scriptUrl</td>
-<td>The url for the quest script.</td>
-</tr>
-</tbody>
-</table>
-<h4><a name="message" class="header-link" href="#message"><span></span></a>Message</h4><table>
-<thead>
-<tr>
-<th>Property</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>template</td>
-<td>the actual html to display as a string.</td>
-</tr>
-<tr>
-<td>templateUrl</td>
-<td>The url for the message html file.</td>
-</tr>
-<tr>
-<td>keys</td>
-<td>Controls the proceed key: either a key (i.e. <code>&#39;a&#39;</code>) a keyCode (i.e. <code>65</code>) or an array of such (i.e. <code>[&#39;a&#39;,&#39;b&#39;]</code>).</td>
-</tr>
-</tbody>
-</table>
-<h4><a name="post" class="header-link" href="#post"><span></span></a>Post</h4><table>
-<thead>
-<tr>
-<th>property</th>
-<th>description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>url</td>
-<td>The url we intend to post to.</td>
-</tr>
-<tr>
-<td>path</td>
-<td>A path within the global to the object that you want to send. For example: <code>&quot;iat.feedback&quot;</code> will post the object <code>feedback</code> from <code>global.iat</code>.</td>
-</tr>
-<tr>
-<td>data</td>
-<td>A raw object to be posted to the server. You may use templates in order to construct it.</td>
-</tr>
-</tbody>
-</table>
-<h3><a name="inheritance" class="header-link" href="#inheritance"><span></span></a>Inheritance</h3><p>miManager uses the same inheritance system used by miQuest. It has one type of set: the task set. In order to create task sets use <code>addTasksSet(set, list)</code>.</p>
-<h3><a name="custom-tasks" class="header-link" href="#custom-tasks"><span></span></a>Custom tasks</h3><p>The miManager allows the creation of custom tasks. The format is fairly simple though you probably need at least some experience with programing for it. </p>
+<h3><a name="custom-tasks" class="header-link" href="#custom-tasks"><span></span></a>Custom tasks</h3><p>The miManager allows the creation of custom tasks.
+The format is fairly simple though you probably need at least some experience with programing for it. </p>
 <h4><a name="plugging-in" class="header-link" href="#plugging-in"><span></span></a>Plugging in</h4><p>miManager manages the task sequence for you as well as loading the task script (if needed). There are several ways to plug a new task into miManager, the all involve passing the activator function to the manager in various ways.</p>
 <ol>
 <li>You can pass the activator function as a script.</li>
@@ -453,7 +461,7 @@ In addition you have a button that allows you to close and open the console.</p>
 </tr>
 </tbody>
 </table>
-<h4><a name="custom-task-example" class="header-link" href="#custom-task-example"><span></span></a>Custom Task Example</h4><p>The following script will display a messages to the user and proceed to the next task after 5 seconds:</p>
+<h4><a name="custom-task-example" class="header-link" href="#custom-task-example"><span></span></a>Custom Task Example</h4><p>The following displays a messages to the user and proceeds to the next task after 5 seconds:</p>
 <pre><code class="lang-javascript">// the define wrapper
 define(function(){
     // the script object being returned
@@ -479,6 +487,8 @@ define(function(){
 <p>In order to use it all you have to do is point the task to the correct url:</p>
 <pre><code class="lang-javascript">var taskElement = {scriptUrl:&#39;path/to/script&#39;};
 </code></pre>
+<h3><a name="inheritance" class="header-link" href="#inheritance"><span></span></a>Inheritance</h3><p>miManager uses the same inheritance system used by miQuest. 
+It has one type of set: the task set. In order to create task sets use <code>API.addTasksSet(set, list)</code>.</p>
 <h3><a name="project-implicit-build" class="header-link" href="#project-implicit-build"><span></span></a>Project Implicit Build</h3><h4><a name="mturk" class="header-link" href="#mturk"><span></span></a>mTurk</h4><p>The project implicit build has a feature for integration with mTurk.
 All you have to do is add The following code to your project, replacing the <code>&lt;id#&gt;</code> tags with the appropriate data of course.
 The player will redirect the users back to mTurk immediately after the final task in the manager (as defined by the <code>last</code> property).
