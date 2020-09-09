@@ -15,7 +15,7 @@ function API(){
     Constructor.call(this);
 
     _.set(this, 'settings.onPreTask',onPreTask);
-    _.set(this, 'settings.logger.url', piGlobal.$dataUrl);
+    _.set(this, 'settings.logger.url', window.piGlobal.$dataUrl);
     window.IS_PI && _.set(this, 'settings.logger.managerUrl', '/implicit/PiManager/');
     window.IS_PI && _.set(this, 'settings.logger.type', 'old');
 }

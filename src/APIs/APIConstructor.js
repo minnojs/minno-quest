@@ -15,9 +15,11 @@ var global = window.piGlobal;
  * 		sets: ['trial', 'stimulus', 'media']
  * }
  */
-function APIconstructor(options){
+function APIconstructor(templateOptions){
 
     function API(){
+        // this makes sure that we don't recycle objects set in the template
+        var options = _.cloneDeep(templateOptions); 
         var script = this.script = {
             type: options.type,
             name: 'anonymous ' + options.type,
@@ -34,11 +36,11 @@ function APIconstructor(options){
         });
     }
 
-    _.forEach(options.sets, function(set){
+    _.forEach(templateOptions.sets, function(set){
         _.set(API.prototype, _.camelCase('add-' + set + '-set') ,  add_set(set));
     });
 
-    _.extend(API.prototype, options.static, {
+    _.extend(API.prototype, templateOptions.static, {
 
         setName: function(name){
             this.script.name = name;

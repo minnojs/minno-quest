@@ -15,7 +15,6 @@ function activateTime(done, $canvas, task, script, piConsole, logger){
     $el = $canvas.contents();
 
     pipSink = time($el[0], script);
-    window.a = pipSink;
     pipSink.promise.then(done);
 
     pipSink.$messages.map(piConsole);
