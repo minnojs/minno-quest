@@ -6,7 +6,7 @@ export default {
         var logs = ctx.csv || (ctx.csv = []);
         logs.push(_.assign({taskName:name}, row));
     },
-    onEnd: function(name, settings, ctx){ if (name == 'manager') return ctx.logs; },
+    onEnd: function(name, settings, ctx){ if (name == 'manager') return ctx.csv; },
     serialize: function(name, logs){ return toCsv(createMatrix(logs)); },
     send: function(name, serialized, settings,ctx){ 
         var url = _.isString(settings.postCsv) ? settings.postCsv : settings.url;
