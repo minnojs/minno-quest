@@ -91,10 +91,8 @@ function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector, pi
 
             // let the directive deal with the end of the sequence
             if (!task) return $scope.$emit('manager:loaded');
-                
-            $document[0].title = task.title || _.get(this.script, 'settings.title');
 
-            // setup current
+            // setup current (this get's referenced in APIConstructor so we have a common current)
             $scope.current = global.current = _.cloneDeep(task.current || {});
 
             // taskLoad adds $script and $template to the task object
@@ -122,7 +120,12 @@ function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector, pi
                         // set the current object back into the global
                         global[taskName] = global.current;
                     }
-
+                })
+                .then(function(){
+                    var title = task.title || _.get(task.$script, 'settings.title');
+                    if (!_.isUndefined(title)) $document[0].title = title;
+                })
+                .then(function(){
                     $scope.$emit('manager:loaded');
                 });
         },
