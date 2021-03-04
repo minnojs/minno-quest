@@ -99,6 +99,11 @@ function managerService($rootScope, $q, ManagerSequence, taskLoad, $injector, pi
             return taskLoad(task, loadOptions)
                 .then(function(){
                     var taskName = task.$name;
+
+                    // Allow script to define a "current" itself.
+                    // In particular useful when loading a standalone task that doesn't pass here before composing script
+                    global.current = $scope.current = task.$script.current;
+
                     piConsole({
                         tags:['manager'],
                         type:'debug',
