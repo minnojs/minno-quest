@@ -104,7 +104,6 @@ function directive($q, $injector,piConsole){
                         thisCtrl.manager.log(data, $scope.settings);
                     },
                     $scope.settings.onPreTask,
-                    _.get(prevTask,'post'),
                     currentTask.pre,
                     _.bind(swap.next, swap, {task:currentTask, settings:$scope.settings}),
                     currentTask.load,
@@ -115,7 +114,6 @@ function directive($q, $injector,piConsole){
             function done(){
                 var locals = {prevTask: prevTask, currentTask: currentTask};
                 $qSequence([
-                    prevTask && prevTask.post,
                     _.bind(swap.empty, swap),
                     function(){
                         $scope.loading = false;
@@ -132,9 +130,14 @@ function directive($q, $injector,piConsole){
              * @param  {Object} args An object that describes the direction of proceeding
              */
             function taskDone(ev, args){
+                var locals = {prevTask: prevTask, currentTask: currentTask, managerSettings: $scope.settings};
                 ev.stopPropagation();
-                $scope.loading = true;
-                $scope.$emit('manager:next', args);
+
+                $qSequence([
+                    currentTask.post,
+                    function(){ $scope.loading = true; },
+                    function(){ $scope.$emit('manager:next', args); }
+                ], locals);
             }
 
             /**
