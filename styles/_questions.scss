@@ -13,6 +13,8 @@
 	}
 }
 
+[quest-select-one] button:focus { outline:none; }
+
 // ripped off regular buttons and group-list-item for conformity with the list style
 [quest-select-one] .btn-select, [quest-select-multi] .btn-select {
 	background-color: #fff;

@@ -2,8 +2,7 @@
 	<div ng-class="listClass" ng-style="listCss">
 		<!-- track by in the ng-repeat allows us to keep the repeated object clean so that angular doesn't add a $$hashkey property -->
 		<!-- using interpolation within class, so that we can keep the style info separate within the directive -->
-		<a
-			tabindex="-1"
+		<button
 			ng-repeat="answer in quest.answers track by answer.order"
 			ng-model="$parent.responseObj"
 			btn-radio="answer"
@@ -14,7 +13,7 @@
 			ng-click="data.autoSubmit && autoSubmit($event)"
 			ng-bind-html="answer.text"
 			unselectable="on"
-		></a>
+		></button>
 	</div>
 	<div pi-quest-validation="model.$error.required">{{data.errorMsg.required || "Please respond to this question"}}</div>
 	<div pi-quest-validation="model.$error.correct">{{data.errorMsg.correct || "You must answer the correct answer!"}}</div>

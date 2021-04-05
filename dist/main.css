@@ -6066,6 +6066,9 @@ html {
   [pi-quest-validation] .glyphicon, [pi-quest-validation] [quest-grid] .btn:before, [quest-grid] [pi-quest-validation] .btn:before, [pi-quest-validation] [quest-multi-grid] .btn:before, [quest-multi-grid] [pi-quest-validation] .btn:before {
     margin-right: 5px; }
 
+[quest-select-one] button:focus {
+  outline: none; }
+
 [quest-select-one] .btn-select, [quest-select-multi] .btn-select {
   background-color: #fff;
   border-color: #ccc;

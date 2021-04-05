@@ -134,7 +134,7 @@ function directive($q, $injector,piConsole){
                 ev.stopPropagation();
 
                 $qSequence([
-                    currentTask.post,
+                    currentTask && currentTask.post,
                     function(){ $scope.loading = true; },
                     function(){ $scope.$emit('manager:next', args); }
                 ], locals);

@@ -36,7 +36,6 @@
     "karma-jasmine": "^1.1.0",
     "karma-rollup-preprocessor": "^5.0.1",
     "minno-gendocs": "^1.0.3",
-    "node-sass": "^4.14.1",
     "rollup": "^0.51.8",
     "rollup-plugin-commonjs": "^8.2.1",
     "rollup-plugin-html": "^0.2.1",
@@ -59,6 +58,7 @@
     "minno-time": "github:minnojs/minno-time#0.5",
     "mithril": "^1.1.7",
     "mithril-stream": "^1.1.0",
+    "node-sass": "^5.0.0",
     "requirejs": "^2.3.5",
     "utils": "file:src/utils"
   }

@@ -269,7 +269,7 @@ describe('manager', function(){
 
                 // should run at the end of the task
                 currentSpy.and.returnValue({});
-                $scope.$emit('manager:loaded');
+                $scope.$emit('task:done');
                 $scope.$digest();
                 expect(post).toHaveBeenCalled();
             });
@@ -290,49 +290,6 @@ describe('manager', function(){
                 expect(preTask).toHaveBeenCalledWith(task);
             });
 
-            it('should apply post after preTask', function(){
-                var post = jasmine.createSpy('post');
-                var preTask = jasmine.createSpy('preTask').and.callFake(function(){
-                    expect(post).not.toHaveBeenCalled();
-                });
-
-                compile();
-
-                // execute first task
-                currentSpy.and.returnValue({post:post});
-                $scope.settings = {onPreTask:preTask};
-                $scope.$emit('manager:loaded');
-                $scope.$digest();
-
-                $scope.$emit('manager:loaded');
-                $scope.$digest();
-
-                expect(post).toHaveBeenCalled(); // make sure the pre expect was run...
-                expect(preTask).toHaveBeenCalled();
-            });
-
-            it('should apply pre after post', function(){
-                var pre = jasmine.createSpy('pre');
-                var post = jasmine.createSpy('post').and.callFake(function(){
-                    expect(pre).not.toHaveBeenCalled();
-                });
-
-                compile();
-
-                // execute first task
-                currentSpy.and.returnValue({post:post});
-                $scope.$emit('manager:loaded');
-                $scope.$digest();
-
-                // execute second task
-                currentSpy.and.returnValue({pre: pre});
-                $scope.$emit('manager:loaded');
-                $scope.$digest();
-
-                expect(post).toHaveBeenCalled(); // make sure the pre expect was run...
-                expect(pre).toHaveBeenCalled();
-            });
-
             it('should call swap.next after pre', function(){
                 var pre = jasmine.createSpy('pre').and.callFake(function(){
                     expect(piSwap.next).not.toHaveBeenCalled();
@@ -350,48 +307,20 @@ describe('manager', function(){
 
         describe(': loaded->done', function(){
 
-            it('should apply the appropriate post', function(){
-                var post = jasmine.createSpy('post');
-
+            it('should call swap.empty', function(){
+                currentSpy.and.returnValue();
                 compile();
-
-                // should not run at begining of task
-                currentSpy.and.returnValue({post:post});
                 $scope.$emit('manager:loaded');
                 $scope.$digest();
-                expect(post).not.toHaveBeenCalled();
-
-                // should run at the end of the task
-                currentSpy.and.returnValue(undefined);
-                $scope.$emit('manager:loaded');
-                $scope.$digest();
-                expect(post).toHaveBeenCalled();
-            });
-
-            it('should call swap.empty after post', function(){
-                var post = jasmine.createSpy('post').and.callFake(function(){
-                    expect(piSwap.empty).not.toHaveBeenCalled();
-                });
-
-                compile();
-                currentSpy.and.returnValue({post: post});
-                $scope.$emit('manager:loaded');
-                $scope.$digest();
-
-                currentSpy.and.returnValue(undefined);
-                $scope.$emit('manager:loaded');
-                $scope.$digest();
-
-                expect(post).toHaveBeenCalled();
                 expect(piSwap.empty).toHaveBeenCalled();
             });
 
             it('should emit manager:done', function(){
+
                 var done = jasmine.createSpy('manager:done');
 
                 compile();
                 currentSpy.and.returnValue(undefined);
-
                 $scope.$on('manager:done', done);
                 $scope.$emit('manager:loaded');
                 $scope.$digest();
@@ -401,23 +330,25 @@ describe('manager', function(){
         });
 
         describe(': task listeners', function(){
-
-            it('should not propagate manager:next up', inject(function($rootScope){
-                var spy = jasmine.createSpy('next');
-                compile({});
-                $rootScope.$on('manager:next', spy);
-                $scope.$emit('task:done');
-                expect(spy).toHaveBeenCalled();
-            }));
-
             it('should trigger a manager:next event', function(){
                 var spy = jasmine.createSpy('next');
                 var args = {};
                 compile({});
                 $scope.$on('manager:next', spy);
                 $scope.$emit('task:done', args);
+                $scope.$digest();
                 expect(spy).toHaveBeenCalledWith(jasmine.any(Object), args);
             });
+
+            it('should not propagate manager:next up', inject(function($rootScope){
+                var spy = jasmine.createSpy('next');
+                compile({});
+                $rootScope.$on('manager:next', spy);
+                $scope.$emit('task:done');
+                $scope.$digest();
+                expect(spy).toHaveBeenCalled();
+            }));
+
         });
     });
 
