@@ -14,6 +14,14 @@ import {require,define,requirejs} from 'requirejs/require';
 
 export default app;
 
+// RequireJS does not automatically load config from window.require when loaded as a module
+// see https://requirejs.org/docs/api.html#config
+// Therefore we load the configuration manually
+var dfltRequireConfig = {waitSeconds: 30};
+var externalRequireConfig = _.isPlainObject(window.require) ? window.require : null;
+var requireConfig = _.defaults(externalRequireConfig, dfltRequireConfig); 
+require.config(requireConfig);
+
 // requirejs does not explicitly export these as globals
 window.require = require;
 window.requirejs = requirejs;
