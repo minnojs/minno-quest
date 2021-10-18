@@ -6069,6 +6069,9 @@ html {
 [quest-select-one] button:focus {
   outline: none; }
 
+[quest-select-multi] button:focus {
+  outline: none; }
+
 [quest-select-one] .btn-select, [quest-select-multi] .btn-select {
   background-color: #fff;
   border-color: #ccc;
