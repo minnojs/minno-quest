@@ -9,6 +9,8 @@ function activatePIP(done, $canvas, task, script, piConsole, logger){
     var $el, req;
     var pipSink;
 
+    piConsole({type:'warn', message: 'The "pip" task has been deprecated. Please use "time" instead.'});
+
     script.name = task.$name;
 
     if (task.version > 0.4) {
