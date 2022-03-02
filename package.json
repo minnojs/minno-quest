@@ -36,7 +36,7 @@
     "grunt-conventional-changelog": "^1.1.0",
     "grunt-githooks": "^0.3.1",
     "grunt-karma": "^0.8.2",
-    "karma": "^0.12.16",
+    "karma": "^6.3.16",
     "karma-chrome-launcher": "^0.1.2",
     "karma-firefox-launcher": "^0.1.4",
     "karma-jasmine": "^0.1.5",
